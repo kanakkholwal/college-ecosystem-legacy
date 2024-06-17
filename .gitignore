@@ -28,6 +28,9 @@ apps/**/.next
 
 # lock files
 package-lock.json
+apps/**/package-lock.json
+yarn.lock
+apps/**/yarn.lock
 
 # Testing
 coverage
