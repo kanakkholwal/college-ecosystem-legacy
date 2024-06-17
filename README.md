@@ -1,81 +1,110 @@
-# Turborepo starter
+# College Ecosystem
 
-This is an official starter Turborepo.
+Welcome to the College Ecosystem monorepo, housing various projects related to college management and services. This repository utilizes Yarn Workspaces and Turbo Repo for efficient project management.
 
-## Using this example
+## Directory Structure
 
-Run the following command:
+The repository is structured to accommodate multiple projects:
 
-```sh
-npx create-turbo@latest
-```
+```bash
+/college-ecosystem
+  /apps
+    /platform      # College Platform (app.nith.eu.org)
+    /website       # Website          (nith.eu.org)
+  /turbo.json      # Turbo Repo configuration
+  /package.json    # Root package.json with Yarn workspaces configuration
+  /.gitignore      # Git ignore file
+  /README.md       # This readme file
+  ```
 
-## What's inside?
+## Setup
 
-This Turborepo includes the following packages/apps:
+To get started with the College Ecosystem on your local machine, follow these steps:
 
-### Apps and Packages
+### Clone the Repository
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
-
-### Utilities
-
-This Turborepo has some additional tools already setup for you:
-
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
-
-### Build
-
-To build all apps and packages, run the following command:
+```bash
+git clone https://github.com/kanakkholwal/college-ecosystem.git
+cd college-ecosystem
 
 ```
-cd my-turborepo
-pnpm build
+
+### Install Dependencies
+
+```bash
+yarn install
 ```
 
-### Develop
+This command installs dependencies for all projects defined in the apps directory.
 
-To develop all apps and packages, run the following command:
+## Projects
 
-```
-cd my-turborepo
-pnpm dev
-```
+The College Ecosystem includes the following projects:
 
-### Remote Caching
+- [College Platform](https://app.nith.eu.org/) : centralized platform that is multifunctional, user-friendly platform for all.
+- [College Website](https://nith.eu.org) : landing page website
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
-
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
-
-```
-cd my-turborepo
-npx turbo login
+```bash
+cd college-ecosystem
+yarn run build
 ```
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
+## Usage
 
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
+### Running Projects
+
+To run individual projects locally:
+
+#### College Platform
+
+```bash
+yarn workspace platform run dev
+```
+
+#### Website
+
+```bash
+yarn workspace website run dev
+```
+
+### Building Projects
+
+To build individual projects for production:
+
+#### College Platform
+
+```bash
+yarn workspace platform run build
+```
+
+#### Website
+
+```bash
+yarn workspace website run build
+```
+
+### Running Turbo Commands
+
+To utilize Turbo Repo for optimized workflows:
+
+```bash
+yarn turbo run [command]
+```
+
+Replace [command] with `build`, `dev`, `lint`, or `test` as needed.
+
+## Scripts
+
+The root `package.json` file defines scripts for common tasks:
+
+```json
+{
+  "scripts": {
+    "dev": "turbo run dev",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "test": "turbo run test"
+  }
+}
 
 ```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
