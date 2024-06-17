@@ -6,11 +6,13 @@ import {
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
-import { ChevronLeftCircle, ChevronRightCircle, LayoutGrid, LogOut, Settings2, UserRoundCog } from 'lucide-react';
+import { ChevronLeftCircle, ChevronRightCircle, Grid3X3, LayoutGrid, LogOut, UserRoundCog } from 'lucide-react';
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
 import { useState } from "react";
+import { LiaReadme } from "react-icons/lia";
+import { SiGoogleclassroom } from "react-icons/si";
 import { TbDashboard } from "react-icons/tb";
 import { sessionType } from "src/types/session";
 
@@ -30,25 +32,40 @@ const admin_links: sideLinkType[] = [
         icon: UserRoundCog,
         href: "/admin/users",
     },
+    {
+        label: "Results",
+        icon: Grid3X3,
+        href: "/admin/results",
+    },
+    {
+        label: "Courses",
+        icon: LiaReadme,
+        href: "/admin/courses",
+    },
+    {
+        label: "Classrooms",
+        icon: SiGoogleclassroom,
+        href: "/admin/rooms",
+    },
 
 ];
 
-const user_links: sideLinkType[] = [
+const cr_links: sideLinkType[] = [
     {
         label: "Dashboard",
         icon: TbDashboard,
-        href: "/feed",
+        href: "/cr",
     },
     {
-        label: "Account",
-        icon: UserRoundCog,
-        href: "/dashboard/settings/account",
+        label: "Courses",
+        icon: LiaReadme,
+        href: "/cr/courses",
     },
     {
-        label: "Settings",
-        icon: Settings2,
-        href: "/dashboard/settings",
-    }
+        label: "Classrooms",
+        icon: SiGoogleclassroom,
+        href: "/cr/rooms",
+    },
 ];
 
 
@@ -56,7 +73,7 @@ const user_links: sideLinkType[] = [
 export default function SideBar({ user }: { user: sessionType["user"] }) {
     const [open, setOpen] = useState(false);
     const pathname = usePathname() as string;
-    const links = pathname.startsWith("/admin") ? admin_links : user_links;
+    const links = pathname.startsWith("/admin") ? admin_links : pathname.startsWith("/cr") ? cr_links : [];
 
 
     return (<div aria-label="Sidenav"

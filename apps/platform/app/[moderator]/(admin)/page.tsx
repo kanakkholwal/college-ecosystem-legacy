@@ -10,11 +10,19 @@ import Link from "next/link";
 import { getSession } from "src/lib/auth";
 import { sessionType } from "src/types/session";
 import { users_CountAndGrowth } from "./actions";
+import Page403 from "@/components/utils/403";
 
+interface DashboardProps {
+    params:{
+        moderator: string;
+    }
+}
 
-
-export default async function Dashboard() {
+export default async function Dashboard({params}: DashboardProps) {
     const session = await getSession() as sessionType;
+    if (!session.user.roles.includes("admin") && params.moderator === "admin")
+        return <Page403 />;
+
     const { count: userCount, growth: userGrowth, trend: userTrend } = await users_CountAndGrowth("this_month");
     return (<div className="space-y-6 my-5">
     <div>

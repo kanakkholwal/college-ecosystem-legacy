@@ -13,16 +13,16 @@ import { sessionType } from "src/types/session";
 
 interface Props {
     params: {
-        department_code: string;
-        year: number;
-        semester: number;
+        slug: string[];
     }
 }
 const super_access = ["admin", "moderator"];
 
 export default async function Dashboard({ params }: Props) {
+    const [department_code, year, semester] = params.slug as [string, string, string];
+
     const session = await getSession() as sessionType;
-    const { department_code, year, semester } = params;
+    
     const timetableData = await getTimeTable(department_code, Number(year), Number(semester));
     if (!timetableData)
         return notFound();

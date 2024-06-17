@@ -1,3 +1,4 @@
+
 import Page403 from "@/components/utils/403";
 import { Metadata } from "next";
 import { getSession } from "src/lib/auth";
@@ -13,8 +14,9 @@ export const metadata: Metadata = {
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
     const session = await getSession() as sessionType;
-    // console.log(session)
-    if (!session.user.roles.includes("admin")) return <Page403 />;
+
+    if (session.user.roles.length === 0 && session.user.roles.includes("student"))
+        return <Page403 />;
 
     return (<>
         <div className="flex h-full min-h-screen selection:bg-primary/10 selection:text-primary dark:bg-neutral-900 bg-slate-200/80 z-0">
@@ -26,7 +28,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
                     <div className="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
                 </div>
 
-                <main className="content p-2 md:p-4 z-2 @container">
+                <main className="content p-2 md:p-4 z-2 @container space-y-10">
                     {children}
                 </main>
                 {process.env.NODE_ENV !== "production" && <div className="fixed bottom-0 right-0 p-2 text-xs text-gray-500 dark:text-slate-400">v0.0.1({process.env.NODE_ENV})</div>}
