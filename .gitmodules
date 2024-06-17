@@ -1,0 +1,6 @@
+# [submodule "apps/platform"]
+# 	path = apps/platform
+# 	url = https://github.com/kanakkholwal/college-website/
+# [submodule "apps/website"]
+# 	path = apps/website
+# 	url = https://github.com/kanakkholwal/college-website/
