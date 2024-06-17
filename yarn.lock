@@ -1612,20 +1612,6 @@
     serwist "9.0.3"
     zod "3.23.8"
 
-"@serwist/precaching@^9.0.2":
-  version "9.0.3"
-  resolved "https://registry.yarnpkg.com/@serwist/precaching/-/precaching-9.0.3.tgz#24f8f6a8f662cfa63f6d82b85b497a5af5b4c846"
-  integrity sha512-0sSUXrsWFHTze1llOxnhkyJCQ/MhUmTL2TFRjDnRqdg5TIiJqTqGnBU6FHgWxlMyiPb9jLbmsZcGaLIlwTOQWg==
-  dependencies:
-    serwist "9.0.3"
-
-"@serwist/sw@^9.0.2":
-  version "9.0.3"
-  resolved "https://registry.yarnpkg.com/@serwist/sw/-/sw-9.0.3.tgz#f2feeac85ffb76798673c2e69f6453be55b9a44a"
-  integrity sha512-f5Mcclo+W5DaWvKtL54lh67lxjzp2/6BsxXJA/FvRfMUi3qvGH7h0OV/cCiMcMSu/WrFS2t2eh2xXPB1gByp8A==
-  dependencies:
-    serwist "9.0.3"
-
 "@serwist/webpack-plugin@9.0.3":
   version "9.0.3"
   resolved "https://registry.yarnpkg.com/@serwist/webpack-plugin/-/webpack-plugin-9.0.3.tgz#780d7c4113b4b5f5333ddcb8152758fbc467c847"

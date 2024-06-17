@@ -20,6 +20,6 @@ const serwist = new Serwist({
   clientsClaim: true,
   navigationPreload: true,
   runtimeCaching: defaultCache,
-  importScripts: ['notifications-worker.js'], // Import the custom service worker script
+  // importScripts: ['notifications-worker.js'], // Import the custom service worker script
 });
 serwist.addEventListeners();

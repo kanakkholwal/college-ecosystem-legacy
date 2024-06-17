@@ -12,15 +12,13 @@ import { TimeTableWithID } from "src/models/time-table";
 
 interface Props {
     params: {
-        department_code: string;
-        year: number;
-        semester: number;
+        slug: string[]
     }
 }
 
 export default async function Dashboard({ params }: Props) {
     // const session = await getSession() as sessionType;
-    const { department_code, year, semester } = params;
+    const  [department_code, year, semester]  = params.slug;
     const timetableData = await getTimeTable(department_code, Number(year), Number(semester));
     if (!timetableData)
         return notFound();

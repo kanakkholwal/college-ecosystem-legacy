@@ -9,9 +9,7 @@ if (!MONGODB_URI) {
 }
 
 // Function to migrate data
-async function migrateData(sourceURI, targetURI, collectionName, sourceDB, targetDB) {
-    const sourceClient = await MongoClient.connect(sourceURI);
-    const targetClient = await MongoClient.connect(targetURI);
+async function migrateData(sourceClient, targetClient, collectionName, sourceDB, targetDB) {
 
     const sourceCollection = sourceClient.db(sourceDB).collection(collectionName);
     const targetCollection = targetClient.db(targetDB).collection(collectionName);
@@ -44,7 +42,7 @@ async function initialize(sourceDB, targetDB) {
 
     for await (const collection of collections) {
         console.log(collection.collectionName);
-        await migrateData(sourceURI, targetURI, collection.collectionName, sourceDB, targetDB);
+        await migrateData(sourceClient, targetClient, collection.collectionName, sourceDB, targetDB);
     }
 
     sourceClient.close();
