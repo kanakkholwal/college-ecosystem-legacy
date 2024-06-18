@@ -1,4 +1,5 @@
 # College Ecosystem
+[![Trigger Deployments](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/ci.yml)
 
 Welcome to the College Ecosystem monorepo, housing various projects related to college management and services. This repository utilizes Yarn Workspaces and Turbo Repo for efficient project management.
 
