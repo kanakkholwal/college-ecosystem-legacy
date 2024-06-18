@@ -1,6 +1,6 @@
 
 ## College Platform 
-Our aim is to create a centralized platform that is multifunctional, user-friendly, and extremely entertaining for college students. Any educational institution may utilize this generic, open-source platform _(not individuals)_. For the time being, we are introducing results-based ranking, announcements, polls, classroom availability, class schedules and timetables, and **a community like to Reddit** where students may engage with one another. 
+Our aim is to create a centralized platform that is multifunctional, user-friendly for college students. Any educational institution may utilize this generic, open-source platform _(not individuals)_. For the time being, we are introducing results-based ranking, announcements, polls, classroom availability, class schedules and timetables, and **a community like to Reddit** where students may engage with one another. 
 
 Here is the initial preview : 
 ![Generic College Platform Preview](https://i.imgur.com/SOX9ebg.png)
