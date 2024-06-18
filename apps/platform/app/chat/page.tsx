@@ -5,7 +5,6 @@ import ChatForm from "./components/form";
 import ChatHistory from "./components/history";
 import Wrapper from "./components/wrapper";
 
-
 export const dynamic = "force-dynamic";
 
 export default async function ChatBotPage() {
