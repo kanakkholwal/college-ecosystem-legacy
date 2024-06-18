@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
     const session = await getSession() as sessionType;
 
-    if (session.user.roles.length === 0 && session.user.roles.includes("student"))
+    if (session.user.roles.length === 1 && session.user.roles.includes("student"))
         return <Page403 />;
 
     return (<>
