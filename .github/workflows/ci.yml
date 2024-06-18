@@ -19,6 +19,22 @@ jobs:
         with:
           fetch-depth: 2
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Cache Vercel CLI
+        uses: actions/cache@v3
+        with:
+          path: ~/.vercel
+          key: ${{ runner.OS }}-vercel-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-vercel-
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
       - name: 💡 Detect changed projects
         id: changed
         run: |
@@ -27,7 +43,7 @@ jobs:
 
       - name: 🎯 Deploy Platform to Staging
         if: github.ref == 'refs/heads/staging' && steps.changed.outputs.platform_changed == 'true'
-        run: npx vercel --token ${VERCEL_TOKEN} ./apps/platform
+        run: vercel --token ${VERCEL_TOKEN} ./apps/platform
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -35,7 +51,7 @@ jobs:
 
       - name: 🚀 Deploy Platform to Production
         if: github.ref == 'refs/heads/main' && steps.changed.outputs.platform_changed == 'true'
-        run: npx vercel --token ${VERCEL_TOKEN} --prod ./apps/platform
+        run: vercel --token ${VERCEL_TOKEN} --prod ./apps/platform
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
@@ -43,7 +59,7 @@ jobs:
 
       - name: 🚀 Deploy Website to Production
         if: github.ref == 'refs/heads/main' && steps.changed.outputs.website_changed == 'true'
-        run: npx vercel --token ${VERCEL_TOKEN} --prod ./apps/website
+        run: vercel --token ${VERCEL_TOKEN} --prod ./apps/website
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
