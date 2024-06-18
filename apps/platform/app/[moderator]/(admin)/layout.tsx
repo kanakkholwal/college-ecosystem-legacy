@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     description: "Admin Dashboard ",
 }
 
+const ALLOWED_ROLES = ["admin", "moderator"];
+
 interface DashboardLayoutProps {
     children: React.ReactNode
     params: {
@@ -23,7 +25,7 @@ export default async function DashboardLayout({ children, params }: DashboardLay
     const session = await getSession() as sessionType;
 
 
-    if (["admin", "moderator"].some(role => session.user.roles.includes(role))) {
+    if (ALLOWED_ROLES.some(role => session.user.roles.includes(role))) {
         return <Page403 />;
     }
 
