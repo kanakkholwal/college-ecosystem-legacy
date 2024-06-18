@@ -2,6 +2,7 @@ import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { revalidatePath } from "next/cache";
+import { ORG_DOMAIN } from "root/project.config";
 import dbConnect from "src/lib/dbConnect";
 import ResultModel from "src/models/result";
 import UserModel from "src/models/user";
@@ -116,7 +117,7 @@ export const authOptions: NextAuthOptions = {
                 try {
                     console.log(profile);
                     console.log(tokens);
-                    if (profile.hd !== "nith.ac.in" ) {
+                    if (profile.hd !== ORG_DOMAIN) {
                         return Promise.reject({
                             status: 401,
                             message: "Only NITH emails are allowed",
@@ -137,7 +138,7 @@ export const authOptions: NextAuthOptions = {
                             })
                         }
                         const user = new UserModel({
-                            email: result.rollNo + "@nith.ac.in",
+                            email: result.rollNo + "@" + ORG_DOMAIN,
                             firstName: result.name.split(" ")[0],
                             lastName: result.name.split(" ")[1],
                             rollNo: result.rollNo,

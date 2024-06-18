@@ -9,7 +9,7 @@ const config = {
     './app/**/*.{ts,tsx}',
     './src/**/*.{ts,tsx}',
     './@/**/*.{ts,tsx,js,jsx}',
-        // Path to Tremor module
+    // Path to Tremor module
 
     './node_modules/@tremor/**/*.{js,ts,jsx,tsx}',
 
@@ -142,12 +142,12 @@ const config = {
         'dark-tremor-dropdown':
           '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
       },
-        fontSize: {
-          'tremor-label': ['0.75rem', { lineHeight: '1rem' }],
-          'tremor-default': ['0.875rem', { lineHeight: '1.25rem' }],
-          'tremor-title': ['1.125rem', { lineHeight: '1.75rem' }],
-          'tremor-metric': ['1.875rem', { lineHeight: '2.25rem' }],
-        },
+      fontSize: {
+        'tremor-label': ['0.75rem', { lineHeight: '1rem' }],
+        'tremor-default': ['0.875rem', { lineHeight: '1.25rem' }],
+        'tremor-title': ['1.125rem', { lineHeight: '1.75rem' }],
+        'tremor-metric': ['1.875rem', { lineHeight: '2.25rem' }],
+      },
       extend: {
         fontFamily: {
           sans: ["var(--font-sans)", ...fontFamily.sans],
@@ -184,9 +184,12 @@ const config = {
         /^(fill-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900|950))$/,
     },
   ],
-  plugins: [require('@headlessui/tailwindcss'),require("tailwindcss-animate")
+  plugins: [
+    require('@headlessui/tailwindcss'),
+      require("tailwindcss-animate")
     , require('@tailwindcss/container-queries')
-    , require('@tailwindcss/typography')],
+    , require('@tailwindcss/typography')
+  ],
 } satisfies Config
 
 export default config

@@ -81,10 +81,10 @@
     "vaul": "^0.9.1",
     "whatamesh": "^0.2.0",
     "zod": "^3.23.8",
+    "@tailwindcss/container-queries": "^0.1.1",
     "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/typography": "^0.5.13",
     "@types/aos": "^3.0.7",
     "@types/bcryptjs": "^2.4.6",

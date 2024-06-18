@@ -33,9 +33,23 @@ cd college-ecosystem
 
 ```bash
 yarn install
+# or 
+npm install
 ```
 
 This command installs dependencies for all projects defined in the apps directory.
+
+#### For individual projects
+
+```bash
+npm install --workspace=platform
+```
+
+#### Specific package
+
+```bash
+npm install some-package --workspace=platform
+```
 
 ## Projects
 
@@ -59,28 +73,39 @@ To run individual projects locally:
 
 ```bash
 yarn workspace platform run dev
+# or
+npm run --workspace=platform dev
 ```
 
 #### Website
 
 ```bash
 yarn workspace website run dev
+# or
+npm run --workspace=website dev
+
 ```
 
 ### Building Projects
 
 To build individual projects for production:
 
-#### College Platform
+#### Platform
 
 ```bash
 yarn workspace platform run build
+# or 
+npm run --workspace=platform build
+
 ```
 
 #### Website
 
 ```bash
 yarn workspace website run build
+# or 
+npm run --workspace=website build
+
 ```
 
 ### Running Turbo Commands
