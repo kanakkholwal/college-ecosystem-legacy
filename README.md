@@ -99,7 +99,7 @@ npm run --workspace=platform build
 
 ```
 
-#### Website
+#### Website (landing)
 
 ```bash
 yarn workspace website run build
