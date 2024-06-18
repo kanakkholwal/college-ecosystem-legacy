@@ -1,0 +1,46 @@
+name: Deploy to Vercel
+
+on:
+  push:
+    branches:
+      - main
+      - staging
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 2
+
+      - name: Detect changed projects
+        id: changed
+        run: |
+          git diff --quiet HEAD^ HEAD ./apps/platform || echo "platform_changed=true" >> $GITHUB_OUTPUT
+          git diff --quiet HEAD^ HEAD ./apps/website || echo "website_changed=true" >> $GITHUB_OUTPUT
+
+      - name: Deploy Platform to Production
+        if: github.ref == 'refs/heads/main' && steps.changed.outputs.platform_changed == 'true'
+        run: npx vercel --token ${VERCEL_TOKEN} --prod ./apps/platform
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PLATFORM_PROJECT_ID }}
+
+      - name: Deploy Website to Production
+        if: github.ref == 'refs/heads/main' && steps.changed.outputs.website_changed == 'true'
+        run: npx vercel --token ${VERCEL_TOKEN} --prod ./apps/website
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
+
+      - name: Deploy Platform to Staging
+        if: github.ref == 'refs/heads/staging' && steps.changed.outputs.platform_changed == 'true'
+        run: npx vercel --token ${VERCEL_TOKEN} ./apps/platform
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PLATFORM_PROJECT_ID }}
