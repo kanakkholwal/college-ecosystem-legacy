@@ -1,11 +1,10 @@
 
 import Page403 from "@/components/utils/403";
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 import { getSession } from "src/lib/auth";
 import { sessionType } from "src/types/session";
-import Navbar from "./components/navbar";
-import SideNav from "./components/sidenav";
+import Navbar from "../components/navbar";
+import SideNav from "../components/sidenav";
 
 
 export const metadata: Metadata = {
@@ -13,26 +12,20 @@ export const metadata: Metadata = {
     description: "Admin Dashboard ",
 }
 
-const ALLOWED_ROLES = ["admin", "moderator","cr","hod","faculty"] as const;
-
 interface DashboardLayoutProps {
     children: React.ReactNode
     params: {
-        moderator: typeof ALLOWED_ROLES[number]
+        moderator: "admin" | "moderator"
     }
 }
 
-export default async function DashboardLayout({ children,params }: DashboardLayoutProps) {
-    const moderator = params.moderator!;
+export default async function DashboardLayout({ children, params }: DashboardLayoutProps) {
+    const session = await getSession() as sessionType;
 
-    const session = await getSession() as sessionType | null;
 
-    if(!(ALLOWED_ROLES.includes(params.moderator) && !!session?.user)){
-        return notFound();
-    }
-
-    if (session.user.roles.includes(moderator))
+    if (["admin", "moderator"].some(role => session.user.roles.includes(role))) {
         return <Page403 />;
+    }
 
     return (<>
         <div className="flex h-full min-h-screen selection:bg-primary/10 selection:text-primary dark:bg-neutral-900 bg-slate-200/80 z-0">

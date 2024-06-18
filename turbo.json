@@ -1,10 +1,6 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
-    "build":{
-      "cache": true,
-      "persistent": true
-    },
     "dev": {
       "cache": false,
       "persistent": true
