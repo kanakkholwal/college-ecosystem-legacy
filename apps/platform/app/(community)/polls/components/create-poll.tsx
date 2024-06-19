@@ -54,8 +54,10 @@ export default function CreatePoll() {
             children: "Create New Poll",
             size:"sm",
         }}
-        content={<PollForm />}
-    />
+        >
+            <PollForm/>
+        </ResponsiveDialog>
+
 
 }
 

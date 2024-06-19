@@ -34,10 +34,10 @@ export default function DeletePoll({ pollId }: { pollId: PollType["_id"] }) {
             variant: "destructive_light",
             children: "Delete Poll",
             size: "sm"
-        }}
-        content={<Button variant="destructive" width="full" disabled={loading} onClick={handleDelete}>
+        }}>
+            <Button variant="destructive" width="full" disabled={loading} onClick={handleDelete}>
             {loading ? "Deleting..." : "Delete Poll"}
-        </Button>}
-    />
+        </Button>
+        </ResponsiveDialog>
 
 }

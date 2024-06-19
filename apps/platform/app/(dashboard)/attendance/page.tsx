@@ -17,13 +17,15 @@ export default async function PersonalAttendanceManager() {
             <ResponsiveDialog
                 title="Create Attendance Record"
                 description="Create a new attendance record for a subject."
-                content={<CreateAttendanceRecord />}
+                
                 btnProps={{
                     variant: "default_light",
                     size: "sm",
                     children: "Create Record",
                 }}
-            />
+            >
+            <CreateAttendanceRecord />
+            </ResponsiveDialog>
         </div>
         {attendance_records.length === 0 && <EmptyArea Icon={BookUser} title="No attendance records"  description="There are no attendance records at the moment." />}
         <Suspense fallback={<div>Loading...</div>}>

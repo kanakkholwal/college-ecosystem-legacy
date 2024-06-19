@@ -1,5 +1,5 @@
 "use client";
-import { FancyArea } from "@/components/common/fancy-area";
+import MarkdownView from "@/components/common/markdown/view";
 import { Button } from "@/components/ui/button";
 import {
     Form,
@@ -19,10 +19,12 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import NexoMdxEditor from 'nexo-mdx';
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "src/constants/community";
 import { createPost } from "src/lib/community/actions";
-import { CATEGORY_TYPES, rawCommunityPostSchema,SUB_CATEGORY_TYPES } from "src/models/community";
+import { rawCommunityPostSchema } from "src/models/community";
 import { z } from "zod";
 
 export default function CreateCommunityPost() {
@@ -79,12 +81,11 @@ export default function CreateCommunityPost() {
                         <FormItem>
                             <FormLabel>Content</FormLabel>
                             <FormControl>
-                                <FancyArea
-                                    disabled={form.formState.isSubmitting}
-                                    textValue={field.value}
-                                    setTextValue={(value) => {
-                                        field.onChange(value)
-                                    }}
+                                <NexoMdxEditor
+                                    placeholder="Write a great post"
+                                    className="!h-auto p-0"
+                                    rows={8}
+                                    renderHtml={(md) => <MarkdownView className="prose max-w-full">{md}</MarkdownView>}
                                     {...field} 
                                 />
                             </FormControl>
@@ -120,7 +121,7 @@ export default function CreateCommunityPost() {
                         </FormItem>
                     )}
                 />
-                {form.watch('category').toLowerCase() === 'academics' && (<>
+                {form.watch('category').toLowerCase() === 'departmental' && (<>
                 
                     <FormField
                     control={form.control}
@@ -141,7 +142,7 @@ export default function CreateCommunityPost() {
                                 </SelectContent>
                             </Select>
                             <FormDescription>
-                                The category of the post.
+                                The Sub category of the post.
                             </FormDescription>
                             <FormMessage />
                         </FormItem>

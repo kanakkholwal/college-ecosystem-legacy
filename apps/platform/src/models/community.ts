@@ -1,10 +1,8 @@
 
 import mongoose, { Document, Schema, Types } from 'mongoose';
-import { DEPARTMENT_CODES } from 'src/constants/departments';
+import { CATEGORY_TYPES,SUB_CATEGORY_TYPES } from 'src/constants/community';
 import * as z from 'zod';
 
-export const CATEGORY_TYPES = ['academics', 'departmental', 'technology', 'design', 'fun', 'activities', 'others'] as const;
-export const SUB_CATEGORY_TYPES: readonly string[] = DEPARTMENT_CODES;
 
 export const rawCommunityPostSchema = z.object({
     title: z.string().min(5, "Title must be atleast 5 characters long."),
@@ -26,14 +24,14 @@ export type CommunityPostTypeWithId = RawCommunityPostType & {
     },
     views: number,
     likes: string[],
-    savedBy: string[]
+    savedBy: string[],
 }
 
 interface ICommunityPost extends Document {
     title: string;
     content: string;
     category: typeof CATEGORY_TYPES[number];
-    subCategory?: typeof DEPARTMENT_CODES[number];
+    subCategory?: typeof SUB_CATEGORY_TYPES[number];
     author: Types.ObjectId;
     views: number,
     likes: Types.ObjectId[],
@@ -50,7 +48,7 @@ const communityPostSchema = new Schema<ICommunityPost>({
     likes: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
     savedBy: [{ type: Schema.Types.ObjectId, ref: 'User', required: true }],
     author: { type: Schema.Types.ObjectId, ref: 'User', required: true },
-    subCategory: { type: String, enum: DEPARTMENT_CODES, default: null },
+    subCategory: { type: String, enum: SUB_CATEGORY_TYPES, default: null },
 }, {
     timestamps: true,
 });

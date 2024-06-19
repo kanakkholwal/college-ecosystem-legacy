@@ -3,7 +3,7 @@ import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { getPostsByCategory } from "src/lib/community/actions";
-import { CATEGORY_TYPES } from "src/models/community";
+import { CATEGORY_TYPES } from "src/constants/community";
 
 interface CategoryPageProps {
     params: {
