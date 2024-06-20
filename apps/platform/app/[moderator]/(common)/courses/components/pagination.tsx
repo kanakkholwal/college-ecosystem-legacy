@@ -1,4 +1,4 @@
-'use client';
+"use client";
 import {
   Pagination,
   PaginationContent,
@@ -6,31 +6,32 @@ import {
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious
+  PaginationPrevious,
 } from "@/components/ui/pagination";
 
-
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function Paginate({ totalPages }: { totalPages: number }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const currentPage = Number(searchParams.get('page')) || 1;
+  const currentPage = Number(searchParams.get("page")) || 1;
 
   const createPageURL = (pageNumber: number | string) => {
     const params = new URLSearchParams(searchParams);
-    params.set('page', pageNumber.toString());
+    params.set("page", pageNumber.toString());
     return `${pathname}?${params.toString()}`;
   };
   const displayPageRange = 3; // Adjust this value based on how many pages you want to show around the current page.
 
-  return <Pagination>
-   <PaginationContent>
-   <PaginationItem>
-      <PaginationPrevious
-      aria-disabled={currentPage <= 1}
-      href={currentPage <= 1 ? "#" :createPageURL(currentPage - 1)} />
-    </PaginationItem>
+  return (
+    <Pagination>
+      <PaginationContent>
+        <PaginationItem>
+          <PaginationPrevious
+            aria-disabled={currentPage <= 1}
+            href={currentPage <= 1 ? "#" : createPageURL(currentPage - 1)}
+          />
+        </PaginationItem>
         {Array.from({ length: totalPages }).map((_, i) => {
           const pageNumber = i + 1;
 
@@ -38,7 +39,8 @@ export default function Paginate({ totalPages }: { totalPages: number }) {
           if (
             pageNumber === 1 ||
             pageNumber === totalPages ||
-            (pageNumber >= currentPage - displayPageRange && pageNumber <= currentPage + displayPageRange)
+            (pageNumber >= currentPage - displayPageRange &&
+              pageNumber <= currentPage + displayPageRange)
           ) {
             return (
               <PaginationItem key={i}>
@@ -60,12 +62,15 @@ export default function Paginate({ totalPages }: { totalPages: number }) {
 
           return null;
         })}
-         <PaginationItem>
-      <PaginationNext
-      aria-disabled={currentPage  >= totalPages}
-      href={currentPage  >= totalPages ? "#" :createPageURL(currentPage + 1)} />
-    </PaginationItem>
+        <PaginationItem>
+          <PaginationNext
+            aria-disabled={currentPage >= totalPages}
+            href={
+              currentPage >= totalPages ? "#" : createPageURL(currentPage + 1)
+            }
+          />
+        </PaginationItem>
       </PaginationContent>
-  </Pagination>
-
+    </Pagination>
+  );
 }

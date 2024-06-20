@@ -6,28 +6,28 @@ import ReferencePng from "./assets/reference.png";
 import YoutubePng from "./assets/youtube.png";
 
 export const IconList = [
-    {
-        type: "drive",
-        icon: DriveSvg
-    },
-    {
-        type: "youtube",
-        icon: YoutubePng
-    },
-    {
-        type: "book",
-        icon: BookPng
-    }, 
-    {
-        type: "others",
-        icon: OthersPng
-    },
-    {
-        type: "reference",
-        icon: ReferencePng
-    }
+  {
+    type: "drive",
+    icon: DriveSvg,
+  },
+  {
+    type: "youtube",
+    icon: YoutubePng,
+  },
+  {
+    type: "book",
+    icon: BookPng,
+  },
+  {
+    type: "others",
+    icon: OthersPng,
+  },
+  {
+    type: "reference",
+    icon: ReferencePng,
+  },
 ] as {
-    type:booksAndRefType["type"],
-    icon:string
-}[]
-export const IconMap = new Map(IconList.map((i) => [i.type, i.icon]))
+  type: booksAndRefType["type"];
+  icon: string;
+}[];
+export const IconMap = new Map(IconList.map((i) => [i.type, i.icon]));

@@ -1,16 +1,16 @@
 // useNotificationChecker.ts
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 const useNotificationChecker = () => {
   useEffect(() => {
     const checkNotifications = async () => {
       try {
-        if ('serviceWorker' in navigator) {
+        if ("serviceWorker" in navigator) {
           const registration = await navigator.serviceWorker.ready;
-          registration.active?.postMessage({ action: 'check-notifications' });
+          registration.active?.postMessage({ action: "check-notifications" });
         }
       } catch (error) {
-        console.error('Error checking notifications:', error);
+        console.error("Error checking notifications:", error);
       }
     };
 

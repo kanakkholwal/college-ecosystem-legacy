@@ -1,9 +1,9 @@
-import { create } from 'zustand';
+import { create } from "zustand";
 
 export type ClientStoreState = {
-    isSidebarOpen: boolean;
+  isSidebarOpen: boolean;
 };
 
 export const useClientStore = create<ClientStoreState>((set) => ({
-    isSidebarOpen: false,
+  isSidebarOpen: false,
 }));

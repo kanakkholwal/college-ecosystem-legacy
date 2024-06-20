@@ -1,18 +1,15 @@
-import {
-  Card,
-  CardContent,
-  CardHeader
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-
 export default async function CoursePageLoader() {
-
-
-    return <>
-        <div className="relative mb-24" id="home">
-        <div aria-hidden="true" className="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20">
+  return (
+    <>
+      <div className="relative mb-24" id="home">
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20"
+        >
           <div className="blur-[106px] h-56 bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700" />
           <div className="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
         </div>
@@ -63,4 +60,5 @@ export default async function CoursePageLoader() {
         </Tabs>
       </div>
     </>
+  );
 }
