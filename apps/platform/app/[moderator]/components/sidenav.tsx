@@ -6,7 +6,7 @@ import {
 import { cn } from "@/lib/utils";
 
 import { Button } from "@/components/ui/button";
-import { ChevronLeftCircle, ChevronRightCircle, Grid3X3, LayoutGrid, LogOut, UserRoundCog } from 'lucide-react';
+import { CalendarRange, ChevronLeftCircle, ChevronRightCircle, Grid3X3, LogOut, UserRoundCog } from 'lucide-react';
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from 'next/navigation';
@@ -15,7 +15,6 @@ import { LiaReadme } from "react-icons/lia";
 import { SiGoogleclassroom } from "react-icons/si";
 import { TbDashboard } from "react-icons/tb";
 import { sessionType } from "src/types/session";
-import { all } from "axios";
 
 export type sideLinkType = {
     label: string;
@@ -53,6 +52,12 @@ const all_links:rawLinkType[] = [
         label: "Courses",
         icon: LiaReadme,
         path: "/courses",
+        allowed_roles:["*"]
+    },
+    {
+        label: "Time Tables",
+        icon: CalendarRange,
+        path: "/schedules",
         allowed_roles:["*"]
     },
     {

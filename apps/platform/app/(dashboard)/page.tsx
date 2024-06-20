@@ -8,7 +8,7 @@ import { MdOutlinePoll } from "react-icons/md";
 import { SiGoogleclassroom } from "react-icons/si";
 import { getSession } from "src/lib/auth";
 import { sessionType } from "src/types/session";
-
+import {RouterCard} from "@/components/common/router-card"
 
 
 const quick_links = [
@@ -81,7 +81,7 @@ export default async function Dashboard() {
           </p>
         </div>
         <div>
-          <Image src={gif} width={600} height={600} alt="Random GIF" className="max-w-full h-auto max-h-60 w-fit mt-4 rounded-lg hidden lg:block" data-aos="fade-up" />
+          <Image src={gif} width={600} height={600} alt="Random GIF" className="max-w-full h-auto max-h-60 w-fit mt-4 rounded-lg hidden lg:block" data-aos="fade-up" unoptimized/>
           <p className="mt-4 text-xs text-gray-700 italic text-center hidden lg:block" data-aos="fade-up">
             Random GIF
           </p>
@@ -159,34 +159,4 @@ async function getRandomGif(): Promise<string> {
     console.error("Error fetching GIF:", error);
     return "Error fetching GIF. Please try again later.";
   }
-}
-interface RouterCardProps {
-  href: string;
-  title: string;
-  description: string;
-  external?: boolean;
-  Icon: React.ElementType;
-  style?: React.CSSProperties;
-}
-
-function RouterCard({ href, title, description, external = false, Icon, style }: RouterCardProps) {
-  return (<Link
-    href={href}
-    className="group rounded-lg flex flex-col justify-between gap-3 border border-gray-50/30 px-5 py-4 animate-in popup  transition-colors backdrop-blur-2xl hover:bg-white/10 hover:shadow hover:border-primary/5"
-    target={external ? "_blank" : "_self"}
-    rel={external ? "noopener noreferrer" : undefined}
-    style={style}
-  >
-    <h2 className="mtext-xl font-semibold">
-      <Icon className="w-8 h-8 text-primary inline-block mr-2" />
-      {title}{" "}
-    </h2>
-    <p className="max-w-[30ch] text-sm opacity-80">
-      {description}
-    </p>
-    <p className="text-sm whitespace-nowrap font-semibold text-primary/80 transition-all group-hover:text-primary group-hover:translate-x-1 motion-reduce:transform-none">
-      Go to {title}
-      {external ? <ArrowUpRight className="w-4 h-4 ml-1 inline-block" /> : <ArrowRight className="w-4 h-4 ml-1 inline-block" />}
-    </p>
-  </Link>)
 }

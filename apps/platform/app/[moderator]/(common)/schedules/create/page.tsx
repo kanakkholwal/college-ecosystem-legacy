@@ -9,8 +9,8 @@ export default async function Dashboard() {
 
     return (<>
         <StoreInitializer timetableData={useTimetableStore.getInitialState().timetableData} isEditing={false} />
-        <TimeTable 
-        // timetableData={useTimetableStore.getInitialState().timetableData}
-         mode="edit" saveTimetable={createTimeTable} />
+        {/* <TimeTable 
+        timetableData={useTimetableStore.getInitialState().timetableData}
+         mode="edit" saveTimetable={createTimeTable} /> */}
     </>)
 }

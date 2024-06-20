@@ -55,6 +55,11 @@ export function Provider({ children }: { children: React.ReactNode }) {
                 duration: 2500,
             }}
         />
+        <div className="fixed bottom-2 right-2 left-auto top-auto z-50 flex gap-1 items-center">
+            <span>
+                <img src="https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge" alt="Visitor counter" className="inline-block font-inherit h-4" />
+            </span>
+        </div>
     </SessionProvider>;
 }
 

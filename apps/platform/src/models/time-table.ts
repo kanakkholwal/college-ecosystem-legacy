@@ -93,7 +93,7 @@ const timetableSchema = new Schema<ITimetable>({
 
 
 
-const Timetable = mongoose.models.Timetable || mongoose.model<ITimetable>('Timetable', timetableSchema);
+const Timetable = mongoose.models?.Timetable || mongoose.model<ITimetable>('Timetable', timetableSchema);
 
 export default Timetable;
 

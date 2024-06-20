@@ -22,7 +22,7 @@ export default async function Dashboard({ params }: DashboardProps) {
                 Hi, {session.user.firstName}
             </h2>
             <p className="text-slate-600 dark:text-slate-400">
-                Let's check out your Platform today!
+                Welcome to the dashboard.
             </p>
         </div>
 

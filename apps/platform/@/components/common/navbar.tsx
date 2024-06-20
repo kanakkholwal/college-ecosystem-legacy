@@ -121,7 +121,7 @@ export default function Navbar({ user, showBreadcrumbs = false, sidebarLinks }: 
                                     </Link>
                                 </DropdownMenuItem>)}
                                 <DropdownMenuItem asChild>
-                                    <Link href={`https://github.com/kanakkholwal/college-platform/issues`} target="_blank">
+                                    <Link href={`https://github.com/kanakkholwal/college-ecosystem/issues`} target="_blank">
                                         <Bug className="mr-2 h-4 w-4" />
                                         <span>Report an issue</span>
                                     </Link>
@@ -132,12 +132,7 @@ export default function Navbar({ user, showBreadcrumbs = false, sidebarLinks }: 
                                 <Cloud className="mr-2 h-4 w-4" />
                                 <span>API</span>
                             </DropdownMenuItem>
-                            <DropdownMenuItem disabled>
-                                <Eye className="mr-2 h-4 w-4" />
-                                <span>
-                                    <img src="https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge" alt="Visitor counter" className="inline-block font-inherit h-4" />
-                                </span>
-                            </DropdownMenuItem>
+                            
                             <DropdownMenuSeparator />
                             <DropdownMenuItem onClick={() => signOut({ callbackUrl: pathname, })} className='cursor-pointer'>
                                 <LogOut className="mr-2 h-4 w-4" />
