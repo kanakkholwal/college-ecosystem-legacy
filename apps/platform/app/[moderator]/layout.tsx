@@ -9,8 +9,8 @@ import SideNav from "./components/sidenav";
 
 
 export const metadata: Metadata = {
-    title: "Admin Dashboard",
-    description: "Admin Dashboard ",
+    title: "Dashboard",
+    description: "Dashboard ",
 }
 
 const ALLOWED_ROLES = ["admin", "moderator","cr","hod","faculty"] as const;
@@ -31,12 +31,12 @@ export default async function DashboardLayout({ children,params }: DashboardLayo
         return notFound();
     }
 
-    if (session.user.roles.includes(moderator))
+    if (!session.user.roles.includes(moderator))
         return <Page403 />;
 
     return (<>
         <div className="flex h-full min-h-screen selection:bg-primary/10 selection:text-primary dark:bg-neutral-900 bg-slate-200/80 z-0">
-            <SideNav user={session.user} />
+            <SideNav user={session.user} role={moderator} />
             <div className="xl:pl-80 flex flex-col flex-1 w-full relative z-0">
                 <Navbar user={session.user} />
                 <div aria-hidden="true" className="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20 -z-[1]">

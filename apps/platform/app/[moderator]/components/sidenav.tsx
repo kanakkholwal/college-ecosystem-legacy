@@ -15,65 +15,70 @@ import { LiaReadme } from "react-icons/lia";
 import { SiGoogleclassroom } from "react-icons/si";
 import { TbDashboard } from "react-icons/tb";
 import { sessionType } from "src/types/session";
+import { all } from "axios";
 
 export type sideLinkType = {
     label: string;
     href: string;
     icon: React.ElementType,
 }
-const admin_links: sideLinkType[] = [
+export type rawLinkType = {
+    label: string;
+    path: string;
+    allowed_roles: sessionType["user"]["roles"],
+    icon: React.ElementType,
+}
+
+
+const all_links:rawLinkType[] = [
     {
         label: "Dashboard",
-        icon: LayoutGrid,
-        href: "/admin",
+        icon: TbDashboard,
+        path: "",
+        allowed_roles: ["*"]
     },
     {
         label: "Users",
         icon: UserRoundCog,
-        href: "/admin/users",
+        path: "/users",
+        allowed_roles: ["admin","moderator"]
     },
     {
         label: "Results",
         icon: Grid3X3,
-        href: "/admin/results",
+        path: "/results",
+        allowed_roles: ["admin","moderator"]
     },
     {
         label: "Courses",
         icon: LiaReadme,
-        href: "/admin/courses",
+        path: "/courses",
+        allowed_roles:["*"]
     },
     {
         label: "Classrooms",
         icon: SiGoogleclassroom,
-        href: "/admin/rooms",
+        path: "/rooms",
+        allowed_roles: ["*"]
     },
+]
 
-];
+const getSideNavLinks = (role:string):sideLinkType[] =>{
+    
+    return all_links.filter(link=> {
+        return link.allowed_roles.includes(role) || link.allowed_roles.includes("*")
+    }).map((link)=> ({
+        label: link.label,
+        icon: link.icon,
+        href:`/${role}${link.path}`
+    }))
 
-const cr_links: sideLinkType[] = [
-    {
-        label: "Dashboard",
-        icon: TbDashboard,
-        href: "/cr",
-    },
-    {
-        label: "Courses",
-        icon: LiaReadme,
-        href: "/cr/courses",
-    },
-    {
-        label: "Classrooms",
-        icon: SiGoogleclassroom,
-        href: "/cr/rooms",
-    },
-];
+}
 
-
-
-export default function SideBar({ user }: { user: sessionType["user"] }) {
+export default function SideBar({ user,role }: { user: sessionType["user"],role:sessionType["user"]["roles"][number] }) {
     const [open, setOpen] = useState(false);
     const pathname = usePathname() as string;
-    const links = pathname.startsWith("/admin") ? admin_links : pathname.startsWith("/cr") ? cr_links : [];
+    const links = getSideNavLinks(role)
 
 
     return (<div aria-label="Sidenav"
