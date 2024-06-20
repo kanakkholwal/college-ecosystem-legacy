@@ -21,7 +21,21 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { getCurrentWord, replaceWord } from "./utils";
 
-import { BsChatQuote, BsCode, BsCodeSlash, BsDashSquare, BsImage, BsLink45Deg, BsListOl, BsListUl, BsTypeBold, BsTypeH1, BsTypeH2, BsTypeH3, BsTypeItalic } from 'react-icons/bs';
+import {
+  BsChatQuote,
+  BsCode,
+  BsCodeSlash,
+  BsDashSquare,
+  BsImage,
+  BsLink45Deg,
+  BsListOl,
+  BsListUl,
+  BsTypeBold,
+  BsTypeH1,
+  BsTypeH2,
+  BsTypeH3,
+  BsTypeItalic,
+} from "react-icons/bs";
 
 const listItems = [
   {
@@ -91,15 +105,13 @@ const listItems = [
   },
 ];
 
-
-
-interface Props extends TextareaProps{
+interface Props extends TextareaProps {
   textValue: string;
-  setTextValue: (value:string) => void;
-  disabled?:boolean
+  setTextValue: (value: string) => void;
+  disabled?: boolean;
 }
 
-export function Write({ textValue, setTextValue,disabled,...props }: Props) {
+export function Write({ textValue, setTextValue, disabled, ...props }: Props) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -114,7 +126,7 @@ export function Write({ textValue, setTextValue,disabled,...props }: Props) {
       dropdown.classList.add("hidden");
       setCommandValue("");
     }
-  }, [])
+  }, []);
 
   const handleKeyDown = useCallback((e: KeyboardEvent) => {
     const textarea = textareaRef.current;
@@ -122,26 +134,33 @@ export function Write({ textValue, setTextValue,disabled,...props }: Props) {
     const dropdown = dropdownRef.current;
     if (textarea && input && dropdown) {
       const currentWord = getCurrentWord(textarea);
-      const isDropdownHidden = dropdown.classList.contains("hidden")
+      const isDropdownHidden = dropdown.classList.contains("hidden");
       if (currentWord.startsWith("@") && !isDropdownHidden) {
         // FIXME: handle Escape
-        if (e.key === "ArrowUp" || e.keyCode === 38
-          || e.key === "ArrowDown" || e.keyCode === 40
-          || e.key === "Enter" || e.keyCode === 13
-          || e.key === "Escape" || e.keyCode === 27) {
+        if (
+          e.key === "ArrowUp" ||
+          e.keyCode === 38 ||
+          e.key === "ArrowDown" ||
+          e.keyCode === 40 ||
+          e.key === "Enter" ||
+          e.keyCode === 13 ||
+          e.key === "Escape" ||
+          e.keyCode === 27
+        ) {
           e.preventDefault();
           input.dispatchEvent(new KeyboardEvent("keydown", e));
         }
       }
     }
-  }, [])
+  }, []);
 
-  const onTextValueChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const text = e.target.value;
-    // const textarea = textareaRef.current;
-    // const dropdown = dropdownRef.current;
+  const onTextValueChange = useCallback(
+    (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      const text = e.target.value;
+      // const textarea = textareaRef.current;
+      // const dropdown = dropdownRef.current;
 
-    // if (textarea && dropdown) {
+      // if (textarea && dropdown) {
       // const caret = getCaretCoordinates(textarea, textarea.selectionEnd);
       // const currentWord = getCurrentWord(textarea);
       setTextValue(text);
@@ -158,50 +177,55 @@ export function Write({ textValue, setTextValue,disabled,...props }: Props) {
       //     dropdown.classList.add("hidden");
       //   }
       // }
-    // }
-  // }, [setTextValue, commandValue])
-  }, [setTextValue])
+      // }
+      // }, [setTextValue, commandValue])
+    },
+    [setTextValue]
+  );
 
   const onCommandSelect = useCallback((value: string) => {
-    const textarea = textareaRef.current
+    const textarea = textareaRef.current;
     const dropdown = dropdownRef.current;
     if (textarea && dropdown) {
       replaceWord(textarea, `${value}`);
       setCommandValue("");
       dropdown.classList.add("hidden");
     }
-  }, [])
+  }, []);
 
   const handleMouseDown = useCallback((e: Event) => {
     e.preventDefault();
     e.stopPropagation();
-  }, [])
+  }, []);
 
-  const handleSectionChange = useCallback((e: Event) => {
-    const textarea = textareaRef.current
-    const dropdown = dropdownRef.current;
-    if (textarea && dropdown) {
-      const currentWord = getCurrentWord(textarea);
-      console.log(currentWord)
-      if (!currentWord.startsWith("@") && commandValue !== "") {
-        setCommandValue("");
-        dropdown.classList.add("hidden");
+  const handleSectionChange = useCallback(
+    (e: Event) => {
+      const textarea = textareaRef.current;
+      const dropdown = dropdownRef.current;
+      if (textarea && dropdown) {
+        const currentWord = getCurrentWord(textarea);
+        console.log(currentWord);
+        if (!currentWord.startsWith("@") && commandValue !== "") {
+          setCommandValue("");
+          dropdown.classList.add("hidden");
+        }
       }
-    }
-  }, [commandValue])
+    },
+    [commandValue]
+  );
 
   useEffect(() => {
     const textarea = textareaRef.current;
     const dropdown = dropdownRef.current;
     textarea?.addEventListener("keydown", handleKeyDown);
     textarea?.addEventListener("blur", handleBlur);
-    document?.addEventListener("selectionchange", handleSectionChange)
-    dropdown?.addEventListener("mousedown", handleMouseDown)
+    document?.addEventListener("selectionchange", handleSectionChange);
+    dropdown?.addEventListener("mousedown", handleMouseDown);
     return () => {
       textarea?.removeEventListener("keydown", handleKeyDown);
       textarea?.removeEventListener("blur", handleBlur);
-      document?.removeEventListener("selectionchange", handleSectionChange)
-      dropdown?.removeEventListener("mousedown", handleMouseDown)
+      document?.removeEventListener("selectionchange", handleSectionChange);
+      dropdown?.removeEventListener("mousedown", handleMouseDown);
     };
   }, [handleBlur, handleKeyDown, handleMouseDown, handleSectionChange]);
 
@@ -228,11 +252,10 @@ export function Write({ textValue, setTextValue,disabled,...props }: Props) {
         </SheetTrigger>
         <SheetContent>
           <SheetHeader>
-            <SheetTitle>
-              Markdown Cheatsheet
-            </SheetTitle>
+            <SheetTitle>Markdown Cheatsheet</SheetTitle>
             <SheetDescription>
-              Use markdown to format your text. For example, you can make text bold by wrapping it in double asterisks like **this**.
+              Use markdown to format your text. For example, you can make text
+              bold by wrapping it in double asterisks like **this**.
             </SheetDescription>
           </SheetHeader>
           <div className="grid gap-1 w-full mt-5">
@@ -240,8 +263,12 @@ export function Write({ textValue, setTextValue,disabled,...props }: Props) {
               return (
                 <div key={index} className="flex items-center gap-2">
                   <item.icon className="text-gray-600 h-4  flex-shrink-0" />
-                  <h4 className="text-md font-semibold text-gray-700">{item.title}</h4>
-                  <div className="ml-auto prose"><kbd className="ml-2">{item.content}</kbd></div>
+                  <h4 className="text-md font-semibold text-gray-700">
+                    {item.title}
+                  </h4>
+                  <div className="ml-auto prose">
+                    <kbd className="ml-2">{item.content}</kbd>
+                  </div>
                 </div>
               );
             })}
@@ -272,5 +299,7 @@ export function Write({ textValue, setTextValue,disabled,...props }: Props) {
       </Command> */}
     </div>
   );
-};
-{/* REMINDER: className="hidden" won't hide the SearchIcon and border */ }
+}
+{
+  /* REMINDER: className="hidden" won't hide the SearchIcon and border */
+}

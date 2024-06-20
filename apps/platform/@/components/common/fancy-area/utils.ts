@@ -53,8 +53,8 @@ export function getCaretPosition(element: HTMLTextAreaElement) {
   return {
     caretStartIndex: element.selectionStart || 0,
     caretEndIndex: element.selectionEnd || 0,
-  }
-};
+  };
+}
 
 export function getCurrentWord(element: HTMLTextAreaElement) {
   const text = element.value;
@@ -116,7 +116,6 @@ export function replaceWord(element: HTMLTextAreaElement, value: string) {
     );
   }
 }
-
 
 export function getCaretCoordinates(
   element: HTMLTextAreaElement,

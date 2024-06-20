@@ -1,4 +1,5 @@
 # College Ecosystem
+
 [![Trigger Deployments](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/ci.yml)
 
 Welcome to the College Ecosystem monorepo, housing various projects related to college management and services. This repository utilizes Yarn Workspaces and Turbo Repo for efficient project management.
@@ -16,7 +17,7 @@ The repository is structured to accommodate multiple projects:
   /package.json    # Root package.json with Yarn workspaces configuration
   /.gitignore      # Git ignore file
   /README.md       # This readme file
-  ```
+```
 
 ## Setup
 
@@ -34,7 +35,7 @@ cd college-ecosystem
 
 ```bash
 yarn install
-# or 
+# or
 npm install
 ```
 
@@ -95,7 +96,7 @@ To build individual projects for production:
 
 ```bash
 yarn workspace platform run build
-# or 
+# or
 npm run --workspace=platform build
 
 ```
@@ -104,7 +105,7 @@ npm run --workspace=platform build
 
 ```bash
 yarn workspace website run build
-# or 
+# or
 npm run --workspace=website build
 
 ```
@@ -132,5 +133,4 @@ The root `package.json` file defines scripts for common tasks:
     "test": "turbo run test"
   }
 }
-
 ```

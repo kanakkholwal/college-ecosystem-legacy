@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { GoogleAnalytics } from '@next/third-parties/google';
+import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { headers } from "next/headers";
@@ -11,17 +11,17 @@ import { Provider } from "./client-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'College Platform',
-  description: 'All-in-One Student Hub: Results, Resources, Attendance & More',
-  applicationName: 'College Platform',
-  authors: [{ name: 'Kanak Kholwal', url: 'https://kanakkholwal.eu.org' }],
-  creator: 'Kanak Kholwal',
+  title: "College Platform",
+  description: "All-in-One Student Hub: Results, Resources, Attendance & More",
+  applicationName: "College Platform",
+  authors: [{ name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" }],
+  creator: "Kanak Kholwal",
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL('https://app.nith.eu.org'),
+  metadataBase: new URL("https://app.nith.eu.org"),
   robots: {
     index: false,
     follow: true,
@@ -30,15 +30,15 @@ export const metadata: Metadata = {
       index: true,
       follow: false,
       noimageindex: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
     },
   },
-  manifest: '/manifest.json',
+  manifest: "/manifest.json",
 };
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -46,10 +46,10 @@ const fontSans = FontSans({
 });
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;
-}>
+}>;
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = await getSession() as sessionType | null;
+  const session = (await getSession()) as sessionType | null;
   const headerList = headers();
   const pathname = headerList.get("x-current-path") as string;
   const redirectUrl = new URL(pathname);
@@ -62,22 +62,17 @@ export default async function RootLayout({ children }: RootLayoutProps) {
     } else {
       return redirect("/login");
     }
-
   }
 
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body
-        className={cn(
-          "min-h-screen antialiased",
-          fontSans.variable
-        )}
-      >
+      <body className={cn("min-h-screen antialiased", fontSans.variable)}>
         <Provider>{children} </Provider>
-        {process.env.NODE_ENV === "production" && <GoogleAnalytics gaId="G-SC4TQQ5PCW" />}
+        {process.env.NODE_ENV === "production" && (
+          <GoogleAnalytics gaId="G-SC4TQQ5PCW" />
+        )}
       </body>
     </html>
-  )
+  );
 }
-
