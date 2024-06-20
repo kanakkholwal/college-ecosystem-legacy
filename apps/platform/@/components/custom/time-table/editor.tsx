@@ -1,12 +1,6 @@
 "use client";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
 import {
   Table,
   TableBody,
@@ -16,50 +10,68 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import React, { useRef } from "react";
 import toast from "react-hot-toast";
 import { getDepartmentName } from "src/constants/departments";
+import { createTimeTable, updateTimeTable } from "src/lib/time-table/actions";
 import { RawTimetable, TimeTableWithID } from "src/models/time-table";
-import { daysMap, timeMap } from "./time-table-constants";
-import EditTimetableDialog, { TimeTableMetaData } from "./time-table-editor";
-import { useTimetableStore } from "./time-table-store";
+import { EditTimetableDialog, Event, TimeTableMetaData } from "./components";
+import { daysMap, rawTimetableData, timeMap } from "./constants";
+import { useTimeTableStore } from "./store";
 
-export type FormattedTimetable = TimeTableWithID | RawTimetable;
-
-export type TimetableProps = {
-  // timetableData: FormattedTimetable;
-  mode?: "view" | "edit";
-  saveTimetable?: (
-    timetableData: TimeTableWithID | RawTimetable
-  ) => Promise<string>;
+export type TimeTableEditorProps = {
+  timetableData?: TimeTableWithID | RawTimetable;
+  mode: "create" | "edit";
 };
 
-export function TimeTable({ mode = "view", saveTimetable }: TimetableProps) {
-  const { timetableData: stateTimetableData, isEditing } = useTimetableStore(
-    (state) => ({
-      timetableData: state.timetableData,
-      isEditing: state.isEditing,
-    })
-  );
+export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
+  timetableData: timetableDataProp,
+  mode = "create",
+}) => {
+  const isInitialized = useRef<boolean>(false);
+  if (!isInitialized.current) {
+    useTimeTableStore.setState({
+      timetableData:
+        mode === "edit" && !!timetableDataProp
+          ? (timetableDataProp as TimeTableWithID)
+          : (rawTimetableData as RawTimetable),
+      isEditing: false,
+      editingEvent: { dayIndex: 0, timeSlotIndex: 0, eventIndex: -1 },
+      disabled: false,
+    });
+    isInitialized.current = true;
+    console.log("initialized");
+  }
+  const { timetableData, isEditing } = useTimeTableStore.getState();
+
+  // console.log(timetableData);
 
   const handleSaveTimetable = async () => {
-    if (mode === "edit" && stateTimetableData) {
-      if (saveTimetable && typeof saveTimetable === "function") {
-        useTimetableStore.setState({ isEditing: false });
-        toast
-          .promise(
-            saveTimetable(
-              mode === "edit"
-                ? (stateTimetableData as TimeTableWithID)
-                : (stateTimetableData as RawTimetable)
-            ),
-            {
-              loading: "Saving Timetable",
-              success: "Timetable saved successfully",
-              error: "Failed to save timetable",
-            }
-          )
-          .finally(() => useTimetableStore.setState({ isEditing: true }));
-      }
+    useTimeTableStore.setState({ isEditing: false, disabled: true });
+
+    if (mode === "edit") {
+      const data = timetableData as TimeTableWithID;
+      toast
+        .promise(updateTimeTable(data._id!, data), {
+          loading: "Saving Timetable",
+          success: "Timetable saved successfully",
+          error: "Failed to save timetable",
+        })
+        .finally(() => {
+          useTimeTableStore.setState({ disabled: false });
+        });
+    } else {
+      const data = timetableData as RawTimetable;
+
+      toast
+        .promise(createTimeTable(timetableData), {
+          loading: "Creating Timetable",
+          success: "Timetable created successfully",
+          error: "Failed to create timetable",
+        })
+        .finally(() => {
+          useTimeTableStore.setState({ disabled: false });
+        });
     }
   };
 
@@ -68,22 +80,26 @@ export function TimeTable({ mode = "view", saveTimetable }: TimetableProps) {
       <div className="flex items-center justify-between gap-2 flex-col md:flex-row mx-auto max-w-7xl w-full mt-20">
         <div>
           <h3 className="text-lg font-semibold">
-            {stateTimetableData.sectionName} -{" "}
-            {getDepartmentName(stateTimetableData.department_code)}
+            {timetableData?.sectionName} {" |  "}
+            {getDepartmentName(timetableData?.department_code)}
           </h3>
           <p className="text-sm text-gray-700">
-            {stateTimetableData.year} Year, {stateTimetableData.semester}{" "}
-            Semester
+            {timetableData?.year} Year | {timetableData?.semester} Semester
           </p>
         </div>
-        {mode === "edit" && (
-          <div className="flex gap-3 items-center">
-            <TimeTableMetaData />
-            <Button size="sm" onClick={() => handleSaveTimetable()}>
-              Save TimeTable
-            </Button>
-          </div>
-        )}
+        <div className="flex gap-3 items-center">
+          <TimeTableMetaData />
+          <Button
+            size="sm"
+            onClick={(e) => {
+              e.stopPropagation();
+              e.preventDefault();
+              handleSaveTimetable();
+            }}
+          >
+            {mode === "create" ? "Save" : "Edit"} TimeTable
+          </Button>
+        </div>
       </div>
       <Table className="mx-auto max-w-7xl bg-white/20 backdrop-blur-2xl rounded-lg overflow-hidden">
         <TableHeader>
@@ -130,12 +146,12 @@ export function TimeTable({ mode = "view", saveTimetable }: TimetableProps) {
                       ? "text-primary bg-primary/10"
                       : ""
                   )}
-                  {...(mode === "edit" && {
+                  {...{
                     role: "button",
                     tabIndex: 0,
                     "aria-disabled": isEditing ? "true" : "false",
                     onClick: () =>
-                      useTimetableStore.setState({
+                      useTimeTableStore.setState({
                         isEditing: true,
                         editingEvent: {
                           dayIndex,
@@ -143,9 +159,9 @@ export function TimeTable({ mode = "view", saveTimetable }: TimetableProps) {
                           eventIndex: 0,
                         },
                       }),
-                  })}
+                  }}
                 >
-                  {stateTimetableData.schedule[dayIndex]?.timeSlots[
+                  {timetableData.schedule[dayIndex]?.timeSlots[
                     index
                   ]?.events.map((event, eventIndex) => (
                     <Event
@@ -153,8 +169,8 @@ export function TimeTable({ mode = "view", saveTimetable }: TimetableProps) {
                       key={`${index}-${dayIndex}-event-${eventIndex}`}
                     />
                   ))}
-                  {stateTimetableData.schedule[dayIndex]?.timeSlots[index]
-                    ?.events.length === 0 && (
+                  {timetableData.schedule[dayIndex]?.timeSlots[index]?.events
+                    .length === 0 && (
                     <Badge className="text-xs" variant="success" size="sm">
                       Free Time
                     </Badge>
@@ -165,30 +181,7 @@ export function TimeTable({ mode = "view", saveTimetable }: TimetableProps) {
           ))}
         </TableBody>
       </Table>
-      {mode === "edit" && <EditTimetableDialog />}
+      <EditTimetableDialog />
     </>
   );
-}
-function Event({
-  event,
-}: {
-  event: FormattedTimetable["schedule"][0]["timeSlots"][0]["events"][0];
-}) {
-  return (
-    <div>
-      <HoverCard>
-        <HoverCardTrigger asChild>
-          <Button variant="link" className="p-4">
-            {event.title}
-          </Button>
-        </HoverCardTrigger>
-        <HoverCardContent className="w-80 text-left">
-          <div className="space-y-1">
-            <h4 className="text-sm font-semibold">{event.title}</h4>
-            <p className="text-sm">{event?.description}</p>
-          </div>
-        </HoverCardContent>
-      </HoverCard>
-    </div>
-  );
-}
+};

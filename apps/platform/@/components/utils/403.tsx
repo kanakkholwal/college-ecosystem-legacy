@@ -1,6 +1,6 @@
 export default function Page403() {
   return (
-    <div className="flex h-full min-h-screen relative overflow-hidden">
+    <div className="flex h-full relative overflow-hidden">
       <div className="flex flex-col justify-center items-center p-4 w-full h-full gap-4 m-auto">
         <h2 className="text-5xl font-bold text-slate-900  text-center">
           No permission!

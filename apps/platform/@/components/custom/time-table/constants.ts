@@ -1,3 +1,5 @@
+import { RawEvent, RawTimetableType } from "src/models/time-table";
+
 export const daysMap = new Map([
   [0, "Monday"],
   [1, "Tuesday"],
@@ -20,3 +22,18 @@ export const timeMap = new Map([
   [8, "4:00 PM - 5:00 PM"],
   [9, "5:00 PM - 6:00 PM"],
 ]);
+
+export const rawTimetableData: RawTimetableType = {
+  department_code: "",
+  sectionName: "",
+  year: 1,
+  semester: 1,
+  schedule: Array.from(daysMap.entries()).map((_, dayIndex) => ({
+    day: dayIndex,
+    timeSlots: Array.from(timeMap.entries()).map((_, timeSlotIndex) => ({
+      startTime: timeSlotIndex,
+      endTime: timeSlotIndex + 1,
+      events: [] as RawEvent[],
+    })),
+  })),
+};

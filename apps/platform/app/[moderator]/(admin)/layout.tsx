@@ -25,8 +25,8 @@ export default async function DashboardLayout({
   const moderator = params.moderator!;
 
   if (
-    ALLOWED_ROLES.some((role) => session.user.roles.includes(role)) &&
-    session.user.roles.includes(moderator)
+    !ALLOWED_ROLES.some((role) => session.user.roles.includes(role)) &&
+    !session.user.roles.includes(moderator)
   ) {
     return <Page403 />;
   }

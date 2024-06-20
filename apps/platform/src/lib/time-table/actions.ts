@@ -11,7 +11,7 @@ export async function getTimeTable(
   department_code: string,
   year: number,
   semester: number
-): Promise<Partial<TimeTableWithID>> {
+): Promise<TimeTableWithID> {
   try {
     await dbConnect();
     // Find the timetable by department code, year and semester
@@ -19,9 +19,7 @@ export async function getTimeTable(
       department_code: department_code,
       year: year,
       semester: semester,
-    })
-      .select("-author")
-      .exec();
+    }).exec();
 
     if (!timetable) {
       return Promise.reject("Timetable not found");
@@ -56,10 +54,8 @@ export async function createTimeTable(timetableData: RawTimetable) {
   }
   try {
     if (
-      (!session.user.roles.includes("admin") &&
-        !session.user.roles.includes("faculty") &&
-        !session.user.roles.includes("cr")) ||
-      !session.user.roles.includes("moderator")
+      session.user.roles.includes("student") &&
+      session.user.roles.length === 1
     ) {
       return Promise.reject("Student can't create a timetable");
     }

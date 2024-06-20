@@ -1,10 +1,8 @@
 // provider.tsx
 "use client";
-import { Button, ButtonProps } from "@/components/ui/button";
 import useNotificationChecker from "@/hooks/useNotificationChecker";
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { ArrowLeft } from "lucide-react";
 import { SessionProvider } from "next-auth/react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { type ThemeProviderProps } from "next-themes/dist/types";
@@ -79,20 +77,5 @@ export function Provider({ children }: { children: React.ReactNode }) {
         </span>
       </div>
     </SessionProvider>
-  );
-}
-
-export function GoBackButton(props: ButtonProps) {
-  return (
-    <Button
-      rounded="full"
-      variant="default_light"
-      width="sm"
-      size="lg"
-      {...props}
-    >
-      <ArrowLeft />
-      Go Back
-    </Button>
   );
 }
