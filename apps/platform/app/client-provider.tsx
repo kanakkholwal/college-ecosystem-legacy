@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 // provider.tsx
 "use client";
 import useNotificationChecker from "@/hooks/useNotificationChecker";
@@ -69,7 +70,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
       />
       <div className="fixed bottom-2 right-2 left-auto top-auto z-50 flex gap-1 items-center">
         <span>
-          <Image
+          <img
             height={20}
             width={80}
             src="https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
