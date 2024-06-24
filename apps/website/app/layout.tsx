@@ -4,7 +4,7 @@ import { Provider } from "./client-provider";
 
 import "./globals.css";
 
-import { Montserrat, Open_Sans } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 
 const font = Open_Sans({
   weight: ["400", "500", "600", "700", "800"],
@@ -12,13 +12,6 @@ const font = Open_Sans({
   display: "swap",
   adjustFontFallback: false,
   fallback: ["system-ui", "sans-serif"],
-});
-
-const heading_font = Montserrat({
-  subsets: ["latin"],
-  preload: true,
-  display: "swap",
-  weight: ["500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {

@@ -5,7 +5,7 @@ import { GrAnnounce } from "react-icons/gr";
 import { MdOutlinePoll } from "react-icons/md";
 import { TbHome } from "react-icons/tb";
 
-export const sidenav_links:SidenavLinkType[] = [
+export const sidenav_links: SidenavLinkType[] = [
   {
     title: "Home",
     href: "/",
@@ -26,4 +26,4 @@ export const sidenav_links:SidenavLinkType[] = [
     href: "/polls",
     Icon: MdOutlinePoll,
   },
-] 
+];

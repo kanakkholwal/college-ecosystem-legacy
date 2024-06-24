@@ -8,7 +8,7 @@ import { LuSearch } from "react-icons/lu";
 import { MdOutlinePoll } from "react-icons/md";
 import { TbHome } from "react-icons/tb";
 
-export const sidenav_links:SidenavLinkType[] = [
+export const sidenav_links: SidenavLinkType[] = [
   {
     title: "Home",
     href: "/",
@@ -28,13 +28,13 @@ export const sidenav_links:SidenavLinkType[] = [
     title: "Polls",
     href: "/polls",
     Icon: MdOutlinePoll,
-  }
+  },
 ];
 export type SidenavLinkType = {
-  title:string;
-  href:string;
-  Icon:React.FC<React.SVGProps<SVGSVGElement>>;
-}
+  title: string;
+  href: string;
+  Icon: React.FC<React.SVGProps<SVGSVGElement>>;
+};
 
 export default function Sidebar() {
   return (
@@ -44,11 +44,15 @@ export default function Sidebar() {
         "lg:sticky lg:top-24 lg:left-0 lg:bottom-auto lg:translate-x-0 transition-all"
       )}
     >
-      <SidebarContent sidebarLinks={sidenav_links}/>
+      <SidebarContent sidebarLinks={sidenav_links} />
     </aside>
   );
 }
-export function SidebarContent({sidebarLinks}:{sidebarLinks?:SidenavLinkType[]}) {
+export function SidebarContent({
+  sidebarLinks,
+}: {
+  sidebarLinks?: SidenavLinkType[];
+}) {
   return (
     <>
       {/* <h3 className="text-xl font-bold">Community</h3> */}
