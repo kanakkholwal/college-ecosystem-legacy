@@ -1,5 +1,7 @@
 "use client";
-import { FancyArea } from "@/components/common/fancy-area";
+import NexoMdxEditor from "nexo-mdx";
+import MarkdownView from "@/components/common/markdown/view";
+
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -91,14 +93,10 @@ export default function CreateAnnouncement() {
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <FancyArea
-                  // textValue={field.value}
-                  // setTextValue={field.onChange}
+                <NexoMdxEditor
+                  {...field}
                   disabled={form.formState.isSubmitting}
-                  textValue={field.value}
-                  setTextValue={(value) => {
-                    field.onChange(value);
-                  }}
+                  renderHtml={(md) => <MarkdownView>{md}</MarkdownView>}
                 />
               </FormControl>
               <FormDescription>

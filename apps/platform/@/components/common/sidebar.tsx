@@ -49,7 +49,7 @@ export default function Sidebar() {
     </aside>
   );
 }
-export function SidebarContent() {
+export function SidebarContent({sidebarLinks}:{sidebarLinks:SidenavLinkType[]}) {
   return (
     <>
       {/* <h3 className="text-xl font-bold">Community</h3> */}

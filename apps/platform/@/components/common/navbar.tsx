@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
-import { Bug, Cloud, Eye, LogOut, UserRound } from "lucide-react";
+import { Bug, Cloud, LogOut, UserRound } from "lucide-react";
 
 import { signOut } from "next-auth/react";
 import Link from "next/link";
@@ -21,7 +21,7 @@ import { FiLinkedin } from "react-icons/fi";
 import { LuGithub } from "react-icons/lu";
 import { RiTwitterXFill } from "react-icons/ri";
 import { sessionType } from "src/types/session";
-// import { SidebarContent } from "./sidebar";
+import { SidebarContent } from "./sidebar";
 import Image from "next/image";
 import { SidenavLinkType } from "./sidebar";
 
@@ -168,7 +168,7 @@ export default function Navbar({
           </DropdownMenu>
         </div>
       </nav>
-      {!showBreadcrumbs && !sidebarLinks ? null : (
+      {(!showBreadcrumbs && !sidebarLinks) ? null : (
         <div className="flex items-center p-4 border-b border-slate-900/10 lg:hidden dark:border-slate-50/[0.06] w-full">
           {sidebarLinks && sidebarLinks.length > 0 && (
             <Sheet>
@@ -189,7 +189,9 @@ export default function Navbar({
                   </svg>
                 </button>
               </SheetTrigger>
-              <SheetContent className="pt-12"></SheetContent>
+              <SheetContent className="pt-12">
+                <SidebarContent sidebarLinks={sidebarLinks} />
+              </SheetContent>
             </Sheet>
           )}
           {showBreadcrumbs && (
