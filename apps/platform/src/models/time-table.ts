@@ -37,6 +37,7 @@ export interface RawEvent {
   title: string;
   description?: string;
 }
+export type EventTypeWithID = RawEvent & { _id: string };
 export interface IEvent extends Document, RawEvent {}
 
 export interface rawTimeSlot {
@@ -44,12 +45,14 @@ export interface rawTimeSlot {
   endTime: number;
   events: RawEvent[];
 }
+export type TimeSlotWithID = rawTimeSlot & { _id: string };
 export interface ITimeSlot extends Document, rawTimeSlot {}
 
 export interface rawDaySchedule {
   day: number;
   timeSlots: rawTimeSlot[];
 }
+export type DayScheduleWithID = rawDaySchedule & { _id: string };
 export interface IDaySchedule extends Document, rawDaySchedule {}
 
 export type RawTimetable = {
@@ -65,11 +68,18 @@ export interface PublicTimetable extends RawTimetable {
   createdAt?: Date;
   updatedAt?: Date;
 }
-export interface TimeTableWithID extends PublicTimetable {
+export interface TimeTableWithID {
   _id: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  department_code: string;
+  sectionName: string;
+  year: number;
+  semester: number;
+  schedule: DayScheduleWithID[];
+  author: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
+
 export interface ITimetable extends Document, PublicTimetable {
   bookmarks: Types.ObjectId[];
   views: number;

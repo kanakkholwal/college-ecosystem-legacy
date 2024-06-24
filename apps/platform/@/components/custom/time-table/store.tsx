@@ -1,18 +1,21 @@
-import { create } from "zustand";
-import { FormattedTimetable } from "./time-table";
-import { daysMap, timeMap } from "./time-table-constants";
+import { RawTimetable, TimeTableWithID } from "src/models/time-table";
+import { createStore } from "zustand";
+import { daysMap, timeMap } from "./constants";
 
-export type TimeTableState = {
+export type FormattedTimetable = TimeTableWithID | RawTimetable;
+
+export interface TimeTableState {
   timetableData: FormattedTimetable;
-  isEditing: boolean;
   editingEvent: {
     dayIndex: number;
     timeSlotIndex: number;
     eventIndex: number;
   };
-};
+  isEditing: boolean;
+  disabled?: boolean;
+}
 
-export const useTimetableStore = create<TimeTableState>((set) => ({
+export const useTimeTableStore = createStore<TimeTableState>((set) => ({
   timetableData: {
     department_code: "",
     sectionName: "",
@@ -28,10 +31,11 @@ export const useTimetableStore = create<TimeTableState>((set) => ({
       })),
     })),
   },
-  isEditing: false,
   editingEvent: {
     dayIndex: 0,
     timeSlotIndex: 0,
     eventIndex: 0,
   },
+  isEditing: false,
+  disabled: false,
 }));

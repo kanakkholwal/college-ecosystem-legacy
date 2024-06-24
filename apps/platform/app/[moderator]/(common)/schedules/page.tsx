@@ -1,19 +1,25 @@
 import { RouterCard, RouterCardLink } from "@/components/common/router-card";
 import { CalendarDays, CalendarPlus } from "lucide-react";
-import { getInfo } from "./cr.actions";
+import { getInfo } from "./actions";
 
-export default async function CRDashboard() {
+export default async function Schedules({
+  params,
+}: {
+  params: {
+    moderator: string;
+  };
+}) {
   const { studentInfo, timetables } = await getInfo();
 
   const quick_links: RouterCardLink[] = [
     {
-      href: "/cr/schedules/create",
+      href: `/${params.moderator}/schedules/create`,
       title: "New Time Table",
       description: "Create new timetable here.",
       Icon: CalendarPlus,
     },
     ...timetables.map((timetable) => ({
-      href: `/cr/schedules/${timetable.department_code}/${timetable.year}/${timetable.semester}`,
+      href: `/${params.moderator}/schedules/${timetable.department_code}/${timetable.year}/${timetable.semester}`,
       title: timetable.sectionName,
       description: "View your timetable here.",
       Icon: CalendarDays,

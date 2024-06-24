@@ -10,4 +10,5 @@ export type studentInfoType = {
   name: string;
   rank: Rank;
   departmentCode: string;
+  roles: string[];
 };

@@ -3,9 +3,7 @@ import dbConnect from "src/lib/dbConnect";
 import UserModel from "src/models/user";
 
 // Function to count users and calculate percent growth
-export async function users_CountAndGrowth(
-  timeInterval: string
-): Promise<{
+export async function users_CountAndGrowth(timeInterval: string): Promise<{
   count: number;
   growth: number;
   trend: "increase" | "decrease" | "stable";

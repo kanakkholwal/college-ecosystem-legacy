@@ -1,8 +1,8 @@
+import { GoBackButton } from "@/components/common/go-back";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
-import { GoBackButton } from "./client-provider";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {

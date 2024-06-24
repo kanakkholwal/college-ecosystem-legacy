@@ -2,6 +2,14 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   Sheet,
   SheetContent,
@@ -13,77 +21,23 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
-import { create } from "zustand";
-import { shallow } from "zustand/shallow";
-import { FormattedTimetable } from "./time-table";
-import { daysMap, timeMap } from "./time-table-constants";
-
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
-import { useMediaQuery } from "usehooks-ts";
-import { useRef } from "react";
+import { daysMap, timeMap } from "./constants";
+import { FormattedTimetable, useTimeTableStore } from "./store";
 
-import { TimeTableState, useTimetableStore } from "./time-table-store";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+import { EventTypeWithID, RawEvent } from "src/models/time-table";
 
-export function StoreInitializer({
-  timetableData,
-  isEditing,
-}: {
-  timetableData: TimeTableState["timetableData"];
-  isEditing: TimeTableState["isEditing"];
-}) {
-  const initialized = useRef(false);
-  if (!initialized.current) {
-    useTimetableStore.setState({
-      timetableData: timetableData,
-      isEditing: false,
-      editingEvent: {
-        dayIndex: 0,
-        timeSlotIndex: 0,
-        eventIndex: 0,
-      },
-    });
-    initialized.current = true;
-  }
-  return null;
-}
-
-const EditTimetableDialog: React.FC = () => {
-  const { timetableData, isEditing, editingEvent } = useTimetableStore(
-    (state) => ({
-      timetableData: state.timetableData,
-      isEditing: state.isEditing,
-      editingEvent: state.editingEvent,
-    }),
-    shallow
-  );
+export const EditTimetableDialog: React.FC = () => {
+  const { timetableData, isEditing, editingEvent } =
+    useTimeTableStore.getState();
 
   const [newEvent, setNewEvent] = useState<
-    FormattedTimetable["schedule"][0]["timeSlots"][0]["events"][0]
+    FormattedTimetable["schedule"][number]["timeSlots"][number]["events"][number]
   >({
     title: "",
     description: "",
@@ -113,7 +67,7 @@ const EditTimetableDialog: React.FC = () => {
         return daySchedule;
       }),
     };
-    useTimetableStore.setState({
+    useTimeTableStore.setState({
       timetableData: updatedTimetableData,
       isEditing: false,
       editingEvent: { dayIndex: 0, timeSlotIndex: 0, eventIndex: -1 },
@@ -122,7 +76,7 @@ const EditTimetableDialog: React.FC = () => {
   };
 
   const handleCancel = () => {
-    useTimetableStore.setState({
+    useTimeTableStore.setState({
       isEditing: false,
       editingEvent: { dayIndex: 0, timeSlotIndex: 0, eventIndex: -1 },
     });
@@ -148,7 +102,7 @@ const EditTimetableDialog: React.FC = () => {
         return daySchedule;
       }),
     };
-    useTimetableStore.setState({
+    useTimeTableStore.setState({
       timetableData: updatedTimetableData,
       isEditing: false,
       editingEvent: { dayIndex: 0, timeSlotIndex: 0, eventIndex: -1 },
@@ -163,9 +117,9 @@ const EditTimetableDialog: React.FC = () => {
   return (
     <Sheet
       open={isEditing}
-      onOpenChange={(value) => useTimetableStore.setState({ isEditing: value })}
+      onOpenChange={(value) => useTimeTableStore.setState({ isEditing: value })}
     >
-      <SheetContent>
+      <SheetContent className="w-full max-w-lg">
         <SheetHeader>
           <SheetTitle>Edit Event</SheetTitle>
           <SheetDescription className="font-semibold">
@@ -206,7 +160,7 @@ const EditTimetableDialog: React.FC = () => {
                 ]?.events.length
               }
               onCheckedChange={(checked) => {
-                useTimetableStore.setState({
+                useTimeTableStore.setState({
                   editingEvent: {
                     ...editingEvent,
                     eventIndex: checked
@@ -219,11 +173,15 @@ const EditTimetableDialog: React.FC = () => {
             />
           </div>
           <div className="grid grid-cols-2 items-center gap-2">
-            <Button onClick={handleSave}>Save</Button>
+            <Button onClick={handleSave} variant="dark">
+              Save
+            </Button>
             <Button variant="outline" onClick={handleCancel}>
               Cancel
             </Button>
-            <Button onClick={handleDelete}>Delete</Button>
+            <Button onClick={handleDelete} variant="destructive_light">
+              Delete
+            </Button>
           </div>
         </div>
         <div className="grid gap-4 py-4">
@@ -244,7 +202,7 @@ const EditTimetableDialog: React.FC = () => {
                   variant="outline"
                   size="sm"
                   onClick={() => {
-                    useTimetableStore.setState({
+                    useTimeTableStore.setState({
                       isEditing: true,
                       editingEvent: {
                         dayIndex: editingEvent.dayIndex,
@@ -265,141 +223,120 @@ const EditTimetableDialog: React.FC = () => {
     </Sheet>
   );
 };
-export function TimeTableMetaData() {
-  const [open, setOpen] = React.useState(false);
-  const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  if (isDesktop) {
-    return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button variant="default_light" size="sm">
-            Edit Metadata
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>Edit Metadata</DialogTitle>
-            <DialogDescription>
-              Edit the metadata of the timetable
-            </DialogDescription>
-          </DialogHeader>
-          <MetaDataForm />
-        </DialogContent>
-      </Dialog>
-    );
-  }
+export function TimeTableMetaData({ className }: React.ComponentProps<"form">) {
+  const timetableData = useTimeTableStore.getState().timetableData;
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button variant="default_light" size="sm">
-          Edit Metadata
-        </Button>
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader className="text-left">
-          <DrawerTitle>Edit Metadata</DrawerTitle>
-          <DrawerDescription>
-            Edit the metadata of the timetable
-          </DrawerDescription>
-        </DrawerHeader>
-        <MetaDataForm className="px-4" />
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+    <ResponsiveDialog
+      title="Timetable Metadata"
+      description="the metadata of the timetable"
+      btnProps={{
+        variant: "default_light",
+        size: "sm",
+        children: "Edit Metadata",
+      }}
+    >
+      <div className={cn("grid items-start gap-4", className)}>
+        <div className="grid gap-2">
+          <Label htmlFor="department">Department</Label>
+          <Select
+            value={timetableData.department_code}
+            onValueChange={(value) => {
+              useTimeTableStore.setState({
+                timetableData: { ...timetableData, department_code: value },
+              });
+            }}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Choose department" />
+            </SelectTrigger>
+            <SelectContent>
+              {DEPARTMENTS_LIST.map((department) => {
+                return (
+                  <SelectItem value={department.code} key={department.code}>
+                    {department.name}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="sectionName">Section Name</Label>
+          <Input
+            id="sectionName"
+            defaultValue="ECE 3-B"
+            value={timetableData.sectionName}
+            onChange={(e) =>
+              useTimeTableStore.setState({
+                timetableData: {
+                  ...timetableData,
+                  sectionName: e.target.value,
+                },
+              })
+            }
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="year">Year</Label>
+          <Input
+            id="year"
+            type="number"
+            defaultValue="3"
+            min={1}
+            max={5}
+            value={timetableData.year}
+            onChange={(e) =>
+              useTimeTableStore.setState({
+                timetableData: {
+                  ...timetableData,
+                  year: parseInt(e.target.value),
+                },
+              })
+            }
+          />
+        </div>
+        <div className="grid gap-2">
+          <Label htmlFor="semester">Semester</Label>
+          <Input
+            id="semester"
+            type="number"
+            defaultValue="1"
+            min={1}
+            max={10}
+            value={timetableData.semester}
+            onChange={(e) =>
+              useTimeTableStore.setState({
+                timetableData: {
+                  ...timetableData,
+                  semester: parseInt(e.target.value),
+                },
+              })
+            }
+          />
+        </div>
+      </div>
+    </ResponsiveDialog>
   );
 }
 
-function MetaDataForm({ className }: React.ComponentProps<"form">) {
-  const { timetableData } = useTimetableStore(
-    (state) => ({
-      timetableData: state.timetableData,
-    }),
-    shallow
-  );
+export function Event({ event }: { event: EventTypeWithID | RawEvent }) {
   return (
-    <div className={cn("grid items-start gap-4", className)}>
-      <div className="grid gap-2">
-        <Label htmlFor="department">Department</Label>
-        <Select
-          value={timetableData.department_code}
-          onValueChange={(value) =>
-            useTimetableStore.setState({
-              timetableData: { ...timetableData, department_code: value },
-            })
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Choose department" />
-          </SelectTrigger>
-          <SelectContent>
-            {DEPARTMENTS_LIST.map((department) => {
-              return (
-                <SelectItem value={department.code} key={department.code}>
-                  {department.name}
-                </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="sectionName">Section Name</Label>
-        <Input
-          id="sectionName"
-          defaultValue="ECE 3-B"
-          value={timetableData.sectionName}
-          onChange={(e) =>
-            useTimetableStore.setState({
-              timetableData: { ...timetableData, sectionName: e.target.value },
-            })
-          }
-        />
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="year">Year</Label>
-        <Input
-          id="year"
-          type="number"
-          defaultValue="3"
-          min={1}
-          max={5}
-          value={timetableData.year}
-          onChange={(e) =>
-            useTimetableStore.setState({
-              timetableData: {
-                ...timetableData,
-                year: parseInt(e.target.value),
-              },
-            })
-          }
-        />
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="semester">Semester</Label>
-        <Input
-          id="semester"
-          type="number"
-          defaultValue="1"
-          min={1}
-          max={10}
-          value={timetableData.semester}
-          onChange={(e) =>
-            useTimetableStore.setState({
-              timetableData: {
-                ...timetableData,
-                semester: parseInt(e.target.value),
-              },
-            })
-          }
-        />
-      </div>
+    <div>
+      <HoverCard>
+        <HoverCardTrigger asChild>
+          <Button variant="link" className="p-4">
+            {event.title}
+          </Button>
+        </HoverCardTrigger>
+        <HoverCardContent className="w-80 text-left">
+          <div className="space-y-1">
+            <h4 className="text-sm font-semibold">{event.title}</h4>
+            <p className="text-sm">{event?.description}</p>
+          </div>
+        </HoverCardContent>
+      </HoverCard>
     </div>
   );
 }
-export default EditTimetableDialog;
