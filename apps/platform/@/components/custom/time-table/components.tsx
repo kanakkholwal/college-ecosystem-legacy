@@ -32,8 +32,10 @@ import {
 } from "@/components/ui/hover-card";
 import { EventTypeWithID, RawEvent } from "src/models/time-table";
 
-export const EditTimetableDialog: React.FC = () => {
-  const { timetableData, isEditing, editingEvent } =
+export const EditTimetableDialog: React.FC<{
+  isEditing: boolean;
+}> = ({isEditing}) => {
+  const { timetableData, editingEvent } =
     useTimeTableStore.getState();
 
   const [newEvent, setNewEvent] = useState<
