@@ -1,4 +1,4 @@
-name: Lint
+name: 🧹 Lint
 
 on:
   push:
@@ -7,21 +7,27 @@ on:
   pull_request:
     branches:
       - '**'
-  workflow_call:  # This allows the workflow to be called by other workflows
+  workflow_call:
 
 jobs:
   lint:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
 
-      - name: Setup Node.js
+      - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Install dependencies
-        run: npm ci
+      - name: 📦 Install dependencies
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install
+          fi
 
-      - name: Run linter
+      - name: 🔍 Run linter
         run: npm run lint

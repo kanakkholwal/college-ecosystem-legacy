@@ -1,4 +1,4 @@
-name: Trigger Deployments
+name: 🚀 Trigger Deployments
 
 on:
   push:
@@ -15,16 +15,17 @@ jobs:
     needs: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
         with:
           fetch-depth: 2
 
-      - name: Setup Node.js
+      - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '20'
 
-      - name: Cache Vercel CLI
+      - name: 💾 Cache Vercel CLI
         uses: actions/cache@v3
         with:
           path: ~/.vercel
@@ -32,10 +33,10 @@ jobs:
           restore-keys: |
             ${{ runner.OS }}-vercel-
 
-      - name: Install Vercel CLI
+      - name: 📦 Install Vercel CLI
         run: npm install -g vercel
 
-      - name: 💡 Detect changed projects
+      - name: 🔍 Detect changed projects
         id: changed
         run: |
           git diff --quiet HEAD^ HEAD ./apps/platform || echo "platform_changed=true" >> $GITHUB_OUTPUT
@@ -57,7 +58,7 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PLATFORM_PROJECT_ID }}
 
-      - name: 🚀 Deploy Website to Production
+      - name: 🌐 Deploy Website to Production
         if: github.ref == 'refs/heads/main' && steps.changed.outputs.website_changed == 'true'
         run: vercel --token ${VERCEL_TOKEN} --prod ./apps/website
         env:
