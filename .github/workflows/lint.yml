@@ -1,4 +1,4 @@
-name: 🧹 Lint
+name: 🧹 Lint and Format
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
   workflow_call:
 
 jobs:
-  lint:
+  lint-and-format:
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout code
@@ -23,20 +23,15 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          if [ -f pnpm-lock.yaml ]; then
-            npm install -g pnpm
-            pnpm install
-          elif [ -f package-lock.json ]; then
+          if [ -f package-lock.json ]; then
             npm ci
-          elif [ -f yarn.lock ]; then
-            yarn install --frozen-lockfile
           else
-            echo "No lock file found. Please commit a lock file to the repository."
-            exit 1
+            npm install
           fi
+          npm install turbo -g
 
-      - name: 📦 Install Turbo
-        run: npm install turbo -g
+      # - name: 🔍 Run linter and formatter
+      #   run: npx lint-staged
 
-      - name: 🔍 Run linter
+      - name: 🚀 Run Turbo lint
         run: turbo run lint
