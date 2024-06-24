@@ -1,7 +1,7 @@
 import mongoose, { ConnectOptions, Mongoose } from "mongoose";
 import "server-only";
 
-const MONGODB_URI = process.env.MONGODB_URI as string;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 declare const global: {
   mongoose: { conn: Mongoose | null; promise: Promise<Mongoose> | null };
