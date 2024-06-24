@@ -1,13 +1,11 @@
-
-import { cn } from "@/lib/utils";
-import { ArrowRight, ArrowUpRight, AudioLines } from "lucide-react";
-import Link from "next/link";
+"use client";
+import { SidenavLinkType } from "@/components/common/sidebar";
+import { AudioLines } from "lucide-react";
 import { GrAnnounce } from "react-icons/gr";
-import { LuSearch } from "react-icons/lu";
 import { MdOutlinePoll } from "react-icons/md";
 import { TbHome } from "react-icons/tb";
 
-export const sidenav_links = [
+export const sidenav_links:SidenavLinkType[] = [
   {
     title: "Home",
     href: "/",
@@ -28,9 +26,4 @@ export const sidenav_links = [
     href: "/polls",
     Icon: MdOutlinePoll,
   },
-  // {
-  //     title: "Contact",
-  //     href: "/contact",
-  //     Icon: ArrowRight,
-  // },
-];
+] 

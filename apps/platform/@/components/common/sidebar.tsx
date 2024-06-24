@@ -8,7 +8,7 @@ import { LuSearch } from "react-icons/lu";
 import { MdOutlinePoll } from "react-icons/md";
 import { TbHome } from "react-icons/tb";
 
-export const sidenav_links = [
+export const sidenav_links:SidenavLinkType[] = [
   {
     title: "Home",
     href: "/",
@@ -28,14 +28,13 @@ export const sidenav_links = [
     title: "Polls",
     href: "/polls",
     Icon: MdOutlinePoll,
-  },
-  // {
-  //     title: "Contact",
-  //     href: "/contact",
-  //     Icon: ArrowRight,
-  // },
+  }
 ];
-export type SidenavLinkType = (typeof sidenav_links)[number];
+export type SidenavLinkType = {
+  title:string;
+  href:string;
+  Icon:React.FC<React.SVGProps<SVGSVGElement>>;
+}
 
 export default function Sidebar() {
   return (
@@ -45,11 +44,11 @@ export default function Sidebar() {
         "lg:sticky lg:top-24 lg:left-0 lg:bottom-auto lg:translate-x-0 transition-all"
       )}
     >
-      <SidebarContent />
+      <SidebarContent sidebarLinks={sidenav_links}/>
     </aside>
   );
 }
-export function SidebarContent({sidebarLinks}:{sidebarLinks:SidenavLinkType[]}) {
+export function SidebarContent({sidebarLinks}:{sidebarLinks?:SidenavLinkType[]}) {
   return (
     <>
       {/* <h3 className="text-xl font-bold">Community</h3> */}
@@ -63,7 +62,7 @@ export function SidebarContent({sidebarLinks}:{sidebarLinks:SidenavLinkType[]}) 
         Search anything...
       </button>
       <div className="grid gap-3 mt-5 w-full">
-        {sidenav_links.map((link, index) => (
+        {sidebarLinks?.map((link, index) => (
           <SideLink
             key={index}
             link={link}
