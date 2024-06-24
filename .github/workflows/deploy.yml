@@ -5,13 +5,14 @@ on:
     branches:
       - main
       - staging
-  # pull_request:
-  #   branches:
-  #     - main
   workflow_dispatch:
 
 jobs:
+  lint:
+    uses: ./.github/workflows/lint.yml
+
   deploy:
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
