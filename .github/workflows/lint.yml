@@ -23,11 +23,20 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          if [ -f package-lock.json ]; then
+          if [ -f pnpm-lock.yaml ]; then
+            npm install -g pnpm
+            pnpm install
+          elif [ -f package-lock.json ]; then
             npm ci
+          elif [ -f yarn.lock ]; then
+            yarn install --frozen-lockfile
           else
-            npm install
+            echo "No lock file found. Please commit a lock file to the repository."
+            exit 1
           fi
 
+      - name: 📦 Install Turbo
+        run: npm install turbo -g
+
       - name: 🔍 Run linter
-        run: npm run lint
+        run: turbo run lint
