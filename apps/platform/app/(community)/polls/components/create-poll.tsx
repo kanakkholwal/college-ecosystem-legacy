@@ -12,13 +12,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { Switch } from "@/components/ui/switch";
-import { useRefWithFocus } from "@/hooks/useRefWithFocus";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import { Control, useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { createPoll } from "src/lib/poll/actions";
 import * as z from "zod";
@@ -33,18 +32,21 @@ import {
 export const rawPollSchema = z.object({
   question: z.string(),
   description: z.string().optional(),
-  options: z
-    .array(z.string().min(1, "Option cannot be empty"))
-    .min(2, "At least two options are required"),
+  options: z.array(z.object({
+    id: z.string(),
+    value: z.string(),
+  }))
+    .min(2, "At least two options are required.")
+    .default(() => [
+      { id: String(Date.now()), value: "" },
+      { id: String(Date.now() + 1), value: "" },
+    ]),
   multipleChoice: z.boolean().default(false),
   votes: z.array(z.string()).default([]),
-  closesAt: z
-    .date({
-      required_error: "A closing time is required.",
-    })
-    .default(() => new Date(Date.now() + 6 * 60 * 60 * 1000)), // Default to 6 hours from now
+  closesAt: z.date({
+    required_error: "A closing time is required.",
+  }).default(() => new Date(Date.now() + 6 * 60 * 60 * 1000)),
 });
-
 export default function CreatePoll() {
   return (
     <ResponsiveDialog
@@ -60,30 +62,43 @@ export default function CreatePoll() {
     </ResponsiveDialog>
   );
 }
+type PollFormData = z.infer<typeof rawPollSchema>;
 
 function PollForm({ className }: { className?: string }) {
-  const form = useForm<z.infer<typeof rawPollSchema>>({
+  const router = useRouter();
+  const form = useForm<PollFormData>({
     resolver: zodResolver(rawPollSchema),
     defaultValues: {
       question: "",
       description: "",
-      options: ["", ""],
+      options: [{
+        id: String(Date.now()),
+        value: "",
+      }],
       multipleChoice: false,
       closesAt: new Date(Date.now() + 6 * 60 * 60 * 1000), // Default to 6 hours from now
     },
   });
-
+  const { fields, append, remove } = useFieldArray<PollFormData>({
+    control: form.control as Control<PollFormData>,
+    name: "options",
+  });
+  
   async function onSubmit(values: z.infer<typeof rawPollSchema>) {
     console.log("Form submitted with values:", values);
 
     toast
-      .promise(createPoll(values), {
+      .promise(createPoll({
+        ...values,
+        options: values.options.map((option) => option.value),
+      }), {
         loading: "Creating poll...",
         success: "Poll created successfully",
         error: "Failed to create poll",
       })
       .finally(() => {
         form.reset();
+        router.refresh();
       });
   }
 
@@ -138,67 +153,43 @@ function PollForm({ className }: { className?: string }) {
                   size="sm"
                   type="button"
                   variant="default_light"
-                  onClick={() => {
-                    form.setValue("options", [
-                      ...form.getValues("options"),
-                      "",
-                    ]);
-                  }}
+                  onClick={() => append({
+                    id: String(Date.now()),
+                    value: ""
+                  })}
                 >
                   Add Option
                 </Button>
               </div>
               <FormDescription>Add the options for the poll</FormDescription>
-              {form.getValues("options").map((item, index) => (
+              {fields.map((field, index) => (
                 <FormField
-                  key={item + "_" + index}
+                  key={field.id}
                   control={form.control}
                   name={`options.${index}`}
-                  render={({ field }) => {
-                    const inputRef = useRefWithFocus<HTMLInputElement>();
-                    const { ref, ...rest } = field; // Destructure ref from field
-
-                    useEffect(() => {
-                      inputRef.current?.focus();
-                    }, [item]);
-                    return (
-                      <FormItem
-                        key={item}
-                        className="flex flex-row space-x-3 space-y-0"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-row space-x-3 space-y-0">
+                      <FormLabel className="bg-slate-200 rounded-md p-3 inline-flex justify-center items-center mb-0">
+                        {index + 1}
+                      </FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder={`Enter Option ${index + 1}`}
+                          id={`options.${index}.id`}
+                          {...form.register(`options.${index}.value`)} 
+                          disabled={form.formState.isSubmitting}
+                        />
+                      </FormControl>
+                      <Button
+                        type="button"
+                        size="icon"
+                        variant="default_light"
+                        onClick={() => remove(index)}
                       >
-                        <FormLabel className="bg-slate-200 rounded-md p-3 inline-flex justify-center items-center mb-0">
-                          {index + 1}
-                        </FormLabel>
-                        <FormControl>
-                          <Input
-                            ref={inputRef}
-                            placeholder={`Enter Option ${index + 1}`}
-                            {...rest}
-                            disabled={form.formState.isSubmitting}
-                            onChange={(event) => {
-                              const newOptions = [...form.getValues("options")];
-                              newOptions[index] = event.target.value;
-                              form.setValue("options", newOptions);
-                            }}
-                          />
-                        </FormControl>
-                        <Button
-                          type="button"
-                          size="icon"
-                          variant="default_light"
-                          onClick={() => {
-                            const newOptions = form
-                              .getValues("options")
-                              .filter((_, i) => i !== index);
-                            form.setValue("options", newOptions);
-                          }}
-                        >
-                          -
-                        </Button>
-                        <FormMessage />
-                      </FormItem>
-                    );
-                  }}
+                        -
+                      </Button>
+                    </FormItem>
+                  )}
                 />
               ))}
               <FormMessage />

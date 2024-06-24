@@ -164,7 +164,7 @@ export default function NewCourseForm({
             </Label>
             {chapters.map((chapter: ChapterType, index: number) => {
               return (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2" key={`chapter-${index}`}>
                   <Label htmlFor={`chapter-${index}-name`}>
                     Chapter {index + 1}
                   </Label>
@@ -257,7 +257,10 @@ export default function NewCourseForm({
             {books_and_references.map(
               (reference: booksAndRefType, index: number) => {
                 return (
-                  <div className="flex flex-col gap-2">
+                  <div
+                    className="flex flex-col gap-2"
+                    key={`reference-${index}`}
+                  >
                     <Label htmlFor={`reference-${index}-name`}>
                       Reference {index + 1}
                     </Label>
@@ -358,9 +361,12 @@ export default function NewCourseForm({
           </div>
           <div className="flex flex-col gap-4 w-full">
             <Label htmlFor="content">Previous Papers</Label>
-            {prev_papers.map((prevPaper: prevPaperType, index) => {
+            {prev_papers.map((prevPaper: prevPaperType, index: number) => {
               return (
-                <div className="flex flex-col gap-2">
+                <div
+                  className="flex flex-col gap-2"
+                  key={`prev_papers-${index}`}
+                >
                   <Label htmlFor={`prevPaper-${index}-link`}>
                     Previous Paper {index + 1}
                   </Label>

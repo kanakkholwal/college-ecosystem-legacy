@@ -77,6 +77,8 @@ To run individual projects locally:
 yarn workspace platform run dev
 # or
 npm run --workspace=platform dev
+# or
+npx turbo run dev --filter=platform
 ```
 
 #### Website
@@ -85,7 +87,8 @@ npm run --workspace=platform dev
 yarn workspace website run dev
 # or
 npm run --workspace=website dev
-
+# or
+npx turbo run dev --filter=website
 ```
 
 ### Building Projects

@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 // provider.tsx
 "use client";
 import useNotificationChecker from "@/hooks/useNotificationChecker";
@@ -31,6 +32,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
       // Perform canvas operations here
       const gradient = new Gradient();
       gradient.initGradient("#gradient-canvas");
+      setIsLoaded(true);
       // If animation loading fails, set isLoaded to false
     } catch (error) {
       setIsLoaded(false);
@@ -70,6 +72,8 @@ export function Provider({ children }: { children: React.ReactNode }) {
       <div className="fixed bottom-2 right-2 left-auto top-auto z-50 flex gap-1 items-center">
         <span>
           <img
+            height={20}
+            width={80}
             src="https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
             alt="Visitor counter"
             className="inline-block font-inherit h-4"
