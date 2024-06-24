@@ -149,7 +149,7 @@ function PollForm({ className }: { className?: string }) {
                 </Button>
               </div>
               <FormDescription>Add the options for the poll</FormDescription>
-              {form.getValues("options").map((item, index) => (
+              {/* {form.getValues("options").map((item, index) => (
                 <FormField
                   key={item + "_" + index}
                   control={form.control}
@@ -200,7 +200,7 @@ function PollForm({ className }: { className?: string }) {
                     );
                   }}
                 />
-              ))}
+              ))} */}
               <FormMessage />
             </FormItem>
           )}
@@ -269,7 +269,8 @@ function PollForm({ className }: { className?: string }) {
         <Button
           type="submit"
           width="full"
-          disabled={form.formState.isSubmitting}
+          // disabled={form.formState.isSubmitting}
+          disabled={true}
         >
           {form.formState.isSubmitting ? "Creating Poll..." : "Create Poll"}
         </Button>

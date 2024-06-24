@@ -155,7 +155,7 @@ export function EditCourseForm({
             </Label>
             {chapters.map((chapter: ChapterType, index: number) => {
               return (
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col gap-2" key={`chapter-${index}`}>
                   <Label htmlFor={`chapter-${index}-name`}>
                     Chapter {index + 1}
                   </Label>
@@ -248,7 +248,10 @@ export function EditCourseForm({
             {books_and_references.map(
               (reference: booksAndRefType, index: number) => {
                 return (
-                  <div className="flex flex-col gap-2">
+                  <div
+                    className="flex flex-col gap-2"
+                    key={`reference-${index}`}
+                  >
                     <Label htmlFor={`reference-${index}-name`}>
                       Reference {index + 1}
                     </Label>
@@ -351,7 +354,10 @@ export function EditCourseForm({
             <Label htmlFor="content">Previous Papers</Label>
             {prev_papers.map((prevPaper: prevPaperType, index) => {
               return (
-                <div className="flex flex-col gap-2">
+                <div
+                  className="flex flex-col gap-2"
+                  key={`prev_papers-${index}`}
+                >
                   <Label htmlFor={`prevPaper-${index}-exam`}>
                     Paper {index + 1}
                   </Label>

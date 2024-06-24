@@ -1,4 +1,5 @@
 import { Instagram } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { FiLinkedin } from "react-icons/fi";
 import { LuGithub } from "react-icons/lu";
@@ -37,7 +38,9 @@ export default function Footer() {
                 {NEXT_PUBLIC_WEBSITE_NAME}
               </Link>{" "}
               .
-              <img
+              <Image
+                height={20}
+                width={80}
                 src="https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
                 alt="Vistor counter"
                 className="inline-block"

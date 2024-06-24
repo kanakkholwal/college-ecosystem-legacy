@@ -2,7 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { onValue, ref, set } from "firebase/database";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { database } from "src/lib/firebase";
 
@@ -42,14 +42,14 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
       setVoteData(updatedVotes);
     }
   };
-  const handleSync = async () => {
+  const handleSync = useCallback(async () => {
     try {
       await updateVotes(voteData);
       console.log("Poll updated:", voteData);
     } catch (error) {
       console.error("Error updating poll:", error);
     }
-  };
+  }, [updateVotes, voteData]);
   useEffect(() => {
     const pollRef = ref(database, `polls/${poll._id}`);
     const unsubscribe = onValue(pollRef, (snapshot) => {
@@ -63,12 +63,12 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
       handleSync();
       unsubscribe();
     };
-  }, [poll._id]);
+  }, [handleSync, poll._id]);
   useEffect(() => {
     if (poll.votes.length !== voteData.length) {
       handleSync();
     }
-  }, [voteData.length]);
+  }, [handleSync, poll.votes.length, voteData.length]);
 
   return (
     <div className="grid grid-cols-2 gap-4">

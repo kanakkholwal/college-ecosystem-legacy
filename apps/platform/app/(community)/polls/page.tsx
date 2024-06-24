@@ -8,7 +8,7 @@ import {
 } from "src/lib/poll/actions";
 import { PollType } from "src/models/poll";
 import { sessionType } from "src/types/session";
-import CreatePoll from "./components/create-poll";
+// import CreatePoll from "./components/create-poll";
 import PollComponent from "./components/poll-component";
 
 export default async function Dashboard() {
@@ -69,7 +69,8 @@ export default async function Dashboard() {
         <TabsContent value="by-you">
           <div className="w-full flex justify-between items-center whitespace-nowrap gap-2">
             <h3 className="text-xl font-semibold">Polls created by you</h3>
-            <CreatePoll />
+            {/* <CreatePoll /> */}
+            Disabled for now
           </div>
           <div className="grid grid-cols-1 @2xl/polls:grid-cols-2 gap-3">
             {userPolls.map((poll: PollType) => (
