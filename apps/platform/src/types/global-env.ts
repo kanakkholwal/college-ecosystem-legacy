@@ -2,6 +2,7 @@ import { z } from "zod";
 
 
 const envVariables = z.object({
+    // Server Side
     GOOGLE_ID: z.string(),
     GOOGLE_SECRET: z.string(),
     NEXTAUTH_URL: z.string(),
