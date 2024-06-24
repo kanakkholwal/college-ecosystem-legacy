@@ -34,9 +34,8 @@ import { EventTypeWithID, RawEvent } from "src/models/time-table";
 
 export const EditTimetableDialog: React.FC<{
   isEditing: boolean;
-}> = ({isEditing}) => {
-  const { timetableData, editingEvent } =
-    useTimeTableStore.getState();
+}> = ({ isEditing }) => {
+  const { timetableData, editingEvent } = useTimeTableStore.getState();
 
   const [newEvent, setNewEvent] = useState<
     FormattedTimetable["schedule"][number]["timeSlots"][number]["events"][number]

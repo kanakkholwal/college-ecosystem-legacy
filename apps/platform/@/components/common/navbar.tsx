@@ -168,7 +168,7 @@ export default function Navbar({
           </DropdownMenu>
         </div>
       </nav>
-      {(!showBreadcrumbs && !sidebarLinks) ? null : (
+      {!showBreadcrumbs && !sidebarLinks ? null : (
         <div className="flex items-center p-4 border-b border-slate-900/10 lg:hidden dark:border-slate-50/[0.06] w-full">
           {sidebarLinks && sidebarLinks.length > 0 && (
             <Sheet>
