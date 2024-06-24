@@ -32,6 +32,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
       // Perform canvas operations here
       const gradient = new Gradient();
       gradient.initGradient("#gradient-canvas");
+      setIsLoaded(true);
       // If animation loading fails, set isLoaded to false
     } catch (error) {
       setIsLoaded(false);
