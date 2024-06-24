@@ -14,8 +14,6 @@ const font = Open_Sans({
   fallback: ["system-ui", "sans-serif"],
 });
 
-
-
 export const metadata: Metadata = {
   title: "NITH Portal",
   description:
