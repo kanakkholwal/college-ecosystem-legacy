@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
 import OthersPng from "./assets/others.png";
 
+import { GoBackButton } from "@/components/common/go-back";
 import {
   Card,
   CardContent,
@@ -14,7 +15,6 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { authOptions } from "app/api/auth/[...nextauth]/options";
-import { Undo2 } from "lucide-react";
 import { getServerSession } from "next-auth/next";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
@@ -72,19 +72,13 @@ export default async function CoursePage({
 
   return (
     <>
+      <div>
+        <GoBackButton />
+      </div>
       <section
         id="hero"
         className="z-10 w-full max-w-6xl relative flex flex-col items-center justify-center  py-24 max-h-80 text-center"
       >
-        <Link
-          href="/syllabus"
-          className="relative flex h-12 w-full items-center justify-center py-4 mr-auto px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max"
-        >
-          <span className="relative text-base font-semibold text-primary dark:text-white flex items-center gap-2">
-            <Undo2 className="w-5 h-5" />
-            Go Back
-          </span>
-        </Link>
         <h1 className="text-gray-900 dark:text-white font-bold text-5xl md:text-6xl xl:text-7xl">
           <span className="relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent  md:px-2">
             {course.name}
@@ -105,7 +99,7 @@ export default async function CoursePage({
             <TabsTrigger value="prev_papers">Previous Year Papers</TabsTrigger>
           </TabsList>
           <TabsContent value="chapters">
-            <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3">
+            <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1">
               {course.chapters.map((chapter, index) => {
                 return (
                   <Card variant="glass" key={index}>

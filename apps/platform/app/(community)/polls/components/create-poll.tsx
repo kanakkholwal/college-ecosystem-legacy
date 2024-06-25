@@ -32,10 +32,13 @@ import {
 export const rawPollSchema = z.object({
   question: z.string(),
   description: z.string().optional(),
-  options: z.array(z.object({
-    id: z.string(),
-    value: z.string(),
-  }))
+  options: z
+    .array(
+      z.object({
+        id: z.string(),
+        value: z.string(),
+      })
+    )
     .min(2, "At least two options are required.")
     .default(() => [
       { id: String(Date.now()), value: "" },
@@ -43,9 +46,11 @@ export const rawPollSchema = z.object({
     ]),
   multipleChoice: z.boolean().default(false),
   votes: z.array(z.string()).default([]),
-  closesAt: z.date({
-    required_error: "A closing time is required.",
-  }).default(() => new Date(Date.now() + 6 * 60 * 60 * 1000)),
+  closesAt: z
+    .date({
+      required_error: "A closing time is required.",
+    })
+    .default(() => new Date(Date.now() + 6 * 60 * 60 * 1000)),
 });
 export default function CreatePoll() {
   return (
@@ -71,10 +76,12 @@ function PollForm({ className }: { className?: string }) {
     defaultValues: {
       question: "",
       description: "",
-      options: [{
-        id: String(Date.now()),
-        value: "",
-      }],
+      options: [
+        {
+          id: String(Date.now()),
+          value: "",
+        },
+      ],
       multipleChoice: false,
       closesAt: new Date(Date.now() + 6 * 60 * 60 * 1000), // Default to 6 hours from now
     },
@@ -83,19 +90,22 @@ function PollForm({ className }: { className?: string }) {
     control: form.control as Control<PollFormData>,
     name: "options",
   });
-  
+
   async function onSubmit(values: z.infer<typeof rawPollSchema>) {
     console.log("Form submitted with values:", values);
 
     toast
-      .promise(createPoll({
-        ...values,
-        options: values.options.map((option) => option.value),
-      }), {
-        loading: "Creating poll...",
-        success: "Poll created successfully",
-        error: "Failed to create poll",
-      })
+      .promise(
+        createPoll({
+          ...values,
+          options: values.options.map((option) => option.value),
+        }),
+        {
+          loading: "Creating poll...",
+          success: "Poll created successfully",
+          error: "Failed to create poll",
+        }
+      )
       .finally(() => {
         form.reset();
         router.refresh();
@@ -153,10 +163,12 @@ function PollForm({ className }: { className?: string }) {
                   size="sm"
                   type="button"
                   variant="default_light"
-                  onClick={() => append({
-                    id: String(Date.now()),
-                    value: ""
-                  })}
+                  onClick={() =>
+                    append({
+                      id: String(Date.now()),
+                      value: "",
+                    })
+                  }
                 >
                   Add Option
                 </Button>
@@ -176,7 +188,7 @@ function PollForm({ className }: { className?: string }) {
                         <Input
                           placeholder={`Enter Option ${index + 1}`}
                           id={`options.${index}.id`}
-                          {...form.register(`options.${index}.value`)} 
+                          {...form.register(`options.${index}.value`)}
                           disabled={form.formState.isSubmitting}
                         />
                       </FormControl>

@@ -47,6 +47,22 @@ export async function getRooms(
     roomTypes,
   };
 }
+
+export async function getRoomsInfo() {
+  await dbConnect();
+  const [totalRooms, totalAvailableRooms, totalOccupiedRooms] =
+    await Promise.all([
+      RoomModel.countDocuments(),
+      RoomModel.countDocuments({ currentStatus: "available" }),
+      RoomModel.countDocuments({ currentStatus: "occupied" }),
+    ]);
+
+  return Promise.resolve({
+    totalRooms,
+    totalAvailableRooms,
+    totalOccupiedRooms,
+  });
+}
 export async function updateStatus(
   roomNumber: string,
   status: "available" | "occupied"

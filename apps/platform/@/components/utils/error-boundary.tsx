@@ -57,6 +57,7 @@ interface ErrorBoundaryWithSuspenseProps {
   fallback: ReactElement;
   loadingFallback: ReactElement;
 }
+
 export const ErrorBoundaryWithSuspense: React.FC<
   ErrorBoundaryWithSuspenseProps
 > = ({ children, fallback, loadingFallback }) => {
