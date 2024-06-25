@@ -53,7 +53,6 @@ export async function getCourses(
   };
 }
 
-
 export async function getCourseByCode(code: string) {
   await dbConnect();
   const course = await CourseModel.findOne({ code }).lean().exec();

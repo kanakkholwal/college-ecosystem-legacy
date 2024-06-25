@@ -67,7 +67,6 @@ export async function getUsers(
     [key: string]: any;
   }
 ): Promise<{ users: UserWithId[]; hasMore: boolean }> {
-
   const session = await getSession();
   if (!session) {
     return {

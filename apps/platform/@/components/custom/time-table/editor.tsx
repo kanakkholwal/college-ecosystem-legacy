@@ -44,7 +44,6 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
   }
   const { timetableData, isEditing, disabled } = useTimeTableStore.getState();
 
-
   const handleSaveTimetable = async () => {
     useTimeTableStore.setState({ isEditing: false, disabled: true });
 

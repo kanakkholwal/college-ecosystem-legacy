@@ -20,7 +20,7 @@ export default async function CoursesPage({
 }: {
   params: {
     moderator: string;
-  },
+  };
   searchParams?: {
     query?: string;
     page?: string;
@@ -44,7 +44,6 @@ export default async function CoursesPage({
   return (
     <>
       <div className="relative mb-28" id="home">
-        
         <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
           <div className="relative pt-36 ml-auto">
             <div className="lg:w-3/4 text-center mx-auto">
@@ -81,7 +80,11 @@ export default async function CoursesPage({
         >
           {courses.map((course) => {
             return (
-              <Card key={course._id} variant="glass" className="hover:shadow-lg">
+              <Card
+                key={course._id}
+                variant="glass"
+                className="hover:shadow-lg"
+              >
                 <CardHeader>
                   <CardTitle>{course.name}</CardTitle>
                   <CardDescription className="font-semibold">

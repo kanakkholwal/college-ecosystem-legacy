@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
-import { BadgePlus } from 'lucide-react';
+import { BadgePlus } from "lucide-react";
 import { Suspense } from "react";
 import { getRooms, getRoomsInfo } from "src/lib/room/actions";
 import Pagination from "./components/pagination";
@@ -21,7 +21,7 @@ export default async function RoomsPage({
 }: {
   params: {
     moderator: string;
-  },
+  };
   searchParams?: {
     query?: string;
     page?: string;
@@ -41,7 +41,8 @@ export default async function RoomsPage({
     currentPage,
     filter
   );
-  const { totalRooms, totalAvailableRooms, totalOccupiedRooms } = await getRoomsInfo();
+  const { totalRooms, totalAvailableRooms, totalOccupiedRooms } =
+    await getRoomsInfo();
 
   return (
     <>
@@ -82,19 +83,33 @@ export default async function RoomsPage({
       <div className="lg:w-3/4 text-center mx-auto">
         <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
           <SearchBox statuses={currentStatuses} types={roomTypes} />
-
         </div>
       </div>
 
       <div className="mb-32 max-w-[144rem] grid lg:mb-0 lg:w-full mx-auto grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-3 @6xl:grid-cols-4 text-left gap-4">
-      <ErrorBoundaryWithSuspense
+        <ErrorBoundaryWithSuspense
           key="Rooms"
-          fallback={<h4 className="text-red-500 text-lg">   Error fetching rooms. Please try again later. </h4>}
-          loadingFallback={<>{Array.from({ length: 8 }).map((_, index) => <Skeleton className="h-12 w-full" key={`loading-${index}`} />)}</>}
+          fallback={
+            <h4 className="text-red-500 text-lg">
+              {" "}
+              Error fetching rooms. Please try again later.{" "}
+            </h4>
+          }
+          loadingFallback={
+            <>
+              {Array.from({ length: 8 }).map((_, index) => (
+                <Skeleton className="h-12 w-full" key={`loading-${index}`} />
+              ))}
+            </>
+          }
         >
           {rooms.map((room) => {
             return (
-              <Card key={room._id.toString()} variant="glass" className="hover:shadow-lg">
+              <Card
+                key={room._id.toString()}
+                variant="glass"
+                className="hover:shadow-lg"
+              >
                 <CardHeader>
                   <CardTitle>{room.roomNumber}</CardTitle>
                   <CardDescription>

@@ -13,7 +13,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
 import { Loader2, MoreHorizontal } from "lucide-react";
@@ -90,11 +90,7 @@ export default function UserList({
 
       <div className="flex justify-center w-full mt-4">
         {hasMore ? (
-          <Button
-            onClick={loadMoreUsers}
-            disabled={loading}
-            width="md"
-          >
+          <Button onClick={loadMoreUsers} disabled={loading} width="md">
             {loading && <Loader2 className="animate-spin" />}
             {!loading && "Load More"}
           </Button>
@@ -107,68 +103,75 @@ export default function UserList({
 }
 
 function UserRow({ user }: { user: UserWithId }) {
-
-  return <TableRow>
-    <TableCell className="font-medium">{user["firstName"]} {user["lastName"]}</TableCell>
-    <TableCell className="font-medium"><Link
-      className="text-left font-medium"
-      href={`/people/${user.rollNo}`}
-      target="_blank"
-    >
-      @{user["rollNo"]}
-    </Link></TableCell>
-    <TableCell className="font-medium">{user["email"]}</TableCell>
-    <TableCell className="font-medium"> {user.roles?.map((role: string) => {
-      return (
-        <Badge key={role} variant="default_light" className="m-1">
-          {role}
-        </Badge>
-      );
-    })}</TableCell>
-    <TableCell className="font-medium">{user["department"]}</TableCell>
-    <TableCell className="font-medium">{new Date(user["createdAt"]).toLocaleDateString(
-      "en-US",
-      {
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      }
-    )}</TableCell>
-    <TableCell className="font-medium">
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" className="h-8 w-8 p-0">
-            <span className="sr-only">Open menu</span>
-            <MoreHorizontal className="h-4 w-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            onClick={() =>
-              toast.promise(navigator.clipboard.writeText(user._id), {
-                loading: "Copying...",
-                success: "ID copied to clipboard",
-                error: "Failed to copy ID",
-              })
-            }
-          >
-            {" "}
-            Copy ID{" "}
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => {
-              console.log("deleting user ", user);
-              toast.promise(deleteUser(user._id), {
-                loading: "Deleting...",
-                success: "User deleted",
-                error: (error) => error.response.data.message,
-              });
-            }}
-          >
-            <span className="text-red-600">Delete</span>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </TableCell>
-  </TableRow>
+  return (
+    <TableRow>
+      <TableCell className="font-medium">
+        {user["firstName"]} {user["lastName"]}
+      </TableCell>
+      <TableCell className="font-medium">
+        <Link
+          className="text-left font-medium"
+          href={`/people/${user.rollNo}`}
+          target="_blank"
+        >
+          @{user["rollNo"]}
+        </Link>
+      </TableCell>
+      <TableCell className="font-medium">{user["email"]}</TableCell>
+      <TableCell className="font-medium">
+        {" "}
+        {user.roles?.map((role: string) => {
+          return (
+            <Badge key={role} variant="default_light" className="m-1">
+              {role}
+            </Badge>
+          );
+        })}
+      </TableCell>
+      <TableCell className="font-medium">{user["department"]}</TableCell>
+      <TableCell className="font-medium">
+        {new Date(user["createdAt"]).toLocaleDateString("en-US", {
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        })}
+      </TableCell>
+      <TableCell className="font-medium">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="h-8 w-8 p-0">
+              <span className="sr-only">Open menu</span>
+              <MoreHorizontal className="h-4 w-4" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem
+              onClick={() =>
+                toast.promise(navigator.clipboard.writeText(user._id), {
+                  loading: "Copying...",
+                  success: "ID copied to clipboard",
+                  error: "Failed to copy ID",
+                })
+              }
+            >
+              {" "}
+              Copy ID{" "}
+            </DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={() => {
+                console.log("deleting user ", user);
+                toast.promise(deleteUser(user._id), {
+                  loading: "Deleting...",
+                  success: "User deleted",
+                  error: (error) => error.response.data.message,
+                });
+              }}
+            >
+              <span className="text-red-600">Delete</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </TableCell>
+    </TableRow>
+  );
 }
