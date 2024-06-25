@@ -2,16 +2,22 @@
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 export default function SearchBar() {
-  const searchParams = useSearchParams() as URLSearchParams;
-  const query = searchParams.get("query") || "";
+  const searchParams = useSearchParams();
   const router = useRouter();
+
+  const [searchTerm, setSearchTerm] = useState(searchParams.get("query") || "");
+
+  useEffect(() => {
+    setSearchTerm(searchParams.get("query") || "");
+  }, [searchParams]);
 
   const handleSearch = useDebouncedCallback((term: string) => {
     console.log(`Searching... ${term}`);
-    const params = new URLSearchParams(searchParams);
+    const params = new URLSearchParams(searchParams.toString());
     if (term) {
       params.set("query", term);
     } else {
@@ -29,12 +35,11 @@ export default function SearchBar() {
       <Input
         placeholder="Search users..."
         className="w-full pl-10"
-        value={query}
+        value={searchTerm}
         onChange={(e) => {
-          if (e.target.value.trim() === "") return;
-          setTimeout(() => {
-            handleSearch(e.target.value);
-          }, 500);
+          const value = e.target.value;
+          setSearchTerm(value);
+          handleSearch(value);
         }}
       />
     </div>

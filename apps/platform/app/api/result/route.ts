@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
 
     const result = await ScrapeResult(rollNo);
 
-    await dbConnect("result");
+    await dbConnect();
 
     const resultData = await Result.findOne({ rollNo: rollNo });
     if (resultData) {

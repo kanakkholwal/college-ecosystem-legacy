@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button";
+import { GoBackButton } from "@/components/common/go-back";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { LineChart } from "@tremor/react";
-import { Mail, Undo2 } from "lucide-react";
+import { Mail } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ResultTypeWithId, Semester } from "src/models/result";
@@ -30,21 +30,14 @@ export default async function ResultsPage({
 
   return (
     <>
+    <div>
+        <GoBackButton />
+      </div>
       <section
         id="hero"
         className="z-10 w-full max-w-6xl relative flex flex-col items-center justify-center  py-24 text-center"
       >
-        <Button
-          rounded="full"
-          variant="default_light"
-          className="mr-auto ml-2"
-          asChild
-        >
-          <Link href="/results">
-            <Undo2 className="w-5 h-5" />
-            Go Back
-          </Link>
-        </Button>
+
         <div className="lg:w-3/4 text-center mx-auto mt-10">
           <h1 className="text-gray-900 dark:text-white font-bold text-5xl md:text-6xl xl:text-7xl">
             <span className="relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent  md:px-2">

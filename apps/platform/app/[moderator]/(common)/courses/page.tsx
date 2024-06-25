@@ -13,9 +13,14 @@ import { Suspense } from "react";
 import { getCourses } from "src/lib/course/actions";
 import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
+
 export default async function CoursesPage({
+  params,
   searchParams,
 }: {
+  params: {
+    moderator: string;
+  },
   searchParams?: {
     query?: string;
     page?: string;
@@ -39,13 +44,7 @@ export default async function CoursesPage({
   return (
     <>
       <div className="relative mb-28" id="home">
-        <div
-          aria-hidden="true"
-          className="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20"
-        >
-          <div className="blur-[106px] h-56 bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700" />
-          <div className="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
-        </div>
+        
         <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
           <div className="relative pt-36 ml-auto">
             <div className="lg:w-3/4 text-center mx-auto">
@@ -69,7 +68,7 @@ export default async function CoursesPage({
           </div>
         </div>
       </div>
-      <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6 grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      <div className="mb-32 max-w-[144rem] grid lg:mb-0 lg:w-full mx-auto grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-3 @6xl:grid-cols-4 text-left gap-4">
         <Suspense
           key="Courses"
           fallback={
@@ -82,7 +81,7 @@ export default async function CoursesPage({
         >
           {courses.map((course) => {
             return (
-              <Card key={course._id} className="hover:shadow-lg">
+              <Card key={course._id} variant="glass" className="hover:shadow-lg">
                 <CardHeader>
                   <CardTitle>{course.name}</CardTitle>
                   <CardDescription className="font-semibold">
@@ -109,7 +108,7 @@ export default async function CoursesPage({
                 </CardContent>
                 <CardFooter className="justify-between">
                   <Button size="sm" variant="default_light" asChild>
-                    <Link href={`/admin/courses/${course.code}`}>
+                    <Link href={`/${params.moderator}/courses/${course.code}`}>
                       Edit Course
                     </Link>
                   </Button>

@@ -67,6 +67,15 @@ export async function getUsers(
     [key: string]: any;
   }
 ): Promise<{ users: UserWithId[]; hasMore: boolean }> {
+
+  const session = await getSession();
+  if (!session) {
+    return {
+      users: [],
+      hasMore: false,
+    };
+  }
+
   const resultsPerPage = 50;
   const filterQuery = {
     $or: [

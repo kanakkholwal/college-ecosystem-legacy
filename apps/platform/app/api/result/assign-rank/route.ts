@@ -5,7 +5,7 @@ import ResultModel from "src/models/result";
 export async function POST(request: NextRequest) {
   try {
     const time = new Date();
-    await dbConnect("result");
+    await dbConnect();
 
     const aggregationPipeline = [
       {

@@ -44,7 +44,6 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
   }
   const { timetableData, isEditing, disabled } = useTimeTableStore.getState();
 
-  // console.log(timetableData);
 
   const handleSaveTimetable = async () => {
     useTimeTableStore.setState({ isEditing: false, disabled: true });
@@ -64,7 +63,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
       const data = timetableData as RawTimetable;
 
       toast
-        .promise(createTimeTable(timetableData), {
+        .promise(createTimeTable(data), {
           loading: "Creating Timetable",
           success: "Timetable created successfully",
           error: "Failed to create timetable",
@@ -97,7 +96,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
               handleSaveTimetable();
             }}
           >
-            {mode === "create" ? "Save" : "Edit"} TimeTable
+            {mode === "create" ? "Save" : "Update"} TimeTable
           </Button>
         </div>
       </div>

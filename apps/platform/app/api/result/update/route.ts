@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     const result = await ScrapeResult(rollNo);
     // console.table(result)
 
-    await dbConnect("result");
+    await dbConnect();
     const resultData = await Result.findOne({ rollNo: rollNo });
     if (resultData) {
       // if (result.semesters.length > resultData.semesters.length) {

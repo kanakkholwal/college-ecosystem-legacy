@@ -5,6 +5,7 @@ import dbConnect from "src/lib/dbConnect";
 import RoomModel, { RoomTypeWithId } from "src/models/room";
 import { getSession } from "../auth";
 
+
 export async function getRooms(
   query: string,
   currentPage: number,
@@ -46,6 +47,21 @@ export async function getRooms(
     currentStatuses,
     roomTypes,
   };
+}
+
+export async function getRoomsInfo(){
+  await dbConnect();
+  const [totalRooms, totalAvailableRooms, totalOccupiedRooms] = await Promise.all([
+    RoomModel.countDocuments(),
+    RoomModel.countDocuments({ currentStatus: "available" }),
+    RoomModel.countDocuments({ currentStatus: "occupied" }),
+  ]);
+
+  return Promise.resolve({
+    totalRooms,
+    totalAvailableRooms,
+    totalOccupiedRooms,
+  });
 }
 export async function updateStatus(
   roomNumber: string,
