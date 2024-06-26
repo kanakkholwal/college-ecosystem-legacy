@@ -9,7 +9,7 @@ export function GoBackButton(props: ButtonProps) {
       rounded="full"
       variant="default_light"
       onClick={() => {
-        window?.history?.back();
+        window?.history?.length > 1 ? window.history?.back() : window.location.replace("/");
       }}
       {...props}
     >

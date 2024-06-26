@@ -6,7 +6,7 @@ import { useChat } from "../useChat";
 import MessageComponent from "./message";
 
 export default function ChatList({ messages }: { messages: Message[] }) {
-  const {  isLoading} = useChat();
+  const { isLoading } = useChat();
   return (
     <AnimatePresence>
       {messages?.map((message, index) => (
@@ -33,7 +33,7 @@ export default function ChatList({ messages }: { messages: Message[] }) {
             message.role !== "user" ? "items-end" : "items-start"
           )}
         >
-          <MessageComponent message={message} isLoading={isLoading && index === messages.length && message.role === "bot"} />
+          <MessageComponent message={message} isLoading={isLoading && (index === (messages.length - 1))} />
         </motion.div>
       ))}
     </AnimatePresence>

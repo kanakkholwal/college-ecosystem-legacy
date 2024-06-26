@@ -13,7 +13,7 @@ export default function Wrapper({ children }: { children: React.ReactNode }) {
   return (
     <div className="w-full h-full min-h-screen m-auto p-5 md:p-24">
       {initialScreen ? (
-        <div className="flex flex-col justify-center items-center gap-4 w-full my-auto">
+        <div className="flex flex-col justify-center items-center gap-4 w-full h-full min-h-screen my-auto">
           <Bot className="w-24 h-24 text-primary" />
           <h1 className="text-4xl font-bold text-center">Welcome to Chatbot</h1>
           <p className="text-center my-4">

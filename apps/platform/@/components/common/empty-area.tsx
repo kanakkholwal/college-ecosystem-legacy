@@ -1,15 +1,25 @@
+import { cn } from "@/lib/utils";
+
 export type EmptyAreaProps = {
   Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
   title: string;
   description: string;
   actionPanel?: React.ReactNode;
-};
+} & React.HTMLAttributes<HTMLDivElement>
 
-export default function EmptyArea(props: EmptyAreaProps) {
+export default function EmptyArea({
+  Icon,
+  title,
+  description,
+  actionPanel,
+  className,
+  ...props
+}: EmptyAreaProps) {
+
   return (
-    <div className="w-full mx-auto px-6 py-10 my-10 rounded-lg bg-white/20 backdrop-blur-md flex flex-col justify-center gap-2 items-center">
-      {props.Icon ? (
-        <props.Icon className="w-12 h-12 text-primary mx-auto mb-4" />
+    <div className={cn("w-full mx-auto px-6 py-10 my-10 rounded-lg bg-white/20 backdrop-blur-md flex flex-col justify-center gap-2 items-center",className)} {...props}>
+      {Icon ? (
+        <Icon className="w-12 h-12 text-primary mx-auto mb-4" />
       ) : (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -26,11 +36,11 @@ export default function EmptyArea(props: EmptyAreaProps) {
           />
         </svg>
       )}
-      <h1 className="text-xl font-semibold text-center mt-4">{props.title}</h1>
+      <h1 className="text-xl font-semibold text-center mt-4">{title}</h1>
       <p className="text-center mt-2 text-sm text-gray-700">
-        {props.description}
+        {description}
       </p>
-      {props.actionPanel}
+      {actionPanel}
     </div>
   );
 }
