@@ -3,7 +3,7 @@ export type Message = {
   role: "user" | "bot";
   createdAt?: Date;
   content: string;
-  tool_call_id?: string;
+  // isTyping?: boolean;
 };
 
 export type ChatType = {
