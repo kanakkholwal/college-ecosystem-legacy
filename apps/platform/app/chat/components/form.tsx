@@ -24,13 +24,14 @@ export default function Form() {
     startListening,
     stopListening,
     browserSupportsSpeechRecognition,
-    scrollRef
+    scrollRef,
   } = useChat();
 
-
-
   return (
-    <form onSubmit={handleSubmit} className="sticky top-5 overflow-hidden rounded-lg border bg-white/30 backdrop-blur-lg w-full h-full min-h-[80vh] flex flex-col items-stretch justify-stretch">
+    <form
+      onSubmit={handleSubmit}
+      className="sticky top-5 overflow-hidden rounded-lg border bg-white/30 backdrop-blur-lg w-full h-full min-h-[80vh] flex flex-col items-stretch justify-stretch"
+    >
       <div className="flex items-center justify-between p-4 gap-3">
         <div className="flex items-center gap-2">
           <Bot className="w-8 h-8 text-primary" />
@@ -42,9 +43,16 @@ export default function Form() {
           <GoBackButton />
         </div>
       </div>
-      <ScrollArea className="min-h-96 h-max flex-1 w-full border-y p-4" ref={scrollRef}>
+      <ScrollArea
+        className="min-h-96 h-max flex-1 w-full border-y p-4"
+        ref={scrollRef}
+      >
         <ConditionalRender condition={messages.length === 0}>
-          <EmptyArea title="Welcome to the Chatbot" description="Start a conversation with the chatbot to get started." className="bg-transparent backdrop-blur-none" />
+          <EmptyArea
+            title="Welcome to the Chatbot"
+            description="Start a conversation with the chatbot to get started."
+            className="bg-transparent backdrop-blur-none"
+          />
         </ConditionalRender>
         <ConditionalRender condition={messages.length > 0}>
           <ChatList messages={messages} />
@@ -63,30 +71,44 @@ export default function Form() {
           disabled={isLoading}
           className="min-h-12 resize-none border-0 p-3 shadow-none focus-visible:ring-0"
           onKeyDown={(e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
+            if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               handleSubmit(e);
             }
           }}
         />
         <div className="flex items-center gap-1">
-
           <ConditionalRender condition={browserSupportsSpeechRecognition}>
-            <ResponsiveDialog title="Speech To Text" description="Click the microphone button to start speaking." btnProps={{
-              variant: 'ghost',
-              size: 'icon_sm',
-              type: 'button',
-              onClick: listening ? stopListening : startListening,
-              disabled: isLoading,
-              children: <Mic />,
-            }}>
-              <Button variant="ghost" size="icon_sm" type="button" disabled={isLoading} onClick={listening ? stopListening : startListening}>
+            <ResponsiveDialog
+              title="Speech To Text"
+              description="Click the microphone button to start speaking."
+              btnProps={{
+                variant: "ghost",
+                size: "icon_sm",
+                type: "button",
+                onClick: listening ? stopListening : startListening,
+                disabled: isLoading,
+                children: <Mic />,
+              }}
+            >
+              <Button
+                variant="ghost"
+                size="icon_sm"
+                type="button"
+                disabled={isLoading}
+                onClick={listening ? stopListening : startListening}
+              >
                 <Mic />
-                {listening ? 'Stop' : 'Start'} Listening
+                {listening ? "Stop" : "Start"} Listening
               </Button>
             </ResponsiveDialog>
           </ConditionalRender>
-          <Button type="submit" size="sm" className="ml-auto gap-1.5" disabled={isLoading} >
+          <Button
+            type="submit"
+            size="sm"
+            className="ml-auto gap-1.5"
+            disabled={isLoading}
+          >
             Send Message
             <Send />
           </Button>

@@ -33,7 +33,10 @@ export default function ChatList({ messages }: { messages: Message[] }) {
             message.role !== "user" ? "items-end" : "items-start"
           )}
         >
-          <MessageComponent message={message} isLoading={isLoading && (index === (messages.length - 1))} />
+          <MessageComponent
+            message={message}
+            isLoading={isLoading && index === messages.length - 1}
+          />
         </motion.div>
       ))}
     </AnimatePresence>

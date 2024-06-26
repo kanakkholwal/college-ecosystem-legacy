@@ -1,17 +1,17 @@
-import { HfInference } from '@huggingface/inference';
+import { HfInference } from "@huggingface/inference";
 import { Redis } from "@upstash/redis";
 import { NextRequest, NextResponse } from "next/server";
 
 export const maxDuration = 45; // This function can run for a maximum of 5 seconds
 export const revalidate = 0; // disable cache
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 const redis = Redis.fromEnv();
 
 async function loadDocument() {
-  const rootUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
-  const response = await fetch(rootUrl + '/doc/REFERENCE.md');
+  const rootUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
+  const response = await fetch(rootUrl + "/doc/REFERENCE.md");
   const text = await response.text();
 
   return text;
@@ -19,7 +19,6 @@ async function loadDocument() {
 
 export async function POST(request: NextRequest) {
   try {
-
     const body = await request.json();
 
     const { query } = body as { query: string };
@@ -57,7 +56,6 @@ export async function POST(request: NextRequest) {
         status: 200,
       }
     );
-
   } catch {
     return NextResponse.json(
       {
@@ -70,4 +68,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

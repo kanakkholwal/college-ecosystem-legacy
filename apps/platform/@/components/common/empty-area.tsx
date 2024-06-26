@@ -5,7 +5,7 @@ export type EmptyAreaProps = {
   title: string;
   description: string;
   actionPanel?: React.ReactNode;
-} & React.HTMLAttributes<HTMLDivElement>
+} & React.HTMLAttributes<HTMLDivElement>;
 
 export default function EmptyArea({
   Icon,
@@ -15,9 +15,14 @@ export default function EmptyArea({
   className,
   ...props
 }: EmptyAreaProps) {
-
   return (
-    <div className={cn("w-full mx-auto px-6 py-10 my-10 rounded-lg bg-white/20 backdrop-blur-md flex flex-col justify-center gap-2 items-center",className)} {...props}>
+    <div
+      className={cn(
+        "w-full mx-auto px-6 py-10 my-10 rounded-lg bg-white/20 backdrop-blur-md flex flex-col justify-center gap-2 items-center",
+        className
+      )}
+      {...props}
+    >
       {Icon ? (
         <Icon className="w-12 h-12 text-primary mx-auto mb-4" />
       ) : (
@@ -37,9 +42,7 @@ export default function EmptyArea({
         </svg>
       )}
       <h1 className="text-xl font-semibold text-center mt-4">{title}</h1>
-      <p className="text-center mt-2 text-sm text-gray-700">
-        {description}
-      </p>
+      <p className="text-center mt-2 text-sm text-gray-700">{description}</p>
       {actionPanel}
     </div>
   );

@@ -1,5 +1,5 @@
 "use client";
-import { Bot } from 'lucide-react';
+import { Bot } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import useLocalStorage from "@/hooks/useLocalStorage";

@@ -7,10 +7,7 @@ import Link from "next/link";
 import type { ChatType } from "../types";
 
 export default function ChatHistory() {
-  const [chats, setChats] = useLocalStorage<ChatType[]>(
-    "chats_history",
-    []
-  );
+  const [chats, setChats] = useLocalStorage<ChatType[]>("chats_history", []);
 
   return (
     <aside
@@ -21,9 +18,15 @@ export default function ChatHistory() {
     >
       <h3 className="text-xl font-bold">Chat History</h3>
       <div className="grid gap-3 mt-5 w-full">
-        {chats.map((chat: ChatType, index: number) => <ChatButton key={index} chat={chat} style={{
-          animationDelay: `${index * 100}ms`,
-        }} />)}
+        {chats.map((chat: ChatType, index: number) => (
+          <ChatButton
+            key={index}
+            chat={chat}
+            style={{
+              animationDelay: `${index * 100}ms`,
+            }}
+          />
+        ))}
       </div>
     </aside>
   );

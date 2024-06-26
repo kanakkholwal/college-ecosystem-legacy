@@ -1,12 +1,6 @@
 import { BorderBeam } from "@/components/animation/border-beam";
 import { RouterCard } from "@/components/common/router-card";
-import {
-  AudioLines,
-  BookUser,
-  Bot,
-  CalendarDays,
-  Grid3X3
-} from "lucide-react";
+import { AudioLines, BookUser, Bot, CalendarDays, Grid3X3 } from "lucide-react";
 import Image from "next/image";
 import { GrAnnounce } from "react-icons/gr";
 import { LiaReadme } from "react-icons/lia";
