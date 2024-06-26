@@ -1,21 +1,13 @@
 import { BorderBeam } from "@/components/animation/border-beam";
-import {
-  ArrowRight,
-  ArrowUpRight,
-  AudioLines,
-  BookUser,
-  CalendarDays,
-  Grid3X3,
-} from "lucide-react";
+import { RouterCard } from "@/components/common/router-card";
+import { AudioLines, BookUser, Bot, CalendarDays, Grid3X3 } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
 import { GrAnnounce } from "react-icons/gr";
 import { LiaReadme } from "react-icons/lia";
 import { MdOutlinePoll } from "react-icons/md";
 import { SiGoogleclassroom } from "react-icons/si";
 import { getSession } from "src/lib/auth";
 import { sessionType } from "src/types/session";
-import { RouterCard } from "@/components/common/router-card";
 
 const quick_links = [
   {
@@ -23,6 +15,12 @@ const quick_links = [
     title: "Results",
     description: "Check your results here.",
     Icon: Grid3X3,
+  },
+  {
+    href: "/chat",
+    title: "Chatbot",
+    description: "Chat with our AI bot.",
+    Icon: Bot,
   },
   {
     href: "/syllabus",

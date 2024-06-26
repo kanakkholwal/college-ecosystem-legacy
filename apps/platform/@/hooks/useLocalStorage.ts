@@ -9,22 +9,26 @@ function useStorage<T>(
   initialValue: T,
   storageType: StorageType = "localStorage"
 ) {
-  const storage = window?.[storageType];
+  const isClient = typeof window !== "undefined";
+  const storage = isClient ? window[storageType] : null;
 
   // Subscribe to storage changes
   const subscribe = (callback: () => void) => {
+    if (!isClient) return () => {};
+
     const onStorageChange = (event: StorageEvent) => {
       if (event.key === key && event.storageArea === storage) {
         callback();
       }
     };
-    window?.addEventListener("storage", onStorageChange);
-    return () => window?.removeEventListener("storage", onStorageChange);
+    window.addEventListener("storage", onStorageChange);
+    return () => window.removeEventListener("storage", onStorageChange);
   };
 
   // Get the stored value
   const getStoredValue = (): T => {
-    const item = storage.getItem(key);
+    if (!isClient) return initialValue;
+    const item = storage?.getItem(key);
     return item ? (JSON.parse(item) as T) : initialValue;
   };
 
@@ -33,8 +37,9 @@ function useStorage<T>(
 
   // Update the stored value
   const setValue = (newValue: T) => {
-    storage.setItem(key, JSON.stringify(newValue));
-    window?.dispatchEvent(
+    if (!isClient) return;
+    storage?.setItem(key, JSON.stringify(newValue));
+    window.dispatchEvent(
       new StorageEvent("storage", {
         key,
         newValue: JSON.stringify(newValue),
