@@ -2,9 +2,11 @@
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import { Message } from "../types";
+import { useChat } from "../useChat";
 import MessageComponent from "./message";
 
 export default function ChatList({ messages }: { messages: Message[] }) {
+  const {  isLoading} = useChat();
   return (
     <AnimatePresence>
       {messages?.map((message, index) => (
@@ -31,7 +33,7 @@ export default function ChatList({ messages }: { messages: Message[] }) {
             message.role !== "user" ? "items-end" : "items-start"
           )}
         >
-          <MessageComponent message={message} />
+          <MessageComponent message={message} isLoading={isLoading && index === messages.length && message.role === "bot"} />
         </motion.div>
       ))}
     </AnimatePresence>

@@ -1,47 +1,63 @@
-import { HfInference } from "@huggingface/inference";
+import { HfInference } from '@huggingface/inference';
+import { Redis } from "@upstash/redis";
 import { NextRequest, NextResponse } from "next/server";
 
-export const runtime = "edge";
+export const maxDuration = 45; // This function can run for a maximum of 5 seconds
+export const revalidate = 0; // disable cache
 
-//  read ./document.md file for context
-const getContext = async () => {
-  // const filePath = join(process.cwd(), 'document.md');
-  // const file = await fs
-  //     .readFile(filePath, 'utf8')
-  //     .catch(() => {
-  //         throw new Error("Error reading file")
-  //     });
-  return "file";
-};
+export const dynamic = 'force-dynamic';
+
+const redis = Redis.fromEnv();
+
+async function loadDocument() {
+  const rootUrl = process.env.NEXTAUTH_URL || 'http://localhost:3000';
+  const response = await fetch(rootUrl + '/doc/REFERENCE.md');
+  const text = await response.text();
+
+  return text;
+}
 
 export async function POST(request: NextRequest) {
   try {
-    const url = request.nextUrl;
-    // const query = url.searchParams.get('query') || '';
+
     const body = await request.json();
 
-    const { question, context } = body;
+    const { query } = body as { query: string };
+
+    // let data = await redis.hget("questions", query)
+    // if (data) {
+    //   return NextResponse.json(
+    //     {
+    //       answer: data,
+    //     },
+    //     {
+    //       status: 200,
+    //     }
+    //   );
+    // }
 
     const hf = new HfInference(process.env.HUGGING_FACE_API_KEY);
 
-    const fullContext = await getContext();
-
+    const docs = await loadDocument();
     const response = await hf.questionAnswering({
-      model: "distilbert-base-uncased-distilled-squad",
+      model: "meta-llama/Meta-Llama-3-8B",
       inputs: {
-        question,
-        context: fullContext + context,
+        context: docs,
+        question: query,
       },
     });
+    const { answer } = response;
+    // await redis.hset("questions", { [query]: answer });
 
     return NextResponse.json(
       {
-        answer: response.answer,
+        answer,
       },
       {
         status: 200,
       }
     );
+
   } catch {
     return NextResponse.json(
       {
@@ -54,3 +70,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+
