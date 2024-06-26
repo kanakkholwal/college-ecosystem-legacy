@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
 
     const docs = await loadDocument();
     const response = await hf.questionAnswering({
-      model: "meta-llama/Meta-Llama-3-8B",
+      model: "deepset/roberta-base-squad2",
       inputs: {
         context: docs,
         question: query,

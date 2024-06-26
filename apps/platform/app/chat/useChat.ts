@@ -14,10 +14,11 @@ interface UseChatResult {
     error: string | null;
     listening: boolean;
     handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-    handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
+    handleSubmit: (e: React.FormEvent<HTMLFormElement | HTMLTextAreaElement>) => void;
     startListening: () => void;
     stopListening: () => void;
     browserSupportsSpeechRecognition: boolean;
+    scrollRef: React.RefObject<HTMLDivElement>;
 }
 
 export function useChat(): UseChatResult {
@@ -25,6 +26,7 @@ export function useChat(): UseChatResult {
     const [input, setInput] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
+    const scrollRef = useRef<HTMLDivElement | null>(null);
 
     const abortControllerRef = useRef<AbortController | null>(null);
     const {
@@ -44,7 +46,7 @@ export function useChat(): UseChatResult {
         setInput(e.target.value);
     }, []);
 
-    const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = useCallback(async (e: React.FormEvent<HTMLFormElement | HTMLTextAreaElement>) => {
         e.preventDefault();
         if (!input.trim() || isLoading) return;
 
@@ -58,7 +60,7 @@ export function useChat(): UseChatResult {
         // Prepare assistant message
         const assistantMessage: ChatMessage = { role: 'bot', content: '', id: nanoid() };
         setMessages(prev => [...prev, assistantMessage]);
-
+        scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
         setInput('');
         resetTranscript();
 
@@ -86,6 +88,7 @@ export function useChat(): UseChatResult {
                 }
                 return prev;
             });
+            scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
         } catch (err: any) {
             if (err.name === 'AbortError') {
                 setError('Request was cancelled');
@@ -118,5 +121,6 @@ export function useChat(): UseChatResult {
         startListening,
         stopListening,
         browserSupportsSpeechRecognition,
+        scrollRef
     };
 }

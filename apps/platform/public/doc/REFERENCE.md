@@ -99,4 +99,3 @@ Team Technical
 Lalkaar
 
 National Institute of Technology Hamirpur is one of the premier technical institutes in Northern India. The Institute presently provides sports facilities for both outdoor and indoor activity. A standard size stadium with provision of pavilion has been provided to the student where the games like Cricket, Football, Basketball, Volleyball, Lawn Tennis martial art karate for self defense and Athletics are played. Student's Activity Center(SAC) is recently build with world class facilities to host various extra-curricular activities by the students.
-

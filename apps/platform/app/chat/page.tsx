@@ -16,7 +16,7 @@ export default async function ChatBotPage() {
   return (
     <div className="flex min-h-screen h-full w-full flex-col items-center justify-start @container/page max-w-[1680px] mx-auto px-3">
       <Wrapper>
-        <main className="flex-1 @container flex items-stretch justify-start w-full gap-4 h-full min-h-screen">
+        <main className="flex-1 @container flex items-stretch justify-start w-full gap-4 h-full min-h-screen relative">
           {/* <ChatHistory /> */}
           <ChatForm />
         </main>
