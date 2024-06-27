@@ -6,8 +6,8 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md}\"",
-    "dev:server": "go run ./apps/server/*.go",
-    "build:server": "go build -o server go run ./apps/server/*.go"
+    "dev:server": "cd apps/server && npm run dev",
+    "build:server": "cd apps/server && npm run build"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
@@ -21,5 +21,9 @@
   "workspaces": [
     "apps/*",
     "packages/*"
-  ]
+  ],
+  "dependencies": {
+    "cors": "^2.8.5",
+    "tsup": "^8.1.0"
+  }
 }
