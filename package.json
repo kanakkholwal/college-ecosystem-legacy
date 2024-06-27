@@ -5,11 +5,13 @@
     "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md}\"",
+    "dev:server": "go run ./apps/server/*.go",
+    "build:server": "go build -o server go run ./apps/server/*.go"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
-    "turbo": "^2.0.4",
+    "turbo": "^2.0.5",
     "typescript": "^5.4.5"
   },
   "engines": {
