@@ -59,6 +59,7 @@ The College Ecosystem includes the following projects:
 
 - [College Platform](https://app.nith.eu.org/) : centralized platform that is multifunctional, user-friendly platform for all.
 - [College Website](https://nith.eu.org) : landing page website
+- [Go Server (No ready yet)](https://go-apis.nith.eu.org) : For concurrent queues and heavy scraping jobs
 
 ```bash
 cd college-ecosystem

@@ -93,8 +93,9 @@ export default function Form() {
             >
               <Button
                 variant="ghost"
-                size="icon_sm"
+                size="lg"
                 type="button"
+                width="xs"
                 disabled={isLoading}
                 onClick={listening ? stopListening : startListening}
               >
