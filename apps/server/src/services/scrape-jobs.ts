@@ -88,11 +88,10 @@ const getAllAnchors = async (platform: PlatformType, targetUrl: string,browser:B
     await page.goto(targetUrl,{
         waitUntil: 'domcontentloaded',
     });
-    const response = await page.waitSelector("")
+    const response = await page.waitForSelector(platform.resultPageSelectors.results_container)
     
-    const document = HTMLParser.parse(response);
+    const resultsContainer = HTMLParser.parse(response?.toString()!);
 
-    const resultsContainer = document.querySelector(platform.resultPageSelectors.results_container);
     if (!resultsContainer) {
         return []
     }
