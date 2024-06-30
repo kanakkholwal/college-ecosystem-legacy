@@ -1,4 +1,4 @@
-import { PLATFORMS, scrapeJobFromPlatform } from '@app/services/scrape-jobs';
+import { scrapeJobFromPlatform } from '@app/services/scraper/jobs';
 
 import { NextFunction, Request, Response } from 'express';
 
@@ -12,12 +12,12 @@ export const scrapeJobs = async (req: Request, res: Response, next: NextFunction
     };
     
 
-    const platformObj = PLATFORMS[platform];
-    if (!platformObj) {
-      return res.status(400).json({ message: "Invalid platform" });
-    }
+    // const platformObj = PLATFORMS[platform];
+    // if (!platformObj) {
+    //   return res.status(400).json({ message: "Invalid platform" });
+    // }
 
-    const jobs = await scrapeJobFromPlatform(platformObj, query);
+    const jobs = await scrapeJobFromPlatform(platform, query);
     res.json(jobs);
   } catch (error) {
     next(error);

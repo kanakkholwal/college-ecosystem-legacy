@@ -86,10 +86,10 @@ const parseResult = (
                 });
             }
             table.querySelectorAll("tr:not([class])").forEach((tr) => {
-                let semester = parseFloat(
+                const semester = parseFloat(
                     tr.querySelector("td:nth-child(6)")?.textContent || "0.00"
                 );
-                let semester_total = parseFloat(
+                const semester_total = parseFloat(
                     tr.querySelector("td:nth-child(4)")?.textContent || "1"
                 );
                 student.semesters[index].courses.push({
