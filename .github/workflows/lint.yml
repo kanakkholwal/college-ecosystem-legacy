@@ -33,8 +33,7 @@ jobs:
             ${{ runner.OS }}-node-
 
       - name: 📦 Install lint dependencies
-        run: |
-          npm install --no-package-lock
+        run: npm ci
 
       - name: 💾 Cache Turbo
         uses: actions/cache@v3
