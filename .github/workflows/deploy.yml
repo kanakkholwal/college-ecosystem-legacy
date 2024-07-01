@@ -1,4 +1,4 @@
-name: 🚀 Trigger Deployments
+name: 🚀 Deployments
 
 on:
   push:

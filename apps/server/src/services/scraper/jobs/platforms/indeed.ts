@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ApolloClient, InMemoryCache, gql } from '@apollo/client/core';
+// import { ApolloClient, InMemoryCache, gql } from '@apollo/client/core';
 
 export interface ScraperInput {
   searchTerm: string;
@@ -26,61 +26,61 @@ interface Job {
 
 export class IndeedScraper {
   private api_url = 'https://apis.indeed.com/graphql';
-  private client: ApolloClient<any>;
+  private headers = {
+    'Host': 'apis.indeed.com',
+    'content-type': 'application/json',
+    'indeed-api-key': '161092c2017b5bbab13edb12461a62d5a833871e7cad6d9d475304573de67ac8',
+    'accept': 'application/json',
+    'indeed-locale': 'en-US',
+    'accept-language': 'en-US,en;q=0.9',
+    'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Indeed App 193.1',
+    'indeed-app-info': 'appv=193.1; appid=com.indeed.jobsearch; osv=16.6.1; os=ios; dtype=phone',
+    'referer': 'https://www.indeed.com/',
+  }
+  // private client: ApolloClient<any>;
 
   constructor() {
-    this.client = new ApolloClient({
-      cache: new InMemoryCache(),
-      uri: this.api_url,
-      headers: {
-        'Host': 'apis.indeed.com',
-        'content-type': 'application/json',
-        'indeed-api-key': '161092c2017b5bbab13edb12461a62d5a833871e7cad6d9d475304573de67ac8',
-        'accept': 'application/json',
-        'indeed-locale': 'en-US',
-        'accept-language': 'en-US,en;q=0.9',
-        'user-agent': 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_6_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 Indeed App 193.1',
-        'indeed-app-info': 'appv=193.1; appid=com.indeed.jobsearch; osv=16.6.1; os=ios; dtype=phone',
-      },
 
-    });
   }
 
-  public async scrape(scraperInput: ScraperInput): Promise<Job[]> {
-    let jobList: Job[] = [];
-    let page = 1;
-    let cursor: string | null = null;
+  // public async scrape(scraperInput: ScraperInput): Promise<Job[]> {
+    // let jobList: Job[] = [];
+    // let page = 1;
+    // let cursor: string | null = null;
+    // console.log('scrape', scraperInput);
 
-    while (jobList.length < scraperInput.resultsWanted) {
-      console.log(`Indeed search page: ${page}`);
-      const { jobs, newCursor } = await this.scrapePage(scraperInput, cursor);
-      if (!jobs.length) {
-        console.log(`Indeed found no jobs on page: ${page}`);
-        break;
-      }
-      jobList = jobList.concat(jobs);
-      cursor = newCursor;
-      page++;
-    }
 
-    return jobList.slice(0, scraperInput.resultsWanted);
-  }
+    // while (jobList.length < scraperInput.resultsWanted) {
+      // console.log(`Indeed search page: ${page}`);
+      // const { jobs, newCursor } = await this.scrapePage(scraperInput, cursor);
+      // if (!jobs.length) {
+      //   console.log(`Indeed found no jobs on page: ${page}`);
+      //   break;
+      // }
+      // jobList = jobList.concat(jobs);
+      // cursor = newCursor;
+      // page++;
+    // }
+
+    // return jobList.slice(0, scraperInput.resultsWanted);
+  // }
 
   private async scrapePage(scraperInput: ScraperInput, cursor: string | null) {
-    const query = this.buildQuery(scraperInput, cursor);
+    console.log('scrapePage', scraperInput, cursor);
+    // const query = this.buildQuery(scraperInput, cursor);
 
     // console.log('Query:', query);
 
     try {
-      const { data } = await this.client.query({
-        query,
-        variables: {},
-        fetchPolicy: 'no-cache',
-      });
-      const jobs = data.jobSearch.results.map((job: any) => this.processJob(job.job));
-      const newCursor = data.jobSearch.pageInfo.nextCursor;
+      // const { data } = await this.client.query({
+      //   query,
+      //   variables: {},
+      //   fetchPolicy: 'no-cache',
+      // });
+      // const jobs = data.jobSearch.results.map((job: any) => this.processJob(job.job));
+      // const newCursor = data.jobSearch.pageInfo.nextCursor;
 
-      return { jobs, newCursor };
+      // return { jobs, newCursor };
     } catch (error) {
       console.error('Error response:', error);
       throw error;
@@ -89,72 +89,72 @@ export class IndeedScraper {
 
   private buildQuery(scraperInput: ScraperInput, cursor: string | null) {
     console.log('buildQuery', scraperInput, cursor);
-    return gql`
-   query GetJobData($searchTerm: String, $location: String, $dateOnIndeed: Int, $cursor: String, $filters: String) {
-    jobSearch(
-      what: $searchTerm
-      location: $location
-      includeSponsoredResults: NONE
-      limit: 100
-      sort: DATE
-      cursor: $cursor
-      filters: $filters
-    ) {
-      pageInfo {
-        nextCursor
-      }
-      results {
-        trackingKey
-        job {
-          key
-          title
-          datePublished
-          dateOnIndeed
-          description {
-            html
-          }
-          compensation {
-            baseSalary {
-              unitOfWork
-            }
-            currencyCode
-          }
-          attributes {
-            key
-            label
-          }
-          employer {
-            relativeCompanyPageUrl
-            name
-            dossier {
-              employerDetails {
-                addresses
-                industry
-                employeesLocalizedLabel
-                revenueLocalizedLabel
-                briefDescription
-                ceoName
-                ceoPhotoUrl
-              }
-              images {
-                headerImageUrl
-                squareLogoUrl
-              }
-              links {
-                corporateWebsite
-              }
-            }
-          }
-          recruit {
-            viewJobUrl
-            detailedSalary
-            workSchedule
-          }
-        }
-      }
-    }
-  }
-       `;
+  //   return gql`
+  //  query GetJobData($searchTerm: String, $location: String, $dateOnIndeed: Int, $cursor: String, $filters: String) {
+  //   jobSearch(
+  //     what: $searchTerm
+  //     location: $location
+  //     includeSponsoredResults: NONE
+  //     limit: 100
+  //     sort: DATE
+  //     cursor: $cursor
+  //     filters: $filters
+  //   ) {
+  //     pageInfo {
+  //       nextCursor
+  //     }
+  //     results {
+  //       trackingKey
+  //       job {
+  //         key
+  //         title
+  //         datePublished
+  //         dateOnIndeed
+  //         description {
+  //           html
+  //         }
+  //         compensation {
+  //           baseSalary {
+  //             unitOfWork
+  //           }
+  //           currencyCode
+  //         }
+  //         attributes {
+  //           key
+  //           label
+  //         }
+  //         employer {
+  //           relativeCompanyPageUrl
+  //           name
+  //           dossier {
+  //             employerDetails {
+  //               addresses
+  //               industry
+  //               employeesLocalizedLabel
+  //               revenueLocalizedLabel
+  //               briefDescription
+  //               ceoName
+  //               ceoPhotoUrl
+  //             }
+  //             images {
+  //               headerImageUrl
+  //               squareLogoUrl
+  //             }
+  //             links {
+  //               corporateWebsite
+  //             }
+  //           }
+  //         }
+  //         recruit {
+  //           viewJobUrl
+  //           detailedSalary
+  //           workSchedule
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
+  //      `;
   }
 
   private processJob(job: any): Job {

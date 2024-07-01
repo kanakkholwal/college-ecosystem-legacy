@@ -1,13 +1,16 @@
-name: 🧹 Lint and Format
+name: 🧹 Lint
+
 
 on:
   push:
-    branches:
-      - '**'
+    branches-ignore:
+      - main
+      - staging
   pull_request:
     branches:
       - '**'
   workflow_call:
+
 
 jobs:
   lint-and-format:

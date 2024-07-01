@@ -132,14 +132,14 @@ const parseResult = (
 };
 
 export async function ScrapeResult(rollNo: string): Promise<ResultType> {
-    const { url, branch, batch, programme, headers } = getInfo(rollNo);
+    const { url, headers } = getInfo(rollNo);
 
-    console.log(rollNo, url, branch, batch, programme);
+    // console.log(rollNo, url, branch, batch, programme);
     return new Promise(async (resolve, reject) => {
         try {
-            console.log("evaluating");
+            // console.log("evaluating");
             const result = await fetchData(url, rollNo, headers);
-            console.log("evaluated");
+            // console.log("evaluated");
             const student = await parseResult(result, {
                 rollNo,
                 ...getInfo(rollNo),
@@ -147,6 +147,7 @@ export async function ScrapeResult(rollNo: string): Promise<ResultType> {
             resolve(student);
             console.log("resolved");
         } catch (err) {
+            console.error("Error scraping result:", err);
             reject(err);
         }
     });
