@@ -37,7 +37,7 @@ jobs:
           if [ -f package-lock.json ]; then
             npm ci
           else
-            npm install
+            npm install --force
           fi
 
       - name: 💾 Cache Turbo
