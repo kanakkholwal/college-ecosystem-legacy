@@ -135,7 +135,7 @@ export async function ScrapeResult(rollNo: string): Promise<ResultType> {
     const { url, headers } = getInfo(rollNo);
 
     // console.log(rollNo, url, branch, batch, programme);
-    return new Promise(async (resolve, reject) => {
+
         try {
             // console.log("evaluating");
             const result = await fetchData(url, rollNo, headers);
@@ -144,13 +144,13 @@ export async function ScrapeResult(rollNo: string): Promise<ResultType> {
                 rollNo,
                 ...getInfo(rollNo),
             });
-            resolve(student);
             console.log("resolved");
+            return Promise.resolve(student);
         } catch (err) {
             console.error("Error scraping result:", err);
-            reject(err);
+            return Promise.reject(err);
         }
-    });
+    
 }
 const headerMap: Record<
     number,
