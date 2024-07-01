@@ -34,13 +34,7 @@ jobs:
 
       - name: 📦 Install lint dependencies
         run: |
-          npm install --no-package-lock --no-save \
-            eslint \
-            @typescript-eslint/parser \
-            @typescript-eslint/eslint-plugin \
-            eslint-config-prettier \
-            typescript \
-            turbo
+          npm install --no-package-lock
 
       - name: 💾 Cache Turbo
         uses: actions/cache@v3
