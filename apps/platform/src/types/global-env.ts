@@ -6,7 +6,7 @@ const envVariables = z.object({
   GOOGLE_SECRET: z.string(),
   NEXTAUTH_URL: z.string(),
   NEXT_AUTH_SECRET: z.string(),
-  
+
   MONGODB_URI: z.string(),
 
   NODE_ENV: z.string().default("testing"),
