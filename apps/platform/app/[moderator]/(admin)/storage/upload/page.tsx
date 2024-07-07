@@ -1,4 +1,4 @@
-import {UploadImage} from "@/components/utils/uploader";
+import { UploadImage } from "@/components/utils/uploader";
 
 interface PageProps {
     searchParams: {
@@ -14,6 +14,9 @@ export default async function StoragePage({ searchParams }: PageProps) {
 
     return (
         <div className="space-y-6 my-5">
+            <h1 className="text-2xl font-semibold text-center">
+                Storage Upload (Admin Only)
+            </h1>
             <UploadImage />
         </div>
     );

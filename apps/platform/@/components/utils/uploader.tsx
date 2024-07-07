@@ -5,20 +5,24 @@ import {
     FileUploaderContent,
     FileUploaderItem,
 } from "@/components/extended/file-upload";
-import { Input } from "@/components/ui/input";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
 import axios from "axios";
-import { Paperclip } from "lucide-react";
+import { Paperclip, Upload } from "lucide-react";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { CgSpinner } from "react-icons/cg";
+import ConditionalRender from "./conditional-render";
 
 interface UploadImageProps {
     onUpload?: (fileUrl: string) => void;
 }
 
 const dropZoneConfig = {
-    maxFiles: 5,
+    maxFiles: 1,
     maxSize: 1024 * 1024 * 4,
     multiple: false,
 };
@@ -30,67 +34,71 @@ export function UploadImage({ onUpload }: UploadImageProps) {
     const [uploadSuccess, setUploadSuccess] = useState(false);
     const [files, setFiles] = useState<File[] | null>(null);
 
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
     const [meta, setMeta] = useState({
         name: "",
-        path:""
+        path: "",
     });
 
-    useEffect(() => {
-        const uploadImage = async (file: File) => {
-            setUploading(true);
-            setUploadProgress(0);
-            setUploadError(null);
-            setUploadSuccess(false);
+    const uploadImage = async () => {
+        if (!selectedFile) return;
+        setUploading(true);
+        setUploadProgress(0);
+        setUploadError(null);
+        setUploadSuccess(false);
 
-            const formData = new FormData();
-            formData.append("file", file);
-            formData.append("name", file.name);
-            formData.append("path", `uploads/${file.name}`);
+        const formData = new FormData();
+        formData.append("file", selectedFile!);
+        formData.append("name", meta.name);
+        formData.append("path", meta.path);
+        formData.append("tags", JSON.stringify(meta.path.split("/").filter(Boolean)));
 
-            try {
-                const response = await axios.post("/api/storage/upload", formData, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                    },
-                    onUploadProgress: (progressEvent) => {
-                        if (progressEvent.total) {
-                            setUploadProgress(Math.round((progressEvent.loaded * 100) / progressEvent.total));
-                        }
-                    },
-                });
+        try {
+            const response = await axios.post("/api/storage/upload", formData, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+                onUploadProgress: (progressEvent) => {
+                    if (progressEvent.total) {
+                        setUploadProgress(Math.round((progressEvent.loaded * 100) / progressEvent.total));
+                    }
+                },
+            });
 
-                setUploading(false);
-                setUploadSuccess(true);
-                console.log(response.data);
-                onUpload?.(response.data.publicUrl); // Ensure this matches your response structure
-                toast.success("File uploaded successfully");
-            } catch (error) {
-                console.error(error);
-                setUploading(false);
-                setUploadError("Error uploading file");
-                toast.error("Error uploading file");
-            }
-        };
-        if (files && files.length > 0) {
-            const file = files[0];
-            if (!file) {
-                toast.error("No file selected");
-                return;
-            }
-            console.log(file);
-            uploadImage(file);
+            setUploading(false);
+            setUploadSuccess(true);
+            console.log(response.data);
+            onUpload?.(response.data.publicUrl); // Ensure this matches your response structure
+            toast.success("File uploaded successfully");
+        } catch (error) {
+            console.error(error);
+            setUploadError("Error uploading file");
+            toast.error("Error uploading file");
+        } finally {
+            setUploading(false);
+            setUploadProgress(0)
         }
-    }, [files, onUpload]);
+    };
+    useEffect(() => {
+        if (files && files.length > 0) {
+            setSelectedFile(files[0]);
+            setMeta({
+                name: files[0].name,
+                path: `uploads/${files[0].name}`,
+            })
+        }
+
+    }, [files]);
+
 
 
     return (
-        <div className="flex justify-center gap-6 w-full">
-            <div>
+        <div className="flex justify-center gap-6 flex-wrap w-full max-w-5xl mx-auto pt-5">
 
-
+            <div className="flex-auto p-3 space-y-4">
                 <FileUploader
                     value={files}
-                    onValueChange={setFiles}
+                    onValueChange={(files) => setFiles(files)}
                     dropzoneOptions={dropZoneConfig}
                     className="relative bg-background rounded-lg p-2"
                 >
@@ -110,25 +118,67 @@ export function UploadImage({ onUpload }: UploadImageProps) {
                             ))}
                     </FileUploaderContent>
                 </FileUploader>
-                {uploading && (
-                    <div className="mt-4 w-full">
-                        <Progress value={uploadProgress} />
-                        <p className="mt-2 text-center">{uploadProgress}%</p>
-                    </div>
-                )}
-                {uploadError && <p className="mt-2 text-red-500">{uploadError}</p>}
-                {uploadSuccess && <p className="mt-2 text-green-500">Upload successful!</p>}
+                
+                <ConditionalRender condition={uploading}>
+                    <Alert>
+                        <Upload className="h-4 w-4" />
+                        <AlertTitle>
+                            {uploadProgress === 100 ? "Finishing up..." : "Uploading..."} ({uploadProgress}%)
+                        </AlertTitle>
+                        <AlertDescription>
+                            <Progress value={uploadProgress} className="mt-5"/>
+                        </AlertDescription>
+                    </Alert>
+                </ConditionalRender>
+                <ConditionalRender condition={!!uploadError}>
+                    <Alert variant="destructive">
+                        <Upload className="h-4 w-4" />
+                        <AlertTitle>
+                            Error uploading file
+                        </AlertTitle>
+                        <AlertDescription>
+                            {uploadError}
+                        </AlertDescription>
+                    </Alert>
+                </ConditionalRender>
+                <ConditionalRender condition={!!uploadSuccess}>
+                    <Alert variant="success">
+                        <Upload className="h-4 w-4" />
+                        <AlertTitle>
+                            Upload successful!
+                        </AlertTitle>
+                        <AlertDescription>
+                            File uploaded successfully
+                        </AlertDescription>
+                    </Alert>
+                </ConditionalRender>
             </div>
-            <div>
-                <Input placeholder="Enter name"  value={meta.name} onChange={(e) => setMeta({ ...meta, name: e.target.value })} />
-                <Input placeholder="Enter path"  value={meta.path} onChange={(e) => setMeta({ ...meta, path: e.target.value })} />
+            <div className="grid gap-3 flex-auto @3xl:max-w-sm">
+                <div className="grid w-full">
+                    <Label htmlFor="name">File Name</Label>
+                    <Input id="name" placeholder="Enter name" value={meta.name} onChange={(e) => setMeta({ ...meta, name: e.target.value })} />
+                </div>
+                <div className="grid w-full">
+                    <Label htmlFor="path">File Path</Label>
+                    <Input id="path" placeholder="Enter path" value={meta.path} onChange={(e) => setMeta({ ...meta, path: e.target.value })} />
+                </div>
 
                 <Button
+                    disabled={uploading || !selectedFile}
                     onClick={() => {
                         console.log(meta);
+
+                        if (!selectedFile) {
+                            toast.error("No file selected");
+                            return;
+                        }
+                        console.log(selectedFile);
+                        uploadImage();
+
                     }}
                 >
-                    Upload
+                    {uploading ? <CgSpinner className="animate-spin" /> : <Upload />}
+                    Upload{uploading ? "ing" : ""} File
                 </Button>
 
             </div>
