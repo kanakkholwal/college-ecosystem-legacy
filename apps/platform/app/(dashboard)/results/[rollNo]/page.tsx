@@ -8,12 +8,11 @@ import { getResultByRollNo } from "./actions";
 import { CgpiCard, RankCard, SemCard } from "./components/card";
 import { CGPIChart } from "./components/chart";
 
-
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: { rollNo: string }
-}
+  params: { rollNo: string };
+};
 
 export async function generateMetadata(
   { params }: Props,
@@ -24,13 +23,10 @@ export async function generateMetadata(
   return {
     title: `${rollNo} | Results | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
     description: `Check the results of ${rollNo}`,
-  }
+  };
 }
 
-
-export default async function ResultsPage({
-  params,
-}: Props) {
+export default async function ResultsPage({ params }: Props) {
   const result = await getResultByRollNo(params.rollNo);
   if (!result) {
     return notFound();
@@ -117,7 +113,7 @@ export default async function ResultsPage({
           </TabsContent>
           <TabsContent value="graph">
             <div className="max-w-6xl mx-auto my-5 w-full p-4 rounded-xl bg-white/50">
-            <CGPIChart semesters={result.semesters} />
+              <CGPIChart semesters={result.semesters} />
             </div>
           </TabsContent>
         </Tabs>

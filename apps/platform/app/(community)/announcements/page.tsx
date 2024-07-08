@@ -8,15 +8,12 @@ import { GrAnnounce } from "react-icons/gr";
 import { getAnnouncements } from "src/lib/announcement/actions";
 import AnnouncementsList from "./list";
 
+import type { Metadata } from "next";
 
-import type { Metadata } from 'next';
- 
 export const metadata: Metadata = {
   title: `Announcements | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-  description: `Check the latest announcements here.`
-}
- 
-
+  description: `Check the latest announcements here.`,
+};
 
 export default async function AnnouncementsPage() {
   // const session = await getSession() as sessionType;

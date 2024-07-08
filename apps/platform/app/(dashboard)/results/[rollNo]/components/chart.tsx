@@ -1,5 +1,11 @@
 "use client";
-import { ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart";
+import {
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+  type ChartConfig,
+} from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
 import React, { Suspense } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
@@ -42,7 +48,10 @@ export const CGPIChart: React.FC<CGPIChartProps> = ({ semesters }) => {
   return (
     <>
       <Suspense fallback={<CGPIChartLoader />}>
-        <ChartContainer config={chartConfig} className="w-full aspect-video relative z-10">
+        <ChartContainer
+          config={chartConfig}
+          className="w-full aspect-video relative z-10"
+        >
           <BarChart data={chartData}>
             <CartesianGrid vertical={false} />
             <XAxis dataKey="semester" />

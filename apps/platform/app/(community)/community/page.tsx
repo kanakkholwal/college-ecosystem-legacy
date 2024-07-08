@@ -3,14 +3,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { CATEGORY_IMAGES, CATEGORY_TYPES } from "src/constants/community";
 
-import type { Metadata } from 'next';
- 
+import type { Metadata } from "next";
+
 export const metadata: Metadata = {
   title: `Communities | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-  description: `Explore different communities`
-}
- 
-
+  description: `Explore different communities`,
+};
 
 export default async function CommunitiesPage() {
   return (

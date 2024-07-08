@@ -2,7 +2,6 @@ import Image from "next/image";
 import { GetFileByPath } from "src/lib/storage";
 import { FileWithID } from "src/models/file";
 
-
 const defaultValue = {
   year: new Date().getFullYear(),
   sem: new Date().getMonth() < 6 ? "even" : "odd",
@@ -24,12 +23,11 @@ async function getCalender({
   return Promise.resolve(JSON.parse(JSON.stringify(calender)));
 }
 
-
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
   searchParams: { year?: number; sem?: "even" | "odd" };
-}
+};
 
 export async function generateMetadata(
   { searchParams }: Props,
@@ -42,13 +40,10 @@ export async function generateMetadata(
   return {
     title: `Calender ${year} ${sem} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
     description: `Calender for the year ${year} ${sem} semester`,
-  }
+  };
 }
 
-
-export default async function StoragePage({
-  searchParams,
-}: Props) {
+export default async function StoragePage({ searchParams }: Props) {
   const year = searchParams?.year || new Date().getFullYear();
   const sem = searchParams?.sem || new Date().getMonth() < 6 ? "even" : "odd";
 

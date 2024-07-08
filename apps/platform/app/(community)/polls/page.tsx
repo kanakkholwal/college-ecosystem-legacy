@@ -11,13 +11,12 @@ import { sessionType } from "src/types/session";
 import CreatePoll from "./components/create-poll";
 import PollComponent from "./components/poll-component";
 
-import type { Metadata } from 'next'
- 
+import type { Metadata } from "next";
+
 export const metadata: Metadata = {
   title: `Polls | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-  description: `Check the latest polls here.`
-}
- 
+  description: `Check the latest polls here.`,
+};
 
 export default async function PollsPage() {
   const session = (await getSession()) as sessionType;

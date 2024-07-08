@@ -15,30 +15,26 @@ interface Props {
   };
 }
 
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata, ResolvingMetadata } from "next";
 
- 
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
-  const post = await getPostById(
-    params.postId,
-    true
-  ); 
+  const post = await getPostById(params.postId, true);
   if (!post) return notFound();
 
   return {
     title: `${post.title} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
     description: post.content.slice(0, 100),
     openGraph: {
-      images: [`${process.env.NEXT_PUBLIC_BASE_URL}/${CATEGORY_IMAGES[post.category]}`],
-    }
-  }
+      images: [
+        `${process.env.NEXT_PUBLIC_BASE_URL}/${CATEGORY_IMAGES[post.category]}`,
+      ],
+    },
+  };
 }
- 
-
 
 const cache = new Map<string, boolean>();
 

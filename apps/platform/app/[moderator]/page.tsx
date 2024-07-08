@@ -10,9 +10,7 @@ interface Props {
   };
 }
 
-import type { Metadata, ResolvingMetadata } from 'next';
-
-
+import type { Metadata, ResolvingMetadata } from "next";
 
 export async function generateMetadata(
   { params }: Props,
@@ -24,9 +22,8 @@ export async function generateMetadata(
   return {
     title: `${moderator} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
     description: `Dashboard for ${moderator}`,
-  }
+  };
 }
-
 
 export default async function ModeratorDashboard({ params }: Props) {
   const session = (await getSession()) as sessionType;

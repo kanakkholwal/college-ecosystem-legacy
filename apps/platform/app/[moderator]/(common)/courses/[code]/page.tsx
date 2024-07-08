@@ -12,14 +12,13 @@ import { CourseTypeWithId } from "src/models/course";
 import ResultModel from "src/models/result";
 import { EditCourseForm } from "./form";
 
+import type { Metadata, ResolvingMetadata } from "next";
 
-import type { Metadata, ResolvingMetadata } from 'next';
- 
 type Props = {
-  params: {code: string , moderator: string}
-  searchParams: { [key: string]: string | string[] | undefined }
-}
- 
+  params: { code: string; moderator: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
 export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
@@ -27,9 +26,9 @@ export async function generateMetadata(
   return {
     title: `Edit Course | ${params.code} | ${params.moderator} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
     description: `Edit an existing course`,
-  }
+  };
 }
- 
+
 export default async function EditCoursePage({ params }: Props) {
   await dbConnect();
   const course = await getCourseByCode(params.code);

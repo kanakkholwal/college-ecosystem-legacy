@@ -17,9 +17,8 @@ interface Props {
     limit?: number;
   };
 }
-import type { Metadata, ResolvingMetadata } from 'next'
+import type { Metadata, ResolvingMetadata } from "next";
 
- 
 export async function generateMetadata(
   { params, searchParams }: Props,
   parent: ResolvingMetadata
@@ -32,16 +31,15 @@ export async function generateMetadata(
   return {
     title: `${category} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
     description: `Posts in ${category}`,
-    openGraph:{
-      images: [`${process.env.NEXT_PUBLIC_BASE_URL}/${CATEGORY_IMAGES[category]}`],
-    }
-  }
+    openGraph: {
+      images: [
+        `${process.env.NEXT_PUBLIC_BASE_URL}/${CATEGORY_IMAGES[category]}`,
+      ],
+    },
+  };
 }
- 
-export default async function CategoryPage({
-  params,
-  searchParams,
-}: Props) {
+
+export default async function CategoryPage({ params, searchParams }: Props) {
   const { category } = params;
 
   const page = searchParams.page || 1;

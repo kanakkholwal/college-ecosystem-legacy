@@ -1,14 +1,12 @@
 import { GrAnnounce } from "react-icons/gr";
 import CreateAnnouncement from "./form";
 
-import type { Metadata } from 'next';
- 
+import type { Metadata } from "next";
+
 export const metadata: Metadata = {
   title: `Create Announcement | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-  description:  "Create an announcement here"
-}
- 
-
+  description: "Create an announcement here",
+};
 
 export default async function CreateAnnouncementPage() {
   return (

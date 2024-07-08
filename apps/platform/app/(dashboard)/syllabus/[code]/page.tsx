@@ -25,12 +25,11 @@ import CourseModel, { booksAndRefType, prevPaperType } from "src/models/course";
 import { AddPrevsModal, AddRefsModal } from "./modal";
 import { IconMap } from "./render-link";
 
-import type { Metadata, ResolvingMetadata } from 'next';
+import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
   params: { code: string };
-
-}
+};
 
 export async function generateMetadata(
   { params }: Props,
@@ -43,13 +42,10 @@ export async function generateMetadata(
   return {
     title: `${course.name} | ${course.code} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
     description: `Syllabus of ${course.name} (${course.code})`,
-  }
+  };
 }
 
-
-export default async function CoursePage({
-  params,
-}: Props) {
+export default async function CoursePage({ params }: Props) {
   const session = await getServerSession(authOptions);
 
   await dbConnect();

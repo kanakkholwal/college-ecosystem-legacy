@@ -13,7 +13,7 @@ import { Suspense } from "react";
 import { getCourses } from "src/lib/course/actions";
 import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
-import type { Metadata, ResolvingMetadata } from 'next'
+import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
   params: {
@@ -25,7 +25,7 @@ type Props = {
     department?: string;
     type?: string;
   };
-}
+};
 
 export async function generateMetadata(
   { params, searchParams }: Props,
@@ -34,13 +34,10 @@ export async function generateMetadata(
   return {
     title: `Courses | ${params.moderator} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
     description: `Search for courses based on their name, code, department, and type.`,
-  }
+  };
 }
 
-export default async function CoursesPage({
-  params,
-  searchParams,
-}: Props) {
+export default async function CoursesPage({ params, searchParams }: Props) {
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const filter = {
