@@ -117,7 +117,9 @@ function UserRow({ user }: { user: UserWithId }) {
           @{user["rollNo"]}
         </Link>
       </TableCell>
-      <TableCell className="font-medium whitespace-nowrap">{user["email"]}</TableCell>
+      <TableCell className="font-medium whitespace-nowrap">
+        {user["email"]}
+      </TableCell>
       <TableCell className="font-medium whitespace-nowrap">
         {" "}
         {user.roles?.map((role: string) => {
@@ -128,7 +130,9 @@ function UserRow({ user }: { user: UserWithId }) {
           );
         })}
       </TableCell>
-      <TableCell className="font-medium whitespace-nowrap">{user["department"]}</TableCell>
+      <TableCell className="font-medium whitespace-nowrap">
+        {user["department"]}
+      </TableCell>
       <TableCell className="font-medium whitespace-nowrap">
         {new Date(user["createdAt"]).toLocaleDateString("en-US", {
           year: "numeric",
@@ -156,6 +160,9 @@ function UserRow({ user }: { user: UserWithId }) {
             >
               {" "}
               Copy ID{" "}
+            </DropdownMenuItem>
+            <DropdownMenuItem asChild>
+              <Link href={`/admin/users/${user._id}/update`}>Update</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {

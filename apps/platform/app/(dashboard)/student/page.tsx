@@ -80,7 +80,7 @@ export default async function StudentDashboard() {
             </Link>
           </Button>
         </div>
-          <OverallAttendanceChart attendanceRecords={attendanceRecords} />
+        <OverallAttendanceChart attendanceRecords={attendanceRecords} />
       </section>
       <div>
         <SubWiseAttendanceChart attendanceRecords={attendanceRecords} />
