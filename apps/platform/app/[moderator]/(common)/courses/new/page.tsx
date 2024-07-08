@@ -18,6 +18,7 @@ export const metadata: Metadata = {
   description: "Create a new course",
 };
 
+
 export default async function CoursesPage() {
   await dbConnect();
   const branches = await ResultModel.distinct("branch");

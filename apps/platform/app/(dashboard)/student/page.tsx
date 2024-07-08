@@ -1,7 +1,15 @@
 import { getSession } from "src/lib/auth";
 import { sessionType } from "src/types/session";
 
-export default async function Dashboard() {
+
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: `Student Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+  description: "Student Dashboard to view your profile and other details"
+}
+
+export default async function StudentDashboard() {
   const session = (await getSession()) as sessionType;
 
   return (

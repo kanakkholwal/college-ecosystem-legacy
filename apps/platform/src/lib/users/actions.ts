@@ -60,6 +60,20 @@ export async function updateUserRoles(userId: string, roles: string[]) {
     };
   }
 }
+export async function getUser(userId: string): Promise<UserWithId | null> {
+  try {
+    await dbConnect();
+    const user = await UserModel.findById(userId);
+    if (!user) {
+      return null;
+    }
+    return Promise.resolve(JSON.parse(JSON.stringify(user)));
+  } catch (error) {
+    console.log(error);
+    return Promise.resolve(null);
+  }
+}
+
 export async function getUsers(
   query: string,
   skip: number,
