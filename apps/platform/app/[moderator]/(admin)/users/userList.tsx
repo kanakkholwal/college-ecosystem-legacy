@@ -105,7 +105,7 @@ export default function UserList({
 function UserRow({ user }: { user: UserWithId }) {
   return (
     <TableRow>
-      <TableCell className="font-medium">
+      <TableCell className="font-medium whitespace-nowrap">
         {user["firstName"]} {user["lastName"]}
       </TableCell>
       <TableCell className="font-medium">
@@ -117,8 +117,8 @@ function UserRow({ user }: { user: UserWithId }) {
           @{user["rollNo"]}
         </Link>
       </TableCell>
-      <TableCell className="font-medium">{user["email"]}</TableCell>
-      <TableCell className="font-medium">
+      <TableCell className="font-medium whitespace-nowrap">{user["email"]}</TableCell>
+      <TableCell className="font-medium whitespace-nowrap">
         {" "}
         {user.roles?.map((role: string) => {
           return (
@@ -128,8 +128,8 @@ function UserRow({ user }: { user: UserWithId }) {
           );
         })}
       </TableCell>
-      <TableCell className="font-medium">{user["department"]}</TableCell>
-      <TableCell className="font-medium">
+      <TableCell className="font-medium whitespace-nowrap">{user["department"]}</TableCell>
+      <TableCell className="font-medium whitespace-nowrap">
         {new Date(user["createdAt"]).toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
