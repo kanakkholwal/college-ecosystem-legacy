@@ -11,7 +11,7 @@ app.use(morgan('dev'));
 app.use(urlencoded({ extended: true }));
 app.use(json());
 app.use(cors({
-    origin:['http://localhost:3000','http://localhost:3001','nith.eu.org'],
+    origin:['localhost:3000','nith.eu.org'],
 }));
 
 app.use('/results', resultRoutes);

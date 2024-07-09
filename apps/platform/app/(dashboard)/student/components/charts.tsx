@@ -1,4 +1,5 @@
 "use client";
+import { CircleSlash } from "lucide-react";
 
 import {
   Card,
@@ -81,11 +82,12 @@ export function OverallAttendanceChart({ attendanceRecords }: Props) {
   const weeklyTrend = calculateWeeklyTrend(attendanceRecords)?.at(-1);
 
   return (
-    <Card className="flex flex-col" variant="glass">
+    <Card className="flex flex-col flex-auto ml-auto" variant="glass">
       <CardContent className="flex-1 pb-0 pt-5">
         <ConditionalRender condition={totalClasses === 0}>
           <div className="flex flex-col items-center justify-center gap-4">
-            <div className="text-center text-lg font-medium">
+            <CircleSlash className="h-12 w-12 text-danger" />
+            <div className="text-center text-lg font-medium text-gray-600">
               No attendance records found
             </div>
             <div className="text-muted-foreground text-sm">
@@ -172,25 +174,41 @@ export function SubWiseAttendanceChart({ attendanceRecords }: Props) {
         <CardDescription>Attendance for each subject</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
-        <ChartContainer config={chartConfig} className="w-full relative z-10">
-          <BarChart data={chartData}>
-            <CartesianGrid vertical={false} />
-            <XAxis dataKey="subject" />
-            <YAxis />
-            <ChartTooltip content={<ChartTooltipContent />} />
-            <ChartLegend content={<ChartLegendContent />} />
-            <Bar
-              dataKey="attendedClasses"
-              fill={chartConfig.attended.color}
-              radius={4}
-            />
-            <Bar
-              dataKey="totalClasses"
-              fill={chartConfig.total.color}
-              radius={4}
-            />
-          </BarChart>
-        </ChartContainer>
+        <ConditionalRender condition={attendanceRecords.length > 0}>
+          <ChartContainer
+            config={chartConfig}
+            className="w-full aspect-video relative z-10"
+          >
+            <BarChart data={chartData}>
+              <CartesianGrid vertical={false} />
+              <XAxis dataKey="subjectName" />
+              <YAxis />
+              <ChartTooltip content={<ChartTooltipContent />} />
+              <ChartLegend content={<ChartLegendContent />} />
+              <Bar
+                dataKey="attendedClasses"
+                fill={chartConfig.attended.color}
+                radius={4}
+              />
+              <Bar
+                dataKey="totalClasses"
+                fill={chartConfig.total.color}
+                radius={4}
+              />
+            </BarChart>
+          </ChartContainer>
+        </ConditionalRender>
+        <ConditionalRender condition={attendanceRecords.length === 0}>
+          <div className="flex flex-col items-center justify-center gap-4">
+            <CircleSlash className="h-12 w-12 text-danger" />
+            <div className="text-center text-lg font-medium text-gray-600">
+              No attendance records found
+            </div>
+            <div className="text-muted-foreground text-sm">
+              Your attendance records will be displayed here
+            </div>
+          </div>
+        </ConditionalRender>
       </CardContent>
     </Card>
   );
