@@ -72,7 +72,7 @@ export function calculateWeeklyTrend(
 }
 
 interface SubjectAttendance {
-  subject: string;
+  subjectName: string;
   totalClasses: number;
   attendedClasses: number;
 }
@@ -83,7 +83,7 @@ export function formatAttendanceForSubjects(
   return attendanceRecords.map((record) => {
     const attendedClasses = record.attendance.filter((a) => a.isPresent).length;
     return {
-      subject: record.subjectName,
+      subjectName: record.subjectName,
       totalClasses: record.totalClasses,
       attendedClasses: attendedClasses,
     };
@@ -118,3 +118,36 @@ export const getMonthlyAttendanceData = (
 
   return Object.values(monthlyData);
 };
+
+export function getSafeAttendance(attendanceRecords: AttendanceRecordWithId[]) {
+  const distinctData = attendanceRecords
+    .map((record) => {
+      const attendedClasses = record.attendance.filter(
+        (a) => a.isPresent
+      ).length;
+      return {
+        subject: record.subjectName,
+        totalClasses: record.totalClasses,
+        attendedClasses: attendedClasses,
+      };
+    })
+    .filter((data) => {
+      return data.attendedClasses / data.totalClasses < 0.75;
+    });
+  if (distinctData.length === 0) {
+    return {
+      className: "text-green-500 bg-green-500/10",
+      message: "You are doing great! Keep it up.",
+    };
+  } else if (distinctData.length === 1) {
+    return {
+      className: "text-orange-500 bg-orange-500/10",
+      message: `You are missing classes for ${distinctData[0].subject}.`,
+    };
+  } else {
+    return {
+      className: "text-red-500 bg-red-500/10",
+      message: `You are missing classes for ${distinctData.length} subjects.`,
+    };
+  }
+}

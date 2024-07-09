@@ -3,12 +3,14 @@ import { getSession } from "src/lib/auth";
 import { sessionType } from "src/types/session";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import {
   OverallAttendanceChart,
   SubWiseAttendanceChart,
 } from "./components/charts";
+import { getSafeAttendance } from "./libs";
 
 const quick_links = [
   {
@@ -51,7 +53,7 @@ export default async function StudentDashboard() {
         <p className="md:text-lg font-medium text-neutral-700 dark:text-neutral-300">
           Here{`'`}s a quick overview of your Activities
         </p>
-        <div className="flex flex-col md:flex-row items-center gap-3 flex-wrap mt-5">
+        <div className="flex items-center gap-3 flex-wrap mt-5">
           {quick_links.map((link) => {
             return (
               <Button variant="link" size="sm" key={link.title} asChild>
@@ -65,7 +67,7 @@ export default async function StudentDashboard() {
       </section>
       <section
         id="attendance"
-        className="z-10 w-full max-w-6xl relative flex flex-col lg:flex-row items-center justify-between"
+        className="z-10 w-full relative flex flex-wrap items-center justify-between gap-10"
       >
         <div className="flex flex-col items-start">
           <h2 className="text-xl md:text-2xl lg:text-4xl font-bold text-neutral-900 dark:text-neutral-100 whitespace-nowrap">
@@ -74,6 +76,14 @@ export default async function StudentDashboard() {
           <p className="mt-4 text-lg text-neutral-700 dark:text-neutral-300">
             Your attendance records for the current semester
           </p>
+          <div
+            className={cn(
+              "mt-4 text-base font-medium backdrop-blur-lg py-2 px-3 rounded-full",
+              getSafeAttendance(attendanceRecords).className
+            )}
+          >
+            {getSafeAttendance(attendanceRecords).className}
+          </div>
           <Button className="mt-10" asChild>
             <Link href="/attendance">
               Manage Attendance <ArrowRight />

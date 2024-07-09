@@ -26,7 +26,7 @@ const FileSchema: Schema = new Schema(
     contentType: { type: String, required: true },
     uploadedAt: { type: Date, required: true, default: Date.now },
     uploadedBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
-    publicUrl: { type: String, required: true },
+    publicUrl: { type: String, required: true, unique: true },
     tags: { type: [String], required: true, default: [] },
     metadata: { type: Schema.Types.Mixed, required: true },
   },
