@@ -5,7 +5,7 @@ import SpeechRecognition, {
 } from "react-speech-recognition";
 import { Message } from "./types";
 
-interface ChatMessage extends Message { }
+interface ChatMessage extends Message {}
 
 interface UseChatResult {
   messages: ChatMessage[];

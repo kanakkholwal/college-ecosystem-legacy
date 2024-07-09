@@ -46,14 +46,17 @@ export function ResponsiveDialog({
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={(value) => {
-        setOpen(value)
-        onOpenChange?.(value)
-      }}>
+      <Dialog
+        open={open}
+        onOpenChange={(value) => {
+          setOpen(value);
+          onOpenChange?.(value);
+        }}
+      >
         <DialogTrigger asChild>
           <Button {...btnProps} />
         </DialogTrigger>
-        <DialogContent className={cn("sm:max-w-[425px]",className)}>
+        <DialogContent className={cn("sm:max-w-[425px]", className)}>
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{description}</DialogDescription>
@@ -65,10 +68,13 @@ export function ResponsiveDialog({
   }
 
   return (
-    <Drawer open={open} onOpenChange={(value) => {
-      setOpen(value)
-      onOpenChange?.(value)
-    }}>
+    <Drawer
+      open={open}
+      onOpenChange={(value) => {
+        setOpen(value);
+        onOpenChange?.(value);
+      }}
+    >
       <DrawerTrigger asChild>
         <Button {...btnProps} />
       </DrawerTrigger>
@@ -77,7 +83,7 @@ export function ResponsiveDialog({
           <DrawerTitle>{title}</DrawerTitle>
           <DrawerDescription>{description}</DrawerDescription>
         </DrawerHeader>
-        <div className={cn("px-4 w-full",className)}>{children}</div>
+        <div className={cn("px-4 w-full", className)}>{children}</div>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>

@@ -14,15 +14,24 @@ export default function MessageComponent({
 
   return (
     <div
-      className={cn(`w-full flex mb-4`, isUser ? "justify-end" : "justify-start")}
+      className={cn(
+        `w-full flex mb-4`,
+        isUser ? "justify-end" : "justify-start"
+      )}
     >
       <div
-        className={cn(`flex flex-col max-w-[70%]`, isUser ? "items-end" : "items-start")}
+        className={cn(
+          `flex flex-col max-w-[70%]`,
+          isUser ? "items-end" : "items-start"
+        )}
       >
         <div
-          className={cn(`px-4 py-2 rounded-lg max-h-mins`, isUser
-            ? "bg-primary text-white rounded-br-none"
-            : "bg-white text-gray-800 rounded-bl-none")}
+          className={cn(
+            `px-4 py-2 rounded-lg max-h-mins`,
+            isUser
+              ? "bg-primary text-white rounded-br-none"
+              : "bg-white text-gray-800 rounded-bl-none"
+          )}
         >
           {message.content.trim() === "" ? (
             <TypingIndicator className="h-5" />
