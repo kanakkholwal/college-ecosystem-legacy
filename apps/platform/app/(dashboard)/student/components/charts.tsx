@@ -86,7 +86,7 @@ export function OverallAttendanceChart({ attendanceRecords }: Props) {
       <CardContent className="flex-1 pb-0 pt-5">
         <ConditionalRender condition={totalClasses === 0}>
           <div className="flex flex-col items-center justify-center gap-4">
-            <CircleSlash className="h-12 w-12 text-danger" />
+            <CircleSlash className="h-12 w-12 text-danger mt-20" />
             <div className="text-center text-lg font-medium text-gray-600">
               No attendance records found
             </div>
@@ -200,7 +200,7 @@ export function SubWiseAttendanceChart({ attendanceRecords }: Props) {
         </ConditionalRender>
         <ConditionalRender condition={attendanceRecords.length === 0}>
           <div className="flex flex-col items-center justify-center gap-4">
-            <CircleSlash className="h-12 w-12 text-danger" />
+            <CircleSlash className="h-12 w-12 text-danger mt-20" />
             <div className="text-center text-lg font-medium text-gray-600">
               No attendance records found
             </div>

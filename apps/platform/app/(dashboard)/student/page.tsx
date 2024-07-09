@@ -82,7 +82,7 @@ export default async function StudentDashboard() {
               getSafeAttendance(attendanceRecords).className
             )}
           >
-            {getSafeAttendance(attendanceRecords).className}
+            {getSafeAttendance(attendanceRecords).message}
           </div>
           <Button className="mt-10" asChild>
             <Link href="/attendance">
