@@ -6,7 +6,7 @@ node_modules
 .husky
 .pnp
 .pnp.js
-
+.vscode
 # Local env files
 .env
 .env.local

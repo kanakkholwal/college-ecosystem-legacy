@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getBasicInfo } from "./actions";
+import UpdateRanksCard from "./components/update-ranks";
 
 export default async function Page() {
   const basicInfo = await getBasicInfo();
@@ -34,14 +35,15 @@ export default async function Page() {
             {basicInfo.counts.batches}
           </h3>
         </div>
+        <UpdateRanksCard />
       </div>
       <Tabs defaultValue="scrape" className="w-full">
         <TabsList className="w-full h-14 px-2 gap-2">
           <TabsTrigger value="scrape" className="text-md w-full">
             Scrape Results
           </TabsTrigger>
-          <TabsTrigger value="rank" className="text-md w-full">
-            Rank Results
+          <TabsTrigger value="branch-change" className="text-md w-full">
+            Branch Change
           </TabsTrigger>
         </TabsList>
         <TabsContent value="scrape" className="space-y-8 p-4">
@@ -53,12 +55,13 @@ export default async function Page() {
             </div>
           </div>
         </TabsContent>
-        <TabsContent value="rank" className="space-y-8 p-4">
+        <TabsContent value="branch-change" className="space-y-8 p-4">
           <div className="flex w-full flex-wrap justify-between items-center">
-            <h4 className="text-lg font-bold">Rank Results</h4>
+            <h4 className="text-lg font-bold">Branch Change</h4>
             <div className="flex gap-2">
               <Input type="text" placeholder="Roll No" size={24} />
-              <Button>Rank</Button>
+              <Input type="text" placeholder="Branch" size={24} />
+              <Button>Change Branch</Button>
             </div>
           </div>
         </TabsContent>

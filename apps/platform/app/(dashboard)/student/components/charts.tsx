@@ -83,19 +83,19 @@ export function OverallAttendanceChart({ attendanceRecords }: Props) {
 
   return (
     <Card className="flex flex-col flex-auto ml-auto" variant="glass">
-       <CardHeader className="items-center pb-0">
-        <CardTitle>Overall Attendance - Showing attendance overview</CardTitle>
+      <CardHeader className="items-center pb-0">
+        <CardTitle>Overall Attendance </CardTitle>
         <CardDescription>
-        Trending {weeklyTrend?.growth! > 0 ? "up" : "down"} by{" "}
+          Trending {weeklyTrend?.growth! > 0 ? "up" : "down"} by{" "}
           {weeklyTrend?.percentage.toFixed(1) || 0}% this week
           {weeklyTrend?.growth! > 0 ? (
-            <TrendingUp className="h-4 w-4" />
+            <TrendingUp className="h-4 w-4 inline-block" />
           ) : (
-            <TrendingDown className="h-4 w-4" />
+            <TrendingDown className="h-4 w-4 inline-block" />
           )}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="flex-1">
         <ConditionalRender condition={totalClasses === 0}>
           <div className="flex flex-col items-center justify-center gap-4">
             <CircleSlash className="h-12 w-12 text-danger mt-20" />

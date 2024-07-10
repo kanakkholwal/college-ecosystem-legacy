@@ -2,6 +2,7 @@
 import { revalidatePath } from "next/cache";
 import { getSession } from "src/lib/auth";
 import dbConnect from "src/lib/dbConnect";
+import ResultModel from "src/models/result";
 import UserModel, { UserWithId } from "src/models/user";
 
 export async function updateUser(userId: string, data: Partial<UserWithId>) {
@@ -30,9 +31,11 @@ export async function updateUser(userId: string, data: Partial<UserWithId>) {
         message: "Unauthorized",
       };
     }
+    const user = await await UserModel.findOne({
+      $or: [{ rollNo: userId }, { _id: session.user._id }],
+    });
     // cannot remove admin role from the only admin
     if (data?.roles && data?.roles?.includes("admin")) {
-      const user = await UserModel.findById(userId);
       if (user.roles.includes("admin")) {
         const adminCount = await UserModel.countDocuments({
           roles: "admin",
@@ -45,7 +48,16 @@ export async function updateUser(userId: string, data: Partial<UserWithId>) {
         }
       }
     }
-    await UserModel.findByIdAndUpdate(userId, { ...data });
+    user.roles = data.roles;
+    user.department = data.department;
+    await user.save();
+    // update department in result collection
+    if (data?.department) {
+      await ResultModel.findOneAndUpdate(
+        { rollNo: user.rollNo },
+        { branch: data.department }
+      );
+    }
 
     revalidatePath("/admin/users", "page");
     revalidatePath(`/admin/users/${userId}/update`, "page");
@@ -65,7 +77,9 @@ export async function updateUser(userId: string, data: Partial<UserWithId>) {
 export async function getUser(userId: string): Promise<UserWithId | null> {
   try {
     await dbConnect();
-    const user = await UserModel.findById(userId);
+    const user = await UserModel.findOne({
+      $or: [{ rollNo: userId }, { _id: userId }],
+    });
     if (!user) {
       return null;
     }
