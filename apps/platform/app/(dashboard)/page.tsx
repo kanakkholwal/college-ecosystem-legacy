@@ -113,7 +113,7 @@ export default async function Dashboard() {
             </AlertTitle>
             <AlertDescription>
               We are looking for contributors to help us build the platform. Check out the
-              <Link href="/contribute" className="text-primary underline mx-1">Contribute</Link> page for more information.
+              <Link href="https://github.com/kanakkholwal/college-ecosystem/blob/main/CONTRIBUTING.md" className="text-primary underline mx-1">Contribute</Link> page for more information.
             </AlertDescription>
           </Alert>
 

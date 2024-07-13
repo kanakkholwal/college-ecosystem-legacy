@@ -50,4 +50,4 @@ We use GitHub Actions to automate the deployment process for both Vercel and Doc
 
 ## Contributing
 
-We welcome contributions! Please see our [CONTRIBUTE.md](CONTRIBUTE.md) for more details.
+We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
