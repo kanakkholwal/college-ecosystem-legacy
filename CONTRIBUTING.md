@@ -6,7 +6,6 @@ The following is a set of guidelines for contributing to the College Ecosystem p
 
 ## Table of Contents
 
-- [Code of Conduct](#code-of-conduct)
 - [How Can I Contribute?](#how-can-i-contribute)
   - [Reporting Bugs](#reporting-bugs)
   - [Suggesting Enhancements](#suggesting-enhancements)
@@ -17,9 +16,6 @@ The following is a set of guidelines for contributing to the College Ecosystem p
 - [Commit Messages](#commit-messages)
 - [License](#license)
 
-## Code of Conduct
-
-This project and everyone participating in it is governed by the [Code of Conduct](CODE_OF_CONDUCT.md). By participating, you are expected to uphold this code. Please report unacceptable behavior to [email@example.com](mailto:email@example.com).
 
 ## How Can I Contribute?
 
