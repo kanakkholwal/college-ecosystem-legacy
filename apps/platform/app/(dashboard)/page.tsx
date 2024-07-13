@@ -1,14 +1,17 @@
 import { BorderBeam } from "@/components/animation/border-beam";
 import { RouterCard } from "@/components/common/router-card";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { RocketIcon } from "@radix-ui/react-icons";
 import {
   AudioLines,
   BookUser,
   Bot,
   CalendarDays,
-  Grid3X3,
   CalendarRange,
+  Grid3X3,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import { GrAnnounce } from "react-icons/gr";
 import { LiaReadme } from "react-icons/lia";
 import { MdOutlinePoll } from "react-icons/md";
@@ -89,9 +92,9 @@ export default async function Dashboard() {
     <>
       <section
         id="hero"
-        className="z-10 w-full max-w-7xl max-h-96 relative flex justify-center lg:justify-around items-center py-24 px-4 rounded-lg text-center lg:text-left"
+        className="z-10 w-full max-w-7xl max-h-96 relative flex justify-center lg:justify-around items-center gap-10 py-24 px-4 rounded-lg text-center lg:text-left"
       >
-        <div>
+        <div className="relative z-50">
           <h2
             className="text-xl md:text-2xl lg:text-4xl font-bold text-neutral-900  whitespace-nowrap"
             data-aos="fade-up"
@@ -103,6 +106,17 @@ export default async function Dashboard() {
             {quote.content} <br />{" "}
             <span className="text-gray-600 italic"> - {quote.author}</span>
           </p>
+          <Alert variant="info" className="mt-4" data-aos="fade-right">
+            <RocketIcon className="h-4 w-4" />
+            <AlertTitle>
+              Join the College Ecosystem Project!
+            </AlertTitle>
+            <AlertDescription>
+              We are looking for contributors to help us build the platform. Check out the
+              <Link href="/contribute" className="text-primary underline mx-1">Contribute</Link> page for more information.
+            </AlertDescription>
+          </Alert>
+
         </div>
         <div>
           <Image

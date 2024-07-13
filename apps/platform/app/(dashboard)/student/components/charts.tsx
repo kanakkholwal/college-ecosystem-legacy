@@ -82,7 +82,7 @@ export function OverallAttendanceChart({ attendanceRecords }: Props) {
   const weeklyTrend = calculateWeeklyTrend(attendanceRecords)?.at(-1);
 
   return (
-    <Card className="flex flex-col flex-auto ml-auto" variant="glass">
+    <Card className="flex flex-col flex-auto ml-auto bg-transparent shadow-none border-0 backdrop-filter-none">
       <CardHeader className="items-center pb-0">
         <CardTitle>Overall Attendance </CardTitle>
         <CardDescription>
@@ -166,7 +166,7 @@ export function SubWiseAttendanceChart({ attendanceRecords }: Props) {
   const chartData = formatAttendanceForSubjects(attendanceRecords);
 
   return (
-    <Card className="flex flex-col" variant="glass">
+    <Card className="flex flex-col bg-transparent shadow-none border-0 backdrop-filter-none">
       <CardHeader className="items-center pb-0">
         <CardTitle>Bar Chart - Subject Wise Attendance</CardTitle>
         <CardDescription>Attendance for each subject</CardDescription>
@@ -212,7 +212,7 @@ export function MonthlyAttendanceChart({ attendanceRecords }: Props) {
   const monthlyData = getMonthlyAttendanceData(attendanceRecords);
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col bg-transparent shadow-none border-0 backdrop-filter-none">
       <CardHeader className="items-center pb-0">
         <CardTitle>Line Chart - Monthly Attendance</CardTitle>
         <CardDescription>Attendance Trends Over Time</CardDescription>

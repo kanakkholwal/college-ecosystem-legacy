@@ -67,34 +67,36 @@ export default async function StudentDashboard() {
       </section>
       <section
         id="attendance"
-        className="z-10 w-full relative flex flex-wrap items-center justify-between gap-10"
+        className="z-10 w-full relative rounded-lg space-y-5 bg-slate-50/15 dark:bg-slate-800/15 backdrop-blur-xl border-slate-500/10 dark:border-border/70 p-3 md:p-6"
       >
-        <div className="flex flex-col items-start">
-          <h2 className="text-xl md:text-2xl lg:text-4xl font-bold text-neutral-900 dark:text-neutral-100 whitespace-nowrap">
-            Your Attendance
-          </h2>
-          <p className="mt-4 text-lg text-neutral-700 dark:text-neutral-300">
-            Your attendance records for the current semester
-          </p>
-          <div
-            className={cn(
-              "mt-4 text-base font-medium backdrop-blur-lg py-2 px-3 rounded-full",
-              getSafeAttendance(attendanceRecords).className
-            )}
-          >
-            {getSafeAttendance(attendanceRecords).message}
+        <div className="flex flex-wrap items-center justify-between gap-10 ">
+          <div className="flex flex-col items-start">
+            <h2 className="text-xl md:text-2xl lg:text-4xl font-bold text-neutral-900 dark:text-neutral-100 whitespace-nowrap">
+              Your Attendance
+            </h2>
+            <p className="mt-4 text-lg text-neutral-700 dark:text-neutral-300">
+              Your attendance records for the current semester
+            </p>
+            <div
+              className={cn(
+                "mt-4 text-base font-medium backdrop-blur-lg py-2 px-3 rounded-full",
+                getSafeAttendance(attendanceRecords).className
+              )}
+            >
+              {getSafeAttendance(attendanceRecords).message}
+            </div>
+            <Button className="mt-10" asChild>
+              <Link href="/attendance">
+                Manage Attendance <ArrowRight />
+              </Link>
+            </Button>
           </div>
-          <Button className="mt-10" asChild>
-            <Link href="/attendance">
-              Manage Attendance <ArrowRight />
-            </Link>
-          </Button>
+          <OverallAttendanceChart attendanceRecords={attendanceRecords} />
         </div>
-        <OverallAttendanceChart attendanceRecords={attendanceRecords} />
+        <div>
+          <SubWiseAttendanceChart attendanceRecords={attendanceRecords} />
+        </div>
       </section>
-      <div>
-        <SubWiseAttendanceChart attendanceRecords={attendanceRecords} />
-      </div>
     </div>
   );
 }
