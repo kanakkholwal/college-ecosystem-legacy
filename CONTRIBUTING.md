@@ -58,9 +58,9 @@ Please follow these steps:
 
 ### Prerequisites
 
-- [Node.js](https://nodejs.org/) >= 14
-- [Yarn](https://yarnpkg.com/)
-- [Go](https://golang.org/) (if applicable)
+- [Node.js](https://nodejs.org/) >= 20
+- [Yarn](https://yarnpkg.com/) or [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [Next.js](https://nextjs.org/docs)
 
 ### Initial Setup
 
