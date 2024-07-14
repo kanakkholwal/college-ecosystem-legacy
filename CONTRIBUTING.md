@@ -137,7 +137,7 @@ To utilize Turbo Repo for optimized workflows:
 ```bash
 yarn turbo run [command]
 # or 
-npm run [command]
+npx turbo run [command]
 # or 
 turbo [command]
 ```
