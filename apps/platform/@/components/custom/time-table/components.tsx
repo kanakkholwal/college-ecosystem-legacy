@@ -1,15 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { RadioStyle } from "@/components/ui/radio-group";
 import {
   Sheet,
   SheetContent,
@@ -22,15 +20,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
+import { EventTypeWithID, RawEvent } from "src/models/time-table";
 import { daysMap, timeMap } from "./constants";
 import { FormattedTimetable, useTimeTableStore } from "./store";
-
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import { EventTypeWithID, RawEvent } from "src/models/time-table";
 
 export const EditTimetableDialog: React.FC<{
   isEditing: boolean;
@@ -166,7 +158,7 @@ export const EditTimetableDialog: React.FC<{
                     ...editingEvent,
                     eventIndex: checked
                       ? timetableData.schedule[editingEvent.dayIndex]
-                          ?.timeSlots[editingEvent.timeSlotIndex]?.events.length
+                        ?.timeSlots[editingEvent.timeSlotIndex]?.events.length
                       : 0,
                   },
                 });
@@ -229,96 +221,95 @@ export function TimeTableMetaData({ className }: React.ComponentProps<"form">) {
   const timetableData = useTimeTableStore.getState().timetableData;
 
   return (
-    <ResponsiveDialog
-      title="Timetable Metadata"
-      description="the metadata of the timetable"
-      btnProps={{
-        variant: "default_light",
-        size: "sm",
-        children: "Edit Metadata",
-      }}
-    >
-      <div className={cn("grid items-start gap-4", className)}>
-        <div className="grid gap-2">
+    <>
+      <div className={cn("grid items-start gap-4 mx-auto max-w-7xl py-10", className)}>
+        <div className="flex gap-2 flex-wrap w-full">
+          <div className="grid gap-2 grow">
+            <Label htmlFor="sectionName">Section Name</Label>
+            <Input
+              id="sectionName"
+              placeholder="ECE 3-B"
+              value={timetableData?.sectionName}
+              onChange={(e) =>
+                useTimeTableStore.setState({
+                  timetableData: {
+                    ...timetableData,
+                    sectionName: e.target.value,
+                  },
+                })
+              }
+            />
+          </div>
+          <div className="grid gap-2 grow">
+            <Label htmlFor="year">Year</Label>
+            <Input
+              id="year"
+              type="number"
+              placeholder="3"
+              min={1}
+              max={5}
+              value={timetableData.year}
+              onChange={(e) =>
+                useTimeTableStore.setState({
+                  timetableData: {
+                    ...timetableData,
+                    year: parseInt(e.target.value),
+                  },
+                })
+              }
+            />
+          </div>
+          <div className="grid gap-2 grow">
+            <Label htmlFor="semester">Semester</Label>
+            <Input
+              id="semester"
+              type="number"
+              placeholder="1"
+              min={1}
+              max={10}
+              value={timetableData.semester}
+              onChange={(e) =>
+                useTimeTableStore.setState({
+                  timetableData: {
+                    ...timetableData,
+                    semester: parseInt(e.target.value),
+                  },
+                })
+              }
+            />
+          </div>
+        </div>
+        <div className="grid gap-2 grow">
           <Label htmlFor="department">Department</Label>
-          <Select
-            value={timetableData.department_code}
-            onValueChange={(value) => {
-              useTimeTableStore.setState({
-                timetableData: { ...timetableData, department_code: value },
-              });
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Choose department" />
-            </SelectTrigger>
-            <SelectContent>
-              {DEPARTMENTS_LIST.map((department) => {
-                return (
-                  <SelectItem value={department.code} key={department.code}>
-                    {department.name}
-                  </SelectItem>
-                );
-              })}
-            </SelectContent>
-          </Select>
+          <div className="grid gap-4 w-full grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4">
+            {DEPARTMENTS_LIST.map((department, index) => {
+              return (
+                <label key={index} className={RadioStyle.label}>
+                  {department.name}
+                  <input
+                    type="radio"
+                    required
+                    checked={department.code === timetableData.department_code}
+                    onChange={(e) => {
+                      useTimeTableStore.setState({
+                        timetableData: {
+                          ...timetableData,
+                          department_code: department.code,
+                        },
+                      });
+                    }}
+                    name="department"
+                    value={department.code}
+                    className={RadioStyle.input}
+                  />
+                </label>
+              );
+            })}
+          </div>
         </div>
-        <div className="grid gap-2">
-          <Label htmlFor="sectionName">Section Name</Label>
-          <Input
-            id="sectionName"
-            defaultValue="ECE 3-B"
-            value={timetableData.sectionName}
-            onChange={(e) =>
-              useTimeTableStore.setState({
-                timetableData: {
-                  ...timetableData,
-                  sectionName: e.target.value,
-                },
-              })
-            }
-          />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="year">Year</Label>
-          <Input
-            id="year"
-            type="number"
-            defaultValue="3"
-            min={1}
-            max={5}
-            value={timetableData.year}
-            onChange={(e) =>
-              useTimeTableStore.setState({
-                timetableData: {
-                  ...timetableData,
-                  year: parseInt(e.target.value),
-                },
-              })
-            }
-          />
-        </div>
-        <div className="grid gap-2">
-          <Label htmlFor="semester">Semester</Label>
-          <Input
-            id="semester"
-            type="number"
-            defaultValue="1"
-            min={1}
-            max={10}
-            value={timetableData.semester}
-            onChange={(e) =>
-              useTimeTableStore.setState({
-                timetableData: {
-                  ...timetableData,
-                  semester: parseInt(e.target.value),
-                },
-              })
-            }
-          />
-        </div>
+
       </div>
-    </ResponsiveDialog>
+    </>
   );
 }
 

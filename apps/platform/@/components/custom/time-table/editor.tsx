@@ -18,7 +18,11 @@ import { RawTimetable, TimeTableWithID } from "src/models/time-table";
 import { EditTimetableDialog, Event, TimeTableMetaData } from "./components";
 import { daysMap, rawTimetableData, timeMap } from "./constants";
 import { useTimeTableStore } from "./store";
-
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 export type TimeTableEditorProps = {
   timetableData?: TimeTableWithID | RawTimetable;
   mode: "create" | "edit";
@@ -29,6 +33,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
   mode = "create",
 }) => {
   const isInitialized = useRef<boolean>(false);
+  const [isMetaOpen, setIsMetaOpen] = React.useState(false);
   if (!isInitialized.current) {
     useTimeTableStore.setState({
       timetableData:
@@ -75,30 +80,43 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
 
   return (
     <>
-      <div className="flex items-center justify-between gap-2 flex-col md:flex-row mx-auto max-w-7xl w-full mt-20">
-        <div>
-          <h3 className="text-lg font-semibold">
-            {timetableData?.sectionName} {" |  "}
-            {getDepartmentName(timetableData?.department_code)}
-          </h3>
-          <p className="text-sm text-gray-700">
-            {timetableData?.year} Year | {timetableData?.semester} Semester
-          </p>
+      <Collapsible open={isMetaOpen} onOpenChange={setIsMetaOpen}>
+
+        <div className="flex items-center justify-between gap-2 flex-col md:flex-row mx-auto max-w-7xl w-full mt-20">
+          <div>
+            <h3 className="text-lg font-semibold">
+              {timetableData?.sectionName || "Section"}
+              {" |  "}
+              {getDepartmentName(timetableData?.department_code) || "Department"}
+            </h3>
+            <p className="text-sm text-gray-700">
+              {timetableData?.year || "2"} Year | {timetableData?.semester || "3"} Semester
+            </p>
+          </div>
+          <div className="flex gap-3 items-center">
+            <CollapsibleTrigger asChild>
+              <Button {...{
+                variant: "default_light",
+                size: "sm",
+                children: "Edit Metadata",
+              }} />
+            </CollapsibleTrigger>
+            <Button
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleSaveTimetable();
+              }}
+            >
+              {mode === "create" ? "Save" : "Update"} TimeTable
+            </Button>
+          </div>
         </div>
-        <div className="flex gap-3 items-center">
+        <CollapsibleContent>
           <TimeTableMetaData />
-          <Button
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              e.preventDefault();
-              handleSaveTimetable();
-            }}
-          >
-            {mode === "create" ? "Save" : "Update"} TimeTable
-          </Button>
-        </div>
-      </div>
+        </CollapsibleContent>
+      </Collapsible>
       <Table className="mx-auto max-w-7xl bg-white/20 backdrop-blur-2xl rounded-lg overflow-hidden">
         <TableHeader>
           <TableRow>
@@ -168,10 +186,10 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
                   ))}
                   {timetableData.schedule[dayIndex]?.timeSlots[index]?.events
                     .length === 0 && (
-                    <Badge className="text-xs" variant="success" size="sm">
-                      Free Time
-                    </Badge>
-                  )}
+                      <Badge className="text-xs" variant="success" size="sm">
+                        Free Time
+                      </Badge>
+                    )}
                 </TableCell>
               ))}
             </TableRow>
