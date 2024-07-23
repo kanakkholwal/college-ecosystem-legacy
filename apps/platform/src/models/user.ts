@@ -22,7 +22,7 @@ export interface IUser {
   rollNo: string;
   email: string;
   profilePicture: string;
-  gender: "male" | "female" | null;
+  gender?: "male" | "female" | null;
   phone?: string | null;
   department: (typeof DEPARTMENTS)[number];
   roles: string[];

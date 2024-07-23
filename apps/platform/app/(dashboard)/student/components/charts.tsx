@@ -168,7 +168,7 @@ export function SubWiseAttendanceChart({ attendanceRecords }: Props) {
   return (
     <Card className="flex flex-col bg-transparent shadow-none border-0 backdrop-filter-none">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Bar Chart - Subject Wise Attendance</CardTitle>
+        <CardTitle>Subject Wise Attendance</CardTitle>
         <CardDescription>Attendance for each subject</CardDescription>
       </CardHeader>
       <CardContent className="flex-1">
@@ -214,7 +214,7 @@ export function MonthlyAttendanceChart({ attendanceRecords }: Props) {
   return (
     <Card className="flex flex-col bg-transparent shadow-none border-0 backdrop-filter-none">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Line Chart - Monthly Attendance</CardTitle>
+        <CardTitle> Monthly Attendance</CardTitle>
         <CardDescription>Attendance Trends Over Time</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">

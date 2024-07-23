@@ -3,7 +3,7 @@ import { revalidatePath } from "next/cache";
 import { getSession } from "src/lib/auth";
 import dbConnect from "src/lib/dbConnect";
 import ResultModel from "src/models/result";
-import UserModel, { UserWithId } from "src/models/user";
+import UserModel, { IUser, UserWithId } from "src/models/user";
 
 export async function updateUser(userId: string, data: Partial<UserWithId>) {
   "use server";
@@ -186,6 +186,50 @@ export async function deleteUser(userId: string) {
       message: "User deleted",
     };
   } catch (error) {
+    console.log(error);
+    return {
+      success: false,
+      message: "An error occurred",
+    };
+  }
+}
+
+
+export async function createUser(userData:IUser){
+  try{
+    // const session = await getSession();
+    // if (!session) {
+    //   return {
+    //     success: false,
+    //     message: "Unauthorized",
+    //   };
+    // }
+
+    // await dbConnect();
+    // const adminUser = await UserModel.findById(session.user._id);
+    // if (!adminUser) {
+    //   return {
+    //     success: false,
+    //     message: "User not found",
+    //   };
+    // }
+    // // must be admin
+    // if (!adminUser.roles.includes("admin")) {
+    //   return {
+    //     success: false,
+    //     message: "Unauthorized",
+    //   };
+    // }
+    await dbConnect();
+    const user = new UserModel(userData);
+    await user.save();
+
+
+    return {
+      success: true,
+      message: "User created",
+    };
+  }catch(error){
     console.log(error);
     return {
       success: false,
