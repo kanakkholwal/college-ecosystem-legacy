@@ -195,8 +195,7 @@ export const authOptions: NextAuthOptions = {
               console.log("not a valid roll no", username);
               return Promise.reject({
                 status: 401,
-                message:
-                  "ot a valid roll no, Please contact admin",
+                message:`not a valid roll no : ${username}, Please contact admin.`,
                 success: false,
               });
             }
