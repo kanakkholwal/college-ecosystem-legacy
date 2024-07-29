@@ -125,15 +125,15 @@ export const authOptions: NextAuthOptions = {
       },
       async profile(profile, tokens) {
         try {
-          console.log(profile);
-          console.log(tokens);
+          // console.log(profile);
+          // console.log(tokens);
 
           await dbConnect();
           const userInDb = await UserModel.findOne({ email: profile.email });
           if (!userInDb) {
             console.log("user not found, creating new user", profile);
-            const username = profile.email.split("@")[0];
-            if (!isValidRollNumber(username)) {
+            const username = profile.email.split("@")[0].toLowerCase();
+            if (isValidRollNumber(username)) {
               //  find roll no from result
               const result = await ResultModel.findOne({
                 rollNo: username,
@@ -172,7 +172,7 @@ export const authOptions: NextAuthOptions = {
                 });
               }
               const user = new UserModel({
-                email: result.rollNo.toLowerCase().trim().concat("@".concat(ORG_DOMAIN)),
+                email: result.rollNo.toLowerCase().concat("@".concat(ORG_DOMAIN)),
                 firstName: result.name.split(" ")[0],
                 lastName: result.name.split(" ")[1],
                 rollNo: result.rollNo,
@@ -192,10 +192,11 @@ export const authOptions: NextAuthOptions = {
               });
             }
             else {
+              console.log("not a valid roll no", username);
               return Promise.reject({
                 status: 401,
                 message:
-                  "No result found for this roll no, Please contact admin",
+                  "ot a valid roll no, Please contact admin",
                 success: false,
               });
             }
