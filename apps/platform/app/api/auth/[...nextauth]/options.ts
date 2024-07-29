@@ -172,7 +172,7 @@ export const authOptions: NextAuthOptions = {
                 });
               }
               const user = new UserModel({
-                email: result.rollNo + "@" + ORG_DOMAIN,
+                email: result.rollNo.toLowerCase().trim().concat("@".concat(ORG_DOMAIN)),
                 firstName: result.name.split(" ")[0],
                 lastName: result.name.split(" ")[1],
                 rollNo: result.rollNo,
