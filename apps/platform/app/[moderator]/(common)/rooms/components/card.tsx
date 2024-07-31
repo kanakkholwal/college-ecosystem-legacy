@@ -1,37 +1,51 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { formatDistanceToNow, parseISO } from "date-fns";
+import toast from "react-hot-toast";
+import { updateStatus } from "src/lib/room/actions";
 import { RoomTypeWithId } from "src/models/room";
 
-// Function to convert a date string to local time string + time ago format
-function formatDateAgo(dateString: string): string {
-  const date = parseISO(dateString);
-  const localTimeString = date.toLocaleTimeString(); // Convert to local time string
-  const timeAgo = formatDistanceToNow(date, { addSuffix: true }); // Calculate time ago
+type Props = {
+  room: RoomTypeWithId;
+};
 
-  return `${localTimeString} (${timeAgo})`;
-}
-
-export function RoomCardPublic({
-  room,
-  ...props
-}: { room: RoomTypeWithId } & React.ComponentProps<typeof Card>) {
+export default function RoomCard({ room }: Props) {
   return (
-    <Card
-      variant="glass"
-      className="hover:shadow-lg  animate-in popup"
-      {...props}
-    >
+    <Card variant="glass" className="hover:shadow-lg">
       <CardHeader>
-        <CardTitle>{room.roomNumber}</CardTitle>
-        <CardDescription className="font-semibold text-sm text-gray-700">
-          Last updated: {formatDateAgo(room.lastUpdatedTime.toString())}
+        <CardTitle>
+          {room.roomNumber}
+          <Button
+            size="icon"
+            className="ml-5"
+            onClick={() => {
+              toast.promise(
+                updateStatus(
+                  room.roomNumber,
+                  room.currentStatus === "available" ? "occupied" : "available"
+                ),
+                {
+                  loading: "Updating room status...",
+                  success: "Room status updated successfully!",
+                  error: "An error occurred while updating room status",
+                }
+              );
+            }}
+          >
+            {room.currentStatus === "available" ? "Occupy" : "Release"}
+          </Button>
+        </CardTitle>
+        <CardDescription>
+          Last updated: {new Date(room.lastUpdatedTime).toLocaleTimeString()}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -63,6 +77,7 @@ export function RoomCardPublic({
           </div>
         </div>
       </CardContent>
+      <CardFooter></CardFooter>
     </Card>
   );
 }

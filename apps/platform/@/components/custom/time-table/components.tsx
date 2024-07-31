@@ -25,8 +25,10 @@ import { DEPARTMENTS_LIST } from "src/constants/departments";
 import { EventTypeWithID, RawEvent } from "src/models/time-table";
 import { daysMap, timeMap } from "./constants";
 import {
-  editingEventAtom, FormattedTimetable, isEditingAtom,
-  timetableDataAtom
+  editingEventAtom,
+  FormattedTimetable,
+  isEditingAtom,
+  timetableDataAtom,
 } from "./store";
 
 export const EditTimetableDialog: React.FC<{}> = ({}) => {
@@ -165,11 +167,15 @@ export const EditTimetableDialog: React.FC<{}> = ({}) => {
             <Button onClick={handleSave} size="sm" width="sm" variant="dark">
               Save
             </Button>
-            <Button variant="outline"  size="sm" onClick={handleCancel}>
+            <Button variant="outline" size="sm" onClick={handleCancel}>
               Cancel
             </Button>
-            <Button onClick={handleDelete}  size="icon_sm" variant="destructive_light">
-            <Trash />
+            <Button
+              onClick={handleDelete}
+              size="icon_sm"
+              variant="destructive_light"
+            >
+              <Trash />
             </Button>
           </div>
         </div>

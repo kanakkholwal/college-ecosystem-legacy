@@ -11,7 +11,9 @@ export function GoBackButton(props: ButtonProps) {
       rounded="full"
       variant="default_light"
       onClick={() => {
-        window?.history?.length > 1 ? router.back() : router.push(pathname.split("/").splice(-1).join("/"))
+        window?.history?.length > 1
+          ? router.back()
+          : router.push(pathname.split("/").splice(-1).join("/"));
       }}
       {...props}
     >
