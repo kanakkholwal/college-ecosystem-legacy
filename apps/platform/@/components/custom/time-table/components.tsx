@@ -18,17 +18,15 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
+import { useAtom } from "jotai";
+import { Trash } from "lucide-react";
 import React, { useState } from "react";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
 import { EventTypeWithID, RawEvent } from "src/models/time-table";
 import { daysMap, timeMap } from "./constants";
-import { FormattedTimetable } from "./store";
-import { atom, useAtom } from "jotai";
 import {
-  disabledAtom,
-  editingEventAtom,
-  isEditingAtom,
-  timetableDataAtom,
+  editingEventAtom, FormattedTimetable, isEditingAtom,
+  timetableDataAtom
 } from "./store";
 
 export const EditTimetableDialog: React.FC<{}> = ({}) => {
@@ -120,7 +118,7 @@ export const EditTimetableDialog: React.FC<{}> = ({}) => {
           </SheetDescription>
         </SheetHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid items-center gap-2">
+          <div className="grid items-center">
             <Label htmlFor="event-title">Title</Label>
             <Input
               id="event-title"
@@ -130,7 +128,7 @@ export const EditTimetableDialog: React.FC<{}> = ({}) => {
               onChange={(e) => handleEventChange("title", e.target.value)}
             />
           </div>
-          <div className="grid items-center gap-2">
+          <div className="grid items-center">
             <Label htmlFor="event-description">Description</Label>
             <Textarea
               id="event-description"
@@ -163,15 +161,15 @@ export const EditTimetableDialog: React.FC<{}> = ({}) => {
               }}
             />
           </div>
-          <div className="grid grid-cols-2 items-center gap-2">
-            <Button onClick={handleSave} variant="dark">
+          <div className="flex items-center gap-2">
+            <Button onClick={handleSave} size="sm" width="sm" variant="dark">
               Save
             </Button>
-            <Button variant="outline" onClick={handleCancel}>
+            <Button variant="outline"  size="sm" onClick={handleCancel}>
               Cancel
             </Button>
-            <Button onClick={handleDelete} variant="destructive_light">
-              Delete
+            <Button onClick={handleDelete}  size="icon_sm" variant="destructive_light">
+            <Trash />
             </Button>
           </div>
         </div>
@@ -225,7 +223,7 @@ export function TimeTableMetaData({ className }: React.ComponentProps<"form">) {
         )}
       >
         <div className="flex gap-2 flex-wrap w-full">
-          <div className="grid gap-2 grow">
+          <div className="grid grow">
             <Label htmlFor="sectionName">Section Name</Label>
             <Input
               id="sectionName"
@@ -239,7 +237,7 @@ export function TimeTableMetaData({ className }: React.ComponentProps<"form">) {
               }}
             />
           </div>
-          <div className="grid gap-2 grow">
+          <div className="grid grow">
             <Label htmlFor="year">Year</Label>
             <Input
               id="year"
@@ -256,7 +254,7 @@ export function TimeTableMetaData({ className }: React.ComponentProps<"form">) {
               }}
             />
           </div>
-          <div className="grid gap-2 grow">
+          <div className="grid grow">
             <Label htmlFor="semester">Semester</Label>
             <Input
               id="semester"

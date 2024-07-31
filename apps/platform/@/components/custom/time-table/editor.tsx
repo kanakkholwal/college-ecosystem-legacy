@@ -171,7 +171,8 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
                 <TableCell
                   key={`${index}-${dayIndex}`}
                   className={cn(
-                    "border-x text-center ",
+                    "border-x text-center",
+                    "focus-within:border focus-within:border-primary",
                     new Date().getDay() === dayIndex
                       ? "text-primary bg-primary/10"
                       : ""
