@@ -14,7 +14,7 @@ export async function getStudentInfo(rollNo: string): Promise<studentInfoType> {
   }).lean()) as IResultType | null;
 
   if (!result) {
-    return Promise.reject(("Student not found"));
+    return Promise.reject("Student not found");
   }
   const user = (await User.findOne({
     rollNo,

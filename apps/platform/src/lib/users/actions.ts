@@ -194,9 +194,8 @@ export async function deleteUser(userId: string) {
   }
 }
 
-
-export async function createUser(userData:IUser){
-  try{
+export async function createUser(userData: IUser) {
+  try {
     // const session = await getSession();
     // if (!session) {
     //   return {
@@ -224,12 +223,11 @@ export async function createUser(userData:IUser){
     const user = new UserModel(userData);
     await user.save();
 
-
     return {
       success: true,
       message: "User created",
     };
-  }catch(error){
+  } catch (error) {
     console.log(error);
     return {
       success: false,

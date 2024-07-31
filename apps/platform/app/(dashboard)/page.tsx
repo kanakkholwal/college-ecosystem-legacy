@@ -108,15 +108,19 @@ export default async function Dashboard() {
           </p>
           <Alert variant="info" className="mt-4" data-aos="fade-right">
             <RocketIcon className="h-4 w-4" />
-            <AlertTitle>
-              Join the College Ecosystem Project!
-            </AlertTitle>
+            <AlertTitle>Join the College Ecosystem Project!</AlertTitle>
             <AlertDescription>
-              We are looking for contributors to help us build the platform. Check out the
-              <Link href="https://github.com/kanakkholwal/college-ecosystem/blob/main/CONTRIBUTING.md" className="underline mx-1">Contribute</Link> page for more information.
+              We are looking for contributors to help us build the platform.
+              Check out the
+              <Link
+                href="https://github.com/kanakkholwal/college-ecosystem/blob/main/CONTRIBUTING.md"
+                className="underline mx-1"
+              >
+                Contribute
+              </Link>{" "}
+              page for more information.
             </AlertDescription>
           </Alert>
-
         </div>
         <div>
           <Image

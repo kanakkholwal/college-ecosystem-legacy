@@ -78,7 +78,7 @@ export default function Unauthorized() {
       loading: "Logging in...",
       success: (data: any) => {
         console.log(data);
-        if(data?.ok === false) {
+        if (data?.ok === false) {
           setIsLoading(false);
           return data.error;
         }

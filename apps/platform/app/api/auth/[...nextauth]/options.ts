@@ -8,7 +8,6 @@ import dbConnect from "src/lib/dbConnect";
 import ResultModel from "src/models/result";
 import UserModel from "src/models/user";
 
-
 interface AuthEnv {
   GOOGLE_ID: string;
   GOOGLE_SECRET: string;
@@ -138,9 +137,9 @@ export const authOptions: NextAuthOptions = {
               const result = await ResultModel.findOne({
                 rollNo: username,
               });
-              if(!result){
+              if (!result) {
                 const scraped_result = await ScrapeResult(username);
-                if(!scraped_result){
+                if (!scraped_result) {
                   return Promise.reject({
                     status: 401,
                     message:
@@ -149,7 +148,9 @@ export const authOptions: NextAuthOptions = {
                   });
                 }
                 const user = new UserModel({
-                  email: scraped_result.rollNo + "@" + ORG_DOMAIN,
+                  email: scraped_result.rollNo
+                    .toLowerCase()
+                    .concat("@".concat(ORG_DOMAIN)),
                   firstName: scraped_result.name.split(" ")[0],
                   lastName: scraped_result.name.split(" ")[1],
                   rollNo: scraped_result.rollNo,
@@ -172,7 +173,9 @@ export const authOptions: NextAuthOptions = {
                 });
               }
               const user = new UserModel({
-                email: result.rollNo.toLowerCase().concat("@".concat(ORG_DOMAIN)),
+                email: result.rollNo
+                  .toLowerCase()
+                  .concat("@".concat(ORG_DOMAIN)),
                 firstName: result.name.split(" ")[0],
                 lastName: result.name.split(" ")[1],
                 rollNo: result.rollNo,
@@ -183,19 +186,22 @@ export const authOptions: NextAuthOptions = {
               });
               await user.save();
 
-
-              return Promise.reject({
-                status: 401,
-                message:
-                  "No result found for this roll no, Please contact admin",
-                success: false,
+              return Promise.resolve({
+                id: user._id.toString(),
+                _id: user._id.toString(),
+                firstName: user.firstName,
+                lastName: user.lastName,
+                rollNo: user.rollNo,
+                email: user.email,
+                roles: user.roles,
+                profilePicture: user.profilePicture,
+                department: user.department,
               });
-            }
-            else {
+            } else {
               console.log("not a valid roll no", username);
               return Promise.reject({
                 status: 401,
-                message:`not a valid roll no : ${username}, Please contact admin.`,
+                message: `not a valid roll no : ${username}, Please contact admin.`,
                 success: false,
               });
             }
@@ -219,7 +225,7 @@ export const authOptions: NextAuthOptions = {
             status: 401,
             message: "Error in google login",
             success: false,
-          })
+          });
         }
       },
     }),

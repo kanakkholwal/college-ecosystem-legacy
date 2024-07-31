@@ -33,9 +33,7 @@ export async function GET(request: NextRequest) {
 }
 export async function POST(request: NextRequest) {
   try {
-    
-    const {user} = await request.json();
-
+    const { user } = await request.json();
 
     return NextResponse.json(
       {
