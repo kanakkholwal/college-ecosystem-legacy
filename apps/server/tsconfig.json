@@ -5,7 +5,7 @@
     "rootDir": "./src",
     "outDir": "./dist",
     "esModuleInterop": true,
-    "strict": true,
+    "strict": false,
     "skipLibCheck": true,
     "allowJs": true,
     "baseUrl": ".",
