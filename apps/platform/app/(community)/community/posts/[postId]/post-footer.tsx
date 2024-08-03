@@ -4,13 +4,7 @@ import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { useShare } from "@/hooks/useShare";
-import {
-  Bookmark,
-  BookmarkCheck,
-  Eye,
-  Share,
-  ThumbsUp
-} from "lucide-react";
+import { Bookmark, BookmarkCheck, Eye, Share, ThumbsUp } from "lucide-react";
 
 import { useState } from "react";
 import { updatePost } from "src/lib/community/actions";

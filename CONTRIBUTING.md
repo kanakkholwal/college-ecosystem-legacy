@@ -16,7 +16,6 @@ The following is a set of guidelines for contributing to the College Ecosystem p
 - [Commit Messages](#commit-messages)
 - [License](#license)
 
-
 ## How Can I Contribute?
 
 ### Reporting Bugs
@@ -98,7 +97,7 @@ npm install some-package --workspace=platform
 
 ## Usage
 
-### Running Projects/Apps (app/*)
+### Running Projects/Apps (app/\*)
 
 To run individual projects locally:
 
@@ -113,7 +112,7 @@ turbo dev --filter=platform
 
 ```
 
-### Building Projects/Apps (app/*)
+### Building Projects/Apps (app/\*)
 
 To build individual projects for production:
 
@@ -136,9 +135,9 @@ To utilize Turbo Repo for optimized workflows:
 
 ```bash
 yarn turbo run [command]
-# or 
+# or
 npx turbo run [command]
-# or 
+# or
 turbo [command]
 ```
 
@@ -155,7 +154,7 @@ The root `package.json` file defines scripts for common tasks:
     "build": "turbo run build",
     "lint": "turbo run lint",
     "test": "turbo run test",
-        "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md}\"",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md}\""
   }
 }
 ```

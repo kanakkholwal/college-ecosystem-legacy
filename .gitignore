@@ -8,6 +8,7 @@ node_modules
 .pnp.js
 .vscode
 .venv
+pnpm-*.yaml
 # Local env files
 .env
 .env.local

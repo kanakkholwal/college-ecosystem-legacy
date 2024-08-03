@@ -5,8 +5,5 @@ export default function ConditionalRender({
   children: React.ReactNode;
   condition: boolean;
 }) {
-  if (condition) {
-    return <>{children}</>;
-  }
-  return null;
+  return condition ? <>{children}</> : null;
 }

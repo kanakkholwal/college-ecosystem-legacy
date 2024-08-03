@@ -48,7 +48,6 @@
 //     }
 // }
 
-
 // export const scrapeJobFromPlatform = async (platform: PlatformType, query: string) => {
 //     const browser = await puppeteer.launch({ headless: true });
 //     try {
@@ -73,7 +72,6 @@
 //     }
 // }
 
-
 // const getFinalURL = (platform: PlatformType, query: string) => {
 //     platform.url.searchParams.set(platform.query, query);
 //     for (const [key, value] of Object.entries(platform.params)) {
@@ -87,7 +85,7 @@
 //     const page = await browser.newPage();
 //     const response = await page.goto(targetUrl, { waitUntil: 'networkidle2' });
 //     const data = await page.content();
-    
+
 //     console.log("response",data);
 
 //     const resultsContainer = HTMLParser.parse(response?.toString()!);
