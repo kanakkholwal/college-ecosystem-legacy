@@ -5,9 +5,8 @@ import dbConnect from "src/lib/dbConnect";
 import redis from "src/lib/redis";
 import Result from "src/models/result";
 
-export const config = {
-  maxDuration: 60,
-};
+export const maxDuration = 60
+
 
 const allowedRoles = ["admin", "moderator"];
 const environment = process.env.NODE_ENV!;
