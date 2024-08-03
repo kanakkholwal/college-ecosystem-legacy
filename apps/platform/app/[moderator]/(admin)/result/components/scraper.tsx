@@ -1,11 +1,15 @@
 "use client";
-
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
-import { AlertCircle, LoaderCircle } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import useSWR from "swr";
+import { useActionState } from "@/hooks/useActionState";
 import { formatDistanceToNow } from "date-fns";
+import { AlertCircle, LoaderCircle } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
+import { updateRanks } from "src/lib/result";
+import useSWR from "swr";
 
 type scrapeResponse = {
   scrape_ables: number;
@@ -25,8 +29,13 @@ const formatUrl = (scrape: boolean, restartScrape: boolean): string => {
   return formattedURL.toString();
 };
 
+
+
 export default function Scraper() {
+  const [run, { loading, error: rankError }] = useActionState(updateRanks);
+
   const searchParams = useSearchParams();
+  const router = useRouter();
   const scrape = searchParams.get("scrape") === "true";
   const restartScrape = searchParams.get("restart") === "true";
   const { data, error, isLoading } = useSWR<scrapeResponse>(
@@ -36,21 +45,54 @@ export default function Scraper() {
     { refreshInterval: 5000 }
   );
 
+
+  console.log("swr",data, error, isLoading);
+  console.log("scrape", scrape, "restartScrape", restartScrape);
+  console.log("rankError", rankError);
+
   if (data && !error)
     return (
       <>
-        <h3 className="text-lg font-bold">
-          Scraping Results
-          <span className="text-sm font-normal text-gray-600">
-            {" "}
-            (
-            {formatDistanceToNow(new Date(data.timestamp), {
-              addSuffix: true,
-            })}
-            )
-          </span>
-        </h3>
-        <div className="grid grid-cols-2 @xl:grid-cols-5 gap-4 divide-x divide-y border rounded">
+        <div className="w-full flex flex-wrap justify-between gap-4">
+          <h3 className="text-lg font-bold">
+            Scraping Results
+            <span className="text-sm font-normal text-gray-600">
+              {" "}
+              (
+              {formatDistanceToNow(new Date
+                (data?.timestamp || new Date()), {
+
+                addSuffix: true,
+              })}
+              )
+            </span>
+          </h3>
+          <div className="flex gap-4">
+            <Button
+              size="sm"
+              onClick={() => toast.promise(run(), {
+                loading: "Updating ranks...",
+                success: "Ranks updated successfully",
+                error: rankError?.message || "Failed to update ranks"
+              })}
+              disabled={loading}
+            >
+              {loading ? "Assigning..." : "Assign Rank"}
+            </Button>
+            {/* <Button
+              size="sm"
+              variant="default_light"
+              onClick={() => {
+                router.push(`/admin/result?start=true`);
+              }}
+              disabled={isLoading}
+            >
+              {loading ? "Starting..." : "Start Scrape"}
+            </Button> */}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 @xl:grid-cols-4 gap-4 divide-x divide-y border rounded">
           <div className="flex flex-col gap-2 p-4">
             <span className="text-sm font-medium">Scrapeables</span>
             <span className="text-lg font-bold">{data?.scrape_ables}</span>
@@ -67,17 +109,19 @@ export default function Scraper() {
             <span className="text-sm font-medium">Failing Scrapes</span>
             <span className="text-lg font-bold">{data.failed_results}</span>
           </div>
-          <div className="flex flex-col gap-2 p-4">
-            <span className="text-sm font-medium">Last Updated</span>
-            <span className="text-lg font-bold">
-              {new Date(data?.timestamp).toLocaleDateString()}
-            </span>
-          </div>
         </div>
-        <div className="flex gap-4"></div>
-        <div className="flex gap-4">
-          <Progress value={data?.scraped_results / data?.scraping_queue || 0} />
-          {isLoading && <LoaderCircle className="h-4 w-4 animate-spin" />}
+        <div className="flex gap-4 flex-col border p-4 rounded-lg">
+          <h4 className="text-lg font-bold">Scraping Progress</h4>
+          <p className="text-sm font-medium">
+            <strong>{data?.scraped_results}</strong> results scraped out of <strong>{data?.scrape_ables}</strong>{" "} from the queue of <strong>{data?.scraping_queue}</strong> results.
+          </p>
+          <div className="flex items-center gap-4 p-2">
+            <Badge variant="info">
+              {(data?.scraped_results / data?.scraping_queue).toPrecision(3)}%
+            </Badge>
+            <Progress value={data?.scraped_results / data?.scraping_queue || 0} />
+            {isLoading && <LoaderCircle className="h-4 w-4 animate-spin" />}
+          </div>
         </div>
       </>
     );

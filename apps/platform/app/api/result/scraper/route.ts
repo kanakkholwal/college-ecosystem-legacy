@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { ScrapeResult } from "src/controllers/scraper";
+import { getSession } from "src/lib/auth";
 import dbConnect from "src/lib/dbConnect";
 import redis from "src/lib/redis";
 import Result from "src/models/result";
@@ -8,6 +9,7 @@ export const config = {
   maxDuration: 60,
 };
 
+const allowedRoles = ["admin", "moderator"];
 const environment = process.env.NODE_ENV!;
 
 type lastScrapeData = {
@@ -21,6 +23,24 @@ type lastScrapeData = {
 export async function GET(request: NextRequest) {
   try {
     const startTime = Date.now();
+
+    const session = await getSession();
+    console.log(session)
+    if (!session ||
+      !session?.user?.roles.some((role) => allowedRoles.includes(role))
+    ) {
+
+      return NextResponse.json(
+        {
+          result: "fail",
+          message: "Unauthorized",
+        },
+        {
+          status: 401,
+        }
+      );
+    }
+
     const restart = request.nextUrl.searchParams.get("restart") === "true";
     const scrape = request.nextUrl.searchParams.get("scrape") === "true";
     const retry_failed =

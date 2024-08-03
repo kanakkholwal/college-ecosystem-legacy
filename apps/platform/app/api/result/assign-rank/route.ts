@@ -6,7 +6,7 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getSession();
     // only admins can update ranks
-    if (!session || !session.user.roles.includes("admin")) {
+    if (!session || !session.user.roles.includes("admin") || !session.user.roles.includes("moderator")) {
       return NextResponse.json(
         {
           result: "fail",
