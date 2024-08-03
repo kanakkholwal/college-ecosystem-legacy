@@ -4,7 +4,7 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "lint": "turbo lint",
+    "lint": "turbo run lint:ts lint:js lint:css lint:md",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md}\"",
     "dev:server": "cd apps/server && npm run dev",
     "build:server": "cd apps/server && npm run build"
