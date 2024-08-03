@@ -15,21 +15,14 @@ on:
 jobs:
   lint-and-format:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20]
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-  
       - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'pnpm'
+          node-version: '20'
 
       - name: 📦 Cache dependencies
         uses: actions/cache@v4
@@ -40,16 +33,15 @@ jobs:
             ${{ runner.OS }}-node-
 
       - name: 📦 Install lint dependencies
-        run: pnpm install --frozen-lockfile
-        # run: |
-        #   if [ -f package-lock.json ]; then
-        #     npm ci
-        #   else
-        #     npm install --force
-        #   fi
+        run: |
+          if [ -f package-lock.json ]; then
+            npm ci
+          else
+            npm install --force
+          fi
 
       - name: 💾 Cache Turbo
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         with:
           path: .turbo
           key: ${{ runner.os }}-turbo-${{ github.sha }}
@@ -57,4 +49,4 @@ jobs:
             ${{ runner.os }}-turbo-
 
       - name: 🚀 Run Turbo lint
-        run: pnpm turbo run lint --cache-dir=.turbo
+        run: npx turbo run lint --cache-dir=.turbo
