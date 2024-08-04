@@ -29,8 +29,6 @@ const formatUrl = (scrape: boolean, restartScrape: boolean): string => {
   return formattedURL.toString();
 };
 
-
-
 export default function Scraper() {
   const [run, { loading, error: rankError }] = useActionState(updateRanks);
 
@@ -42,12 +40,11 @@ export default function Scraper() {
     formatUrl(scrape, restartScrape),
     (url: string) =>
       fetch(url, { cache: "no-store" }).then((res) => res.json()),
-    { refreshInterval: 5000 }
+    { refreshInterval: 2000 }
   );
 
-
-  console.log("swr",data, error, isLoading);
-  console.log("scrape", scrape, "restartScrape", restartScrape);
+  // console.log("swr",data, error, isLoading);
+  // console.log("scrape", scrape, "restartScrape", restartScrape);
   console.log("rankError", rankError);
 
   if (data && !error)
@@ -59,9 +56,7 @@ export default function Scraper() {
             <span className="text-sm font-normal text-gray-600">
               {" "}
               (
-              {formatDistanceToNow(new Date
-                (data?.timestamp || new Date()), {
-
+              {formatDistanceToNow(new Date(data?.timestamp || new Date()), {
                 addSuffix: true,
               })}
               )
@@ -70,11 +65,13 @@ export default function Scraper() {
           <div className="flex gap-4">
             <Button
               size="sm"
-              onClick={() => toast.promise(run(), {
-                loading: "Updating ranks...",
-                success: "Ranks updated successfully",
-                error: rankError?.message || "Failed to update ranks"
-              })}
+              onClick={() =>
+                toast.promise(run(), {
+                  loading: "Updating ranks...",
+                  success: "Ranks updated successfully",
+                  error: rankError?.message || "Failed to update ranks",
+                })
+              }
               disabled={loading}
             >
               {loading ? "Assigning..." : "Assign Rank"}
@@ -113,13 +110,20 @@ export default function Scraper() {
         <div className="flex gap-4 flex-col border p-4 rounded-lg">
           <h4 className="text-lg font-bold">Scraping Progress</h4>
           <p className="text-sm font-medium">
-            <strong>{data?.scraped_results}</strong> results scraped out of <strong>{data?.scrape_ables}</strong>{" "} from the queue of <strong>{data?.scraping_queue}</strong> results.
+            <strong>{data?.scraped_results}</strong> results scraped out of{" "}
+            <strong>{data?.scrape_ables}</strong> from the queue of{" "}
+            <strong>{data?.scraping_queue}</strong> results.
           </p>
           <div className="flex items-center gap-4 p-2">
             <Badge variant="info">
-              {(data?.scraped_results / data?.scraping_queue).toPrecision(3)}%
+              {(
+                (data?.scraped_results / data?.scrape_ables || 0) * 100
+              ).toPrecision(3)}
+              %
             </Badge>
-            <Progress value={data?.scraped_results / data?.scraping_queue || 0} />
+            <Progress
+              value={(data?.scraped_results / data?.scrape_ables || 0) * 100}
+            />
             {isLoading && <LoaderCircle className="h-4 w-4 animate-spin" />}
           </div>
         </div>

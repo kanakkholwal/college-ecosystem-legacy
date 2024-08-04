@@ -1,4 +1,4 @@
-"use server"
+"use server";
 import type { PipelineStage } from "mongoose";
 import dbConnect from "src/lib/dbConnect";
 import ResultModel from "src/models/result";

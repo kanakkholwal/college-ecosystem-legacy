@@ -5,8 +5,7 @@ import dbConnect from "src/lib/dbConnect";
 import redis from "src/lib/redis";
 import Result from "src/models/result";
 
-export const maxDuration = 60
-
+export const maxDuration = 60;
 
 const allowedRoles = ["admin", "moderator"];
 const environment = process.env.NODE_ENV!;
@@ -24,11 +23,11 @@ export async function GET(request: NextRequest) {
     const startTime = Date.now();
 
     const session = await getSession();
-    console.log(session)
-    if (!session ||
+    console.log(session);
+    if (
+      !session ||
       !session?.user?.roles.some((role) => allowedRoles.includes(role))
     ) {
-
       return NextResponse.json(
         {
           result: "fail",
@@ -54,6 +53,19 @@ export async function GET(request: NextRequest) {
     if (!scrape && !restart && lastScrapedResult.length > 0) {
       const lastScrapedResultData: lastScrapeData = lastScrapedResult[0];
       return NextResponse.json(lastScrapedResultData, { status: 200 });
+    }
+    const lockKey = `${environment}-scrape-lock`;
+
+    const lock = await redis.set<boolean>(lockKey, true, {
+      ex: maxDuration,
+      nx: true,
+    });
+
+    if (lock) {
+      return NextResponse.json(
+        { result: "fail", message: "Scrape already in progress" },
+        { status: 429 }
+      );
     }
 
     await dbConnect();
@@ -123,7 +135,7 @@ export async function GET(request: NextRequest) {
     };
     console.log("cache add", data);
     await redis.lpush(`${environment}-last-scrape`, JSON.stringify(data));
-
+    await redis.del(lockKey);
     return NextResponse.json(data, { status: 200 });
   } catch (error: any) {
     console.error(error);
