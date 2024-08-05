@@ -63,8 +63,9 @@ export async function GET(request: NextRequest) {
 
     if (lock) {
       return NextResponse.json(
-        { ...lastScrapedResult[0],result: "fail", message: "Scrape already in progress" },
-        { status: 429 }
+        { ...lastScrapedResult[0],
+          result: "fail", message: "Scrape already in progress" },
+        { status: 200 }
       );
     }
 
