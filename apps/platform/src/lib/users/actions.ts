@@ -120,7 +120,7 @@ export async function getUsers(
 
     await dbConnect();
     const users = await UserModel.find(filterQuery)
-      .sort({ createdAt: 1 })
+      .sort({ createdAt: -1 })  // Sort by 'createdAt' in descending order (latest first)
       .skip(skip)
       .limit(resultsPerPage)
       .select("firstName lastName email rollNo roles createdAt department")

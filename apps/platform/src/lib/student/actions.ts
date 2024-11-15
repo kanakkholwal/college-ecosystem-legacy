@@ -1,7 +1,7 @@
 "use server";
 import dbConnect from "src/lib/dbConnect";
 import ResultModel, { IResultType, Semester } from "src/models/result";
-import User, { IUser } from "src/models/user";
+import User, { UserWithId } from "src/models/user";
 import { studentInfoType } from "src/types/student";
 
 import { getDepartmentCode } from "src/constants/departments";
@@ -16,9 +16,10 @@ export async function getStudentInfo(rollNo: string): Promise<studentInfoType> {
   if (!result) {
     return Promise.reject("Student not found");
   }
-  const user = (await User.findOne({
+  const _user = (await User.findOne({
     rollNo,
-  }).lean()) as IUser;
+  }).lean());
+  const user = JSON.parse(JSON.stringify(_user)) as UserWithId;
 
   return Promise.resolve({
     currentSemester: result.semesters.length + 1,

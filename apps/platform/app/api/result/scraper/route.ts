@@ -6,11 +6,10 @@ import redis from "src/lib/redis";
 import Result from "src/models/result";
 
 export const maxDuration = 60;
-
 const allowedRoles = ["admin", "moderator"];
 const environment = process.env.NODE_ENV!;
 
-type lastScrapeData = {
+type LastScrapeData = {
   scrape_ables: number;
   scraping_queue: number;
   scraped_results: number;
@@ -21,137 +20,234 @@ type lastScrapeData = {
 export async function GET(request: NextRequest) {
   try {
     const startTime = Date.now();
-
     const session = await getSession();
-    console.log(session);
-    if (
-      !session ||
-      !session?.user?.roles.some((role) => allowedRoles.includes(role))
-    ) {
-      return NextResponse.json(
-        {
-          result: "fail",
-          message: "Unauthorized",
-        },
-        {
-          status: 401,
-        }
-      );
+    
+    if (!session?.user?.roles.some((role) => allowedRoles.includes(role))) {
+      return unauthorizedResponse();
     }
 
     const restart = request.nextUrl.searchParams.get("restart") === "true";
     const scrape = request.nextUrl.searchParams.get("scrape") === "true";
-    const retry_failed =
-      request.nextUrl.searchParams.get("retry_failed") === "true";
-
-    const lastScrapedResult = await redis.lrange<lastScrapeData>(
-      `${environment}-last-scrape`,
-      0,
-      -1
-    );
-
-    if (!scrape && !restart && lastScrapedResult.length > 0) {
-      const lastScrapedResultData: lastScrapeData = lastScrapedResult[0];
-      return NextResponse.json(lastScrapedResultData, { status: 200 });
-    }
-    const lockKey = `${environment}-scrape-lock`;
-
-    const lock = await redis.set<boolean>(lockKey, true, {
-      ex: maxDuration,
-      nx: true,
-    });
-
-    if (lock) {
-      return NextResponse.json(
-        { ...lastScrapedResult[0],
-          result: "fail", message: "Scrape already in progress" },
-        { status: 200 }
-      );
-    }
+    const retryFailed = request.nextUrl.searchParams.get("retry_failed") === "true";
 
     await dbConnect();
+    const lastScrapeData = await getLastScrapeData(scrape, restart);
 
-    const rollNumbers = await Result.find({
-      $nor: [
-        { $and: [{ "semesters.length": 8 }, { programme: "B.Tech." }] },
-        { "semesters.length": 10 },
-      ],
-    }).select("rollNo");
-
-    let resultsQueue = await redis.lrange<string>(
-      `${environment}-results-queue`,
-      0,
-      -1
-    );
-    if (restart || resultsQueue.length === 0) {
-      console.log("restarting scrape");
-      await redis.del(`${environment}-results-queue`);
-      const rollNos = rollNumbers.map((roll) => roll.rollNo);
-      await redis.rpush(`${environment}-results-queue`, ...rollNos);
-      resultsQueue = await redis.lrange(`${environment}-results-queue`, 0, -1);
-    }
-    if (retry_failed) {
-      console.log("retrying failed results");
-      const allResults = await redis.lrange<scrapeResponse>(
-        `${environment}-scraped-results`,
-        0,
-        -1
-      );
-      const failedRollNumbers = allResults
-        .filter((result) => result.result === "fail")
-        .map((result) => result.rollNo);
-      await redis.lpush(`${environment}-results-queue`, ...failedRollNumbers);
-      // removed failed results from scraped results
-      // await redis.lrem(`${environment}-scraped-results`, 0, ...allResults.filter((result) => result.result === "fail").map((result) => JSON.stringify(result)));
-      resultsQueue = await redis.lrange(`${environment}-results-queue`, 0, -1);
+    if (lastScrapeData) {
+      return NextResponse.json(lastScrapeData, { status: 200 });
     }
 
-    for (const rollNo of resultsQueue) {
-      const currentTime = Date.now();
-      if (currentTime - startTime >= 55000) {
-        console.log("timeout", currentTime - startTime);
-        break;
-      }
-
-      const scrapeResponse = await scrapeAndUpdateResult(rollNo);
-      await redis.rpush(
-        `${environment}-scraped-results`,
-        JSON.stringify(scrapeResponse)
-      );
-      await redis.lrem(`${environment}-results-queue`, 0, rollNo);
+    const lockAcquired = await acquireLock();
+    if (!lockAcquired) {
+      return lockInProgressResponse();
     }
 
-    const [scrapedResultsQueueLength, currentQueueNumber, failedResults] =
-      await Promise.all([
-        redis.llen(`${environment}-scraped-results`),
-        redis.llen(`${environment}-results-queue`),
-        redis.lrange<scrapeResponse>(`${environment}-scraped-results`, 0, -1),
-      ]);
+    const resultsQueue = await initializeScrapingQueue(restart, retryFailed);
+    await processScrapingQueue(resultsQueue, startTime);
 
-    const data: lastScrapeData = {
-      scrape_ables: rollNumbers.length,
-      scraping_queue: currentQueueNumber,
-      scraped_results: scrapedResultsQueueLength,
-      timestamp: new Date().toISOString(),
-      failed_results: failedResults.filter((result) => result.result === "fail")
-        .length,
-    };
-    console.log("cache add", data);
-    await redis.lpush(`${environment}-last-scrape`, JSON.stringify(data));
-    await redis.del(lockKey);
+    const data = await getUpdatedScrapeData();
+    await cacheLastScrapeData(data);
+    await releaseLock();
+
     return NextResponse.json(data, { status: 200 });
   } catch (error: any) {
     console.error(error);
-    return NextResponse.json(
-      {
-        result: "fail",
-        message: error.message,
-      },
-      {
-        status: 500,
-      }
-    );
+    return serverErrorResponse(error.message);
   }
+}
+
+// Utility Functions
+
+function unauthorizedResponse() {
+  return NextResponse.json(
+    {
+      result: "fail",
+      message: "Unauthorized",
+    },
+    { status: 401 }
+  );
+}
+
+async function getLastScrapeData(scrape: boolean, restart: boolean) {
+  const lastScrapeData = await redis.lrange<LastScrapeData>(
+    `${environment}-last-scrape`,
+    0,
+    -1
+  );
+
+  if (!scrape && !restart && lastScrapeData.length > 0) {
+    return lastScrapeData[0];
+  }
+  return null;
+}
+
+async function acquireLock(): Promise<boolean> {
+  const lockKey = `${environment}-scrape-lock`;
+  const lock = await redis.set<boolean>(lockKey, true, {
+    ex: maxDuration,
+    nx: true,
+  });
+  return !!lock;
+}
+
+function lockInProgressResponse() {
+  return NextResponse.json(
+    {
+      result: "fail",
+      message: "Scrape already in progress",
+    },
+    { status: 200 }
+  );
+}
+
+async function initializeScrapingQueue(restart: boolean, retryFailed: boolean) {
+  const rollNumbers = await getRollNumbers();
+  let resultsQueue = await redis.lrange<string>(
+    `${environment}-results-queue`,
+    0,
+    -1
+  );
+
+  if (restart || resultsQueue.length === 0) {
+    await redis.del(`${environment}-results-queue`);
+    const rollNos = rollNumbers.map((roll) => roll.rollNo);
+    await redis.rpush(`${environment}-results-queue`, ...rollNos);
+    resultsQueue = await redis.lrange(`${environment}-results-queue`, 0, -1);
+  }
+
+  if (retryFailed) {
+    const failedRollNumbers = await getFailedRollNumbers();
+    await redis.lpush(`${environment}-results-queue`, ...failedRollNumbers);
+  }
+
+  return resultsQueue;
+}
+
+async function getRollNumbers() {
+  return await Result.find({
+    $nor: [
+      { $and: [{ "semesters.length": 8 }, { programme: "B.Tech." }] },
+      { "semesters.length": 10 },
+    ],
+  }).select("rollNo");
+}
+
+async function getFailedRollNumbers() {
+  const allResults = await redis.lrange<scrapeResponse>(
+    `${environment}-scraped-results`,
+    0,
+    -1
+  );
+  return allResults
+    .filter((result) => result.result === "fail")
+    .map((result) => result.rollNo);
+}
+
+async function processScrapingQueue(resultsQueue: string[], startTime: number) {
+  for (const rollNo of resultsQueue) {
+    if (Date.now() - startTime >= 55000) {
+      console.log("Timeout reached, stopping further scraping.");
+      break;
+    }
+
+    const scrapeResponse = await scrapeAndUpdateResult(rollNo);
+    await redis.rpush(
+      `${environment}-scraped-results`,
+      JSON.stringify(scrapeResponse)
+    );
+    await redis.lrem(`${environment}-results-queue`, 0, rollNo);
+  }
+}
+
+async function getUpdatedScrapeData(): Promise<LastScrapeData> {
+  const rollNumbers = await getRollNumbers();
+  const [scrapedResultsQueueLength, currentQueueNumber, failedResults] =
+    await Promise.all([
+      redis.llen(`${environment}-scraped-results`),
+      redis.llen(`${environment}-results-queue`),
+      redis.lrange<scrapeResponse>(`${environment}-scraped-results`, 0, -1),
+    ]);
+
+  return {
+    scrape_ables: rollNumbers.length,
+    scraping_queue: currentQueueNumber,
+    scraped_results: scrapedResultsQueueLength,
+    timestamp: new Date().toISOString(),
+    failed_results: failedResults.filter((result) => result.result === "fail")
+      .length,
+  };
+}
+
+async function cacheLastScrapeData(data: LastScrapeData) {
+  console.log("Adding data to cache", data);
+  await redis.lpush(`${environment}-last-scrape`, JSON.stringify(data));
+}
+
+async function releaseLock() {
+  await redis.del(`${environment}-scrape-lock`);
+}
+
+function serverErrorResponse(message: string) {
+  return NextResponse.json(
+    {
+      result: "fail",
+      message,
+    },
+    { status: 500 }
+  );
+}
+
+// Scraping Function
+
+async function scrapeAndUpdateResult(rollNo: string): Promise<scrapeResponse> {
+  try {
+    const result = await ScrapeResult(rollNo);
+    const existingResult = await Result.findOne({ rollNo: rollNo });
+
+    if (existingResult) {
+      updateExistingResult(existingResult, result);
+      return scrapeResponseData(rollNo, "success", false);
+    } else {
+      await saveNewResult(result, rollNo);
+      return scrapeResponseData(rollNo, "success", true);
+    }
+  } catch {
+    return scrapeResponseData(rollNo, "fail", false);
+  }
+}
+
+async function updateExistingResult(existingResult: any, result: any) {
+  existingResult.name = result.name;
+  existingResult.branch = result.branch;
+  existingResult.batch = result.batch;
+  existingResult.programme = result.programme;
+  existingResult.semesters = result.semesters;
+  await existingResult.save();
+}
+
+async function saveNewResult(result: any, rollNo: string) {
+  const newResult = new Result({
+    rollNo: rollNo,
+    name: result.name,
+    branch: result.branch,
+    batch: result.batch,
+    programme: result.programme,
+    semesters: result.semesters,
+  });
+  await newResult.save();
+}
+
+function scrapeResponseData(
+  rollNo: string,
+  result: "success" | "fail",
+  newResult: boolean
+): scrapeResponse {
+  return {
+    rollNo: rollNo,
+    result,
+    timestamp: new Date(),
+    newResult,
+  };
 }
 
 type scrapeResponse = {
@@ -160,51 +256,3 @@ type scrapeResponse = {
   newResult: boolean;
   timestamp: Date;
 };
-
-async function scrapeAndUpdateResult(rollNo: string): Promise<scrapeResponse> {
-  try {
-    const result = await ScrapeResult(rollNo);
-    const resultData = await Result.findOne({ rollNo: rollNo });
-
-    if (resultData) {
-      resultData.name = result.name;
-      resultData.branch = result.branch;
-      resultData.batch = result.batch;
-      resultData.programme = result.programme;
-      resultData.semesters = result.semesters;
-      await resultData.save();
-
-      return {
-        rollNo: rollNo,
-        result: "success",
-        timestamp: new Date(),
-        newResult: false,
-      };
-    } else {
-      const newResult = new Result({
-        rollNo: rollNo,
-        name: result.name,
-        branch: result.branch,
-        batch: result.batch,
-        programme: result.programme,
-        semesters: result.semesters,
-      });
-      await newResult.save();
-
-      return {
-        rollNo: rollNo,
-        result: "success",
-        timestamp: new Date(),
-        newResult: true,
-      };
-    }
-  } catch (error) {
-    // console.error(error);
-    return {
-      rollNo: rollNo,
-      result: "fail",
-      timestamp: new Date(),
-      newResult: false,
-    };
-  }
-}
