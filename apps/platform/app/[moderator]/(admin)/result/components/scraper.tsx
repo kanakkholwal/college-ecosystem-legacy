@@ -40,7 +40,7 @@ export default function Scraper() {
     formatUrl(scrape, restartScrape),
     (url: string) =>
       fetch(url, { cache: "no-store" }).then((res) => res.json()),
-    { refreshInterval: 2000 }
+    { refreshInterval: 60000 }
   );
 
   // console.log("swr",data, error, isLoading);

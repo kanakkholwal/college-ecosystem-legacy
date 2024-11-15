@@ -1,3 +1,4 @@
+import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
@@ -30,6 +31,7 @@ export default async function Layout({ children }: LayoutProps) {
       <div className="flex-1 w-full h-full min-h-screen @container flex-col items-center justify-start space-y-4 my-10">
         {children}
       </div>
+      <Footer />
     </div>
   );
 }

@@ -92,15 +92,17 @@ export async function GET(request: NextRequest) {
     }
     if (retry_failed) {
       console.log("retrying failed results");
-      const failedResults = await redis.lrange<scrapeResponse>(
+      const allResults = await redis.lrange<scrapeResponse>(
         `${environment}-scraped-results`,
         0,
         -1
       );
-      const failedRollNumbers = failedResults
+      const failedRollNumbers = allResults
         .filter((result) => result.result === "fail")
         .map((result) => result.rollNo);
       await redis.lpush(`${environment}-results-queue`, ...failedRollNumbers);
+      // removed failed results from scraped results
+      // await redis.lrem(`${environment}-scraped-results`, 0, ...allResults.filter((result) => result.result === "fail").map((result) => JSON.stringify(result)));
       resultsQueue = await redis.lrange(`${environment}-results-queue`, 0, -1);
     }
 
