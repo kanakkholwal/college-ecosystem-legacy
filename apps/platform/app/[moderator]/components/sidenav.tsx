@@ -48,9 +48,9 @@ const all_links: rawLinkType[] = [
     allowed_roles: ["admin", "moderator"],
   },
   {
-    label: "Results",
+    label: "Result",
     icon: Grid3X3,
-    path: "/results",
+    path: "/result",
     allowed_roles: ["admin", "moderator"],
   },
   {

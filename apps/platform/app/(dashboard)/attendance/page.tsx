@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 
 export default async function PersonalAttendanceManager() {
   const attendance_records = await getAttendanceRecords();
-  console.log(attendance_records);
+  // console.log(attendance_records);
 
   return (
     <div className="z-10 w-full max-w-7xl relative bg-white/20 backdrop-blur-lg mt-20 lg:mt-5 rounded-lg p-4 @container/attendance">

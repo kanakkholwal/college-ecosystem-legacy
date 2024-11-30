@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { revalidatePath } from "next/cache";
 import { ORG_DOMAIN } from "root/project.config";
+import { ScrapeResult } from "src/controllers/scraper";
 import dbConnect from "src/lib/dbConnect";
 import ResultModel from "src/models/result";
 import UserModel from "src/models/user";
@@ -31,6 +32,17 @@ Object.values(env).forEach((value) => {
 const useSecureCookies = env.NEXTAUTH_URL.startsWith("https://");
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 const hostName = new URL(env.NEXTAUTH_URL).hostname;
+
+function isValidRollNumber(rollNo: string): boolean {
+  const rollNoPattern = /^\d{2}[a-z]{3}\d{3}$/i;
+
+  if (!rollNoPattern.test(rollNo)) {
+    return false;
+  }
+
+  const numericPart = parseInt(rollNo.slice(-3));
+  return numericPart >= 1 && numericPart <= 999;
+}
 
 export const authOptions: NextAuthOptions = {
   // Enable JSON Web Tokens since we will not store sessions in our DB
@@ -112,54 +124,87 @@ export const authOptions: NextAuthOptions = {
       },
       async profile(profile, tokens) {
         try {
-          console.log(profile);
-          console.log(tokens);
-          if (profile.hd !== ORG_DOMAIN) {
-            return Promise.reject({
-              status: 401,
-              message: "Only NITH emails are allowed",
-              success: false,
-            });
-          }
+          // console.log(profile);
+          // console.log(tokens);
+
           await dbConnect();
           const userInDb = await UserModel.findOne({ email: profile.email });
           if (!userInDb) {
             console.log("user not found, creating new user", profile);
-            //  find roll no from result
-            const result = await ResultModel.findOne({
-              rollNo: profile.email.split("@")[0],
-            });
-            if (!result) {
+            const username = profile.email.split("@")[0].toLowerCase();
+            if (isValidRollNumber(username)) {
+              //  find roll no from result
+              const result = await ResultModel.findOne({
+                rollNo: username,
+              });
+              if (!result) {
+                const scraped_result = await ScrapeResult(username);
+                if (!scraped_result) {
+                  return Promise.reject({
+                    status: 401,
+                    message:
+                      "No result found for this roll no, Please contact admin",
+                    success: false,
+                  });
+                }
+                const user = new UserModel({
+                  email: scraped_result.rollNo
+                    .toLowerCase()
+                    .concat("@".concat(ORG_DOMAIN)),
+                  firstName: scraped_result.name.split(" ")[0],
+                  lastName: scraped_result.name.split(" ")[1],
+                  rollNo: scraped_result.rollNo,
+                  profilePicture: profile.picture,
+                  password: "google" + profile.sub,
+                  roles: ["student"],
+                  department: scraped_result.branch,
+                });
+                await user.save();
+                return Promise.resolve({
+                  id: user._id.toString(),
+                  _id: user._id.toString(),
+                  firstName: user.firstName,
+                  lastName: user.lastName,
+                  rollNo: user.rollNo,
+                  email: user.email,
+                  roles: user.roles,
+                  profilePicture: user.profilePicture,
+                  department: user.department,
+                });
+              }
+              const user = new UserModel({
+                email: result.rollNo
+                  .toLowerCase()
+                  .concat("@".concat(ORG_DOMAIN)),
+                firstName: result.name.split(" ")[0],
+                lastName: result.name.split(" ")[1],
+                rollNo: result.rollNo,
+                profilePicture: profile.picture,
+                password: "google" + profile.sub,
+                roles: ["student"],
+                department: result.branch,
+              });
+              await user.save();
+
+              return Promise.resolve({
+                id: user._id.toString(),
+                _id: user._id.toString(),
+                firstName: user.firstName,
+                lastName: user.lastName,
+                rollNo: user.rollNo,
+                email: user.email,
+                roles: user.roles,
+                profilePicture: user.profilePicture,
+                department: user.department,
+              });
+            } else {
+              console.log("not a valid roll no", username);
               return Promise.reject({
                 status: 401,
-                message:
-                  "No result found for this roll no, Please contact admin",
+                message: `not a valid roll no : ${username}, Please contact admin.`,
                 success: false,
               });
             }
-            const user = new UserModel({
-              email: result.rollNo + "@" + ORG_DOMAIN,
-              firstName: result.name.split(" ")[0],
-              lastName: result.name.split(" ")[1],
-              rollNo: result.rollNo,
-              profilePicture: profile.picture,
-              password: "google" + profile.sub,
-              roles: ["student"],
-              department: result.branch,
-            });
-            await user.save();
-
-            return Promise.resolve({
-              id: user._id.toString(),
-              _id: user._id.toString(),
-              firstName: user.firstName,
-              lastName: user.lastName,
-              rollNo: user.rollNo,
-              email: user.email,
-              roles: user.roles,
-              profilePicture: user.profilePicture,
-              department: user.department,
-            });
           }
           console.log("user found", userInDb);
 
@@ -176,7 +221,11 @@ export const authOptions: NextAuthOptions = {
           });
         } catch (err) {
           console.log(err);
-          return Promise.reject("/login?error=google_error");
+          return Promise.reject({
+            status: 401,
+            message: "Error in google login",
+            success: false,
+          });
         }
       },
     }),

@@ -1,6 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
-import { getResults } from "./action";
+import { getCachedLabels, getResults } from "./action";
 import { ResultCard, SkeletonCard } from "./components/card";
 import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
@@ -21,18 +21,20 @@ export default async function ResultPage({
     batch?: string;
     branch?: string;
     programme?: string;
+    cache?: string;
   };
 }) {
-  const query = searchParams?.query || "";
+  const query = searchParams?.query?.trim() || "";
   const currentPage = Number(searchParams?.page) || 1;
   const filter = {
     batch: Number(searchParams?.batch),
     branch: searchParams?.branch || "",
     programme: searchParams?.programme || "",
   };
+  const new_cache = searchParams?.cache === "new";
 
-  const { results, totalPages, branches, programmes, batches } =
-    await getResults(query, currentPage, filter);
+  const { results, totalPages } = await getResults(query, currentPage, filter, new_cache);
+  const { branches, programmes, batches } = await getCachedLabels(new_cache);
 
   return (
     <>

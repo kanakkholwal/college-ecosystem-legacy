@@ -82,11 +82,23 @@ export function OverallAttendanceChart({ attendanceRecords }: Props) {
   const weeklyTrend = calculateWeeklyTrend(attendanceRecords)?.at(-1);
 
   return (
-    <Card className="flex flex-col flex-auto ml-auto" variant="glass">
-      <CardContent className="flex-1 pb-0 pt-5">
+    <Card className="flex flex-col flex-auto ml-auto bg-transparent shadow-none border-0 backdrop-filter-none">
+      <CardHeader className="items-center pb-0">
+        <CardTitle>Overall Attendance </CardTitle>
+        <CardDescription>
+          Trending {weeklyTrend?.growth! > 0 ? "up" : "down"} by{" "}
+          {weeklyTrend?.percentage.toFixed(1) || 0}% this week
+          {weeklyTrend?.growth! > 0 ? (
+            <TrendingUp className="h-4 w-4 inline-block" />
+          ) : (
+            <TrendingDown className="h-4 w-4 inline-block" />
+          )}
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="flex-1">
         <ConditionalRender condition={totalClasses === 0}>
           <div className="flex flex-col items-center justify-center gap-4">
-            <CircleSlash className="h-12 w-12 text-danger" />
+            <CircleSlash className="h-12 w-12 text-danger mt-20" />
             <div className="text-center text-lg font-medium text-gray-600">
               No attendance records found
             </div>
@@ -146,20 +158,6 @@ export function OverallAttendanceChart({ attendanceRecords }: Props) {
           </ChartContainer>
         </ConditionalRender>
       </CardContent>
-      <CardFooter className="flex-col gap-2 text-sm">
-        <div className="flex items-center gap-2 font-medium leading-none">
-          Trending {weeklyTrend?.growth! > 0 ? "up" : "down"} by{" "}
-          {weeklyTrend?.percentage.toFixed(1) || 0}% this week
-          {weeklyTrend?.growth! > 0 ? (
-            <TrendingUp className="h-4 w-4" />
-          ) : (
-            <TrendingDown className="h-4 w-4" />
-          )}
-        </div>
-        <div className="leading-none text-muted-foreground">
-          Showing attendance overview
-        </div>
-      </CardFooter>
     </Card>
   );
 }
@@ -168,12 +166,12 @@ export function SubWiseAttendanceChart({ attendanceRecords }: Props) {
   const chartData = formatAttendanceForSubjects(attendanceRecords);
 
   return (
-    <Card className="flex flex-col" variant="glass">
+    <Card className="flex flex-col bg-transparent shadow-none border-0 backdrop-filter-none">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Bar Chart - Subject Wise Attendance</CardTitle>
+        <CardTitle>Subject Wise Attendance</CardTitle>
         <CardDescription>Attendance for each subject</CardDescription>
       </CardHeader>
-      <CardContent className="flex-1 pb-0">
+      <CardContent className="flex-1">
         <ConditionalRender condition={attendanceRecords.length > 0}>
           <ChartContainer
             config={chartConfig}
@@ -200,12 +198,9 @@ export function SubWiseAttendanceChart({ attendanceRecords }: Props) {
         </ConditionalRender>
         <ConditionalRender condition={attendanceRecords.length === 0}>
           <div className="flex flex-col items-center justify-center gap-4">
-            <CircleSlash className="h-12 w-12 text-danger" />
+            <CircleSlash className="h-12 w-12 text-danger mt-20" />
             <div className="text-center text-lg font-medium text-gray-600">
               No attendance records found
-            </div>
-            <div className="text-muted-foreground text-sm">
-              Your attendance records will be displayed here
             </div>
           </div>
         </ConditionalRender>
@@ -217,9 +212,9 @@ export function MonthlyAttendanceChart({ attendanceRecords }: Props) {
   const monthlyData = getMonthlyAttendanceData(attendanceRecords);
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col bg-transparent shadow-none border-0 backdrop-filter-none">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Line Chart - Monthly Attendance</CardTitle>
+        <CardTitle> Monthly Attendance</CardTitle>
         <CardDescription>Attendance Trends Over Time</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">

@@ -3,6 +3,7 @@ import { getSession } from "src/lib/auth";
 import { sessionType } from "src/types/session";
 import AdminDashboard from "./context/admin.dashboard";
 import CRDashboard from "./context/cr.dashboard";
+import { changeCase } from "src/utils/string";
 
 interface Props {
   params: {
@@ -20,7 +21,7 @@ export async function generateMetadata(
   const { moderator } = params;
 
   return {
-    title: `${moderator} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+    title: `${changeCase(moderator, "title")} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
     description: `Dashboard for ${moderator}`,
   };
 }

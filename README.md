@@ -1,12 +1,27 @@
 # College Ecosystem
 
 [![Trigger Deployments](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy.yml)
+College Ecosystem is a monorepo for various projects aimed at creating a comprehensive platform for managing and interacting with different aspects of a college environment. It includes frontend applications built with Next.js and a backend server using Express and TypeScript.
 
-Welcome to the College Ecosystem monorepo, housing various projects related to college management and services. This repository utilizes Yarn Workspaces and Turbo Repo for efficient project management.
+<!-- Welcome to the College Ecosystem monorepo, housing various projects related to college management and services. This repository utilizes Yarn Workspaces and Turbo Repo for efficient project management. -->
 
-## Directory Structure
+## Table of Contents
 
-The repository is structured to accommodate multiple projects:
+- [Features](#features)
+- [Project Structure](#project-structure)
+- [Tech Stack](#tech-stack)
+- [Deployment](#deployment)
+- [Contributing](#contributing)
+- [License](#license)
+
+## Features
+
+- **Platform**: A Next.js application for the main platform.
+- **Website**: A Next.js application for the college website.
+- **Server**: An Express server with TypeScript for backend operations.
+- **Modular Architecture**: Scalable and maintainable project structure.
+
+## Project Structure
 
 ```bash
 /college-ecosystem
@@ -19,122 +34,20 @@ The repository is structured to accommodate multiple projects:
   /README.md       # This readme file
 ```
 
-## Setup
+## Tech Stack
 
-To get started with the College Ecosystem on your local machine, follow these steps:
+- **Frontend**: Next.js, React, TypeScript
+- **Backend**: Express, TypeScript, Node.js
+- **Database**: MongoDB with mongoose,Upstash Redis, Postgres (will use)
+- **Build Tools**: Turbo
+- **Other**: Docker, ESLint, Prettier, Jest
 
-### Clone the Repository
+## Deployment
 
-```bash
-git clone https://github.com/kanakkholwal/college-ecosystem.git
-cd college-ecosystem
+### GitHub Actions
 
-```
+We use GitHub Actions to automate the deployment process for both Vercel and Docker, [deploy](.github/workflows/deploy.yml).
 
-### Install Dependencies
+## Contributing
 
-```bash
-yarn install
-# or
-npm install
-```
-
-This command installs dependencies for all projects defined in the apps directory.
-
-#### For individual projects
-
-```bash
-npm install --workspace=platform
-```
-
-#### Specific package
-
-```bash
-npm install some-package --workspace=platform
-```
-
-## Projects
-
-The College Ecosystem includes the following projects:
-
-- [College Platform](https://app.nith.eu.org/) : centralized platform that is multifunctional, user-friendly platform for all.
-- [College Website](https://nith.eu.org) : landing page website
-- [Go Server (No ready yet)](https://go-apis.nith.eu.org) : For concurrent queues and heavy scraping jobs
-
-```bash
-cd college-ecosystem
-yarn run build
-```
-
-## Usage
-
-### Running Projects
-
-To run individual projects locally:
-
-#### College Platform
-
-```bash
-yarn workspace platform run dev
-# or
-npm run --workspace=platform dev
-# or
-npx turbo run dev --filter=platform
-```
-
-#### Website
-
-```bash
-yarn workspace website run dev
-# or
-npm run --workspace=website dev
-# or
-npx turbo run dev --filter=website
-```
-
-### Building Projects
-
-To build individual projects for production:
-
-#### Platform
-
-```bash
-yarn workspace platform run build
-# or
-npm run --workspace=platform build
-
-```
-
-#### Website (landing)
-
-```bash
-yarn workspace website run build
-# or
-npm run --workspace=website build
-
-```
-
-### Running Turbo Commands
-
-To utilize Turbo Repo for optimized workflows:
-
-```bash
-yarn turbo run [command]
-```
-
-Replace [command] with `build`, `dev`, `lint`, or `test` as needed.
-
-## Scripts
-
-The root `package.json` file defines scripts for common tasks:
-
-```json
-{
-  "scripts": {
-    "dev": "turbo run dev",
-    "build": "turbo run build",
-    "lint": "turbo run lint",
-    "test": "turbo run test"
-  }
-}
-```
+We welcome contributions! Please see our [CONTRIBUTING.md](CONTRIBUTING.md) for more details.

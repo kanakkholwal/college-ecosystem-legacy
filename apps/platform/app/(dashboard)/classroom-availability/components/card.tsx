@@ -35,29 +35,24 @@ export function RoomCardPublic({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex w-full flex-col md:flex-row md:justify-around gap-2">
+        <div className="flex w-full flex-col md:flex-row md:justify-around items-start gap-2">
           <div className="flex flex-col items-center gap-1">
-            <span className="text-sm font-semibold text-slate-600">
-              Capacity
-            </span>
-            <Badge size="sm" className="uppercase" variant="default_light">
+            <span className="text-xs font-medium text-gray-700">Capacity</span>
+            <Badge className="uppercase" variant="default_light">
               {room.capacity}
             </Badge>
           </div>
           <div className="flex flex-col items-center gap-1">
-            <span className="text-sm font-semibold text-slate-600">
-              Room Type
-            </span>
-            <Badge size="sm" className="uppercase" variant="ghost">
+            <span className="text-xs font-medium text-gray-700">Room Type</span>
+            <Badge className="uppercase" variant="ghost">
               {room.roomType}
             </Badge>
           </div>
           <div className="flex flex-col items-center gap-1">
-            <span className="text-sm font-semibold text-slate-600">
+            <span className="text-xs font-medium text-gray-700">
               Current Status
             </span>
             <Badge
-              size="sm"
               className="uppercase"
               variant={
                 room.currentStatus === "available" ? "success" : "destructive"

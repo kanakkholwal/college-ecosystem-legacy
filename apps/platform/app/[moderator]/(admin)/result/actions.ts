@@ -1,7 +1,7 @@
 "use server";
 
 import dbConnect from "src/lib/dbConnect";
-import ResultModel from "src/models/result";
+import ResultModel, { ResultTypeWithId } from "src/models/result";
 
 export async function getBasicInfo() {
   try {
@@ -26,6 +26,22 @@ export async function getBasicInfo() {
       },
       asOf: updatedAt,
     });
+  } catch (err) {
+    console.error(err);
+    return Promise.reject("Failed to fetch results");
+  }
+}
+
+export async function getResultByRollNo(
+  rollNo: string
+): Promise<ResultTypeWithId> {
+  try {
+    await dbConnect();
+    const result = await ResultModel.findOne({ rollNo }).lean();
+    if (!result) {
+      return Promise.reject("No results found");
+    }
+    return Promise.resolve(JSON.parse(JSON.stringify(result)));
   } catch (err) {
     console.error(err);
     return Promise.reject("Failed to fetch results");

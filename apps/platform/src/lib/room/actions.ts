@@ -99,7 +99,8 @@ export async function updateStatus(
     };
     room.usageHistory.push(historyEntry);
     await room.save();
-    revalidatePath("/dashboard/rooms");
+    session.user.roles.forEach((role) => revalidatePath(`${role}/rooms`));
+    revalidatePath(`/classroom-availability`);
     return Promise.resolve(true);
   } catch (error) {
     return Promise.reject(error);

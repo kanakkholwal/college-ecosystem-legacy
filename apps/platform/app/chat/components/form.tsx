@@ -40,9 +40,21 @@ export default function Form() {
             {process.env.NEXT_PUBLIC_WEBSITE_NAME} Chatbot
             <span className="text-xs text-gray-500 block">
               Using {` `}
-              <a target="_blank" href="https://huggingface.co/deepset/roberta-base-squad2" className="underline text-primary">deepset/roberta-base-squad2</a>
+              <a
+                target="_blank"
+                href="https://huggingface.co/deepset/roberta-base-squad2"
+                className="underline text-primary"
+              >
+                deepset/roberta-base-squad2
+              </a>
               {` | `}
-              <a target="_blank" href="https://github.com/kanakkholwal/college-ecosystem/blob/main/apps/platform/public/doc/REFERENCE.md" className="underline text-primary">Reference</a>
+              <a
+                target="_blank"
+                href="https://github.com/kanakkholwal/college-ecosystem/blob/main/apps/platform/public/doc/REFERENCE.md"
+                className="underline text-primary"
+              >
+                Reference
+              </a>
             </span>
           </div>
         </div>
@@ -111,7 +123,12 @@ export default function Form() {
               >
                 <Mic />
               </Button>
-              <p className={cn("text-center font-semibold text-gray-700", listening ? "animate-pulse text-primary" : "")}>
+              <p
+                className={cn(
+                  "text-center font-semibold text-gray-700",
+                  listening ? "animate-pulse text-primary" : ""
+                )}
+              >
                 {listening ? "Stop" : "Start"} Listening{listening ? "..." : ""}
               </p>
             </ResponsiveDialog>

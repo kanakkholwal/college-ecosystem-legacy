@@ -1,5 +1,5 @@
+import { atom } from "jotai";
 import { RawTimetable, TimeTableWithID } from "src/models/time-table";
-import { createStore } from "zustand";
 import { daysMap, timeMap } from "./constants";
 
 export type FormattedTimetable = TimeTableWithID | RawTimetable;
@@ -15,27 +15,27 @@ export interface TimeTableState {
   disabled?: boolean;
 }
 
-export const useTimeTableStore = createStore<TimeTableState>((set) => ({
-  timetableData: {
-    department_code: "",
-    sectionName: "",
-    year: 1,
-    semester: 1,
-    schedule: Array.from(daysMap.entries()).map((_, dayIndex) => ({
-      day: dayIndex,
-      timeSlots: Array.from(timeMap.entries()).map((_, timeSlotIndex) => ({
-        startTime: timeSlotIndex,
-        endTime: timeSlotIndex + 1,
-        events:
-          [] as FormattedTimetable["schedule"][0]["timeSlots"][0]["events"],
-      })),
+const initialTimetableData: FormattedTimetable = {
+  department_code: "",
+  sectionName: "",
+  year: 1,
+  semester: 1,
+  schedule: Array.from(daysMap.entries()).map((_, dayIndex) => ({
+    day: dayIndex,
+    timeSlots: Array.from(timeMap.entries()).map((_, timeSlotIndex) => ({
+      startTime: timeSlotIndex,
+      endTime: timeSlotIndex + 1,
+      events:
+        [] as FormattedTimetable["schedule"][number]["timeSlots"][number]["events"],
     })),
-  },
-  editingEvent: {
-    dayIndex: 0,
-    timeSlotIndex: 0,
-    eventIndex: 0,
-  },
-  isEditing: false,
-  disabled: false,
-}));
+  })),
+};
+
+export const timetableDataAtom = atom<FormattedTimetable>(initialTimetableData);
+export const editingEventAtom = atom({
+  dayIndex: 0,
+  timeSlotIndex: 0,
+  eventIndex: 0,
+});
+export const isEditingAtom = atom(false);
+export const disabledAtom = atom(false);

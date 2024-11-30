@@ -7,6 +7,27 @@ export function generateSlug(length = 8): string {
     length
   )();
 }
+
+export function changeCase(
+  str: string,
+  type: "upper" | "lower" | "title" | "sentence"
+) {
+  switch (type) {
+    case "upper":
+      return str.toUpperCase();
+    case "lower":
+      return str.toLowerCase();
+    case "title":
+      return str
+        .split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    case "sentence":
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    default:
+      return str;
+  }
+}
 export function validatePassword(password: string) {
   const minLength = 8;
   const minUppercase = 1;

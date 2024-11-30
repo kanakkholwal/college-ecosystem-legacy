@@ -4,19 +4,13 @@ import { Button } from "@/components/ui/button";
 import { CardFooter } from "@/components/ui/card";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { useShare } from "@/hooks/useShare";
-import {
-  Bookmark,
-  BookmarkCheck,
-  Ellipsis,
-  Eye,
-  Share,
-  ThumbsUp,
-} from "lucide-react";
+import { Bookmark, BookmarkCheck, Eye, Share, ThumbsUp } from "lucide-react";
+
+import { useState } from "react";
 import { updatePost } from "src/lib/community/actions";
 import { CommunityPostTypeWithId } from "src/models/community";
 import { sessionType } from "src/types/session";
 import { formatNumber } from "src/utils/number";
-import { useState } from "react";
 
 export default function PostFooter({
   post,
@@ -112,7 +106,6 @@ export default function PostFooter({
                 share();
               }}
             >
-              <Ellipsis />
               <span>More</span>
             </Button>
           </div>

@@ -11,7 +11,10 @@ import { CGPIChart } from "./components/chart";
 import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: { rollNo: string };
+  params: { rollNo: string};
+  searchParams?: {
+    update?:string 
+  }
 };
 
 export async function generateMetadata(
@@ -26,8 +29,9 @@ export async function generateMetadata(
   };
 }
 
-export default async function ResultsPage({ params }: Props) {
-  const result = await getResultByRollNo(params.rollNo);
+export default async function ResultsPage({ params,searchParams }: Props) {
+  const update_result = searchParams?.update === "true";
+  const result = await getResultByRollNo(params.rollNo, update_result);
   if (!result) {
     return notFound();
   }

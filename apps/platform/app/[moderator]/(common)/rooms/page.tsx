@@ -1,22 +1,14 @@
 import { RouterCard } from "@/components/common/router-card";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { BadgePlus } from "lucide-react";
+import type { Metadata, ResolvingMetadata } from "next";
 import { Suspense } from "react";
 import { getRooms, getRoomsInfo } from "src/lib/room/actions";
+import { changeCase } from "src/utils/string";
+import RoomCard from "./components/card";
 import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
-
-import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
   params: {
@@ -35,12 +27,13 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   return {
-    title: `Rooms | ${params.moderator} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+    title: `Rooms | ${changeCase(params.moderator, "title")} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
     description: `Search for rooms based on their availability and type.`,
   };
 }
 
-export default async function RoomsPage({ searchParams }: Props) {
+export default async function RoomsPage({ params, searchParams }: Props) {
+  const moderator = params.moderator;
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const filter = {
@@ -60,7 +53,7 @@ export default async function RoomsPage({ searchParams }: Props) {
     <>
       <div>
         <h1 className="text-2xl font-bold">Rooms Overview</h1>
-        <p className="text-sm text-gray-700 font-semibold">
+        <p className="text-xs text-medium font-semibold">
           As of {new Date().toLocaleString()}
         </p>
       </div>
@@ -88,7 +81,7 @@ export default async function RoomsPage({ searchParams }: Props) {
           Icon={BadgePlus}
           title="Add New Room"
           description="Add a new room to the system"
-          href="/rooms/new"
+          href={`${moderator}/rooms/new`}
         />
       </div>
 
@@ -116,57 +109,7 @@ export default async function RoomsPage({ searchParams }: Props) {
           }
         >
           {rooms.map((room) => {
-            return (
-              <Card
-                key={room._id.toString()}
-                variant="glass"
-                className="hover:shadow-lg"
-              >
-                <CardHeader>
-                  <CardTitle>{room.roomNumber}</CardTitle>
-                  <CardDescription>
-                    Last updated:{" "}
-                    {new Date(room.lastUpdatedTime).toLocaleTimeString()}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex w-full flex-col md:flex-row md:justify-around gap-2">
-                    <div className="flex flex-col items-center gap-1">
-                      <span className="text-sm font-semibold text-slate-600">
-                        Capacity
-                      </span>
-                      <Badge className="uppercase" variant="default_light">
-                        {room.capacity}
-                      </Badge>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <span className="text-sm font-semibold text-slate-600">
-                        Room Type
-                      </span>
-                      <Badge className="uppercase" variant="ghost">
-                        {room.roomType}
-                      </Badge>
-                    </div>
-                    <div className="flex flex-col items-center gap-1">
-                      <span className="text-sm font-semibold text-slate-600">
-                        Current Status
-                      </span>
-                      <Badge
-                        className="uppercase"
-                        variant={
-                          room.currentStatus === "available"
-                            ? "success"
-                            : "destructive"
-                        }
-                      >
-                        {room.currentStatus}
-                      </Badge>
-                    </div>
-                  </div>
-                </CardContent>
-                <CardFooter></CardFooter>
-              </Card>
-            );
+            return <RoomCard key={room._id.toString()} room={room} />;
           })}
         </ErrorBoundaryWithSuspense>
       </div>
