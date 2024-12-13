@@ -1,14 +1,14 @@
 import ConditionalRender from "@/components/utils/conditional-render";
 import { getSession } from "src/lib/auth";
-import { sessionType } from "src/types/session";
+import type { sessionType } from "src/types/session";
+import { changeCase } from "src/utils/string";
 import AdminDashboard from "./context/admin.dashboard";
 import CRDashboard from "./context/cr.dashboard";
-import { changeCase } from "src/utils/string";
 
 interface Props {
-  params: {
+  params: Promise<{
     moderator: string;
-  };
+  }>
 }
 
 import type { Metadata, ResolvingMetadata } from "next";
@@ -18,7 +18,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
-  const { moderator } = params;
+  const { moderator } = await params;
 
   return {
     title: `${changeCase(moderator, "title")} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
@@ -26,7 +26,8 @@ export async function generateMetadata(
   };
 }
 
-export default async function ModeratorDashboard({ params }: Props) {
+export default async function ModeratorDashboard(props: Props) {
+  const params = await props.params;
   const session = (await getSession()) as sessionType;
 
   return (

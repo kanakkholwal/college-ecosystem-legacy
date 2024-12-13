@@ -5,28 +5,30 @@ import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
-import { CATEGORY_IMAGES, CATEGORY_TYPES } from "src/constants/community";
+import { CATEGORY_IMAGES, type CATEGORY_TYPES } from "src/constants/community";
 import { getPostsByCategory } from "src/lib/community/actions";
 
 interface Props {
-  params: {
+  params:Promise<{
     category: (typeof CATEGORY_TYPES)[number];
-  };
-  searchParams: {
+  }>;
+  searchParams: Promise<{
     page?: number;
     limit?: number;
-  };
+  }>
 }
 import type { Metadata, ResolvingMetadata } from "next";
 
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  props: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
-  const { category } = params;
-  const page = searchParams.page || 1;
-  const limit = searchParams.limit || 10;
+  const { category } = await props.params;
+  // const searchParams = await props.searchParams;
+
+  // const page = searchParams.page || 1;
+  // const limit = searchParams.limit || 10;
 
   return {
     title: `${category} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
@@ -39,9 +41,9 @@ export async function generateMetadata(
   };
 }
 
-export default async function CategoryPage({ params, searchParams }: Props) {
-  const { category } = params;
-
+export default async function CategoryPage(props: Props) {
+  const { category } = await props.params;
+  const searchParams = await props.searchParams;
   const page = searchParams.page || 1;
   const limit = searchParams.limit || 10;
 

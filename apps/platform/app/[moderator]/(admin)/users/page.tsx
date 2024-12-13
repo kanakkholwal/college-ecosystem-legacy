@@ -4,13 +4,14 @@ import SearchBar from "./search";
 import UserList from "./userList";
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     query?: string;
     offset?: number;
-  };
+  }>
 }
 
-export default async function DashboardPage({ searchParams }: PageProps) {
+export default async function DashboardPage(props: PageProps) {
+  const searchParams = await props.searchParams;
   const offset = Number(searchParams.offset) || 1;
   const query = searchParams.query || "";
 

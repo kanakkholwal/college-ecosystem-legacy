@@ -1,8 +1,8 @@
 import Page403 from "@/components/utils/403";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getSession } from "src/lib/auth";
-import { sessionType } from "src/types/session";
+import type { sessionType } from "src/types/session";
 import Navbar from "./components/navbar";
 import SideNav from "./components/sidenav";
 
@@ -15,20 +15,21 @@ const ALLOWED_ROLES = ["admin", "moderator", "cr", "hod", "faculty"] as const;
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
-  params: {
+  params: Promise<{
     moderator: (typeof ALLOWED_ROLES)[number];
-  };
+  }>
 }
 
 export default async function DashboardLayout({
   children,
   params,
 }: DashboardLayoutProps) {
-  const moderator = params.moderator!;
+
+  const {moderator} = await params;
 
   const session = (await getSession()) as sessionType | null;
 
-  if (!(ALLOWED_ROLES.includes(params.moderator) && !!session?.user)) {
+  if (!(ALLOWED_ROLES.includes(moderator) && !!session?.user)) {
     return notFound();
   }
 

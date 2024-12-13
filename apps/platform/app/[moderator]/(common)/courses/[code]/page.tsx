@@ -8,28 +8,29 @@ import { notFound, redirect } from "next/navigation";
 import { Suspense } from "react";
 import { getCourseByCode, updateCourseByCr } from "src/lib/course/actions";
 import dbConnect from "src/lib/dbConnect";
-import { CourseTypeWithId } from "src/models/course";
+import type { CourseTypeWithId } from "src/models/course";
 import ResultModel from "src/models/result";
 import { EditCourseForm } from "./form";
 
 import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: { code: string; moderator: string };
-  searchParams: { [key: string]: string | string[] | undefined };
+  params: Promise<{ code: string; moderator: string }>
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
 };
 
-export async function generateMetadata(
-  { params, searchParams }: Props,
+export async function generateMetadata(props: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const params = await props.params;
   return {
     title: `Edit Course | ${params.code} | ${params.moderator} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-    description: `Edit an existing course`,
+    description: "Edit an existing course",
   };
 }
 
-export default async function EditCoursePage({ params }: Props) {
+export default async function EditCoursePage(props: Props) {
+  const params = await props.params;
   await dbConnect();
   const course = await getCourseByCode(params.code);
   if (!course) {
@@ -41,7 +42,7 @@ export default async function EditCoursePage({ params }: Props) {
     "use server";
     const res = await updateCourseByCr(courseData);
     if (courseData.code !== params.code) {
-      redirect("/admin/courses/" + courseData.code);
+      redirect(`/admin/courses/${courseData.code}`);
     }
     // revalidatePath("/admin/courses/[code]", "page");
     return res;

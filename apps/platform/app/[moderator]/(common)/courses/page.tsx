@@ -8,36 +8,39 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { getCourses } from "src/lib/course/actions";
 import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
-import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: {
+  params: Promise<{
     moderator: string;
-  };
-  searchParams?: {
+  }>
+  searchParams?: Promise<{
     query?: string;
     page?: string;
     department?: string;
     type?: string;
-  };
+  }>
 };
 
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  props: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const params = await props.params;
   return {
     title: `Courses | ${params.moderator} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-    description: `Search for courses based on their name, code, department, and type.`,
+    description: "Search for courses based on their name, code, department, and type.",
   };
 }
 
-export default async function CoursesPage({ params, searchParams }: Props) {
+export default async function CoursesPage(props: Props) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const filter = {
@@ -64,11 +67,7 @@ export default async function CoursesPage({ params, searchParams }: Props) {
               <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
                 <Suspense
                   key="SearchBox"
-                  fallback={
-                    <>
-                      <Skeleton className="h-12 w-full " />
-                    </>
-                  }
+                  fallback={<Skeleton className="h-12 w-full " />}
                 >
                   <SearchBox departments={departments} types={types} />
                 </Suspense>
@@ -139,11 +138,7 @@ export default async function CoursesPage({ params, searchParams }: Props) {
       <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6 mt-5">
         <Suspense
           key="Pagination"
-          fallback={
-            <>
-              <Skeleton className="h-12 w-full " />
-            </>
-          }
+          fallback={<Skeleton className="h-12 w-full " />}
         >
           {courses.length > 0 ? <Pagination totalPages={totalPages} /> : null}
         </Suspense>

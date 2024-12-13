@@ -6,13 +6,13 @@ import { notFound } from "next/navigation";
 import { CATEGORY_IMAGES } from "src/constants/community";
 import { getSession } from "src/lib/auth";
 import { getPostById } from "src/lib/community/actions";
-import { sessionType } from "src/types/session";
+import type { sessionType } from "src/types/session";
 import PostFooter from "./post-footer";
 
 interface Props {
-  params: {
+  params: Promise<{
     postId: string;
-  };
+  }>
 }
 
 import type { Metadata, ResolvingMetadata } from "next";
@@ -22,7 +22,8 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
-  const post = await getPostById(params.postId, true);
+  const { postId } = await params;
+  const post = await getPostById(postId, true);
   if (!post) return notFound();
 
   return {
@@ -38,8 +39,9 @@ export async function generateMetadata(
 
 const cache = new Map<string, boolean>();
 
-export default async function CommunityPost({ params }: Props) {
+export default async function CommunityPost(props: Props) {
   const session = (await getSession()) as sessionType;
+  const params = await props.params;
   const post = await getPostById(
     params.postId,
     cache.has(params.postId) || false
@@ -89,6 +91,7 @@ export default async function CommunityPost({ params }: Props) {
             {post.content}
           </MarkdownView>
         </CardContent>
+        {/* biome-ignore lint/style/noNonNullAssertion: <explanation> */}
         <PostFooter post={post} user={session?.user!} />
       </Card>
     </>
