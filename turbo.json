@@ -20,10 +20,10 @@
     "clean": {
       "cache": false
     },
-    "dev:server": {
+    "dev:node-server": {
       "dependsOn": []
     },
-    "build:server": {
+    "build:node-server": {
       "dependsOn": []
     }
   }

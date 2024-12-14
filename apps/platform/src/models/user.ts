@@ -1,8 +1,8 @@
 import bcrypt from "bcryptjs";
-import mongoose, { CallbackError, Document, Schema } from "mongoose";
+import mongoose, { Schema, type CallbackError, type Document } from "mongoose";
 import { DEPARTMENTS } from "src/constants/departments";
 import { ROLES } from "src/constants/user";
-import { generateToken,verifyToken } from "src/emails/helper";
+import { generateToken, verifyToken } from "src/emails/helper";
 
 
 
@@ -84,6 +84,7 @@ userSchema.pre("save", async function (next) {
     const hash = await bcrypt.hash(this.password, saltRounds);
     this.password = hash;
     next();
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   } catch (err: any) {
     return next(err as CallbackError);
   }
@@ -95,6 +96,7 @@ userSchema.methods.comparePassword = async function (
 ): Promise<boolean> {
   try {
     return await bcrypt.compare(password, this.password);
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   } catch (err: any) {
     throw new Error(err);
   }
@@ -106,6 +108,7 @@ userSchema.methods.generateVerificationToken = async function (): Promise<string
     this.verificationToken = generateToken(this.email);
     await this.save();
     return this.verificationToken;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   } catch (err: any) {
     throw new Error(err);
   }
@@ -124,6 +127,7 @@ userSchema.methods.verifyUser = async function (token: string): Promise<boolean>
       return false;
     }
     return false;
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   } catch (err: any) {
     throw new Error(err);
   }
