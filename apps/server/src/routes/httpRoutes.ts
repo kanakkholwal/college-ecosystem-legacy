@@ -19,7 +19,7 @@ router.get('/hello', (req: Request, res: Response) => {
 });
 
 // Example POST route
-router.post('/result/:rollNo', async(req: Request, res: Response) => {
+router.post('/result/:rollNo', async (req: Request, res: Response) => {
   const rollNo = req.params.rollNo;
   const data = await scrapeResult(rollNo);
 

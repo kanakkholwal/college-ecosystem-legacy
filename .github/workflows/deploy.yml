@@ -76,10 +76,13 @@ jobs:
 
       - name: 🏗️ Build and Push Docker Image
         if: steps.changed.outputs.server_changed == 'true'
-        working-directory: ./apps/server
+        working-directory: ./apps/server/
         run: |
-            docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:${{ github.sha }} .
-            docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:${{ github.sha }}
+          pwd  # Print current working directory
+          find . -name "Dockerfile"  # Find Dockerfile location
+          cd ./apps/server
+          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:${{ github.sha }} .
+          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:${{ github.sha }}
   
       - name: 🚀 Deploy to Cloud Run (Staging)
         if: github.ref == 'refs/heads/staging' && steps.changed.outputs.server_changed == 'true'
