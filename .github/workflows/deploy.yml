@@ -18,7 +18,8 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
+          path: ./
 
       - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
@@ -79,11 +80,6 @@ jobs:
         working-directory: ./apps/server/
         run: |
           pwd  # Print current working directory
-          # ls -la
-          # if [ ! -f Dockerfile ]; then
-          #   echo "ERROR: Dockerfile not found!"
-          #   exit 1
-          # fi
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest .
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest
   
