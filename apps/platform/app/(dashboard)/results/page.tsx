@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: `Results | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-  description: `Check your results here.`,
+  description: "Check your results here.",
 };
 
 export default async function ResultPage(
@@ -94,7 +94,7 @@ export default async function ResultPage(
           {results.map((result, i) => {
             return (
               <ResultCard
-                key={i}
+                key={result._id.toString()}
                 result={result}
                 style={{
                   animationDelay: `${i * 100}ms`,
@@ -107,11 +107,7 @@ export default async function ResultPage(
       <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
         <Suspense
           key={"Pagination_key"}
-          fallback={
-            <>
-              <Skeleton className="h-12 w-full " />
-            </>
-          }
+          fallback={<Skeleton className="h-12 w-full " />}
         >
           <Pagination totalPages={totalPages} />
         </Suspense>

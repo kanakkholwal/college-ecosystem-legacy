@@ -2,7 +2,7 @@ import { z } from "zod";
 
 const envVariables = z.object({
     MONGODB_URI: z.string(),
-
+    IDENTITY_KEY: z.string().length(32),
 });
 
 envVariables.parse(process.env);
