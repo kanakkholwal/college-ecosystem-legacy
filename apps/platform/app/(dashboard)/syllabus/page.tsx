@@ -28,16 +28,17 @@ export const metadata: Metadata = {
     "NITH Courses Search",
   ],
 };
-export default async function CoursesPage({
-  searchParams,
-}: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-    department?: string;
-    type?: string;
-  };
-}) {
+export default async function CoursesPage(
+  props: {
+    searchParams?: Promise<{
+      query?: string;
+      page?: string;
+      department?: string;
+      type?: string;
+    }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const filter = {

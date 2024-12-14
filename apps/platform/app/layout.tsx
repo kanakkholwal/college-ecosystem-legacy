@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { headers } from "next/headers";
 import { getSession } from "src/lib/auth";
-import { sessionType } from "src/types/session";
+import type { sessionType } from "src/types/session";
 
 import { redirect } from "next/navigation";
 import { Provider } from "./client-provider";
@@ -50,7 +50,7 @@ type RootLayoutProps = Readonly<{
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   const session = (await getSession()) as sessionType | null;
-  const headerList = headers();
+  const headerList = await headers();
   const pathname = headerList.get("x-current-path") as string;
   const redirectUrl = new URL(pathname);
   const authorized = !!session?.user;
@@ -58,10 +58,9 @@ export default async function RootLayout({ children }: RootLayoutProps) {
   if (!authorized && redirectUrl.pathname !== "/login") {
     if (redirectUrl.pathname !== "/login" && redirectUrl.pathname !== "/") {
       redirectUrl.searchParams.set("redirect", pathname);
-      return redirect("/login?" + redirectUrl.searchParams.toString());
-    } else {
-      return redirect("/login");
+      return redirect(`/login?${redirectUrl.searchParams.toString()}`);
     }
+      return redirect("/login");
   }
 
   return (

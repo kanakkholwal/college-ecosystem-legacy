@@ -12,18 +12,19 @@ export const metadata: Metadata = {
   description: `Check your results here.`,
 };
 
-export default async function ResultPage({
-  searchParams,
-}: {
-  searchParams?: {
-    query?: string;
-    page?: string;
-    batch?: string;
-    branch?: string;
-    programme?: string;
-    cache?: string;
-  };
-}) {
+export default async function ResultPage(
+  props: {
+    searchParams?: Promise<{
+      query?: string;
+      page?: string;
+      batch?: string;
+      branch?: string;
+      programme?: string;
+      cache?: string;
+    }>;
+  }
+) {
+  const searchParams = await props.searchParams;
   const query = searchParams?.query?.trim() || "";
   const currentPage = Number(searchParams?.page) || 1;
   const filter = {
