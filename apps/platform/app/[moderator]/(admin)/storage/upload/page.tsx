@@ -1,13 +1,14 @@
 import { UploadImage } from "@/components/utils/uploader";
 
 interface PageProps {
-  searchParams: {
+  searchParams: Promise<{
     query?: string;
     offset?: number;
-  };
+  }>
 }
 
-export default async function StoragePage({ searchParams }: PageProps) {
+export default async function StoragePage(props: PageProps) {
+  const searchParams = await props.searchParams;
   const offset = Number(searchParams.offset) || 1;
   const query = searchParams.query || "";
 

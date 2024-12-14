@@ -14,6 +14,9 @@ const envVariables = z.object({
   UPSTASH_REDIS_REST_URL: z.string(),
   UPSTASH_REDIS_REST_TOKEN: z.string(),
 
+  MAIL_EMAIL:z.string().email(),
+  MAIL_PASSWORD:z.string(),
+
   HUGGING_FACE_API_KEY: z.string(),
   FIREWORKS_API_KEY: z.string(),
 
@@ -23,7 +26,7 @@ const envVariables = z.object({
   FIREBASE_STORAGE_BUCKET: z.string(),
 
   // Client Side
-  NEXT_PUBLIC_BASE_URL: z.string(),
+  NEXT_PUBLIC_BASE_URL: z.string().url(),
   NEXT_PUBLIC_WEBSITE_NAME: z.string(),
   NEXT_PUBLIC_FIREBASE_API_KEY: z.string(),
   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: z.string(),

@@ -3,7 +3,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Mail } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ResultTypeWithId, Semester } from "src/models/result";
+import type { ResultTypeWithId, Semester } from "src/models/result";
 import { getResultByRollNo } from "./actions";
 import { CgpiCard, RankCard, SemCard } from "./components/card";
 import { CGPIChart } from "./components/chart";
@@ -11,10 +11,10 @@ import { CGPIChart } from "./components/chart";
 import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: { rollNo: string};
-  searchParams?: {
+  params: Promise<{ rollNo: string}>
+  searchParams?: Promise<{
     update?:string 
-  }
+  }>
 };
 
 export async function generateMetadata(
@@ -22,14 +22,17 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
-  const { rollNo } = params;
+  const { rollNo } = await params;
   return {
     title: `${rollNo} | Results | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
     description: `Check the results of ${rollNo}`,
   };
 }
 
-export default async function ResultsPage({ params,searchParams }: Props) {
+export default async function ResultsPage(props: Props) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
   const update_result = searchParams?.update === "true";
   const result = await getResultByRollNo(params.rollNo, update_result);
   if (!result) {
@@ -111,7 +114,7 @@ export default async function ResultsPage({ params,searchParams }: Props) {
           <TabsContent value="table">
             <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1 @lg:grid-cols-2 @4xl:grid-cols-3">
               {result.semesters?.map((semester: Semester, index: number) => {
-                return <SemCard key={index} semester={semester} />;
+                return <SemCard key={semester.semester} semester={semester} />;
               })}
             </div>
           </TabsContent>

@@ -1,7 +1,7 @@
 import Page403 from "@/components/utils/403";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { getSession } from "src/lib/auth";
-import { sessionType } from "src/types/session";
+import type { sessionType } from "src/types/session";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -12,9 +12,9 @@ const ALLOWED_ROLES = ["admin", "moderator"];
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
-  params: {
+  params: Promise<{
     moderator: "admin" | "moderator";
-  };
+  }>
 }
 
 export default async function DashboardLayout({
@@ -22,7 +22,7 @@ export default async function DashboardLayout({
   params,
 }: DashboardLayoutProps) {
   const session = (await getSession()) as sessionType;
-  const moderator = params.moderator!;
+  const {moderator} = await params
 
   if (
     !ALLOWED_ROLES.some((role) => session.user.roles.includes(role)) &&

@@ -8,20 +8,21 @@ import SearchBox from "./components/search";
 import type { Metadata } from "next";
 
 type Props = {
-  searchParams: {
+  searchParams: Promise<{
     query?: string;
     page?: string;
     currentStatus?: string;
     roomType?: string;
-  };
+  }>
 };
 
 export const metadata: Metadata = {
   title: `Rooms | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-  description: `Search for rooms based on their availability and type.`,
+  description: "Search for rooms based on their availability and type.",
 };
 
-export default async function RoomsPage({ searchParams }: Props) {
+export default async function RoomsPage(props: Props) {
+  const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
   const filter = {
@@ -58,12 +59,7 @@ export default async function RoomsPage({ searchParams }: Props) {
           data-aos-anchor-placement="center-bottom"
         >
           <Suspense
-            fallback={
-              <>
-                <Skeleton className="h-12 w-full " />
-              </>
-            }
-          >
+            fallback={<Skeleton className="h-12 w-full " />}>
             <SearchBox statuses={currentStatuses} types={roomTypes} />
           </Suspense>
         </div>

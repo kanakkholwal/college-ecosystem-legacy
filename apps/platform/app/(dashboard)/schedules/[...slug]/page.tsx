@@ -7,9 +7,9 @@ import { getTimeTable } from "src/lib/time-table/actions";
 import TimeTableViewer from "@/components/custom/time-table/viewer";
 
 interface Props {
-  params: {
+  params: Promise<{
     slug: string[];
-  };
+  }>
 }
 
 import type { Metadata, ResolvingMetadata } from "next";
@@ -19,7 +19,8 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
-  const [department_code, year, semester] = params.slug;
+  const { slug } = await params;
+  const [department_code, year, semester] = slug;
 
   return {
     title: `Semester ${semester} - ${year} | ${department_code} | Timetable`,
@@ -28,7 +29,8 @@ export async function generateMetadata(
 }
 
 export default async function Dashboard({ params }: Props) {
-  const [department_code, year, semester] = params.slug;
+  const {slug} = await params;
+  const [department_code, year, semester] = slug;
 
   const timetableData = await getTimeTable(
     department_code,
@@ -41,7 +43,7 @@ export default async function Dashboard({ params }: Props) {
     <>
       <div className="flex items-center justify-between gap-2 mx-auto max-w-7xl w-full mt-20">
         <Button variant="default_light" size="sm" asChild>
-          <Link href={`/schedules`}>
+          <Link href={"/schedules"}>
             <ArrowLeft />
             Go Back
           </Link>

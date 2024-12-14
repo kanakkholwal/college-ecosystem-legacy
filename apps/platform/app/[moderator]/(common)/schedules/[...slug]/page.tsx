@@ -4,12 +4,13 @@ import { notFound } from "next/navigation";
 import { getTimeTable } from "src/lib/time-table/actions";
 
 interface Props {
-  params: {
+  params: Promise<{
     slug: string[];
-  };
+  }>
 }
 
-export default async function Dashboard({ params }: Props) {
+export default async function Dashboard(props: Props) {
+  const params = await props.params;
   const [department_code, year, semester] = params.slug as [
     string,
     string,

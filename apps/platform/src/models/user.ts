@@ -1,7 +1,10 @@
 import bcrypt from "bcryptjs";
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { CallbackError, Document, Schema } from "mongoose";
 import { DEPARTMENTS } from "src/constants/departments";
 import { ROLES } from "src/constants/user";
+import { generateToken,verifyToken } from "src/emails/helper";
+
+
 
 export type UserWithId = {
   _id: string;
@@ -33,6 +36,7 @@ export interface IUser {
 export interface IUserSchema extends IUser, Document {
   password: string;
   comparePassword: (password: string) => Promise<boolean>;
+  verificationToken: string | null;
 }
 const userSchema = new Schema<IUserSchema>(
   {
@@ -57,6 +61,7 @@ const userSchema = new Schema<IUserSchema>(
     },
     createdAt: { type: Date },
     updatedAt: { type: Date },
+    verificationToken: { type: String, default: null },
   },
   { timestamps: true }
 );
@@ -80,15 +85,45 @@ userSchema.pre("save", async function (next) {
     this.password = hash;
     next();
   } catch (err: any) {
-    return next(err);
+    return next(err as CallbackError);
   }
 });
+
 // Method to compare password
 userSchema.methods.comparePassword = async function (
   password: string
 ): Promise<boolean> {
   try {
     return await bcrypt.compare(password, this.password);
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+//  Method to generate verification token
+userSchema.methods.generateVerificationToken = async function (): Promise<string> {
+  try {
+    this.verificationToken = generateToken(this.email);
+    await this.save();
+    return this.verificationToken;
+  } catch (err: any) {
+    throw new Error(err);
+  }
+};
+
+// Method to verify the user
+userSchema.methods.verifyUser = async function (token: string): Promise<boolean> {
+  try {
+    if (this.verificationToken === token) {
+      const payload = verifyToken(token);
+      if (payload && payload === this.email) {
+        this.verificationToken = null;
+        await this.save();
+        return true;
+      }
+      return false;
+    }
+    return false;
   } catch (err: any) {
     throw new Error(err);
   }

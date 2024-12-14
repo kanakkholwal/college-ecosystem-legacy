@@ -13,7 +13,7 @@
   "dependencies": {
     "@hookform/resolvers": "^3.4.0",
     "@huggingface/inference": "^2.7.0",
-    "@next/third-parties": "^14.2.3",
+    "@next/third-parties": "^14.2.20",
     "@radix-ui/react-accordion": "^1.1.2",
     "@radix-ui/react-alert-dialog": "^1.0.5",
     "@radix-ui/react-avatar": "^1.0.4",
@@ -53,18 +53,20 @@
     "firebase-admin": "^12.2.0",
     "framer-motion": "^11.2.0",
     "jotai": "^2.9.1",
+    "jsonwebtoken": "^9.0.0",
     "lucide-react": "^0.378.0",
     "mongoose": "^8.3.4",
     "nanoid": "^5.0.7",
     "nexo-mdx": "^0.5.5",
-    "next": "^14.2.4",
+    "next": "^15.1.0",
     "next-auth": "^4.24.7",
     "next-themes": "^0.3.0",
     "next13-progressbar": "^1.2.1",
     "node-html-parser": "^6.1.13",
-    "react": "^18.3.1",
+    "nodemailer": "^6.8.0",
+    "react": "^19.0.0",
     "react-day-picker": "^8.10.1",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.0.0",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.51.4",
     "react-hot-toast": "^2.4.1",
@@ -92,6 +94,7 @@
     "@types/aos": "^3.0.7",
     "@types/bcryptjs": "^2.4.6",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.14",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/react-speech-recognition": "^3.9.5",
@@ -101,5 +104,6 @@
     "serwist": "^9.0.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
-  }
+  },
+  "packageManager": "npm@10.5.0"
 }

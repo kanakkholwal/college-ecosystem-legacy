@@ -5,43 +5,45 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSession } from "src/lib/auth";
 import { getPollById, updateVotes } from "src/lib/poll/actions";
-import { sessionType } from "src/types/session";
+import type { sessionType } from "src/types/session";
 import { PollRender } from "../components/poll-component";
 import Polling from "./polling";
 
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export async function generateMetadata({
   params,
 }: {
-  params: { pollId: string };
+  params: Promise<{ pollId: string }>
 }): Promise<Metadata> {
-  const poll = await getPollById(params.pollId);
+  const { pollId } = await params;
+  const poll = await getPollById(pollId);
 
   if (!poll) return notFound();
 
   return {
     title: `${poll.question}`,
-    description: poll?.description?.substring(0, 160) + "...",
+    description: `${poll?.description?.substring(0, 160)}...`,
     openGraph: {
       type: "website",
       title: `${poll.question}`,
-      description: poll?.description?.substring(0, 160) + "...",
+      description: `${poll?.description?.substring(0, 160)}...`,
       siteName: process.env.NEXTAUTH_URL,
-      url: `${process.env.NEXTAUTH_URL}/polls/${params.pollId}`,
+      url: `${process.env.NEXTAUTH_URL}/polls/${pollId}`,
     },
   };
 }
 
 interface Props {
-  params: {
+  params: Promise<{
     pollId: string;
-  };
+  }>
 }
 
 export default async function Dashboard({ params }: Props) {
   const session = (await getSession()) as sessionType;
-  const poll = await getPollById(params.pollId);
+  const { pollId } = await params;
+  const poll = await getPollById(pollId);
   if (!poll) {
     return notFound();
   }

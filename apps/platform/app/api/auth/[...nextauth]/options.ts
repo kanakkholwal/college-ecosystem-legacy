@@ -1,4 +1,4 @@
-import { NextAuthOptions } from "next-auth";
+import type { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import { revalidatePath } from "next/cache";
@@ -23,12 +23,18 @@ const env: AuthEnv = {
   NEXTAUTH_URL: process.env.NEXTAUTH_URL || "",
 };
 
+// TODO: MIGRATE TO BETTER-AUTH
 // Check if all required environment variables are defined
-Object.values(env).forEach((value) => {
-  if (!value) {
-    throw new Error(`Environment variable ${value} is not defined`);
+for (const key of Object.keys(env)) {
+  if (!env[key as keyof AuthEnv]) {
+    throw new Error(`Environment variable ${key} is not defined`);
   }
-});
+}
+// Object.values(env).forEach((value) => {
+//   if (!value) {
+//     throw new Error(`Environment variable ${value} is not defined`);
+//   }
+// });
 const useSecureCookies = env.NEXTAUTH_URL.startsWith("https://");
 const cookiePrefix = useSecureCookies ? "__Secure-" : "";
 const hostName = new URL(env.NEXTAUTH_URL).hostname;
@@ -40,7 +46,7 @@ function isValidRollNumber(rollNo: string): boolean {
     return false;
   }
 
-  const numericPart = parseInt(rollNo.slice(-3));
+  const numericPart = Number.parseInt(rollNo.slice(-3));
   return numericPart >= 1 && numericPart <= 999;
 }
 
@@ -61,9 +67,9 @@ export const authOptions: NextAuthOptions = {
       },
       // Authorize callback is ran upon calling the sign-in function
       authorize: async (credentials) => {
-        return new Promise(async (resolve, reject) => {
+        
           if (!credentials || !credentials.email || !credentials.password) {
-            return reject({
+            return Promise.reject({
               status: 401,
               message: "Credentials not provided",
               success: false,
@@ -76,7 +82,7 @@ export const authOptions: NextAuthOptions = {
             }).select("+password");
 
             if (!userInDb)
-              return reject({
+              return Promise.reject({
                 status: 401,
                 message: "User not found",
                 success: false,
@@ -86,7 +92,7 @@ export const authOptions: NextAuthOptions = {
             );
 
             if (!pwValid)
-              return reject({
+              return Promise.reject({
                 status: 401,
                 message: "Wrong Password",
                 success: false,
@@ -104,12 +110,11 @@ export const authOptions: NextAuthOptions = {
 
             console.log("user found", user);
             revalidatePath("/", "layout");
-            return resolve(JSON.parse(JSON.stringify(user)));
+            return Promise.resolve(JSON.parse(JSON.stringify(user)));
           } catch (err) {
             console.log(err);
-            return reject(err);
+            return Promise.reject(err);
           }
-        });
       },
     }),
     GoogleProvider({
@@ -155,7 +160,7 @@ export const authOptions: NextAuthOptions = {
                   lastName: scraped_result.name.split(" ")[1],
                   rollNo: scraped_result.rollNo,
                   profilePicture: profile.picture,
-                  password: "google" + profile.sub,
+                  password: `google_${profile.sub}`,
                   roles: ["student"],
                   department: scraped_result.branch,
                 });
@@ -180,7 +185,7 @@ export const authOptions: NextAuthOptions = {
                 lastName: result.name.split(" ")[1],
                 rollNo: result.rollNo,
                 profilePicture: profile.picture,
-                password: "google" + profile.sub,
+                password: `google_${profile.sub}`,
                 roles: ["student"],
                 department: result.branch,
               });
@@ -197,14 +202,13 @@ export const authOptions: NextAuthOptions = {
                 profilePicture: user.profilePicture,
                 department: user.department,
               });
-            } else {
+            }
               console.log("not a valid roll no", username);
               return Promise.reject({
                 status: 401,
                 message: `not a valid roll no : ${username}, Please contact admin.`,
                 success: false,
               });
-            }
           }
           console.log("user found", userInDb);
 
@@ -234,7 +238,8 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     // We can pass in additional information from the user document MongoDB returns
     // This could be avatars, role, display name, etc...
-    async jwt({ token, user }: { token: any; user: any }): Promise<any> {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+            async jwt({ token, user }: { token: any; user: any }): Promise<any> {
       if (user) {
         token.user = {
           _id: user._id.toString(),
@@ -252,7 +257,8 @@ export const authOptions: NextAuthOptions = {
       return token;
     },
     // If we want to access our extra user info from sessions we have to pass it the token here to get them in sync:
-    session: async ({ session, token }: { session: any; token: any }) => {
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        session: async ({ session, token }: { session: any; token: any }) => {
       if (token) {
         session.user = token.user;
       }

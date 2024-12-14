@@ -11,28 +11,32 @@ import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
 
 type Props = {
-  params: {
+  params: Promise<{
     moderator: string;
-  };
-  searchParams?: {
+  }>
+  searchParams?: Promise<{
     query?: string;
     page?: string;
     currentStatus?: string;
     roomType?: string;
-  };
+  }>
 };
 
 export async function generateMetadata(
-  { params, searchParams }: Props,
+  props: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const params = await props.params;
   return {
     title: `Rooms | ${changeCase(params.moderator, "title")} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-    description: `Search for rooms based on their availability and type.`,
+    description: "Search for rooms based on their availability and type.",
   };
 }
 
-export default async function RoomsPage({ params, searchParams }: Props) {
+export default async function RoomsPage(props: Props) {
+  const params = await props.params;
+  const searchParams = await props.searchParams;
+
   const moderator = params.moderator;
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
@@ -100,13 +104,10 @@ export default async function RoomsPage({ params, searchParams }: Props) {
               Error fetching rooms. Please try again later.{" "}
             </h4>
           }
-          loadingFallback={
-            <>
-              {Array.from({ length: 8 }).map((_, index) => (
+          loadingFallback={Array.from({ length: 8 }).map((_, index) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 <Skeleton className="h-12 w-full" key={`loading-${index}`} />
               ))}
-            </>
-          }
         >
           {rooms.map((room) => {
             return <RoomCard key={room._id.toString()} room={room} />;
@@ -118,10 +119,7 @@ export default async function RoomsPage({ params, searchParams }: Props) {
         <Suspense
           key="Pagination"
           fallback={
-            <>
-              <Skeleton className="h-12 w-full " />
-            </>
-          }
+            <Skeleton className="h-12 w-full " />}
         >
           {rooms.length > 0 ? <Pagination totalPages={totalPages} /> : null}
         </Suspense>

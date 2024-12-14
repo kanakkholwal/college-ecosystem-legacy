@@ -6,6 +6,8 @@ node_modules
 .husky
 .pnp
 .pnp.js
+pnpm-*.yaml
+
 .vscode
 .venv
 # pnpm-lock.yaml

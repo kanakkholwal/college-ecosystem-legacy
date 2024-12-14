@@ -1,16 +1,16 @@
+import { GoBackButton } from "@/components/common/go-back";
 import { notFound } from "next/navigation";
 import { getUser } from "src/lib/users/actions";
 import UpdateUserForm from "./components";
-import { GoBackButton } from "@/components/common/go-back";
 
 interface PageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>
 }
 
 export default async function UpdateUserPage({ params }: PageProps) {
-  const user = await getUser(params.id);
+  const user = await getUser((await params).id);
   if (!user) {
     return notFound();
   }

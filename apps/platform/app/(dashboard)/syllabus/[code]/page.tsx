@@ -1,8 +1,7 @@
-import { notFound } from "next/navigation";
-// import { Suspense } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ExternalLink } from "lucide-react";
+import { notFound } from "next/navigation";
 import OthersPng from "./assets/others.png";
 
 import { GoBackButton } from "@/components/common/go-back";
@@ -21,14 +20,14 @@ import Image from "next/image";
 import Link from "next/link";
 import { getCourseByCode } from "src/lib/course/actions";
 import dbConnect from "src/lib/dbConnect";
-import CourseModel, { booksAndRefType, prevPaperType } from "src/models/course";
+import CourseModel, { type booksAndRefType, type prevPaperType } from "src/models/course";
 import { AddPrevsModal, AddRefsModal } from "./modal";
 import { IconMap } from "./render-link";
 
 import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: { code: string };
+  params: Promise<{ code: string }>
 };
 
 export async function generateMetadata(
@@ -36,7 +35,8 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
-  const course = await getCourseByCode(params.code);
+  const {code} = await params;
+  const course = await getCourseByCode(code);
   if (!course) return notFound();
 
   return {
@@ -45,7 +45,9 @@ export async function generateMetadata(
   };
 }
 
-export default async function CoursePage({ params }: Props) {
+export default async function CoursePage(props: Props) {
+  const params = await props.params;
+
   const session = await getServerSession(authOptions);
 
   await dbConnect();
@@ -103,7 +105,7 @@ export default async function CoursePage({ params }: Props) {
         <h5 className="mt-8 text-xl font-semibold text-gray-700 dark:text-gray-300 text-center mx-auto uppercase">
           {course.code}
         </h5>
-        <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6"></div>
+        <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6" />
       </section>
       <div className="max-w-6xl mx-auto px-6 md:px-12 xl:px-6">
         <Tabs defaultValue="chapters">
@@ -118,7 +120,7 @@ export default async function CoursePage({ params }: Props) {
             <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1">
               {course.chapters.map((chapter, index) => {
                 return (
-                  <Card variant="glass" key={index}>
+                  <Card variant="glass" key={chapter.title}>
                     <CardHeader className="flex-row gap-2 items-center px-5 py-4">
                       <div className="flex-auto">
                         <CardTitle>{chapter.title}</CardTitle>
@@ -151,7 +153,7 @@ export default async function CoursePage({ params }: Props) {
                       ? IconMap.get(ref.type as booksAndRefType["type"])
                       : OthersPng;
                     return (
-                      <Card key={index}>
+                      <Card key={ref.link}>
                         <CardHeader className="md:flex-row md:justify-between gap-2">
                           <div className="w-16 h-16 p-3 aspect-square rounded-full flex justify-center items-center  bg-slate-100 dark:bg-gray-800 font-bold text-lg">
                             {iconsSrc ? (
@@ -179,7 +181,7 @@ export default async function CoursePage({ params }: Props) {
                             <a
                               href={ref.link}
                               target="_blank"
-                              className="text-primary mt-2 text-sm font-semibold"
+                              className="text-primary mt-2 text-sm font-semibold" rel="noreferrer"
                             >
                               Go to Link
                             </a>
@@ -218,7 +220,7 @@ export default async function CoursePage({ params }: Props) {
                   return (
                     <div
                       className="flex items-center p-4 gap-3 border border-border hover:border-primary rounded-md"
-                      key={index}
+                      key={paper.link}
                     >
                       <h6 className="uppercase font-semibold text-lg">
                         {paper.exam}
@@ -226,7 +228,7 @@ export default async function CoursePage({ params }: Props) {
                       <Badge className="bg-primary ml-2">{paper.year}</Badge>
                       <div className="ml-auto">
                         <Button size="icon" asChild>
-                          <a href={paper.link} target="_blank">
+                          <a href={paper.link} target="_blank" rel="noreferrer">
                             <ExternalLink className="w-5 h-5" />
                           </a>
                         </Button>

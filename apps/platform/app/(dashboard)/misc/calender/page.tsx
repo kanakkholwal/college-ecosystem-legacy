@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { GetFileByPath } from "src/lib/storage";
-import { FileWithID } from "src/models/file";
+import type { FileWithID } from "src/models/file";
 
 const defaultValue = {
   year: new Date().getFullYear(),
@@ -26,13 +26,14 @@ async function getCalender({
 import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  searchParams: { year?: number; sem?: "even" | "odd" };
+  searchParams: Promise<{ year?: number; sem?: "even" | "odd" }>
 };
 
 export async function generateMetadata(
-  { searchParams }: Props,
+  props: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
+  const searchParams = await props.searchParams;
   // read route params
   const year = searchParams?.year || new Date().getFullYear();
   const sem = searchParams?.sem || new Date().getMonth() < 6 ? "even" : "odd";
@@ -43,7 +44,8 @@ export async function generateMetadata(
   };
 }
 
-export default async function StoragePage({ searchParams }: Props) {
+export default async function StoragePage(props: Props) {
+  const searchParams = await props.searchParams;
   const year = searchParams?.year || new Date().getFullYear();
   const sem = searchParams?.sem || new Date().getMonth() < 6 ? "even" : "odd";
 
