@@ -79,8 +79,8 @@ jobs:
         working-directory: ./apps/server/
         run: |
           pwd  # Print current working directory
-          find . -name "Dockerfile"  # Find Dockerfile location
-          cd ./apps/server
+          # find . -name "Dockerfile"  # Find Dockerfile location
+          # cd ./apps/server
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:${{ github.sha }} .
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:${{ github.sha }}
   

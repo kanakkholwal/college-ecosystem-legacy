@@ -28,6 +28,13 @@ export function initWebSocketServer(server: HttpServer): void {
                             message: parsedMessage.message
                         }), ws);
                         break;
+                    case 'fetched':
+                        broadcastMessage(JSON.stringify({
+                            type: 'fetched',
+                            sender: parsedMessage.sender,
+                            message: parsedMessage.message
+                        }), ws);
+                        break;
 
                     case 'ping':
                         ws.send(JSON.stringify({
