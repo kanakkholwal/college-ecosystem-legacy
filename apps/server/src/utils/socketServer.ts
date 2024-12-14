@@ -75,11 +75,9 @@ export function initWebSocketServer(server: HttpServer): void {
 // Broadcast message to all clients except sender
 function broadcastMessage(message: string, sender: WebSocket): void {
     for (const client of clients) {
-        // clients.forEach((client) => {
         if (client !== sender && client.readyState === WebSocket.OPEN) {
             client.send(message);
         }
-        // });
     }
 }
 

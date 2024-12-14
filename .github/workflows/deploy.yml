@@ -80,9 +80,9 @@ jobs:
         working-directory: ./apps/server/
         run: |
           pwd  # Print current working directory
-          docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest .
+          docker build -f ./Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest .
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest
-  
+
       - name: 🚀 Deploy to Cloud Run (Staging)
         if: github.ref == 'refs/heads/staging' && steps.changed.outputs.server_changed == 'true'
         uses: google-github-actions/deploy-cloudrun@v2
