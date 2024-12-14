@@ -79,14 +79,22 @@ jobs:
         if:  steps.changed.outputs.server_changed == 'true'
         run: |
             gcloud auth configure-docker
-
+          
+        # - name: Build and Push Docker Image
+        # if:  steps.changed.outputs.server_changed == 'true'
+        # uses: docker/build-push-action@v2
+        # with:
+          #   context: ./apps/server
+          #   file: ./apps/server/Dockerfile
+          #   push: true 
+              
       - name: Build and Push Docker Image
         if:  steps.changed.outputs.server_changed == 'true'
-        uses: docker/build-push-action@v2
-        with:
-          context: ./apps/server
-          file: ./apps/server/Dockerfile
-          push: true          
+        
+        run: |
+              IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest"
+              docker build -t "$IMAGE_NAME" .
+              docker push "$IMAGE_NAME"
         
       - name: Deploy to Cloud Run
         run: |
