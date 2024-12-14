@@ -79,11 +79,11 @@ jobs:
         working-directory: ./apps/server/
         run: |
           pwd  # Print current working directory
-          ls -la
-          if [ ! -f Dockerfile ]; then
-            echo "ERROR: Dockerfile not found!"
-            exit 1
-          fi
+          # ls -la
+          # if [ ! -f Dockerfile ]; then
+          #   echo "ERROR: Dockerfile not found!"
+          #   exit 1
+          # fi
           docker build -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest .
           docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest
   
