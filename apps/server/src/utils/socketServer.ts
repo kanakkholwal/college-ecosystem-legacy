@@ -28,6 +28,13 @@ export function initWebSocketServer(server: HttpServer): void {
                             message: parsedMessage.message
                         }), ws);
                         break;
+                    case 'fetched':
+                        broadcastMessage(JSON.stringify({
+                            type: 'fetched',
+                            sender: parsedMessage.sender,
+                            message: parsedMessage.message
+                        }), ws);
+                        break;
 
                     case 'ping':
                         ws.send(JSON.stringify({
@@ -57,7 +64,6 @@ export function initWebSocketServer(server: HttpServer): void {
             console.log('Client disconnected');
         });
 
-        // Welcome message
         ws.send(JSON.stringify({
             type: 'system',
             message: 'Welcome to the WebSocket server!'
@@ -68,13 +74,12 @@ export function initWebSocketServer(server: HttpServer): void {
 // Broadcast message to all clients except sender
 function broadcastMessage(message: string, sender: WebSocket): void {
     for (const client of clients) {
-        // clients.forEach((client) => {
         if (client !== sender && client.readyState === WebSocket.OPEN) {
             client.send(message);
         }
-        // });
     }
 }
+
 
 // Helper to get active client count
 export function getClientCount(): number {

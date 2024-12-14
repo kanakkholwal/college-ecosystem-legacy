@@ -42,31 +42,13 @@ const RESPONSE = {
     }
 }
 
-// const res_code = z.union([
-//     z.literal("INVALID_ROLL_NO"),
-//     z.literal("BATCH_NOT_SUPPORTED"),
-//     z.literal("NO_SIMILAR_BRANCH"),
-//     z.literal("NO_PROGRAMME"),
-//     z.literal("NO_BRANCH"),
-//     z.literal("NO_URL"),
-//     z.literal("NO_HEADERS"),
-//     z.literal("OTHER"),
-//     z.literal("RESULT_FETCHED"),
-//     z.literal("WELCOME"),
-//     z.literal("HEALTHY"),
-//     z.literal("SOMETHING_WRONG"),
-//     z.literal("OTHER"),
-// ])
-
 
 // function parseResponse(res_type:keyof typeof RESPONSE,response_code:keyof typeof RESPONSE[keyof typeof RESPONSE]){
-    
 //     return {
 //         type:RESPONSE[res_type] ? res_type : "OTHER",
 //         message:RESPONSE[res_type][response_code] ? RESPONSE[res_type][response_code] : RESPONSE.OTHER.OTHER
 //     }
 // }
-    
 
 
 const fetchData = async (
