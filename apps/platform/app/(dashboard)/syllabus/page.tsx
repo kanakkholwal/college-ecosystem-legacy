@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { getCourses } from "src/lib/course/actions";
@@ -76,10 +76,7 @@ export default async function CoursesPage(
           data-aos-anchor-placement="center-bottom"
         >
           <Suspense
-            fallback={
-              <>
-                <Skeleton className="h-12 w-full " />
-              </>
+            fallback={<Skeleton className="h-12 w-full " />
             }
           >
             <SearchBox departments={departments} types={types} />
