@@ -64,7 +64,6 @@ export function initWebSocketServer(server: HttpServer): void {
             console.log('Client disconnected');
         });
 
-        // Welcome message
         ws.send(JSON.stringify({
             type: 'system',
             message: 'Welcome to the WebSocket server!'

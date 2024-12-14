@@ -68,42 +68,53 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
       
-      - name: 🔐 Google Cloud Authentication
+      - name: Set up Google Cloud SDK
         if: steps.changed.outputs.server_changed == 'true'
-        uses: google-github-actions/auth@v2
+        uses: google-github-actions/setup-gcloud@v1
         with:
-            credentials_json: ${{ secrets.CREDENTIALS_JSON }}
-            project_id: ${{ secrets.GCP_PROJECT_ID }}
-
-      - name: 🏗️ Build and Push Docker Image
-        if: steps.changed.outputs.server_changed == 'true'
-        working-directory: ./apps/server/
+          credentials_json: ${{ secrets.CREDENTIALS_JSON }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+      
+      - name: Authenticate Docker with Google Artifact Registry
+        if:  steps.changed.outputs.server_changed == 'true'
         run: |
-          pwd  # Print current working directory
-          docker build -f ./Dockerfile -t gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest .
-          docker push gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest
+            gcloud auth configure-docker
 
-      - name: 🚀 Deploy to Cloud Run (Staging)
-        if: github.ref == 'refs/heads/staging' && steps.changed.outputs.server_changed == 'true'
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-            service: server-staging
-            image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest
-            region: ${{ secrets.GCP_PROJECT_REGION }} # Adjust to your preferred region
-            env_vars: |
-              NODE_ENV=staging
-              IDENTITY_KEY=${{ secrets.IDENTITY_KEY }} // Change this to your own key
+      - name: Build and Push Docker Image
+        if:  steps.changed.outputs.server_changed == 'true'
+        run: |
+              IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest"
+              docker build -t "$IMAGE_NAME" .
+              docker push "$IMAGE_NAME"
+      - name: Deploy to Cloud Run
+        run: |
+                gcloud run deploy college-ecosystem-server:latest \
+                  --image="gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest" \
+                  --platform=managed \
+                  --region=${{ secrets.GCP_PROJECT_REGION }} \
+                  --allow-unauthenticated
+
+      # - name: 🚀 Deploy to Cloud Run (Staging)
+      #   if: github.ref == 'refs/heads/staging' && steps.changed.outputs.server_changed == 'true'
+      #   uses: google-github-actions/deploy-cloudrun@v2
+      #   with:
+      #       service: server-staging
+      #       image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest
+      #       region: ${{ secrets.GCP_PROJECT_REGION }} # Adjust to your preferred region
+      #       env_vars: |
+      #         NODE_ENV=staging
+      #         IDENTITY_KEY=${{ secrets.IDENTITY_KEY }} // Change this to your own key
 
 
-      - name: 🚀 Deploy to Cloud Run (Production)
-        if: github.ref == 'refs/heads/main' && steps.changed.outputs.server_changed == 'true'
-        uses: google-github-actions/deploy-cloudrun@v2
-        with:
-            service: server-production
-            image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest
-            region: ${{ secrets.GCP_PROJECT_REGION }} # Adjust to your preferred region
-            env_vars: |
-              NODE_ENV=production
-              IDENTITY_KEY=${{ secrets.IDENTITY_KEY }} // Change this to your own key
+      # - name: 🚀 Deploy to Cloud Run (Production)
+      #   if: github.ref == 'refs/heads/main' && steps.changed.outputs.server_changed == 'true'
+      #   uses: google-github-actions/deploy-cloudrun@v2
+      #   with:
+      #       service: server-production
+      #       image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest
+      #       region: ${{ secrets.GCP_PROJECT_REGION }} # Adjust to your preferred region
+      #       env_vars: |
+      #         NODE_ENV=production
+      #         IDENTITY_KEY=${{ secrets.IDENTITY_KEY }} // Change this to your own key
 
       
