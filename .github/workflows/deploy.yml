@@ -71,7 +71,7 @@ jobs:
         if: steps.changed.outputs.server_changed == 'true'
         uses: google-github-actions/auth@v2
         with:
-            credentials_json: ${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}
+            credentials_json: ${{ secrets.CREDENTIALS_JSON }}
   
       - name: 🐳 Set up Docker Buildx
         if: steps.changed.outputs.server_changed == 'true'
@@ -80,7 +80,7 @@ jobs:
       - name: 🔑 Login to Google Container Registry
         if: steps.changed.outputs.server_changed == 'true'
         run: |
-          echo '${{ secrets.GCP_SERVICE_ACCOUNT_KEY }}' | docker login -u _json_key --password-stdin https://gcr.io
+          echo '${{ secrets.CREDENTIALS_JSON }}' | docker login -u _json_key --password-stdin https://gcr.io
 
       - name: 🏗️ Build and Push Docker Image
         if: steps.changed.outputs.server_changed == 'true'
@@ -95,7 +95,7 @@ jobs:
         with:
             service: server-staging
             image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/server-app:${{ github.sha }}
-            region: us-central1  # Adjust to your preferred region
+            region: ${{ secrets.GCP_PROJECT_REGION }} # Adjust to your preferred region
             env_vars: |
               NODE_ENV=staging
               # Add other environment-specific variables here
@@ -106,7 +106,7 @@ jobs:
         with:
             service: server-production
             image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/server-app:${{ github.sha }}
-            region: us-central1  # Adjust to your preferred region
+            region: ${{ secrets.GCP_PROJECT_REGION }} # Adjust to your preferred region
             env_vars: |
               NODE_ENV=production
       
