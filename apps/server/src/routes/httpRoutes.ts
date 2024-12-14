@@ -13,10 +13,7 @@ router.use((req: Request, res: Response, next) => {
     res.status(403).json({ error: 'Forbidden - Invalid or missing header' });
   }
 })
-// Example GET route
-router.get('/hello', (req: Request, res: Response) => {
-  res.json({ message: 'Hello from HTTP route!' });
-});
+
 
 // Example POST route
 router.post('/result/:rollNo', async (req: Request, res: Response) => {
