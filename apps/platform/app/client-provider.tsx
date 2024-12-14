@@ -5,11 +5,12 @@ import useNotificationChecker from "@/hooks/useNotificationChecker";
 import Aos from "aos";
 import "aos/dist/aos.css";
 import { SessionProvider } from "next-auth/react";
+import type { ThemeProviderProps } from "next-themes";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
-import { type ThemeProviderProps } from "next-themes/dist/types";
 import Image from "next/image";
 import { Next13ProgressBar } from "next13-progressbar";
-import React, { useEffect, useState } from "react";
+import type React from "react";
+import { useEffect, useState } from "react";
 import { Toaster as HotToaster } from "react-hot-toast";
 import { Gradient } from "whatamesh";
 import fallbackImg from "./fallback.png";
@@ -77,6 +78,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
             src="https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
             alt="Visitor counter"
             className="inline-block font-inherit h-4"
+            loading="lazy"
           />
         </span>
       </div>

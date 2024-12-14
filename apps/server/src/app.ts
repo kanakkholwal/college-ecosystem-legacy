@@ -13,7 +13,7 @@ app.use('/api', httpRoutes);
 // Default route
 app.get('/', (req, res) => {
   res.json({ 
-    message: 'Welcome to the Node.js TypeScript WebSocket Server',
+    message: 'Welcome to the server!',
     status: 'healthy' 
   });
 });

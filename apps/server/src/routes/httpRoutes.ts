@@ -1,4 +1,5 @@
 import { Router, type Request, type Response } from 'express';
+import { scrapeResult } from '~/lib/scrape';
 
 const router = Router();
 
@@ -8,12 +9,11 @@ router.get('/hello', (req: Request, res: Response) => {
 });
 
 // Example POST route
-router.post('/echo', (req: Request, res: Response) => {
-  const body = req.body;
-  res.json({ 
-    message: 'Echo successful',
-    data: body 
-  });
+router.post('/result/:rollNo', async(req: Request, res: Response) => {
+  const rollNo = req.params.rollNo;
+  const data = await scrapeResult(rollNo);
+
+  res.json(data);
 });
 
 export default router;
