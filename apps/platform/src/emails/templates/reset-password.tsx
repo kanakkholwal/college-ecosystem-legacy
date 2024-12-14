@@ -10,9 +10,9 @@ import {
     Tailwind,
     Text,
   } from "@react-email/components";
-  import tailwindConfig from "@root/tailwind.config";
+import tailwindConfig from "@root/tailwind.config";
   import { Config } from "tailwindcss";
-  
+
   type Payload = {
     name: string;
     email: string;
