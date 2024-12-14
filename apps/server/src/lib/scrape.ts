@@ -60,13 +60,11 @@ const RESPONSE = {
 
 
 // function parseResponse(res_type:keyof typeof RESPONSE,response_code:keyof typeof RESPONSE[keyof typeof RESPONSE]){
-    
 //     return {
 //         type:RESPONSE[res_type] ? res_type : "OTHER",
 //         message:RESPONSE[res_type][response_code] ? RESPONSE[res_type][response_code] : RESPONSE.OTHER.OTHER
 //     }
 // }
-    
 
 
 const fetchData = async (
