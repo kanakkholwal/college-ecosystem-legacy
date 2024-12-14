@@ -90,8 +90,9 @@ jobs:
             region: ${{ secrets.GCP_PROJECT_REGION }} # Adjust to your preferred region
             env_vars: |
               NODE_ENV=staging
-              # Add other environment-specific variables here
-  
+              IDENTITY_KEY=${{ secrets.IDENTITY_KEY }} // Change this to your own key
+
+
       - name: 🚀 Deploy to Cloud Run (Production)
         if: github.ref == 'refs/heads/main' && steps.changed.outputs.server_changed == 'true'
         uses: google-github-actions/deploy-cloudrun@v2
@@ -101,4 +102,6 @@ jobs:
             region: ${{ secrets.GCP_PROJECT_REGION }} # Adjust to your preferred region
             env_vars: |
               NODE_ENV=production
+              IDENTITY_KEY=${{ secrets.IDENTITY_KEY }} // Change this to your own key
+
       
