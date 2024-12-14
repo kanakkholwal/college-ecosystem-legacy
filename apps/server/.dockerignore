@@ -1,0 +1,35 @@
+# Dependency directories
+node_modules
+
+# Build output
+dist
+
+# Environment files
+.env
+.env.local
+
+# Version control
+.git
+.gitignore
+
+# Development files
+*.md
+README.md
+
+# Logs
+*.log
+
+# Testing
+test
+coverage
+
+# IDE specific files
+.vscode
+.idea
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# CI/CD
+.github
