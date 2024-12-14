@@ -203,7 +203,7 @@ export async function scrapeResult(rollNo: string): Promise<{
 }> {
     const data = await getInfo(rollNo);
 
-    console.log(rollNo, data);
+    console.log("Roll No: %s, Data: %o", rollNo, data);
     try {
         console.log("evaluating");
         const result = await fetchData(data.url, rollNo, data.headers);
