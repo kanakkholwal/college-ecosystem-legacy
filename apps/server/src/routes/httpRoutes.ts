@@ -1,30 +1,19 @@
-import express from 'express';
-import httpRoutes from './routes/httpRoutes';
+import { Router, type Request, type Response } from 'express';
 
-const app = express();
+const router = Router();
 
-// Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Example GET route
+router.get('/hello', (req: Request, res: Response) => {
+  res.json({ message: 'Hello from HTTP route!' });
+});
 
-// Routes
-app.use('/api', httpRoutes);
-
-// Default route
-app.get('/', (req, res) => {
+// Example POST route
+router.post('/echo', (req: Request, res: Response) => {
+  const body = req.body;
   res.json({ 
-    message: 'Welcome to the Node.js TypeScript WebSocket Server',
-    status: 'healthy' 
+    message: 'Echo successful',
+    data: body 
   });
 });
 
-// Error handling middleware
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ 
-    message: 'Something went wrong!',
-    error: err.message 
-  });
-});
-
-export default app;
+export default router;
