@@ -4,8 +4,8 @@ import { scrapeResult } from '~/lib/scrape';
 const router = Router();
 
 router.use((req: Request, res: Response, next) => {
-  const requiredHeaderKey = "X-IDENTITY-KEY"; // The expected key
-  const requiredHeaderValue = process.env.IDENTITY_KEY; // The expected value
+  const requiredHeaderKey = "X-IDENTITY-KEY";
+  const requiredHeaderValue = process.env.IDENTITY_KEY;
 
   if (req.headers[requiredHeaderKey.toLowerCase()] === requiredHeaderValue) {
     next(); // Header matches, proceed to the route
