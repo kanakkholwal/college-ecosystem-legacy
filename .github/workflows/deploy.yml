@@ -93,11 +93,25 @@ jobs:
       - name: ⚙️ Configure Docker
         if: steps.server-changed.outputs.server_changed == 'true'
         run:  gcloud auth configure-docker gcr.io 
-
+      
+      # Step 3: Check if Dockerfile or application code changed
+      - name: Check if Dockerfile or application code changed
+        id: check_changes
+        run: |
+          git diff --exit-code ./apps/server/Dockerfile || echo "Dockerfile changed" > changed.txt
+          git diff --exit-code ./apps/server/src || echo "Application code changed" >> changed.txt
+          if [ -f changed.txt ]; then
+            echo "Docker image needs to be rebuilt"
+            echo "true" >> $GITHUB_ENV
+          else
+            echo "No changes detected, skipping Docker build"
+            echo "false" >> $GITHUB_ENV 
+          
       - name: 🐳 Build and Push Docker Image
-        if: steps.server-changed.outputs.server_changed == 'true'
+        if: env.DOCKER_BUILD == 'true'
         run: |
           IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
+          #  docker build --pull --rm -f "apps\server\Dockerfile" -t gcr.io/nith-website/college-ecosystem-server:latest "apps\server"
           docker build -t "${IMAGE_NAME}" -f ./apps/server/Dockerfile ./apps/server
           docker push "${IMAGE_NAME}"
 
