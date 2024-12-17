@@ -1,5 +1,6 @@
 name: 🚀 Deployments
 
+
 on:
   push:
     branches:
@@ -11,7 +12,7 @@ jobs:
   lint:
     uses: ./.github/workflows/lint.yml
 
-  deploy:
+  deploy-frontend-to-vercel: 
     needs: lint
     runs-on: ubuntu-latest
     steps:
@@ -68,63 +69,38 @@ jobs:
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
       
-      - name: Set up Google Cloud SDK
-        if: steps.changed.outputs.server_changed == 'true'
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          credentials_json: ${{ secrets.CREDENTIALS_JSON }}
-          project_id: ${{ secrets.GCP_PROJECT_ID }}
-      
-      - name: Authenticate Docker with Google Artifact Registry
-        if:  steps.changed.outputs.server_changed == 'true'
-        run: |
-            gcloud auth configure-docker
-          
-        # - name: Build and Push Docker Image
-        # if:  steps.changed.outputs.server_changed == 'true'
-        # uses: docker/build-push-action@v2
-        # with:
-          #   context: ./apps/server
-          #   file: ./apps/server/Dockerfile
-          #   push: true 
-              
-      - name: Build and Push Docker Image
-        if:  steps.changed.outputs.server_changed == 'true'
-        
-        run: |
-              IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest"
-              docker build -t "$IMAGE_NAME" .
+  dockerize-and-deploy-server:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging' || github.event_name == 'workflow_dispatch'
+
+    steps:
+          - name: Checkout repository
+            uses: actions/checkout@v2
+    
+          - name: Google Cloud Auth
+            uses: 'google-github-actions/auth@v2'
+            with:
+              credentials_json: '${{ secrets.CREDENTIALS_JSON }}'
+              project_id: ${{ secrets.GCP_PROJECT_ID }}
+    
+          - name: Set up Cloud SDK
+            uses: 'google-github-actions/setup-gcloud@v2'
+    
+          - name: Configure Docker
+            run: |
+              gcloud auth configure-docker ${{ secrets.GCP_PROJECT_REGION }}.pkg.dev
+    
+          - name: Build and Push Docker Image
+            run: |
+              IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{env.SERVICE_NAME_SERVER}}:latest"
+              docker build -t "$IMAGE_NAME" -f ./apps/server/Dockerfile .
               docker push "$IMAGE_NAME"
-        
-      - name: Deploy to Cloud Run
-        run: |
-                gcloud run deploy college-ecosystem-server:latest \
-                  --image="gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest" \
-                  --platform=managed \
-                  --region=${{ secrets.GCP_PROJECT_REGION }} \
-                  --allow-unauthenticated
-
-      # - name: 🚀 Deploy to Cloud Run (Staging)
-      #   if: github.ref == 'refs/heads/staging' && steps.changed.outputs.server_changed == 'true'
-      #   uses: google-github-actions/deploy-cloudrun@v2
-      #   with:
-      #       service: server-staging
-      #       image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest
-      #       region: ${{ secrets.GCP_PROJECT_REGION }} # Adjust to your preferred region
-      #       env_vars: |
-      #         NODE_ENV=staging
-      #         IDENTITY_KEY=${{ secrets.IDENTITY_KEY }} // Change this to your own key
-
-
-      # - name: 🚀 Deploy to Cloud Run (Production)
-      #   if: github.ref == 'refs/heads/main' && steps.changed.outputs.server_changed == 'true'
-      #   uses: google-github-actions/deploy-cloudrun@v2
-      #   with:
-      #       service: server-production
-      #       image: gcr.io/${{ secrets.GCP_PROJECT_ID }}/college-ecosystem-server:latest
-      #       region: ${{ secrets.GCP_PROJECT_REGION }} # Adjust to your preferred region
-      #       env_vars: |
-      #         NODE_ENV=production
-      #         IDENTITY_KEY=${{ secrets.IDENTITY_KEY }} // Change this to your own key
-
-      
+    
+          - name: Deploy to Cloud Run
+            run: |
+              IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{env.SERVICE_NAME_SERVER}}:latest"
+              gcloud run deploy ${{env.SERVICE_NAME_SERVER}} \
+                --image  "$IMAGE_NAME" \
+                --platform managed \
+                --region ${{ secrets.GCP_PROJECT_REGION }} \
+                --allow-unauthenticated   
