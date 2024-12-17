@@ -15,7 +15,7 @@ router.use((req: Request, res: Response, next) => {
 })
 
 
-// Example POST route
+// get result by rollNo scraped from website
 router.post('/result/:rollNo', async (req: Request, res: Response) => {
   const rollNo = req.params.rollNo;
   const data = await scrapeResult(rollNo);
