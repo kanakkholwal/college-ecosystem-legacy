@@ -97,7 +97,7 @@ jobs:
       - name: 🐳 Build and Push Docker Image
         if: steps.server-changed.outputs.server_changed == 'true'
         run: |
-          IMAGE_NAME="${{env.DOCKER_REGISTRY}}/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
+          IMAGE_NAME="docker-repo/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
           docker build -t "${IMAGE_NAME}" -f ./apps/server/Dockerfile ./apps/server
           docker push "${IMAGE_NAME}"
 
