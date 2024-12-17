@@ -55,7 +55,8 @@ const fetchData = async (
     url: string,
     RollNo: string,
     headers: Record<string, string>
-): Promise<string | null> => {
+): Promise<[string | null,string]> => {
+
     const data = `RollNumber=${RollNo}&CSRFToken=${headers.CSRFToken}&RequestVerificationToken=${headers.RequestVerificationToken}&B1=Submit`;
 
     try {
@@ -74,12 +75,12 @@ const fetchData = async (
         //  only if the status is 200
         if (response.status !== 200) {
             console.log("Invalid Roll No");
-            return Promise.resolve(null)
+            return Promise.resolve([null,"Invalid Roll No"])
         }
-        return Promise.resolve(response.data.toString())
+        return Promise.resolve([response.data.toString(),"successfully fetched"])
     } catch (error) {
         console.error("Error fetching data:", error);
-        return Promise.resolve(null)
+        return Promise.resolve([null, (error as Error).toString()])
     }
 };
 
@@ -189,10 +190,10 @@ export async function scrapeResult(rollNo: string): Promise<{
     console.log("Roll No: %s, Data: %o", rollNo, data);
     try {
         console.log("evaluating");
-        const result = await fetchData(data.url, rollNo, data.headers);
+        const [result,msg] = await fetchData(data.url, rollNo, data.headers);
         if (result === null) {
             return Promise.resolve({
-                message: "Invalid Roll No",
+                message: msg,
                 data: null,
                 error: "Invalid Roll No",
             });

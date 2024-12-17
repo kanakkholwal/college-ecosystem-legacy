@@ -22,14 +22,22 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 2  # Fetch the current commit and its immediate parent
+          
+      - name: 🔍 Detect changed projects
+        id: changed
+        run: |
+              git diff --quiet HEAD^ HEAD ./apps/platform || echo "platform_changed=true" >> $GITHUB_OUTPUT
+              git diff --quiet HEAD^ HEAD ./apps/website || echo "website_changed=true" >> $GITHUB_OUTPUT
 
       - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
+        if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true'
         with:
           node-version: '20'
 
       - name: 💾 Cache Vercel CLI
         uses: actions/cache@v4
+        if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true'
         with:
           path: ~/.vercel
           key: ${{ runner.os }}-vercel-${{ hashFiles('**/package-lock.json') }}
@@ -37,13 +45,9 @@ jobs:
             ${{ runner.os }}-vercel-
 
       - name: 📦 Install Vercel CLI
+        if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true'
         run: npm install -g vercel
 
-      - name: 🔍 Detect changed projects
-        id: changed
-        run: |
-          git diff --quiet HEAD^ HEAD ./apps/platform || echo "platform_changed=true" >> $GITHUB_OUTPUT
-          git diff --quiet HEAD^ HEAD ./apps/website || echo "website_changed=true" >> $GITHUB_OUTPUT
 
       - name: 🎯 Deploy Platform to Staging
         if: github.ref == 'refs/heads/staging' && steps.changed.outputs.platform_changed == 'true'
@@ -97,7 +101,7 @@ jobs:
         if: steps.server-changed.outputs.server_changed == 'true'
         run: |
           IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
-          docker build -t "${IMAGE_NAME}" -f ./apps/server/Dockerfile .
+          docker build -t "${IMAGE_NAME}" -f ./apps/server/Dockerfile ./apps/server
           docker push "${IMAGE_NAME}"
 
       - name: 🚀 Deploy to Cloud Run
