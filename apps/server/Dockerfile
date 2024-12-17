@@ -2,7 +2,7 @@
 FROM node:20.12.2-alpine AS builder
 
 # Set working directory
-WORKDIR /app
+WORKDIR /node-server
 
 # Install dependencies first for caching
 COPY package*.json ./
@@ -16,12 +16,12 @@ RUN npm run build
 FROM node:20.12.2-alpine
 
 # Set working directory
-WORKDIR /app
+WORKDIR /node-server
 
 # Copy only necessary files for production
 COPY package*.json ./
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/dist ./dist
+COPY --from=builder /node-server/node_modules ./node_modules
+COPY --from=builder /node-server/dist ./dist
 
 # Set environment to production
 ENV NODE_ENV=production
