@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Install dependencies first for caching
 COPY package*.json ./
-RUN npm install --production
+RUN npm install
 
 # Copy source files and build TypeScript
 COPY . .
