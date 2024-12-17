@@ -93,21 +93,21 @@ jobs:
 
       - name: ⚙️ Configure Docker
         if: steps.server-changed.outputs.server_changed == 'true'
-        run: gcloud auth configure-docker us-docker.pkg.dev --quiet
+        run: gcloud auth configure-docker gcr.io --quiet
           
       - name: 🐳 Build and Push Docker Image
         if:  steps.server-changed.outputs.dockerfile_changed == 'true'
         run: |
-          IMAGE_NAME="us-docker/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
-          #  docker build --pull --rm -f "apps\server\Dockerfile" -t us-docker/nith-website/college-ecosystem-server:latest "apps\server"
+          IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
+          #  docker build --pull --rm -f "apps\server\Dockerfile" -t gcr.io/nith-website/college-ecosystem-server:latest "apps\server"
           docker build -t "${IMAGE_NAME}" -f ./apps/server/Dockerfile ./apps/server
-          # gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-docker.pkg.dev
+          # gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
           docker push "${IMAGE_NAME}"
 
       - name: 🚀 Deploy to Cloud Run
         if: steps.server-changed.outputs.server_changed == 'true'
         run: |
-          IMAGE_NAME="us-docker/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
+          IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
           gcloud run deploy ${{ env.SERVICE_NAME_SERVER }} \
             --image "${IMAGE_NAME}" \
             --platform managed \
