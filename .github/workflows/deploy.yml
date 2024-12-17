@@ -21,7 +21,7 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 2  # Fetch the current commit and its immediate parent
 
       - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
@@ -42,8 +42,8 @@ jobs:
       - name: 🔍 Detect changed projects
         id: changed
         run: |
-          echo "platform_changed=$(git diff --name-only HEAD^ HEAD | grep -q '^apps/platform/' && echo true || echo false)" >> $GITHUB_OUTPUT
-          echo "website_changed=$(git diff --name-only HEAD^ HEAD | grep -q '^apps/website/' && echo true || echo false)" >> $GITHUB_OUTPUT
+          git diff --quiet HEAD^ HEAD ./apps/platform || echo "platform_changed=true" >> $GITHUB_OUTPUT
+          git diff --quiet HEAD^ HEAD ./apps/website || echo "website_changed=true" >> $GITHUB_OUTPUT
 
       - name: 🎯 Deploy Platform to Staging
         if: github.ref == 'refs/heads/staging' && steps.changed.outputs.platform_changed == 'true'
@@ -76,12 +76,7 @@ jobs:
       - name: 🔍 Check changes in Server Directory
         id: server-changed
         run: |
-          # Ensure at least one previous commit exists
-          if git rev-parse HEAD^ >/dev/null 2>&1; then
-            echo "server_changed=$(git diff --name-only HEAD^ HEAD | grep -q '^apps/server/' && echo true || echo false)" >> $GITHUB_OUTPUT
-          else
-            echo "server_changed=$(git diff --name-only $(git rev-list --max-parents=0 HEAD) HEAD | grep -q '^apps/server/' && echo true || echo false)" >> $GITHUB_OUTPUT
-          fi
+          git diff --quiet HEAD^ HEAD ./apps/server || echo "server_changed=true" >> $GITHUB_OUTPUT
 
       - name: 🔑 Google Cloud Auth
         if: steps.server-changed.outputs.server_changed == 'true'

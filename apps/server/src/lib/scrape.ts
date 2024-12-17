@@ -21,24 +21,24 @@ const PROGRAMME_KEYS = {
 const CACHE = new Map<string, string>();
 
 const RESPONSE = {
-    "ERROR":{
-        "INVALID_ROLL_NO":"Invalid Roll No",
-        "BATCH_NOT_SUPPORTED":"Batch not supported",
-        "NO_SIMILAR_BRANCH":"No Similar branch",
-        "NO_PROGRAMME":"No Programme",
-        "NO_BRANCH":"No Branch",
-        "NO_URL":"No URL",
-        "NO_HEADERS":"No Headers",
-        "OTHER":"Something went wrong",
+    "ERROR": {
+        "INVALID_ROLL_NO": "Invalid Roll No",
+        "BATCH_NOT_SUPPORTED": "Batch not supported",
+        "NO_SIMILAR_BRANCH": "No Similar branch",
+        "NO_PROGRAMME": "No Programme",
+        "NO_BRANCH": "No Branch",
+        "NO_URL": "No URL",
+        "NO_HEADERS": "No Headers",
+        "OTHER": "Something went wrong",
     },
-    "SUCCESS":{
-        "RESULT_FETCHED":"Result fetched successfully!",
+    "SUCCESS": {
+        "RESULT_FETCHED": "Result fetched successfully!",
     },
-    "OTHER":{
-        "WELCOME":"Welcome to the server!",
-        "HEALTHY":"Healthy",
-        "SOMETHING_WRONG":"Something went wrong!",
-        "OTHER":"Other",
+    "OTHER": {
+        "WELCOME": "Welcome to the server!",
+        "HEALTHY": "Healthy",
+        "SOMETHING_WRONG": "Something went wrong!",
+        "OTHER": "Other",
     }
 }
 
@@ -82,6 +82,7 @@ const fetchData = async (
         return Promise.resolve(null)
     }
 };
+
 const parseResult = (
     result: string | null,
     info: {
@@ -209,9 +210,9 @@ export async function scrapeResult(rollNo: string): Promise<{
         });
     } catch (err) {
         return Promise.resolve({
-            message:"Something went wrong",
-            data:null,
-            error:err?.toString()
+            message: "Something went wrong",
+            data: null,
+            error: err?.toString()
         });
     }
 
@@ -261,8 +262,8 @@ async function getInfo(rollNo: string) {
     if (!headerMap[Number.parseInt(matches[0])]) {
         if (Number.parseInt(matches[0]) < 20 && !PROGRAMME_KEYS["Dual Degree"].includes(matches[1])) {
             return Promise.reject({
-                type:"ERROR",
-                message:RESPONSE.ERROR.BATCH_NOT_SUPPORTED
+                type: "ERROR",
+                message: RESPONSE.ERROR.BATCH_NOT_SUPPORTED
             });
         }
         if (Number.parseInt(matches[0]) >= 20 && (
