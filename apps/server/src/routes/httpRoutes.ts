@@ -8,7 +8,7 @@ router.use((req: Request, res: Response, next) => {
   const requiredHeaderValue = process.env.IDENTITY_KEY;
 
   if (req.headers[requiredHeaderKey.toLowerCase()] === requiredHeaderValue) {
-    next(); // Header matches, proceed to the route
+    next();
   } else {
     res.status(403).json({ error: 'Forbidden - Invalid or missing header' });
   }

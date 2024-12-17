@@ -76,7 +76,12 @@ jobs:
       - name: 🔍 Check changes in Server Directory
         id: server-changed
         run: |
-          echo "server_changed=$(git diff --name-only HEAD^ HEAD | grep -q '^apps/server/' && echo true || echo false)" >> $GITHUB_OUTPUT
+          # Ensure at least one previous commit exists
+          if git rev-parse HEAD^ >/dev/null 2>&1; then
+            echo "server_changed=$(git diff --name-only HEAD^ HEAD | grep -q '^apps/server/' && echo true || echo false)" >> $GITHUB_OUTPUT
+          else
+            echo "server_changed=$(git diff --name-only $(git rev-list --max-parents=0 HEAD) HEAD | grep -q '^apps/server/' && echo true || echo false)" >> $GITHUB_OUTPUT
+          fi
 
       - name: 🔑 Google Cloud Auth
         if: steps.server-changed.outputs.server_changed == 'true'
