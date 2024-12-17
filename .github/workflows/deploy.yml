@@ -93,7 +93,7 @@ jobs:
 
       - name: ⚙️ Configure Docker
         if: steps.server-changed.outputs.server_changed == 'true'
-        run:  gcloud auth configure-docker 
+        run: gcloud auth configure-docker us-docker.pkg.dev
           
       - name: 🐳 Build and Push Docker Image
         if:  steps.server-changed.outputs.dockerfile_changed == 'true'
