@@ -1,5 +1,7 @@
 name: 🚀 Deployments
 
+env:
+  SERVICE_NAME_SERVER: "college-ecosystem-server"
 
 on:
   push:
@@ -88,13 +90,14 @@ jobs:
     
           - name: Configure Docker
             run: |
-              gcloud auth configure-docker ${{ secrets.GCP_PROJECT_REGION }}.pkg.dev
+              gcloud auth configure-docker gcr.io
     
           - name: Build and Push Docker Image
             run: |
-              IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{env.SERVICE_NAME_SERVER}}:latest"
-              docker build -t "$IMAGE_NAME" -f ./apps/server/Dockerfile .
-              docker push "$IMAGE_NAME"
+                IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
+                docker build -t "${IMAGE_NAME}" -f ./apps/server/Dockerfile .
+                docker push "${IMAGE_NAME}"
+            
     
           - name: Deploy to Cloud Run
             run: |
