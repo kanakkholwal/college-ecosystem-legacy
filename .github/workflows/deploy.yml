@@ -101,7 +101,7 @@ jobs:
           IMAGE_NAME="us-docker/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
           #  docker build --pull --rm -f "apps\server\Dockerfile" -t us-docker/nith-website/college-ecosystem-server:latest "apps\server"
           docker build -t "${IMAGE_NAME}" -f ./apps/server/Dockerfile ./apps/server
-          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-docker.pkg.dev
+          # gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-docker.pkg.dev
           docker push "${IMAGE_NAME}"
 
       - name: 🚀 Deploy to Cloud Run
