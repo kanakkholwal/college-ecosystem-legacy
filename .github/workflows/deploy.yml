@@ -99,7 +99,7 @@ jobs:
         if:  steps.server-changed.outputs.dockerfile_changed == 'true'
         run: |
           IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
-          docker build --pull --rm -f "apps\server\Dockerfile" -t "${IMAGE_NAME}" "apps\server"
+          docker build --pull --rm -f "apps/server/Dockerfile" -t "${IMAGE_NAME}" "apps/server"
           # docker build -t "${IMAGE_NAME}" -f ./apps/server/Dockerfile ./apps/server
           # gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
           docker push "${IMAGE_NAME}"
