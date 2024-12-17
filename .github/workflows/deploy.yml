@@ -2,7 +2,7 @@ name: 🚀 Deployments
 
 env:
   SERVICE_NAME_SERVER: "college-ecosystem-server"
-  # DOCKER_REGISTRY: "asia-southeast1-docker"
+  # DOCKER_REGISTRY: "asia-southeast1"
 
 on:
   push:
@@ -93,7 +93,7 @@ jobs:
 
       - name: ⚙️ Configure Docker
         if: steps.server-changed.outputs.server_changed == 'true'
-        run: gcloud auth configure-docker us-central1-docker.pkg.dev
+        run: gcloud auth configure-docker asia-southeast1-docker.pkg.dev
           
       - name: 🐳 Build and Push Docker Image
         if:  steps.server-changed.outputs.dockerfile_changed == 'true'
@@ -101,8 +101,9 @@ jobs:
           IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
           docker build --pull --rm -f "apps/server/Dockerfile" -t "${IMAGE_NAME}" "apps/server"
           # docker build -t "${IMAGE_NAME}" -f ./apps/server/Dockerfile ./apps/server
-          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-central1-docker.pkg.dev
-          docker push "${IMAGE_NAME}"
+          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://asia-southeast1-docker.pkg.dev
+          # docker push "${IMAGE_NAME}"
+          docker push asia-southeast1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest
 
       - name: 🚀 Deploy to Cloud Run
         if: steps.server-changed.outputs.server_changed == 'true'
