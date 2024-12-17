@@ -6,7 +6,7 @@ WORKDIR /app
 
 # Copy root-level Turbo and package files
 COPY turbo.json ./
-COPY package.json package-lock.json ./
+COPY package.json ./
 
 # Copy only the apps/server directory and its dependencies
 COPY apps/server/package.json ./apps/server/package.json

@@ -14,7 +14,7 @@ jobs:
   lint:
     uses: ./.github/workflows/lint.yml
 
-  deploy-frontend-to-vercel: 
+  deploy-frontend-to-vercel:
     needs: lint
     runs-on: ubuntu-latest
     steps:
@@ -22,7 +22,6 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          path: ./
 
       - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
@@ -33,9 +32,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/.vercel
-          key: ${{ runner.OS }}-vercel-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-vercel-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.OS }}-vercel-
+            ${{ runner.os }}-vercel-
 
       - name: 📦 Install Vercel CLI
         run: npm install -g vercel
@@ -43,67 +42,70 @@ jobs:
       - name: 🔍 Detect changed projects
         id: changed
         run: |
-          git diff --quiet HEAD^ HEAD ./apps/platform || echo "platform_changed=true" >> $GITHUB_OUTPUT
-          git diff --quiet HEAD^ HEAD ./apps/website || echo "website_changed=true" >> $GITHUB_OUTPUT
-          git diff --quiet HEAD^ HEAD ./apps/server || echo "server_changed=true" >> $GITHUB_OUTPUT
+          echo "platform_changed=$(git diff --name-only HEAD^ HEAD | grep -q '^apps/platform/' && echo true || echo false)" >> $GITHUB_OUTPUT
+          echo "website_changed=$(git diff --name-only HEAD^ HEAD | grep -q '^apps/website/' && echo true || echo false)" >> $GITHUB_OUTPUT
 
       - name: 🎯 Deploy Platform to Staging
         if: github.ref == 'refs/heads/staging' && steps.changed.outputs.platform_changed == 'true'
-        run: vercel --token ${VERCEL_TOKEN} ./apps/platform
+        run: vercel --token ${{ secrets.VERCEL_TOKEN }} ./apps/platform
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PLATFORM_PROJECT_ID }}
 
       - name: 🚀 Deploy Platform to Production
         if: github.ref == 'refs/heads/main' && steps.changed.outputs.platform_changed == 'true'
-        run: vercel --token ${VERCEL_TOKEN} --prod ./apps/platform
+        run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod ./apps/platform
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PLATFORM_PROJECT_ID }}
 
       - name: 🌐 Deploy Website to Production
         if: github.ref == 'refs/heads/main' && steps.changed.outputs.website_changed == 'true'
-        run: vercel --token ${VERCEL_TOKEN} --prod ./apps/website
+        run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod ./apps/website
         env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
           VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
-      
+
   dockerize-and-deploy-server:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging' || github.event_name == 'workflow_dispatch'
-
     steps:
-          - name: Checkout repository
-            uses: actions/checkout@v2
-    
-          - name: Google Cloud Auth
-            uses: 'google-github-actions/auth@v2'
-            with:
-              credentials_json: '${{ secrets.CREDENTIALS_JSON }}'
-              project_id: ${{ secrets.GCP_PROJECT_ID }}
-    
-          - name: Set up Cloud SDK
-            uses: 'google-github-actions/setup-gcloud@v2'
-    
-          - name: Configure Docker
-            run: |
-              gcloud auth configure-docker gcr.io
-    
-          - name: Build and Push Docker Image
-            run: |
-                IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
-                docker build -t "${IMAGE_NAME}" -f ./apps/server/Dockerfile .
-                docker push "${IMAGE_NAME}"
-            
-    
-          - name: Deploy to Cloud Run
-            run: |
-              IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{env.SERVICE_NAME_SERVER}}:latest"
-              gcloud run deploy ${{env.SERVICE_NAME_SERVER}} \
-                --image  "$IMAGE_NAME" \
-                --platform managed \
-                --region ${{ secrets.GCP_PROJECT_REGION }} \
-                --allow-unauthenticated   
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🔍 Check changes in Server Directory
+        id: server-changed
+        run: |
+          echo "server_changed=$(git diff --name-only HEAD^ HEAD | grep -q '^apps/server/' && echo true || echo false)" >> $GITHUB_OUTPUT
+
+      - name: 🔑 Google Cloud Auth
+        if: steps.server-changed.outputs.server_changed == 'true'
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: ${{ secrets.CREDENTIALS_JSON }}
+          project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+      - name: 🛠️ Set up Cloud SDK
+        if: steps.server-changed.outputs.server_changed == 'true'
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: ⚙️ Configure Docker
+        if: steps.server-changed.outputs.server_changed == 'true'
+        run: gcloud auth configure-docker gcr.io
+
+      - name: 🐳 Build and Push Docker Image
+        if: steps.server-changed.outputs.server_changed == 'true'
+        run: |
+          IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
+          docker build -t "${IMAGE_NAME}" -f ./apps/server/Dockerfile .
+          docker push "${IMAGE_NAME}"
+
+      - name: 🚀 Deploy to Cloud Run
+        if: steps.server-changed.outputs.server_changed == 'true'
+        run: |
+          IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
+          gcloud run deploy ${{ env.SERVICE_NAME_SERVER }} \
+            --image "${IMAGE_NAME}" \
+            --platform managed \
+            --region ${{ secrets.GCP_PROJECT_REGION }} \
+            --allow-unauthenticated
