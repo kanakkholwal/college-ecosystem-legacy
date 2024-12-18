@@ -27,15 +27,15 @@ COPY --from=builder /node-server/dist ./dist
 ENV NODE_ENV=production
 
 # Expose port (match your app's port)
-EXPOSE 8080
+EXPOSE 8080 
 
 # Non-root user for security
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
 # Health check
-HEALTHCHECK --interval=30s --timeout=5s --start-period=5s \
-  CMD curl --fail http://localhost:3000/ || exit 1
+# HEALTHCHECK --interval=30s --timeout=5s --start-period=5s \
+#   CMD curl --fail http://localhost:8080/ || exit 1
 
 # Command to run the application
 CMD ["node", "dist/index.js"]

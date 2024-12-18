@@ -98,7 +98,6 @@ jobs:
             registry: gcr.io
             username: _json_key
             password:  ${{ secrets.CREDENTIALS_JSON }}
-            # registry: '${{ env.DOCKER_REGISTRY }}-docker.pkg.dev'
       
       - name: 🐳 Build and Push Docker Image
         # if:  steps.server-changed.outputs.dockerfile_changed == 'true'
