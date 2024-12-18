@@ -27,7 +27,7 @@ COPY --from=builder /node-server/dist ./dist
 ENV NODE_ENV=production
 
 # Expose port (match your app's port)
-EXPOSE 3000
+EXPOSE 8080
 
 # Non-root user for security
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
