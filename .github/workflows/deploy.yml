@@ -116,3 +116,5 @@ jobs:
             --region ${{ secrets.GCP_PROJECT_REGION }} \
             --allow-unauthenticated
             --port=8080
+            --timeout=300s
+
