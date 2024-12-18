@@ -2,13 +2,13 @@ name: 🚀 Deployments
 
 env:
   SERVICE_NAME_SERVER: "college-ecosystem-server"
-  DOCKER_REGISTRY: "asia-southeast1"
 
 on:
   push:
     branches:
       - main
       - staging
+      
   workflow_dispatch:
 
 
