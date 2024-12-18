@@ -10,6 +10,6 @@ const server = createServer(app);
 initWebSocketServer(server);
 
 // Start the server
-app.listen(8080, '0.0.0.0', () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
 });
