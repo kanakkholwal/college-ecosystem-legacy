@@ -1,5 +1,5 @@
 import { Router, type Request, type Response } from 'express';
-import { scrapeResult } from '~/lib/scrape';
+import { scrapeResult } from '../lib/scrape';
 
 const router = Router();
 

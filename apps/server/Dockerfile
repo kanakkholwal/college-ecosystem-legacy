@@ -37,7 +37,7 @@ USER appuser
 
 # Health check
 # HEALTHCHECK --interval=30s --timeout=5s --start-period=5s \
-#   CMD curl --fail http://localhost:8080/ || exit 1
+#   CMD curl --fail http://localhost:8080 || exit 1
 
 # Command to run the application
 CMD ["npm", "run", "start"]
