@@ -5,6 +5,7 @@ env:
   REDIS_URL: '${{ secrets.REDIS_URL }}'
   MONGODB_URI: '${{ secrets.A_SECRET }}'
   # IDENTITY_KEY: '${{ secrets.A_BUCKET }}'
+  
 on:
   push:
     branches:
