@@ -89,7 +89,7 @@ jobs:
         uses: google-github-actions/auth@v2
         id: auth
         with:
-          credentials_json: ${{ secrets.CREDENTIALS_JSON }}
+          # credentials_json: ${{ secrets.CREDENTIALS_JSON }}
           # username: _json_key
           # password: ${{ secrets.CREDENTIALS_JSON }}
           project_id: ${{ secrets.GCP_PROJECT_ID }} 
