@@ -99,8 +99,8 @@ jobs:
         uses: docker/login-action@v2
         with:
             registry: gcr.io
-            username: oauth2accesstoken
-            password: ${{ steps.auth.outputs.access_token }}
+            username: _json_key
+            password:  ${{ secrets.CREDENTIALS_JSON }}
             # registry: '${{ env.DOCKER_REGISTRY }}-docker.pkg.dev'
 
 
