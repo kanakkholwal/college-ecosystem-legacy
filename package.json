@@ -24,6 +24,7 @@
   ],
   "dependencies": {
     "ioredis": "^5.4.1",
+    "socket.io-client": "^4.8.1",
     "tsup": "^8.1.0"
   }
 }

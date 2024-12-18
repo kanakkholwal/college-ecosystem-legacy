@@ -6,11 +6,11 @@ import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { getYear, isValidRollNumber } from "src/constants/result";
-import { ResultTypeWithId } from "src/models/result";
+import type { ResultTypeWithId } from "src/models/result";
 
 const getResult = async (rollNo: string) => {
   try {
-    const res = await axios.post("/api/result?rollNo=" + rollNo);
+    const res = await axios.post(`/api/result?rollNo=${rollNo}`);
     return res.data.data as ResultTypeWithId;
   } catch (error) {
     console.error(error);
@@ -67,7 +67,7 @@ export default function BranchChanger() {
               <span
                 className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}
               >
-                {result && getYear(result!)}
+                {result && getYear(result)}
               </span>
               <span
                 className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}
@@ -81,7 +81,7 @@ export default function BranchChanger() {
               </span>
             </div>
           </div>
-          <div className="flex gap-4 items-center"></div>
+          <div className="flex gap-4 items-center"/>
         </div>
       </ConditionalRender>
     </>

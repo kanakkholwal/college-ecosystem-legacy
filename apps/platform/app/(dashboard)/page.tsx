@@ -10,14 +10,15 @@ import {
   CalendarRange,
   Grid3X3,
 } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { GrAnnounce } from "react-icons/gr";
 import { LiaReadme } from "react-icons/lia";
 import { MdOutlinePoll } from "react-icons/md";
 import { SiGoogleclassroom } from "react-icons/si";
 import { getSession } from "src/lib/auth";
-import { sessionType } from "src/types/session";
+import type { sessionType } from "src/types/session";
+
+// import Greetings from "./greeting";
 
 const quick_links = [
   {
@@ -85,8 +86,6 @@ const quick_links = [
 export default async function Dashboard() {
   const session = (await getSession()) as sessionType;
 
-  const quote = await getRandomQuote();
-  const gif = await getRandomGif();
 
   return (
     <>
@@ -102,10 +101,7 @@ export default async function Dashboard() {
             {getGreeting()}{" "}
             <span className="text-primary">{session?.user?.firstName}</span>
           </h2>
-          <p className="mt-4 text-lg text-gray-700" data-aos="fade-up">
-            {quote.content} <br />{" "}
-            <span className="text-gray-600 italic"> - {quote.author}</span>
-          </p>
+          {/* <Greetings/> */}
           <Alert variant="info" className="mt-4" data-aos="fade-right">
             <RocketIcon className="h-4 w-4" />
             <AlertTitle>Join the College Ecosystem Project!</AlertTitle>
@@ -122,23 +118,7 @@ export default async function Dashboard() {
             </AlertDescription>
           </Alert>
         </div>
-        <div>
-          <Image
-            src={gif}
-            width={600}
-            height={600}
-            alt="Random GIF"
-            className="max-w-full h-auto max-h-60 w-fit mt-4 rounded-lg hidden lg:block"
-            data-aos="fade-up"
-            unoptimized
-          />
-          <p
-            className="mt-4 text-xs text-gray-700 italic text-center hidden lg:block"
-            data-aos="fade-up"
-          >
-            Random GIF
-          </p>
-        </div>
+        
         <BorderBeam />
       </section>
       <section
@@ -156,7 +136,7 @@ export default async function Dashboard() {
         <div className="mb-32 grid  lg:mb-0 lg:w-full mx-auto @5xl:max-w-6xl grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 text-left gap-4">
           {quick_links.map((link, i) => (
             <RouterCard
-              key={i}
+              key={link.href}
               {...link}
               style={{
                 animationDelay: `${i * 500}ms`,
@@ -174,59 +154,11 @@ function getGreeting(): string {
 
   if (currentHour >= 5 && currentHour < 12) {
     return "Good morning!";
-  } else if (currentHour >= 12 && currentHour < 18) {
+  }
+  if (currentHour >= 12 && currentHour < 18) {
     return "Good afternoon!";
-  } else {
-    return "Good evening!";
   }
+  return "Good evening!";
 }
 
-// Random quote generator function
-async function getRandomQuote(): Promise<{ content: string; author: string }> {
-  try {
-    const response = await fetch(
-      "https://api.quotable.io/quotes/random?limit=1&maxLength=100"
-    );
-    const data = await response.json();
-    return { content: data[0].content, author: data[0].author };
-  } catch (error) {
-    console.error("Error fetching quote:", error);
-    return {
-      content: "The best way to predict the future is to create it.",
-      author: "Peter Drucker",
-    };
-  }
-}
 
-interface GiphyResponse {
-  data: {
-    images: {
-      original: {
-        url: string;
-      };
-    };
-  };
-}
-
-const giphy = {
-  baseURL: "https://api.giphy.com/v1/gifs/",
-  apiKey: "0UTRbFtkMxAplrohufYco5IY74U8hOes",
-  tag: "fail",
-  type: "random",
-  rating: "pg-13",
-};
-
-async function getRandomGif(): Promise<string> {
-  const giphyURL = encodeURI(
-    `${giphy.baseURL}${giphy.type}?api_key=${giphy.apiKey}&tag=${giphy.tag}&rating=${giphy.rating}`
-  );
-
-  try {
-    const response = await fetch(giphyURL);
-    const data: GiphyResponse = await response.json();
-    return data.data.images.original.url;
-  } catch (error) {
-    console.error("Error fetching GIF:", error);
-    return "Error fetching GIF. Please try again later.";
-  }
-}

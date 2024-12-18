@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { ScrapeResult } from "src/controllers/scraper";
 import dbConnect from "src/lib/dbConnect";
 import Result from "src/models/result";
@@ -47,7 +47,7 @@ export async function POST(request: NextRequest) {
         status: 200,
       }
     );
-  } catch (error: any) {
+  } catch (error) {
     return NextResponse.json(
       {
         result: "fail",

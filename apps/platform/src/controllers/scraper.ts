@@ -1,7 +1,5 @@
 import axios from "axios";
-// import * as cheerio from 'cheerio';
-import { ResultType } from "src/types/result";
-// import { CheerioElement } from 'cheerio';
+import type { ResultType } from "src/types/result";
 import HTMLParser from "node-html-parser";
 
 const fetchData = async (
