@@ -115,3 +115,4 @@ jobs:
             --platform managed \
             --region ${{ secrets.GCP_PROJECT_REGION }} \
             --allow-unauthenticated
+            --port=8080
