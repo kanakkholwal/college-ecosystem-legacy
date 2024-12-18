@@ -4,7 +4,7 @@
     "description": "Node.js TypeScript Express and WebSocket application",
     "main": "dist/index.js",
     "scripts": {
-        "start": "node dist/index.js",
+        "start": "node dist/index.js --host 0.0.0.0 --port ${PORT:-8080}",
         "build": "tsc",
         "dev": "tsx watch --respawn --transpile-only src/index.ts",
         "lint": "eslint src/** ",

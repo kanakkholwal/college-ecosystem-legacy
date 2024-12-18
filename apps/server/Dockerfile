@@ -26,6 +26,7 @@ COPY --from=builder /node-server/dist ./dist
 # Set environment to production
 ENV NODE_ENV=production
 ENV PORT=8080
+ENV HOST 0.0.0.0
 
 # Expose port (match your app's port)
 EXPOSE 8080 
@@ -39,4 +40,4 @@ USER appuser
 #   CMD curl --fail http://localhost:8080/ || exit 1
 
 # Command to run the application
-CMD ["node", "dist/index.js"]
+CMD ["npm", "run", "start"]

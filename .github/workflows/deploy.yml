@@ -102,14 +102,14 @@ jobs:
       - name: 🐳 Build and Push Docker Image
         # if:  steps.server-changed.outputs.dockerfile_changed == 'true'
         run: |
-          IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:${{ github.sha }}"
+          IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
           docker build --pull --rm -f "apps/server/Dockerfile" -t "${IMAGE_NAME}" "apps/server"
           docker push "${IMAGE_NAME}"
 
       - name: 🚀 Deploy to Cloud Run
         if: success()
         run: |
-          IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:${{ github.sha }}"
+          IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
           gcloud run deploy ${{ env.SERVICE_NAME_SERVER }} \
             --image "${IMAGE_NAME}" \
             --platform managed \
