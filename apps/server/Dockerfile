@@ -26,7 +26,7 @@ COPY --from=builder /node-server/dist ./dist
 # Set environment to production
 ENV NODE_ENV=production
 ENV PORT=8080
-ENV HOST 0.0.0.0
+ENV HOST=0.0.0.0
 
 # Expose port (match your app's port)
 EXPOSE 8080 
