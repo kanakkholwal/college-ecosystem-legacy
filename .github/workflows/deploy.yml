@@ -91,12 +91,9 @@ jobs:
         id: auth
         with:
           credentials_json: ${{ secrets.CREDENTIALS_JSON }}
-          # username: _json_key
-          # password: ${{ secrets.CREDENTIALS_JSON }}
           project_id: ${{ secrets.GCP_PROJECT_ID }} 
-          token_format: access_token
           # workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
-          service_account: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
+          # service_account: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
             
       - name: ⚙️ Log in Docker to GCR
         uses: docker/login-action@v2
