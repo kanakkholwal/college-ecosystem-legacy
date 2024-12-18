@@ -27,8 +27,8 @@ COPY --from=builder /node-server/dist ./dist
 ENV NODE_ENV=production
 ENV PORT=8080
 ENV HOST=0.0.0.0
-ENV REDIS_URL=${REDIS_URL}
-ENV MONGODB_URI=${MONGODB_URI}
+# ENV REDIS_URL=${REDIS_URL}
+# ENV MONGODB_URI=${MONGODB_URI}
 # ENV IDENTITY_KEY=${IDENTITY_KEY}
 
 # Expose port (match your app's port)

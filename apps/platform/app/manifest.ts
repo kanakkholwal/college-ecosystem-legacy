@@ -34,6 +34,6 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/",
     scope: ".",
     display: "standalone",
-    orientation: "portrait",
+    orientation: "natural",
   };
 }
