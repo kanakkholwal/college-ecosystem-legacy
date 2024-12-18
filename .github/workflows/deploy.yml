@@ -11,6 +11,10 @@ on:
       - staging
   workflow_dispatch:
 
+permissions:
+  id-token: write
+  contents: read
+  
 jobs:
   # lint:
   #   uses: ./.github/workflows/lint.yml
