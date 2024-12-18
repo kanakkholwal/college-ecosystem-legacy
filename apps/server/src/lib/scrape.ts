@@ -178,7 +178,9 @@ const parseResult = (
 
 };
 
-
+export async function updateResultModel(rollNo: string) {
+    return Promise.resolve(rollNo);
+}
 
 export async function scrapeResult(rollNo: string): Promise<{
     message: string;
