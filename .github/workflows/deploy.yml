@@ -91,8 +91,8 @@ jobs:
         id: auth
         with:
           credentials_json: ${{ secrets.CREDENTIALS_JSON }}
-          username: _json_key
-          password: ${{ secrets.CREDENTIALS_JSON }}
+          # username: _json_key
+          # password: ${{ secrets.CREDENTIALS_JSON }}
           project_id: ${{ secrets.GCP_PROJECT_ID }} 
           token_format: access_token
           # workload_identity_provider: ${{ secrets.WORKLOAD_IDENTITY_PROVIDER }}
