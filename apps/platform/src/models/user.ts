@@ -4,8 +4,6 @@ import { DEPARTMENTS } from "src/constants/departments";
 import { ROLES } from "src/constants/user";
 import { generateToken, verifyToken } from "src/emails/helper";
 
-
-
 export type UserWithId = {
   _id: string;
   firstName: string;
@@ -61,34 +59,9 @@ const userSchema = new Schema<IUserSchema>(
     },
     createdAt: { type: Date },
     updatedAt: { type: Date },
-    verificationToken: { type: String, default: null },
   },
   { timestamps: true }
 );
-// Middleware to hash password before saving
-userSchema.pre("save", async function (next) {
-  if (this.isNew) {
-    // If it's a new document, set both createdAt and updatedAt
-    this.createdAt = new Date();
-    this.updatedAt = new Date();
-  } else {
-    // If it's an existing document, only update the updatedAt field
-    this.updatedAt = new Date();
-  }
-  if (!this.isModified("password")) {
-    return next();
-  }
-
-  const saltRounds = 10;
-  try {
-    const hash = await bcrypt.hash(this.password, saltRounds);
-    this.password = hash;
-    next();
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  } catch (err: any) {
-    return next(err as CallbackError);
-  }
-});
 
 // Method to compare password
 userSchema.methods.comparePassword = async function (
@@ -103,19 +76,22 @@ userSchema.methods.comparePassword = async function (
 };
 
 //  Method to generate verification token
-userSchema.methods.generateVerificationToken = async function (): Promise<string> {
-  try {
-    this.verificationToken = generateToken(this.email);
-    await this.save();
-    return this.verificationToken;
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-  } catch (err: any) {
-    throw new Error(err);
-  }
-};
+userSchema.methods.generateVerificationToken =
+  async function (): Promise<string> {
+    try {
+      this.verificationToken = generateToken(this.email);
+      await this.save();
+      return this.verificationToken;
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    } catch (err: any) {
+      throw new Error(err);
+    }
+  };
 
 // Method to verify the user
-userSchema.methods.verifyUser = async function (token: string): Promise<boolean> {
+userSchema.methods.verifyUser = async function (
+  token: string
+): Promise<boolean> {
   try {
     if (this.verificationToken === token) {
       const payload = verifyToken(token);

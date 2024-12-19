@@ -28,16 +28,14 @@ export const metadata: Metadata = {
     "NITH Courses Search",
   ],
 };
-export default async function CoursesPage(
-  props: {
-    searchParams?: Promise<{
-      query?: string;
-      page?: string;
-      department?: string;
-      type?: string;
-    }>;
-  }
-) {
+export default async function CoursesPage(props: {
+  searchParams?: Promise<{
+    query?: string;
+    page?: string;
+    department?: string;
+    type?: string;
+  }>;
+}) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
@@ -75,10 +73,7 @@ export default async function CoursesPage(
           data-aos="fade-up"
           data-aos-anchor-placement="center-bottom"
         >
-          <Suspense
-            fallback={<Skeleton className="h-12 w-full " />
-            }
-          >
+          <Suspense fallback={<Skeleton className="h-12 w-full " />}>
             <SearchBox departments={departments} types={types} />
           </Suspense>
         </div>

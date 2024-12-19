@@ -9,7 +9,7 @@ import TimeTableViewer from "@/components/custom/time-table/viewer";
 interface Props {
   params: Promise<{
     slug: string[];
-  }>
+  }>;
 }
 
 import type { Metadata, ResolvingMetadata } from "next";
@@ -29,7 +29,7 @@ export async function generateMetadata(
 }
 
 export default async function Dashboard({ params }: Props) {
-  const {slug} = await params;
+  const { slug } = await params;
   const [department_code, year, semester] = slug;
 
   const timetableData = await getTimeTable(

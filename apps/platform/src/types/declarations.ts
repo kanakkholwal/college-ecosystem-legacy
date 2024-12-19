@@ -1,1 +1,1 @@
-declare module 'react-advanced-news-ticker';
+declare module "react-advanced-news-ticker";

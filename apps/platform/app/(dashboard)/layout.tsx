@@ -22,7 +22,7 @@ export default async function Layout({ children }: LayoutProps) {
   const authorized = !!session?.user;
 
   if (!authorized) {
-    return redirect("/login");
+    return redirect("/sign-in");
   }
 
   return (

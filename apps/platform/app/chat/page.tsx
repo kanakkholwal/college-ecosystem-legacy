@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default async function ChatBotPage() {
   const session = (await getSession()) as sessionType | null;
   if (!session?.user) {
-    return redirect("/login");
+    return redirect("/sign-in");
   }
 
   return (

@@ -12,11 +12,11 @@ interface PageProps {
   searchParams: Promise<{
     query?: string;
     offset?: number;
-  }>
+  }>;
 }
 
 export default async function StoragePage(props: PageProps) {
-  const  searchParams = await props.searchParams;
+  const searchParams = await props.searchParams;
   const offset = Number(searchParams.offset) || 1;
   const query = searchParams.query || "";
 
@@ -52,9 +52,9 @@ export default async function StoragePage(props: PageProps) {
             title="No files found"
             description="No files found in the storage. You can upload a new file by clicking the button below."
             actionPanel={
-                <Button variant="default_light" className="mx-auto" asChild>
-                  <Link href="/storage/upload">Upload new file</Link>
-                </Button>
+              <Button variant="default_light" className="mx-auto" asChild>
+                <Link href="/storage/upload">Upload new file</Link>
+              </Button>
             }
           />
         </ConditionalRender>

@@ -8,6 +8,7 @@ const envVariables = z.object({
   NEXT_AUTH_SECRET: z.string(),
 
   MONGODB_URI: z.string(),
+  DATABASE_URL: z.string(),
 
   NODE_ENV: z.string().default("testing"),
 
@@ -17,8 +18,8 @@ const envVariables = z.object({
   UPSTASH_REDIS_REST_URL: z.string(),
   UPSTASH_REDIS_REST_TOKEN: z.string(),
 
-  MAIL_EMAIL:z.string().email(),
-  MAIL_PASSWORD:z.string(),
+  MAIL_EMAIL: z.string().email(),
+  MAIL_PASSWORD: z.string(),
 
   HUGGING_FACE_API_KEY: z.string(),
   FIREWORKS_API_KEY: z.string(),

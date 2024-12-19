@@ -14,7 +14,7 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
   params: Promise<{
     moderator: "admin" | "moderator";
-  }>
+  }>;
 }
 
 export default async function DashboardLayout({
@@ -22,7 +22,7 @@ export default async function DashboardLayout({
   params,
 }: DashboardLayoutProps) {
   const session = (await getSession()) as sessionType;
-  const {moderator} = await params
+  const { moderator } = await params;
 
   if (
     !ALLOWED_ROLES.some((role) => session.user.roles.includes(role)) &&

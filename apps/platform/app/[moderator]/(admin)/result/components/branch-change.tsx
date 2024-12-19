@@ -81,7 +81,7 @@ export default function BranchChanger() {
               </span>
             </div>
           </div>
-          <div className="flex gap-4 items-center"/>
+          <div className="flex gap-4 items-center" />
         </div>
       </ConditionalRender>
     </>

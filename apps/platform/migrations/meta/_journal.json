@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1734617990098,
+      "tag": "0000_exotic_captain_britain",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1734619224544,
+      "tag": "0001_strong_magus",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1734619688856,
+      "tag": "0002_shallow_shinko_yamashiro",
+      "breakpoints": true
+    }
+  ]
+}

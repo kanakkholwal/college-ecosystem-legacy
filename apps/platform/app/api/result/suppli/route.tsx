@@ -3,34 +3,32 @@ import dbConnect from "src/lib/dbConnect";
 import Result from "src/models/result";
 
 export async function GET(request: NextRequest) {
-    try {
+  try {
+    await dbConnect();
+    //  find all results with semesters[n].courses[m].cgpi =0
+    const results = await Result.find({
+      "semesters.courses.cgpi": 0,
+    }).select("name rollNo semesters");
 
-
-        await dbConnect();
-        //  find all results with semesters[n].courses[m].cgpi =0
-        const results = await Result.find({
-            "semesters.courses.cgpi": 0
-        }).select("name rollNo semesters");
-
-        return NextResponse.json(
-            {
-                result: "success",
-                length: results.length,
-                data: results,
-            },
-            {
-                status: 200,
-            }
-        );
-    } catch (error: any) {
-        return NextResponse.json(
-            {
-                result: "fail",
-                message: error.message,
-            },
-            {
-                status: 500,
-            }
-        );
-    }
+    return NextResponse.json(
+      {
+        result: "success",
+        length: results.length,
+        data: results,
+      },
+      {
+        status: 200,
+      }
+    );
+  } catch (error: any) {
+    return NextResponse.json(
+      {
+        result: "fail",
+        message: error.message,
+      },
+      {
+        status: 500,
+      }
+    );
+  }
 }

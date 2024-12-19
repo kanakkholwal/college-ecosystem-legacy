@@ -86,7 +86,6 @@ const quick_links = [
 export default async function Dashboard() {
   const session = (await getSession()) as sessionType;
 
-
   return (
     <>
       <section
@@ -118,7 +117,7 @@ export default async function Dashboard() {
             </AlertDescription>
           </Alert>
         </div>
-        
+
         <BorderBeam />
       </section>
       <section
@@ -160,5 +159,3 @@ function getGreeting(): string {
   }
   return "Good evening!";
 }
-
-

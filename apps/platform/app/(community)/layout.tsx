@@ -12,7 +12,7 @@ export default async function CommunityLayout({
 }) {
   const session = (await getSession()) as sessionType | null;
   if (!session?.user) {
-    return redirect("/login");
+    return redirect("/sign-in");
   }
   const isStudent = session?.user?.roles?.includes("student");
 

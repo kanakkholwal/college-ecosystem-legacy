@@ -6,7 +6,7 @@ import { getTimeTable } from "src/lib/time-table/actions";
 interface Props {
   params: Promise<{
     slug: string[];
-  }>
+  }>;
 }
 
 export default async function Dashboard(props: Props) {

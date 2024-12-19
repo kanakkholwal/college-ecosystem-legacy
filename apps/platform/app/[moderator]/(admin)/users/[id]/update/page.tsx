@@ -6,7 +6,7 @@ import UpdateUserForm from "./components";
 interface PageProps {
   params: Promise<{
     id: string;
-  }>
+  }>;
 }
 
 export default async function UpdateUserPage({ params }: PageProps) {

@@ -17,15 +17,14 @@ interface DashboardLayoutProps {
   children: React.ReactNode;
   params: Promise<{
     moderator: (typeof ALLOWED_ROLES)[number];
-  }>
+  }>;
 }
 
 export default async function DashboardLayout({
   children,
   params,
 }: DashboardLayoutProps) {
-
-  const {moderator} = await params;
+  const { moderator } = await params;
 
   const session = (await getSession()) as sessionType | null;
 

@@ -1,8 +1,9 @@
-import XlsxHandler from './read-xlsx';
+import XlsxHandler from "./read-xlsx";
 
-export default function Allotment(){
-
-    return<>
-    <XlsxHandler/>
+export default function Allotment() {
+  return (
+    <>
+      <XlsxHandler />
     </>
+  );
 }

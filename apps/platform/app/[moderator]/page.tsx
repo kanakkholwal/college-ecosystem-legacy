@@ -8,7 +8,7 @@ import CRDashboard from "./context/cr.dashboard";
 interface Props {
   params: Promise<{
     moderator: string;
-  }>
+  }>;
 }
 
 import type { Metadata, ResolvingMetadata } from "next";

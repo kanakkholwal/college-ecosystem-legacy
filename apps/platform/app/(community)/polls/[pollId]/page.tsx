@@ -14,7 +14,7 @@ import type { Metadata } from "next";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ pollId: string }>
+  params: Promise<{ pollId: string }>;
 }): Promise<Metadata> {
   const { pollId } = await params;
   const poll = await getPollById(pollId);
@@ -37,7 +37,7 @@ export async function generateMetadata({
 interface Props {
   params: Promise<{
     pollId: string;
-  }>
+  }>;
 }
 
 export default async function Dashboard({ params }: Props) {

@@ -49,7 +49,7 @@ export const DEPARTMENTS_LIST = [
     code: "arc",
     short: "ARC",
   },
-];
+] as const;
 
 export const DEPARTMENTS: readonly string[] = DEPARTMENTS_LIST.map(
   (dept) => dept.name

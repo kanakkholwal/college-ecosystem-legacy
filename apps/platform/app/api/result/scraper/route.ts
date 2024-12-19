@@ -21,14 +21,15 @@ export async function GET(request: NextRequest) {
   try {
     const startTime = Date.now();
     const session = await getSession();
-    
+
     if (!session?.user?.roles.some((role) => allowedRoles.includes(role))) {
       return unauthorizedResponse();
     }
 
     const restart = request.nextUrl.searchParams.get("restart") === "true";
     const scrape = request.nextUrl.searchParams.get("scrape") === "true";
-    const retryFailed = request.nextUrl.searchParams.get("retry_failed") === "true";
+    const retryFailed =
+      request.nextUrl.searchParams.get("retry_failed") === "true";
 
     await dbConnect();
     const lastScrapeData = await getLastScrapeData(scrape, restart);

@@ -18,13 +18,13 @@ import SearchBox from "./components/search";
 type Props = {
   params: Promise<{
     moderator: string;
-  }>
+  }>;
   searchParams?: Promise<{
     query?: string;
     page?: string;
     department?: string;
     type?: string;
-  }>
+  }>;
 };
 
 export async function generateMetadata(
@@ -34,7 +34,8 @@ export async function generateMetadata(
   const params = await props.params;
   return {
     title: `Courses | ${params.moderator} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-    description: "Search for courses based on their name, code, department, and type.",
+    description:
+      "Search for courses based on their name, code, department, and type.",
   };
 }
 

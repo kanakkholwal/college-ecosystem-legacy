@@ -1,6 +1,6 @@
 "use client";
 
-import { Gradient } from "whatamesh";
+import { authClient } from "src/lib/auth-client";
 
 import {
   Card,
@@ -8,9 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { signIn } from "next-auth/react";
 import React from "react";
-import "./unauthorized.css";
 
 import { useState } from "react";
 
@@ -37,13 +35,17 @@ import toast from "react-hot-toast";
 import { AiOutlineLoading } from "react-icons/ai";
 
 import * as z from "zod";
+import { getDepartmentName } from "src/constants/departments";
 
 const FormSchema = z.object({
   email: z
     .string()
     .email({ message: "Invalid email format" })
     .min(5, { message: "Email must be at least 5 characters long" })
-    .max(100, { message: "Email cannot exceed 100 characters" }),
+    .max(100, { message: "Email cannot exceed 100 characters" })
+    .refine((val) => val.endsWith("@nith.ac.in"), {
+      message: "Email must end with @nith.ac.in",
+    }),
 
   password: z
     .string()
@@ -59,7 +61,6 @@ export default function Unauthorized() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams?.get("redirect") || "/";
-  const callbackUrl = searchParams?.get("callbackUrl") || "/";
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -73,85 +74,36 @@ export default function Unauthorized() {
     console.log(data);
 
     setIsLoading(true);
-
-    toast.promise(signInPromise(data), {
-      loading: "Logging in...",
-      success: (data: any) => {
-        console.log(data);
-        if (data?.ok === false) {
+    await authClient.signUp.email(
+      {
+        email: data.email,
+        password: data.password,
+        callbackURL: redirect,
+        name: "Kanak Kholwal",
+        username: "21dec026",
+        gender: "male",
+        role:"user",
+        other_roles: ["student"],
+        department: getDepartmentName("ece"),
+      },
+      {
+        onRequest: () => {
+          setIsLoading(true);
+        },
+        onResponse: () => {
           setIsLoading(false);
-          return data.error;
-        }
-        router.refresh();
-        setIsLoading(false);
-        if (redirect) {
-          router.push(redirect);
-          return `Logged in successfully to ${redirect}`;
-        } else if (callbackUrl) {
-          router.push(callbackUrl);
-          return `Logged in successfully to ${callbackUrl}`;
-        }
-        router.push("/");
-        return `Logged in successfully to dashboard`;
-      },
-      error: (err) => {
-        console.log(err);
-        setIsLoading(false);
-        return err || "An error occurred while logging in";
-      },
-    });
-  }
-  const signInPromise = async (data: { email: string; password: string }) =>
-    new Promise(async (resolve, reject) => {
-      try {
-        signIn("credentials", {
-          email: data.email,
-          password: data.password,
-          redirect: false,
-        })
-          .then((data) => {
-            console.log(data);
-            if (data && data.ok === false) {
-              reject(data.error);
-              return;
-            } else if (data && data.ok === true) {
-              resolve(data);
-              return;
-            }
-            resolve(data);
-          })
-          .catch((error) => {
-            console.log(error);
-            reject(error);
-          });
-      } catch (error) {
-        reject(error);
+        },
+        onError: (ctx: { error: { message: string } }) => {
+          console.log(ctx);
+          toast.error(ctx.error.message);
+        },
       }
-    });
-  React.useEffect(() => {
-    const gradient = new Gradient();
-    gradient.initGradient("#gradient-canvas");
-  }, []);
+    );
+  }
 
   return (
     <>
-      <canvas
-        id="gradient-canvas"
-        data-transition-in
-        className="fixed inset-0"
-      />
-      <div className="min-h-screen w-full mx-auto px-4 relative h-[100vh] flex-col items-center justify-center bg-background-gradient">
-        <div className="lg:p-8 @container flex flex-col justify-center items-center">
-          <Card
-            variant="glass"
-            className="m-auto flex flex-col justify-center space-y-6 max-w-[28rem]  mx-auto w-full h-full  mt-32 @lg:mt-0"
-          >
-            <CardHeader className="flex flex-col space-y-2 text-center">
-              <CardTitle>{process.env.NEXT_PUBLIC_WEBSITE_NAME}</CardTitle>
-              <CardDescription>
-                Log in for a seamless experience.
-              </CardDescription>
-            </CardHeader>
+    
             <main className="flex flex-col items-center justify-center w-full p-4 space-y-4">
               <div className={cn("grid gap-6 w-full text-left px-4")}>
                 <Form {...form}>
@@ -252,7 +204,10 @@ export default function Unauthorized() {
                     width={"full"}
                     onClick={async () => {
                       setIsLoading(true);
-                      await signIn("google", { callbackUrl: redirect });
+                      // await authClient.signIn.social({
+                      //   provider: "google",
+                      //   callbackURL: redirect,
+                      // });
                       setIsLoading(false);
                     }}
                   >
@@ -266,9 +221,7 @@ export default function Unauthorized() {
                 </div>
               </div>
             </main>
-          </Card>
-        </div>
-      </div>
+         
     </>
   );
 }

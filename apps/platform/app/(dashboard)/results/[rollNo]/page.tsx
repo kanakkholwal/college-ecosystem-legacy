@@ -11,10 +11,10 @@ import { CGPIChart } from "./components/chart";
 import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: Promise<{ rollNo: string}>
+  params: Promise<{ rollNo: string }>;
   searchParams?: Promise<{
-    update?:string 
-  }>
+    update?: string;
+  }>;
 };
 
 export async function generateMetadata(

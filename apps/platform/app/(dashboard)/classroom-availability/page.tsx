@@ -13,7 +13,7 @@ type Props = {
     page?: string;
     currentStatus?: string;
     roomType?: string;
-  }>
+  }>;
 };
 
 export const metadata: Metadata = {
@@ -58,8 +58,7 @@ export default async function RoomsPage(props: Props) {
           data-aos="fade-up"
           data-aos-anchor-placement="center-bottom"
         >
-          <Suspense
-            fallback={<Skeleton className="h-12 w-full " />}>
+          <Suspense fallback={<Skeleton className="h-12 w-full " />}>
             <SearchBox statuses={currentStatuses} types={roomTypes} />
           </Suspense>
         </div>

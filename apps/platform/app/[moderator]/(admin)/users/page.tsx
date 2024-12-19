@@ -7,7 +7,7 @@ interface PageProps {
   searchParams: Promise<{
     query?: string;
     offset?: number;
-  }>
+  }>;
 }
 
 export default async function DashboardPage(props: PageProps) {

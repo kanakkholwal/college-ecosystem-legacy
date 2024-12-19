@@ -3,11 +3,10 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
 import { headers } from "next/headers";
-import { getSession } from "src/lib/auth";
-import type { sessionType } from "src/types/session";
-
 import { redirect } from "next/navigation";
+import { auth } from "src/lib/auth";
 import { Provider } from "./client-provider";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -49,18 +48,19 @@ type RootLayoutProps = Readonly<{
 }>;
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = (await getSession()) as sessionType | null;
   const headerList = await headers();
+  const session = await auth.api.getSession({
+    headers: headerList,
+  });
   const pathname = headerList.get("x-current-path") as string;
   const redirectUrl = new URL(pathname);
-  const authorized = !!session?.user;
 
-  if (!authorized && redirectUrl.pathname !== "/login") {
-    if (redirectUrl.pathname !== "/login" && redirectUrl.pathname !== "/") {
+  if (!session && redirectUrl.pathname !== "/sign-in") {
+    if (redirectUrl.pathname !== "/sign-in" && redirectUrl.pathname !== "/") {
       redirectUrl.searchParams.set("redirect", pathname);
-      return redirect(`/login?${redirectUrl.searchParams.toString()}`);
+      return redirect(`/sign-in?${redirectUrl.searchParams.toString()}`);
     }
-      return redirect("/login");
+    return redirect("/sign-in");
   }
 
   return (

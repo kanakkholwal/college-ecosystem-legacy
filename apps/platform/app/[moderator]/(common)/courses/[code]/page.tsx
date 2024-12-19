@@ -15,11 +15,12 @@ import { EditCourseForm } from "./form";
 import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: Promise<{ code: string; moderator: string }>
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>
+  params: Promise<{ code: string; moderator: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 };
 
-export async function generateMetadata(props: Props,
+export async function generateMetadata(
+  props: Props,
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   const params = await props.params;

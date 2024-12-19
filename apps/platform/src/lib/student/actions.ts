@@ -16,9 +16,9 @@ export async function getStudentInfo(rollNo: string): Promise<studentInfoType> {
   if (!result) {
     return Promise.reject("Student not found");
   }
-  const _user = (await User.findOne({
+  const _user = await User.findOne({
     rollNo,
-  }).lean());
+  }).lean();
   const user = JSON.parse(JSON.stringify(_user)) as UserWithId;
 
   return Promise.resolve({

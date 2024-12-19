@@ -20,14 +20,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { getCourseByCode } from "src/lib/course/actions";
 import dbConnect from "src/lib/dbConnect";
-import CourseModel, { type booksAndRefType, type prevPaperType } from "src/models/course";
+import CourseModel, {
+  type booksAndRefType,
+  type prevPaperType,
+} from "src/models/course";
 import { AddPrevsModal, AddRefsModal } from "./modal";
 import { IconMap } from "./render-link";
 
 import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: Promise<{ code: string }>
+  params: Promise<{ code: string }>;
 };
 
 export async function generateMetadata(
@@ -35,7 +38,7 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
-  const {code} = await params;
+  const { code } = await params;
   const course = await getCourseByCode(code);
   if (!course) return notFound();
 
@@ -181,7 +184,8 @@ export default async function CoursePage(props: Props) {
                             <a
                               href={ref.link}
                               target="_blank"
-                              className="text-primary mt-2 text-sm font-semibold" rel="noreferrer"
+                              className="text-primary mt-2 text-sm font-semibold"
+                              rel="noreferrer"
                             >
                               Go to Link
                             </a>
@@ -203,7 +207,7 @@ export default async function CoursePage(props: Props) {
               ) : (
                 <p className="text-center text-gray-600 dark:text-gray-400 text-md font-semibold pt-5">
                   <Link
-                    href="/login"
+                    href="/sign-in"
                     className="text-primary font-semibold hover:underline"
                   >
                     Login
@@ -249,7 +253,7 @@ export default async function CoursePage(props: Props) {
               ) : (
                 <p className="text-center text-gray-600 dark:text-gray-400 text-md font-semibold pt-5">
                   <Link
-                    href="/login"
+                    href="/sign-in"
                     className="text-primary font-semibold hover:underline"
                   >
                     Login

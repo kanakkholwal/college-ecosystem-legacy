@@ -12,7 +12,7 @@ import PostFooter from "./post-footer";
 interface Props {
   params: Promise<{
     postId: string;
-  }>
+  }>;
 }
 
 import type { Metadata, ResolvingMetadata } from "next";

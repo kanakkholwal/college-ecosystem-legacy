@@ -9,18 +9,18 @@ import {
   ChevronRightCircle,
   Grid3X3,
   LogOut,
+  NotepadTextDashed,
   UserRoundCog,
 } from "lucide-react";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { GrStorage } from "react-icons/gr";
 import { LiaReadme } from "react-icons/lia";
 import { SiGoogleclassroom } from "react-icons/si";
 import { TbDashboard } from "react-icons/tb";
 import { sessionType } from "src/types/session";
-import { GrStorage } from "react-icons/gr";
-import { NotepadTextDashed } from "lucide-react";
 
 export type sideLinkType = {
   label: string;
@@ -188,7 +188,7 @@ export function SidenavFooter({ user }: { user: sessionType["user"] }) {
         className="rounded-full ml-auto"
         onClick={(e) => {
           e.preventDefault();
-          signOut({ callbackUrl: "/login" });
+          signOut({ callbackUrl: "/sign-in" });
         }}
       >
         <LogOut className="w-5 h-5" />
