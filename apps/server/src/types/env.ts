@@ -3,7 +3,7 @@ import { z } from "zod";
 const envVariables = z.object({
     MONGODB_URI: z.string(),
     REDIS_URL: z.string(),
-    IDENTITY_KEY: z.string().length(32),
+    IDENTITY_KEY: z.string().min(10),
 });
 
 envVariables.parse(process.env);

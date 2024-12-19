@@ -11,6 +11,9 @@ const envVariables = z.object({
 
   NODE_ENV: z.string().default("testing"),
 
+  BASE_SERVER_URL: z.string().url(),
+  NEXT_PUBLIC_BASE_SERVER_URL: z.string().url(),
+
   UPSTASH_REDIS_REST_URL: z.string(),
   UPSTASH_REDIS_REST_TOKEN: z.string(),
 

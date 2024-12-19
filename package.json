@@ -23,6 +23,7 @@
     "packages/*"
   ],
   "dependencies": {
+    "dotenv": "^16.4.7",
     "ioredis": "^5.4.1",
     "socket.io-client": "^4.8.1",
     "tsup": "^8.1.0"

@@ -3,24 +3,25 @@ import {
     getListOfRollNos,
     type listType,
     scrapeAndSaveResult
-} from '../controllers/socker-scraping';
+} from '../controllers/socket-scraping';
 
 import { redisClient } from "../utils/redis";
 
-// Define task status constants
 const TASK_STATUS = {
     QUEUED: 'queued',
     SCRAPING: 'scraping',
-    // UPDATING: 'updating',
     COMPLETED: 'completed',
     FAILED: 'failed',
     CANCELLED: 'cancelled',
-} as const
+    PAUSED: 'paused',
+} as const;
 
 const EVENTS = {
-    TASK_STATUS: 'task-status',
-    TASK_START: 'task-start',
-} as const
+    TASK_STATUS: 'task_status',
+    TASK_START: 'task_start',
+    TASK_CANCEL: 'task_cancel',
+    TASK_PAUSE: 'task_pause',
+} as const;
 
 type taskDataType = {
     total_processable: number,
@@ -31,16 +32,19 @@ type taskDataType = {
     data: {
         roll_no: string,
         status: typeof TASK_STATUS[keyof typeof TASK_STATUS],
-    }[]
-}
-
+    }[];
+};
 
 export async function socketServer(socket: Socket) {
     console.log('A user connected');
-    // Connect to Redis
-    // Start task processing on socket connection
+
+    const activeTasks = new Map<string, boolean>(); // To track task states (paused/cancelled)
+
     socket.on(EVENTS.TASK_START, async (list_type: listType = "has_backlog") => {
         const list = await getListOfRollNos(list_type);
+        const taskId = `scraping:${list_type}:${Date.now()}`;
+        activeTasks.set(taskId, true);
+
         const taskData: taskDataType = {
             total_processable: list.length,
             total_processed: 0,
@@ -50,45 +54,44 @@ export async function socketServer(socket: Socket) {
             data: []
         };
 
-        // Store task metadata in Redis
-        const taskId = `scraping:${list_type}:${Date.now()}`;
         await redisClient.set(taskId, JSON.stringify({ startTime: Date.now(), listType: list_type }));
 
         let batchCount = 0;
         const batchSize = 10;
 
-        // Process the list of roll numbers
         for (const rollNo of list) {
+            if (!activeTasks.get(taskId)) {
+                socket.emit(EVENTS.TASK_STATUS, { status: TASK_STATUS.CANCELLED, data: taskData });
+                break;
+            }
+
+            const isPaused = await redisClient.get(`${taskId}:paused`);
+            if (isPaused) {
+                socket.emit(EVENTS.TASK_STATUS, { status: TASK_STATUS.PAUSED, data: taskData });
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Wait before resuming
+                continue;
+            }
+
             const redisPipeline = redisClient.pipeline();
-            redisPipeline.get(`scraping:${list_type}:cancelled`);
             redisPipeline.get(`scraping:${list_type}:${rollNo.rollNo}`);
+            const pipelineResults = await redisPipeline.exec();
+            const isProcessedResult = pipelineResults?.[0];
+            const isProcessed = isProcessedResult ? isProcessedResult[1] : null;
 
-            const results = await redisPipeline.exec();
-            if (!results) {
-                console.error('Error occurred while fetching data from Redis');
-                console.log(results);
-                break;
-            }
-            const cancelled = results[0][1];  // Access the result (not the error) for the cancellation check
-            const isProcessed = results[1][1];  // Access the result (not the error) for the processed status
-
-            if (cancelled) {
-                socket.emit(EVENTS.TASK_STATUS, { status: TASK_STATUS.CANCELLED });
-                break;
-            }
 
             if (isProcessed) {
                 taskData.total_skipped++;
                 if (++batchCount % batchSize === 0 || rollNo === list[list.length - 1]) {
-                    socket.emit(EVENTS.TASK_STATUS, taskData);
+                    socket.emit(EVENTS.TASK_STATUS, { status: TASK_STATUS.SCRAPING, data: taskData });
                 }
                 continue;
             }
 
             taskData.total_processed++;
             taskData.data.push({ roll_no: rollNo.rollNo, status: TASK_STATUS.SCRAPING });
+
             if (++batchCount % batchSize === 0 || rollNo === list[list.length - 1]) {
-                socket.emit(EVENTS.TASK_STATUS, taskData);
+                socket.emit(EVENTS.TASK_STATUS, { status: TASK_STATUS.SCRAPING, data: taskData });
             }
 
             try {
@@ -101,28 +104,32 @@ export async function socketServer(socket: Socket) {
                     taskData.total_success++;
                 }
             } catch (error) {
-                if (error instanceof Error) {
-                    console.error(error.message);
-                }
+                console.error(error instanceof Error ? error.message : error);
                 taskData.data[taskData.data.length - 1].status = TASK_STATUS.FAILED;
                 taskData.total_failed++;
             }
 
             await redisClient.set(`scraping:${list_type}:${rollNo.rollNo}`, "true");
 
-            // Emit task status for every batch
             if (++batchCount % batchSize === 0 || rollNo === list[list.length - 1]) {
-                socket.emit(EVENTS.TASK_STATUS, taskData);
+                socket.emit(EVENTS.TASK_STATUS, { status: TASK_STATUS.SCRAPING, data: taskData });
             }
         }
 
-        // Store task completion metadata
         await redisClient.set(taskId, JSON.stringify({ ...taskData, endTime: Date.now() }));
+        activeTasks.delete(taskId);
     });
 
+    socket.on(EVENTS.TASK_CANCEL, async (taskId: string) => {
+        activeTasks.set(taskId, false);
+        await redisClient.set(`${taskId}:cancelled`, "true");
+        socket.emit(EVENTS.TASK_STATUS, { status: TASK_STATUS.CANCELLED });
+    });
 
-    // Example: emitting an event to the client
-    socket.emit('welcome', '{status: "OK", message: "Welcome to the server"}');
+    socket.on(EVENTS.TASK_PAUSE, async (taskId: string) => {
+        await redisClient.set(`${taskId}:paused`, "true");
+        socket.emit(EVENTS.TASK_STATUS, { status: TASK_STATUS.PAUSED });
+    });
 
     socket.on('disconnect', () => {
         console.log('A user disconnected');

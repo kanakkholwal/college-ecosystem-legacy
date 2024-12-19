@@ -32,8 +32,8 @@ export const useSocketStatus = (serverUrl: string, options?: Partial<ManagerOpti
     useEffect(() => {
         // Initialize socket connection
         // if (!socketRef.current) {
-            const socket = io(serverUrl, options);
-            socketRef.current = socket;
+        const socket = io(serverUrl, options);
+        socketRef.current = socket;
         // }
 
         // Event handlers
@@ -126,3 +126,26 @@ export const useSocketStatus = (serverUrl: string, options?: Partial<ManagerOpti
 
     return [socketStatus, socketRef.current]
 };
+
+type SocketStatusVariant = 'info' | 'success' | 'warning' | 'destructive';
+
+export const getSocketStatus = (socketStatus: SocketStatus) => {
+    const status = {
+        variant: "info",
+        text: socketStatus.statusMessage,
+    } as { variant: SocketStatusVariant, text: string };
+    if (socketStatus.connected) {
+        status.variant = "success"
+    } else if (socketStatus.reconnecting) {
+        status.variant = "warning"
+    } else if (socketStatus.error) {
+        status.variant = "destructive"
+    } else {
+        status.variant = "info"
+    }
+    if (socketStatus.latency) {
+        status.text += ` (${socketStatus.latency}ms)`
+    }
+    return status;
+
+}
