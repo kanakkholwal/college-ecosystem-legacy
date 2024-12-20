@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import { getPollById, updateVotes } from "src/lib/poll/actions";
 import type { sessionType } from "src/types/session";
 import { PollRender } from "../components/poll-component";
@@ -41,7 +41,7 @@ interface Props {
 }
 
 export default async function Dashboard({ params }: Props) {
-  const session = (await getSession()) as sessionType;
+  const session = await getSession()
   const { pollId } = await params;
   const poll = await getPollById(pollId);
   if (!poll) {

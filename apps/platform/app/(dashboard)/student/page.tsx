@@ -1,5 +1,5 @@
 import { getAttendanceRecords } from "src/lib/attendance/personal.actions";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import { sessionType } from "src/types/session";
 
 import { Button } from "@/components/ui/button";
@@ -7,8 +7,8 @@ import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import {
-  OverallAttendanceChart,
-  SubWiseAttendanceChart,
+    OverallAttendanceChart,
+    SubWiseAttendanceChart,
 } from "./components/charts";
 import { getSafeAttendance } from "./libs";
 
@@ -36,7 +36,7 @@ const quick_links = [
 ];
 
 export default async function StudentDashboard() {
-  const session = (await getSession()) as sessionType;
+  const session = await getSession()
 
   const attendanceRecords = await getAttendanceRecords();
 

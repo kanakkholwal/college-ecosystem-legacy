@@ -46,7 +46,7 @@ export default async function PersonalAttendanceManager() {
           <AttendanceRecord
             record={record}
             style={{ animationDelay: `${index * 50}ms` }}
-            key={index}
+            key={record._id}
           />
         ))}
       </Suspense>

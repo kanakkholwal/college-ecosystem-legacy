@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { createAttendanceRecord } from "src/lib/attendance/personal.actions";
 import { rawAttendanceRecordSchema } from "src/models/attendance-record";
-import * as z from "zod";
+import type * as z from "zod";
 
 export default function CreateAttendanceRecord() {
   const form = useForm<z.infer<typeof rawAttendanceRecordSchema>>({

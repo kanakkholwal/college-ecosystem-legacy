@@ -2,7 +2,7 @@
 import { Badge } from "@/components/ui/badge";
 import { formatDuration, intervalToDuration } from "date-fns";
 import { useEffect, useState } from "react";
-import { PollType } from "src/models/poll";
+import type { PollType } from "src/models/poll";
 
 export const ClosingBadge = ({ poll }: { poll: PollType }) => {
   const [remainingTime, setRemainingTime] = useState("");

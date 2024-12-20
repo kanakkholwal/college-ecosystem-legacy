@@ -2,8 +2,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { PollType } from "src/models/poll";
-import { sessionType } from "src/types/session";
+import type { PollType } from "src/models/poll";
+import type { Session } from "src/lib/auth-client"
 import DeletePoll from "./delete-poll";
 import { ClosingBadge } from "./poll-timer";
 
@@ -12,7 +12,7 @@ export default function PollComponent({
   user,
 }: {
   poll: PollType;
-  user?: sessionType["user"];
+  user?: Session["user"];
 }) {
   const closesAlready = new Date(poll.closesAt) < new Date();
 
@@ -28,7 +28,7 @@ export default function PollComponent({
         <Badge variant="info_light">{poll.votes.length} votes</Badge>
       </div>
       <div className="w-full flex items-center justify-end gap-2">
-        {user?._id === poll.createdBy && <DeletePoll pollId={poll._id} />}
+        {user?.id === poll.createdBy && <DeletePoll pollId={poll._id} />}
         {!closesAlready && (
           <Button variant="link" size="sm" asChild>
             <Link href={`/polls/${poll._id}`}>
@@ -47,7 +47,7 @@ export function PollRender({ poll }: { poll: PollType }) {
       <div className="relative w-full space-y-1.5">
         {poll.options.map((option, index) => (
           <div
-            key={index}
+            key={option.concat(index.toString())}
             className="group w-full flex items-center rounded-sm bg-white/20"
           >
             <div
@@ -65,7 +65,7 @@ export function PollRender({ poll }: { poll: PollType }) {
       </div>
       <div>
         {poll.options.map((option, index) => (
-          <div key={index} className="flex justify-end items-center h-8 mb-1.5">
+          <div key={option} className="flex justify-end items-center h-8 mb-1.5">
             <p className="whitespace-nowrap leading-none truncate text-sm font-semibold">
               {parseVotes(poll.votes, option).percent.toFixed(2)}%
             </p>

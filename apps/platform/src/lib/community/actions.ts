@@ -1,13 +1,13 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import CommunityPost, {
-  CommunityComment,
-  CommunityPostTypeWithId,
-  rawCommunityCommentSchema,
-  RawCommunityPostType,
+    CommunityComment,
+    CommunityPostTypeWithId,
+    rawCommunityCommentSchema,
+    RawCommunityPostType,
 } from "src/models/community";
 import { z } from "zod";
 

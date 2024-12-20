@@ -1,8 +1,8 @@
 "use server";
 import dbConnect from "src/lib/dbConnect";
-import ResultModel, { IResultType, Semester } from "src/models/result";
-import User, { UserWithId } from "src/models/user";
-import { studentInfoType } from "src/types/student";
+import ResultModel, { type IResultType, type Semester } from "src/models/result";
+import User, { type UserWithId } from "src/models/user";
+import type { studentInfoType } from "src/types/student";
 
 import { getDepartmentCode } from "src/constants/departments";
 

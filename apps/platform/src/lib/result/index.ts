@@ -104,7 +104,7 @@ export async function updateRanks(): Promise<{
     return Promise.resolve({
       success: true,
       message: "Ranks assigned successfully.",
-      timeTaken: (new Date().getTime() - time.getTime()) / 1000 + "s",
+      timeTaken: `${(new Date().getTime() - time.getTime()) / 1000}s`,
       lastUpdated: new Date().toISOString(),
     });
   } catch (error) {

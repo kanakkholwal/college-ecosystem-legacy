@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { client } from "@/lib/auth-client";
+import { authClient } from "src/lib/auth-client";
 import { AlertCircle, ArrowLeft, CheckCircle2 } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
@@ -29,7 +29,7 @@ export default function Component() {
     setError("");
 
     try {
-      const res = await client.forgetPassword({
+      const res = await authClient.forgetPassword({
         email,
         redirectTo: "/reset-password",
       });
@@ -48,14 +48,14 @@ export default function Component() {
           <CardHeader>
             <CardTitle>Check your email</CardTitle>
             <CardDescription>
-              We've sent a password reset link to your email.
+              We&apos;ve sent a password reset link to your email.
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Alert>
               <CheckCircle2 className="h-4 w-4" />
               <AlertDescription>
-                If you don't see the email, check your spam folder.
+                If you don&lsquo;t see the email, check your spam folder.
               </AlertDescription>
             </Alert>
           </CardContent>
@@ -76,7 +76,7 @@ export default function Component() {
   return (
     <main className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
       {/* Radial gradient for the container to give a faded look */}
-      <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]"></div>
+      <div className="absolute pointer-events-none inset-0 flex items-center justify-center dark:bg-black bg-white [mask-image:radial-gradient(ellipse_at_center,transparent_20%,black)]" />
       <Card className="w-[350px]">
         <CardHeader>
           <CardTitle>Forgot password</CardTitle>

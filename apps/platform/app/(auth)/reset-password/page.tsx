@@ -6,17 +6,16 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { PasswordInput } from "@/components/ui/password-input";
-import { client } from "@/lib/auth-client";
 import { AlertCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { toast } from "sonner";
+import toast from "react-hot-toast";
+import { authClient } from "src/lib/auth-client";
 
 export default function ResetPassword() {
   const [password, setPassword] = useState("");
@@ -28,11 +27,11 @@ export default function ResetPassword() {
     e.preventDefault();
     setIsSubmitting(true);
     setError("");
-    const res = await client.resetPassword({
+    const res = await authClient.resetPassword({
       newPassword: password,
     });
     if (res.error) {
-      toast.error(res.error.message);
+      toast.error(res.error?.message || "Something went wrong");
     }
     setIsSubmitting(false);
     router.push("/sign-in");
@@ -51,7 +50,7 @@ export default function ResetPassword() {
             <div className="grid w-full items-center gap-2">
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">New password</Label>
-                <PasswordInput
+                <Input type="password"
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -61,7 +60,7 @@ export default function ResetPassword() {
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">Confirm password</Label>
-                <PasswordInput
+                <Input type="password"
                   id="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}

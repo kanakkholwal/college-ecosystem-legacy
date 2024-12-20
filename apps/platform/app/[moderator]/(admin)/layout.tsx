@@ -1,7 +1,6 @@
 import Page403 from "@/components/utils/403";
 import type { Metadata } from "next";
-import { getSession } from "src/lib/auth";
-import type { sessionType } from "src/types/session";
+import { getSession } from "src/lib/auth-server";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -21,7 +20,7 @@ export default async function DashboardLayout({
   children,
   params,
 }: DashboardLayoutProps) {
-  const session = (await getSession()) as sessionType;
+  const session = await getSession()
   const { moderator } = await params;
 
   if (

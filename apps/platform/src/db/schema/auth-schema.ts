@@ -1,9 +1,9 @@
-import { boolean, pgTable, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { DEPARTMENTS } from "src/constants/departments";
 
 export const departmentNameEnum = pgEnum(
   "department_name_enum",
-  DEPARTMENTS as [string, ...string[]]
+  ["Staff",...DEPARTMENTS] as [string, ...string[]]
 );
 export const userRolesEnum = pgEnum("user_roles_enum", [
   "admin",
@@ -11,7 +11,13 @@ export const userRolesEnum = pgEnum("user_roles_enum", [
   "faculty",
   "hod",
   "cr",
+  "staff",
+  "assistant"
 ] as [string, ...string[]]);
+
+export const userGenderEnum = pgEnum("user_gender_enum", [
+  "male","female","not_specified"
+]);
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
@@ -24,7 +30,7 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updatedAt").notNull(),
   role: text("role").notNull().default("user"),
   other_roles: userRolesEnum("other_roles").array().notNull().default([]),
-  gender: text("gender").notNull().default(""),
+  gender: userGenderEnum("gender").notNull().default("not_specified").$default(() => "not_specified"),
   department: departmentNameEnum("department").notNull(),
 });
 

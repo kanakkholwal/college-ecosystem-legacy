@@ -1,8 +1,7 @@
 import Page403 from "@/components/utils/403";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getSession } from "src/lib/auth";
-import type { sessionType } from "src/types/session";
+import { getSession } from "src/lib/auth-server";
 import Navbar from "./components/navbar";
 import SideNav from "./components/sidenav";
 
@@ -26,7 +25,7 @@ export default async function DashboardLayout({
 }: DashboardLayoutProps) {
   const { moderator } = await params;
 
-  const session = (await getSession()) as sessionType | null;
+  const session = await getSession()
 
   if (!(ALLOWED_ROLES.includes(moderator) && !!session?.user)) {
     return notFound();

@@ -12,7 +12,7 @@ import {
   NotepadTextDashed,
   UserRoundCog,
 } from "lucide-react";
-import { signOut } from "next-auth/react";
+import { signOut } from "src/lib/auth-client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -20,7 +20,7 @@ import { GrStorage } from "react-icons/gr";
 import { LiaReadme } from "react-icons/lia";
 import { SiGoogleclassroom } from "react-icons/si";
 import { TbDashboard } from "react-icons/tb";
-import { sessionType } from "src/types/session";
+import type { Session } from "src/lib/auth-client";
 
 export type sideLinkType = {
   label: string;
@@ -103,8 +103,8 @@ export default function SideBar({
   user,
   role,
 }: {
-  user: sessionType["user"];
-  role: sessionType["user"]["roles"][number];
+  user: Session["user"];
+  role: Session["user"]["role"];
 }) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname() as string;
@@ -114,17 +114,14 @@ export default function SideBar({
     <div
       aria-label="Sidenav"
       className={
-        "fixed top-0 left-0 bottom-0 z-50 flex flex-col w-80 min-h-screen space-y-6 bg-white/20 backdrop-blur-xl " +
-        (open ? " translate-x-0" : " -translate-x-full xl:translate-x-0") +
-        " transition-transform duration-200 ease-in-out"
+        `fixed top-0 left-0 bottom-0 z-50 flex flex-col w-80 min-h-screen space-y-6 bg-white/20 backdrop-blur-xl ${open ? " translate-x-0" : " -translate-x-full xl:translate-x-0"} transition-transform duration-200 ease-in-out`
       }
     >
       <button
+      type="button"
         aria-label="Toggle Sidenav"
         className={
-          "absolute top-5 -right-3 p-2 rounded-xl bg-white dark:bg-slate-800 border border-transparent dark:border-slate-700 shadow-md transition-colors duration-200 ease-in-out" +
-          (open ? " translate-x-0" : " translate-x-full") +
-          " xl:translate-x-0 xl:hidden"
+          `absolute top-5 -right-3 p-2 rounded-xl bg-white dark:bg-slate-800 border border-transparent dark:border-slate-700 shadow-md transition-colors duration-200 ease-in-out${open ? " translate-x-0" : " translate-x-full"} xl:translate-x-0 xl:hidden`
         }
         onClick={() => setOpen(!open)}
       >
@@ -153,7 +150,7 @@ export default function SideBar({
             <SideBarLink
               link={link}
               active={pathname === link.href}
-              key={`sidenav_links_${index}`}
+              key={link.href}
             />
           ))}
         </div>
@@ -163,13 +160,13 @@ export default function SideBar({
   );
 }
 
-export function SidenavFooter({ user }: { user: sessionType["user"] }) {
+export function SidenavFooter({ user }: { user: Session["user"] }) {
   return (
     <div className="flex self-stretch items-center gap-3 border-t border-t-border py-6 px-2 rounded-md mx-4 dark:border-t-slate-700">
       <Avatar>
         {/* <AvatarImage src={user.profilePicture.toString()} alt={"@" + user.rollNo} /> */}
         <AvatarFallback className="uppercase">
-          {user.firstName[0]}
+          {user.name[0]}
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col items-start justify-start">
@@ -177,8 +174,8 @@ export function SidenavFooter({ user }: { user: sessionType["user"] }) {
           {user.firstName}
         </h3>
         <p className="text-xs text-slate-600 dark:text-slate-300">
-          <Link href={"/people/" + user.rollNo} target="_blank">
-            @{user.rollNo}
+          <Link href={`/people/${user.username}`} target="_blank">
+            @{user.username}
           </Link>
         </p>
       </div>

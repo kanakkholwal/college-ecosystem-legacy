@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { Control, useFieldArray, useForm } from "react-hook-form";
+import { type Control, useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { createPoll } from "src/lib/poll/actions";
 import * as z from "zod";

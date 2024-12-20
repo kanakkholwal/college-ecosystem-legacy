@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
-import { Message } from "../types";
+import type { Message } from "../types";
 import { useChat } from "../useChat";
 import MessageComponent from "./message";
 
@@ -11,7 +11,7 @@ export default function ChatList({ messages }: { messages: Message[] }) {
     <AnimatePresence>
       {messages?.map((message, index) => (
         <motion.div
-          key={index}
+          key={message.id}
           layout
           initial={{ opacity: 0, scale: 1, y: 50, x: 0 }}
           animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}

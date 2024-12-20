@@ -10,14 +10,13 @@ import {
   CalendarRange,
   Grid3X3,
 } from "lucide-react";
+import { headers } from "next/headers";
 import Link from "next/link";
 import { GrAnnounce } from "react-icons/gr";
 import { LiaReadme } from "react-icons/lia";
 import { MdOutlinePoll } from "react-icons/md";
 import { SiGoogleclassroom } from "react-icons/si";
-import { getSession } from "src/lib/auth";
-import type { sessionType } from "src/types/session";
-
+import { auth } from "src/lib/auth";
 // import Greetings from "./greeting";
 
 const quick_links = [
@@ -84,7 +83,9 @@ const quick_links = [
 ];
 
 export default async function Dashboard() {
-  const session = (await getSession()) as sessionType;
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
 
   return (
     <>
@@ -98,7 +99,7 @@ export default async function Dashboard() {
             data-aos="fade-up"
           >
             {getGreeting()}{" "}
-            <span className="text-primary">{session?.user?.firstName}</span>
+            <span className="text-primary">{session?.user?.name}</span>
           </h2>
           {/* <Greetings/> */}
           <Alert variant="info" className="mt-4" data-aos="fade-right">

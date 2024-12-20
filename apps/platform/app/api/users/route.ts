@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { type NextRequest, NextResponse } from "next/server";
 import { getUsers } from "src/lib/users/actions";
 
 export async function GET(request: NextRequest) {

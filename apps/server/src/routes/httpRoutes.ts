@@ -1,26 +1,31 @@
-import {  type Request, type Response, Router } from 'express';
-import { scrapeResult } from '../lib/scrape';
+import { Router } from 'express';
+import { getDepartments, getDepartmentsList } from '~/controllers/http-department';
+import { getFacultyByEmailHandler, getFacultyListByDepartmentHandler } from '~/controllers/http-faculty_list';
+import { addUpdateResult, getResultByRollNoFromSite } from '~/controllers/http-result';
 
 const router = Router();
 
-// // Middleware for validating the X-IDENTITY-KEY header
-// router.use((req: Request, res: Response, next: NextFunction) => {
-//     const requiredHeaderKey = "X-IDENTITY-KEY";
-//     const requiredHeaderValue = process.env.IDENTITY_KEY;
 
-//     if (req.headers[requiredHeaderKey.toLowerCase()] === requiredHeaderValue) {
-//         next();
-//     } else {
-//         res.status(403).json({ error: 'Forbidden - Invalid or missing header' });
-//     }
-// });
+/** UTILS ENDPOINTS */
+
+// Endpoint to get all the faculties from the database
+router.get('/departments/faculty/:email', getFacultyByEmailHandler);
+router.get('/departments/:departmentCode', getFacultyListByDepartmentHandler);
+
+// Endpoint to get all the departments from the database
+router.get('/departments', getDepartments);
+router.get('/departments/list', getDepartmentsList);
+
+
+/** RESULT ENDPOINTS */
 
 // Endpoint to get result by rollNo scraped from the website
-router.post('/result/:rollNo', async (req: Request, res: Response) => {
-    const rollNo = req.params.rollNo;
-    const data = await scrapeResult(rollNo);
+router.post('/result/:rollNo', getResultByRollNoFromSite);
 
-    res.json(data);
-});
+// Endpoint to get result by rollNo from the database
+router.post('/result/:rollNo/add', addUpdateResult);
+router.post('/result/:rollNo/update', addUpdateResult);
+
+
 
 export default router;

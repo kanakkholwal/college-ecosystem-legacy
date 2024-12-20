@@ -1,10 +1,10 @@
 "use server";
 
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import Timetable, {
-  RawTimetable,
-  TimeTableWithID,
+    RawTimetable,
+    TimeTableWithID,
 } from "src/models/time-table";
 
 export async function getTimeTable(

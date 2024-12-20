@@ -2,7 +2,7 @@
 import { CircleSlash } from "lucide-react";
 
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltip,
   ChartTooltipContent,
@@ -10,7 +10,7 @@ import {
 import ConditionalRender from "@/components/utils/conditional-render";
 import { Label, Pie, PieChart } from "recharts";
 import { updateAttendanceRecord } from "src/lib/attendance/personal.actions";
-import { AttendanceRecordWithId } from "src/models/attendance-record";
+import type { AttendanceRecordWithId } from "src/models/attendance-record";
 import UpdateAttendanceRecord from "./update-record";
 
 const chartConfig = {
@@ -170,16 +170,18 @@ const getAttendanceStatus = (record: AttendanceRecordWithId) => {
   if (currentPercentage >= ATTENDANCE_CRITERIA) {
     if (attendanceShortfall <= 0) {
       return `On Track, You can't miss the next class.`;
-    } else if (attendanceShortfall === 1) {
-      return `On Track, You may leave the next class.`;
-    } else {
-      return `On Track, You may leave the next ${attendanceShortfall} classes.`;
     }
-  } else {
-    if (possibleFutureClasses === 1) {
-      return "Attend next class to get back on track.";
-    } else {
-      return `Attend the next ${possibleFutureClasses} classes to get back on track.`;
+    if (attendanceShortfall === 1) {
+      return "On Track, You may leave the next class.";
     }
+
+    return `On Track, You may leave the next ${attendanceShortfall} classes.`;
   }
+  if (possibleFutureClasses === 1) {
+    return "Attend next class to get back on track.";
+  }
+
+  return `Attend the next ${possibleFutureClasses} classes to get back on track.`;
+
+
 };

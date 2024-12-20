@@ -2,9 +2,6 @@ import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
-import { headers } from "next/headers";
-import { redirect } from "next/navigation";
-import { auth } from "src/lib/auth";
 import { Provider } from "./client-provider";
 
 import "./globals.css";
@@ -48,20 +45,9 @@ type RootLayoutProps = Readonly<{
 }>;
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-  const headerList = await headers();
-  const session = await auth.api.getSession({
-    headers: headerList,
-  });
-  const pathname = headerList.get("x-current-path") as string;
-  const redirectUrl = new URL(pathname);
 
-  if (!session && redirectUrl.pathname !== "/sign-in") {
-    if (redirectUrl.pathname !== "/sign-in" && redirectUrl.pathname !== "/") {
-      redirectUrl.searchParams.set("redirect", pathname);
-      return redirect(`/sign-in?${redirectUrl.searchParams.toString()}`);
-    }
-    return redirect("/sign-in");
-  }
+  
+
 
   return (
     <html lang="en" suppressHydrationWarning>

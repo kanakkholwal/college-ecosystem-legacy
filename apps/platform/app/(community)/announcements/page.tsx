@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
 import { GrAnnounce } from "react-icons/gr";
-// import { getSession } from "src/lib/auth";
+// import { getSession } from "src/lib/auth-server";
 // import { sessionType } from "src/types/session";
 import { getAnnouncements } from "src/lib/announcement/actions";
 import AnnouncementsList from "./list";

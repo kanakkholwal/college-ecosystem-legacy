@@ -1,5 +1,4 @@
-import { getSession } from "src/lib/auth";
-import { sessionType } from "src/types/session";
+import { getSession } from "src/lib/auth-server";
 
 import type { Metadata } from "next";
 
@@ -9,7 +8,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const session = (await getSession()) as sessionType;
+  const session = await getSession()
 
   return (
     <div className="bg-white/20 backdrop-blur-lg mt-5 rounded-lg p-4 @container/profile">

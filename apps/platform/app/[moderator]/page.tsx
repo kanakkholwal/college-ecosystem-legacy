@@ -1,6 +1,5 @@
 import ConditionalRender from "@/components/utils/conditional-render";
-import { getSession } from "src/lib/auth";
-import type { sessionType } from "src/types/session";
+import { getSession } from "src/lib/auth-server";
 import { changeCase } from "src/utils/string";
 import AdminDashboard from "./context/admin.dashboard";
 import CRDashboard from "./context/cr.dashboard";
@@ -28,7 +27,7 @@ export async function generateMetadata(
 
 export default async function ModeratorDashboard(props: Props) {
   const params = await props.params;
-  const session = (await getSession()) as sessionType;
+  const session = await getSession()
 
   return (
     <div className="space-y-6 my-5">

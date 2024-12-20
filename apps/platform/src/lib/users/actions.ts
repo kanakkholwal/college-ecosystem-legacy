@@ -1,6 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import ResultModel from "src/models/result";
 import UserModel, { IUser, UserWithId } from "src/models/user";

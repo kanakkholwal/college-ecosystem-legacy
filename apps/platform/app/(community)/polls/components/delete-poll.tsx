@@ -6,7 +6,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { database } from "src/lib/firebase";
 import { deletePoll } from "src/lib/poll/actions";
-import { PollType } from "src/models/poll";
+import type { PollType } from "src/models/poll";
 
 export default function DeletePoll({ pollId }: { pollId: PollType["_id"] }) {
   const [loading, setLoading] = useState(false);
@@ -16,6 +16,7 @@ export default function DeletePoll({ pollId }: { pollId: PollType["_id"] }) {
     toast
       .promise(deletePoll(pollId), {
         loading: "Deleting poll...",
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
         success: (data: any) => {
           remove(ref(database, `polls/${pollId}`))
             .catch((err) => {

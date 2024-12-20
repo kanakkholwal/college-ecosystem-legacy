@@ -8,15 +8,15 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "next-auth/react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaRegUser } from "react-icons/fa";
 import { MdLogout } from "react-icons/md";
 import { VscChevronDown } from "react-icons/vsc";
-import { sessionType } from "src/types/session";
+import type { Session } from "src/lib/auth-client";
+import { authClient } from "src/lib/auth-client";
 
-export default function Navbar({ user }: { user: sessionType["user"] }) {
+export default function Navbar({ user }: { user: Session["user"] }) {
   const pathname = usePathname();
 
   return (
@@ -31,10 +31,10 @@ export default function Navbar({ user }: { user: sessionType["user"] }) {
         <div className="flex items-center space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center space-x-2 px-3 py-1.5 rounded-lg">
+              <button type="button" className="flex items-center space-x-2 px-3 py-1.5 rounded-lg">
                 {/* <Image src={user.profilePicture} height={80} width={80} alt="avatar" className="w-8 h-8 rounded-full" /> */}
                 <span className="text-slate-500 dark:text-slate-300 text-sm ml-2 font-semibold hidden md:inline-block">
-                  {user.firstName}
+                  {user.name}
                 </span>
                 <VscChevronDown className="text-slate-500" />
               </button>
@@ -53,9 +53,10 @@ export default function Navbar({ user }: { user: sessionType["user"] }) {
               </DropdownMenuItem>
               <DropdownMenuItem asChild>
                 <button
-                  onClick={(e) => {
+                  type="button"
+                  onClick={async(e) => {
                     e.preventDefault();
-                    signOut();
+                    await authClient.signOut();
                   }}
                   className="w-full text-accent-foreground hover:text-slate-800"
                 >

@@ -64,7 +64,7 @@ export default function SearchBox({ statuses, types }: Props) {
       <div className="absolute top-0 bottom-0 left-0">
         <Suspense
           fallback={
-            <button className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
+            <button type="button" className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
               <span className="relative text-base font-semibold text-primary dark:text-white">
                 <IoMdOptions className="w-5 h-5" />
               </span>
@@ -73,7 +73,7 @@ export default function SearchBox({ statuses, types }: Props) {
         >
           <Sheet open={open} onOpenChange={setOpen}>
             <SheetTrigger asChild>
-              <button className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
+              <button type="button" className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
                 <span className="relative text-base font-semibold text-primary dark:text-white">
                   <IoMdOptions className="w-5 h-5" />
                 </span>
@@ -95,10 +95,9 @@ export default function SearchBox({ statuses, types }: Props) {
                     variant="slate"
                     size="sm"
                     className={
-                      "text-xs !h-8 " +
-                      (searchParams.get("currentStatus")?.toString() === "all"
+                      `text-xs !h-8 ${searchParams.get("currentStatus")?.toString() === "all"
                         ? "bg-accent-foreground hover:bg-accent-foreground/90 text-white"
-                        : "")
+                        : ""}`
                     }
                     onClick={() => {
                       handleFilter("currentStatus", "all");
@@ -112,11 +111,10 @@ export default function SearchBox({ statuses, types }: Props) {
                       variant="slate"
                       size="sm"
                       className={
-                        "text-xs !h-8 capitalize " +
-                        ((searchParams.get("currentStatus")?.toString() ??
+                        `text-xs !h-8 capitalize ${(searchParams.get("currentStatus")?.toString() ??
                           "all") === status
                           ? "bg-accent-foreground hover:bg-accent-foreground/90 text-white"
-                          : "")
+                          : ""}`
                       }
                       onClick={() => {
                         handleFilter("currentStatus", status);
@@ -136,10 +134,9 @@ export default function SearchBox({ statuses, types }: Props) {
                     variant="slate"
                     size="sm"
                     className={
-                      "text-xs !h-8 " +
-                      (searchParams.get("roomType")?.toString() === "all"
+                      `text-xs !h-8 ${searchParams.get("roomType")?.toString() === "all"
                         ? "bg-accent-foreground hover:bg-accent-foreground/90 text-white"
-                        : "")
+                        : ""}`
                     }
                     onClick={() => {
                       handleFilter("roomType", "all");
@@ -153,11 +150,10 @@ export default function SearchBox({ statuses, types }: Props) {
                       variant="slate"
                       size="sm"
                       className={
-                        "text-xs !h-8 capitalize " +
-                        ((searchParams.get("roomType")?.toString() ?? "all") ===
+                        `text-xs !h-8 capitalize ${(searchParams.get("roomType")?.toString() ?? "all") ===
                         type
                           ? "bg-accent-foreground hover:bg-accent-foreground/90 text-white"
-                          : "")
+                          : ""}`
                       }
                       onClick={() => {
                         handleFilter("roomType", type);
@@ -193,7 +189,7 @@ export default function SearchBox({ statuses, types }: Props) {
         }}
       />
       <div className="absolute top-0 bottom-0 right-0">
-        <button className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
+        <button type="button" className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
           <span className="relative text-base font-semibold text-white">
             <Search className="w-5 h-5" />
           </span>

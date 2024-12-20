@@ -1,15 +1,15 @@
 import EmptyArea from "@/components/common/empty-area";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
 import { getDepartmentName } from "src/constants/departments";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import { getAllTimeTables } from "src/lib/time-table/actions";
 import { sessionType } from "src/types/session";
 
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const session = (await getSession()) as sessionType;
+  const session = await getSession()
   const timeTables = await getAllTimeTables();
 
   return (

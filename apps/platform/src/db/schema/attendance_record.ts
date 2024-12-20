@@ -7,6 +7,7 @@ import {
   timestamp,
   uuid,
 } from "drizzle-orm/pg-core";
+import type{ InferSelectModel, InferInsertModel } from 'drizzle-orm'
 
 import { users } from "./auth-schema";
 // Attendance Table Schema
@@ -27,3 +28,6 @@ export const personalAttendanceRecords = pgTable(
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
   }
 );
+
+export type PersonalAttendanceRecord = InferSelectModel<typeof personalAttendanceRecords>;
+export type InsertPersonalAttendanceRecord = InferInsertModel<typeof personalAttendanceRecords>;

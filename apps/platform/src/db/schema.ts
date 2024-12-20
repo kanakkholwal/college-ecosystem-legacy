@@ -5,6 +5,7 @@ export {
   verifications,
   departmentNameEnum,
   userRolesEnum,
+  userGenderEnum
 } from "./schema/auth-schema";
 
 export { personalAttendanceRecords } from "./schema/attendance_record";

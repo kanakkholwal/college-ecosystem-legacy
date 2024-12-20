@@ -25,7 +25,7 @@ export default function Paginate({ totalPages }: { totalPages: number }) {
 
   return (
     <Pagination>
-      <PaginationContent>
+      <PaginationContent className="flex-wrap">
         <PaginationItem>
           <PaginationPrevious
             aria-disabled={currentPage <= 1}
@@ -43,6 +43,7 @@ export default function Paginate({ totalPages }: { totalPages: number }) {
               pageNumber <= currentPage + displayPageRange)
           ) {
             return (
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
               <PaginationItem key={i}>
                 <PaginationLink
                   href={createPageURL(pageNumber)}
@@ -52,11 +53,12 @@ export default function Paginate({ totalPages }: { totalPages: number }) {
                 </PaginationLink>
               </PaginationItem>
             );
-          } else if (
+          } if (
             pageNumber === currentPage - displayPageRange - 1 ||
             pageNumber === currentPage + displayPageRange + 1
           ) {
             // Show ellipsis
+            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
             return <PaginationEllipsis key={i} />;
           }
 

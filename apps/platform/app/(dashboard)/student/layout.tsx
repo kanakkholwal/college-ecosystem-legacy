@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import { sessionType } from "src/types/session";
 
 export const metadata: Metadata = {
@@ -16,7 +16,7 @@ type LayoutProps = Readonly<{
 }>;
 
 export default async function Layout({ children }: LayoutProps) {
-  const session = (await getSession()) as sessionType;
+  const session = await getSession()
   const isStudent = session.user.roles.includes("student");
 
   if (!isStudent) return redirect(`/${session.user.roles[0]}`);

@@ -1,13 +1,12 @@
 import EmptyArea from "@/components/common/empty-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import {
   getClosedPolls,
   getOpenPolls,
   getPollsCreatedByLoggedInUser,
 } from "src/lib/poll/actions";
-import { PollType } from "src/models/poll";
-import { sessionType } from "src/types/session";
+import type { PollType } from "src/models/poll";
 import CreatePoll from "./components/create-poll";
 import PollComponent from "./components/poll-component";
 
@@ -15,11 +14,11 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: `Polls | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-  description: `Check the latest polls here.`,
+  description: "Check the latest polls here.",
 };
 
 export default async function PollsPage() {
-  const session = (await getSession()) as sessionType;
+  const session = await getSession()
 
   const [openPolls, closedPolls, userPolls] = await Promise.all([
     getOpenPolls(),

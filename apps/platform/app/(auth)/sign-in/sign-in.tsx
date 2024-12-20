@@ -86,8 +86,8 @@ export default function SignInForm() {
 
   return (
     <>
-      <main className="flex flex-col items-center justify-center w-full p-4 space-y-4">
-        <div className={cn("grid gap-6 w-full text-left px-4")}>
+      <main className="flex flex-col items-center justify-center w-full space-y-4">
+        <div className={cn("grid gap-6 w-full text-left py-4")}>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
               <FormField

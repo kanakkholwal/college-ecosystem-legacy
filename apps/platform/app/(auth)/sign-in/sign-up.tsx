@@ -82,7 +82,6 @@ export default function Unauthorized() {
         name: "Kanak Kholwal",
         username: "21dec026",
         gender: "male",
-        role:"user",
         other_roles: ["student"],
         department: getDepartmentName("ece"),
       },

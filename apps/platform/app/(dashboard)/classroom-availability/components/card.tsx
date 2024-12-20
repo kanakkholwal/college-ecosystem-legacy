@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { formatDistanceToNow, parseISO } from "date-fns";
-import { RoomTypeWithId } from "src/models/room";
+import type { RoomTypeWithId } from "src/models/room";
 
 // Function to convert a date string to local time string + time ago format
 function formatDateAgo(dateString: string): string {

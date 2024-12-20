@@ -1,17 +1,16 @@
 "use server";
 import { getDepartmentCode } from "src/constants/departments";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import { getStudentInfo } from "src/lib/student/actions";
 import Timetable, { TimeTableWithID } from "src/models/time-table";
-import { sessionType } from "src/types/session";
 import { studentInfoType } from "src/types/student";
 
 export async function getInfo(): Promise<{
   studentInfo: studentInfoType | null;
   timetables: TimeTableWithID[];
 }> {
-  const session = (await getSession()) as sessionType;
+  const session = await getSession()
 
   let query: any = {};
 

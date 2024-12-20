@@ -1,4 +1,4 @@
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import admin from "src/lib/firebaseAdmin";
 
 import dbConnect from "src/lib/dbConnect";

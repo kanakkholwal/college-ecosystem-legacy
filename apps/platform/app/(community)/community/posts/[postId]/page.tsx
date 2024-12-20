@@ -4,9 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatDistanceToNow } from "date-fns";
 import { notFound } from "next/navigation";
 import { CATEGORY_IMAGES } from "src/constants/community";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import { getPostById } from "src/lib/community/actions";
-import type { sessionType } from "src/types/session";
 import PostFooter from "./post-footer";
 
 interface Props {
@@ -40,7 +39,7 @@ export async function generateMetadata(
 const cache = new Map<string, boolean>();
 
 export default async function CommunityPost(props: Props) {
-  const session = (await getSession()) as sessionType;
+  const session = await getSession()
   const params = await props.params;
   const post = await getPostById(
     params.postId,

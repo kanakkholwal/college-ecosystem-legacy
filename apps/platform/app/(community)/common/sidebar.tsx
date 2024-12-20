@@ -1,5 +1,5 @@
 "use client";
-import { SidenavLinkType } from "@/components/common/sidebar";
+import type { SidenavLinkType } from "@/components/common/sidebar";
 import { AudioLines } from "lucide-react";
 import { GrAnnounce } from "react-icons/gr";
 import { MdOutlinePoll } from "react-icons/md";
