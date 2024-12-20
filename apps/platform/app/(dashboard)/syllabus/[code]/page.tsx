@@ -13,8 +13,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { authOptions } from "app/api/auth/[...nextauth]/options";
-import { getServerSession } from "next-auth/next";
+
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
@@ -28,6 +27,7 @@ import { AddPrevsModal, AddRefsModal } from "./modal";
 import { IconMap } from "./render-link";
 
 import type { Metadata, ResolvingMetadata } from "next";
+import { getSession } from "src/lib/auth-server";
 
 type Props = {
   params: Promise<{ code: string }>;
@@ -39,26 +39,32 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   // read route params
   const { code } = await params;
-  const course = await getCourseByCode(code);
-  if (!course) return notFound();
+  const data = await getCourseByCode(code);
+  if (!data) return notFound();
 
   return {
-    title: `${course.name} | ${course.code} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-    description: `Syllabus of ${course.name} (${course.code})`,
+    title: `${data.course.name} | ${data.course.code} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+    description: `Syllabus of ${data.course.name} (${data.course.code})`,
   };
 }
 
 export default async function CoursePage(props: Props) {
   const params = await props.params;
 
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
 
   await dbConnect();
-  const course = await getCourseByCode(params.code);
-  if (!course) {
+  const data = await getCourseByCode(params.code);
+  if (!data) {
     return notFound();
   }
-  console.log(course);
+  console.log(data);
+  const {
+    course,
+    booksAndReferences,
+    previousPapers,
+    chapters,
+  } = data;
 
   async function addPrevPaper(paper: prevPaperType): Promise<boolean> {
     "use server";
@@ -121,7 +127,7 @@ export default async function CoursePage(props: Props) {
           </TabsList>
           <TabsContent value="chapters">
             <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1">
-              {course.chapters.map((chapter, index) => {
+              {chapters.map((chapter, index) => {
                 return (
                   <Card variant="glass" key={chapter.title}>
                     <CardHeader className="flex-row gap-2 items-center px-5 py-4">
@@ -146,10 +152,10 @@ export default async function CoursePage(props: Props) {
             </div>
           </TabsContent>
           <TabsContent value="books_and_references">
-            {course.books_and_references.length > 0 ? (
+            {booksAndReferences.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {course.books_and_references.map(
-                  (ref: booksAndRefType, index: number) => {
+                {booksAndReferences.map(
+                  (ref) => {
                     const iconsSrc = IconMap.has(
                       ref.type as booksAndRefType["type"]
                     )
@@ -218,9 +224,9 @@ export default async function CoursePage(props: Props) {
             </div>
           </TabsContent>
           <TabsContent value="prev_papers">
-            {course.prev_papers.length > 0 ? (
+            {previousPapers.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {course.prev_papers.map((paper, index) => {
+                {previousPapers.map((paper, index) => {
                   return (
                     <div
                       className="flex items-center p-4 gap-3 border border-border hover:border-primary rounded-md"

@@ -31,7 +31,7 @@ export default async function DashboardLayout({
     return notFound();
   }
 
-  if (!session.user.roles.includes(moderator)) return <Page403 />;
+  if (!session.user.other_roles.includes(moderator)) return <Page403 />;
 
   return (
     <>

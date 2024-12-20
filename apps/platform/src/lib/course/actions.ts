@@ -2,7 +2,7 @@
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { and, count, eq, ilike, or } from "drizzle-orm";
 import { db } from "src/db/connect";
-import { booksAndReferences, courses, previousPapers } from "src/db/schema";
+import { booksAndReferences, courses, previousPapers,chapters } from "src/db/schema";
 import { getSession } from "src/lib/auth-server";
 
 
@@ -17,6 +17,9 @@ type BookReferenceInsert = InferInsertModel<typeof booksAndReferences>;
 // Infer types for previous papers
 type PreviousPaperSelect = InferSelectModel<typeof previousPapers>;
 type PreviousPaperInsert = InferInsertModel<typeof previousPapers>;
+
+type ChapterSelect = InferSelectModel<typeof chapters>;
+
 
 export async function getCourses(
   query: string,
@@ -68,10 +71,44 @@ export async function getCourses(
 }
 
 export async function getCourseByCode(code: string) {
-  const course = await db.select().from(courses).where(eq(courses.code, code));
-  return (course[0] as CourseSelect) || null;
-}
+  // Fetch course details
+  const course = await db
+    .select()
+    .from(courses)
+    .where(eq(courses.code, code))
+    .limit(1);
 
+  if (course.length === 0) {
+    throw new Error(`Course with code ${code} not found`);
+  }
+
+  const courseId = course[0].id;
+
+  // Fetch related books and references
+  const books = await db
+    .select()
+    .from(booksAndReferences)
+    .where(eq(booksAndReferences.courseId, courseId));
+
+  // Fetch related previous papers
+  const papers = await db
+    .select()
+    .from(previousPapers)
+    .where(eq(previousPapers.courseId, courseId));
+
+  // Fetch related chapters
+  const courseChapters = await db
+    .select()
+    .from(chapters)
+    .where(eq(chapters.id, courseId));
+
+  return {
+    course: course[0] as CourseSelect,
+    booksAndReferences: books as BookReferenceSelect[],
+    previousPapers: papers as PreviousPaperSelect[],
+    chapters: courseChapters as ChapterSelect[],
+  };
+}
 export async function getCourseById(id: string) {
   const course = await db.select().from(courses).where(eq(courses.id, id));
   return (course[0] as CourseSelect) || null;
@@ -86,6 +123,9 @@ export async function updateCourseByCr(course: Partial<CourseSelect>) {
   const session = await getSession();
   if (!session) {
     throw new Error("User not authenticated");
+  }
+  if (!course.id) {
+    throw new Error("Course id is required");
   }
   if (
     !(

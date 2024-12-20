@@ -13,6 +13,25 @@ export const getResultByRollNoFromSite = async (req: Request, res: Response) => 
 
     res.json(data);
 }
+export const getResult = async (req: Request, res: Response) => {
+    const rollNo = req.params.rollNo;
+    await dbConnect();
+
+    const resultData = await ResultModel.findOne({ rollNo: rollNo });
+    if (!resultData) {
+        res.json({
+            message: "Result not found",
+            error: true,
+            data: null,
+        });
+        return;
+    }
+    res.json({
+        data: resultData,
+        message: "Result found",
+        error: false,
+    });
+}
 
 // Endpoint to get result by rollNo from the database
 export const addUpdateResult = async (req: Request, res: Response) => {

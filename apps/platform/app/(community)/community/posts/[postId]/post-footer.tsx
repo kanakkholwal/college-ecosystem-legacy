@@ -7,9 +7,9 @@ import { useShare } from "@/hooks/useShare";
 import { Bookmark, BookmarkCheck, Eye, Share, ThumbsUp } from "lucide-react";
 
 import { useState } from "react";
+import type { Session } from "src/lib/auth-client";
 import { updatePost } from "src/lib/community/actions";
-import { CommunityPostTypeWithId } from "src/models/community";
-import { sessionType } from "src/types/session";
+import type { CommunityPostTypeWithId } from "src/models/community";
 import { formatNumber } from "src/utils/number";
 
 export default function PostFooter({
@@ -17,12 +17,12 @@ export default function PostFooter({
   user,
 }: {
   post: CommunityPostTypeWithId;
-  user: sessionType["user"];
+  user: Session["user"];
 }) {
   const { share, socials } = useShare({
     title: post.title,
     text: post.content,
-    url: process.env.NEXT_PUBLIC_BASE_URL + `/community/posts/${post._id}`,
+    url: `${process.env.NEXT_PUBLIC_BASE_URL}/community/posts/${post._id}`,
   });
 
   // refactor this with useTransition after react 19
@@ -35,13 +35,13 @@ export default function PostFooter({
         <Button
           size="sm"
           disabled={liking}
-          variant={post.likes.includes(user._id) ? "default_light" : "glass"}
+          variant={post.likes.includes(user.id) ? "default_light" : "glass"}
           onClick={() => {
             setLiking(true);
             updatePost(post._id, {
-              likes: post.likes.includes(user._id)
-                ? post.likes.filter((id) => id !== user._id)
-                : [...post.likes, user._id],
+              likes: post.likes.includes(user.id)
+                ? post.likes.filter((id) => id !== user.id)
+                : [...post.likes, user.id],
             }).finally(() => setLiking(false));
           }}
         >
@@ -52,24 +52,24 @@ export default function PostFooter({
         <Button
           size="sm"
           disabled={saving}
-          variant={post.savedBy.includes(user._id) ? "default_light" : "glass"}
+          variant={post.savedBy.includes(user.id) ? "default_light" : "glass"}
           onClick={() => {
             setSaving(true);
             updatePost(post._id, {
-              savedBy: post.savedBy.includes(user._id)
-                ? post.savedBy.filter((id) => id !== user._id)
-                : [...post.savedBy, user._id],
+              savedBy: post.savedBy.includes(user.id)
+                ? post.savedBy.filter((id) => id !== user.id)
+                : [...post.savedBy, user.id],
             }).finally(() => setSaving(false));
           }}
         >
-          {post.savedBy.includes(user._id) ? <BookmarkCheck /> : <Bookmark />}
+          {post.savedBy.includes(user.id) ? <BookmarkCheck /> : <Bookmark />}
           <span>{formatNumber(post.savedBy.length)}</span>
           <span>Save</span>
         </Button>
 
         <ResponsiveDialog
-          title={`Share this Post`}
-          description={`Share this post with your friends`}
+          title={"Share this Post"}
+          description={"Share this post with your friends"}
           btnProps={{
             variant: "glass",
             size: "sm",
@@ -85,7 +85,7 @@ export default function PostFooter({
             {socials.map((social, index) => {
               return (
                 <Button
-                  key={index}
+                  key={social.name + index.toString()}
                   size="sm"
                   variant="default_light"
                   className="w-full justify-start"

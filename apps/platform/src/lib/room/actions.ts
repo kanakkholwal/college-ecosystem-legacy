@@ -2,8 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 import dbConnect from "src/lib/dbConnect";
-import RoomModel, { RoomTypeWithId } from "src/models/room";
-import { getSession } from "../auth";
+import RoomModel, { type RoomTypeWithId } from "src/models/room";
+import { getSession } from "src/lib/auth-server";
+import type { PipelineStage } from "mongoose";
 
 export async function getRooms(
   query: string,
@@ -20,7 +21,7 @@ export async function getRooms(
 
   const filterQuery = {
     $or: [{ roomNumber: { $regex: query, $options: "i" } }],
-  } as unknown as any;
+  } as unknown as PipelineStage[];
 
   // Apply filters if provided and not equal to "all"
   if (filter.currentStatus && filter.currentStatus !== "all") {
@@ -72,9 +73,9 @@ export async function updateStatus(
     throw new Error("Only admins, faculty and CRs can update room status");
   }
   if (
-    !session.user.roles.includes("admin") &&
-    !session.user.roles.includes("faculty") &&
-    !session.user.roles.includes("cr")
+    !(session.user.role === "admin") &&
+    !session.user.other_roles.includes("faculty") &&
+    !session.user.other_roles.includes("cr")
   ) {
     return Promise.reject(
       "Only admins, faculty and CRs can update room status"
@@ -91,16 +92,17 @@ export async function updateStatus(
     room.lastUpdatedTime = Date.now();
     const historyEntry = {
       user: {
-        firstName: session.user.firstName,
-        rollNo: session.user.rollNo,
+        name: session.user.name,
+        username: session.user.username,
         email: session.user.email,
       },
       time: Date.now(),
     };
     room.usageHistory.push(historyEntry);
     await room.save();
-    session.user.roles.forEach((role) => revalidatePath(`${role}/rooms`));
-    revalidatePath(`/classroom-availability`);
+    // biome-ignore lint/complexity/noForEach: <explanation>
+    session.user.other_roles.forEach((role) => revalidatePath(`${role}/rooms`));
+    revalidatePath("/classroom-availability");
     return Promise.resolve(true);
   } catch (error) {
     return Promise.reject(error);

@@ -30,7 +30,7 @@ export type sideLinkType = {
 export type rawLinkType = {
   label: string;
   path: string;
-  allowed_roles: sessionType["user"]["roles"];
+  allowed_roles: Session["user"]["role"] | Session["user"]["other_roles"];
   icon: React.ElementType;
 };
 
@@ -57,12 +57,6 @@ const all_links: rawLinkType[] = [
     label: "Storage",
     icon: GrStorage,
     path: "/storage",
-    allowed_roles: ["admin", "moderator"],
-  },
-  {
-    label: "Pages",
-    icon: NotepadTextDashed,
-    path: "/pages",
     allowed_roles: ["admin", "moderator"],
   },
   {
@@ -171,7 +165,7 @@ export function SidenavFooter({ user }: { user: Session["user"] }) {
       </Avatar>
       <div className="flex flex-col items-start justify-start">
         <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-200">
-          {user.firstName}
+          {user.name}
         </h3>
         <p className="text-xs text-slate-600 dark:text-slate-300">
           <Link href={`/people/${user.username}`} target="_blank">
@@ -185,7 +179,7 @@ export function SidenavFooter({ user }: { user: Session["user"] }) {
         className="rounded-full ml-auto"
         onClick={(e) => {
           e.preventDefault();
-          signOut({ callbackUrl: "/sign-in" });
+          signOut();
         }}
       >
         <LogOut className="w-5 h-5" />

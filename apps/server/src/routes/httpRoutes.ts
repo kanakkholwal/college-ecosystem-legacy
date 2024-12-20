@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getDepartments, getDepartmentsList } from '~/controllers/http-department';
 import { getFacultyByEmailHandler, getFacultyListByDepartmentHandler } from '~/controllers/http-faculty_list';
-import { addUpdateResult, getResultByRollNoFromSite } from '~/controllers/http-result';
+import { addUpdateResult, getResult, getResultByRollNoFromSite } from '~/controllers/http-result';
 
 const router = Router();
 
@@ -23,6 +23,7 @@ router.get('/departments/list', getDepartmentsList);
 router.post('/result/:rollNo', getResultByRollNoFromSite);
 
 // Endpoint to get result by rollNo from the database
+router.get('/result/:rollNo/get', getResult);
 router.post('/result/:rollNo/add', addUpdateResult);
 router.post('/result/:rollNo/update', addUpdateResult);
 
