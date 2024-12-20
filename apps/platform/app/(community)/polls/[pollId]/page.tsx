@@ -5,7 +5,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSession } from "src/lib/auth-server";
 import { getPollById, updateVotes } from "src/lib/poll/actions";
-import type { sessionType } from "src/types/session";
 import { PollRender } from "../components/poll-component";
 import Polling from "./polling";
 
@@ -73,11 +72,13 @@ export default async function Dashboard({ params }: Props) {
         {closesAlready ? (
           <PollRender poll={poll} />
         ) : (
-          <Polling
-            poll={poll}
-            user={session.user}
-            updateVotes={updateVotes.bind(null, poll._id)}
-          />
+          session?.user && (
+            <Polling
+              poll={poll}
+              user={session.user}
+              updateVotes={updateVotes.bind(null, poll._id)}
+            />
+          )
         )}
       </div>
     </>

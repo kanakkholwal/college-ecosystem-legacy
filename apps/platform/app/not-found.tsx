@@ -1,7 +1,7 @@
 import { GoBackButton } from "@/components/common/go-back";
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic";
@@ -25,7 +25,9 @@ export default async function NotFound() {
           className="w-full h-80 my-4"
           viewBox="0 0 480 360"
           xmlns="http://www.w3.org/2000/svg"
+          aria-label="404"
         >
+          <title>404</title>
           <defs>
             <linearGradient
               id="BG"

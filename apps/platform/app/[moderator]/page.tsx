@@ -33,7 +33,7 @@ export default async function ModeratorDashboard(props: Props) {
     <div className="space-y-6 my-5">
       <div>
         <h2 className="text-3xl font-semibold mb-2">
-          Hi, {session.user.firstName}
+          Hi, {session.user.name}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Welcome to the dashboard.

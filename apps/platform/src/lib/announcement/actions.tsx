@@ -19,7 +19,7 @@ export async function createAnnouncement(
     // Validate the announcement data
     const announcement = new Announcement({
       ...announcementData,
-      createdBy: session.user._id,
+      createdBy: session.user.id,
     });
     await announcement.save();
     revalidatePath(`/announcements`);

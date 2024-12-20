@@ -1,6 +1,7 @@
 import { getSession } from "src/lib/auth-server";
 
 import type { Metadata } from "next";
+import type { Session } from "src/lib/auth";
 
 export const metadata: Metadata = {
   title: `Profile | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
@@ -8,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const session = await getSession()
+  const session = await getSession() as Session
 
   return (
     <div className="bg-white/20 backdrop-blur-lg mt-5 rounded-lg p-4 @container/profile">
@@ -20,21 +21,21 @@ export default async function Dashboard() {
           <div className="grid gap-2">
             <p className="font-bold text-gray-900 dark:text-gray-100">Name</p>
             <p className="text-sm text-gray-700 font-semibold">
-              {session.user.firstName} {session.user.lastName}
+              {session?.user?.name} 
             </p>
           </div>
           <div className="grid gap-2">
             <p className="font-bold text-gray-900 dark:text-gray-100">Email</p>
             <p className="text-sm text-gray-700 font-semibold">
-              {session.user.email}
+              {session?.user.email}
             </p>
           </div>
           <div className="grid gap-2">
             <p className="font-bold text-gray-900 dark:text-gray-100">
-              Username / Roll No.
+              Username
             </p>
             <p className="text-sm text-gray-700 font-semibold">
-              {session.user.rollNo}
+              @{session.user.username}
             </p>
           </div>
           <div className="grid gap-2">
@@ -48,7 +49,7 @@ export default async function Dashboard() {
           <div className="grid gap-2">
             <p className="font-bold text-gray-900 dark:text-gray-100">Roles</p>
             <p className="text-sm text-gray-700 font-semibold">
-              {session.user.roles.join(", ")}
+              {session.user.other_roles.join(", ")}
             </p>
           </div>
         </div>

@@ -2,18 +2,18 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
 import { Loader2, MoreHorizontal } from "lucide-react";
@@ -83,7 +83,7 @@ export default function UserList({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users?.map((user) => <UserRow user={user} key={user._id} />)}
+            {users?.map((user) => <UserRow user={user} key={user.id} />)}
           </TableBody>
         </Table>
       </div>
@@ -151,7 +151,7 @@ function UserRow({ user }: { user: UserWithId }) {
           <DropdownMenuContent align="end">
             <DropdownMenuItem
               onClick={() =>
-                toast.promise(navigator.clipboard.writeText(user._id), {
+                toast.promise(navigator.clipboard.writeText(user.id), {
                   loading: "Copying...",
                   success: "ID copied to clipboard",
                   error: "Failed to copy ID",
@@ -162,12 +162,12 @@ function UserRow({ user }: { user: UserWithId }) {
               Copy ID{" "}
             </DropdownMenuItem>
             <DropdownMenuItem asChild>
-              <Link href={`/admin/users/${user._id}/update`}>Update</Link>
+              <Link href={`/admin/users/${user.id}/update`}>Update</Link>
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => {
                 console.log("deleting user ", user);
-                toast.promise(deleteUser(user._id), {
+                toast.promise(deleteUser(user.id), {
                   loading: "Deleting...",
                   success: "User deleted",
                   error: (error) => error.response.data.message,

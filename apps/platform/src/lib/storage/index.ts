@@ -23,7 +23,7 @@ export async function UploadFile({
   }
 
   const uploadedAt = new Date();
-  const uploadedBy = session.user._id;
+  const uploadedBy = session.user.id;
 
   const bucket = admin
     .storage()

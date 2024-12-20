@@ -89,7 +89,7 @@ export async function createTimeTable(timetableData: RawTimetable) {
       year: timetableData.year,
       semester: timetableData.semester,
       schedule: timetableData.schedule,
-      author: session.user._id,
+      author: session.user.id,
     });
 
     // Save the timetable document

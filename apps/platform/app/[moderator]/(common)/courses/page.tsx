@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata, ResolvingMetadata } from "next";
@@ -91,7 +91,7 @@ export default async function CoursesPage(props: Props) {
           {courses.map((course) => {
             return (
               <Card
-                key={course._id}
+                key={course.id}
                 variant="glass"
                 className="hover:shadow-lg"
               >

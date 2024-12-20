@@ -22,7 +22,7 @@ export async function createAttendanceRecord(
     // Validate the attendance record data
     const attendanceRecord = new AttendanceRecord({
       ...attendanceRecordData,
-      userId: session.user._id,
+      userId: session.user.id,
       attendance: [],
     });
     await attendanceRecord.save();
@@ -45,7 +45,7 @@ export async function getAttendanceRecords(): Promise<
     }
     await dbConnect();
     const attendanceRecords = await AttendanceRecord.find({
-      userId: session.user._id,
+      userId: session.user.id,
     });
     return Promise.resolve(JSON.parse(JSON.stringify(attendanceRecords)));
   } catch (err) {
@@ -68,7 +68,7 @@ export async function updateAttendanceRecord(
     // Validate the attendance record data
     const attendanceRecord = await AttendanceRecord.findOne({
       _id: recordId,
-      userId: session.user._id,
+      userId: session.user.id,
     });
     if (!attendanceRecord) {
       return Promise.reject("Attendance record not found");
@@ -98,7 +98,7 @@ export async function deleteAttendanceRecord(recordId: string) {
     // Validate the attendance record data
     const attendanceRecord = await AttendanceRecord.findOne({
       _id: recordId,
-      userId: session.user._id,
+      userId: session.user.id,
     });
     if (!attendanceRecord) {
       return Promise.reject("Attendance record not found");
@@ -126,7 +126,7 @@ export async function forceUpdateAttendanceRecord(
     // Validate the attendance record data
     const attendanceRecord = await AttendanceRecord.findOne({
       _id: recordId,
-      userId: session.user._id,
+      userId: session.user.id,
     });
     if (!attendanceRecord) {
       return Promise.reject("Attendance record not found");

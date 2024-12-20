@@ -13,17 +13,17 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Bug, Cloud, LogOut, UserRound } from "lucide-react";
 
-import { authClient } from "src/lib/auth-client"; //import the auth client
+import Image from "next/image";
 import Link from "next/link";
-import { useRouter, usePathname} from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuGithub } from "react-icons/lu";
 import { RiTwitterXFill } from "react-icons/ri";
-import type {Session} from "src/lib/auth-client";
-import { SidebarContent } from "./sidebar";
-import Image from "next/image";
+import type { Session } from "src/lib/auth-client";
+import { authClient } from "src/lib/auth-client"; //import the auth client
 import type { SidenavLinkType } from "./sidebar";
+import { SidebarContent } from "./sidebar";
 
 interface NavbarProps {
   user: Session["user"];
@@ -103,7 +103,7 @@ export default function Navbar({
             <DropdownMenuContent className="w-56" side="bottom" align="end">
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  {/* <p className="block md:hidden text-sm font-medium leading-none">{user.firstName}</p> */}
+                  {/* <p className="block md:hidden text-sm font-medium leading-none">{user.name}</p> */}
                   <p className="text-xs capitalize leading-none text-primary md:font-medium ">
                     {user.name.toLowerCase()}
                   </p>

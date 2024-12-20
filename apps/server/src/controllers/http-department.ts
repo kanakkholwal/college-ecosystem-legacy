@@ -1,9 +1,9 @@
 import {
-    DEPARTMENTS_LIST,
-    DEPARTMENTS
+    DEPARTMENTS,
+    DEPARTMENTS_LIST
 } from '../constants/departments';
 
-import { type Request, type Response, Router } from 'express';
+import type { Request, Response } from 'express';
 
 
 export const getDepartmentsList = async (req: Request, res: Response) => {

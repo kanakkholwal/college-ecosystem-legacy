@@ -22,12 +22,12 @@ export default async function UpdateUserPage({ params }: PageProps) {
         <h1 className="text-2xl font-bold">Update User</h1>
         <div className="flex items-center space-x-2">
           <span className="text-gray-700 font-semibold">User ID:</span>
-          <span className="font-medium">{user._id}</span>
+          <span className="font-medium">{user.id}</span>
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-gray-700 font-semibold">Name:</span>
           <span className="font-medium">
-            {user.firstName} {user.lastName}
+            {user.name} 
           </span>
         </div>
         <div className="flex items-center space-x-2">

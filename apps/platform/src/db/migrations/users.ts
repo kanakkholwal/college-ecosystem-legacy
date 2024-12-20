@@ -52,7 +52,7 @@ export async function mongoToPgDatabase(ENV:"production" | "testing" = "producti
                 body: {
                     email: user.email,
                     password: user.email + user.password,
-                    name: `${user.firstName} ${user?.lastName || ""}`,
+                    name: `${user.name} ${user?.lastName || ""}`,
                     username: user.rollNo,
                     image: user.profilePicture,
                     gender: "not_specified",

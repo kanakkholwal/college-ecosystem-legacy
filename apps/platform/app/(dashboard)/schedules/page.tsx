@@ -1,23 +1,22 @@
 import EmptyArea from "@/components/common/empty-area";
 import { Button } from "@/components/ui/button";
 import {
-    Card,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+  Card,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
 import { getDepartmentName } from "src/constants/departments";
 import { getSession } from "src/lib/auth-server";
 import { getAllTimeTables } from "src/lib/time-table/actions";
-import { sessionType } from "src/types/session";
 
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: `Timetables | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-  description: `Check your schedules here.`,
+  description: "Check your schedules here.",
 };
 
 export default async function Dashboard() {
@@ -68,7 +67,7 @@ export default async function Dashboard() {
                   <CardTitle>{timetable.sectionName}</CardTitle>
                   <CardDescription className="text-gray-700 font-semibold">
                     {timetable.year} Year, {timetable.semester} Semester -{" "}
-                    {getDepartmentName(timetable.department_code!)}
+                    {getDepartmentName(timetable.department_code as string)}
                   </CardDescription>
                 </CardHeader>
                 <CardFooter className="justify-end">

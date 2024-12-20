@@ -17,7 +17,7 @@ export async function updateUser(userId: string, data: Partial<UserWithId>) {
     }
 
     await dbConnect();
-    const adminUser = await UserModel.findById(session.user._id);
+    const adminUser = await UserModel.findById(session.user.id);
     if (!adminUser) {
       return {
         success: false,
@@ -32,7 +32,7 @@ export async function updateUser(userId: string, data: Partial<UserWithId>) {
       };
     }
     const user = await await UserModel.findOne({
-      $or: [{ rollNo: userId }, { _id: session.user._id }],
+      $or: [{ rollNo: userId }, { _id: session.user.id }],
     });
     // cannot remove admin role from the only admin
     if (data?.roles && data?.roles?.includes("admin")) {
@@ -148,7 +148,7 @@ export async function deleteUser(userId: string) {
     }
 
     await dbConnect();
-    const adminUser = await UserModel.findById(session.user._id);
+    const adminUser = await UserModel.findById(session.user.id);
     if (!adminUser) {
       return {
         success: false,
@@ -205,7 +205,7 @@ export async function createUser(userData: IUser) {
     // }
 
     // await dbConnect();
-    // const adminUser = await UserModel.findById(session.user._id);
+    // const adminUser = await UserModel.findById(session.user.id);
     // if (!adminUser) {
     //   return {
     //     success: false,

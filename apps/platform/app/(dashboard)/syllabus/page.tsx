@@ -93,7 +93,7 @@ export default async function CoursesPage(props: {
             return (
               <Card
                 variant="glass"
-                key={course._id}
+                key={course.id}
                 className="hover:shadow-lg animate-in popup flex flex-col items-stretch justify-between"
                 style={{
                   animationDelay: `${i * 100}ms`,
