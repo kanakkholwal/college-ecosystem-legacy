@@ -2,6 +2,7 @@
 import axios from "axios";
 import type { Request, Response } from 'express';
 import HTMLParser from "node-html-parser";
+import { z } from "zod";
 import { DEPARTMENTS_LIST, type Department } from "../constants/departments";
 
 
@@ -79,7 +80,7 @@ export async function getFacultyList(): Promise<FacultyType[]> {
 
 
 export const getFacultyListByDepartmentHandler = async (req: Request, res: Response) => {
-    const department = req.params.department;
+    const department = req.params.departmentCode;
     const dept = DEPARTMENTS_LIST.find(d => d.code === department);
     if (!dept) {
         res.json({
@@ -100,6 +101,15 @@ export const getFacultyListHandler = async (req: Request, res: Response) => {
 
 export const getFacultyByEmailHandler = async (req: Request, res: Response) => {
     const email = req.params.email;
+    const emailSchema = z.string().email();
+    if(!emailSchema.safeParse(email).success) {
+        res.json({
+            error: true,
+            message: "Invalid email",
+            data: null
+        });
+        return;
+    }
     const faculties = await getFacultyList();
     const faculty = faculties.find(f => f.email === email);
     if (!faculty) {
