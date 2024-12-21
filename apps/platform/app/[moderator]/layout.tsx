@@ -1,6 +1,6 @@
 import Page403 from "@/components/utils/403";
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getSession } from "src/lib/auth-server";
 import Navbar from "./components/navbar";
 import SideNav from "./components/sidenav";
@@ -28,7 +28,7 @@ export default async function DashboardLayout({
   const session = await getSession()
 
   if (!(ALLOWED_ROLES.includes(moderator) && !!session?.user)) {
-    return notFound();
+    return redirect(session?.user.other_roles.includes("student") ? "/" : session?.user.other_roles[0] || "/");
   }
 
   if (!session.user.other_roles.includes(moderator)) return <Page403 />;

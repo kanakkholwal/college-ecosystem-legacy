@@ -38,13 +38,13 @@ export function RoomCardPublic({
         <div className="flex w-full flex-col md:flex-row md:justify-around items-start gap-2">
           <div className="flex flex-col items-center gap-1">
             <span className="text-xs font-medium text-gray-700">Capacity</span>
-            <Badge className="uppercase" variant="default_light">
+            <Badge className="uppercase" variant="default_light"size="sm">
               {room.capacity}
             </Badge>
           </div>
           <div className="flex flex-col items-center gap-1">
             <span className="text-xs font-medium text-gray-700">Room Type</span>
-            <Badge className="uppercase" variant="ghost">
+            <Badge className="uppercase" variant="ghost" size="sm">
               {room.roomType}
             </Badge>
           </div>
@@ -54,6 +54,7 @@ export function RoomCardPublic({
             </span>
             <Badge
               className="uppercase"
+              size="sm"
               variant={
                 room.currentStatus === "available" ? "success" : "destructive"
               }

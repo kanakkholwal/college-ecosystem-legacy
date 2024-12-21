@@ -43,7 +43,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     return {
       other_roles: [ROLES.STUDENT],
       department: getDepartmentByRollNo(username) as string,
-      // name: response.data.name,
+      name: response.data.name,
       emailVerified: true,
       email,
       username,

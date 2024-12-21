@@ -1,31 +1,9 @@
 import jwt, { type JwtPayload } from "jsonwebtoken";
-import nodemailer from "nodemailer";
+import { Resend } from 'resend';
 
-type Payload = {
-  to: string;
-  subject: string;
-  html: string;
-};
+export const resend = new Resend(process.env.RESEND_API_TOKEN);
 
-const smtpSettings = {
-  host: "smtp-relay.sendinblue.com", // "smtp.gmail.com", //replace with your email provider
-  port: 587,
-  auth: {
-    user: process.env.MAIL_EMAIL,
-    pass: process.env.MAIL_PASSWORD,
-  },
-};
 
-export const handleEmailFire = async (from: string, data: Payload) => {
-  const transporter = nodemailer.createTransport({
-    ...smtpSettings,
-  });
-
-  return await transporter.sendMail({
-    from: from, // 'Sender Name <sender@server.com>'
-    ...data,
-  });
-};
 const secretKey = process.env.JWT_SECRET as string;
 const expiresInMinutes = 30; // 30 minutes
 // Function to generate a token with a specific expiration time

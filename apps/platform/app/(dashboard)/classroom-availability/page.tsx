@@ -1,10 +1,9 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { Suspense } from "react";
 import { getRooms } from "src/lib/room/actions";
 import { RoomCardPublic } from "./components/card";
-import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
 
+import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
 
 type Props = {
@@ -29,7 +28,7 @@ export default async function RoomsPage(props: Props) {
     currentStatus: searchParams?.currentStatus || "",
     roomType: searchParams?.roomType || "",
   };
-  const { rooms, totalPages, currentStatuses, roomTypes } = await getRooms(
+  const { rooms, currentStatuses, roomTypes } = await getRooms(
     query,
     currentPage,
     filter
@@ -58,11 +57,26 @@ export default async function RoomsPage(props: Props) {
           data-aos="fade-up"
           data-aos-anchor-placement="center-bottom"
         >
-          <Suspense fallback={<Skeleton className="h-12 w-full " />}>
-            <SearchBox statuses={currentStatuses} types={roomTypes} />
-          </Suspense>
+            <SearchBox />
         </div>
       </section>
+      <ErrorBoundaryWithSuspense
+        fallback={
+          <div className="max-w-[1440px] mx-auto grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            <div className="text-center text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+              An error occurred while fetching rooms.
+            </div>
+          </div>
+        }
+        loadingFallback={
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {[...Array(8)].map((_, i) => (
+              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                <Skeleton className="w-full h-96" key={i} />
+            ))}
+          </div>
+        }
+      >
       <div className="max-w-[1440px] mx-auto grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {rooms.map((room, i) => {
           return (
@@ -76,10 +90,8 @@ export default async function RoomsPage(props: Props) {
           );
         })}
       </div>
+      </ErrorBoundaryWithSuspense>
 
-      <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6 mt-5">
-        {rooms.length > 0 ? <Pagination totalPages={totalPages} /> : null}
-      </div>
     </>
   );
 }

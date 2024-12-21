@@ -22,12 +22,13 @@
     "dependencies": {
         "axios": "^1.7.9",
         "cors": "^2.8.5",
+        "dotenv": "^16.4.7",
         "express": "^4.21.2",
+        "ioredis": "5.4.1",
         "mongoose": "^8.9.1",
         "node-html-parser": "^6.1.13",
         "socket.io": "^4.8.1",
-        "zod": "^3.24.1",
-        "ioredis":"5.4.1"
+        "zod": "^3.24.1"
     },
     "devDependencies": {
         "@eslint/js": "^9.17.0",
