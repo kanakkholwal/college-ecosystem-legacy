@@ -7,7 +7,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { formatDistanceToNow, parseISO } from "date-fns";
+import type { InferSelectModel } from "drizzle-orm";
 import type { RoomTypeWithId } from "src/models/room";
+import type { rooms, roomUsageHistory } from "~/db/schema/room";
+
+type RoomSelect = InferSelectModel<typeof rooms>;
+type UsageHistorySelect = InferSelectModel<typeof roomUsageHistory>;
 
 // Function to convert a date string to local time string + time ago format
 function formatDateAgo(dateString: string): string {
@@ -21,7 +26,7 @@ function formatDateAgo(dateString: string): string {
 export function RoomCardPublic({
   room,
   ...props
-}: { room: RoomTypeWithId } & React.ComponentProps<typeof Card>) {
+}: { room: RoomSelect & { latestUsageHistory: { username: string; name: string } | null } } & React.ComponentProps<typeof Card>) {
   return (
     <Card
       variant="glass"
@@ -31,7 +36,8 @@ export function RoomCardPublic({
       <CardHeader>
         <CardTitle>{room.roomNumber}</CardTitle>
         <CardDescription className="font-semibold text-sm text-gray-700">
-          Last updated: {formatDateAgo(room.lastUpdatedTime.toString())}
+          Last updated: {room.lastUpdatedTime ? formatDateAgo(new Date(room.lastUpdatedTime).toISOString()) : "N/A"}
+          {room.latestUsageHistory ? ` by ${room.latestUsageHistory.name}` : ""}
         </CardDescription>
       </CardHeader>
       <CardContent>

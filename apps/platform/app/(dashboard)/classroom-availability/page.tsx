@@ -1,17 +1,15 @@
 import { Skeleton } from "@/components/ui/skeleton";
-import { getRooms } from "src/lib/room/actions";
 import { RoomCardPublic } from "./components/card";
 import SearchBox from "./components/search";
 
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
+import { listAllRoomsWithHistory } from "~/actions/room";
 
 type Props = {
   searchParams: Promise<{
     query?: string;
-    page?: string;
     currentStatus?: string;
-    roomType?: string;
   }>;
 };
 
@@ -22,17 +20,11 @@ export const metadata: Metadata = {
 
 export default async function RoomsPage(props: Props) {
   const searchParams = await props.searchParams;
-  const query = searchParams?.query || "";
-  const currentPage = Number(searchParams?.page) || 1;
-  const filter = {
-    currentStatus: searchParams?.currentStatus || "",
-    roomType: searchParams?.roomType || "",
-  };
-  const { rooms, currentStatuses, roomTypes } = await getRooms(
-    query,
-    currentPage,
-    filter
-  );
+  
+  const rooms = await listAllRoomsWithHistory({
+    status: searchParams.currentStatus,
+    roomNumber: searchParams.query,
+  });
 
   return (
     <>
@@ -81,7 +73,7 @@ export default async function RoomsPage(props: Props) {
         {rooms.map((room, i) => {
           return (
             <RoomCardPublic
-              key={room._id.toString()}
+              key={room.id}
               room={room}
               style={{
                 animationDelay: `${i * 100}ms`,
