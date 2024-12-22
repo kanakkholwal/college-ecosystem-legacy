@@ -4,12 +4,13 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { admin, username } from "better-auth/plugins";
-import { ROLES } from "src/constants";
-import { getDepartmentByRollNo, isValidRollNumber } from "src/constants/departments";
-import { FACULTY_LIST } from "src/constants/faculty";
-import { db } from "src/db/connect"; // your drizzle instance
-import { accounts, sessions, users, verifications } from "src/db/schema";
-import type { ResultType } from "src/types/result";
+import { ROLES } from "~/constants";
+import { getDepartmentByRollNo, isValidRollNumber } from "~/constants/departments";
+import { FACULTY_LIST } from "~/constants/faculty";
+import { db } from "~/db/connect"; // your drizzle instance
+import { accounts, sessions, users, verifications } from "~/db/schema";
+import { resend } from "~/emails/helper";
+import type { ResultType } from "~/types/result";
 
 type getUserInfoReturnType = {
   email: string;
@@ -110,27 +111,43 @@ export const auth = betterAuth({
   },
   emailAndPassword: {
     enabled: true,
-    // requireEmailVerification: true,
+    requireEmailVerification: true,
     autoSignIn: true,
+    sendResetPassword: async ({user, url, token}, request) => {
+      const verification_url = `${process.env.BASE_SERVER_URL}/sign-in?tab=reset-password&token=${token}`;
+
+        await resend.emails.send({
+          from: process.env.RESEND_EMAIL_FROM,
+          to: user.email,
+          subject: "Reset Password",
+          text: `Click the link to reset your password: ${verification_url}`,
+        }).then(() => {
+          console.log("Reset Password Email sent");
+        }).catch((err) => {
+          console.error(err);
+        });
+    },
   },
-  // emailVerification: {
-  //     sendOnSignUp: true
-  // },
+  emailVerification: {
+      sendOnSignUp: true,
+      sendVerificationEmail: async ( { user, url, token }, request) => {
+        const verification_url = `${process.env.BASE_SERVER_URL}/sign-in?tab=verify-email&token=${token}`;
+        await resend.emails.send({
+          from: process.env.RESEND_EMAIL_FROM,
+          to: user.email,
+          subject: "Verify Email",
+          text: `Click the link to verify your email: ${verification_url}`,
+        }).then(() => {
+          console.log("Verification Email sent");
+        }).catch((err) => {
+          console.error(err);
+        });
+      },
+  },
   socialProviders: {
     google: {
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-      mapProfileToUser: async (profile) => {
-        const info = await getUserInfo(profile.email);
-
-        return {
-          ...info,
-          name: info?.name ? info.name : `${profile.given_name} ${profile.family_name}`,
-          emailVerified: true,
-          email: profile.email,
-          image: profile.picture,
-        };
-      },
     },
   },
   user: {

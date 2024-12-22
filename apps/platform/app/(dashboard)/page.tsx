@@ -102,11 +102,12 @@ export default async function Dashboard() {
             <span className="text-primary">{session?.user?.name}</span>
           </h2>
           {/* <Greetings/> */}
-          <Alert variant="info" className="mt-4" data-aos="fade-right">
+          {session?.user?.other_roles.includes("student") && (<Alert variant="info" className="mt-4" data-aos="fade-right">
             <RocketIcon className="h-4 w-4" />
             <AlertTitle>Join the College Ecosystem Project!</AlertTitle>
             <AlertDescription>
               We are looking for contributors to help us build the platform.
+              No matter it&apos;s coding, documentation,design, video editing, or anything else, we have a place for you.
               Check out the
               <Link
                 href="https://github.com/kanakkholwal/college-ecosystem/blob/main/CONTRIBUTING.md"
@@ -116,7 +117,7 @@ export default async function Dashboard() {
               </Link>{" "}
               page for more information.
             </AlertDescription>
-          </Alert>
+          </Alert>)}
         </div>
 
         <BorderBeam />

@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,8 +9,13 @@ import {
 } from "@/components/ui/card";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import type { InferSelectModel } from "drizzle-orm";
-import type { RoomTypeWithId } from "src/models/room";
-import type { rooms, roomUsageHistory } from "~/db/schema/room";
+import type React from "react";
+import toast from "react-hot-toast";
+import { updateRoom } from "~/actions/room";
+import type { roomUsageHistory, rooms } from "~/db/schema/room";
+import { updateStatus } from "~/lib/room/actions";
+
+
 
 type RoomSelect = InferSelectModel<typeof rooms>;
 type UsageHistorySelect = InferSelectModel<typeof roomUsageHistory>;
@@ -23,10 +29,14 @@ function formatDateAgo(dateString: string): string {
   return `${localTimeString} (${timeAgo})`;
 }
 
-export function RoomCardPublic({
-  room,
-  ...props
-}: { room: RoomSelect & { latestUsageHistory: { username: string; name: string } | null } } & React.ComponentProps<typeof Card>) {
+
+
+interface Props extends React.ComponentProps<typeof Card> {
+  room: RoomSelect & { latestUsageHistory: { username: string; name: string } | null }
+  authorized?: boolean
+}
+
+export default function RoomCard({ room,authorized, ...props }: Props) {
   return (
     <Card
       variant="glass"
@@ -34,7 +44,30 @@ export function RoomCardPublic({
       {...props}
     >
       <CardHeader>
-        <CardTitle>{room.roomNumber}</CardTitle>
+        <CardTitle>
+          {room.roomNumber}
+          {authorized && <Button
+            size="icon"
+            className="ml-5"
+            onClick={() => {
+              toast.promise(
+                updateRoom(
+                  room.id,
+                  {
+                    currentStatus: room.currentStatus === "available" ? "occupied" : "available",
+                  }
+                ),
+                {
+                  loading: "Updating room status...",
+                  success: "Room status updated successfully!",
+                  error: "An error occurred while updating room status",
+                }
+              );
+            }}
+          >
+            {room.currentStatus === "available" ? "Occupy" : "Release"}
+          </Button>}
+        </CardTitle>
         <CardDescription className="font-semibold text-sm text-gray-700">
           Last updated: {room.lastUpdatedTime ? formatDateAgo(new Date(room.lastUpdatedTime).toISOString()) : "N/A"}
           {room.latestUsageHistory ? ` by ${room.latestUsageHistory.name}` : ""}
@@ -44,7 +77,7 @@ export function RoomCardPublic({
         <div className="flex w-full flex-col md:flex-row md:justify-around items-start gap-2">
           <div className="flex flex-col items-center gap-1">
             <span className="text-xs font-medium text-gray-700">Capacity</span>
-            <Badge className="uppercase" variant="default_light"size="sm">
+            <Badge className="uppercase" variant="default_light" size="sm">
               {room.capacity}
             </Badge>
           </div>

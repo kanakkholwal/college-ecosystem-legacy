@@ -1,12 +1,5 @@
 import Page403 from "@/components/utils/403";
-import type { Metadata } from "next";
-import { getSession } from "src/lib/auth-server";
-
-export const metadata: Metadata = {
-  title: "Admin Dashboard",
-  description: "Admin Dashboard ",
-};
-
+import { getSession } from "~/lib/auth-server";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -22,11 +15,11 @@ export default async function DashboardLayout({
   const session = await getSession()
   const { moderator } = await params;
 
-  if (session && 
-    session.user.role === "admin" 
-  ) {
+  if (session && moderator === "admin" &&
+    (session.user.role !== "admin" && session.user.role !== "moderator")) {
+      console.log("403 from layout: admin");
     return <Page403 />;
   }
 
-  return <>{children}</>;
+  return children
 }

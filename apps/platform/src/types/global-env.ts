@@ -18,6 +18,7 @@ const envVariables = z.object({
   UPSTASH_REDIS_REST_URL: z.string(),
   UPSTASH_REDIS_REST_TOKEN: z.string(),
 
+  RESEND_EMAIL_FROM: z.string(),
   RESEND_API_TOKEN: z.string().email(),
 
   HUGGING_FACE_API_KEY: z.string(),

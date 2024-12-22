@@ -1,6 +1,6 @@
+import  RoomCard  from "@/components/application/room-card";
+import SearchBox from "@/components/application/room-search";
 import { Skeleton } from "@/components/ui/skeleton";
-import { RoomCardPublic } from "./components/card";
-import SearchBox from "./components/search";
 
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
@@ -72,7 +72,7 @@ export default async function RoomsPage(props: Props) {
       <div className="max-w-[1440px] mx-auto grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {rooms.map((room, i) => {
           return (
-            <RoomCardPublic
+            <RoomCard
               key={room.id}
               room={room}
               style={{

@@ -2,9 +2,12 @@
 
 import { authClient } from "src/lib/auth-client";
 
-import { useState } from "react";
-
 import { Button } from "@/components/ui/button";
+import {
+  CardDescription,
+  CardTitle
+} from "@/components/ui/card";
+import { useState } from "react";
 import { BiLockOpenAlt } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
 import { LuMail } from "react-icons/lu";
@@ -78,6 +81,10 @@ export default function SignInForm() {
         },
         onError: (ctx: { error: { message: string } }) => {
           console.log(ctx);
+          // Handle the error
+          if (ctx.error.status === 403) {
+            alert("Please verify your email address");
+          }
           toast.error(ctx.error.message);
         },
       }
@@ -86,7 +93,11 @@ export default function SignInForm() {
 
   return (
     <>
-      <main className="flex flex-col items-center justify-center w-full space-y-4">
+      <main className="flex flex-col items-center justify-start w-full space-y-4">
+        <CardTitle>Sign In</CardTitle>
+        <CardDescription className="mt-2 mb-5">
+          Log in for a seamless experience.
+        </CardDescription>
         <div className={cn("grid gap-6 w-full text-left py-4")}>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
@@ -145,8 +156,9 @@ export default function SignInForm() {
 
               <p className="text-right mt-2 text-sm font-medium">
                 <Link
-                  href="/forgot-password"
+                  href="/sign-in?tab=forget-password"
                   className="text-primary hover:underline"
+                  shallow
                 >
                   Forgot Password?
                 </Link>

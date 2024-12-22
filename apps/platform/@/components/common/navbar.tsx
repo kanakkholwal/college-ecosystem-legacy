@@ -122,7 +122,7 @@ export default function Navbar({
                     </Link>
                   </DropdownMenuItem>
                 )}
-                {user.other_roles.includes("admin") && (
+                {(user.role === "admin") && (
                   <DropdownMenuItem asChild>
                     <Link href={"/admin"}>
                       <UserRound className="mr-2 h-4 w-4" />

@@ -12,7 +12,7 @@ export default function RootLoading() {
         </h2>
       </div>
       <div className="relative w-56 h-1 rounded-full bg-primary/10 overflow-hidden">
-        <div className="absolute h-full bg-primary rounded-full animate-loader"></div>
+        <div className="absolute h-full bg-primary rounded-full animate-loader"/>
       </div>
     </div>
   );

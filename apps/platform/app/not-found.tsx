@@ -94,7 +94,6 @@ export default async function NotFound() {
             rounded="full"
             variant="default_light"
             width="sm"
-            size="lg"
             asChild
           >
             <Link href="/">

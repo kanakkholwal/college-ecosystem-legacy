@@ -1,8 +1,9 @@
 import ConditionalRender from "@/components/utils/conditional-render";
-import { getSession } from "src/lib/auth-server";
-import { changeCase } from "src/utils/string";
+import { getSession } from "~/lib/auth-server";
+import { changeCase } from "~/utils/string";
 import AdminDashboard from "./context/admin.dashboard";
 import CRDashboard from "./context/cr.dashboard";
+import FacultyDashboard from "./context/faculty.dashboard";
 
 interface Props {
   params: Promise<{
@@ -10,30 +11,18 @@ interface Props {
   }>;
 }
 
-import type { Metadata, ResolvingMetadata } from "next";
-
-export async function generateMetadata(
-  { params }: Props,
-  parent: ResolvingMetadata
-): Promise<Metadata> {
-  // read route params
-  const { moderator } = await params;
-
-  return {
-    title: `${changeCase(moderator, "title")} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-    description: `Dashboard for ${moderator}`,
-  };
-}
 
 export default async function ModeratorDashboard(props: Props) {
   const params = await props.params;
   const session = await getSession()
+  
+
 
   return (
     <div className="space-y-6 my-5">
       <div>
         <h2 className="text-3xl font-semibold mb-2">
-          Hi, {session.user.name}
+          Hi, {session?.user?.name}
         </h2>
         <p className="text-slate-600 dark:text-slate-400">
           Welcome to the dashboard.
@@ -49,6 +38,9 @@ export default async function ModeratorDashboard(props: Props) {
       </ConditionalRender>
       <ConditionalRender condition={params.moderator === "cr"}>
         <CRDashboard />
+      </ConditionalRender>
+      <ConditionalRender condition={params.moderator === "faculty"}>
+        <FacultyDashboard />
       </ConditionalRender>
     </div>
   );

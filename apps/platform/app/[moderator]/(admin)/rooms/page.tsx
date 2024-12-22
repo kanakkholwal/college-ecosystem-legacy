@@ -1,14 +1,13 @@
+import RoomCard from "@/components/application/room-card";
+import SearchBox from "@/components/application/room-search";
 import { RouterCard } from "@/components/common/router-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { BadgePlus } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
-import { Suspense } from "react";
-import { getRooms, getRoomsInfo } from "src/lib/room/actions";
 import { changeCase } from "src/utils/string";
-import RoomCard from "./components/card";
-import Pagination from "./components/pagination";
-import SearchBox from "./components/search";
+
+import { getRoomsInfo, listAllRoomsWithHistory } from "~/actions/room";
 
 type Props = {
   params: Promise<{
@@ -39,17 +38,12 @@ export default async function RoomsPage(props: Props) {
 
   const moderator = params.moderator;
   const query = searchParams?.query || "";
-  const currentPage = Number(searchParams?.page) || 1;
-  const filter = {
-    currentStatus: searchParams?.currentStatus || "",
-    roomType: searchParams?.roomType || "",
-  };
-
-  const { rooms, totalPages, currentStatuses, roomTypes } = await getRooms(
-    query,
-    currentPage,
-    filter
-  );
+  const status = searchParams?.currentStatus || "";
+  
+  const rooms = await listAllRoomsWithHistory({
+    status,
+    roomNumber: query,
+  })
   const { totalRooms, totalAvailableRooms, totalOccupiedRooms } =
     await getRoomsInfo();
 
@@ -89,7 +83,7 @@ export default async function RoomsPage(props: Props) {
       </div>
       <div className="lg:w-3/4 text-center mx-auto">
         <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
-          <SearchBox statuses={currentStatuses} types={roomTypes} />
+          <SearchBox />
         </div>
       </div>
       <div className="mb-32 max-w-[144rem] grid lg:mb-0 lg:w-full mx-auto grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-3 @6xl:grid-cols-4 text-left gap-4">
@@ -107,18 +101,11 @@ export default async function RoomsPage(props: Props) {
           ))}
         >
           {rooms.map((room) => {
-            return <RoomCard key={room._id.toString()} room={room} />;
+            return <RoomCard key={room.id} room={room} />;
           })}
         </ErrorBoundaryWithSuspense>
       </div>
-      <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6 mt-5">
-        <Suspense
-          key="Pagination"
-          fallback={<Skeleton className="h-12 w-full " />}
-        >
-          {rooms.length > 0 ? <Pagination totalPages={totalPages} /> : null}
-        </Suspense>
-      </div>
+
     </>
   );
 }

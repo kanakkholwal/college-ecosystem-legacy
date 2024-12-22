@@ -1,4 +1,4 @@
-import { RouterCard, RouterCardLink } from "@/components/common/router-card";
+import { RouterCard, type RouterCardLink } from "@/components/common/router-card";
 import { CalendarDays, CalendarPlus } from "lucide-react";
 import { getInfo } from "./cr.actions";
 
@@ -24,7 +24,7 @@ export default async function CRDashboard() {
       <div className="grid grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 text-left gap-4">
         {quick_links.map((link, i) => (
           <RouterCard
-            key={i}
+            key={link.href}
             {...link}
             style={{
               animationDelay: `${i * 500}ms`,

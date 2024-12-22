@@ -3,46 +3,54 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
     Card,
     CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+    CardHeader
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Terminal } from "lucide-react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { auth } from "src/lib/auth";
+import ForgotPassword from "./forget-password";
+import ResetPassword from "./reset-password";
 import SignInForm from "./sign-in";
 
-import { auth } from "src/lib/auth";
+const TABS = ["sign-in", "sign-up","forget-password"];
 
+interface Props {
+    searchParams:Promise<{
+        tab: string;
+    }>
+}
 
-export default async function SignInPage() {
+export default async function SignInPage({ searchParams }: Props) {
     const session = await auth.api.getSession({
         headers: await headers()
     });
     if (session) return redirect("/");
 
+    const { tab } = await searchParams;
 
     return (
         <div className="min-h-screen w-full mx-auto px-4 relative h-[100vh] flex-col items-center justify-center bg-background-gradient">
-            <div className="lg:p-8 @container flex flex-col justify-center items-center">
+            <div className="lg:p-8 @container flex flex-col justify-center items-center m-auto">
                 <Card
                     variant="glass"
                     className="m-auto flex flex-col justify-center space-y-6 max-w-[35rem]  mx-auto w-full mt-32 @lg:mt-0"
                 >
-                    <Tabs defaultValue="sign-in" className="w-full">
+                    <Tabs defaultValue={TABS.includes(tab) ? tab : TABS[0]} className="w-full">
                         <CardHeader>
-                            <TabsList>
-                                <TabsTrigger value="sign-in">Sign In</TabsTrigger>
-                                <TabsTrigger value="sign-up">Sign Up</TabsTrigger>
+                            <TabsList className="flex justify-around space-x-4">
+                                {TABS.map((tab) => {
+                                    return (
+                                        <TabsTrigger key={tab} value={tab} className="capitalize w-full flex-1">
+                                            {tab.replace("-", " ")}
+                                        </TabsTrigger>
+                                    );
+                                })}
                             </TabsList>
                         </CardHeader>
                         <CardContent className="px-10">
                             <TabsContent value="sign-in">
-                                <CardTitle>Sign In</CardTitle>
-                                <CardDescription className="mt-2 mb-5">
-                                    Log in for a seamless experience.
-                                </CardDescription>
                                 <SignInForm />
                             </TabsContent>
                             <TabsContent value="sign-up">
@@ -62,6 +70,15 @@ export default async function SignInPage() {
                                 </CardDescription>
                                 <SignUpForm /> */}
                             </TabsContent>
+                            <TabsContent value="forget-password">
+                                <ForgotPassword />
+                            </TabsContent>
+                            <TabsContent value="reset-password">
+                                <ResetPassword />
+                            </TabsContent>
+                            <TabsContent value="verify-email">
+                                
+                            </TabsContent>
                         </CardContent>
                     </Tabs>
                 </Card>
@@ -69,3 +86,4 @@ export default async function SignInPage() {
         </div>
     );
 }
+

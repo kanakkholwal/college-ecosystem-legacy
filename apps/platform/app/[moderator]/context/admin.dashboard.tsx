@@ -27,11 +27,11 @@ export default async function AdminDashboard() {
                 <CardDescription>
                   <span
                     className={
-                      (userTrend === "increase"
+                      `${userTrend === "increase"
                         ? "text-green-500"
                         : userTrend === "decrease"
                           ? "text-red-500"
-                          : "text-primary/80") + " text-base"
+                          : "text-primary/80"} text-base`
                     }
                   >
                     {userTrend === "increase" ? (

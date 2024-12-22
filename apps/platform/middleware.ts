@@ -3,11 +3,12 @@ import type { Session } from "better-auth/types";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
+
+// Paths that do not require authentication
 const unauthorized_paths = [
   "/sign-in",
   "/signup",
   "/forgot-password",
-  "/reset-password",
 ];
 
 export async function middleware(request: NextRequest) {
@@ -21,14 +22,14 @@ export async function middleware(request: NextRequest) {
       },
     }
   );
-  if (!session && !unauthorized_paths.includes(request.nextUrl.pathname)) {
+  if (!session) {
+    if (unauthorized_paths.includes(request.nextUrl.pathname)) {
+      return NextResponse.next();
+    }
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
-  // Add a new header x-current-path which passes the path to downstream components
-  const headers = new Headers(request.headers);
-  const rootUrl = process.env.NEXTAUTH_URL as string;
-  headers.set("x-current-path", rootUrl + request.nextUrl.pathname);
-  return NextResponse.next({ headers });
+
+  return NextResponse.next();
 }
 // the following code has been copied from https://nextjs.org/docs/advanced-features/middleware#matcher
 export const config = {

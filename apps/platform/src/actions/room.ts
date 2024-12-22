@@ -1,5 +1,5 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import { and, desc, eq, like } from "drizzle-orm";
+import { and, desc, eq, like, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
 import { roomUsageHistory, rooms, users } from "~/db/schema";
 
@@ -9,7 +9,90 @@ type RoomInsert = InferInsertModel<typeof rooms>;
 type UsageHistoryInsert = InferInsertModel<typeof roomUsageHistory>;
 type UsageHistorySelect = InferSelectModel<typeof roomUsageHistory>;
 
-// TODO: Add JSDoc comments for all functions
+
+/* FOR ADMIN USERS */
+
+
+
+// Function to get a room by ID with full history for admin
+
+export async function getRoomByIdForAdmin(
+  roomId: string
+): Promise<
+  RoomSelect & {
+    usageHistory: { username: string; name: string; createdAt: Date }[];
+  } | null
+> {
+  // Fetch room details
+  const room = await db
+    .select()
+    .from(rooms)
+    .where(eq(rooms.id, roomId))
+    .then((res) => res[0]);
+
+  if (!room) return null;
+
+  // Fetch usage history for the room
+  const usageHistory = await db
+    .select({
+      roomId: roomUsageHistory.roomId,
+      userId: roomUsageHistory.userId,
+      createdAt: roomUsageHistory.createdAt,
+      username: users.username,
+      name: users.name,
+    })
+    .from(roomUsageHistory)
+    .innerJoin(users, eq(users.id, roomUsageHistory.userId))
+    .where(eq(roomUsageHistory.roomId, roomId))
+    .orderBy(desc(roomUsageHistory.createdAt));
+
+  return {
+    ...room,
+    usageHistory: usageHistory
+      .filter((history) => history.createdAt !== null)
+      .map((history) => ({
+        username: history.username,
+        name: history.name,
+        createdAt: history.createdAt as Date,
+      })),
+  };
+}
+
+export async function getRoomsInfo(): Promise<{
+  totalRooms: number;
+  totalAvailableRooms: number;
+  totalOccupiedRooms: number;
+}> {
+  // Count total rooms
+  const totalRooms = await db
+    .select({ count: sql`count(*)`.mapWith(Number) })
+    .from(rooms)
+    .then((res) => res[0]?.count ?? 0);
+
+  // Count available rooms
+  const totalAvailableRooms = await db
+    .select({ count: sql`count(*)`.mapWith(Number) })
+    .from(rooms)
+    .where(eq(rooms.currentStatus, "available"))
+    .then((res) => res[0]?.count ?? 0);
+
+  // Count occupied rooms
+  const totalOccupiedRooms = await db
+    .select({ count: sql`count(*)`.mapWith(Number) })
+    .from(rooms)
+    .where(eq(rooms.currentStatus, "occupied"))
+    .then((res) => res[0]?.count ?? 0);
+
+  return {
+    totalRooms,
+    totalAvailableRooms,
+    totalOccupiedRooms,
+  };
+}
+
+
+/* FOR NON-ADMIN USERS */
+
 // Function to list all rooms with their usage history
 export async function listAllRoomsWithHistory(
   filters?: { status?: string; roomNumber?: string }
