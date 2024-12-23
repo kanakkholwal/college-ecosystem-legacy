@@ -60,6 +60,12 @@ const all_links: rawLinkType[] = [
     icon: Grid3X3,
     path: "/result",
     allowed_roles: ["admin", "moderator"],
+    items:[
+      {
+        title: "Scraping",
+        path: "/scraping",
+      },
+    ]
   },
   {
     title: "Storage",

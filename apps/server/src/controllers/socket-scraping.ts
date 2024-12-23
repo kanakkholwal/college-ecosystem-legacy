@@ -8,7 +8,8 @@ const LIST_TYPE = {
     BACKLOG: "has_backlog",
     NEW_SEMESTER: "new_semester",
 } as const
-export type listType =typeof LIST_TYPE[keyof typeof LIST_TYPE]
+
+export type listType = typeof LIST_TYPE[keyof typeof LIST_TYPE]
 
 export async function getListOfRollNos(list_type: listType) {
     let query = {};

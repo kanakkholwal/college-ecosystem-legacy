@@ -77,7 +77,7 @@ export default async function DashboardLayout({
           <div className="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
         </div>
 
-        <main className="content p-3 md:p-4 z-2 @container space-y-10">
+        <main className="content p-4 md:p-6 z-2 @container space-y-10">
           {children}
         </main>
         <div

@@ -21,9 +21,9 @@ export async function getFacultyListByDepartment(department: Department): Promis
 }> {
     const url = department.page
     const response = await axios.get(url);
-    console.log("Fetching", url);
+    // console.log("Fetching", url);
     const document = HTMLParser.parse(response.data.toString());
-    console.log("Fetched", url);
+    // console.log("Fetched", url);
     const section = document.querySelector(".departmentTab#138");
     if (!section) {
         console.error("Invalid department page", department);
@@ -66,13 +66,13 @@ export async function getFacultyListByDepartment(department: Department): Promis
 export async function getFacultyList(): Promise<FacultyType[]> {
 
     const faculties: FacultyType[] = [];
-    for await (const department of DEPARTMENTS_LIST) {
-        const { error, data } = await getFacultyListByDepartment(department);
-        if (error) {
-            console.error("Error fetching faculty list", department);
-            continue;
+    const promises = DEPARTMENTS_LIST.map(department => getFacultyListByDepartment(department));
+    const results = await Promise.allSettled(promises);
+
+    for (const result of results) {
+        if (result.status === "fulfilled") {
+            faculties.push(...result.value.data);
         }
-        faculties.push(...data);
     }
 
     return faculties;

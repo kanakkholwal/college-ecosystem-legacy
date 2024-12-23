@@ -48,7 +48,7 @@ export function UploadImage({ onUpload }: UploadImageProps) {
     setUploadSuccess(false);
 
     const formData = new FormData();
-    formData.append("file", selectedFile!);
+    formData.append("file", selectedFile);
     formData.append("name", meta.name);
     formData.append("path", meta.path);
     formData.append(

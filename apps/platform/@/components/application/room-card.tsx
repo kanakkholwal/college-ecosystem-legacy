@@ -1,3 +1,4 @@
+"use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -51,6 +52,7 @@ export default function RoomCard({ room, user, ...props }: Props) {
             size="icon"
             className="ml-5"
             onClick={() => {
+              if(!(user && authorized)) return;
               toast.promise(
                 updateRoom(
                   room.id,

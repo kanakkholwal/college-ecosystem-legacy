@@ -13,6 +13,7 @@ export interface SocketStatus {
   connectionAttempts: number;
   latency: number | null;
   statusMessage: string;
+  transport: string;
 }
 
 export type UseSocketStatusReturn = [SocketStatus, Socket | null];
@@ -26,16 +27,17 @@ export const useSocketStatus = (
   serverUrl: string,
   options?: Partial<ManagerOptions & SocketOptions>
 ): UseSocketStatusReturn => {
+  
+  const socketRef = useRef<Socket | null>(null);
   const [socketStatus, setSocketStatus] = useState<SocketStatus>({
-    connected: false,
+    connected: socketRef.current?.connected || false,
     reconnecting: false,
     error: null,
     connectionAttempts: 0,
     latency: null,
     statusMessage: "Disconnected",
+    transport: "",
   });
-
-  const socketRef = useRef<Socket | null>(null);
 
   useEffect(() => {
     // Initialize socket connection
@@ -43,6 +45,7 @@ export const useSocketStatus = (
     const socket = io(serverUrl, options);
     socketRef.current = socket;
     // }
+    
 
     // Event handlers
     const handleConnect = () => {
@@ -52,6 +55,7 @@ export const useSocketStatus = (
         reconnecting: false,
         error: null,
         statusMessage: "Connected",
+        transport: socket.io.engine.transport.name,
       }));
     };
 

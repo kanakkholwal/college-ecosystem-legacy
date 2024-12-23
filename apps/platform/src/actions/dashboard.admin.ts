@@ -1,7 +1,7 @@
-import { and, asc, desc, like, sql,eq } from "drizzle-orm";
+import type { InferSelectModel } from "drizzle-orm";
+import { and, asc, desc, eq, like, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
 import { users } from "~/db/schema/auth-schema";
-import type { InferSelectModel } from "drizzle-orm";
 
 export async function users_CountAndGrowth(
     timeInterval: string
@@ -73,7 +73,10 @@ export async function users_CountAndGrowth(
         trend = "decrease";
     }
 
-    return { count: currentCount, growth, trend };
+    return {
+        count: currentCount === Number.POSITIVE_INFINITY ? 100 : currentCount,
+        growth, trend
+    };
 }
 
 
@@ -127,12 +130,12 @@ export async function listUsers(options: UserListOptions): Promise<User[]> {
 
 
 export async function getUser(userId: string): Promise<User | null> {
-  const user = await db
-    .select()
-    .from(users)
-    .where(eq(users.id,userId)) // Fetch the user by their ID
-    .limit(1) // Limit to 1 result since ID is unique
-    .execute();
+    const user = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, userId)) // Fetch the user by their ID
+        .limit(1) // Limit to 1 result since ID is unique
+        .execute();
 
-  return user.length > 0 ? user[0] : null; // Return the first user or null if not found
+    return user.length > 0 ? user[0] : null; // Return the first user or null if not found
 }

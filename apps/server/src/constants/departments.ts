@@ -2,7 +2,7 @@ export interface Department {
     name: string;
     code: string;
     short: string;
-    keys: string[];
+    roll_keys: string[];
     page: string;
 }
 
@@ -11,70 +11,70 @@ export const DEPARTMENTS_LIST: readonly Department[] = [
         name: "Computer Science and Engineering",
         code: "cse",
         short: "CSE",
-        keys: ["bcs", "dcs", "mcs"],
+        roll_keys: ["bcs", "dcs", "mcs"],
         page: "https://nith.ac.in/computer-science-engineering"
     },
     {
         name: "Electronics and Communication Engineering",
         code: "ece",
         short: "ECE",
-        keys: ["bec", "dec", "mec"],
+        roll_keys: ["bec", "dec", "mec"],
         page: "https://nith.ac.in/electronics-communication-engineering"
     },
     {
         name: "Electrical Engineering",
         code: "ee",
         short: "EE",
-        keys: ["bee", "mee"],
+        roll_keys: ["bee", "mee"],
         page: "https://nith.ac.in/electrical-engineering"
     },
     {
         name: "Mechanical Engineering",
         code: "me",
         short: "ME",
-        keys: ["bme", "mme"],
+        roll_keys: ["bme", "mme"],
         page: "https://nith.ac.in/mechanical-engineering"
     },
     {
         name: "Civil Engineering",
         code: "ce",
         short: "CE",
-        keys: ["bce", "mce"],
+        roll_keys: ["bce", "mce"],
         page: "https://nith.ac.in/Departments/topic/130"
     },
     {
         name: "Chemical Engineering",
         code: "che",
         short: "CHE",
-        keys: ["bch", "mch"],
+        roll_keys: ["bch", "mch"],
         page: "https://nith.ac.in/chemistry"
     },
     {
         name: "Materials Science and Engineering",
         code: "mse",
         short: "MSE",
-        keys: ["bms", "mms"],
+        roll_keys: ["bms", "mms"],
         page: "https://nith.ac.in/material-science-engineering"
     },
     {
         name: "Mathematics & Scientific Computing",
         code: "mnc",
         short: "MNC",
-        keys: ["bma", "mma"],
+        roll_keys: ["bma", "mma"],
         page: "https://nith.ac.in/mathematics-scientific-computing"
     },
     {
         name: "Architecture",
         code: "arc",
         short: "ARC",
-        keys: ["bar", "mar"],
+        roll_keys: ["bar", "mar"],
         page: "https://nith.ac.in/Departments/topic/287"
     },
     {
         name: "Engineering Physics",
         code: "phy",
         short: "PHY",
-        keys: ["bph", "mph"],
+        roll_keys: ["bph", "mph"],
         page: "https://nith.ac.in/physics-photonics-science"
     },
 ] as const;
@@ -111,7 +111,7 @@ export const getDepartmentByRollNo = (rollNo: string) => {
         rollNo.toLowerCase().substring(5, 8),
     ];
     for (const dept of DEPARTMENTS_LIST) {
-        if (dept.keys.includes(matches[1])) {
+        if (dept.roll_keys.includes(matches[1])) {
             return dept.name;
         }
     }

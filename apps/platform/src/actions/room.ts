@@ -1,3 +1,4 @@
+"use server"
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { and, desc, eq, like, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
@@ -176,7 +177,7 @@ export async function updateRoom(
   updatedData: Partial<RoomInsert>,
   usageHistoryData?: UsageHistoryInsert
 ): Promise<RoomSelect> {
-  "use server"
+  // "use server"
   const [updatedRoom] = await db
     .update(rooms)
     .set(updatedData)
