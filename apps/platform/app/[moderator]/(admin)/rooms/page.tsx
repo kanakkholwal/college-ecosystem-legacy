@@ -8,6 +8,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { changeCase } from "src/utils/string";
 
 import { getRoomsInfo, listAllRoomsWithHistory } from "~/actions/room";
+import { getSession } from "~/lib/auth-server";
 
 type Props = {
   params: Promise<{
@@ -47,11 +48,13 @@ export default async function RoomsPage(props: Props) {
   const { totalRooms, totalAvailableRooms, totalOccupiedRooms } =
     await getRoomsInfo();
 
+  const session = await getSession();
+
   return (
     <>
       <div>
-        <h1 className="text-2xl font-bold">Rooms Overview</h1>
-        <p className="text-xs text-medium font-semibold">
+        <h1 className="text-2xl font-bold mb-4">Rooms Overview</h1>
+        <p className="text-xs text-medium font-semibold text-gray-600">
           As of {new Date().toLocaleString()}
         </p>
       </div>
@@ -78,7 +81,7 @@ export default async function RoomsPage(props: Props) {
           Icon={BadgePlus}
           title="Add New Room"
           description="Add a new room to the system"
-          href={`${moderator}/rooms/new`}
+          href={`/${moderator}/rooms/new`}
         />
       </div>
       <div className="lg:w-3/4 text-center mx-auto">
@@ -101,7 +104,7 @@ export default async function RoomsPage(props: Props) {
           ))}
         >
           {rooms.map((room) => {
-            return <RoomCard key={room.id} room={room} />;
+            return <RoomCard key={room.id} room={room} user={session?.user}/>;
           })}
         </ErrorBoundaryWithSuspense>
       </div>

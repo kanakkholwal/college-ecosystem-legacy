@@ -13,7 +13,7 @@ import type React from "react";
 import toast from "react-hot-toast";
 import { updateRoom } from "~/actions/room";
 import type { roomUsageHistory, rooms } from "~/db/schema/room";
-import { updateStatus } from "~/lib/room/actions";
+import type { Session } from "~/lib/auth-client";
 
 
 
@@ -33,14 +33,15 @@ function formatDateAgo(dateString: string): string {
 
 interface Props extends React.ComponentProps<typeof Card> {
   room: RoomSelect & { latestUsageHistory: { username: string; name: string } | null }
-  authorized?: boolean
+  user?: Session["user"]
 }
 
-export default function RoomCard({ room,authorized, ...props }: Props) {
+export default function RoomCard({ room, user, ...props }: Props) {
+  const authorized = user ? user?.role === "admin" || user.other_roles?.includes("cr") || user.other_roles?.includes("faculty") : false;
   return (
     <Card
       variant="glass"
-      className="hover:shadow-lg  animate-in popup"
+      className="hover:shadow-lg animate-in popup"
       {...props}
     >
       <CardHeader>
@@ -55,12 +56,16 @@ export default function RoomCard({ room,authorized, ...props }: Props) {
                   room.id,
                   {
                     currentStatus: room.currentStatus === "available" ? "occupied" : "available",
+                  },
+                  {
+                    userId: user.id,
+
                   }
                 ),
                 {
-                  loading: "Updating room status...",
-                  success: "Room status updated successfully!",
-                  error: "An error occurred while updating room status",
+                  loading: `Updating ${room.roomNumber} status...`,
+                  success: `Room ${room.roomNumber} status updated successfully!`,
+                  error: `Failed to update ${room.roomNumber} status!`,
                 }
               );
             }}

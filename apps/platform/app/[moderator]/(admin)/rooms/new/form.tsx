@@ -10,26 +10,28 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useReducer } from "react";
-import { RoomType } from "src/models/room";
-import { ACTION_TYPES, roomFormReducer } from "./store";
+import type { InferInsertModel } from "drizzle-orm";
+import { useState } from "react";
+import type { rooms } from "~/db/schema";
 
 import { Plus } from "lucide-react";
 import toast from "react-hot-toast";
+
+type RoomType = InferInsertModel<typeof rooms>;
 
 export default function CreateRoomForm({
   onSubmit,
 }: {
   onSubmit: (room: RoomType) => Promise<RoomType>;
 }) {
-  const [state, dispatch] = useReducer(roomFormReducer, {
+  const [state, setState] = useState<RoomType>({
     roomNumber: "",
     roomType: "",
     capacity: 0,
     currentStatus: "occupied",
     lastUpdatedTime: new Date(),
-    usageHistory: [],
-  } as RoomType);
+    createdAt: new Date(),
+  } );
   const { roomNumber, roomType, capacity, currentStatus } = state;
 
   return (
@@ -44,10 +46,11 @@ export default function CreateRoomForm({
             variant="fluid"
             value={roomNumber}
             onChange={(e) => {
-              dispatch({
-                type: ACTION_TYPES.SET_ROOM_NUMBER,
-                roomNumber: e.target.value,
+              setState({
+                ...state,
+                roomNumber: e.target.value.toUpperCase(),
               });
+              
             }}
           />
         </div>
@@ -57,8 +60,8 @@ export default function CreateRoomForm({
             name="roomType"
             value={roomType}
             onValueChange={(value) => {
-              dispatch({
-                type: ACTION_TYPES.SET_ROOM_TYPE,
+              setState({
+                ...state,
                 roomType: value,
               });
             }}
@@ -83,11 +86,11 @@ export default function CreateRoomForm({
             placeholder="Capacity"
             variant="fluid"
             type="number"
-            value={capacity}
+            value={capacity || ""}
             onChange={(e) => {
-              dispatch({
-                type: ACTION_TYPES.SET_ROOM_CAPACITY,
-                capacity: Number(e.target.value),
+              setState({
+                ...state,
+                capacity: Number.parseInt(e.target.value),
               });
             }}
           />
@@ -99,8 +102,8 @@ export default function CreateRoomForm({
             name="currentStatus"
             value={currentStatus}
             onValueChange={(value: "available" | "occupied") => {
-              dispatch({
-                type: ACTION_TYPES.SET_ROOM_STATUS,
+              setState({
+                ...state,
                 currentStatus: value,
               });
             }}

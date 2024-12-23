@@ -2,32 +2,34 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
+import type { InferSelectModel } from "drizzle-orm";
 import { Loader2, MoreHorizontal } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { deleteUser } from "src/lib/users/actions";
-import { UserWithId } from "src/models/user";
+import type { users } from "~/db/schema";
+
+type UserListType = InferSelectModel<typeof users>;
 
 const USER_PER_PAGE = 50;
 
 interface UserListProps {
-  initialUsers: UserWithId[];
+  initialUsers: UserListType[];
   initialHasMore: boolean;
 }
 
@@ -37,7 +39,7 @@ export default function UserList({
 }: UserListProps) {
   const searchParams = useSearchParams() as URLSearchParams;
   const [offset, setOffset] = useState(USER_PER_PAGE);
-  const [users, setUsers] = useState<UserWithId[]>(initialUsers);
+  const [users, setUsers] = useState<UserListType[]>(initialUsers);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [loading, setLoading] = useState(false);
 
@@ -102,27 +104,27 @@ export default function UserList({
   );
 }
 
-function UserRow({ user }: { user: UserWithId }) {
+function UserRow({ user }: { user: UserListType }) {
   return (
     <TableRow>
       <TableCell className="font-medium whitespace-nowrap">
-        {user["firstName"]} {user["lastName"]}
+        {user.name}
       </TableCell>
       <TableCell className="font-medium">
         <Link
           className="text-left font-medium"
-          href={`/people/${user.rollNo}`}
+          href={`/people/${user.username}`}
           target="_blank"
         >
-          @{user["rollNo"]}
+          @{user.username}
         </Link>
       </TableCell>
       <TableCell className="font-medium whitespace-nowrap">
-        {user["email"]}
+        {user.email}
       </TableCell>
       <TableCell className="font-medium whitespace-nowrap">
         {" "}
-        {user.roles?.map((role: string) => {
+        {user.other_roles?.map((role: string) => {
           return (
             <Badge key={role} variant="default_light" className="m-1">
               {role}
@@ -131,10 +133,10 @@ function UserRow({ user }: { user: UserWithId }) {
         })}
       </TableCell>
       <TableCell className="font-medium whitespace-nowrap">
-        {user["department"]}
+        {user.department}
       </TableCell>
       <TableCell className="font-medium whitespace-nowrap">
-        {new Date(user["createdAt"]).toLocaleDateString("en-US", {
+        {new Date(user.createdAt).toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
           day: "numeric",
@@ -167,11 +169,11 @@ function UserRow({ user }: { user: UserWithId }) {
             <DropdownMenuItem
               onClick={() => {
                 console.log("deleting user ", user);
-                toast.promise(deleteUser(user.id), {
-                  loading: "Deleting...",
-                  success: "User deleted",
-                  error: (error) => error.response.data.message,
-                });
+                // toast.promise(deleteUser(user.id), {
+                //   loading: "Deleting...",
+                //   success: "User deleted",
+                //   error: (error) => error.response.data.message,
+                // });
               }}
             >
               <span className="text-red-600">Delete</span>

@@ -1,6 +1,6 @@
 import { GoBackButton } from "@/components/common/go-back";
 import { notFound } from "next/navigation";
-import { getUser } from "src/lib/users/actions";
+import { getUser } from "~/actions/dashboard.admin";
 import UpdateUserForm from "./components";
 
 interface PageProps {
@@ -40,7 +40,7 @@ export default async function UpdateUserPage({ params }: PageProps) {
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-gray-700 font-semibold">Roles:</span>
-          <span className="font-medium">{user.roles.join(", ")}</span>
+          <span className="font-medium">{user.other_roles.join(", ")}</span>
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-gray-700 font-semibold">Joined At:</span>

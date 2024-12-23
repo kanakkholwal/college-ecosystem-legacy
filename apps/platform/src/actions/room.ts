@@ -23,6 +23,7 @@ export async function getRoomByIdForAdmin(
     usageHistory: { username: string; name: string; createdAt: Date }[];
   } | null
 > {
+  "use server"
   // Fetch room details
   const room = await db
     .select()
@@ -63,6 +64,7 @@ export async function getRoomsInfo(): Promise<{
   totalAvailableRooms: number;
   totalOccupiedRooms: number;
 }> {
+  "use server"
   // Count total rooms
   const totalRooms = await db
     .select({ count: sql`count(*)`.mapWith(Number) })
@@ -97,6 +99,7 @@ export async function getRoomsInfo(): Promise<{
 export async function listAllRoomsWithHistory(
   filters?: { status?: string; roomNumber?: string }
 ): Promise<(RoomSelect & { latestUsageHistory: { username: string; name: string } | null })[]> {
+  "use server"
   // Build the filters for the query
   const conditions = [];
   if (filters?.status) {
@@ -150,6 +153,7 @@ export async function createRoom(
   roomData: RoomInsert,
   initialUsageHistory?: UsageHistoryInsert
 ): Promise<RoomSelect> {
+  "use server"
   const [newRoom] = await db.insert(rooms).values(roomData).returning();
 
   if (!newRoom) {
@@ -172,6 +176,7 @@ export async function updateRoom(
   updatedData: Partial<RoomInsert>,
   usageHistoryData?: UsageHistoryInsert
 ): Promise<RoomSelect> {
+  "use server"
   const [updatedRoom] = await db
     .update(rooms)
     .set(updatedData)

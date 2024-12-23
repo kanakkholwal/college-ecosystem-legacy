@@ -1,14 +1,5 @@
 "use client"
 
-import {
-  BookOpen,
-  Bot,
-  Frame,
-  Map as MapIcon,
-  PieChart,
-  Settings2,
-  SquareTerminal
-} from "lucide-react"
 import type * as React from "react"
 
 import { NavMain } from "@/components/common/sidebar/nav-main"
@@ -36,9 +27,13 @@ import { TbDashboard } from "react-icons/tb"
 
 export type rawLinkType = {
   title: string;
-  url: string;
+  path: string;
   allowed_roles: Session["user"]["role"] | Session["user"]["other_roles"] | "*";
   icon:  React.FC<React.SVGProps<SVGSVGElement>>
+  items?: {
+    title: string;
+    path: string;
+  }[]
 };
 
 const all_links: rawLinkType[] = [
@@ -53,6 +48,12 @@ const all_links: rawLinkType[] = [
     icon: UserRoundCog,
     path: "/users",
     allowed_roles: ["admin", "moderator"],
+    items: [
+      {
+        title: "Create User",
+        path: "/new",
+      },
+    ]
   },
   {
     title: "Result",
@@ -83,6 +84,12 @@ const all_links: rawLinkType[] = [
     icon: SiGoogleclassroom,
     path: "/rooms",
     allowed_roles: ["*"],
+    items: [
+      {
+        title: "Create Classroom",
+        path: "/new",
+      },
+    ]
   },
 ];
 
@@ -96,8 +103,11 @@ const getSideNavLinks = (role: string) => {
     .map((link) => ({
       title: link.title,
       icon: link.icon,
-      href: `/${role}${link.url}`,
-      items: [],
+      href: `/${role}${link.path}`,
+      items: link?.items?.map((item) => ({
+        title: item.title,
+        href: `/${role}${link.path}${item.path}`,
+      })),
     }));
 };
 

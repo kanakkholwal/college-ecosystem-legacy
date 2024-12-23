@@ -24,20 +24,24 @@ import toast from "react-hot-toast";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
 import { ROLES } from "src/constants/user";
 import { updateUser } from "src/lib/users/actions";
-import { UserWithId } from "src/models/user";
+import type { InferSelectModel } from "drizzle-orm";
 import * as z from "zod";
+
+import type {users} from "~/db/schema";
+
+type UserType = InferSelectModel<typeof users>;
 
 const formSchema = z.object({
   // rollNo: z.string(),
   // email: z.string().email(),
   department: z.string(),
-  roles: z.array(z.string()),
+  other_roles: z.array(z.string()),
 });
 
 export default function UpdateUserForm({
   currentUser,
 }: {
-  currentUser: UserWithId;
+  currentUser: UserType;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -45,13 +49,13 @@ export default function UpdateUserForm({
       // rollNo: currentUser.rollNo,
       // email: currentUser.email,
       department: currentUser.department,
-      roles: currentUser.roles,
+      other_roles: currentUser.other_roles,
     },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data);
-    toast.promise(updateUser(currentUser._id, data), {
+    toast.promise(updateUser(currentUser.id, data), {
       loading: "Updating user...",
       success: "User updated successfully",
       error: "Failed to update user",
@@ -65,7 +69,7 @@ export default function UpdateUserForm({
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
-            name="roles"
+            name="other_roles"
             render={({ field }) => (
               <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
                 <div className="space-y-0.5">
@@ -77,9 +81,10 @@ export default function UpdateUserForm({
                 <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
                   {ROLES.map((item, index) => (
                     <FormField
-                      key={item + "_" + index}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                      key={`${item}_${index}`}
                       control={form.control}
-                      name="roles"
+                      name="other_roles"
                       render={({ field }) => {
                         return (
                           <FormItem

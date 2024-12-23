@@ -2,8 +2,8 @@
 import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import { getStudentInfo } from "src/lib/student/actions";
-import Timetable, { TimeTableWithID } from "src/models/time-table";
-import { studentInfoType } from "src/types/student";
+import Timetable, { type TimeTableWithID } from "src/models/time-table";
+import type { studentInfoType } from "src/types/student";
 
 export async function getInfo(): Promise<{
   studentInfo: studentInfoType;
@@ -11,14 +11,12 @@ export async function getInfo(): Promise<{
 }> {
   const session = await getSession()
 
-  if (!session.user.roles.includes("cr")) {
+  if (!session?.user.other_roles.includes("cr")) {
     throw new Error("You are not authorized to perform this action");
   }
 
   await dbConnect();
-  const studentInfo = await getStudentInfo(
-    session.user.rollNo === "kanakkholwal" ? "21dec026" : session.user.rollNo!
-  );
+  const studentInfo = await getStudentInfo(session?.user.username);
 
   const timetables = await Timetable.find({
     department_code: studentInfo.departmentCode,

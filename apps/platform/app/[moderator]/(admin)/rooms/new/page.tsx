@@ -4,9 +4,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Metadata } from "next";
-import dbConnect from "src/lib/dbConnect";
-import RoomModel, { RoomType, RoomTypeWithId } from "src/models/room";
+import type { Metadata } from "next";
+import { createRoom } from "~/actions/room";
 import CreateRoomForm from "./form";
 
 export const metadata: Metadata = {
@@ -15,20 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CoursesPage() {
-  await dbConnect();
-
-  async function SaveRoom(room: RoomType): Promise<RoomTypeWithId> {
-    "use server";
-    await dbConnect();
-    console.log(room);
-    try {
-      const newRoom = new RoomModel(room);
-      await newRoom.save();
-      return Promise.resolve(JSON.parse(JSON.stringify(newRoom)));
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  }
+  
 
   return (
     <>
@@ -37,7 +23,7 @@ export default async function CoursesPage() {
           <CardTitle>New Room</CardTitle>
           <CardDescription>Add a new room</CardDescription>
         </CardHeader>
-        <CreateRoomForm onSubmit={SaveRoom} />
+        <CreateRoomForm onSubmit={createRoom} />
       </Card>
     </>
   );
