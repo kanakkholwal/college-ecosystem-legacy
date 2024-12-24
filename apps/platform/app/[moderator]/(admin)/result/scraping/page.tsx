@@ -2,14 +2,48 @@
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { getSocketStatus, useSocketStatus } from "@/hooks/useSocketStatus";
-import { Wifi, WifiOff } from 'lucide-react';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Info, Pause, Play, Wifi, WifiOff, X } from 'lucide-react';
+
 import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+
+import ConditionalRender from "@/components/utils/conditional-render";
+
+
 
 const BASE_SERVER_URL = process.env.NEXT_PUBLIC_BASE_SERVER_URL;
+
+
+
+const socket = io(BASE_SERVER_URL, {
+  path: "/ws/results-scraping",
+  withCredentials: true,
+  transports: ["websocket"]
+});
+
 const EVENTS = {
-  TASK_STATUS: "task-status",
-  TASK_START: "task-start",
+  TASK_STATUS: 'task_status',
+  TASK_START: 'task_start',
+  TASK_CANCEL: 'task_cancel',
+  TASK_PAUSE: 'task_pause',
+  TASK_PAUSED_RESUME: 'task_paused_resume',
+} as const;
+
+const TASK_STATUS = {
+  IDLE: 'idle',
+  QUEUED: 'queued',
+  SCRAPING: 'scraping',
+  COMPLETED: 'completed',
+  FAILED: 'failed',
+  CANCELLED: 'cancelled',
+  PAUSED: 'paused',
 } as const;
 
 const LIST_TYPE = {
@@ -18,49 +52,303 @@ const LIST_TYPE = {
   NEW_SEMESTER: "new_semester",
 } as const;
 
+type taskDataType = {
+  processable: number,
+  processed: number,
+  failed: number,
+  success: number,
+  skipped: number,
+  data: {
+    roll_no: string,
+    status: typeof TASK_STATUS[keyof typeof TASK_STATUS],
+  }[];
+  startTime: number,
+  endTime: number | null,
+  status: typeof TASK_STATUS[keyof typeof TASK_STATUS],
+  successfulRollNos: Set<string>,
+  failedRollNos: Set<string>,
+};
 export default function ScrapeResultPage() {
-  const [_status, socket] = useSocketStatus(BASE_SERVER_URL, {
-    path: "/ws/results-scraping",
-  });
-  const status = getSocketStatus(_status);
-  const [data, setData] = useState([]);
+  const [connected, setConnected] = useState(socket.connected);
+  const [transportName, setTransportName] = useState(socket.io.engine.transport.name);
+  const [listType, setListType] = useState<typeof LIST_TYPE[keyof typeof LIST_TYPE]>(LIST_TYPE.BACKLOG);
+  const [error, setError] = useState<string | null>(null);
+  const [taskList, setTaskList] = useState<taskDataType[]>([]);
+  const [taskData, setTaskData] = useState<taskDataType>({
+    status: TASK_STATUS.IDLE,
+    processable: 0,
+    processed: 0,
+    failed: 0,
+    success: 0,
+    skipped: 0,
+    data: [],
+    startTime: new Date().getTime(),
+    endTime: null,
+    successfulRollNos: new Set(),
+    failedRollNos: new Set(),
+
+  })
 
   useEffect(() => {
-    // socket?.emit(EVENTS.TASK_START, { list_type: "all" });
-    socket?.on(EVENTS.TASK_STATUS, (data) => {
-      console.log(data);
-    });
-  }, [socket]);
+    socket.on('connect', () => {
+      console.log('connected');
+      setConnected(true);
+      setTransportName(socket.io.engine.transport.name);
+    })
+    socket.on('disconnect', () => {
+      console.log('disconnected');
+      setConnected(false);
+      setTaskData({
+        ...taskData,
+        status: TASK_STATUS.IDLE,
+      })
+    })
+    socket.on('reconnect', () => {
+      console.log('reconnected');
+      setConnected(true);
+      setTransportName(socket.io.engine.transport.name);
+    })
+    socket.on("task_error", (message) => {
+      console.error('task_error:', message);
+      setError(message);
+    })
+    socket.on("task_list", (message) => {
+      console.log('task_list:', message);
+      setTaskList(message);
+    })
+    socket.on("task_paused_resume", (message) => {
+      console.log('task_paused_resume:', message);
+      socket.emit(EVENTS.TASK_START, message)
+    })
+    for (const event of Object.values(EVENTS)) {
+      console.log(`listening for ${event}`);
+      socket.on(event, (message) => {
+        if (message.data) {
+          setTaskData(message);
+        } else {
+          setTaskData({
+            ...taskData,
+            status: message.status,
+          })
+        }
+      })
+    }
+
+
+
+
+
+    return () => {
+      socket.off('connect');
+      socket.off('disconnect');
+      socket.off('reconnect');
+      for (const event in EVENTS) {
+        socket.off(event);
+      }
+      socket.off('task_error');
+      socket.off('task_list');
+    };
+  }, [taskData]);
 
   return (
     <>
-      <Alert>
-        {_status.connected ? <Wifi className="size-6 !text-green-500" /> : <WifiOff className="size-6 !text-red-500" />}
+      <Alert suppressHydrationWarning>
+        {connected ? <Wifi className="size-6 !text-green-500" /> : <WifiOff className="size-6 !text-red-500" />}
         <AlertTitle>
-          Connection 
+          Connection ({transportName})
         </AlertTitle>
-        <AlertDescription>
-          <Badge className="flex gap-2 max-w-content" variant={status.variant} size="sm">
-            {status.text}
-          </Badge>
-          {Object.entries(status).map(([key, value]) => {
-            if (key === "text" || key === "variant") return null;
-            return (
-              <Badge key={key} className="flex gap-2 max-w-content" variant="secondary" size="sm">
-                {key}: {value}
-              </Badge>
-            );
-          })}
+        <AlertDescription className="flex items-center space-x-2">
+          {connected ? (
+            <Badge variant="success">Connected</Badge>
+          ) : (
+            <Badge variant="destructive">Disconnected</Badge>
+          )}
 
         </AlertDescription>
 
       </Alert>
+      <section className="p-6 border border-gray-200 rounded-lg bg-slate-100 shadow space-y-10">
+        <div aria-label="header" className="text-lg font-semibold border-b pb-5">
+          Scraping Result <Badge variant="info" className="ml-2">{taskData.status}</Badge>
+          {error && <p className="text-red-500">{error}</p>}
+        </div>
+        <DisplayTask task={taskData} />
+        <div aria-label="footer" className="flex items-center space-x-2 pt-5 border-t">
+          <Button
+            size="sm"
+            variant="default_light"
+            onClick={() => {
+              socket.emit(EVENTS.TASK_STATUS, listType)
+              console.log('task status requested');
+            }}
+          >
+            <Info />
+            Task Status
+          </Button>
+          <ConditionalRender condition={taskData.status === TASK_STATUS.IDLE}>
+            <Select
+              value={listType}
+              onValueChange={(value) => setListType(value as typeof LIST_TYPE[keyof typeof LIST_TYPE])}
+            >
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="List Type" />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.entries(LIST_TYPE).map(([key, value]) => {
+                  return <SelectItem key={key} value={value}>{key}</SelectItem>
+                })}
+              </SelectContent>
+            </Select>
 
-      <Button
-        onClick={() => socket?.emit(EVENTS.TASK_START, LIST_TYPE.BACKLOG)}
-      >
-        Start Scraping
-      </Button>
+            <Button
+              size="sm"
+              onClick={() => {
+                console.log('start scraping', listType);
+                socket.emit(EVENTS.TASK_START, listType)
+              }}
+            >
+              Start Scraping
+            </Button>
+          </ConditionalRender>
+          <ConditionalRender condition={taskData.status === TASK_STATUS.SCRAPING}>
+            <Button
+              size="sm"
+              variant="default_light"
+              onClick={() => {
+                socket?.emit(EVENTS.TASK_PAUSE, listType)
+                console.log('pause scraping', listType);
+              }}
+            >
+              <Pause />
+              Pause Scraping
+            </Button>
+            <Button
+              size="sm"
+              variant="destructive_light"
+              onClick={() => {
+                socket?.emit(EVENTS.TASK_CANCEL, listType)
+                console.log('cancel scraping', listType);
+              }}
+            >
+              <X />
+              Cancel Scraping
+            </Button>
+          </ConditionalRender>
+          <ConditionalRender condition={taskData.status === TASK_STATUS.PAUSED}>
+            <Button
+              size="sm"
+              onClick={() => {
+                socket?.emit(EVENTS.TASK_START, listType)
+                console.log('resume scraping', listType);
+              }}
+            >
+              <Play />
+              Start Scraping
+            </Button>
+          </ConditionalRender>
+          <ConditionalRender condition={taskData.status === TASK_STATUS.FAILED}>
+            <Button
+              size="sm"
+              onClick={() => {
+                socket?.emit(EVENTS.TASK_START, listType)
+                console.log('retry scraping', listType);
+              }}
+            >
+              Retry Scraping
+            </Button>
+            <Button
+
+              size="sm"
+              variant="destructive_light"
+              onClick={() => {
+                socket?.emit(EVENTS.TASK_CANCEL, listType)
+                console.log('cancel scraping', listType);
+              }}
+            >
+              <X />
+              Cancel Scraping
+            </Button>
+          </ConditionalRender>
+          <ConditionalRender condition={taskData.status === TASK_STATUS.COMPLETED}>
+            <Button
+              size="sm"
+              onClick={() => {
+                socket?.emit(EVENTS.TASK_START, listType)
+                console.log('start scraping', listType);
+              }}
+            >
+              Start Scraping
+            </Button>
+          </ConditionalRender>
+        </div>
+
+      </section>
+
+      <section className="p-6 border border-gray-200 rounded-lg bg-slate-100 shadow space-y-10">
+        <div aria-label="header" className="text-lg font-semibold border-b pb-5 flex w-full justify-between gap-4">
+          <div>
+            Task List {taskList.length > 0 && <Badge variant="info" className="ml-2">{taskList.length}</Badge>}
+          </div>
+          <div>
+            <Button
+              size="sm"
+              onClick={() => {
+                socket.emit("task_list")
+                console.log('task list requested');
+              }}
+            >
+              Refresh
+            </Button>
+          </div>
+        </div>
+        {taskList.map((task, index) => {
+          return (<div key={task.startTime} className="grid grid-cols-1 gap-2 border-b pb-2">
+            <div className="flex gap-4">
+              <h4 className="text-lg font-semibold">Task {index + 1}</h4>
+              <Badge variant="info">{task.status}</Badge>
+
+            </div>
+            <DisplayTask task={task} />
+          </div>)
+        })}
+      </section>
     </>
   );
+}
+
+function DisplayTask({ task }: { task: taskDataType }) {
+  return (
+    <div className="grid grid-cols-1 gap-2">
+      <div className="flex gap-4">
+        <h4 className="text-lg font-semibold">Task</h4>
+        <Badge variant="info">{task.status}</Badge>
+      </div>
+      <div className="grid grid-cols-5 border rounded-md p-2">
+        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">Processable</div>
+        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">Processed</div>
+        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">Failed</div>
+        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">Success</div>
+        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">Skipped</div>
+        <div className="text-center p-2"><Badge variant="info">{task.processable}</Badge></div>
+        <div className="text-center p-2"><Badge variant="info">{task.processed}</Badge></div>
+        <div className="text-center p-2"><Badge variant="info">{task.failed}</Badge></div>
+        <div className="text-center p-2"><Badge variant="info">{task.success}</Badge></div>
+        <div className="text-center p-2"><Badge variant="info">{task.skipped}</Badge></div>
+      </div>
+      <div className="flex gap-2 flex-wrap">
+        {task.data.sort((a, b) => {
+          if (a.status === TASK_STATUS.FAILED) return 1;
+          if (b.status === TASK_STATUS.FAILED) return -1;
+          return 0;
+        }).map((item, index) => {
+          if (index > 10) return null;
+          return (
+            <Badge key={item.roll_no} variant={item.status === TASK_STATUS.FAILED ? 'destructive' : 'success'}>
+              {item.roll_no} - {item.status}
+            </Badge>
+          )
+        })}
+      </div>
+    </div>
+  )
 }

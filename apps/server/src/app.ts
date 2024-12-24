@@ -15,21 +15,21 @@ app.get('/', (req, res) => {
     status: 'healthy' 
   });
 });
-const CORS_ORIGINS = ['nith.eu.org'];
+const CORS_ORIGINS = ['nith.eu.org',"app.nith.eu.org"];
 
 // Middleware to handle custom CORS logic
 app.use((req: Request, res: Response, next: NextFunction) => {
   const origin = req.header('Origin') || '';
 
   // Allow requests without an Origin header (e.g., direct browser requests)
-  if (!origin) {
+  if (!origin && process.env.NODE_ENV !== 'production') {
       return next();
   }
 
   // Check CORS for specific origins
   if (
       (process.env.NODE_ENV === 'production' && CORS_ORIGINS.some(o => origin.endsWith(o))) ||
-      (process.env.NODE_ENV === 'development' && origin.startsWith('http://localhost:'))
+      (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost:'))
   ) {
       res.header('Access-Control-Allow-Origin', origin);
       res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
