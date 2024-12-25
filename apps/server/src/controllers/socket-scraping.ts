@@ -1,10 +1,10 @@
 import type { Server, Socket } from 'socket.io';
 import { scrapeResult } from '../lib/scrape';
+import { ResultScrapingLog } from '../models/log-result_scraping';
 import ResultModel from "../models/result";
 import dbConnect from '../utils/dbConnect';
+import { skip } from 'node:test';
 
-
-import { redisClient } from "../utils/redis";
 
 const LIST_TYPE = {
     ALL: "all",
@@ -44,8 +44,10 @@ type taskDataType = {
     startTime: number,
     endTime: number | null,
     status: typeof TASK_STATUS[keyof typeof TASK_STATUS],
-    successfulRollNos: Set<string>,
-    failedRollNos: Set<string>,
+    successfulRollNos: string[];
+    failedRollNos: string[];
+    skippedRollNos: string[];
+    list_type: listType,
 };
 
 type listType = typeof LIST_TYPE[keyof typeof LIST_TYPE]
@@ -58,15 +60,18 @@ const KEY_PREFIX = 'result_scraping';
 
 
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function handler_resultScraping(io: Server) {
     return async (socket: Socket) => {
         const activeTasks = new Map<string, boolean>();
+        const tasksMap = new Map<string, taskDataType>();
 
+        await dbConnect();
         socket.on('connect', async () => {
             console.log("A user connected:", socket.id);
         });
 
-        socket.on(EVENTS.TASK_START, async ({list_type="has_backlog",task_resume_id}:{list_type:listType,task_resume_id?:string}) => {
+        socket.on(EVENTS.TASK_START, async ({ list_type = "has_backlog", task_resume_id }: { list_type: listType, task_resume_id?: string }) => {
             try {
                 console.log(`Starting task for list type: ${list_type}`);
                 const roll_list = await getListOfRollNos(list_type);
@@ -76,7 +81,18 @@ export function handler_resultScraping(io: Server) {
                     return;
                 }
 
-                const taskId = task_resume_id ? task_resume_id :`${KEY_PREFIX}:${list_type}:${roll_list.size}:${Date.now()}`;
+                let taskId: string;
+                if (task_resume_id) {
+                    const task = await ResultScrapingLog.exists({ taskId: task_resume_id });
+                    if (!task) {
+                        console.error("Task not found.");
+                        socket.emit(EVENTS.TASK_ERROR, "Task not found.");
+                        return;
+                    }
+                    taskId = task_resume_id;
+                } else {
+                    taskId = `${KEY_PREFIX}:${list_type}:${roll_list.size}:${Date.now()}`;
+                }
                 activeTasks.set(taskId, true);
 
                 const taskData: taskDataType = {
@@ -89,154 +105,161 @@ export function handler_resultScraping(io: Server) {
                     startTime: Date.now(),
                     endTime: null,
                     status: TASK_STATUS.QUEUED,
-                    successfulRollNos: new Set<string>(),
-                    failedRollNos: new Set<string>(),
+                    successfulRollNos: [],
+                    failedRollNos: [],
+                    skippedRollNos: [],
+                    list_type,
                 };
+                tasksMap.set(taskId, taskData);
+                await ResultScrapingLog.create({ taskId: taskId, ...taskData });
+                socket.emit(EVENTS.TASK_STATUS, tasksMap.get(taskId));
 
-                await redisClient.set(taskId, JSON.stringify(taskData));
-                socket.emit(EVENTS.TASK_STATUS, taskData);
 
+                const rollArray = Array.from(roll_list);
 
-                // Loop through each roll number one by one
-                for (const rollNo of roll_list) {
-                    if (!activeTasks.get(taskId)) break;  // Stop processing if task is canceled
+                for (let i = 0; i < rollArray.length; i += BATCH_SIZE) {
+                    if (!activeTasks.get(taskId)) break; // Stop if task is cancelled
 
-                    const taskStatus = await redisClient.get(taskId);
+                    const batch = rollArray.slice(i, i + BATCH_SIZE);
+                    const taskStatus = tasksMap.get(taskId) as taskDataType;
+
                     if (taskStatus) {
-                        const parsedStatus = JSON.parse(taskStatus);
-                        if (parsedStatus.status === TASK_STATUS.PAUSED) {
-                            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait if paused
+                        if (taskStatus.status === TASK_STATUS.PAUSED) {
+                            await new Promise(resolve => setTimeout(resolve, 1000)); // Wait before checking again
+                            i -= BATCH_SIZE; // Reattempt the current batch
                             continue;
                         }
                     }
 
-                    const isProcessed = await redisClient.get(`scraping:${list_type}:${rollNo}`);
-                    if (isProcessed) {
-                        taskData.skipped++;
-                        await redisClient.set(taskId, JSON.stringify(taskData));
-                        continue; // Skip if already processed
-                    }
+                    // Execute scrapeAndSaveResult in parallel for the current batch
+                    const batchResults = await Promise.allSettled(
+                        batch.map(rollNo => scrapeAndSaveResult(rollNo))
+                    );
 
-                    try {
-                        const response = await scrapeAndSaveResult(rollNo);
-                        if (response.success) {
+                    batchResults.forEach((result, index) => {
+                        const rollNo = batch[index];
+                        if (result.status === 'fulfilled' && result.value.success) {
                             taskData.success++;
-                            taskData.successfulRollNos.add(rollNo);
+                            taskData.successfulRollNos.push(rollNo);
                         } else {
                             taskData.failed++;
-                            taskData.failedRollNos.add(rollNo);
+                            taskData.failedRollNos.push(rollNo);
                         }
-                    } catch (error) {
-                        console.error("Error during scraping:", error);
-                        taskData.failed++;
-                    }
-
-                    taskData.processed++;
+                        taskData.processed++;
+                    });
+                    tasksMap.set(taskId, taskData);
+                    
                     socket.emit(EVENTS.TASK_STATUS, taskData);
-                    await redisClient.set(`scraping:${list_type}:${rollNo}`, "true");
-
-                    // Save task data after processing each roll number
-                    await redisClient.set(taskId, JSON.stringify(taskData));
                 }
 
                 taskData.endTime = Date.now();
                 taskData.status = TASK_STATUS.COMPLETED;
-                await redisClient.set(taskId, JSON.stringify(taskData));
+                tasksMap.set(taskId, taskData);
+                await ResultScrapingLog.updateOne({ taskId: taskId }, {
+                    $set: {
+                        end_time: taskData.endTime, status: TASK_STATUS.COMPLETED,
+                        successfulRollNos: Array.from(taskData.successfulRollNos), failedRollNos: Array.from(taskData.failedRollNos)
+                    }
+                })
                 activeTasks.delete(taskId);
 
                 socket.emit(EVENTS.TASK_STATUS, taskData);
             } catch (error) {
                 console.error("Task start error:", error);
+
                 socket.emit(EVENTS.TASK_ERROR, "An error occurred while starting the task.");
             }
         });
 
         socket.on(EVENTS.TASK_CANCEL, async (taskId: string) => {
             activeTasks.set(taskId, false);
-            await redisClient.set(`${taskId}:cancelled`, "true");
 
-            const taskData = await redisClient.get(taskId);
+            const taskData = tasksMap.get(taskId);
             if (taskData) {
-                const parsedTask = JSON.parse(taskData);
-                parsedTask.endTime = Date.now();
-                parsedTask.status = TASK_STATUS.CANCELLED;
-                await redisClient.set(taskId, JSON.stringify(parsedTask));
+                taskData.endTime = Date.now();
+                taskData.status = TASK_STATUS.CANCELLED;
+                tasksMap.set(taskId, taskData);
+                await ResultScrapingLog.updateOne({ taskId: taskId }, {
+                    $set: {
+                        end_time: taskData.endTime, status: TASK_STATUS.CANCELLED,
+                        successfulRollNos: Array.from(taskData.successfulRollNos), failedRollNos: Array.from(taskData.failedRollNos)
+                    }
+                });
+
             }
 
             socket.emit(EVENTS.TASK_STATUS, { status: TASK_STATUS.CANCELLED });
         });
 
         socket.on(EVENTS.TASK_PAUSE, async (taskId: string) => {
-            const taskData = await redisClient.get(taskId);
+            const taskData = await ResultScrapingLog.findOne({ taskId: taskId });
             if (taskData) {
                 const parsedTask = JSON.parse(taskData);
                 parsedTask.endTime = Date.now();
                 parsedTask.status = TASK_STATUS.PAUSED;
-                await redisClient.set(taskId, JSON.stringify(parsedTask));
+                tasksMap.set(taskId, parsedTask);
+                await ResultScrapingLog.updateOne({ taskId: taskId }, {
+                    $set: {
+                        end_time: parsedTask.endTime, status: TASK_STATUS.PAUSED,
+                        successfulRollNos: Array.from(parsedTask.successfulRollNos), failedRollNos: Array.from(parsedTask.failedRollNos)
+                    }
+                });
             }
             activeTasks.set(taskId, false);
             socket.emit(EVENTS.TASK_STATUS, { status: TASK_STATUS.PAUSED });
         });
 
         socket.on(EVENTS.TASK_PAUSED_RESUME, async (taskId: string) => {
-            const taskData = await redisClient.get(taskId);
+            const taskData = tasksMap.get(taskId);
             if (taskData) {
-                const parsedTask = JSON.parse(taskData);
-                if (parsedTask.status === TASK_STATUS.PAUSED) {
+                if (taskData.status === TASK_STATUS.PAUSED) {
                     activeTasks.set(taskId, true);
-                    
-                    socket.emit(EVENTS.TASK_PAUSED_RESUME, { task_resume_id: taskId,list_type:taskId.split(":")[1] });
+                    taskData.status = TASK_STATUS.QUEUED;
+                    tasksMap.set(taskId, taskData);
+
+
+                    socket.emit(EVENTS.TASK_PAUSED_RESUME, { task_resume_id: taskId, list_type: taskId.split(":")[1] });
                 }
             }
         });
 
         socket.on(EVENTS.TASK_LIST, async () => {
             try {
-                // Get all the task keys that are stored in Redis (these keys could follow a specific pattern like 'scraping:*')
-                const taskKeys = await redisClient.keys(`${KEY_PREFIX}:*`);  // Adjust the pattern as per your task keys structure
-                console.log("Task keys:", taskKeys);
-                // Fetch the task data for all keys
-                const tasks = await Promise.all(
-                    taskKeys.map(async (key) => {
-                        const taskData = await redisClient.get(key);
-                        if (taskData) {
-                            return JSON.parse(taskData);
-                        }
-                        return null;
-                    })
-                );
+                const tasks = await ResultScrapingLog.find({}).limit(30) as taskDataType[];
 
-                // Filter out any null values (if some tasks don't have data in Redis)
-                const validTasks = tasks.filter(task => task !== null);
-
-                // Emit the list of valid tasks to the client
-                socket.emit(EVENTS.TASK_LIST, validTasks);
+                socket.emit(EVENTS.TASK_LIST, tasks);
             } catch (error) {
                 console.error("Error fetching task list:", error);
                 socket.emit(EVENTS.TASK_ERROR, "An error occurred while fetching the task list.");
             }
         });
-        
-        // socket.on(EVENTS.TASK_STATUS, async (taskId: string) => {
-        //     const taskData = await redisClient.get(taskId);
-        //     if (taskData) {
-        //         const parsedTask = JSON.parse(taskData);
-        //         socket.emit(EVENTS.TASK_STATUS, parsedTask);
-        //     }
-        // })
+
+        socket.on(EVENTS.TASK_STATUS, async (taskId: string) => {
+            const taskData = tasksMap.get(taskId);
+            if (taskData) {
+                socket.emit(EVENTS.TASK_STATUS, taskData);
+            }
+        })
 
         socket.on('disconnect', async () => {
             console.log("User disconnected:", socket.id);
-            for (const taskId of activeTasks.keys()) {
+            for await (const taskId of activeTasks.keys()) {
                 activeTasks.set(taskId, false);
-                await redisClient.set(`${taskId}:paused`, "true");
+                tasksMap.set(taskId, { ...tasksMap.get(taskId) as taskDataType, status: TASK_STATUS.CANCELLED });
+                await ResultScrapingLog.updateOne({ taskId: taskId }, {
+                    $set: {
+                        status: TASK_STATUS.PAUSED,
+                        successfulRollNos: Array.from(tasksMap.get(taskId)?.successfulRollNos || []),
+                        failedRollNos: Array.from(tasksMap.get(taskId)?.failedRollNos || []),
+                        skippedRollNos: Array.from(tasksMap.get(taskId)?.skippedRollNos || []),
+                        
+                    }
+                });
             }
         });
 
 
-        function iterateRollNo(rollNo:string){
-            
-        }
+
     };
 }
 

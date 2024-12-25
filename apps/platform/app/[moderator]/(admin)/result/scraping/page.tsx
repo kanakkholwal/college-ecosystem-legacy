@@ -25,7 +25,8 @@ const BASE_SERVER_URL = process.env.NEXT_PUBLIC_BASE_SERVER_URL;
 const socket = io(BASE_SERVER_URL, {
   path: "/ws/results-scraping",
   withCredentials: true,
-  transports: ["websocket"]
+  transports: ["websocket"],  // or ['websocket', 'polling']
+  // autoConnect: false,
 });
 
 const EVENTS = {
@@ -51,6 +52,7 @@ const LIST_TYPE = {
   BACKLOG: "has_backlog",
   NEW_SEMESTER: "new_semester",
 } as const;
+type listType = typeof LIST_TYPE[keyof typeof LIST_TYPE]
 
 type taskDataType = {
   processable: number,
@@ -65,8 +67,11 @@ type taskDataType = {
   startTime: number,
   endTime: number | null,
   status: typeof TASK_STATUS[keyof typeof TASK_STATUS],
-  successfulRollNos: Set<string>,
-  failedRollNos: Set<string>,
+  successfulRollNos: string[];
+  failedRollNos: string[];
+  skippedRollNos: string[];
+  list_type: listType,
+  taskId: string,
 };
 export default function ScrapeResultPage() {
   const [connected, setConnected] = useState(socket.connected);
@@ -74,20 +79,32 @@ export default function ScrapeResultPage() {
   const [listType, setListType] = useState<typeof LIST_TYPE[keyof typeof LIST_TYPE]>(LIST_TYPE.BACKLOG);
   const [error, setError] = useState<string | null>(null);
   const [taskList, setTaskList] = useState<taskDataType[]>([]);
+
   const [taskData, setTaskData] = useState<taskDataType>({
-    status: TASK_STATUS.IDLE,
     processable: 0,
+    status: TASK_STATUS.IDLE,
     processed: 0,
     failed: 0,
     success: 0,
     skipped: 0,
     data: [],
-    startTime: new Date().getTime(),
+    startTime: Date.now(),
     endTime: null,
-    successfulRollNos: new Set(),
-    failedRollNos: new Set(),
-
+    successfulRollNos: [],
+    failedRollNos: [],
+    skippedRollNos: [],
+    list_type: listType,
+    taskId: "",
   })
+
+  const handleAction = (id: string, type: string) => {
+    console.log('action:', id, type);
+    if(type === EVENTS.TASK_PAUSED_RESUME){
+      socket.emit(type, id)
+    }else if(type === EVENTS.TASK_CANCEL){
+      socket.emit(type, id)
+    }
+  }
 
   useEffect(() => {
     socket.on('connect', () => {
@@ -172,7 +189,16 @@ export default function ScrapeResultPage() {
           Scraping Result <Badge variant="info" className="ml-2">{taskData.status}</Badge>
           {error && <p className="text-red-500">{error}</p>}
         </div>
-        <DisplayTask task={taskData} />
+        {taskData?.taskId ? <DisplayTask task={taskData} /> :
+          <div className="grid grid-cols-1 gap-2 bg-white p-3 rounded-md shadow">
+            <div className="flex gap-4">
+              <h5 className="text-sm font-semibold">
+                #No Task Running
+              </h5>
+            </div>
+
+          </div>}
+
         <div aria-label="footer" className="flex items-center space-x-2 pt-5 border-t">
           <Button
             size="sm"
@@ -284,8 +310,8 @@ export default function ScrapeResultPage() {
 
       </section>
 
-      <section className="p-6 border border-gray-200 rounded-lg bg-slate-100 shadow space-y-10">
-        <div aria-label="header" className="text-lg font-semibold border-b pb-5 flex w-full justify-between gap-4">
+      <section className="p-6 border border-gray-200 rounded-lg bg-slate-100 shadow">
+        <div aria-label="header" className="text-lg font-semibold border-b pb-5 mb-5 flex w-full justify-between gap-4">
           <div>
             Task List {taskList.length > 0 && <Badge variant="info" className="ml-2">{taskList.length}</Badge>}
           </div>
@@ -302,33 +328,33 @@ export default function ScrapeResultPage() {
           </div>
         </div>
         {taskList.map((task, index) => {
-          return (<div key={task.startTime} className="grid grid-cols-1 gap-2 border-b pb-2">
-            <div className="flex gap-4">
-              <h4 className="text-lg font-semibold">Task {index + 1}</h4>
-              <Badge variant="info">{task.status}</Badge>
-
-            </div>
-            <DisplayTask task={task} />
-          </div>)
+          return (<DisplayTask task={task} key={task.startTime} actionFunction={handleAction} />)
         })}
       </section>
     </>
   );
 }
 
-function DisplayTask({ task }: { task: taskDataType }) {
+function DisplayTask({ task, actionFunction }: { task: taskDataType, actionFunction?: (id: string, type: string) => void }) {
   return (
-    <div className="grid grid-cols-1 gap-2">
+    <div className="grid grid-cols-1 gap-2 bg-white p-3 rounded-md shadow">
       <div className="flex gap-4">
-        <h4 className="text-lg font-semibold">Task</h4>
-        <Badge variant="info">{task.status}</Badge>
+        <Button size="sm" variant="ghost" className="text-sm lowercase">
+          #{task.taskId.toLowerCase()}
+        </Button>
+        {actionFunction && <div className="flex gap-2 ml-auto">
+          <Button size="sm" variant="destructive_light" onClick={() => actionFunction(task.taskId, EVENTS.TASK_PAUSED_RESUME)}>Resume</Button>
+          <Button size="sm" variant="default_light" onClick={() => actionFunction(task.taskId, EVENTS.TASK_CANCEL)}>Cancel</Button>
+        </div>}
       </div>
-      <div className="grid grid-cols-5 border rounded-md p-2">
+      <div className="grid grid-cols-6 border rounded-md p-2">
+        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">Status</div>
         <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">Processable</div>
         <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">Processed</div>
         <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">Failed</div>
         <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">Success</div>
         <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">Skipped</div>
+        <div className="text-center p-2"><Badge variant="info">{task.status}</Badge></div>
         <div className="text-center p-2"><Badge variant="info">{task.processable}</Badge></div>
         <div className="text-center p-2"><Badge variant="info">{task.processed}</Badge></div>
         <div className="text-center p-2"><Badge variant="info">{task.failed}</Badge></div>
