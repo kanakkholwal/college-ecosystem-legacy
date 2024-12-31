@@ -287,7 +287,8 @@ export function handler_resultScraping(io: Server) {
                 const tasks = await ResultScrapingLog.find({}).limit(30) as taskDataType[];
                 // Add tasks to tasksMap
                 for await (const task of tasks) {
-                    !tasksMap.has(task.taskId) && tasksMap.set(task.taskId, task);
+                    if(!tasksMap.has(task.taskId) )
+                        tasksMap.set(task.taskId, task);
                 }
                 socket.emit(EVENTS.TASK_LIST, JSON.parse(JSON.stringify(tasks)));
                 console.log("Task list fetched.");
@@ -303,7 +304,8 @@ export function handler_resultScraping(io: Server) {
                 socket.emit(EVENTS.TASK_ERROR, "Task not found.");
                 return;
             }
-            !tasksMap.has(taskId) && tasksMap.set(taskId, task);
+            if(!tasksMap.has(task.taskId) )
+                tasksMap.set(task.taskId, task);
             socket.emit(EVENTS.TASK_STATUS, tasksMap.get(taskId));
             
         })
