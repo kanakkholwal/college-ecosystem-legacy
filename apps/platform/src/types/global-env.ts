@@ -4,17 +4,20 @@ const envVariables = z.object({
   // Server Side
   GOOGLE_ID: z.string(),
   GOOGLE_SECRET: z.string(),
-  NEXTAUTH_URL: z.string(),
-  NEXT_AUTH_SECRET: z.string(),
-
+  
+  BETTER_AUTH_SECRET:z.string(),
+  BETTER_AUTH_URL:z.string(),
+  
+  BASE_URL: z.string().url(),
   MONGODB_URI: z.string(),
   DATABASE_URL: z.string(),
 
   NODE_ENV: z.string().default("testing"),
 
+  SERVER_IDENTITY: z.string().url(),
   BASE_SERVER_URL: z.string().url(),
   NEXT_PUBLIC_BASE_SERVER_URL: z.string().url(),
-
+  
   UPSTASH_REDIS_REST_URL: z.string(),
   UPSTASH_REDIS_REST_TOKEN: z.string(),
 

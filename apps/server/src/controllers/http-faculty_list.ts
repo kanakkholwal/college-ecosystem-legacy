@@ -5,7 +5,7 @@ import HTMLParser from "node-html-parser";
 import { z } from "zod";
 import { DEPARTMENTS_LIST, type Department } from "../constants/departments";
 import Faculty from "../models/faculty";
-import dbConnect from "~/utils/dbConnect";
+import dbConnect from "../utils/dbConnect";
 
 type FacultyType = {
     name: string;

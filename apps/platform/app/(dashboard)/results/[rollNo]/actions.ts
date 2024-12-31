@@ -11,7 +11,7 @@ export async function getResultByRollNo(
     data: ResultTypeWithId | null;
     message: string;
     error: boolean;
-  }>(`${process.env.BASE_SERVER_URL}/api/results/${rollNo}`)
+  }>(`${process.env.BASE_SERVER_URL}/api/results/${rollNo}/get`)
   const result = data.data;
   if (!result) {
     return null;

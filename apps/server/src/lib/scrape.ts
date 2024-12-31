@@ -1,6 +1,6 @@
 import axios from "axios";
 import HTMLParser from "node-html-parser";
-import type { rawResultType } from "~/types/result";
+import type { rawResultType } from "../types/result";
 
 const PROGRAMME_KEYS = {
     "Dual Degree": ["dcs", "dec"],

@@ -1,9 +1,9 @@
 import { z } from "zod";
 
 const envVariables = z.object({
-    MONGODB_URI: z.string(),
-    REDIS_URL: z.string(),
-    IDENTITY_KEY: z.string().min(10),
+    MONGODB_URI: z.string().nonempty(),
+    REDIS_URL: z.string().nonempty(),
+    SERVER_IDENTITY: z.string().nonempty()
 });
 
 envVariables.parse(process.env);

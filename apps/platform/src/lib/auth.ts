@@ -39,6 +39,10 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       error?: string | null;
     }>(`${process.env.BASE_SERVER_URL}/api/results/${username}`, {
       method: "POST",
+      headers: {
+        'Content-Type': 'application/json',
+        'X-IDENTITY-KEY': process.env.SERVER_IDENTITY,
+      },
     });
     console.log(response?.data ? "has result" : "No result");
 
@@ -63,6 +67,10 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     error?: string | null;
   }>(`${process.env.BASE_SERVER_URL}/api/faculties/search/${email}`, {
     method: "POST",
+    headers: {
+      'Content-Type': 'application/json',
+      'X-IDENTITY-KEY': process.env.SERVER_IDENTITY,
+    },
   });
   const faculty = response?.data
   console.log(faculty ? "is faculty" : "Not faculty");
@@ -130,7 +138,7 @@ export const auth = betterAuth({
     requireEmailVerification: true,
     autoSignIn: true,
     sendResetPassword: async ({user, url, token}, request) => {
-      const verification_url = `${process.env.BASE_SERVER_URL}/sign-in?tab=reset-password&token=${token}`;
+      const verification_url = `${process.env.BASE_URL}/sign-in?tab=reset-password&token=${token}`;
 
         await resend.emails.send({
           from: process.env.RESEND_EMAIL_FROM,
@@ -147,7 +155,7 @@ export const auth = betterAuth({
   emailVerification: {
       sendOnSignUp: true,
       sendVerificationEmail: async ( { user, url, token }, request) => {
-        const verification_url = `${process.env.BASE_SERVER_URL}/sign-in?tab=verify-email&token=${token}`;
+        const verification_url = `${process.env.BASE_URL}/sign-in?tab=verify-email&token=${token}`;
         await resend.emails.send({
           from: process.env.RESEND_EMAIL_FROM,
           to: user.email,

@@ -10,36 +10,49 @@ app.use(express.urlencoded({ extended: true }));
 
 // Default route
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'Welcome to the server!',
-    status: 'healthy' 
+    status: 'healthy'
   });
 });
-const CORS_ORIGINS = ['nith.eu.org',"app.nith.eu.org"];
+const CORS_ORIGINS = ['nith.eu.org', "app.nith.eu.org"];
+
+const SERVER_IDENTITY = process.env.SERVER_IDENTITY
+if (!SERVER_IDENTITY)
+  throw new Error("SERVER_IDENTITY is required in ENV")
+
 
 // Middleware to handle custom CORS logic
 app.use((req: Request, res: Response, next: NextFunction) => {
   const origin = req.header('Origin') || '';
 
-  // Allow requests without an Origin header (e.g., direct browser requests)
-  if (!origin && process.env.NODE_ENV !== 'production') {
+  const identityKey = req.header('X-IDENTITY-KEY') || '';
+
+  // Allow requests without an Origin header (e.g., server-to-server API calls)
+  if (!origin) {
+    // Enforce SERVER_IDENTITY for server-to-server API calls
+    if (identityKey === SERVER_IDENTITY) {
       return next();
+    }
+    return res.status(403).json({ error: 'Missing or invalid SERVER_IDENTITY' });
+
   }
+
 
   // Check CORS for specific origins
   if (
-      (process.env.NODE_ENV === 'production' && CORS_ORIGINS.some(o => origin.endsWith(o))) ||
-      (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost:'))
+    (process.env.NODE_ENV === 'production' && CORS_ORIGINS.some(o => origin.endsWith(o))) ||
+    (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost:'))
   ) {
-      res.header('Access-Control-Allow-Origin', origin);
-      res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-      res.header('Access-Control-Allow-Headers', 'Content-Type,X-IDENTITY-KEY');
-      res.header('Access-Control-Allow-Credentials', 'true');
-      if (req.method === 'OPTIONS') {
-          return res.sendStatus(200); // Preflight request
-      }
+    res.header('Access-Control-Allow-Origin', origin);
+    res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+    res.header('Access-Control-Allow-Headers', 'Content-Type,X-IDENTITY-KEY');
+    res.header('Access-Control-Allow-Credentials', 'true');
+    if (req.method === 'OPTIONS') {
+      return res.sendStatus(200); // Preflight request
+    }
   } else {
-      return res.status(403).json({ error: 'CORS policy does not allow this origin' });
+    return res.status(403).json({ error: 'CORS policy does not allow this origin' });
   }
 
   next();
@@ -53,9 +66,9 @@ app.use('/api', httpRoutes);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 app.use((err: Error, req: express.Request, res: express.Response, _next: express.NextFunction) => {
   console.error(err.stack);
-  res.status(500).json({ 
+  res.status(500).json({
     message: 'Something went wrong!',
-    error: err.message 
+    error: err.message
   });
 });
 
