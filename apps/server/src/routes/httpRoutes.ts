@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { getDepartments, getDepartmentsList } from '../controllers/http-department';
-import { getFacultyByEmailHandler, getFacultyListByDepartmentHandler } from '../controllers/http-faculty_list';
+import { getFacultyByEmailHandler, getFacultyListByDepartmentHandler ,refreshFacultyListHandler} from '../controllers/http-faculty_list';
 import { addUpdateResult, assignRankToResults, getResult, getResultByRollNoFromSite } from '../controllers/http-result';
 
 const router = Router();
@@ -14,6 +14,7 @@ router.get('/departments/list', getDepartmentsList);
 
 // Endpoint to get all the faculties from the database
 router.get('/faculties/search/:email', getFacultyByEmailHandler);
+router.get('/faculties/refresh', refreshFacultyListHandler);
 router.get('/faculties/:departmentCode', getFacultyListByDepartmentHandler);
 
 

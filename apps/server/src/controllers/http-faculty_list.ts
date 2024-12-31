@@ -4,7 +4,8 @@ import type { Request, Response } from 'express';
 import HTMLParser from "node-html-parser";
 import { z } from "zod";
 import { DEPARTMENTS_LIST, type Department } from "../constants/departments";
-
+import Faculty from "../models/faculty";
+import dbConnect from "~/utils/dbConnect";
 
 type FacultyType = {
     name: string;
@@ -12,9 +13,8 @@ type FacultyType = {
     department: string;
 }
 
-// TODO: Implement the following functions to add and retrieve from database
 
-export async function getFacultyListByDepartment(department: Department): Promise<{
+async function getFacultyListByDepartment(department: Department): Promise<{
     error: boolean;
     message: string;
     data: FacultyType[];
@@ -68,7 +68,7 @@ export async function getFacultyListByDepartment(department: Department): Promis
     }
 }
 
-export async function getFacultyList(): Promise<FacultyType[]> {
+async function getFacultyList(): Promise<FacultyType[]> {
 
     const faculties: FacultyType[] = [];
     const promises = DEPARTMENTS_LIST.map(department => getFacultyListByDepartment(department));
@@ -95,12 +95,27 @@ export const getFacultyListByDepartmentHandler = async (req: Request, res: Respo
         });
         return;
     }
-    const { error, data } = await getFacultyListByDepartment(dept);
-    res.json({ error, message: error ? "Error" : "Success", data });
+    const facultyList = await Faculty.find({department})
+
+    if (facultyList.length === 0) {
+        res.json({
+            error: true,
+            message: "Faculty not found",
+            data: []
+        });
+        return;
+    }
+    res.json({
+        error: false,
+        message: "Success",
+        data: facultyList
+    });
+    
+    
 }
 
 export const getFacultyListHandler = async (req: Request, res: Response) => {
-    const data = await getFacultyList();
+    const data = await Faculty.find({})
     res.json(data);
 }
 
@@ -115,8 +130,8 @@ export const getFacultyByEmailHandler = async (req: Request, res: Response) => {
         });
         return;
     }
-    const faculties = await getFacultyList();
-    const faculty = faculties.find(f => f.email === email);
+    await dbConnect()
+    const faculty = await Faculty.findOne({email})
     if (!faculty) {
         res.json({
             error: true,
@@ -130,6 +145,36 @@ export const getFacultyByEmailHandler = async (req: Request, res: Response) => {
         message: "Success",
         data: faculty
     });
+}
+
+export const refreshFacultyListHandler = async (req: Request, res: Response) => {
+    try{
+        await dbConnect()
+        const faculties = await getFacultyList();
+        await Faculty.deleteMany({});
+        await Faculty.insertMany(faculties);
+        res.json({
+            error: false,
+            message: "Success",
+            data: faculties
+        });
+    }catch(e){
+        if (e instanceof Error) {
+            console.error(e.message);
+            res.json({
+                error: true,
+                message: e.message,
+                data: []
+            });
+            return;
+        }
+        res.json({
+            error: true,
+            message: "Unknown error",
+            data: []
+        });
+    }
+
 }
 
 
