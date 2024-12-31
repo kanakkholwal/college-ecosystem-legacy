@@ -79,7 +79,7 @@ const fetchData = async (
         }
         return Promise.resolve([response.data.toString(),"successfully fetched"])
     } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:");
         return Promise.resolve([null, (error as Error).toString()])
     }
 };
@@ -189,7 +189,7 @@ export async function scrapeResult(rollNo: string): Promise<{
 }> {
     const data = await getInfo(rollNo);
 
-    console.log("Roll No: %s, Data: %o", rollNo, data);
+    console.log("Roll No: %s", rollNo);
     try {
         console.log("evaluating");
         const [result,msg] = await fetchData(data.url, rollNo, data.headers);

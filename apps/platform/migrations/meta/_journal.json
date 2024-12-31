@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1734617990098,
-      "tag": "0000_exotic_captain_britain",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1734619224544,
-      "tag": "0001_strong_magus",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1734619688856,
-      "tag": "0002_shallow_shinko_yamashiro",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1734680775163,
-      "tag": "0003_overjoyed_wendell_vaughn",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1734690428104,
-      "tag": "0004_harsh_red_shift",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1734690927051,
-      "tag": "0005_glossy_microbe",
+      "when": 1735630133663,
+      "tag": "0000_nifty_synch",
       "breakpoints": true
     }
   ]

@@ -35,6 +35,9 @@ const EVENTS = {
   TASK_CANCEL: 'task_cancel',
   TASK_PAUSE: 'task_pause',
   TASK_PAUSED_RESUME: 'task_paused_resume',
+  TASK_DELETE_CANCELLED: 'task_delete_cancelled',
+  TASK_RESUME_LAST: 'task_resume_last',
+  TASK_RETRY_FAILED: 'task_retry_failed',
 } as const;
 
 const TASK_STATUS = {
@@ -99,11 +102,12 @@ export default function ScrapeResultPage() {
 
   const handleAction = (id: string, type: string) => {
     console.log('action:', id, type);
-    if(type === EVENTS.TASK_PAUSED_RESUME){
+    setError(null);
+    const acceptableActions:string[] = [EVENTS.TASK_PAUSED_RESUME, EVENTS.TASK_CANCEL, EVENTS.TASK_RETRY_FAILED]
+    if (acceptableActions.includes(type)) {
       socket.emit(type, id)
-    }else if(type === EVENTS.TASK_CANCEL){
-      socket.emit(type, id)
-    }
+    } 
+
   }
 
   useEffect(() => {
@@ -126,30 +130,27 @@ export default function ScrapeResultPage() {
       setTransportName(socket.io.engine.transport.name);
     })
     socket.on("task_error", (message) => {
-      console.error('task_error:', message);
+      console.log('task_error:', message);
       setError(message);
     })
     socket.on("task_list", (message) => {
-      console.log('task_list:', message);
+      console.log('---task_list---');
+      console.log(message);
       setTaskList(message);
+      console.log('---task_list---');
     })
     socket.on("task_paused_resume", (message) => {
       console.log('task_paused_resume:', message);
       socket.emit(EVENTS.TASK_START, message)
     })
-    for (const event of Object.values(EVENTS)) {
-      console.log(`listening for ${event}`);
-      socket.on(event, (message) => {
-        if (message.data) {
-          setTaskData(message);
-        } else {
-          setTaskData({
-            ...taskData,
-            status: message.status,
-          })
-        }
+    socket.on(EVENTS.TASK_STATUS, (message) => {
+      console.log(EVENTS.TASK_STATUS);
+      console.table(message);
+      setTaskData({
+        ...message,
       })
-    }
+    })
+
 
 
 
@@ -159,9 +160,7 @@ export default function ScrapeResultPage() {
       socket.off('connect');
       socket.off('disconnect');
       socket.off('reconnect');
-      for (const event in EVENTS) {
-        socket.off(event);
-      }
+      socket.off(EVENTS.TASK_STATUS);
       socket.off('task_error');
       socket.off('task_list');
     };
@@ -184,11 +183,14 @@ export default function ScrapeResultPage() {
         </AlertDescription>
 
       </Alert>
-      <section className="p-6 border border-gray-200 rounded-lg bg-slate-100 shadow space-y-10">
+      <section className="p-6 border border-gray-200 rounded-lg bg-slate-100 shadow space-y-5">
         <div aria-label="header" className="text-lg font-semibold border-b pb-5">
           Scraping Result <Badge variant="info" className="ml-2">{taskData.status}</Badge>
-          {error && <p className="text-red-500">{error}</p>}
         </div>
+        {error && <p className="text-red-500 p-2 border border-red-500 bg-red-100 rounded-md text-sm">
+          {error}
+          <X className="size-4 !text-red-500 ml-auto inline-block cursor-pointer" role="button" onClick={() => setError(null)} />
+        </p>}
         {taskData?.taskId ? <DisplayTask task={taskData} /> :
           <div className="grid grid-cols-1 gap-2 bg-white p-3 rounded-md shadow">
             <div className="flex gap-4">
@@ -200,17 +202,18 @@ export default function ScrapeResultPage() {
           </div>}
 
         <div aria-label="footer" className="flex items-center space-x-2 pt-5 border-t">
-          <Button
+          {taskData.taskId && (<Button
             size="sm"
             variant="default_light"
             onClick={() => {
-              socket.emit(EVENTS.TASK_STATUS, listType)
+              if (!taskData.taskId) return;
+              socket.emit(EVENTS.TASK_STATUS, taskData.taskId)
               console.log('task status requested');
             }}
           >
             <Info />
             Task Status
-          </Button>
+          </Button>)}
           <ConditionalRender condition={taskData.status === TASK_STATUS.IDLE}>
             <Select
               value={listType}
@@ -233,7 +236,7 @@ export default function ScrapeResultPage() {
                 socket.emit(EVENTS.TASK_START, listType)
               }}
             >
-              Start Scraping
+              Start new Scraping Task
             </Button>
           </ConditionalRender>
           <ConditionalRender condition={taskData.status === TASK_STATUS.SCRAPING}>
@@ -241,7 +244,7 @@ export default function ScrapeResultPage() {
               size="sm"
               variant="default_light"
               onClick={() => {
-                socket?.emit(EVENTS.TASK_PAUSE, listType)
+                socket?.emit(EVENTS.TASK_PAUSE, taskData.taskId)
                 console.log('pause scraping', listType);
               }}
             >
@@ -252,7 +255,7 @@ export default function ScrapeResultPage() {
               size="sm"
               variant="destructive_light"
               onClick={() => {
-                socket?.emit(EVENTS.TASK_CANCEL, listType)
+                socket?.emit(EVENTS.TASK_CANCEL, taskData.taskId)
                 console.log('cancel scraping', listType);
               }}
             >
@@ -315,9 +318,10 @@ export default function ScrapeResultPage() {
           <div>
             Task List {taskList.length > 0 && <Badge variant="info" className="ml-2">{taskList.length}</Badge>}
           </div>
-          <div>
+          <div className="flex gap-2">
             <Button
               size="sm"
+              disabled={!connected}
               onClick={() => {
                 socket.emit("task_list")
                 console.log('task list requested');
@@ -325,9 +329,28 @@ export default function ScrapeResultPage() {
             >
               Refresh
             </Button>
+            <Button
+              size="sm"
+              disabled={!connected}
+              variant="destructive_light"
+              onClick={() => {
+                socket.emit(EVENTS.TASK_DELETE_CANCELLED)
+                console.log('task delete cancelled requested');
+              }}
+            >
+              Delete Cancelled
+            </Button>
           </div>
         </div>
-        {taskList.map((task, index) => {
+        {taskList.length === 0 && <div className="grid grid-cols-1 gap-2 bg-primary/10 text-primary text-center p-3 rounded-md shadow">
+          <div className="flex gap-4">
+            <h5 className="text-sm font-semibold">
+              No Task Found
+            </h5>
+          </div>
+
+        </div>}
+        {taskList.map((task) => {
           return (<DisplayTask task={task} key={task.startTime} actionFunction={handleAction} />)
         })}
       </section>
@@ -342,9 +365,14 @@ function DisplayTask({ task, actionFunction }: { task: taskDataType, actionFunct
         <Button size="sm" variant="ghost" className="text-sm lowercase">
           #{task.taskId.toLowerCase()}
         </Button>
-        {actionFunction && <div className="flex gap-2 ml-auto">
-          <Button size="sm" variant="destructive_light" onClick={() => actionFunction(task.taskId, EVENTS.TASK_PAUSED_RESUME)}>Resume</Button>
-          <Button size="sm" variant="default_light" onClick={() => actionFunction(task.taskId, EVENTS.TASK_CANCEL)}>Cancel</Button>
+        {(actionFunction && task.status !== TASK_STATUS.CANCELLED && task.status !== TASK_STATUS.COMPLETED) && <div className="flex gap-2 ml-auto">
+          <Button size="sm" variant="default_light" onClick={() => actionFunction(task.taskId, EVENTS.TASK_PAUSED_RESUME)}>Resume</Button>
+          <Button size="sm" variant="destructive_light" onClick={() => actionFunction(task.taskId, EVENTS.TASK_CANCEL)}>Cancel</Button>
+        </div>}
+        {(actionFunction && task.status === TASK_STATUS.COMPLETED) && <div className="flex gap-2 ml-auto">
+          <Button size="sm" variant="default_light" onClick={() => actionFunction(task.taskId, EVENTS.TASK_RETRY_FAILED)}>
+            Retry failed
+          </Button>
         </div>}
       </div>
       <div className="grid grid-cols-6 border rounded-md p-2">

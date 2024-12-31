@@ -1,5 +1,7 @@
-CREATE TYPE "public"."department_code_enum" AS ENUM('cse', 'ece', 'ee', 'me', 'ce', 'che', 'mse', 'mnc', 'phy', 'arc');--> statement-breakpoint
-CREATE TYPE "public"."department_name_enum" AS ENUM('Computer Science and Engineering', 'Electronics and Communication Engineering', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering', 'Chemical Engineering', 'Materials Science and Engineering', 'Mathematics and Computing', 'Engineering Physics', 'Architecture');--> statement-breakpoint
+CREATE TYPE "public"."department_code_enum" AS ENUM('cse', 'ece', 'ee', 'me', 'ce', 'che', 'mse', 'mnc', 'arc', 'phy');--> statement-breakpoint
+CREATE TYPE "public"."department_name_enum" AS ENUM('Staff', 'Computer Science and Engineering', 'Electronics and Communication Engineering', 'Electrical Engineering', 'Mechanical Engineering', 'Civil Engineering', 'Chemical Engineering', 'Materials Science and Engineering', 'Mathematics & Scientific Computing', 'Architecture', 'Engineering Physics');--> statement-breakpoint
+CREATE TYPE "public"."user_gender_enum" AS ENUM('male', 'female', 'not_specified');--> statement-breakpoint
+CREATE TYPE "public"."user_roles_enum" AS ENUM('admin', 'student', 'faculty', 'hod', 'cr', 'staff', 'assistant');--> statement-breakpoint
 CREATE TABLE "accounts" (
 	"id" text PRIMARY KEY NOT NULL,
 	"accountId" text NOT NULL,
@@ -58,11 +60,11 @@ CREATE TABLE "daily_schedules" (
 --> statement-breakpoint
 CREATE TABLE "personal_attendance_records" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"userId" text NOT NULL,
+	"user_id" text NOT NULL,
 	"subject_code" text NOT NULL,
 	"subject_name" text NOT NULL,
 	"total_classes" integer NOT NULL,
-	"attendance" jsonb[] NOT NULL,
+	"attendance" jsonb NOT NULL,
 	"created_at" timestamp with time zone DEFAULT now(),
 	"updated_at" timestamp with time zone DEFAULT now()
 );
@@ -134,8 +136,9 @@ CREATE TABLE "users" (
 	"image" text,
 	"createdAt" timestamp NOT NULL,
 	"updatedAt" timestamp NOT NULL,
-	"roles" text[] DEFAULT '{"student"}' NOT NULL,
-	"gender" text DEFAULT '' NOT NULL,
+	"role" text DEFAULT 'user' NOT NULL,
+	"other_roles" "user_roles_enum"[] DEFAULT '{}' NOT NULL,
+	"gender" "user_gender_enum" DEFAULT 'not_specified' NOT NULL,
 	"department" "department_name_enum" NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email"),
 	CONSTRAINT "users_username_unique" UNIQUE("username")
@@ -152,7 +155,7 @@ CREATE TABLE "verifications" (
 --> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "books_and_references" ADD CONSTRAINT "books_and_references_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "personal_attendance_records" ADD CONSTRAINT "personal_attendance_records_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "personal_attendance_records" ADD CONSTRAINT "personal_attendance_records_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "previous_papers" ADD CONSTRAINT "previous_papers_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "room_usage_history" ADD CONSTRAINT "room_usage_history_room_id_rooms_id_fk" FOREIGN KEY ("room_id") REFERENCES "public"."rooms"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "room_usage_history" ADD CONSTRAINT "room_usage_history_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint

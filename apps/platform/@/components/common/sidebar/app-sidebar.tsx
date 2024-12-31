@@ -65,6 +65,10 @@ const all_links: rawLinkType[] = [
         title: "Scraping",
         path: "/scraping",
       },
+      {
+        title: "Import",
+        path: "/import",
+      },
     ]
   },
   {

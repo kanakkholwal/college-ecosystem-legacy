@@ -30,7 +30,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       message: string;
       data: ResultType | null;
       error?: string | null;
-    }>(`${process.env.BASE_SERVER_URL}/api/result/${username}`, {
+    }>(`${process.env.BASE_SERVER_URL}/api/results/${username}`, {
       method: "POST",
     });
     console.log(response?.data ? "has result" : "No result");

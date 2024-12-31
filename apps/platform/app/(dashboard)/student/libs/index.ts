@@ -1,4 +1,4 @@
-import { AttendanceRecordWithId } from "src/models/attendance-record";
+import type { PersonalAttendanceRecord } from "~/db/schema/attendance_record";
 
 interface WeeklyTrend {
   weekStart: Date;
@@ -7,7 +7,7 @@ interface WeeklyTrend {
 }
 
 export function calculateWeeklyTrend(
-  attendanceRecords: AttendanceRecordWithId[]
+  attendanceRecords: PersonalAttendanceRecord[]
 ): WeeklyTrend[] {
   // Flatten all attendance records into a single array
   const allAttendance = attendanceRecords.flatMap((record) =>
@@ -25,7 +25,8 @@ export function calculateWeeklyTrend(
   } = {};
 
   // Group attendance by week
-  allAttendance.forEach(({ date, isPresent }) => {
+  for (const record of allAttendance) {
+    const { date, isPresent } = record;
     const weekStart = new Date(
       date.getFullYear(),
       date.getMonth(),
@@ -41,7 +42,7 @@ export function calculateWeeklyTrend(
     if (isPresent) {
       weeklyStats[weekKey].present++;
     }
-  });
+  }
 
   // Calculate weekly percentages and growth
   const weeklyTrend: WeeklyTrend[] = Object.entries(weeklyStats).map(
@@ -78,7 +79,7 @@ interface SubjectAttendance {
 }
 
 export function formatAttendanceForSubjects(
-  attendanceRecords: AttendanceRecordWithId[]
+  attendanceRecords: PersonalAttendanceRecord[]
 ): SubjectAttendance[] {
   return attendanceRecords.map((record) => {
     const attendedClasses = record.attendance.filter((a) => a.isPresent).length;
@@ -91,14 +92,14 @@ export function formatAttendanceForSubjects(
 }
 
 export const getMonthlyAttendanceData = (
-  attendanceRecords: AttendanceRecordWithId[]
+  attendanceRecords: PersonalAttendanceRecord[]
 ) => {
   const monthlyData: {
     [key: string]: { month: string; attended: number; absent: number };
   } = {};
 
-  attendanceRecords.forEach((record) => {
-    record.attendance.forEach(({ date, isPresent }) => {
+  for (const record of attendanceRecords) {
+    for (const { date, isPresent } of record.attendance) {
       const month = new Date(date).toLocaleString("default", {
         month: "long",
         year: "numeric",
@@ -113,41 +114,47 @@ export const getMonthlyAttendanceData = (
       } else {
         monthlyData[month].absent += 1;
       }
-    });
-  });
+    }
+  }
+
 
   return Object.values(monthlyData);
 };
 
-export function getSafeAttendance(attendanceRecords: AttendanceRecordWithId[]) {
-  const distinctData = attendanceRecords
+export function getSafeAttendance(attendanceRecords: PersonalAttendanceRecord[]) {
+  const atRiskSubjects = attendanceRecords
     .map((record) => {
-      const attendedClasses = record.attendance.filter(
-        (a) => a.isPresent
-      ).length;
+      const totalClasses = record.totalClasses || 0;
+      const attendedClasses = record.attendance.filter((a) => a.isPresent).length;
+
+      // Avoid dividing by zero
+      const attendanceRate = totalClasses > 0 ? attendedClasses / totalClasses : 1;
+
       return {
         subject: record.subjectName,
-        totalClasses: record.totalClasses,
-        attendedClasses: attendedClasses,
+        totalClasses,
+        attendedClasses,
+        attendanceRate,
       };
     })
-    .filter((data) => {
-      return data.attendedClasses / data.totalClasses < 0.75;
-    });
-  if (distinctData.length === 0) {
+    .filter((data) => data.attendanceRate < 0.75);
+
+  if (atRiskSubjects.length === 0) {
     return {
       className: "text-green-500 bg-green-500/10",
       message: "You are doing great! Keep it up.",
     };
-  } else if (distinctData.length === 1) {
+  }
+
+  if (atRiskSubjects.length === 1) {
     return {
       className: "text-orange-500 bg-orange-500/10",
-      message: `You are missing classes for ${distinctData[0].subject}.`,
-    };
-  } else {
-    return {
-      className: "text-red-500 bg-red-500/10",
-      message: `You are missing classes for ${distinctData.length} subjects.`,
+      message: `You are missing classes for ${atRiskSubjects[0].subject}.`,
     };
   }
+
+  return {
+    className: "text-red-500 bg-red-500/10",
+    message: `You are missing classes for ${atRiskSubjects.length} subjects.`,
+  };
 }

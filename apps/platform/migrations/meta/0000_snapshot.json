@@ -1,5 +1,5 @@
 {
-  "id": "313c936c-2f12-4d96-b78c-dd352919dd1d",
+  "id": "e19afb85-b7e8-4113-acfa-7664e176af6b",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
@@ -360,8 +360,8 @@
           "notNull": true,
           "default": "gen_random_uuid()"
         },
-        "userId": {
-          "name": "userId",
+        "user_id": {
+          "name": "user_id",
           "type": "text",
           "primaryKey": false,
           "notNull": true
@@ -386,7 +386,7 @@
         },
         "attendance": {
           "name": "attendance",
-          "type": "jsonb[]",
+          "type": "jsonb",
           "primaryKey": false,
           "notNull": true
         },
@@ -407,12 +407,12 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "personal_attendance_records_userId_users_id_fk": {
-          "name": "personal_attendance_records_userId_users_id_fk",
+        "personal_attendance_records_user_id_users_id_fk": {
+          "name": "personal_attendance_records_user_id_users_id_fk",
           "tableFrom": "personal_attendance_records",
           "tableTo": "users",
           "columnsFrom": [
-            "userId"
+            "user_id"
           ],
           "columnsTo": [
             "id"
@@ -870,19 +870,27 @@
           "primaryKey": false,
           "notNull": true
         },
-        "roles": {
-          "name": "roles",
-          "type": "text[]",
-          "primaryKey": false,
-          "notNull": true,
-          "default": "'{\"student\"}'"
-        },
-        "gender": {
-          "name": "gender",
+        "role": {
+          "name": "role",
           "type": "text",
           "primaryKey": false,
           "notNull": true,
-          "default": "''"
+          "default": "'user'"
+        },
+        "other_roles": {
+          "name": "other_roles",
+          "type": "user_roles_enum[]",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'{}'"
+        },
+        "gender": {
+          "name": "gender",
+          "type": "user_gender_enum",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'not_specified'"
         },
         "department": {
           "name": "department",
@@ -978,14 +986,15 @@
         "che",
         "mse",
         "mnc",
-        "phy",
-        "arc"
+        "arc",
+        "phy"
       ]
     },
     "public.department_name_enum": {
       "name": "department_name_enum",
       "schema": "public",
       "values": [
+        "Staff",
         "Computer Science and Engineering",
         "Electronics and Communication Engineering",
         "Electrical Engineering",
@@ -993,9 +1002,31 @@
         "Civil Engineering",
         "Chemical Engineering",
         "Materials Science and Engineering",
-        "Mathematics and Computing",
-        "Engineering Physics",
-        "Architecture"
+        "Mathematics & Scientific Computing",
+        "Architecture",
+        "Engineering Physics"
+      ]
+    },
+    "public.user_gender_enum": {
+      "name": "user_gender_enum",
+      "schema": "public",
+      "values": [
+        "male",
+        "female",
+        "not_specified"
+      ]
+    },
+    "public.user_roles_enum": {
+      "name": "user_roles_enum",
+      "schema": "public",
+      "values": [
+        "admin",
+        "student",
+        "faculty",
+        "hod",
+        "cr",
+        "staff",
+        "assistant"
       ]
     }
   },

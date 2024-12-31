@@ -2,140 +2,141 @@
 
 import { revalidatePath } from "next/cache";
 import { getSession } from "src/lib/auth-server";
-import dbConnect from "src/lib/dbConnect";
-import AttendanceRecord, {
-    AttendanceRecordWithId,
-    RawAttendanceRecord,
-} from "src/models/attendance-record";
+import { db } from "~/db/connect";
+import {
+  personalAttendanceRecords,
+  type PersonalAttendanceRecord,
+  type InsertPersonalAttendanceRecord,
+} from "~/db/schema/attendance_record"; // Path to your schema file
+import { eq } from "drizzle-orm";
 
 export async function createAttendanceRecord(
-  attendanceRecordData: RawAttendanceRecord
-) {
+  attendanceRecordData: Omit<InsertPersonalAttendanceRecord, "id" | "userId" | "createdAt" | "updatedAt">
+): Promise<string> {
   const session = await getSession();
   if (!session) {
-    return Promise.reject(
-      "You need to be logged in to create a attendance record"
-    );
+    return Promise.reject("You need to be logged in to create an attendance record");
   }
   try {
-    await dbConnect();
-    // Validate the attendance record data
-    const attendanceRecord = new AttendanceRecord({
+    await db.insert(personalAttendanceRecords).values({
       ...attendanceRecordData,
       userId: session.user.id,
-      attendance: [],
     });
-    await attendanceRecord.save();
-    revalidatePath(`/attendance`, "page");
-    return Promise.resolve("Attendance record created successfully");
+    revalidatePath("/attendance");
+    return "Attendance record created successfully";
   } catch (err) {
     console.error(err);
     return Promise.reject("Failed to create attendance record");
   }
 }
-export async function getAttendanceRecords(): Promise<
-  AttendanceRecordWithId[]
-> {
+
+export async function getAttendanceRecords(): Promise<PersonalAttendanceRecord[]> {
+  const session = await getSession();
+  if (!session) {
+    return Promise.reject("You need to be logged in to fetch attendance records");
+  }
   try {
-    const session = await getSession();
-    if (!session) {
-      return Promise.reject(
-        "You need to be logged in to fetch attendance records"
-      );
-    }
-    await dbConnect();
-    const attendanceRecords = await AttendanceRecord.find({
-      userId: session.user.id,
-    });
-    return Promise.resolve(JSON.parse(JSON.stringify(attendanceRecords)));
+    const attendanceRecords = await db
+      .select()
+      .from(personalAttendanceRecords)
+      .where(eq(personalAttendanceRecords.userId, session.user.id));
+    return attendanceRecords;
   } catch (err) {
     console.error(err);
     return Promise.reject("Failed to fetch attendance records");
   }
 }
+
 export async function updateAttendanceRecord(
   recordId: string,
   present: boolean
 ): Promise<string> {
   const session = await getSession();
   if (!session) {
-    return Promise.reject(
-      "You need to be logged in to update a attendance record"
-    );
+    return Promise.reject("You need to be logged in to update an attendance record");
   }
   try {
-    await dbConnect();
-    // Validate the attendance record data
-    const attendanceRecord = await AttendanceRecord.findOne({
-      _id: recordId,
-      userId: session.user.id,
-    });
-    if (!attendanceRecord) {
+    const record = await db
+      .select()
+      .from(personalAttendanceRecords)
+      .where(eq(personalAttendanceRecords.id, recordId))
+      .limit(1);
+
+    if (record.length === 0 || record[0].userId !== session.user.id) {
       return Promise.reject("Attendance record not found");
     }
-    attendanceRecord.totalClasses += 1;
-    attendanceRecord.attendance.push({
-      date: new Date(),
-      isPresent: present,
-    });
-    await attendanceRecord.save();
-    revalidatePath(`/attendance`, "page");
-    return Promise.resolve("Attendance record updated successfully");
+
+    const updatedAttendance = [...record[0].attendance, { date: new Date(), isPresent: present }];
+
+    await db
+      .update(personalAttendanceRecords)
+      .set({
+        totalClasses: record[0].totalClasses + 1,
+        attendance: updatedAttendance,
+        updatedAt: new Date(),
+      })
+      .where(eq(personalAttendanceRecords.id, recordId));
+
+    revalidatePath("/attendance");
+    return "Attendance record updated successfully";
   } catch (err) {
     console.error(err);
     return Promise.reject("Failed to update attendance record");
   }
 }
-export async function deleteAttendanceRecord(recordId: string) {
+
+export async function deleteAttendanceRecord(recordId: string): Promise<string> {
   const session = await getSession();
   if (!session) {
-    return Promise.reject(
-      "You need to be logged in to delete a attendance record"
-    );
+    return Promise.reject("You need to be logged in to delete an attendance record");
   }
   try {
-    await dbConnect();
-    // Validate the attendance record data
-    const attendanceRecord = await AttendanceRecord.findOne({
-      _id: recordId,
-      userId: session.user.id,
-    });
-    if (!attendanceRecord) {
+    const record = await db
+      .select()
+      .from(personalAttendanceRecords)
+      .where(eq(personalAttendanceRecords.id, recordId))
+      .limit(1);
+
+    if (record.length === 0 || record[0].userId !== session.user.id) {
       return Promise.reject("Attendance record not found");
     }
-    await attendanceRecord.delete();
-    revalidatePath(`/attendance`, "page");
-    return Promise.resolve("Attendance record deleted successfully");
+
+    await db.delete(personalAttendanceRecords).where(eq(personalAttendanceRecords.id, recordId));
+
+    revalidatePath("/attendance");
+    return "Attendance record deleted successfully";
   } catch (err) {
     console.error(err);
     return Promise.reject("Failed to delete attendance record");
   }
 }
+
 export async function forceUpdateAttendanceRecord(
   recordId: string,
-  attendanceRecordData: Partial<RawAttendanceRecord>
-) {
+  attendanceRecordData: Partial<Omit<InsertPersonalAttendanceRecord, "id" | "userId" | "createdAt">>
+): Promise<string> {
   const session = await getSession();
   if (!session) {
-    return Promise.reject(
-      "You need to be logged in to update a attendance record"
-    );
+    return Promise.reject("You need to be logged in to update an attendance record");
   }
   try {
-    await dbConnect();
-    // Validate the attendance record data
-    const attendanceRecord = await AttendanceRecord.findOne({
-      _id: recordId,
-      userId: session.user.id,
-    });
-    if (!attendanceRecord) {
+    const record = await db
+      .select()
+      .from(personalAttendanceRecords)
+      .where(eq(personalAttendanceRecords.id, recordId))
+      .limit(1);
+
+    if (record.length === 0 || record[0].userId !== session.user.id) {
       return Promise.reject("Attendance record not found");
     }
-    await attendanceRecord.updateOne({
-      ...attendanceRecordData,
-    });
-    revalidatePath(`/attendance`, "page");
-    return Promise.resolve("Attendance record updated successfully");
+
+    await db
+      .update(personalAttendanceRecords)
+      .set({ ...attendanceRecordData, updatedAt: new Date() })
+      .where(eq(personalAttendanceRecords.id, recordId));
+
+    revalidatePath("/attendance");
+    return "Attendance record updated successfully";
   } catch (err) {
     console.error(err);
     return Promise.reject("Failed to update attendance record");

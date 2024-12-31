@@ -10,7 +10,7 @@ import {
 import ConditionalRender from "@/components/utils/conditional-render";
 import { Label, Pie, PieChart } from "recharts";
 import { updateAttendanceRecord } from "src/lib/attendance/personal.actions";
-import type { AttendanceRecordWithId } from "src/models/attendance-record";
+import type { PersonalAttendanceRecord } from "~/db/schema/attendance_record";
 import UpdateAttendanceRecord from "./update-record";
 
 const chartConfig = {
@@ -28,7 +28,7 @@ const chartConfig = {
   },
 } as ChartConfig;
 interface AttendanceRecordProps {
-  record: AttendanceRecordWithId;
+  record: PersonalAttendanceRecord;
   style?: React.CSSProperties;
 }
 const ATTENDANCE_CRITERIA = 75;
@@ -136,14 +136,14 @@ export default function AttendanceRecord({
           {getAttendanceStatus(record)}
         </p>
         <UpdateAttendanceRecord
-          updateAttendanceRecord={updateAttendanceRecord.bind(null, record._id)}
+          updateAttendanceRecord={updateAttendanceRecord.bind(null, record.id)}
         />
       </div>
     </div>
   );
 }
 
-const attendancePercentage = (record: AttendanceRecordWithId) => {
+const attendancePercentage = (record: PersonalAttendanceRecord) => {
   return (
     (record.attendance.filter((a) => a.isPresent).length /
       record.totalClasses) *
@@ -151,7 +151,7 @@ const attendancePercentage = (record: AttendanceRecordWithId) => {
   );
 };
 
-const getAttendanceStatus = (record: AttendanceRecordWithId) => {
+const getAttendanceStatus = (record: PersonalAttendanceRecord) => {
   const classesAttended = record.attendance.filter((a) => a.isPresent).length;
   const totalClasses = record.totalClasses;
   const requiredPercentage = ATTENDANCE_CRITERIA / 100;
