@@ -13,9 +13,13 @@ import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { createAttendanceRecord } from "src/lib/attendance/personal.actions";
-import { rawAttendanceRecordSchema } from "src/models/attendance-record";
-import type * as z from "zod";
+import * as z from "zod";
+import { createAttendance } from "~/actions/record.personal";
+
+export const rawAttendanceRecordSchema = z.object({
+  subjectCode: z.string(),
+  subjectName: z.string(),
+});
 
 export default function CreateAttendanceRecord() {
   const form = useForm<z.infer<typeof rawAttendanceRecordSchema>>({
@@ -23,13 +27,12 @@ export default function CreateAttendanceRecord() {
     defaultValues: {
       subjectCode: "",
       subjectName: "",
-      totalClasses: 0,
     },
   });
 
   function onSubmit(values: z.infer<typeof rawAttendanceRecordSchema>) {
     console.log(values);
-    toast.promise(createAttendanceRecord(values), {
+    toast.promise(createAttendance(values), {
       loading: "Creating Attendance Record",
       success: "Attendance Record Created",
       error: "Failed to create Attendance Record",

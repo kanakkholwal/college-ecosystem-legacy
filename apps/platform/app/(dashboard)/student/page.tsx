@@ -1,13 +1,13 @@
-import { getAttendanceRecords } from "src/lib/attendance/personal.actions";
 import { getSession } from "src/lib/auth-server";
+import { getAttendanceRecords } from "~/actions/personal.actions";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import {
-    OverallAttendanceChart,
-    SubWiseAttendanceChart,
+  OverallAttendanceChart,
+  SubWiseAttendanceChart,
 } from "./components/charts";
 import { getSafeAttendance } from "./libs";
 

@@ -14,20 +14,16 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-import { revalidatePath } from "next/cache";
 import Image from "next/image";
 import Link from "next/link";
-import { getCourseByCode } from "src/lib/course/actions";
-import dbConnect from "src/lib/dbConnect";
-import CourseModel, {
-  type booksAndRefType,
-  type prevPaperType,
-} from "src/models/course";
+import { getCourseByCode, updateBooksAndRefPublic } from "~/actions/course";
+import dbConnect from "~/lib/dbConnect";
+
 import { AddPrevsModal, AddRefsModal } from "./modal";
 import { IconMap } from "./render-link";
 
 import type { Metadata, ResolvingMetadata } from "next";
-import { getSession } from "src/lib/auth-server";
+import { getSession } from "~/lib/auth-server";
 
 type Props = {
   params: Promise<{ code: string }>;
@@ -53,7 +49,6 @@ export default async function CoursePage(props: Props) {
 
   const session = await getSession();
 
-  await dbConnect();
   const data = await getCourseByCode(params.code);
   if (!data) {
     return notFound();
@@ -66,36 +61,6 @@ export default async function CoursePage(props: Props) {
     chapters,
   } = data;
 
-  async function addPrevPaper(paper: prevPaperType): Promise<boolean> {
-    "use server";
-    await dbConnect();
-    const course = await CourseModel.findOne({ code: params.code });
-    if (!course) return Promise.reject("Course not found");
-    if (course.prev_papers.find((p: prevPaperType) => p.link === paper.link)) {
-      return Promise.reject("Paper already exists");
-    }
-    course.prev_papers.push(paper);
-    await course.save();
-    revalidatePath(`/syllabus/${course.code}`);
-    return Promise.resolve(true);
-  }
-  async function addReference(ref: booksAndRefType): Promise<boolean> {
-    "use server";
-    await dbConnect();
-    const course = await CourseModel.findOne({ code: params.code });
-    if (!course) return Promise.reject("Course not found");
-    if (
-      course.books_and_references.find(
-        (p: booksAndRefType) => p.link === ref.link
-      )
-    ) {
-      return Promise.reject("Reference already exists");
-    }
-    course.books_and_references.push(ref);
-    await course.save();
-    revalidatePath(`/syllabus/${course.code}`);
-    return Promise.resolve(true);
-  }
 
   return (
     <>
@@ -156,10 +121,8 @@ export default async function CoursePage(props: Props) {
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {booksAndReferences.map(
                   (ref) => {
-                    const iconsSrc = IconMap.has(
-                      ref.type as booksAndRefType["type"]
-                    )
-                      ? IconMap.get(ref.type as booksAndRefType["type"])
+                    const iconsSrc = IconMap.has(ref.type as "book" | "reference" | "drive" | "youtube" | "others")
+                      ? IconMap.get(ref.type as "book" | "reference" | "drive" | "youtube" | "others")
                       : OthersPng;
                     return (
                       <Card key={ref.link}>
@@ -209,7 +172,7 @@ export default async function CoursePage(props: Props) {
             )}
             <div className="flex w-full items-center justify-center p-4">
               {session?.user ? (
-                <AddRefsModal code={course.code} addReference={addReference} />
+                <AddRefsModal code={course.code} courseId={course.id}  />
               ) : (
                 <p className="text-center text-gray-600 dark:text-gray-400 text-md font-semibold pt-5">
                   <Link
@@ -255,7 +218,7 @@ export default async function CoursePage(props: Props) {
 
             <div className="flex w-full items-center justify-center p-4">
               {session?.user ? (
-                <AddPrevsModal code={course.code} addPrevPaper={addPrevPaper} />
+                <AddPrevsModal code={course.code} courseId={course.id} />
               ) : (
                 <p className="text-center text-gray-600 dark:text-gray-400 text-md font-semibold pt-5">
                   <Link

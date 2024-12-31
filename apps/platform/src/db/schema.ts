@@ -8,7 +8,7 @@ export {
   userGenderEnum
 } from "./schema/auth-schema";
 
-export { personalAttendanceRecords } from "./schema/attendance_record";
+export { personalAttendanceRecords,personalAttendance } from "./schema/attendance_record";
 
 export {
   booksAndReferences,

@@ -9,8 +9,8 @@ import {
 } from "@/components/ui/chart";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { Label, Pie, PieChart } from "recharts";
-import { updateAttendanceRecord } from "src/lib/attendance/personal.actions";
-import type { PersonalAttendanceRecord } from "~/db/schema/attendance_record";
+import { updateAttendanceRecord } from "~/actions/record.personal";
+import type { PersonalAttendanceWithRecords } from "~/db/schema/attendance_record";
 import UpdateAttendanceRecord from "./update-record";
 
 const chartConfig = {
@@ -28,7 +28,7 @@ const chartConfig = {
   },
 } as ChartConfig;
 interface AttendanceRecordProps {
-  record: PersonalAttendanceRecord;
+  record: PersonalAttendanceWithRecords;
   style?: React.CSSProperties;
 }
 const ATTENDANCE_CRITERIA = 75;
@@ -37,17 +37,17 @@ export default function AttendanceRecord({
   record,
   style,
 }: AttendanceRecordProps) {
-  const totalClasses = record.totalClasses;
+  const totalClasses = record.records.length
 
   const chartData = [
     {
       name: "Attended",
-      value: record.attendance.filter((a) => a.isPresent).length,
+      value: record.records.filter((a) => a.isPresent).length,
       fill: "hsl(var(--chart-primary))",
     },
     {
       name: "Absent",
-      value: record.attendance.filter((a) => !a.isPresent).length,
+      value: record.records.filter((a) => !a.isPresent).length,
       fill: "hsl(var(--chart-danger))",
     },
   ];
@@ -66,13 +66,13 @@ export default function AttendanceRecord({
         <div>
           <ConditionalRender condition={totalClasses === 0}>
             <div className="flex flex-col items-center justify-center gap-4">
-              <CircleSlash className="h-12 w-12 text-danger" />
-              <div className="text-center text-lg font-medium text-gray-600">
+              <div className="text-center text-sm font-medium text-gray-600">
+              <CircleSlash className="size-4 text-danger inline-block mr-2" />
                 No attendance records found
               </div>
-              <div className="text-muted-foreground text-sm">
+              {/* <div className="text-muted-foreground text-sm">
                 Your attendance records will be displayed here
-              </div>
+              </div> */}
             </div>
           </ConditionalRender>
           <ConditionalRender condition={totalClasses > 0}>
@@ -128,8 +128,8 @@ export default function AttendanceRecord({
         </div>
       </div>
       <p>
-        Attendance: {record.attendance.filter((a) => a.isPresent).length}/
-        {record.totalClasses}
+        Attendance: {record.records.filter((a) => a.isPresent).length}/
+        {totalClasses}
       </p>
       <div className="flex item-baseline w-full gap-2 justify-between">
         <p className="text-sm font-semibold text-slate-700">
@@ -143,17 +143,17 @@ export default function AttendanceRecord({
   );
 }
 
-const attendancePercentage = (record: PersonalAttendanceRecord) => {
+const attendancePercentage = (record: PersonalAttendanceWithRecords) => {
   return (
-    (record.attendance.filter((a) => a.isPresent).length /
-      record.totalClasses) *
+    (record.records.filter((a) => a.isPresent).length /
+      record.records.length) *
     100
   );
 };
 
-const getAttendanceStatus = (record: PersonalAttendanceRecord) => {
-  const classesAttended = record.attendance.filter((a) => a.isPresent).length;
-  const totalClasses = record.totalClasses;
+const getAttendanceStatus = (record: PersonalAttendanceWithRecords) => {
+  const classesAttended = record.records.filter((a) => a.isPresent).length;
+  const totalClasses = record.records.length
   const requiredPercentage = ATTENDANCE_CRITERIA / 100;
 
   if (totalClasses === 0) {

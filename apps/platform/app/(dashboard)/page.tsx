@@ -49,12 +49,15 @@ const quick_links = [
     title: "Schedules",
     description: "Check your schedules here.",
     Icon: CalendarDays,
+    disabled:true
   },
   {
     href: "/misc/calender",
     title: "Academic Calender",
     description: "Check the academic calender here.",
     Icon: CalendarRange,
+    disabled:true
+
   },
   {
     title: "Community",
@@ -79,6 +82,8 @@ const quick_links = [
     title: "Chatbot",
     description: "Chat with the college chatbot.(Beta)",
     Icon: Bot,
+    disabled:true
+
   },
 ];
 

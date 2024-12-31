@@ -20,6 +20,13 @@ type getUserInfoReturnType = {
   name?: string;
   emailVerified: boolean;
 }
+
+type FacultyType = {
+  name: string;
+  email: string;
+  department: string;
+}
+
 async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
   const username = email.split("@")[0];
   const isStudent = isValidRollNumber(username);
@@ -50,7 +57,16 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       username,
     };
   }
-  const faculty = FACULTY_LIST.find((f) => f.email === email);
+  const { data: response } = await betterFetch<{
+    message: string;
+    data: FacultyType | null;
+    error?: string | null;
+  }>(`${process.env.BASE_SERVER_URL}/api/faculties/search/${email}`, {
+    method: "POST",
+  });
+  const faculty = response?.data
+  console.log(faculty ? "is faculty" : "Not faculty");
+  
   if (faculty) {
     console.log("Faculty");
     console.log(faculty.email);
@@ -63,7 +79,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       username
     };
   }
-  console.log("Staff");
+  console.log("Other:Staff");
   console.log(email);
   return {
     other_roles: [ROLES.STAFF],

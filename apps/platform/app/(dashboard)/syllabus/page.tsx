@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { getCourses } from "src/lib/course/actions";
+import { getCourses } from "~/actions/course";
 import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
 

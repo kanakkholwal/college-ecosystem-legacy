@@ -2,7 +2,7 @@
 import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
 import { and, count, eq, ilike, or } from "drizzle-orm";
 import { db } from "src/db/connect";
-import { booksAndReferences, courses, previousPapers,chapters } from "src/db/schema";
+import { booksAndReferences, courses, previousPapers, chapters } from "src/db/schema";
 import { getSession } from "src/lib/auth-server";
 
 
@@ -70,7 +70,12 @@ export async function getCourses(
   };
 }
 
-export async function getCourseByCode(code: string) {
+export async function getCourseByCode(code: string): Promise<{
+  course: CourseSelect,
+  booksAndReferences: BookReferenceSelect[],
+  previousPapers: PreviousPaperSelect[],
+  chapters: ChapterSelect[],
+}> {
   // Fetch course details
   const course = await db
     .select()
@@ -100,7 +105,7 @@ export async function getCourseByCode(code: string) {
   const courseChapters = await db
     .select()
     .from(chapters)
-    .where(eq(chapters.id, courseId));
+    .where(eq(chapters.courseId, courseId));
 
   return {
     course: course[0] as CourseSelect,
@@ -129,7 +134,7 @@ export async function updateCourseByCr(course: Partial<CourseSelect>) {
   }
   if (
     !(
-      session.user.role === "admin"||
+      session.user.role === "admin" ||
       session.user.other_roles.includes("cr") ||
       session.user.other_roles.includes("faculty"
       ))
@@ -149,31 +154,29 @@ export async function updateCourseByCr(course: Partial<CourseSelect>) {
 
 export async function updateBooksAndRefPublic(
   courseId: string,
-  booksRefs: BookReferenceInsert[]
+  booksRef: Pick<BookReferenceInsert,"name"|"link"|"type">
 ) {
-  await db.delete(booksAndReferences).where(eq(booksAndReferences.courseId, courseId));
-  const newBooksRefs = booksRefs.map((ref) => ({
+
+  const updatedBooksRefs = await db.insert(booksAndReferences).values([{
     courseId,
-    name: ref.name,
-    link: ref.link,
-    type: ref.type,
-  }));
-  const updatedBooksRefs = await db.insert(booksAndReferences).values(newBooksRefs).returning();
+    name: booksRef.name,
+    link: booksRef.link,
+    type: booksRef.type,
+  }]).returning();
   return updatedBooksRefs as BookReferenceSelect[];
 }
 
 export async function updatePrevPapersPublic(
   courseId: string,
-  papers: PreviousPaperInsert[]
+  paper: Pick<PreviousPaperInsert,"year" | "exam" | "link">
 ) {
-  await db.delete(previousPapers).where(eq(previousPapers.courseId, courseId));
-  const newPapers = papers.map((paper) => ({
+ 
+  const updatedPapers = await db.insert(previousPapers).values([{
     courseId,
     year: paper.year,
     exam: paper.exam,
     link: paper.link,
-  }));
-  const updatedPapers = await db.insert(previousPapers).values(newPapers).returning();
+  }]).returning();
   return updatedPapers as PreviousPaperSelect[];
 }
 
@@ -184,7 +187,7 @@ export async function deleteCourse(id: string) {
   }
   if (
     !(
-      session.user.role === "admin"||
+      session.user.role === "admin" ||
       session.user.other_roles.includes("cr") ||
       session.user.other_roles.includes("faculty")
     )
