@@ -40,8 +40,8 @@ export async function getFacultyListByDepartment(department: Department): Promis
         if (tds.length < 5) {
             continue;
         }
-        const name = tds[1].innerText;
-        const email = tds[3].innerText;
+        const name = tds[1].innerText.trim();
+        const email = tds[3].innerText.trim();
         if (!name || !email) {
             console.error("Invalid faculty", { name, email });
             continue;
@@ -49,9 +49,14 @@ export async function getFacultyListByDepartment(department: Department): Promis
         if (email === "Email") {
             continue;
         }
+        const emailSchema = z.string().email();
+        if (!emailSchema.safeParse(email).success) {
+            console.error("Invalid email", email);
+            continue;
+        }
         faculties.push({
-            name: name.trim(),
-            email: email.trim(),
+            name,
+            email,
             department: department.name
         });
     }

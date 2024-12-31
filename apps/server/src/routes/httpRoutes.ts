@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { getDepartments, getDepartmentsList } from '~/controllers/http-department';
-import { getFacultyByEmailHandler, getFacultyListByDepartmentHandler } from '~/controllers/http-faculty_list';
-import { addUpdateResult, assignRankToResults, getResult, getResultByRollNoFromSite } from '~/controllers/http-result';
+import { getDepartments, getDepartmentsList } from '../controllers/http-department';
+import { getFacultyByEmailHandler, getFacultyListByDepartmentHandler } from '../controllers/http-faculty_list';
+import { addUpdateResult, assignRankToResults, getResult, getResultByRollNoFromSite } from '../controllers/http-result';
 
 const router = Router();
 

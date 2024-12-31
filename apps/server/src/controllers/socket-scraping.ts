@@ -9,7 +9,8 @@ const LIST_TYPE = {
     ALL: "all",
     BACKLOG: "has_backlog",
     NEW_SEMESTER: "new_semester",
-} as const
+} as const;
+
 const TASK_STATUS = {
     QUEUED: 'queued',
     SCRAPING: 'scraping',

@@ -1,7 +1,7 @@
 import type { Request, Response } from 'express';
 import type { PipelineStage } from 'mongoose';
-import ResultModel from '~/models/result';
-import dbConnect from '~/utils/dbConnect';
+import ResultModel from '../models/result';
+import dbConnect from '../utils/dbConnect';
 import { scrapeResult } from '../lib/scrape';
 
 

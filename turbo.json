@@ -21,10 +21,12 @@
       "cache": false
     },
     "dev:node-server": {
-      "dependsOn": []
+      "dependsOn": [],
+      "cache": false
     },
     "build:node-server": {
-      "dependsOn": []
+      "dependsOn": [],
+      "cache": false
     }
   }
 }

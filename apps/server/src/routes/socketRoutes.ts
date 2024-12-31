@@ -1,5 +1,5 @@
 import type { Server, Socket } from 'socket.io';
-import { handler_resultScraping } from '~/controllers/socket-scraping';
+import { handler_resultScraping } from '../controllers/socket-scraping';
 
 type SocketServer = Record<string, {
     path: string,
