@@ -79,7 +79,7 @@ export default function SignInForm() {
         onResponse: () => {
           setIsLoading(false);
         },
-        onError: (ctx: { error: { message: string } }) => {
+        onError: (ctx) => {
           console.log(ctx);
           // Handle the error
           if (ctx.error.status === 403) {

@@ -1,5 +1,5 @@
 "use client";
-import { Button, ButtonProps } from "@/components/ui/button";
+import { Button, type ButtonProps } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 

@@ -187,7 +187,7 @@ export async function scrapeResult(rollNo: string): Promise<{
     data: rawResultType | null;
     error?: string | null;
 }> {
-    const data = await getInfo(rollNo);
+    const data = await getInfoFromRollNo(rollNo);
 
     console.log("Roll No: %s", rollNo);
     try {
@@ -254,7 +254,7 @@ const headerMap: Record<
         RequestVerificationToken: "4FFEE8F3-14C9-27C4-B370-598406BF99C1",
     },
 };
-async function getInfo(rollNo: string) {
+export async function getInfoFromRollNo(rollNo: string) {
     // split the roll no into 3 parts starting two characters then 3 characters and then 3 characters
     const matches = [
         rollNo.toLowerCase().substring(0, 2), // 20

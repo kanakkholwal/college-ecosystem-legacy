@@ -9,63 +9,11 @@ export async function updateUser(userId: string, data: Partial<UserWithId>) {
   "use server";
   try {
     const session = await getSession();
-    if (!session) {
-      return {
-        success: false,
-        message: "Unauthorized",
-      };
-    }
-
-    await dbConnect();
-    const adminUser = await UserModel.findById(session.user.id);
-    if (!adminUser) {
-      return {
-        success: false,
-        message: "User not found",
-      };
-    }
-    // must be admin
-    if (!adminUser.roles.includes("admin")) {
-      return {
-        success: false,
-        message: "Unauthorized",
-      };
-    }
-    const user = await await UserModel.findOne({
-      $or: [{ rollNo: userId }, { _id: session.user.id }],
-    });
-    // cannot remove admin role from the only admin
-    if (data?.roles && data?.roles?.includes("admin")) {
-      if (user.roles.includes("admin")) {
-        const adminCount = await UserModel.countDocuments({
-          roles: "admin",
-        });
-        if (adminCount === 1) {
-          return {
-            success: false,
-            message: "Cannot remove admin role from the only admin",
-          };
-        }
-      }
-    }
-    user.roles = data.roles;
-    user.department = data.department;
-    await user.save();
-    // update department in result collection
-    if (data?.department) {
-      await ResultModel.findOneAndUpdate(
-        { rollNo: user.rollNo },
-        { branch: data.department }
-      );
-    }
-
-    revalidatePath("/admin/users", "page");
-    revalidatePath(`/admin/users/${userId}/update`, "page");
-
     return {
-      success: true,
-      message: "Roles updated",
+      success: false,
+      message: "Unauthorized",
     };
+
   } catch (error) {
     console.log(error);
     return {

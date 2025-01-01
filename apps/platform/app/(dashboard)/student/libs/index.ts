@@ -1,4 +1,4 @@
-import type { PersonalAttendanceRecord } from "~/db/schema/attendance_record";
+import type { PersonalAttendanceRecord,PersonalAttendance } from "~/db/schema/attendance_record";
 
 interface WeeklyTrend {
   weekStart: Date;
@@ -7,18 +7,20 @@ interface WeeklyTrend {
 }
 
 export function calculateWeeklyTrend(
-  attendanceRecords: PersonalAttendanceRecord[]
+  attendanceRecords: (PersonalAttendance & {
+    records:PersonalAttendanceRecord[]
+  })[]
 ): WeeklyTrend[] {
   // Flatten all attendance records into a single array
   const allAttendance = attendanceRecords.flatMap((record) =>
-    record.attendance.map((a) => ({
-      date: new Date(a.date),
+    record.records.map((a) => ({
+      date: a.date,
       isPresent: a.isPresent,
     }))
   );
 
   // Sort attendance by date
-  allAttendance.sort((a, b) => a.date.getTime() - b.date.getTime());
+  allAttendance.sort((a, b) => (a.date?.getTime() ?? 0) - (b.date?.getTime() ?? 0));
 
   const weeklyStats: {
     [weekStart: string]: { present: number; total: number };
@@ -27,6 +29,7 @@ export function calculateWeeklyTrend(
   // Group attendance by week
   for (const record of allAttendance) {
     const { date, isPresent } = record;
+    if (!date) continue;
     const weekStart = new Date(
       date.getFullYear(),
       date.getMonth(),
@@ -79,40 +82,46 @@ interface SubjectAttendance {
 }
 
 export function formatAttendanceForSubjects(
-  attendanceRecords: PersonalAttendanceRecord[]
+  attendanceRecords: (PersonalAttendance & {
+    records:PersonalAttendanceRecord[]
+  })[]
 ): SubjectAttendance[] {
   return attendanceRecords.map((record) => {
-    const attendedClasses = record.attendance.filter((a) => a.isPresent).length;
+    const attendedClasses = record.records.filter((a) => a.isPresent).length;
     return {
       subjectName: record.subjectName,
-      totalClasses: record.totalClasses,
+      totalClasses: record.records.length,
       attendedClasses: attendedClasses,
     };
   });
 }
 
 export const getMonthlyAttendanceData = (
-  attendanceRecords: PersonalAttendanceRecord[]
+  attendanceRecords: (PersonalAttendance & {
+    records:PersonalAttendanceRecord[]
+  })[]
 ) => {
   const monthlyData: {
     [key: string]: { month: string; attended: number; absent: number };
   } = {};
 
   for (const record of attendanceRecords) {
-    for (const { date, isPresent } of record.attendance) {
-      const month = new Date(date).toLocaleString("default", {
+    for (const { date, isPresent } of record.records) {
+      const month = date?.toLocaleString("default", {
         month: "long",
         year: "numeric",
       });
 
-      if (!monthlyData[month]) {
+      if (month && !monthlyData[month]) {
         monthlyData[month] = { month, attended: 0, absent: 0 };
       }
 
-      if (isPresent) {
-        monthlyData[month].attended += 1;
-      } else {
-        monthlyData[month].absent += 1;
+      if (month) {
+        if (isPresent) {
+          monthlyData[month].attended += 1;
+        } else {
+          monthlyData[month].absent += 1;
+        }
       }
     }
   }
@@ -121,11 +130,13 @@ export const getMonthlyAttendanceData = (
   return Object.values(monthlyData);
 };
 
-export function getSafeAttendance(attendanceRecords: PersonalAttendanceRecord[]) {
+export function getSafeAttendance(attendanceRecords: (PersonalAttendance & {
+  records:PersonalAttendanceRecord[]
+})[]) {
   const atRiskSubjects = attendanceRecords
     .map((record) => {
-      const totalClasses = record.totalClasses || 0;
-      const attendedClasses = record.attendance.filter((a) => a.isPresent).length;
+      const totalClasses = record.records.length || 0;
+      const attendedClasses = record.records.filter((a) => a.isPresent).length;
 
       // Avoid dividing by zero
       const attendanceRate = totalClasses > 0 ? attendedClasses / totalClasses : 1;

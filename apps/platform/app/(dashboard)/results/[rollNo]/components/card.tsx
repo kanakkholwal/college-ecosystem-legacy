@@ -1,4 +1,4 @@
-import { Course, ResultTypeWithId, Semester } from "src/models/result";
+import type { Course, ResultTypeWithId, Semester } from "src/models/result";
 
 import {
   Card,
@@ -114,7 +114,7 @@ export function SemCard({ semester }: { semester: Semester }) {
           return (
             <div
               className="flex justify-between items-center py-2 gap-2 border-b border-border last:border-b-0"
-              key={index}
+              key={course.code}
             >
               <div className="flex items-start flex-col">
                 <h4 className="text-sm tracking-wide font-semibold text-gray-900 dark:text-white">

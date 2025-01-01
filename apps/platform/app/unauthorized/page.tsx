@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     description: "The page you are looking for does not exist.",
 };
 
-export default async function NotAuthorized() {
+export default function NotAuthorized() {
     return (
         <>
             <div className="flex flex-col justify-center items-center p-4 w-full h-full gap-4 py-36">

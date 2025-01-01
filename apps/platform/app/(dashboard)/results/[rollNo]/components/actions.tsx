@@ -6,6 +6,7 @@ export function GoBackButton() {
   const router = useRouter();
   return (
     <button
+      type="button"
       onClick={() => {
         router.back();
       }}

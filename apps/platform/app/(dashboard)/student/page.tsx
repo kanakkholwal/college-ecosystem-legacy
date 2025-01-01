@@ -1,5 +1,5 @@
-import { getSession } from "src/lib/auth-server";
-import { getAttendanceRecords } from "~/actions/personal.actions";
+import { getSession } from "~/lib/auth-server";
+import { getAttendanceRecords } from "~/actions/record.personal";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";

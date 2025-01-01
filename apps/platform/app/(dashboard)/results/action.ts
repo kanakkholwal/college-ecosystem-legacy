@@ -1,7 +1,7 @@
 "use server";
 import dbConnect from "src/lib/dbConnect";
 import redis from "src/lib/redis";
-import ResultModel, { ResultTypeWithId } from "src/models/result";
+import ResultModel, { type ResultTypeWithId } from "src/models/result";
 
 type getResultsReturnType = {
   results: ResultTypeWithId[];
@@ -23,6 +23,7 @@ export async function getResults(
     const resultsPerPage = 32;
     const skip = currentPage * resultsPerPage - resultsPerPage;
 
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const filterQuery: any = {
       $or: [
         { rollNo: { $regex: query, $options: "i" } },
@@ -44,7 +45,7 @@ export async function getResults(
     }
 
     // Check cached results
-    const cacheKey = `results_${query}_${currentPage}${filter ? "_" + JSON.stringify(filter) : ""}`;
+    const cacheKey = `results_${query}_${currentPage}${filter ? `_${JSON.stringify(filter)}` : ""}`;
     let cachedResults = null;
     try {
       if (!new_cache)

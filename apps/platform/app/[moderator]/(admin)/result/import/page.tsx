@@ -13,12 +13,24 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import z from "zod"
+
+const freshersDataSchema = z.object({
+    name: z.string(),
+    rollNo: z.string(),
+    gender: z.enum(["male","female","not_specified"]),
+})
 
 export default function ImportNewStudents() {
     const [tableData, setTableData] = useState<{
         header_cell: string[],
         row_cells: string[][]
     } | null>(null);
+    const [requiredKeys, setRequiredKeys] = useState<{
+        name: string,
+        rollNo: string,
+        gender: string,
+    }>({name:"Name",rollNo: "Roll No.",gender:"GENDER"});
 
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
@@ -30,6 +42,18 @@ export default function ImportNewStudents() {
                 header_cell: Array.from(sanitized_rows[0]),
                 row_cells:  Array.from(sanitized_rows.slice(1))
             });
+            const sanitized_data = []
+            for (const row of sanitized_rows.slice(1)) {
+                const data = {} as Record<string, string>
+                for (let i = 0; i < row.length; i++) {
+                    data[sanitized_rows[0][i]] = row[i]
+                }
+                sanitized_data.push(data)
+            }
+            console.log(sanitized_data)
+            // verify the data against the schema and set the required keys 
+            
+            
         }
     };
 

@@ -142,11 +142,11 @@ function getYear(result: ResultTypeWithId): string | null {
       return "Third Year";
     case 6:
     case 7:
-      return "Final Year";
+      return result.programme === "B.Tech" ? "Final Year" : "Final Year (Dual Degree)";
     case 8:
-      return result.programme === "B.Tech" ? "Pass Out" : "Super Final Year";
+      return result.programme === "B.Tech" ? "Pass Out" : "Super Final Year (Dual Degree)";
     case 9:
-      return "Super Final Year";
+      return "Super Final Year (Dual Degree)";
     case 10:
       return "Pass Out";
     default:

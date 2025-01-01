@@ -3,8 +3,8 @@
 import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import Timetable, {
-    RawTimetable,
-    TimeTableWithID,
+  type RawTimetable,
+  type TimeTableWithID,
 } from "src/models/time-table";
 
 export async function getTimeTable(
@@ -54,8 +54,8 @@ export async function createTimeTable(timetableData: RawTimetable) {
   }
   try {
     if (
-      session.user.roles.includes("student") &&
-      session.user.roles.length === 1
+      session.user.other_roles.includes("student") &&
+      session.user.other_roles.length === 1
     ) {
       return Promise.reject("Student can't create a timetable");
     }
@@ -110,10 +110,10 @@ export async function deleteTimeTable(timetableId: string) {
 
   try {
     if (
-      !session.user.roles.includes("admin") &&
-      !session.user.roles.includes("faculty") &&
-      !session.user.roles.includes("cr") &&
-      !session.user.roles.includes("moderator")
+      !session.user.other_roles.includes("admin") &&
+      !session.user.other_roles.includes("faculty") &&
+      !session.user.other_roles.includes("cr") &&
+      !session.user.other_roles.includes("moderator")
     ) {
       return Promise.reject("Student can't delete a timetable");
     }
@@ -147,10 +147,10 @@ export async function updateTimeTable(
 
   try {
     if (
-      !session.user.roles.includes("admin") &&
-      !session.user.roles.includes("faculty") &&
-      !session.user.roles.includes("cr") &&
-      !session.user.roles.includes("moderator")
+      !session.user.other_roles.includes("admin") &&
+      !session.user.other_roles.includes("faculty") &&
+      !session.user.other_roles.includes("cr") &&
+      !session.user.other_roles.includes("moderator")
     ) {
       return Promise.reject("Student can't update a timetable");
     }

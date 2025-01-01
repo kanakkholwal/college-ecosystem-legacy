@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { getDepartments, getDepartmentsList } from '../controllers/http-department';
-import { getFacultyByEmailHandler, getFacultyListByDepartmentHandler ,refreshFacultyListHandler} from '../controllers/http-faculty_list';
-import { addUpdateResult, assignRankToResults, getResult, getResultByRollNoFromSite } from '../controllers/http-result';
+import { getFacultyByEmailHandler, getFacultyListByDepartmentHandler, refreshFacultyListHandler } from '../controllers/http-faculty_list';
+import { addResult, assignRankToResults, getResult, getResultByRollNoFromSite, importFreshers, updateResult } from '../controllers/http-result';
 
 const router = Router();
 
@@ -20,14 +20,16 @@ router.get('/faculties/:departmentCode', getFacultyListByDepartmentHandler);
 
 
 /** RESULT ENDPOINTS */
+// Endpoint to import freshers results from the json data
+router.post('/results/import-freshers', importFreshers);
 // Endpoint to assign ranks to the results in the database
 router.post('/results/assign-ranks', assignRankToResults);
 // Endpoint to get result by rollNo scraped from the website
 router.post('/results/:rollNo', getResultByRollNoFromSite);
 // Endpoint to [get,add,update] result by rollNo from the database
 router.get('/results/:rollNo/get', getResult);
-router.post('/results/:rollNo/add', addUpdateResult);
-router.post('/results/:rollNo/update', addUpdateResult);
+router.post('/results/:rollNo/add', addResult);
+router.post('/results/:rollNo/update', updateResult);
 
 
 

@@ -1,8 +1,9 @@
 import type { Request, Response } from 'express';
 import type { PipelineStage } from 'mongoose';
+import { z } from 'zod';
+import { getInfoFromRollNo, scrapeResult } from '../lib/scrape';
 import ResultModel from '../models/result';
 import dbConnect from '../utils/dbConnect';
-import { scrapeResult } from '../lib/scrape';
 
 
 
@@ -34,8 +35,8 @@ export const getResult = async (req: Request, res: Response) => {
     });
 }
 
-// Endpoint to get result by rollNo from the database
-export const addUpdateResult = async (req: Request, res: Response) => {
+// Endpoint to add result by rollNo from the from site to the database
+export const addResult = async (req: Request, res: Response) => {
     const rollNo = req.params.rollNo;
 
     await dbConnect();
@@ -70,6 +71,51 @@ export const addUpdateResult = async (req: Request, res: Response) => {
         message: "Result added successfully",
         error: false,
     });
+}
+
+export const updateResult = async (req: Request, res: Response) => {
+    const rollNo = req.params.rollNo;
+
+    try{
+        await dbConnect();
+
+        const resultData = await ResultModel.findOne({ rollNo: rollNo });
+        if (!resultData) {
+            res.json({
+                message: "Result not found",
+                error: true,
+                data: null,
+            });
+            return;
+        }
+        const data = await scrapeResult(rollNo);
+        if (data?.error || !data.data) {
+            res.json(data);
+            return;
+        }
+        const result = data.data;
+        resultData.name = result.name;
+        resultData.branch = result.branch;
+        resultData.batch = result.batch;
+        resultData.programme = result.programme;
+        resultData.semesters = result.semesters;
+        await resultData.save();
+        console.log("Updated ", rollNo);
+        res.json({
+            data: resultData,
+            message: "Result updated successfully",
+            error: false,
+        });
+    } catch (error) {
+        console.log(error);
+        res.json({
+            message: "An error occurred",
+            error: true,
+            data: error || "Internal Server Error"
+        });
+        
+    }
+    
 }
 
 export async function assignRankToResults(req: Request, res: Response) {
@@ -187,3 +233,59 @@ export async function assignRankToResults(req: Request, res: Response) {
     }
 }
 
+const freshersDataSchema = z.array(z.object({
+    name: z.string(),
+    rollNo: z.string(),
+    gender: z.enum(["male","female","not_specified"]),
+}))
+
+export async function importFreshers(req: Request, res: Response){
+    try{
+        const time = new Date();
+        await dbConnect();
+
+        const data = req.body;
+        const parsedData = freshersDataSchema.safeParse(data);
+        if(!parsedData.success){
+            return res.status(400).json({
+                error: true,
+                message: "Invalid data",
+                data: parsedData.error
+            });
+        }
+        const results = parsedData.data.map(async(student) => {
+            const data = await getInfoFromRollNo(student.rollNo);
+            return {
+                name: student.name,
+                rollNo: student.rollNo,
+                branch: data.branch,
+                batch: data.batch,
+                programme:data.programme,
+                gender:student.gender,
+                semesters: []
+            }
+        })
+
+        const resultsWithRanks = await ResultModel.insertMany(results);
+
+        console.log("Freshers imported successfully.");
+
+        return res.status(200).json({
+            error: false,
+            message: "Freshers imported successfully.",
+            data: {
+                timeTaken: `${(new Date().getTime() - time.getTime()) / 1000}s`,
+                lastUpdated: new Date().toISOString(),
+                results: `${resultsWithRanks.length} freshers imported`
+            }
+        });
+
+    }catch(error){
+        console.log(error);
+        return Promise.resolve({
+            error: true,
+            message: "An error occurred",
+            data: error || "Internal Server Error"
+        });
+    }
+}
