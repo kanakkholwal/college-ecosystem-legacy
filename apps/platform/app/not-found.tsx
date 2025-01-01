@@ -4,7 +4,6 @@ import { Home } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "Not Found | College Platform",
   description: "The page you are looking for does not exist.",

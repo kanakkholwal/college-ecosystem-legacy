@@ -97,6 +97,7 @@ export default async function Dashboard() {
       <section
         id="hero"
         className="z-10 w-full max-w-7xl max-h-96 relative flex justify-center lg:justify-around items-center gap-10 py-24 px-4 rounded-lg text-center lg:text-left"
+        suppressHydrationWarning={true}
       >
         <div className="relative z-50">
           <h2

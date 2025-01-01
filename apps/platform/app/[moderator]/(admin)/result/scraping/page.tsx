@@ -168,7 +168,7 @@ export default function ScrapeResultPage() {
 
   return (
     <>
-      <Alert suppressHydrationWarning>
+      <Alert suppressHydrationWarning={true}>
         {connected ? <Wifi className="size-6 !text-green-500" /> : <WifiOff className="size-6 !text-red-500" />}
         <AlertTitle>
           Connection ({transportName})
