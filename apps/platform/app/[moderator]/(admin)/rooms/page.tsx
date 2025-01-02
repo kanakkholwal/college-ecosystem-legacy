@@ -40,11 +40,11 @@ export default async function RoomsPage(props: Props) {
   const moderator = params.moderator;
   const query = searchParams?.query || "";
   const status = searchParams?.currentStatus || "";
-  
+
   const rooms = await listAllRoomsWithHistory({
     status,
     roomNumber: query,
-  })
+  });
   const { totalRooms, totalAvailableRooms, totalOccupiedRooms } =
     await getRoomsInfo();
 
@@ -104,11 +104,10 @@ export default async function RoomsPage(props: Props) {
           ))}
         >
           {rooms.map((room) => {
-            return <RoomCard key={room.id} room={room} user={session?.user}/>;
+            return <RoomCard key={room.id} room={room} user={session?.user} />;
           })}
         </ErrorBoundaryWithSuspense>
       </div>
-
     </>
   );
 }

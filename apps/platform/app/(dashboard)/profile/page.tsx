@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const session = await getSession() as Session
+  const session = (await getSession()) as Session;
 
   return (
     <div className="bg-white/20 backdrop-blur-lg mt-5 rounded-lg p-4 @container/profile">
@@ -21,7 +21,7 @@ export default async function Dashboard() {
           <div className="grid gap-2">
             <p className="font-bold text-gray-900 dark:text-gray-100">Name</p>
             <p className="text-sm text-gray-700 font-semibold">
-              {session?.user?.name} 
+              {session?.user?.name}
             </p>
           </div>
           <div className="grid gap-2">

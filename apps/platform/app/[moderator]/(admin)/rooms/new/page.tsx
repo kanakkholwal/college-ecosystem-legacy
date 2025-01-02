@@ -14,8 +14,6 @@ export const metadata: Metadata = {
 };
 
 export default async function CoursesPage() {
-  
-
   return (
     <>
       <Card className="m-4 mt-10">

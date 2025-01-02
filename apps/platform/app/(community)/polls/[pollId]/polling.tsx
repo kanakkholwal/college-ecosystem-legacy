@@ -31,9 +31,7 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
         }
       } else {
         if (!poll.multipleChoice) {
-          updatedVotes = updatedVotes.filter(
-            (vote) => vote.userId !== user.id
-          );
+          updatedVotes = updatedVotes.filter((vote) => vote.userId !== user.id);
         }
         updatedVotes.push({ option, userId: user.id });
       }

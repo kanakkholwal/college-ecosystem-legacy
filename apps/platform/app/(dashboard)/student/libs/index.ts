@@ -1,4 +1,7 @@
-import type { PersonalAttendanceRecord,PersonalAttendance } from "~/db/schema/attendance_record";
+import type {
+  PersonalAttendanceRecord,
+  PersonalAttendance,
+} from "~/db/schema/attendance_record";
 
 interface WeeklyTrend {
   weekStart: Date;
@@ -8,7 +11,7 @@ interface WeeklyTrend {
 
 export function calculateWeeklyTrend(
   attendanceRecords: (PersonalAttendance & {
-    records:PersonalAttendanceRecord[]
+    records: PersonalAttendanceRecord[];
   })[]
 ): WeeklyTrend[] {
   // Flatten all attendance records into a single array
@@ -20,7 +23,9 @@ export function calculateWeeklyTrend(
   );
 
   // Sort attendance by date
-  allAttendance.sort((a, b) => (a.date?.getTime() ?? 0) - (b.date?.getTime() ?? 0));
+  allAttendance.sort(
+    (a, b) => (a.date?.getTime() ?? 0) - (b.date?.getTime() ?? 0)
+  );
 
   const weeklyStats: {
     [weekStart: string]: { present: number; total: number };
@@ -83,7 +88,7 @@ interface SubjectAttendance {
 
 export function formatAttendanceForSubjects(
   attendanceRecords: (PersonalAttendance & {
-    records:PersonalAttendanceRecord[]
+    records: PersonalAttendanceRecord[];
   })[]
 ): SubjectAttendance[] {
   return attendanceRecords.map((record) => {
@@ -98,7 +103,7 @@ export function formatAttendanceForSubjects(
 
 export const getMonthlyAttendanceData = (
   attendanceRecords: (PersonalAttendance & {
-    records:PersonalAttendanceRecord[]
+    records: PersonalAttendanceRecord[];
   })[]
 ) => {
   const monthlyData: {
@@ -126,20 +131,22 @@ export const getMonthlyAttendanceData = (
     }
   }
 
-
   return Object.values(monthlyData);
 };
 
-export function getSafeAttendance(attendanceRecords: (PersonalAttendance & {
-  records:PersonalAttendanceRecord[]
-})[]) {
+export function getSafeAttendance(
+  attendanceRecords: (PersonalAttendance & {
+    records: PersonalAttendanceRecord[];
+  })[]
+) {
   const atRiskSubjects = attendanceRecords
     .map((record) => {
       const totalClasses = record.records.length || 0;
       const attendedClasses = record.records.filter((a) => a.isPresent).length;
 
       // Avoid dividing by zero
-      const attendanceRate = totalClasses > 0 ? attendedClasses / totalClasses : 1;
+      const attendanceRate =
+        totalClasses > 0 ? attendedClasses / totalClasses : 1;
 
       return {
         subject: record.subjectName,

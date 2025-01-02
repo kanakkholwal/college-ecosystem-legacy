@@ -54,13 +54,7 @@ export default async function CoursePage(props: Props) {
     return notFound();
   }
   console.log(data);
-  const {
-    course,
-    booksAndReferences,
-    previousPapers,
-    chapters,
-  } = data;
-
+  const { course, booksAndReferences, previousPapers, chapters } = data;
 
   return (
     <>
@@ -119,51 +113,63 @@ export default async function CoursePage(props: Props) {
           <TabsContent value="books_and_references">
             {booksAndReferences.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {booksAndReferences.map(
-                  (ref) => {
-                    const iconsSrc = IconMap.has(ref.type as "book" | "reference" | "drive" | "youtube" | "others")
-                      ? IconMap.get(ref.type as "book" | "reference" | "drive" | "youtube" | "others")
-                      : OthersPng;
-                    return (
-                      <Card key={ref.link}>
-                        <CardHeader className="md:flex-row md:justify-between gap-2">
-                          <div className="w-16 h-16 p-3 aspect-square rounded-full flex justify-center items-center  bg-slate-100 dark:bg-gray-800 font-bold text-lg">
-                            {iconsSrc ? (
-                              <Image
-                                src={iconsSrc}
-                                className="w-10 h-10"
-                                width={40}
-                                height={40}
-                                alt={ref.link}
-                              />
-                            ) : (
-                              <Image
-                                src={OthersPng}
-                                className="w-10 h-10"
-                                width={40}
-                                height={40}
-                                alt={ref.link}
-                              />
-                            )}
-                          </div>
-                          <div className="flex-auto grow">
-                            <CardTitle className="break-words">
-                              {ref.name}
-                            </CardTitle>
-                            <a
-                              href={ref.link}
-                              target="_blank"
-                              className="text-primary mt-2 text-sm font-semibold"
-                              rel="noreferrer"
-                            >
-                              Go to Link
-                            </a>
-                          </div>
-                        </CardHeader>
-                      </Card>
-                    );
-                  }
-                )}
+                {booksAndReferences.map((ref) => {
+                  const iconsSrc = IconMap.has(
+                    ref.type as
+                      | "book"
+                      | "reference"
+                      | "drive"
+                      | "youtube"
+                      | "others"
+                  )
+                    ? IconMap.get(
+                        ref.type as
+                          | "book"
+                          | "reference"
+                          | "drive"
+                          | "youtube"
+                          | "others"
+                      )
+                    : OthersPng;
+                  return (
+                    <Card key={ref.link}>
+                      <CardHeader className="md:flex-row md:justify-between gap-2">
+                        <div className="w-16 h-16 p-3 aspect-square rounded-full flex justify-center items-center  bg-slate-100 dark:bg-gray-800 font-bold text-lg">
+                          {iconsSrc ? (
+                            <Image
+                              src={iconsSrc}
+                              className="w-10 h-10"
+                              width={40}
+                              height={40}
+                              alt={ref.link}
+                            />
+                          ) : (
+                            <Image
+                              src={OthersPng}
+                              className="w-10 h-10"
+                              width={40}
+                              height={40}
+                              alt={ref.link}
+                            />
+                          )}
+                        </div>
+                        <div className="flex-auto grow">
+                          <CardTitle className="break-words">
+                            {ref.name}
+                          </CardTitle>
+                          <a
+                            href={ref.link}
+                            target="_blank"
+                            className="text-primary mt-2 text-sm font-semibold"
+                            rel="noreferrer"
+                          >
+                            Go to Link
+                          </a>
+                        </div>
+                      </CardHeader>
+                    </Card>
+                  );
+                })}
               </div>
             ) : (
               <p className="text-center text-gray-600 dark:text-gray-400 text-md font-semibold pt-5">
@@ -172,7 +178,7 @@ export default async function CoursePage(props: Props) {
             )}
             <div className="flex w-full items-center justify-center p-4">
               {session?.user ? (
-                <AddRefsModal code={course.code} courseId={course.id}  />
+                <AddRefsModal code={course.code} courseId={course.id} />
               ) : (
                 <p className="text-center text-gray-600 dark:text-gray-400 text-md font-semibold pt-5">
                   <Link

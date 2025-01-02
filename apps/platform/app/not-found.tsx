@@ -89,12 +89,7 @@ export default function NotFound() {
         </svg>
         <div className="flex mx-auto gap-4">
           <GoBackButton />
-          <Button
-            rounded="full"
-            variant="default_light"
-            width="sm"
-            asChild
-          >
+          <Button rounded="full" variant="default_light" width="sm" asChild>
             <Link href="/">
               <Home />
               Go to Home

@@ -1,38 +1,27 @@
-"use client"
+"use client";
 
-import {
-  ChevronsUpDown,
-  LogOut
-} from "lucide-react"
+import { ChevronsUpDown, LogOut } from "lucide-react";
 
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu"
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   useSidebar,
-} from "@/components/ui/sidebar"
-import type { Session } from "~/lib/auth-client"
-import { authClient } from "~/lib/auth-client"
+} from "@/components/ui/sidebar";
+import type { Session } from "~/lib/auth-client";
+import { authClient } from "~/lib/auth-client";
 
-export function NavUser({
-  user,
-}: {
-  user:Session["user"]
-}) {
-  const { isMobile } = useSidebar()
+export function NavUser({ user }: { user: Session["user"] }) {
+  const { isMobile } = useSidebar();
 
   return (
     <SidebarMenu>
@@ -72,16 +61,19 @@ export function NavUser({
                 </div>
               </div>
             </DropdownMenuLabel>
-            <DropdownMenuSeparator />     
-            <DropdownMenuItem className="cursor-pointer" onClick={async() => {
-                await authClient.signOut()
-            }}>
-              <LogOut className="size-4 mr-2"/>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              className="cursor-pointer"
+              onClick={async () => {
+                await authClient.signOut();
+              }}
+            >
+              <LogOut className="size-4 mr-2" />
               Log out
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
     </SidebarMenu>
-  )
+  );
 }

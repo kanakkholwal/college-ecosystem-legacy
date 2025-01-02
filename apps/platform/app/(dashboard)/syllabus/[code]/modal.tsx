@@ -30,7 +30,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { updateBooksAndRefPublic, updatePrevPapersPublic } from "~/actions/course";
+import {
+  updateBooksAndRefPublic,
+  updatePrevPapersPublic,
+} from "~/actions/course";
 
 const yearOptions: readonly string[] = Array.from({ length: 6 }, (_, index) =>
   (new Date().getFullYear() - index).toString()
@@ -44,32 +47,35 @@ const formSchema = z.object({
 
 export function AddPrevsModal({
   code,
-  courseId
+  courseId,
 }: {
   code: string;
-  courseId:string
+  courseId: string;
 }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues:{
-      exam:"midsem",
-      link:"",
-      year:""
-    }
+    defaultValues: {
+      exam: "midsem",
+      link: "",
+      year: "",
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     // Handle form submission
     console.log(data);
-    toast.promise(updatePrevPapersPublic(courseId,{
-      exam:data.exam,
-      link:data.link,
-      year:Number(data.year)
-    }), {
-      loading: "Adding Previous Paper",
-      success: "Previous Paper Added",
-      error: "Failed to add Previous Paper",
-    });
+    toast.promise(
+      updatePrevPapersPublic(courseId, {
+        exam: data.exam,
+        link: data.link,
+        year: Number(data.year),
+      }),
+      {
+        loading: "Adding Previous Paper",
+        success: "Previous Paper Added",
+        error: "Failed to add Previous Paper",
+      }
+    );
   };
 
   return (
@@ -192,24 +198,24 @@ const refFormSchema = z.object({
 
 export function AddRefsModal({
   code,
-  courseId
+  courseId,
 }: {
   code: string;
-  courseId:string
+  courseId: string;
 }) {
   const form = useForm<z.infer<typeof refFormSchema>>({
     resolver: zodResolver(refFormSchema),
-    defaultValues:{
-      type:typeOptions[0],
-      name:"",
-      link:""
-    }
+    defaultValues: {
+      type: typeOptions[0],
+      name: "",
+      link: "",
+    },
   });
 
   const onSubmit = async (data: z.infer<typeof refFormSchema>) => {
     // Handle form submission
     console.log(data);
-    toast.promise(updateBooksAndRefPublic(courseId,data), {
+    toast.promise(updateBooksAndRefPublic(courseId, data), {
       loading: "Adding Reference",
       success: "Reference Added",
       error: "Failed to add Reference",

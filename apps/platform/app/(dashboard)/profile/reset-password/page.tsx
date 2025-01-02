@@ -7,7 +7,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -50,7 +50,8 @@ export default function ResetPassword() {
             <div className="grid w-full items-center gap-2">
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">New password</Label>
-                <Input type="password"
+                <Input
+                  type="password"
                   id="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
@@ -60,7 +61,8 @@ export default function ResetPassword() {
               </div>
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="email">Confirm password</Label>
-                <Input type="password"
+                <Input
+                  type="password"
                   id="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}

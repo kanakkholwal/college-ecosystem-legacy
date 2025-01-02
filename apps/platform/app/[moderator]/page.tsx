@@ -11,19 +11,14 @@ interface Props {
   }>;
 }
 
-
 export default async function ModeratorDashboard(props: Props) {
   const params = await props.params;
-  const session = await getSession()
-
-
+  const session = await getSession();
 
   return (
     <div className="space-y-6 my-5">
       <div>
-        <h2 className="text-3xl font-semibold">
-          Hi, {session?.user?.name}
-        </h2>
+        <h2 className="text-3xl font-semibold">Hi, {session?.user?.name}</h2>
         <p className="text-slate-600 dark:text-slate-400">
           Welcome to the dashboard.
         </p>

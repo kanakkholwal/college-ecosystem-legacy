@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import type { PollType } from "src/models/poll";
-import type { Session } from "src/lib/auth-client"
+import type { Session } from "src/lib/auth-client";
 import DeletePoll from "./delete-poll";
 import { ClosingBadge } from "./poll-timer";
 
@@ -65,7 +65,10 @@ export function PollRender({ poll }: { poll: PollType }) {
       </div>
       <div>
         {poll.options.map((option, index) => (
-          <div key={option} className="flex justify-end items-center h-8 mb-1.5">
+          <div
+            key={option}
+            className="flex justify-end items-center h-8 mb-1.5"
+          >
             <p className="whitespace-nowrap leading-none truncate text-sm font-semibold">
               {parseVotes(poll.votes, option).percent.toFixed(2)}%
             </p>

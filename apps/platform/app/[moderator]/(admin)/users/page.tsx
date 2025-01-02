@@ -20,7 +20,7 @@ export default async function DashboardPage(props: PageProps) {
     sortOrder: "desc",
     limit: 50,
     offset: offset,
-    searchQuery: query
+    searchQuery: query,
   });
 
   return (

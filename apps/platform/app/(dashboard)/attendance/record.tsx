@@ -37,7 +37,7 @@ export default function AttendanceRecord({
   record,
   style,
 }: AttendanceRecordProps) {
-  const totalClasses = record.records.length
+  const totalClasses = record.records.length;
 
   const chartData = [
     {
@@ -67,7 +67,7 @@ export default function AttendanceRecord({
           <ConditionalRender condition={totalClasses === 0}>
             <div className="flex flex-col items-center justify-center gap-4">
               <div className="text-center text-sm font-medium text-gray-600">
-              <CircleSlash className="size-4 text-danger inline-block mr-2" />
+                <CircleSlash className="size-4 text-danger inline-block mr-2" />
                 No attendance records found
               </div>
               {/* <div className="text-muted-foreground text-sm">
@@ -145,15 +145,14 @@ export default function AttendanceRecord({
 
 const attendancePercentage = (record: PersonalAttendanceWithRecords) => {
   return (
-    (record.records.filter((a) => a.isPresent).length /
-      record.records.length) *
+    (record.records.filter((a) => a.isPresent).length / record.records.length) *
     100
   );
 };
 
 const getAttendanceStatus = (record: PersonalAttendanceWithRecords) => {
   const classesAttended = record.records.filter((a) => a.isPresent).length;
-  const totalClasses = record.records.length
+  const totalClasses = record.records.length;
   const requiredPercentage = ATTENDANCE_CRITERIA / 100;
 
   if (totalClasses === 0) {
@@ -182,6 +181,4 @@ const getAttendanceStatus = (record: PersonalAttendanceWithRecords) => {
   }
 
   return `Attend the next ${possibleFutureClasses} classes to get back on track.`;
-
-
 };

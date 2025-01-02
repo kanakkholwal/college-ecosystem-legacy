@@ -13,7 +13,6 @@ export async function updateUser(userId: string, data: Partial<UserWithId>) {
       success: false,
       message: "Unauthorized",
     };
-
   } catch (error) {
     console.log(error);
     return {
@@ -37,4 +36,3 @@ export async function getUser(userId: string): Promise<UserWithId | null> {
     return Promise.resolve(null);
   }
 }
-

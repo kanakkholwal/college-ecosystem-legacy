@@ -1,39 +1,34 @@
-"use client"
+"use client";
 
-import type * as React from "react"
+import type * as React from "react";
 
-import { NavMain } from "@/components/common/sidebar/nav-main"
-import { NavUser } from "@/components/common/sidebar/nav-user"
-import { RoleSwitcher } from "@/components/common/sidebar/role-switcher"
+import { NavMain } from "@/components/common/sidebar/nav-main";
+import { NavUser } from "@/components/common/sidebar/nav-user";
+import { RoleSwitcher } from "@/components/common/sidebar/role-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import type { Session } from "~/lib/auth-client"
+} from "@/components/ui/sidebar";
+import type { Session } from "~/lib/auth-client";
 
-import {
-  CalendarRange,
-  Grid3X3,
-  UserRoundCog
-} from "lucide-react"
-import { GrStorage } from "react-icons/gr"
-import { LiaReadme } from "react-icons/lia"
-import { SiGoogleclassroom } from "react-icons/si"
-import { TbDashboard } from "react-icons/tb"
-
+import { CalendarRange, Grid3X3, UserRoundCog } from "lucide-react";
+import { GrStorage } from "react-icons/gr";
+import { LiaReadme } from "react-icons/lia";
+import { SiGoogleclassroom } from "react-icons/si";
+import { TbDashboard } from "react-icons/tb";
 
 export type rawLinkType = {
   title: string;
   path: string;
   allowed_roles: Session["user"]["role"] | Session["user"]["other_roles"] | "*";
-  icon:  React.FC<React.SVGProps<SVGSVGElement>>
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
   items?: {
     title: string;
     path: string;
-  }[]
+  }[];
 };
 
 const all_links: rawLinkType[] = [
@@ -53,14 +48,14 @@ const all_links: rawLinkType[] = [
         title: "Create User",
         path: "/new",
       },
-    ]
+    ],
   },
   {
     title: "Result",
     icon: Grid3X3,
     path: "/result",
     allowed_roles: ["admin", "moderator"],
-    items:[
+    items: [
       {
         title: "Scraping",
         path: "/scraping",
@@ -69,7 +64,7 @@ const all_links: rawLinkType[] = [
         title: "Import",
         path: "/import",
       },
-    ]
+    ],
   },
   {
     title: "Storage",
@@ -99,7 +94,7 @@ const all_links: rawLinkType[] = [
         title: "Create Classroom",
         path: "/new",
       },
-    ]
+    ],
   },
 ];
 
@@ -107,7 +102,7 @@ const getSideNavLinks = (role: string) => {
   return all_links
     .filter((link) => {
       return (
-        link.allowed_roles.includes(role) || link.allowed_roles.includes("*") 
+        link.allowed_roles.includes(role) || link.allowed_roles.includes("*")
       );
     })
     .map((link) => ({
@@ -121,21 +116,22 @@ const getSideNavLinks = (role: string) => {
     }));
 };
 
-
-
-interface SidebarProps extends React.ComponentProps<typeof Sidebar>{
-    user:Session["user"]
-    moderator: string
+interface SidebarProps extends React.ComponentProps<typeof Sidebar> {
+  user: Session["user"];
+  moderator: string;
 }
 
-export function AppSidebar({ user,moderator,...props }: SidebarProps) {
-
-  const links = getSideNavLinks(moderator)
+export function AppSidebar({ user, moderator, ...props }: SidebarProps) {
+  const links = getSideNavLinks(moderator);
 
   return (
-    <Sidebar collapsible="icon" className="bg-white/20 backdrop-blur-3xl border-r border-gray-300/30" {...props}>
+    <Sidebar
+      collapsible="icon"
+      className="bg-white/20 backdrop-blur-3xl border-r border-gray-300/30"
+      {...props}
+    >
       <SidebarHeader>
-        <RoleSwitcher  user={user}/>
+        <RoleSwitcher user={user} />
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={links} />
@@ -145,5 +141,5 @@ export function AppSidebar({ user,moderator,...props }: SidebarProps) {
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

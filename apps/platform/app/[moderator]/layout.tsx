@@ -7,11 +7,7 @@ import { getSession } from "~/lib/auth-server";
 import { changeCase } from "~/utils/string";
 import Navbar from "./components/navbar";
 
-import {
-  SidebarInset,
-  SidebarProvider
-} from "@/components/ui/sidebar";
-
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 const ALLOWED_ROLES = ["admin", "moderator", "cr", "hod", "faculty"];
 
@@ -21,10 +17,6 @@ interface DashboardLayoutProps {
     moderator: (typeof ALLOWED_ROLES)[number];
   }>;
 }
-
-
-
-
 
 export async function generateMetadata(
   { params }: DashboardLayoutProps,
@@ -45,7 +37,7 @@ export default async function DashboardLayout({
 }: DashboardLayoutProps) {
   const { moderator } = await params;
 
-  const session = await getSession() as Session
+  const session = (await getSession()) as Session;
 
   const response = checkAuthorization(moderator, session);
 
@@ -61,8 +53,6 @@ export default async function DashboardLayout({
     console.log("Returning Page403");
     return <Page403 />;
   }
-
-
 
   return (
     <SidebarProvider className="selection:bg-primary/10 selection:text-primary">
@@ -97,15 +87,16 @@ export default async function DashboardLayout({
   );
 }
 
-function checkAuthorization(moderator: string, session: Awaited<ReturnType<typeof getSession>>) {
-
+function checkAuthorization(
+  moderator: string,
+  session: Awaited<ReturnType<typeof getSession>>
+) {
   // 1. No session, redirect to sign-in
   if (!session) {
-
     return {
       redirect: { destination: "/sign-in" },
       authorized: false,
-      notFound: false
+      notFound: false,
     };
   }
 
@@ -118,29 +109,27 @@ function checkAuthorization(moderator: string, session: Awaited<ReturnType<typeo
     return {
       redirect: { destination },
       authorized: false,
-      notFound: false
+      notFound: false,
     };
   }
-
 
   // 4. Authorized check
   if (
-    session.user.other_roles.map((role) => role.toLowerCase()).includes(moderator.toLowerCase())
-    || session.user.role.toLowerCase() === moderator.toLowerCase()
+    session.user.other_roles
+      .map((role) => role.toLowerCase())
+      .includes(moderator.toLowerCase()) ||
+    session.user.role.toLowerCase() === moderator.toLowerCase()
   ) {
-
     return {
       notFound: false,
       authorized: true,
-      redirect: null
+      redirect: null,
     };
   }
-
 
   return {
     notFound: true,
     authorized: false,
-    redirect: null
+    redirect: null,
   };
 }
-

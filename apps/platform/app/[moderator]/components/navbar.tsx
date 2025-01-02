@@ -8,9 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  SidebarTrigger
-} from "@/components/ui/sidebar";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaRegUser } from "react-icons/fa";
@@ -36,7 +34,10 @@ export default function Navbar({ user }: { user: Session["user"] }) {
         <div className="flex items-center space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button type="button" className="flex items-center space-x-2 px-3 py-1.5 rounded-lg">
+              <button
+                type="button"
+                className="flex items-center space-x-2 px-3 py-1.5 rounded-lg"
+              >
                 {/* <Image src={user.profilePicture} height={80} width={80} alt="avatar" className="w-8 h-8 rounded-full" /> */}
                 <span className="text-slate-500 dark:text-slate-300 text-sm ml-2 font-semibold hidden md:inline-block">
                   {user.name}

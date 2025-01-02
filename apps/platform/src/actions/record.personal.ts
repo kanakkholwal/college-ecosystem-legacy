@@ -5,20 +5,29 @@ import { db } from "~/db/connect";
 import {
   personalAttendanceRecords,
   personalAttendance,
-} from "~/db/schema/attendance_record"; 
+} from "~/db/schema/attendance_record";
 import { eq } from "drizzle-orm";
-import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
-
-export type PersonalAttendanceRecord = InferSelectModel<typeof personalAttendanceRecords>;
-export type InsertPersonalAttendanceRecord = InferInsertModel<typeof personalAttendanceRecords>;
+export type PersonalAttendanceRecord = InferSelectModel<
+  typeof personalAttendanceRecords
+>;
+export type InsertPersonalAttendanceRecord = InferInsertModel<
+  typeof personalAttendanceRecords
+>;
 
 export type PersonalAttendance = InferSelectModel<typeof personalAttendance>;
-export type InsertPersonalAttendance = InferInsertModel<typeof personalAttendance>;
-
+export type InsertPersonalAttendance = InferInsertModel<
+  typeof personalAttendance
+>;
 
 // Create a new attendance record
-export async function createAttendance(recordData: Omit<PersonalAttendance, "id" | "userId" |"createdAt" | "updatedAt">) {
+export async function createAttendance(
+  recordData: Omit<
+    PersonalAttendance,
+    "id" | "userId" | "createdAt" | "updatedAt"
+  >
+) {
   const session = await getSession();
   if (!session) {
     throw new Error("You need to be logged in to create an attendance record.");
@@ -78,14 +87,13 @@ export async function updateAttendanceRecord(
   }
 
   try {
-      // Add attendance details
-      await db.insert(personalAttendanceRecords).values({
-        recordId,
-        userId: session.user.id,
-        isPresent,
-        date: new Date(),
-      });
-
+    // Add attendance details
+    await db.insert(personalAttendanceRecords).values({
+      recordId,
+      userId: session.user.id,
+      isPresent,
+      date: new Date(),
+    });
 
     revalidatePath("/attendance");
     return "Attendance record updated successfully.";
@@ -95,9 +103,10 @@ export async function updateAttendanceRecord(
   }
 }
 
-
 // Delete an attendance record
-export async function deleteAttendanceRecord(recordId: string): Promise<string> {
+export async function deleteAttendanceRecord(
+  recordId: string
+): Promise<string> {
   const session = await getSession();
   if (!session) {
     throw new Error("Authentication required.");
@@ -125,7 +134,10 @@ export async function deleteAttendanceRecord(recordId: string): Promise<string> 
 }
 
 // Force update an attendance record with partial data
-export async function forceUpdateAttendanceRecord(recordId: string, data: Partial<InsertPersonalAttendanceRecord>) {
+export async function forceUpdateAttendanceRecord(
+  recordId: string,
+  data: Partial<InsertPersonalAttendanceRecord>
+) {
   const session = await getSession();
   if (!session) {
     throw new Error("You need to be logged in to update an attendance record.");

@@ -27,7 +27,6 @@ export const useSocketStatus = (
   serverUrl: string,
   options?: Partial<ManagerOptions & SocketOptions>
 ): UseSocketStatusReturn => {
-  
   const socketRef = useRef<Socket | null>(null);
   const [socketStatus, setSocketStatus] = useState<SocketStatus>({
     connected: socketRef.current?.connected || false,
@@ -45,7 +44,6 @@ export const useSocketStatus = (
     const socket = io(serverUrl, options);
     socketRef.current = socket;
     // }
-    
 
     // Event handlers
     const handleConnect = () => {

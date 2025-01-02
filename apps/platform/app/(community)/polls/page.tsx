@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 };
 
 export default async function PollsPage() {
-  const session = await getSession()
+  const session = await getSession();
 
   const [openPolls, closedPolls, userPolls] = await Promise.all([
     getOpenPolls(),

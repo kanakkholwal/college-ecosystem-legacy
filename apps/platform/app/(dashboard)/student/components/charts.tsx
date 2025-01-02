@@ -31,7 +31,10 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import type { PersonalAttendanceRecord ,PersonalAttendance} from "~/db/schema/attendance_record";
+import type {
+  PersonalAttendanceRecord,
+  PersonalAttendance,
+} from "~/db/schema/attendance_record";
 import {
   calculateWeeklyTrend,
   formatAttendanceForSubjects,
@@ -55,7 +58,7 @@ const chartConfig = {
 
 interface Props {
   attendanceRecords: (PersonalAttendance & {
-    records:PersonalAttendanceRecord[]
+    records: PersonalAttendanceRecord[];
   })[];
 }
 
@@ -66,8 +69,7 @@ export function OverallAttendanceChart({ attendanceRecords }: Props) {
   );
   const attendedClasses = attendanceRecords.reduce(
     (sum, record) =>
-      sum +
-      record.records.filter((attendance) => attendance.isPresent).length,
+      sum + record.records.filter((attendance) => attendance.isPresent).length,
     0
   );
   const absentClasses = totalClasses - attendedClasses;

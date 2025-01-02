@@ -3,28 +3,29 @@ import type { Metadata } from "next";
 import { getSession } from "src/lib/auth-server";
 
 export const metadata: Metadata = {
-    title: "Admin Dashboard",
-    description: "Admin Dashboard ",
+  title: "Admin Dashboard",
+  description: "Admin Dashboard ",
 };
 
-
 interface DashboardLayoutProps {
-    children: React.ReactNode;
-    params: Promise<{
-        moderator: "faculty" | "hod"
-    }>;
+  children: React.ReactNode;
+  params: Promise<{
+    moderator: "faculty" | "hod";
+  }>;
 }
 
 export default async function DashboardLayout({
-    children,
-    params,
+  children,
+  params,
 }: DashboardLayoutProps) {
-    const session = await getSession()
-    const { moderator } = await params;
+  const session = await getSession();
+  const { moderator } = await params;
 
-    if (!(session?.user.other_roles.includes("faculty") && moderator === "faculty")) {
-        return <Page403 />;
-    }
+  if (
+    !(session?.user.other_roles.includes("faculty") && moderator === "faculty")
+  ) {
+    return <Page403 />;
+  }
 
-    return <>{children}</>;
+  return <>{children}</>;
 }

@@ -23,7 +23,7 @@ export default function Toggle({
       <Switch
         id="currentStatus"
         disabled={loading}
-        checked={currentStatus  === "available"}
+        checked={currentStatus === "available"}
         onCheckedChange={(checked) => {
           setLoading(true);
           toast.promise(
@@ -31,7 +31,9 @@ export default function Toggle({
             {
               loading: `Updating ${roomNumber} status...`,
               success: `${roomNumber} status updated`,
-              error: (err) => {
+            
+              // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                          error: (err:any) => {
                 console.log(err);
                 return err.message || `${roomNumber} status update failed`;
               },
@@ -42,9 +44,7 @@ export default function Toggle({
       />
       <Label
         htmlFor="currentStatus"
-        className={
-          `${loading ? "pointer-events-none" : ""} capitalize align-middle mb-0 `
-        }
+        className={`${loading ? "pointer-events-none" : ""} capitalize align-middle mb-0 `}
       >
         {loading ? "Updating..." : currentStatus}
       </Label>

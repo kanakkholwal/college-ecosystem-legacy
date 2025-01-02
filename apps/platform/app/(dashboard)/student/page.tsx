@@ -35,7 +35,7 @@ const quick_links = [
 ];
 
 export default async function StudentDashboard() {
-  const session = await getSession()
+  const session = await getSession();
 
   const attendanceRecords = await getAttendanceRecords();
 

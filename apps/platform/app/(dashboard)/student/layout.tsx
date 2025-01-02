@@ -14,7 +14,7 @@ type LayoutProps = Readonly<{
 }>;
 
 export default async function Layout({ children }: LayoutProps) {
-  const session = await getSession()
+  const session = await getSession();
   const isStudent = session?.user.other_roles.includes("student");
 
   if (!isStudent) return redirect(`/${session?.user?.other_roles[0]}/`);

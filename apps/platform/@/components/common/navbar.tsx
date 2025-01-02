@@ -35,7 +35,6 @@ interface SocialLink {
   icon: React.ElementType;
 }
 
-
 export default function Navbar({
   user,
   showBreadcrumbs = false,
@@ -122,7 +121,7 @@ export default function Navbar({
                     </Link>
                   </DropdownMenuItem>
                 )}
-                {(user.role === "admin") && (
+                {user.role === "admin" && (
                   <DropdownMenuItem asChild>
                     <Link href={"/admin"}>
                       <UserRound className="mr-2 h-4 w-4" />
@@ -142,7 +141,9 @@ export default function Navbar({
                 })}
                 <DropdownMenuItem asChild>
                   <Link
-                    href={"https://github.com/kanakkholwal/college-ecosystem/issues"}
+                    href={
+                      "https://github.com/kanakkholwal/college-ecosystem/issues"
+                    }
                     target="_blank"
                   >
                     <Bug className="mr-2 h-4 w-4" />
@@ -158,14 +159,14 @@ export default function Navbar({
 
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={async() => {
+                onClick={async () => {
                   await authClient.signOut({
                     fetchOptions: {
                       onSuccess: () => {
                         router.push("/sign-in"); // redirect to login page
                       },
                     },
-                  })
+                  });
                 }}
                 className="cursor-pointer"
               >
@@ -209,7 +210,7 @@ export default function Navbar({
               {pathname
                 .split("/")
                 .slice(1)
-                .map((item:string, index:number) => {
+                .map((item: string, index: number) => {
                   return (
                     <li
                       key={item.concat(index.toString())}
@@ -245,7 +246,6 @@ export default function Navbar({
     </div>
   );
 }
-
 
 const socials: SocialLink[] = [
   {

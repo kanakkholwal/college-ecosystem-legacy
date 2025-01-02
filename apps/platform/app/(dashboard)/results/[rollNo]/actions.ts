@@ -14,11 +14,11 @@ export async function getResultByRollNo(
     rollNo,
   }).exec();
   if (result && update) {
-    const {data:response} = await axios.get<{
+    const { data: response } = await axios.get<{
       data: ResultTypeWithId | null;
       message: string;
       error: boolean;
-    }>(`${process.env.BASE_SERVER_URL}/api/results/${rollNo}/update`)
+    }>(`${process.env.BASE_SERVER_URL}/api/results/${rollNo}/update`);
     if (response.error || !response.data) {
       return JSON.parse(JSON.stringify(result));
     }

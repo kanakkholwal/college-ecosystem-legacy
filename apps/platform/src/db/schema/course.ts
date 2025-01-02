@@ -6,7 +6,7 @@ import {
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
-import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 
 // Sub-schema for Chapter
 export const chapters = pgTable("chapters", {
@@ -51,8 +51,6 @@ export const courses = pgTable("courses", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
-
-
 // Infer types for courses
 export type CourseSelect = InferSelectModel<typeof courses>;
 export type CourseInsert = InferInsertModel<typeof courses>;
@@ -66,5 +64,3 @@ export type PreviousPaperSelect = InferSelectModel<typeof previousPapers>;
 export type PreviousPaperInsert = InferInsertModel<typeof previousPapers>;
 
 export type ChapterSelect = InferSelectModel<typeof chapters>;
-
-

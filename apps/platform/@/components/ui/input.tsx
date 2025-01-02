@@ -2,9 +2,9 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { VariantProps, cva } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 
-const inputVarinats = cva(
+const inputVariants = cva(
   "flex h-10 w-full rounded-md  bg-background px-3 py-2 text-sm font-medium  file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 disabled:border-slate-100 invalid:ring-red-500",
   {
     variants: {
@@ -29,19 +29,23 @@ const inputVarinats = cva(
     },
     defaultVariants: {
       variant: "default",
+      rounded: "default",
     },
   }
 );
 export interface InputProps
-  extends React.InputHTMLAttributes<HTMLInputElement>,
-    VariantProps<typeof inputVarinats> {}
+  extends 
+  // HTMLInputElement,
+  //   React.ComponentProps<"input">,
+    React.InputHTMLAttributes<HTMLInputElement>,
+    VariantProps<typeof inputVariants> {}
 
-const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, variant, type, ...props }, ref) => {
+const Input = React.forwardRef<HTMLInputElement,InputProps>(
+  ({ className, variant, type,rounded, ...props }, ref) => {
     return (
       <input
         type={type}
-        className={cn(inputVarinats({ variant, className }))}
+        className={cn(inputVariants({ variant, className,rounded }))}
         ref={ref}
         {...props}
       />

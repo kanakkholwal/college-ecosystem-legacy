@@ -3,7 +3,7 @@ import { type NextRequest, NextResponse } from "next/server";
 export async function POST(request: NextRequest) {
   try {
     const time = new Date();
-    
+
     return NextResponse.json(
       {
         result: "success",
@@ -25,7 +25,7 @@ export async function POST(request: NextRequest) {
         {
           status: 500,
         }
-      )
+      );
     }
     return NextResponse.json(
       {
@@ -38,5 +38,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-
-

@@ -1,4 +1,7 @@
-import { RouterCard, type RouterCardLink } from "@/components/common/router-card";
+import {
+  RouterCard,
+  type RouterCardLink,
+} from "@/components/common/router-card";
 import { CalendarDays, CalendarPlus } from "lucide-react";
 import { getInfo } from "./cr.actions";
 

@@ -45,10 +45,6 @@ type RootLayoutProps = Readonly<{
 }>;
 
 export default async function RootLayout({ children }: RootLayoutProps) {
-
-  
-
-
   return (
     <html lang="en" suppressHydrationWarning>
       <head />

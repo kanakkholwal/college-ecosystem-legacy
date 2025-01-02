@@ -12,28 +12,25 @@ export async function getBasicInfo() {
     }
     const updatedAt = JSON.parse(JSON.stringify(firstRanker)).updatedAt;
 
-    const [
-      results,branches,batches,
-      hasBacklogs,
-      activeStudents
-    ] = await Promise.all([
-      ResultModel.countDocuments(),
-      ResultModel.distinct("branch"),
-      ResultModel.distinct("batch"),
-      ResultModel.countDocuments({ "semesters.courses.cgpi": 0 }),
-      ResultModel.countDocuments({
-        $or: [
-          { 
-            "programme": "B.Tech",
-            "semesters.length": { $lt: 8 },
-          },
-          { 
-            "programme": "Dual Degree",
-            "semesters.length": { $lt: 10 },
-          },
-        ]
-      }),
-    ]);
+    const [results, branches, batches, hasBacklogs, activeStudents] =
+      await Promise.all([
+        ResultModel.countDocuments(),
+        ResultModel.distinct("branch"),
+        ResultModel.distinct("batch"),
+        ResultModel.countDocuments({ "semesters.courses.cgpi": 0 }),
+        ResultModel.countDocuments({
+          $or: [
+            {
+              programme: "B.Tech",
+              "semesters.length": { $lt: 8 },
+            },
+            {
+              programme: "Dual Degree",
+              "semesters.length": { $lt: 10 },
+            },
+          ],
+        }),
+      ]);
 
     return Promise.resolve({
       counts: {

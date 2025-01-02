@@ -5,10 +5,13 @@ export {
   verifications,
   departmentNameEnum,
   userRolesEnum,
-  userGenderEnum
+  userGenderEnum,
 } from "./schema/auth-schema";
 
-export { personalAttendanceRecords,personalAttendance } from "./schema/attendance_record";
+export {
+  personalAttendanceRecords,
+  personalAttendance,
+} from "./schema/attendance_record";
 
 export {
   booksAndReferences,

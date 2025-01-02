@@ -44,7 +44,6 @@ export interface IResultType extends Document {
   createdAt?: Date;
   updatedAt?: Date;
   gender: "male" | "female" | "not_specified";
-
 }
 
 const CourseSchema: Schema = new Schema({
@@ -70,7 +69,11 @@ const ResultSchema: Schema = new Schema(
     batch: { type: Number, required: true },
     programme: { type: String, required: true },
     semesters: { type: [SemesterSchema], required: true },
-    gender: { type: String, enums: ["male", "female", "not_specified"], default: "not_specified" },
+    gender: {
+      type: String,
+      enums: ["male", "female", "not_specified"],
+      default: "not_specified",
+    },
     rank: {
       college: { type: Number, default: 0 },
       batch: { type: Number, default: 0 },

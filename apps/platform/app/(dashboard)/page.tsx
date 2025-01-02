@@ -49,15 +49,14 @@ const quick_links = [
     title: "Schedules",
     description: "Check your schedules here.",
     Icon: CalendarDays,
-    disabled:true
+    disabled: true,
   },
   {
     href: "/misc/calender",
     title: "Academic Calender",
     description: "Check the academic calender here.",
     Icon: CalendarRange,
-    disabled:true
-
+    disabled: true,
   },
   {
     title: "Community",
@@ -82,8 +81,7 @@ const quick_links = [
     title: "Chatbot",
     description: "Chat with the college chatbot.(Beta)",
     Icon: Bot,
-    disabled:true
-
+    disabled: true,
   },
 ];
 
@@ -108,21 +106,23 @@ export default async function Dashboard() {
             <span className="text-primary">{session?.user?.name}</span>
           </h2>
           {/* <Greetings/> */}
-          {session?.user?.other_roles.includes("student") && (<Alert variant="info" className="mt-4" data-aos="fade-right">
-            <RocketIcon className="h-4 w-4" />
-            <AlertTitle>Join the College Ecosystem Project!</AlertTitle>
-            <AlertDescription>
-              We are looking for contributors to help us build the platform.
-              Check out the
-              <Link
-                href="https://github.com/kanakkholwal/college-ecosystem/blob/main/CONTRIBUTING.md"
-                className="underline mx-1"
-              >
-                Contribute
-              </Link>{" "}
-              page for more information.
-            </AlertDescription>
-          </Alert>)}
+          {session?.user?.other_roles.includes("student") && (
+            <Alert variant="info" className="mt-4" data-aos="fade-right">
+              <RocketIcon className="h-4 w-4" />
+              <AlertTitle>Join the College Ecosystem Project!</AlertTitle>
+              <AlertDescription>
+                We are looking for contributors to help us build the platform.
+                Check out the
+                <Link
+                  href="https://github.com/kanakkholwal/college-ecosystem/blob/main/CONTRIBUTING.md"
+                  className="underline mx-1"
+                >
+                  Contribute
+                </Link>{" "}
+                page for more information.
+              </AlertDescription>
+            </Alert>
+          )}
         </div>
 
         <BorderBeam />

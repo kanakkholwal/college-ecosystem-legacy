@@ -1,25 +1,28 @@
-import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import {
   boolean,
   integer,
   pgTable,
   text,
   timestamp,
-  uuid
+  uuid,
 } from "drizzle-orm/pg-core";
 
 import { users } from "./auth-schema";
 
-export const personalAttendanceRecords  = pgTable("personal_attendance_records",{
-    date:timestamp("date", { withTimezone: true }).defaultNow(),
-    isPresent:boolean("is_present").notNull(),
-    userId:text("user_id")
-    .notNull()
-    .references(() => users.id),
-    recordId:uuid("record_id")
-    .notNull()
-    .references(() => personalAttendance.id)
-})
+export const personalAttendanceRecords = pgTable(
+  "personal_attendance_records",
+  {
+    date: timestamp("date", { withTimezone: true }).defaultNow(),
+    isPresent: boolean("is_present").notNull(),
+    userId: text("user_id")
+      .notNull()
+      .references(() => users.id),
+    recordId: uuid("record_id")
+      .notNull()
+      .references(() => personalAttendance.id),
+  }
+);
 
 // Attendance Table Schema
 export const personalAttendance = pgTable("personal_attendance", {
@@ -33,12 +36,18 @@ export const personalAttendance = pgTable("personal_attendance", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow(),
 });
 
-export type InsertPersonalAttendanceRecord = InferInsertModel<typeof personalAttendanceRecords>;
-export type PersonalAttendanceRecord = InferSelectModel<typeof personalAttendanceRecords>;
+export type InsertPersonalAttendanceRecord = InferInsertModel<
+  typeof personalAttendanceRecords
+>;
+export type PersonalAttendanceRecord = InferSelectModel<
+  typeof personalAttendanceRecords
+>;
 
 export type PersonalAttendance = InferSelectModel<typeof personalAttendance>;
-export type InsertPersonalAttendance = InferInsertModel<typeof personalAttendance>;
+export type InsertPersonalAttendance = InferInsertModel<
+  typeof personalAttendance
+>;
 
-export type PersonalAttendanceWithRecords =  PersonalAttendance & {
-  records:PersonalAttendanceRecord[]
-}
+export type PersonalAttendanceWithRecords = PersonalAttendance & {
+  records: PersonalAttendanceRecord[];
+};

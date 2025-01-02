@@ -1,4 +1,4 @@
-import  RoomCard  from "@/components/application/room-card";
+import RoomCard from "@/components/application/room-card";
 import SearchBox from "@/components/application/room-search";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 
 export default async function RoomsPage(props: Props) {
   const searchParams = await props.searchParams;
-  
+
   const rooms = await listAllRoomsWithHistory({
     status: searchParams.currentStatus,
     roomNumber: searchParams.query,
@@ -49,7 +49,7 @@ export default async function RoomsPage(props: Props) {
           data-aos="fade-up"
           data-aos-anchor-placement="center-bottom"
         >
-            <SearchBox />
+          <SearchBox />
         </div>
       </section>
       <ErrorBoundaryWithSuspense
@@ -64,26 +64,25 @@ export default async function RoomsPage(props: Props) {
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {[...Array(8)].map((_, i) => (
               // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                <Skeleton className="w-full h-96" key={i} />
+              <Skeleton className="w-full h-96" key={i} />
             ))}
           </div>
         }
       >
-      <div className="max-w-[1440px] mx-auto grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {rooms.map((room, i) => {
-          return (
-            <RoomCard
-              key={room.id}
-              room={room}
-              style={{
-                animationDelay: `${i * 100}ms`,
-              }}
-            />
-          );
-        })}
-      </div>
+        <div className="max-w-[1440px] mx-auto grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {rooms.map((room, i) => {
+            return (
+              <RoomCard
+                key={room.id}
+                room={room}
+                style={{
+                  animationDelay: `${i * 100}ms`,
+                }}
+              />
+            );
+          })}
+        </div>
       </ErrorBoundaryWithSuspense>
-
     </>
   );
 }

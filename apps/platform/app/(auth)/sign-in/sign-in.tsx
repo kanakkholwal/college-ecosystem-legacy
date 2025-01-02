@@ -3,10 +3,7 @@
 import { authClient } from "src/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
-import {
-  CardDescription,
-  CardTitle
-} from "@/components/ui/card";
+import { CardDescription, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import { BiLockOpenAlt } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";

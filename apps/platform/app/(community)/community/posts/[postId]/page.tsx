@@ -39,7 +39,7 @@ export async function generateMetadata(
 const cache = new Map<string, boolean>();
 
 export default async function CommunityPost(props: Props) {
-  const session = await getSession()
+  const session = await getSession();
   const params = await props.params;
   const post = await getPostById(
     params.postId,

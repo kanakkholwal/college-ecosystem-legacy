@@ -9,7 +9,7 @@ export async function getInfo(): Promise<{
   studentInfo: studentInfoType;
   timetables: TimeTableWithID[];
 }> {
-  const session = await getSession()
+  const session = await getSession();
 
   if (!session?.user.other_roles.includes("cr")) {
     throw new Error("You are not authorized to perform this action");

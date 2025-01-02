@@ -9,7 +9,7 @@ export default async function CommunityLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSession()
+  const session = await getSession();
   if (!session?.user) {
     return redirect("/sign-in");
   }

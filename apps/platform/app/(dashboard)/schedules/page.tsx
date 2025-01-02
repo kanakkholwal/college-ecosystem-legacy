@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 };
 
 export default async function Dashboard() {
-  const session = await getSession()
+  const session = await getSession();
   const timeTables = await getAllTimeTables();
 
   return (

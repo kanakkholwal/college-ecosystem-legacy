@@ -40,7 +40,7 @@ interface Props {
 }
 
 export default async function Dashboard({ params }: Props) {
-  const session = await getSession()
+  const session = await getSession();
   const { pollId } = await params;
   const poll = await getPollById(pollId);
   if (!poll) {

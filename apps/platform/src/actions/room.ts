@@ -1,4 +1,4 @@
-"use server"
+"use server";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { and, desc, eq, like, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
@@ -10,21 +10,17 @@ type RoomInsert = InferInsertModel<typeof rooms>;
 type UsageHistoryInsert = InferInsertModel<typeof roomUsageHistory>;
 type UsageHistorySelect = InferSelectModel<typeof roomUsageHistory>;
 
-
 /* FOR ADMIN USERS */
-
-
 
 // Function to get a room by ID with full history for admin
 
-export async function getRoomByIdForAdmin(
-  roomId: string
-): Promise<
-  RoomSelect & {
-    usageHistory: { username: string; name: string; createdAt: Date }[];
-  } | null
+export async function getRoomByIdForAdmin(roomId: string): Promise<
+  | (RoomSelect & {
+      usageHistory: { username: string; name: string; createdAt: Date }[];
+    })
+  | null
 > {
-  "use server"
+  "use server";
   // Fetch room details
   const room = await db
     .select()
@@ -65,7 +61,7 @@ export async function getRoomsInfo(): Promise<{
   totalAvailableRooms: number;
   totalOccupiedRooms: number;
 }> {
-  "use server"
+  "use server";
   // Count total rooms
   const totalRooms = await db
     .select({ count: sql`count(*)`.mapWith(Number) })
@@ -93,14 +89,18 @@ export async function getRoomsInfo(): Promise<{
   };
 }
 
-
 /* FOR NON-ADMIN USERS */
 
 // Function to list all rooms with their usage history
-export async function listAllRoomsWithHistory(
-  filters?: { status?: string; roomNumber?: string }
-): Promise<(RoomSelect & { latestUsageHistory: { username: string; name: string } | null })[]> {
-  "use server"
+export async function listAllRoomsWithHistory(filters?: {
+  status?: string;
+  roomNumber?: string;
+}): Promise<
+  (RoomSelect & {
+    latestUsageHistory: { username: string; name: string } | null;
+  })[]
+> {
+  "use server";
   // Build the filters for the query
   const conditions = [];
   if (filters?.status) {
@@ -112,7 +112,10 @@ export async function listAllRoomsWithHistory(
 
   // Apply filters if any
   const roomQuery = conditions.length
-    ? db.select().from(rooms).where(and(...conditions))
+    ? db
+        .select()
+        .from(rooms)
+        .where(and(...conditions))
     : db.select().from(rooms);
 
   const filteredRooms = await roomQuery;
@@ -131,15 +134,18 @@ export async function listAllRoomsWithHistory(
     .orderBy(desc(roomUsageHistory.createdAt));
 
   // Map latest usage history by roomId
-  const latestHistoryMap = latestHistories.reduce((acc, history) => {
-    if (history.roomId && !acc[history.roomId]) {
-      acc[history.roomId] = {
-        username: history.username,
-        name: history.name,
-      };
-    }
-    return acc;
-  }, {} as Record<string, { username: string; name: string }>);
+  const latestHistoryMap = latestHistories.reduce(
+    (acc, history) => {
+      if (history.roomId && !acc[history.roomId]) {
+        acc[history.roomId] = {
+          username: history.username,
+          name: history.name,
+        };
+      }
+      return acc;
+    },
+    {} as Record<string, { username: string; name: string }>
+  );
 
   // Populate rooms with latest usage history
   return filteredRooms.map((room) => ({
@@ -148,13 +154,12 @@ export async function listAllRoomsWithHistory(
   }));
 }
 
-
 // Function to create a new room
 export async function createRoom(
   roomData: RoomInsert,
   initialUsageHistory?: UsageHistoryInsert
 ): Promise<RoomSelect> {
-  "use server"
+  "use server";
   const [newRoom] = await db.insert(rooms).values(roomData).returning();
 
   if (!newRoom) {

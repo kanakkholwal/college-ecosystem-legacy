@@ -31,7 +31,7 @@ export default function CreateRoomForm({
     currentStatus: "occupied",
     lastUpdatedTime: new Date(),
     createdAt: new Date(),
-  } );
+  });
   const { roomNumber, roomType, capacity, currentStatus } = state;
 
   return (
@@ -50,7 +50,6 @@ export default function CreateRoomForm({
                 ...state,
                 roomNumber: e.target.value.toUpperCase(),
               });
-              
             }}
           />
         </div>

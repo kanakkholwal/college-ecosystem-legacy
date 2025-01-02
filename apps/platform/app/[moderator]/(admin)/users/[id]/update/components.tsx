@@ -27,7 +27,7 @@ import { updateUser } from "src/lib/users/actions";
 import type { InferSelectModel } from "drizzle-orm";
 import * as z from "zod";
 
-import type {users} from "~/db/schema";
+import type { users } from "~/db/schema";
 
 type UserType = InferSelectModel<typeof users>;
 
@@ -81,7 +81,7 @@ export default function UpdateUserForm({
                 <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
                   {ROLES.map((item, index) => (
                     <FormField
-                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                       key={`${item}_${index}`}
                       control={form.control}
                       name="other_roles"

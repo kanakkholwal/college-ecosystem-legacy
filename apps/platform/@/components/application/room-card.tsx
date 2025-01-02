@@ -16,8 +16,6 @@ import { updateRoom } from "~/actions/room";
 import type { roomUsageHistory, rooms } from "~/db/schema/room";
 import type { Session } from "~/lib/auth-client";
 
-
-
 type RoomSelect = InferSelectModel<typeof rooms>;
 type UsageHistorySelect = InferSelectModel<typeof roomUsageHistory>;
 
@@ -30,15 +28,19 @@ function formatDateAgo(dateString: string): string {
   return `${localTimeString} (${timeAgo})`;
 }
 
-
-
 interface Props extends React.ComponentProps<typeof Card> {
-  room: RoomSelect & { latestUsageHistory: { username: string; name: string } | null }
-  user?: Session["user"]
+  room: RoomSelect & {
+    latestUsageHistory: { username: string; name: string } | null;
+  };
+  user?: Session["user"];
 }
 
 export default function RoomCard({ room, user, ...props }: Props) {
-  const authorized = user ? user?.role === "admin" || user.other_roles?.includes("cr") || user.other_roles?.includes("faculty") : false;
+  const authorized = user
+    ? user?.role === "admin" ||
+      user.other_roles?.includes("cr") ||
+      user.other_roles?.includes("faculty")
+    : false;
   return (
     <Card
       variant="glass"
@@ -48,35 +50,42 @@ export default function RoomCard({ room, user, ...props }: Props) {
       <CardHeader>
         <CardTitle>
           {room.roomNumber}
-          {authorized && <Button
-            size="icon"
-            className="ml-5"
-            onClick={() => {
-              if(!(user && authorized)) return;
-              toast.promise(
-                updateRoom(
-                  room.id,
+          {authorized && (
+            <Button
+              size="icon"
+              className="ml-5"
+              onClick={() => {
+                if (!(user && authorized)) return;
+                toast.promise(
+                  updateRoom(
+                    room.id,
+                    {
+                      currentStatus:
+                        room.currentStatus === "available"
+                          ? "occupied"
+                          : "available",
+                    },
+                    {
+                      userId: user.id,
+                    }
+                  ),
                   {
-                    currentStatus: room.currentStatus === "available" ? "occupied" : "available",
-                  },
-                  {
-                    userId: user.id,
-
+                    loading: `Updating ${room.roomNumber} status...`,
+                    success: `Room ${room.roomNumber} status updated successfully!`,
+                    error: `Failed to update ${room.roomNumber} status!`,
                   }
-                ),
-                {
-                  loading: `Updating ${room.roomNumber} status...`,
-                  success: `Room ${room.roomNumber} status updated successfully!`,
-                  error: `Failed to update ${room.roomNumber} status!`,
-                }
-              );
-            }}
-          >
-            {room.currentStatus === "available" ? "Occupy" : "Release"}
-          </Button>}
+                );
+              }}
+            >
+              {room.currentStatus === "available" ? "Occupy" : "Release"}
+            </Button>
+          )}
         </CardTitle>
         <CardDescription className="font-semibold text-sm text-gray-700">
-          Last updated: {room.lastUpdatedTime ? formatDateAgo(new Date(room.lastUpdatedTime).toISOString()) : "N/A"}
+          Last updated:{" "}
+          {room.lastUpdatedTime
+            ? formatDateAgo(new Date(room.lastUpdatedTime).toISOString())
+            : "N/A"}
           {room.latestUsageHistory ? ` by ${room.latestUsageHistory.name}` : ""}
         </CardDescription>
       </CardHeader>

@@ -5,10 +5,7 @@ import dbConnect from '../utils/dbConnect';
 const BATCH_SIZE = 8;
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-const getUpdatableResults = async (): Promise<string[]> => {
-    const results = await ResultModel.find({ "semesters.length": { $lt: 8 } }).select('rollNo').sort('updatedAt')
-    return results.map(result => result.rollNo);
-}
+
 async function scrapeAndSaveResult(rollNo: string) {
     try {
         const result = await scrapeResult(rollNo);
@@ -43,8 +40,11 @@ const taskData = {
     failedRollNos: [] as string[]
 }
 const updateResult = async (ENV: "production" | "testing") => {
+    try{
     await dbConnect(ENV);
-    const rollArray = await getUpdatableResults();
+    const results = await ResultModel.find({ $expr: { $gt: [{ $size: '$semesters' }, 8] } }).select('rollNo');
+    console.log(results.length)
+    const rollArray = results.map(result => result.rollNo);
     console.log(`Updating ${rollArray.length} results`);
     for (let i = 0; i < rollArray.length; i += BATCH_SIZE) {
 
@@ -77,6 +77,12 @@ const updateResult = async (ENV: "production" | "testing") => {
             console.log('failedRollNos:', taskData.failedRollNos);
         });
     }
+    process.exit(1)
+}catch(e){
+    console.log("Error:",e)
+
+    process.exit(0)
+}
 
 }
 

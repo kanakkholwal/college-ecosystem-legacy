@@ -9,7 +9,7 @@ interface UseAxiosFetchResult<T> {
   isLoading: boolean;
 }
 
-const useAxiosFetch = <T = unknown>(
+const useAxiosFetch = <T = unknown,>(
   url: string,
   config?: AxiosRequestConfig
 ): UseAxiosFetchResult<T> => {

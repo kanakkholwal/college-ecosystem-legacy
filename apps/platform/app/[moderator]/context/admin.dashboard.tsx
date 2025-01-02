@@ -1,13 +1,14 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { CircleDashed, TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
-
-import { users_CountAndGrowth } from "~/actions/dashboard.admin";
+import {
+  users_CountAndGrowth,
+  getUsersByGender,
+  getUsersByRole,
+  getUsersByDepartment,
+  getActiveSessions,
+  accountCreationTrends,
+} from "~/actions/dashboard.admin";
 
 export default async function AdminDashboard() {
   const {
@@ -16,16 +17,21 @@ export default async function AdminDashboard() {
     trend: userTrend,
   } = await users_CountAndGrowth("this_month");
 
+  const usersByGender = await getUsersByGender();
+  const usersByRole = await getUsersByRole();
+  const usersByDepartment = await getUsersByDepartment();
+  const activeSessions = await getActiveSessions();
+  const accountTrends = await accountCreationTrends();
+
   return (
     <div className="space-y-6 my-5">
       <div className="flex justify-between gap-2 w-full flex-col lg:flex-row">
         <div className="w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            {/* Total Users Card */}
             <Card variant="glass">
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">
-                  Total Users
-                </CardTitle>
+                <CardTitle className="text-sm font-medium">Total Users</CardTitle>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -46,13 +52,13 @@ export default async function AdminDashboard() {
                 <h4 className="text-3xl font-bold text-primary">{userCount}</h4>
                 <p className="text-xs text-muted-foreground">
                   <span
-                    className={
-                      `${userTrend === "increase"
+                    className={`${
+                      userTrend === "increase"
                         ? "text-green-500"
                         : userTrend === "decrease"
-                          ? "text-red-500"
-                          : "text-primary/80"} text-base`
-                    }
+                        ? "text-red-500"
+                        : "text-primary/80"
+                    } text-base`}
                   >
                     {userTrend === "increase" ? (
                       <TrendingUp className="inline-block mr-2 size-4" />
@@ -62,15 +68,91 @@ export default async function AdminDashboard() {
                       <CircleDashed className="inline-block mr-2 size-4" />
                     )}
                     {userGrowth?.toFixed(2)}%
-                  </span> from last month
+                  </span>{" "}
+                  from last month
                 </p>
               </CardContent>
             </Card>
 
+            {/* Active Sessions Card */}
+            <Card variant="glass">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Active Sessions</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <h4 className="text-3xl font-bold text-primary">{activeSessions}</h4>
+                <p className="text-xs text-muted-foreground">Currently active sessions</p>
+              </CardContent>
+            </Card>
+
+            {/* Users by Gender Card */}
+            <Card variant="glass">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Users by Gender</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="text-sm text-muted-foreground">
+                  {usersByGender.map(({ gender, count }) => (
+                    <li key={gender}>
+                      {gender}: <span className="font-bold">{count}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Users by Role Card */}
+            <Card variant="glass">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Users by Role</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="text-sm text-muted-foreground">
+                  {usersByRole.map(({ role, count }) => (
+                    <li key={role}>
+                      {role}: <span className="font-bold">{count}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Users by Department Card */}
+            <Card variant="glass">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Users by Department</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="text-sm text-muted-foreground">
+                  {usersByDepartment.map(({ department, count }) => (
+                    <li key={department}>
+                      {department}: <span className="font-bold">{count}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+
+            {/* Account Creation Trends */}
+            <Card variant="glass">
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Account Creation Trends</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="text-sm text-muted-foreground">
+                  {accountTrends.map(({ date, count }) => (
+                    <li key={date}>
+                      {date}: <span className="font-bold">{count}</span>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </div>
+
+        {/* Messages Section */}
         <div className="lg:w-1/3 p-3">
-          {/* messages */}
           <h3 className="text-2xl font-semibold mb-2">Messages</h3>
           <div className="bg-white dark:bg-slate-800 px-4 py-10 rounded-lg text-center w-full">
             <p className="text-slate-600 dark:text-slate-400 mb-3">

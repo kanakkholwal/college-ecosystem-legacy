@@ -3,13 +3,8 @@ import type { Session } from "better-auth/types";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-
 // Paths that do not require authentication
-const unauthorized_paths = [
-  "/sign-in",
-  "/signup",
-  "/forgot-password",
-];
+const unauthorized_paths = ["/sign-in", "/signup", "/forgot-password"];
 
 export async function middleware(request: NextRequest) {
   const { data: session } = await betterFetch<Session>(

@@ -1,10 +1,14 @@
 "use server";
-import type { InferInsertModel, InferSelectModel } from 'drizzle-orm';
+import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { and, count, eq, ilike, or } from "drizzle-orm";
 import { db } from "src/db/connect";
-import { booksAndReferences, courses, previousPapers, chapters } from "src/db/schema";
+import {
+  booksAndReferences,
+  courses,
+  previousPapers,
+  chapters,
+} from "src/db/schema";
 import { getSession } from "src/lib/auth-server";
-
 
 // Infer types for courses
 type CourseSelect = InferSelectModel<typeof courses>;
@@ -19,7 +23,6 @@ type PreviousPaperSelect = InferSelectModel<typeof previousPapers>;
 type PreviousPaperInsert = InferInsertModel<typeof previousPapers>;
 
 type ChapterSelect = InferSelectModel<typeof chapters>;
-
 
 export async function getCourses(
   query: string,
@@ -53,13 +56,12 @@ export async function getCourses(
       .where(whereClause)
       .offset(offset)
       .limit(resultsPerPage),
-    db.select({ count: count(courses.id) }).from(courses).where(whereClause),
     db
-      .selectDistinct({ department: courses.department })
-      .from(courses),
-    db
-      .selectDistinct({ type: courses.type })
-      .from(courses),
+      .select({ count: count(courses.id) })
+      .from(courses)
+      .where(whereClause),
+    db.selectDistinct({ department: courses.department }).from(courses),
+    db.selectDistinct({ type: courses.type }).from(courses),
   ]);
 
   return {
@@ -71,10 +73,10 @@ export async function getCourses(
 }
 
 export async function getCourseByCode(code: string): Promise<{
-  course: CourseSelect,
-  booksAndReferences: BookReferenceSelect[],
-  previousPapers: PreviousPaperSelect[],
-  chapters: ChapterSelect[],
+  course: CourseSelect;
+  booksAndReferences: BookReferenceSelect[];
+  previousPapers: PreviousPaperSelect[];
+  chapters: ChapterSelect[];
 }> {
   // Fetch course details
   const course = await db
@@ -136,8 +138,8 @@ export async function updateCourseByCr(course: Partial<CourseSelect>) {
     !(
       session.user.role === "admin" ||
       session.user.other_roles.includes("cr") ||
-      session.user.other_roles.includes("faculty"
-      ))
+      session.user.other_roles.includes("faculty")
+    )
   ) {
     throw new Error(
       "User not authorized, only CR, faculty, and admin can update courses"
@@ -154,29 +156,37 @@ export async function updateCourseByCr(course: Partial<CourseSelect>) {
 
 export async function updateBooksAndRefPublic(
   courseId: string,
-  booksRef: Pick<BookReferenceInsert,"name"|"link"|"type">
+  booksRef: Pick<BookReferenceInsert, "name" | "link" | "type">
 ) {
-
-  const updatedBooksRefs = await db.insert(booksAndReferences).values([{
-    courseId,
-    name: booksRef.name,
-    link: booksRef.link,
-    type: booksRef.type,
-  }]).returning();
+  const updatedBooksRefs = await db
+    .insert(booksAndReferences)
+    .values([
+      {
+        courseId,
+        name: booksRef.name,
+        link: booksRef.link,
+        type: booksRef.type,
+      },
+    ])
+    .returning();
   return updatedBooksRefs as BookReferenceSelect[];
 }
 
 export async function updatePrevPapersPublic(
   courseId: string,
-  paper: Pick<PreviousPaperInsert,"year" | "exam" | "link">
+  paper: Pick<PreviousPaperInsert, "year" | "exam" | "link">
 ) {
- 
-  const updatedPapers = await db.insert(previousPapers).values([{
-    courseId,
-    year: paper.year,
-    exam: paper.exam,
-    link: paper.link,
-  }]).returning();
+  const updatedPapers = await db
+    .insert(previousPapers)
+    .values([
+      {
+        courseId,
+        year: paper.year,
+        exam: paper.exam,
+        link: paper.link,
+      },
+    ])
+    .returning();
   return updatedPapers as PreviousPaperSelect[];
 }
 
@@ -197,6 +207,9 @@ export async function deleteCourse(id: string) {
     );
   }
 
-  const deletedCourse = await db.delete(courses).where(eq(courses.id, id)).returning();
+  const deletedCourse = await db
+    .delete(courses)
+    .where(eq(courses.id, id))
+    .returning();
   return deletedCourse[0] as CourseSelect;
 }

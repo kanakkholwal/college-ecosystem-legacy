@@ -7,10 +7,10 @@ import Timetable, { type TimeTableWithID } from "src/models/time-table";
 import type { studentInfoType } from "src/types/student";
 
 export async function getInfo(): Promise<{
-  studentInfo: studentInfoType | null
+  studentInfo: studentInfoType | null;
   timetables: TimeTableWithID[];
 }> {
-  const session = await getSession()
+  const session = await getSession();
   if (!session) {
     return Promise.reject("Unauthorized");
   }

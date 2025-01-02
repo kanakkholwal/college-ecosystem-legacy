@@ -17,10 +17,9 @@ type LayoutProps = Readonly<{
 }>;
 
 export default async function Layout({ children }: LayoutProps) {
-
   const session = await auth.api.getSession({
-      headers: await headers(),
-    });
+    headers: await headers(),
+  });
   const authorized = !!session?.user;
 
   if (!authorized) {

@@ -3,8 +3,8 @@ import { revalidatePath } from "next/cache";
 import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import Announcement, {
-    AnnouncementTypeWithId,
-    RawAnnouncementType,
+  AnnouncementTypeWithId,
+  RawAnnouncementType,
 } from "src/models/announcement";
 
 export async function createAnnouncement(

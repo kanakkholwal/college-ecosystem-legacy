@@ -26,9 +26,7 @@ export default async function UpdateUserPage({ params }: PageProps) {
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-gray-700 font-semibold">Name:</span>
-          <span className="font-medium">
-            {user.name} 
-          </span>
+          <span className="font-medium">{user.name}</span>
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-gray-700 font-semibold">Email:</span>
