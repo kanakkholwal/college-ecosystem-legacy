@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { db } from "src/db/connect";
 import {
   booksAndReferences,
@@ -6,7 +7,6 @@ import {
   previousPapers,
 } from "src/db/schema";
 import dbConnect from "src/lib/dbConnect";
-import CourseModel from "src/models/course";
 
 export async function mongoToPgDatabase(
   ENV: "production" | "testing" = "production"
@@ -16,7 +16,8 @@ export async function mongoToPgDatabase(
     await dbConnect(ENV);
 
     // Fetch courses from MongoDB
-    const coursesFromMongo = await CourseModel.find().lean();
+    const coursesFromMongo = await mongoose.model("Course")
+          .find().lean();
 
     // Start a transaction
     await db.transaction(async (trx) => {

@@ -4,7 +4,7 @@ import ResultModel, {
   type IResultType,
   type Semester,
 } from "src/models/result";
-import User, { type UserWithId } from "src/models/user";
+
 import type { studentInfoType } from "src/types/student";
 
 import { getDepartmentCode } from "src/constants/departments";
@@ -19,11 +19,7 @@ export async function getStudentInfo(rollNo: string): Promise<studentInfoType> {
   if (!result) {
     return Promise.reject("Student not found");
   }
-  const _user = await User.findOne({
-    rollNo,
-  }).lean();
-  const user = JSON.parse(JSON.stringify(_user)) as UserWithId;
-
+  
   return Promise.resolve({
     currentSemester: result.semesters.length + 1,
     currentYear: getYear(result.semesters, result.programme),
@@ -34,7 +30,7 @@ export async function getStudentInfo(rollNo: string): Promise<studentInfoType> {
     name: result.name,
     rank: result.rank,
     departmentCode: getDepartmentCode(result.branch),
-    roles: user?.roles || ["student"],
+    roles:  ["student"],
   });
 }
 function getYear(semesters: Semester[], programme: string): number {

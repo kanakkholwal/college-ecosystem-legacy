@@ -2,8 +2,8 @@
 // provider.tsx
 "use client";
 // import useNotificationChecker from "@/hooks/useNotificationChecker";
-import Aos from "aos";
-import "aos/dist/aos.css";
+// import Aos from "aos";
+// import "aos/dist/aos.css";
 import type { ThemeProviderProps } from "next-themes";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import Image from "next/image";
@@ -23,11 +23,11 @@ export function Provider({ children }: { children: React.ReactNode }) {
   // useNotificationChecker();
 
   useEffect(() => {
-    Aos.init({
-      duration: 1000,
-      once: true,
-      easing: "ease-in-out",
-    });
+    // Aos.init({
+    //   duration: 1000,
+    //   once: true,
+    //   easing: "ease-in-out",
+    // });
     try {
       // Perform canvas operations here
       const gradient = new Gradient();
