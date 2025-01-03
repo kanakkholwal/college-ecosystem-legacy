@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { getSession } from "src/lib/auth-server";
+import { getSession } from "~/lib/auth-server";
+
+
 export const metadata: Metadata = {
   title: `Student Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
   description: "Student Dashboard to view your profile and other details",

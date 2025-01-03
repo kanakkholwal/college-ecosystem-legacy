@@ -36,7 +36,7 @@ export default function Footer() {
             <Link
               href={link.href}
               target="_blank"
-              key={`socials_${index}`}
+              key={link.href}
               className="hover:text-primary hover:-translate-y-1 ease-in duration-300 flex justify-center items-center h-16 icon"
             >
               <link.icon className="w-5 h-5" />

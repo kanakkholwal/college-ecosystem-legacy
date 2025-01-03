@@ -86,6 +86,7 @@ export default async function SignInPage({ searchParams }: Props) {
               <TabsContent value="reset-password">
                 <ResetPassword />
               </TabsContent>
+              {/* biome-ignore lint/style/useSelfClosingElements: <explanation> */}
               <TabsContent value="verify-email"></TabsContent>
             </CardContent>
           </Tabs>

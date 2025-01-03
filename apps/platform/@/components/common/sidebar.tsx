@@ -69,7 +69,7 @@ export function SidebarContent({
       <div className="grid gap-3 mt-5 w-full">
         {sidebarLinks?.map((link, index) => (
           <SideLink
-            key={index}
+            key={link.href}
             link={link}
             style={{
               animationDelay: `${index * 100}ms`,

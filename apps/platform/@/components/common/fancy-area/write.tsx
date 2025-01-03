@@ -9,8 +9,9 @@ import {
 } from "@/components/ui/sheet";
 import { BsMarkdown } from "react-icons/bs";
 
-import { Textarea, TextareaProps } from "@/components/ui/textarea";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { Textarea, type TextareaProps } from "@/components/ui/textarea";
+import type React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 // import {
 //   Command,
 //   CommandGroup,
@@ -245,7 +246,7 @@ export function Write({ textValue, setTextValue, disabled, ...props }: Props) {
 
       <Sheet>
         <SheetTrigger asChild>
-          <button className="text-sm text-muted-foreground prose-none mt-1">
+          <button type="button" className="text-sm text-muted-foreground prose-none mt-1">
             <BsMarkdown className="text-gray-700 h-4 w-5 mr-2 inline-block" />
             Supports markdown.
           </button>
@@ -259,9 +260,9 @@ export function Write({ textValue, setTextValue, disabled, ...props }: Props) {
             </SheetDescription>
           </SheetHeader>
           <div className="grid gap-1 w-full mt-5">
-            {listItems.map((item, index) => {
+            {listItems.map((item) => {
               return (
-                <div key={index} className="flex items-center gap-2">
+                <div key={item.title} className="flex items-center gap-2">
                   <item.icon className="text-gray-600 h-4  flex-shrink-0" />
                   <h4 className="text-md font-semibold text-gray-700">
                     {item.title}
@@ -276,30 +277,7 @@ export function Write({ textValue, setTextValue, disabled, ...props }: Props) {
         </SheetContent>
       </Sheet>
 
-      {/* <Command
-        ref={dropdownRef}
-        className={cn("max-w-min absolute hidden h-auto max-h-32 border border-popover shadow overflow-y-scroll")}
-      >
-        <div className="hidden">
-          <CommandInput ref={inputRef} value={commandValue} />
-        </div>
-        <CommandGroup className="overflow-auto max-w-min">
-          {people.map((p) => {
-            return (
-              <CommandItem
-                key={p.username}
-                value={p.username}
-                onSelect={onCommandSelect}
-              >
-                {p.username}
-              </CommandItem>
-            );
-          })}
-        </CommandGroup>
-      </Command> */}
+    
     </div>
   );
-}
-{
-  /* REMINDER: className="hidden" won't hide the SearchIcon and border */
 }

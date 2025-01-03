@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 import { getDepartmentName } from "src/constants/departments";
-import { TimeTableWithID } from "src/models/time-table";
+import type{ TimeTableWithID } from "src/models/time-table";
 import { Event } from "./components";
 import { daysMap, timeMap } from "./constants";
 
@@ -76,7 +76,8 @@ export default async function TimeTableViewer({
               </TableCell>
               {Array.from(daysMap.entries()).map((_, dayIndex) => (
                 <TableCell
-                  key={`${index}-${dayIndex}`}
+                  key={`${index}-${// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+dayIndex}`}
                   className={cn(
                     "border-x text-center ",
                     currentDayIndex === dayIndex
@@ -89,7 +90,8 @@ export default async function TimeTableViewer({
                   ]?.events.map((event, eventIndex) => (
                     <Event
                       event={event}
-                      key={`${index}-${dayIndex}-event-${eventIndex}`}
+                      key={`${index}-${dayIndex}-event-${// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+eventIndex}`}
                     />
                   ))}
                   {timetableData.schedule[dayIndex]?.timeSlots[index]?.events

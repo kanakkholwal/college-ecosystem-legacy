@@ -1,5 +1,5 @@
 import { atom } from "jotai";
-import { RawTimetable, TimeTableWithID } from "src/models/time-table";
+import type { RawTimetable, TimeTableWithID } from "src/models/time-table";
 import { daysMap, timeMap } from "./constants";
 
 export type FormattedTimetable = TimeTableWithID | RawTimetable;

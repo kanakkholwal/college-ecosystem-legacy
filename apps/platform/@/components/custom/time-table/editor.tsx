@@ -20,7 +20,7 @@ import React, { useRef } from "react";
 import toast from "react-hot-toast";
 import { getDepartmentName } from "src/constants/departments";
 import { createTimeTable, updateTimeTable } from "src/lib/time-table/actions";
-import { RawTimetable, TimeTableWithID } from "src/models/time-table";
+import type { RawTimetable, TimeTableWithID } from "src/models/time-table";
 import { EditTimetableDialog, Event, TimeTableMetaData } from "./components";
 import { daysMap, rawTimetableData, timeMap } from "./constants";
 import {
@@ -66,7 +66,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
     if (mode === "edit") {
       const data = timetableData as TimeTableWithID;
       toast
-        .promise(updateTimeTable(data._id!, data), {
+        .promise(updateTimeTable(data._id, data), {
           loading: "Saving Timetable",
           success: "Timetable saved successfully",
           error: "Failed to save timetable",
@@ -169,7 +169,8 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
               </TableCell>
               {Array.from(daysMap.entries()).map((_, dayIndex) => (
                 <TableCell
-                  key={`${index}-${dayIndex}`}
+                  key={`${index}-${// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+dayIndex}`}
                   className={cn(
                     "border-x text-center",
                     "focus-within:border focus-within:border-primary",
@@ -177,6 +178,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
                       ? "text-primary bg-primary/10"
                       : ""
                   )}
+                  // biome-ignore lint/a11y/useSemanticElements: <explanation>
                   role="button"
                   tabIndex={0}
                   aria-disabled={disabled ? "true" : "false"}
@@ -194,7 +196,8 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
                   ]?.events.map((event, eventIndex) => (
                     <Event
                       event={event}
-                      key={`${index}-${dayIndex}-event-${eventIndex}`}
+                      key={`${index}-${dayIndex}-event-${// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+eventIndex}`}
                     />
                   ))}
                   {timetableData.schedule[dayIndex]?.timeSlots[index]?.events

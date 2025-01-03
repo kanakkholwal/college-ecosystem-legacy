@@ -1,6 +1,6 @@
 import MarkdownView from "@/components/common/markdown/view";
 import { formatDistanceToNow } from "date-fns";
-import { AnnouncementTypeWithId } from "src/models/announcement";
+import type { AnnouncementTypeWithId } from "src/models/announcement";
 
 export default function AnnouncementsList({
   announcements,

@@ -25,7 +25,7 @@ import toast from "react-hot-toast";
 import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "src/constants/community";
 import { createPost } from "src/lib/community/actions";
 import { rawCommunityPostSchema } from "src/models/community";
-import { z } from "zod";
+import type { z } from "zod";
 
 export default function CreateCommunityPost() {
   const form = useForm<z.infer<typeof rawCommunityPostSchema>>({
@@ -42,7 +42,7 @@ export default function CreateCommunityPost() {
     console.log(values);
     toast.promise(createPost(values), {
       loading: "Creating Post",
-      success: (data: any) => {
+      success: () => {
         form.reset({
           title: "",
           content: "",
@@ -132,8 +132,7 @@ export default function CreateCommunityPost() {
           )}
         />
         {form.watch("category").toLowerCase() === "departmental" && (
-          <>
-            <FormField
+          <FormField
               control={form.control}
               name="subCategory"
               render={({ field }) => (
@@ -166,7 +165,6 @@ export default function CreateCommunityPost() {
                 </FormItem>
               )}
             />
-          </>
         )}
         <Button type="submit" width="md" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? "Publishing..." : "Publish Post"}

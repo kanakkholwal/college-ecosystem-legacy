@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import NotFoundImg from "./404.svg";
 
-export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Not Authorized | College Platform",
