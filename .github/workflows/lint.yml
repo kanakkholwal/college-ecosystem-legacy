@@ -66,13 +66,15 @@ jobs:
           fi
 
       - name: 🚀 Run Turbo lint selectively
-        run: |
-          if [ "${{ steps.changed.outputs.platform_changed }}" = "true" ]; then
-            npx turbo run lint --cache-dir=.turbo --filter=platform
-          fi
-          if [ "${{ steps.changed.outputs.website_changed }}" = "true" ]; then
-            npx turbo run lint --cache-dir=.turbo --filter=website
-          fi
-          if [ "${{ steps.changed.outputs.server_changed }}" = "true" ]; then
-            npx turbo run lint --cache-dir=.turbo --filter=node-server
-          fi
+        run: 
+          npx turbo run lint --cache-dir=.turbo
+          # |
+          # if [ "${{ steps.changed.outputs.platform_changed }}" = "true" ]; then
+          #   npx turbo run lint --cache-dir=.turbo --filter=platform
+          # fi
+          # if [ "${{ steps.changed.outputs.website_changed }}" = "true" ]; then
+          #   npx turbo run lint --cache-dir=.turbo --filter=website
+          # fi
+          # if [ "${{ steps.changed.outputs.server_changed }}" = "true" ]; then
+          #   npx turbo run lint --cache-dir=.turbo --filter=node-server
+          # fi
