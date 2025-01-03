@@ -19,14 +19,13 @@ import {
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { InferSelectModel } from "drizzle-orm";
 import { useForm } from "react-hook-form";
-import toast from "react-hot-toast";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
 import { ROLES } from "src/constants/user";
-import { updateUser } from "src/lib/users/actions";
-import type { InferSelectModel } from "drizzle-orm";
 import * as z from "zod";
 
+// import toast from "react-hot-toast";
 import type { users } from "~/db/schema";
 
 type UserType = InferSelectModel<typeof users>;
@@ -55,11 +54,11 @@ export default function UpdateUserForm({
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data);
-    toast.promise(updateUser(currentUser.id, data), {
-      loading: "Updating user...",
-      success: "User updated successfully",
-      error: "Failed to update user",
-    });
+    // toast.promise(updateUser(currentUser.id), {
+    //   loading: "Updating user...",
+    //   success: "User updated successfully",
+    //   error: "Failed to update user",
+    // });
   };
 
   //TODO: Add roles field

@@ -11,6 +11,7 @@ The following is a set of guidelines for contributing to the College Ecosystem p
   - [Suggesting Enhancements](#suggesting-enhancements)
   - [Pull Requests](#pull-requests)
   - [Design Icons Or Layouts](#design-icons-and-layouts)
+  - [Help Needed](#help-needed)
 - [Development Setup](#development-setup)
 - [Project Structure](#project-structure)
 - [Coding Guidelines](#coding-guidelines)
@@ -53,6 +54,11 @@ To contribute, designers can:
 1. Fork the repository and create a branch for their design changes.
 2. Add or update design files in the appropriate directory.
 3. Submit a pull request with a description of the changes and any relevant design files or mockups.
+
+### Help Needed
+
+- **AI Chatbot**: Create a chatbot with open source LLM or free LLM api (that don't use ou data to train) to help question-answer about platform and anything abou the college.
+- **Create Icons**:Create or design a set of Svg icons for the platform with consistent stroke and style
 
 ### Pull Requests
 

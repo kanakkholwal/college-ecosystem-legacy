@@ -1,5 +1,4 @@
 import { loadEnvConfig } from "@next/env";
-import { MongoClient } from "mongodb";
 import mongoose, { type ConnectOptions, type Mongoose } from "mongoose";
 
 const projectDir = process.cwd();
@@ -58,10 +57,6 @@ async function dbConnect(dbName: string = defaultDb): Promise<Mongoose> {
   return cached.conn ? cached.conn : await cached.promise;
 }
 
-const client = new MongoClient(
-  `${MONGODB_URI} + "?retryWrites=true&w=majority&appName=nith"`
-);
 
-export const db = client.db(defaultDb);
 
 export default dbConnect;

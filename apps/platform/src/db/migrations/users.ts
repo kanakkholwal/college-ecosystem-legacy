@@ -3,7 +3,7 @@ import { db } from "src/db/connect";
 import { users } from "src/db/schema";
 import { auth } from "src/lib/auth";
 import dbConnect from "src/lib/dbConnect";
-import UserModel from "src/models/user";
+import mongoose from "mongoose";
 
 // import { loadEnvConfig } from "@next/env";
 // const projectDir = process.cwd();
@@ -18,7 +18,8 @@ export async function mongoToPgDatabase(
     console.log("MongoDB connected successfully!");
 
     /** MIGRATE USERS */
-    const mongoUsers = await UserModel.find().sort({ createdAt: 1 }).lean();
+    const mongoUsers = await mongoose.model("User")
+      .find().sort({ createdAt: 1 }).lean();
     console.log("mongoUsers:", mongoUsers.length);
     if (mongoUsers.length === 0) {
       console.log("No users to migrate!");

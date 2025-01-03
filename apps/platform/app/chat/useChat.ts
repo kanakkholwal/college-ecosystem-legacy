@@ -1,8 +1,6 @@
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useRef, useState } from "react";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
+
 import type{ Message } from "./types";
 
 interface ChatMessage extends Message {}
@@ -12,14 +10,10 @@ interface UseChatResult {
   input: string;
   isLoading: boolean;
   error: string | null;
-  listening: boolean;
   handleInputChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   handleSubmit: (
     e: React.FormEvent<HTMLFormElement | HTMLTextAreaElement>
   ) => void;
-  startListening: () => void;
-  stopListening: () => void;
-  browserSupportsSpeechRecognition: boolean;
   scrollRef: React.RefObject<HTMLDivElement | null>;
 }
 
@@ -31,18 +25,8 @@ export function useChat(): UseChatResult {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const abortControllerRef = useRef<AbortController | null>(null);
-  const {
-    transcript,
-    listening,
-    resetTranscript,
-    browserSupportsSpeechRecognition,
-  } = useSpeechRecognition();
+  
 
-  useEffect(() => {
-    if (transcript) {
-      setInput((prevInput) => `${prevInput} ${transcript}`);
-    }
-  }, [transcript]);
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -77,7 +61,6 @@ export function useChat(): UseChatResult {
       setMessages((prev) => [...prev, assistantMessage]);
       scrollRef.current?.scrollIntoView({ behavior: "smooth" });
       setInput("");
-      resetTranscript();
 
       // Create a new AbortController for this request
       abortControllerRef.current = new AbortController();
@@ -117,29 +100,18 @@ export function useChat(): UseChatResult {
         abortControllerRef.current = null;
       }
     },
-    [input, isLoading, resetTranscript]
+    [input, isLoading]
   );
 
-  const startListening = useCallback(() => {
-    SpeechRecognition.startListening({ continuous: true });
-  }, []);
 
-  const stopListening = useCallback(() => {
-    SpeechRecognition.stopListening();
-    resetTranscript();
-  }, [resetTranscript]);
 
   return {
     messages,
     input,
     isLoading,
     error,
-    listening,
     handleInputChange,
     handleSubmit,
-    startListening,
-    stopListening,
-    browserSupportsSpeechRecognition,
     scrollRef,
   };
 }

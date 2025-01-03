@@ -1,4 +1,3 @@
-import { betterFetch } from "@better-fetch/fetch";
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError } from "better-auth/api";
@@ -9,11 +8,11 @@ import {
   getDepartmentByRollNo,
   isValidRollNumber,
 } from "~/constants/departments";
-import { FACULTY_LIST } from "~/constants/faculty";
-import { db } from "~/db/connect"; // your drizzle instance
+import { db } from "~/db/connect"; // drizzle instance
 import { accounts, sessions, users, verifications } from "~/db/schema";
 import { resend } from "~/emails/helper";
 import type { ResultType } from "~/types/result";
+import { serverFetch } from "./server-fetch";
 
 type getUserInfoReturnType = {
   email: string;
@@ -36,16 +35,15 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
 
   if (isStudent) {
     console.log("Student");
-    const { data: response } = await betterFetch<{
+    const { data: response } = await serverFetch<{
       message: string;
       data: ResultType | null;
       error?: string | null;
-    }>(`${process.env.BASE_SERVER_URL}/api/results/${username}`, {
+    }>("/api/results/:rollNo", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-IDENTITY-KEY": process.env.SERVER_IDENTITY,
-      },
+      params: {
+        rollNo: username
+      }
     });
     console.log(response?.data ? "has result" : "No result");
 
@@ -64,15 +62,14 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       username,
     };
   }
-  const { data: response } = await betterFetch<{
+  const { data: response } = await serverFetch<{
     message: string;
     data: FacultyType | null;
     error?: string | null;
-  }>(`${process.env.BASE_SERVER_URL}/api/faculties/search/${email}`, {
+  }>("/api/faculties/search/:email", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-IDENTITY-KEY": process.env.SERVER_IDENTITY,
+    params: {
+      email,
     },
   });
   const faculty = response?.data;

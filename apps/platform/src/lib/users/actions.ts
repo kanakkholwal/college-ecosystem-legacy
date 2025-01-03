@@ -1,11 +1,7 @@
 "use server";
-import { revalidatePath } from "next/cache";
 import { getSession } from "src/lib/auth-server";
-import dbConnect from "src/lib/dbConnect";
-import ResultModel from "src/models/result";
-import UserModel, { type UserWithId } from "src/models/user";
 
-export async function updateUser(userId: string, data: Partial<UserWithId>) {
+export async function updateUser(userId: string) {
   "use server";
   try {
     const session = await getSession();
@@ -21,16 +17,10 @@ export async function updateUser(userId: string, data: Partial<UserWithId>) {
     };
   }
 }
-export async function getUser(userId: string): Promise<UserWithId | null> {
+export async function getUser(userId: string){
   try {
-    await dbConnect();
-    const user = await UserModel.findOne({
-      $or: [{ rollNo: userId }, { _id: userId }],
-    });
-    if (!user) {
-      return null;
-    }
-    return Promise.resolve(JSON.parse(JSON.stringify(user)));
+    
+    return Promise.resolve(JSON.parse(JSON.stringify({})));
   } catch (error) {
     console.log(error);
     return Promise.resolve(null);

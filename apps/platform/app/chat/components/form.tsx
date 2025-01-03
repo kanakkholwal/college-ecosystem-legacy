@@ -19,12 +19,8 @@ export default function Form() {
     input,
     isLoading,
     error,
-    listening,
     handleInputChange,
     handleSubmit,
-    startListening,
-    stopListening,
-    browserSupportsSpeechRecognition,
     scrollRef,
   } = useChat();
 
@@ -97,42 +93,7 @@ export default function Form() {
           }}
         />
         <div className="flex items-center gap-1">
-          <ConditionalRender condition={browserSupportsSpeechRecognition}>
-            <ResponsiveDialog
-              title="Speech To Text"
-              description="Click the microphone button to start speaking."
-              btnProps={{
-                variant: "ghost",
-                size: "icon_sm",
-                type: "button",
-                onClick: listening ? stopListening : startListening,
-                disabled: isLoading,
-                children: <Mic />,
-              }}
-              onOpenChange={(open) => stopListening()}
-              className="flex flex-col justify-center items-center gap-3"
-            >
-              <Button
-                variant={listening ? "default_light" : "ghost"}
-                size="lg"
-                type="button"
-                className="w-40 h-40 mx-auto"
-                rounded="full"
-                disabled={isLoading}
-                onClick={listening ? stopListening : startListening}
-              >
-                <Mic />
-              </Button>
-              <p
-                className={cn(
-                  "text-center font-semibold text-gray-700",
-                  listening ? "animate-pulse text-primary" : ""
-                )}
-              >
-                {listening ? "Stop" : "Start"} Listening{listening ? "..." : ""}
-              </p>
-            </ResponsiveDialog>
-          </ConditionalRender>
+
           <Button
             type="submit"
             size="sm"
