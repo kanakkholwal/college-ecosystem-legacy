@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Link from "next/link";
-import { ResultTypeWithId } from "src/models/result";
+import type { ResultTypeWithId } from "src/models/result";
 
 export function ResultCard({
   result,
@@ -53,7 +53,7 @@ export function ResultCard({
         </div>
       </CardContent>
       <CardFooter className="justify-between">
-        <Button size="sm">{result.semesters?.at(-1)?.cgpi ?? ""}</Button>
+        <Button size="sm">{result.semesters?.at(-1)?.cgpi ?? "0"}</Button>
         <Button size="sm" variant="default_light" asChild>
           <Link href={`/results/${result.rollNo}`}>View Result</Link>
         </Button>
