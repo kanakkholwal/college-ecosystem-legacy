@@ -2,7 +2,7 @@
 import type { InferSelectModel } from "drizzle-orm";
 import { and, asc, desc, eq, like, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
-import { users } from "~/db/schema/auth-schema";
+import { users,sessions,accounts } from "~/db/schema/auth-schema";
 
 export async function users_CountAndGrowth(timeInterval: string): Promise<{
   count: number;
@@ -57,11 +57,11 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
     })
     .from(users)
     .where(sql`"createdAt" >= ${prevStartTime} AND "createdAt" < ${startTime}`);
-  const prevCount = prevCountQuery[0]?.count ?? 0;
+  const prevCount = prevCountQuery[0]?.count || 0;
 
   // Calculate growth percentage
   const growth =
-    prevCount === 0 ? 100 : ((currentCount - prevCount) / prevCount ?? 0) * 100;
+    prevCount === 0 ? 100 : ((currentCount - prevCount) / prevCount) * 100;
 
   // Determine trend
   let trend: "increase" | "decrease" | "stable" = "stable";
@@ -209,7 +209,7 @@ export async function getSessionsByUserAgent(): Promise<
 > {
   const result = await db
     .select({
-      userAgent: sessions.userAgent,
+      userAgent: sql<string>`COALESCE(${sessions.userAgent}, 'Unknown')`,
       count: sql<number>`COUNT(*)`,
     })
     .from(sessions)
@@ -228,19 +228,7 @@ export async function getTotalAccounts(): Promise<number> {
 }
 
 
-// Account creation trends over time
-export async function accountCreationTrends(): Promise<{ date: string; count: number }[]> {
-  const result = await db
-    .select({
-      date: sql`DATE_TRUNC('day', "createdAt")`.as("date"),
-      count: sql<number>`COUNT(*)`,
-    })
-    .from(users)
-    .groupBy(sql`DATE_TRUNC('day', "createdAt")`)
-    .orderBy(desc(sql`DATE_TRUNC('day', "createdAt")`))
-    .execute();
-  return result;
-}
+
 
 // Users with the most sessions
 export async function mostSessionsUsers(): Promise<{ userId: string; sessionCount: number }[]> {
@@ -292,7 +280,7 @@ export async function sessionActivity(): Promise<{
 export async function userGrowthOverTime(): Promise<{ date: string; count: number }[]> {
   const result = await db
     .select({
-      date: sql`DATE_TRUNC('month', "createdAt")`.as("date"),
+      date: sql<string>`DATE_TRUNC('month', "createdAt")`.as("date"),
       count: sql<number>`COUNT(*)`,
     })
     .from(users)

@@ -128,7 +128,7 @@ export default function CreateRoomForm({
             e.preventDefault();
             toast.promise(onSubmit(state), {
               loading: "Saving...",
-              success: (data) => `Room ${data.roomNumber} created successfully`,
+              success: (data:{roomNumber:string | number}) => `Room ${data.roomNumber} created successfully`,
               error: "Could not create room",
             });
           }}

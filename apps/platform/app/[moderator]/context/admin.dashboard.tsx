@@ -7,7 +7,6 @@ import {
   getUsersByRole,
   getUsersByDepartment,
   getActiveSessions,
-  accountCreationTrends,
 } from "~/actions/dashboard.admin";
 
 export default async function AdminDashboard() {
@@ -21,7 +20,6 @@ export default async function AdminDashboard() {
   const usersByRole = await getUsersByRole();
   const usersByDepartment = await getUsersByDepartment();
   const activeSessions = await getActiveSessions();
-  const accountTrends = await accountCreationTrends();
 
   return (
     <div className="space-y-6 my-5">
@@ -134,20 +132,7 @@ export default async function AdminDashboard() {
             </Card>
 
             {/* Account Creation Trends */}
-            <Card variant="glass">
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Account Creation Trends</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="text-sm text-muted-foreground">
-                  {accountTrends.map(({ date, count }) => (
-                    <li key={date}>
-                      {date}: <span className="font-bold">{count}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
+          
           </div>
         </div>
 

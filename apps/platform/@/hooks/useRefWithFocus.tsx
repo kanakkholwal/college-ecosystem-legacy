@@ -10,5 +10,5 @@ export const useRefWithFocus = <T extends HTMLElement>(): RefObject<T> => {
     }
   }, [ref]);
 
-  return ref;
+  return ref as RefObject<T>;
 };

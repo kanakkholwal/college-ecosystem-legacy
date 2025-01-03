@@ -8,6 +8,12 @@ const PORT = Number.parseInt(process.env.PORT || "") || 8080;
 // Create HTTP server
 const server = createServer(app);
 
+const CORS_ORIGINS = ['nith.eu.org', "app.nith.eu.org"];
+
+const SERVER_IDENTITY = process.env.SERVER_IDENTITY
+if (!SERVER_IDENTITY)
+    throw new Error("SERVER_IDENTITY is required in ENV")
+
 
 
 // Initialize socket servers
@@ -17,10 +23,17 @@ for (const socket_server in socketServers) {
     const io = new SocketIOServer(server, {
         path,
         allowRequest: (req, callback) => {
-            const CORS_ORIGINS = ["nith.eu.org", "app.nith.eu.org"];
             const origin = req.headers.origin || "";
+            const identityKey = req.headers['X-IDENTITY-KEY'] || '';
             if (!origin) {
                 callback(null, false);
+                if (!origin) {
+                    // Enforce SERVER_IDENTITY for server-to-server API calls
+                    if (identityKey === SERVER_IDENTITY) {
+                        return callback(null, true);
+                    }
+                    return callback('Missing or invalid SERVER_IDENTITY', false);
+                }
             } else if (
                 (process.env.NODE_ENV === 'production' && CORS_ORIGINS.some(o => origin.endsWith(o))) ||
                 (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost:'))

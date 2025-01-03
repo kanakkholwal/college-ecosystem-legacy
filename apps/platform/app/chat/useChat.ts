@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
-import { Message } from "./types";
+import type{ Message } from "./types";
 
 interface ChatMessage extends Message {}
 
@@ -20,7 +20,7 @@ interface UseChatResult {
   startListening: () => void;
   stopListening: () => void;
   browserSupportsSpeechRecognition: boolean;
-  scrollRef: React.RefObject<HTMLDivElement>;
+  scrollRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export function useChat(): UseChatResult {
@@ -28,7 +28,7 @@ export function useChat(): UseChatResult {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   const abortControllerRef = useRef<AbortController | null>(null);
   const {
@@ -40,7 +40,7 @@ export function useChat(): UseChatResult {
 
   useEffect(() => {
     if (transcript) {
-      setInput((prevInput) => prevInput + " " + transcript);
+      setInput((prevInput) => `${prevInput} ${transcript}`);
     }
   }, [transcript]);
 
@@ -104,6 +104,7 @@ export function useChat(): UseChatResult {
           return prev;
         });
         scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       } catch (err: any) {
         if (err.name === "AbortError") {
           setError("Request was cancelled");

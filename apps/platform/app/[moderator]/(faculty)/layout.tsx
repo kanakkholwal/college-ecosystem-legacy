@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { getSession } from "src/lib/auth-server";
 
 export const metadata: Metadata = {
-  title: "Admin Dashboard",
+  title: "Faculty Dashboard",
   description: "Admin Dashboard ",
 };
 
