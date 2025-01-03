@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 // provider.tsx
 "use client";
-// import useNotificationChecker from "@/hooks/useNotificationChecker";
 // import Aos from "aos";
 // import "aos/dist/aos.css";
 // import type { ThemeProviderProps } from "next-themes";
@@ -20,7 +19,6 @@ import fallbackImg from "./fallback.png";
 
 export function Provider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState<boolean>(true);
-  // useNotificationChecker();
 
   useEffect(() => {
     // Aos.init({
