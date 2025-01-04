@@ -12,3 +12,11 @@ export const serverFetch = createFetch({
     },
 })
 
+export const mailFetch = createFetch({
+    baseURL: process.env.BASE_MAIL_SERVER_URL,
+    headers: {
+        "Content-Type": "application/json",
+        "X-IDENTITY-KEY": process.env.SERVER_IDENTITY,
+    },
+})
+

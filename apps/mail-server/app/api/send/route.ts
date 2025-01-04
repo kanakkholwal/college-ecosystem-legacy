@@ -22,7 +22,11 @@ export async function POST(request: NextRequest) {
     const identityKey = request.headers.get("X-IDENTITY-KEY") || "";
     if (identityKey !== process.env.SERVER_IDENTITY) {
       return NextResponse.json(
-        { error: "Missing or invalid SERVER_IDENTITY" },
+        { 
+          error: "Missing or invalid SERVER_IDENTITY",
+          data:null
+
+         },
         { status: 403 }
       );
     }
@@ -31,7 +35,10 @@ export async function POST(request: NextRequest) {
 
     const res = payloadSchema.safeParse(body);
     if (!res.success) {
-      return NextResponse.json({ error: res.error }, { status: 400 });
+      return NextResponse.json({ 
+        error: res.error,
+        data:null
+       }, { status: 400 });
     }
     const { template_key, targets, subject, payload } = res.data;
 
@@ -47,10 +54,10 @@ export async function POST(request: NextRequest) {
       }
     );
     if (response.rejected.length > 0) {
-      return NextResponse.json({ error: response.rejected }, { status: 400 });
+      return NextResponse.json({ error: response.rejected,data:null }, { status: 400 });
     }
-    return NextResponse.json({ data: response.accepted });
+    return NextResponse.json({ data: response.accepted,error:null }, { status: 200 });
   } catch (error) {
-    return Response.json({ error }, { status: 500 });
+    return Response.json({ error,data:null }, { status: 500 });
   }
 }

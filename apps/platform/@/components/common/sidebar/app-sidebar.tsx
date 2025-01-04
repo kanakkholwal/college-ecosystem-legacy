@@ -28,6 +28,7 @@ export type rawLinkType = {
   items?: {
     title: string;
     path: string;
+
   }[];
 };
 

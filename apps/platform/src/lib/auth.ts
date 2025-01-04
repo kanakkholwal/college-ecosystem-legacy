@@ -10,9 +10,8 @@ import {
 } from "~/constants/departments";
 import { db } from "~/db/connect"; // drizzle instance
 import { accounts, sessions, users, verifications } from "~/db/schema";
-import { resend } from "~/emails/helper";
 import type { ResultType } from "~/types/result";
-import { serverFetch } from "./server-fetch";
+import { mailFetch, serverFetch } from "./server-fetch";
 
 type getUserInfoReturnType = {
   email: string;
@@ -135,39 +134,72 @@ export const auth = betterAuth({
     autoSignIn: true,
     sendResetPassword: async ({ user, url, token }, request) => {
       const verification_url = `${process.env.BASE_URL}/sign-in?tab=reset-password&token=${token}`;
-
-      await resend.emails
-        .send({
-          from: process.env.RESEND_EMAIL_FROM,
-          to: user.email,
-          subject: "Reset Password",
-          text: `Click the link to reset your password: ${verification_url}`,
-        })
-        .then(() => {
-          console.log("Reset Password Email sent");
-        })
-        .catch((err) => {
-          console.error(err);
+      try {
+        const response = await mailFetch<{
+          data: string[] | null;
+          error?: string | null | object;
+        }>("/api/send", {
+          method: "POST",
+          body: JSON.stringify({
+            template_key: "reset-password",
+            targets: [user.email],
+            subject: "Reset Password",
+            payload: {
+              name: user.name,
+              email: user.email,
+              reset_link: verification_url,
+            },
+          })
         });
+        if(response.error) {
+          throw new APIError("INTERNAL_SERVER_ERROR", {
+            message: "Error sending email",
+          });
+        }
+        console.log(response);
+      } catch (err) {
+        console.error(err);
+        throw new APIError("INTERNAL_SERVER_ERROR", {
+          message: "Error sending email",
+        });
+      }
+
     },
   },
   emailVerification: {
     sendOnSignUp: true,
     sendVerificationEmail: async ({ user, url, token }, request) => {
       const verification_url = `${process.env.BASE_URL}/sign-in?tab=verify-email&token=${token}`;
-      await resend.emails
-        .send({
-          from: process.env.RESEND_EMAIL_FROM,
-          to: user.email,
-          subject: "Verify Email",
-          text: `Click the link to verify your email: ${verification_url}`,
-        })
-        .then(() => {
-          console.log("Verification Email sent");
-        })
-        .catch((err) => {
-          console.error(err);
+      try {
+        const response = await mailFetch<{
+          data: string[] | null;
+          error?: string | null | object;
+        }>("/api/send", {
+          method: "POST",
+          body: JSON.stringify({
+            template_key: "reset-password",
+            targets: [user.email],
+            subject: "Reset Password",
+            payload: {
+              name: user.name,
+              email: user.email,
+              reset_link: verification_url,
+            },
+          })
         });
+        if(response.error) {
+          throw new APIError("INTERNAL_SERVER_ERROR", {
+            message: "Error sending email",
+          });
+        }
+        console.log(response);
+      } catch (err) {
+        console.error(err);
+        throw new APIError("INTERNAL_SERVER_ERROR", {
+          message: "Error sending email",
+        });
+      }
+
     },
   },
   socialProviders: {

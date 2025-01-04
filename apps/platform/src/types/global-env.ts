@@ -9,6 +9,7 @@ const envVariables = z.object({
   BETTER_AUTH_URL: z.string(),
 
   BASE_URL: z.string().url(),
+  BASE_MAIL_SERVER_URL: z.string().url(),
   MONGODB_URI: z.string(),
   DATABASE_URL: z.string(),
 
