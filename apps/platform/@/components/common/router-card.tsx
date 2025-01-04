@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
 
@@ -7,6 +8,7 @@ export type RouterCardLink = {
   description: string;
   external?: boolean;
   Icon: React.ElementType;
+  disabled?: boolean;
 };
 
 export interface RouterCardProps extends RouterCardLink {
@@ -20,18 +22,23 @@ export function RouterCard({
   external = false,
   Icon,
   style,
+  disabled,
 }: RouterCardProps) {
   return (
     <Link
       href={href}
-      className="group rounded-lg flex flex-col justify-between gap-3 border border-gray-50/30 px-5 py-4 animate-in popup  transition-colors backdrop-blur-2xl hover:bg-white/10 hover:shadow hover:border-primary/5"
+      className={cn(
+        "group rounded-lg flex flex-col justify-between gap-3 border border-gray-50/30 px-5 py-4 animate-in popup transition-colors backdrop-blur-2xl hover:bg-white/10 hover:shadow hover:border-primary/5",
+        disabled ? "pointer-events-none cursor-not-allowed" : ""
+      )}
       target={external ? "_blank" : "_self"}
       rel={external ? "noopener noreferrer" : undefined}
       style={style}
     >
       <h2 className="mtext-xl font-semibold">
         <Icon className="w-8 h-8 text-primary inline-block mr-2" />
-        {title}{" "}
+        {title} {disabled ? <span className="text-sm text-gray-400">(Maintenance)</span> : null}
+  
       </h2>
       <p className="max-w-[30ch] text-sm opacity-80">{description}</p>
       <p className="text-sm whitespace-nowrap font-semibold text-primary/80 transition-all group-hover:text-primary group-hover:translate-x-1 motion-reduce:transform-none">

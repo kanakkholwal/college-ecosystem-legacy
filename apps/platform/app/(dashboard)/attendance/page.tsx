@@ -2,7 +2,7 @@ import EmptyArea from "@/components/common/empty-area";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { BookUser } from "lucide-react";
 import { Suspense } from "react";
-import { getAttendanceRecords } from "src/lib/attendance/personal.actions";
+import { getAttendanceRecords } from "~/actions/record.personal";
 import CreateAttendanceRecord from "./create-record";
 import AttendanceRecord from "./record";
 
@@ -46,7 +46,7 @@ export default async function PersonalAttendanceManager() {
           <AttendanceRecord
             record={record}
             style={{ animationDelay: `${index * 50}ms` }}
-            key={index}
+            key={record.id}
           />
         ))}
       </Suspense>

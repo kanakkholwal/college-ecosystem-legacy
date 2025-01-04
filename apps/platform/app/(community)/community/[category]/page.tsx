@@ -9,13 +9,13 @@ import { CATEGORY_IMAGES, type CATEGORY_TYPES } from "src/constants/community";
 import { getPostsByCategory } from "src/lib/community/actions";
 
 interface Props {
-  params:Promise<{
+  params: Promise<{
     category: (typeof CATEGORY_TYPES)[number];
   }>;
   searchParams: Promise<{
     page?: number;
     limit?: number;
-  }>
+  }>;
 }
 import type { Metadata, ResolvingMetadata } from "next";
 

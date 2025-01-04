@@ -1,9 +1,5 @@
 "use client";
 
-
-export default function XlsxHandler(){
-
-    return <>
-    
-    </>
+export default function XlsxHandler() {
+  return <></>;
 }

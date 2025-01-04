@@ -12,18 +12,16 @@ export const metadata: Metadata = {
   description: "Check your results here.",
 };
 
-export default async function ResultPage(
-  props: {
-    searchParams?: Promise<{
-      query?: string;
-      page?: string;
-      batch?: string;
-      branch?: string;
-      programme?: string;
-      cache?: string;
-    }>;
-  }
-) {
+export default async function ResultPage(props: {
+  searchParams?: Promise<{
+    query?: string;
+    page?: string;
+    batch?: string;
+    branch?: string;
+    programme?: string;
+    cache?: string;
+  }>;
+}) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query?.trim() || "";
   const currentPage = Number(searchParams?.page) || 1;
@@ -34,7 +32,12 @@ export default async function ResultPage(
   };
   const new_cache = searchParams?.cache === "new";
 
-  const { results, totalPages } = await getResults(query, currentPage, filter, new_cache);
+  const { results, totalPages } = await getResults(
+    query,
+    currentPage,
+    filter,
+    new_cache
+  );
   const { branches, programmes, batches } = await getCachedLabels(new_cache);
 
   return (

@@ -11,10 +11,10 @@ import { CGPIChart } from "./components/chart";
 import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  params: Promise<{ rollNo: string}>
+  params: Promise<{ rollNo: string }>;
   searchParams?: Promise<{
-    update?:string 
-  }>
+    update?: string;
+  }>;
 };
 
 export async function generateMetadata(
@@ -142,11 +142,15 @@ function getYear(result: ResultTypeWithId): string | null {
       return "Third Year";
     case 6:
     case 7:
-      return "Final Year";
+      return result.programme === "B.Tech"
+        ? "Final Year"
+        : "Final Year (Dual Degree)";
     case 8:
-      return result.programme === "B.Tech" ? "Pass Out" : "Super Final Year";
+      return result.programme === "B.Tech"
+        ? "Pass Out"
+        : "Super Final Year (Dual Degree)";
     case 9:
-      return "Super Final Year";
+      return "Super Final Year (Dual Degree)";
     case 10:
       return "Pass Out";
     default:

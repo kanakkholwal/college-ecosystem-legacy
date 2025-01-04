@@ -2,8 +2,8 @@ import { cn } from "@/lib/utils";
 import { Check, Copy } from "lucide-react";
 import { Fira_Code } from "next/font/google";
 import Image from "next/image";
-import React from "react";
-import { Components, Options } from "react-markdown";
+import React, { type JSX } from "react";
+import type { Components, Options } from "react-markdown";
 type NodeType = {
   type: string;
   value?: string;
@@ -27,24 +27,26 @@ const monoFont = Fira_Code({
 function extractTextFromNode(node: NodeType): string {
   if (node.type === "text") {
     return node.value || "";
-  } else if (Array.isArray(node.children)) {
+  }  if (Array.isArray(node.children)) {
     return node.children.map((child) => extractTextFromNode(child)).join("");
-  } else {
+  } 
     return "";
-  }
+  
 }
 
 export function RenderCodeBlock({
   children,
   className,
   node,
-}: RenderCodeBlockProps): JSX.Element {
+}: RenderCodeBlockProps): JSX.Element 
+{
   const [state, setState] = React.useState<"copy" | "idle">("idle");
   const textContent = extractTextFromNode(node);
 
   return (
     <pre className={cn("relative", monoFont.className, className)}>
       <button
+        type="button"
         className={cn(
           "absolute top-2 right-2",
           "transition-all active:opacity-50 rounded-md p-1.5",

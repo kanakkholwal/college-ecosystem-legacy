@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
-import { getSession } from "src/lib/auth";
+import { type NextRequest, NextResponse } from "next/server";
+import { getSession } from "src/lib/auth-server";
 
 import { UploadFile } from "src/lib/storage";
 

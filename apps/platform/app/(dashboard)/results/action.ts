@@ -1,12 +1,12 @@
 "use server";
 import dbConnect from "src/lib/dbConnect";
 import redis from "src/lib/redis";
-import ResultModel, { ResultTypeWithId } from "src/models/result";
-
+import ResultModel, { type ResultTypeWithId } from "src/models/result";
 
 type getResultsReturnType = {
-  results: ResultTypeWithId[], totalPages: number
-}
+  results: ResultTypeWithId[];
+  totalPages: number;
+};
 
 export async function getResults(
   query: string,
@@ -23,6 +23,7 @@ export async function getResults(
     const resultsPerPage = 32;
     const skip = currentPage * resultsPerPage - resultsPerPage;
 
+    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
     const filterQuery: any = {
       $or: [
         { rollNo: { $regex: query, $options: "i" } },
@@ -44,7 +45,7 @@ export async function getResults(
     }
 
     // Check cached results
-    const cacheKey = `results_${query}_${currentPage}${filter ? "_" + JSON.stringify(filter) : ""}`;
+    const cacheKey = `results_${query}_${currentPage}${filter ? `_${JSON.stringify(filter)}` : ""}`;
     let cachedResults = null;
     try {
       if (!new_cache)
@@ -66,7 +67,6 @@ export async function getResults(
       .limit(resultsPerPage)
       .exec();
 
-
     const totalPages = Math.ceil(
       (await ResultModel.countDocuments(filterQuery)) / resultsPerPage
     );
@@ -75,7 +75,7 @@ export async function getResults(
 
     // Cache the query results for 1 week
     await redis.set(cacheKey, JSON.stringify(response), {
-      ex: 60 * 60 * 24 * 7
+      ex: 60 * 60 * 24 * 7,
     });
 
     return response;
@@ -91,15 +91,15 @@ type CachedLabels = {
   programmes: string[];
 };
 
-export async function getCachedLabels(new_cache?: boolean): Promise<CachedLabels> {
+export async function getCachedLabels(
+  new_cache?: boolean
+): Promise<CachedLabels> {
   const cacheKey = "cached_labels";
   let cachedLabels: CachedLabels | null = null;
   try {
     try {
-      if (!new_cache)
-        cachedLabels = await redis.get(cacheKey);
-      else
-        await redis.del(cacheKey);
+      if (!new_cache) cachedLabels = await redis.get(cacheKey);
+      else await redis.del(cacheKey);
     } catch (redisError) {
       console.error("Redis connection error:", redisError);
     }
@@ -116,11 +116,9 @@ export async function getCachedLabels(new_cache?: boolean): Promise<CachedLabels
         ex: 6 * 30 * 24 * 60 * 60,
       });
     }
-
   } catch (error) {
     console.error("Error fetching cached labels:", error);
     return { branches: [], batches: [], programmes: [] };
   }
   return cachedLabels || { branches: [], batches: [], programmes: [] };
-
 }

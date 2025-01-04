@@ -1,12 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 // provider.tsx
 "use client";
-import useNotificationChecker from "@/hooks/useNotificationChecker";
-import Aos from "aos";
-import "aos/dist/aos.css";
-import { SessionProvider } from "next-auth/react";
-import type { ThemeProviderProps } from "next-themes";
-import { ThemeProvider as NextThemesProvider } from "next-themes";
+// import Aos from "aos";
+// import "aos/dist/aos.css";
+// import type { ThemeProviderProps } from "next-themes";
+// import { ThemeProvider as NextThemesProvider } from "next-themes";
 import Image from "next/image";
 import { Next13ProgressBar } from "next13-progressbar";
 import type React from "react";
@@ -15,20 +13,19 @@ import { Toaster as HotToaster } from "react-hot-toast";
 import { Gradient } from "whatamesh";
 import fallbackImg from "./fallback.png";
 
-export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
-  return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
-}
+// export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
+//   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
+// }
 
 export function Provider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState<boolean>(true);
-  useNotificationChecker();
 
   useEffect(() => {
-    Aos.init({
-      duration: 1000,
-      once: true,
-      easing: "ease-in-out",
-    });
+    // Aos.init({
+    //   duration: 1000,
+    //   once: true,
+    //   easing: "ease-in-out",
+    // });
     try {
       // Perform canvas operations here
       const gradient = new Gradient();
@@ -40,7 +37,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
     }
   }, []);
   return (
-    <SessionProvider>
+    <>
       {isLoaded ? (
         <canvas
           id="gradient-canvas"
@@ -82,6 +79,6 @@ export function Provider({ children }: { children: React.ReactNode }) {
           />
         </span>
       </div>
-    </SessionProvider>
+    </>
   );
 }

@@ -1,7 +1,9 @@
 "use server";
-import { ScrapeResult } from "src/controllers/scraper";
+import type { ResultTypeWithId } from "src/models/result";
+
 import dbConnect from "src/lib/dbConnect";
-import ResultModel, { ResultTypeWithId } from "src/models/result";
+import ResultModel from "src/models/result";
+import { serverFetch } from "~/lib/server-fetch";
 
 export async function getResultByRollNo(
   rollNo: string,
@@ -12,14 +14,17 @@ export async function getResultByRollNo(
     rollNo,
   }).exec();
   if (result && update) {
-    const new_result = await ScrapeResult(rollNo);
-    result.name = new_result.name;
-    result.branch = new_result.branch;
-    result.batch = new_result.batch;
-    result.programme = new_result.programme;
-    result.semesters = new_result.semesters;
-    await result.save();
-    return JSON.parse(JSON.stringify(result));
+    const response = await serverFetch<{
+      data: ResultTypeWithId | null;
+      message: string;
+      error: boolean;
+    }>("/api/results/:rollNo/update",{
+      params: {rollNo}
+    });
+    if (response.error || !response.data) {
+      return JSON.parse(JSON.stringify(result));
+    }
+    return JSON.parse(JSON.stringify(response.data));
   }
   return JSON.parse(JSON.stringify(result));
 }

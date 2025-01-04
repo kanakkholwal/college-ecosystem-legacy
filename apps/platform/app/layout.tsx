@@ -2,11 +2,6 @@ import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
-import { headers } from "next/headers";
-import { getSession } from "src/lib/auth";
-import type { sessionType } from "src/types/session";
-
-import { redirect } from "next/navigation";
 import { Provider } from "./client-provider";
 import "./globals.css";
 
@@ -48,21 +43,7 @@ type RootLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
 
-export default async function RootLayout({ children }: RootLayoutProps) {
-  const session = (await getSession()) as sessionType | null;
-  const headerList = await headers();
-  const pathname = headerList.get("x-current-path") as string;
-  const redirectUrl = new URL(pathname);
-  const authorized = !!session?.user;
-
-  if (!authorized && redirectUrl.pathname !== "/login") {
-    if (redirectUrl.pathname !== "/login" && redirectUrl.pathname !== "/") {
-      redirectUrl.searchParams.set("redirect", pathname);
-      return redirect(`/login?${redirectUrl.searchParams.toString()}`);
-    }
-      return redirect("/login");
-  }
-
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />

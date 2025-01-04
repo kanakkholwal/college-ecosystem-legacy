@@ -1,4 +1,4 @@
-import { Rank } from "src/models/result";
+import type { Rank } from "src/models/result";
 
 export type studentInfoType = {
   currentSemester: number;

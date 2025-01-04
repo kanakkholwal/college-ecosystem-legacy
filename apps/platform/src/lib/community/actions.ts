@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import CommunityPost, {
   CommunityComment,
@@ -22,7 +22,7 @@ export async function createPost(postData: RawCommunityPostType) {
     await dbConnect();
     const post = new CommunityPost({
       ...postData,
-      author: session.user._id,
+      author: session.user.id,
       views: 0,
       likes: [],
       savedBy: [],
@@ -96,7 +96,7 @@ export async function updatePost(
     }
 
     // Check if the user is the author of the post
-    if (post.author.toString() !== session.user._id.toString()) {
+    if (post.author.toString() !== session.user.id.toString()) {
       return Promise.reject("You are not authorized to update this post");
     }
 
@@ -123,7 +123,7 @@ export async function createComment(
     await dbConnect();
     const comment = new CommunityComment({
       ...commentData,
-      author: session.user._id,
+      author: session.user.id,
     });
     await comment.save();
     revalidatePath(`/community/posts/${commentData.postId}`);

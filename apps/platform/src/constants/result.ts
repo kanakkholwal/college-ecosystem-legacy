@@ -1,4 +1,5 @@
-import { ResultTypeWithId } from "src/models/result";
+import type { ResultTypeWithId } from "src/models/result";
+
 export function getYear(result: ResultTypeWithId): string | null {
   switch (result.semesters.length) {
     case 0:
@@ -31,6 +32,6 @@ export function isValidRollNumber(rollNo: string): boolean {
     return false;
   }
 
-  const numericPart = parseInt(rollNo.slice(-3));
+  const numericPart = Number.parseInt(rollNo.slice(-3));
   return numericPart >= 1 && numericPart <= 999;
 }

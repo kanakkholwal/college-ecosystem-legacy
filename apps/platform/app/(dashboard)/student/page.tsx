@@ -1,6 +1,5 @@
-import { getAttendanceRecords } from "src/lib/attendance/personal.actions";
-import { getSession } from "src/lib/auth";
-import { sessionType } from "src/types/session";
+import { getSession } from "~/lib/auth-server";
+import { getAttendanceRecords } from "~/actions/record.personal";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -36,7 +35,7 @@ const quick_links = [
 ];
 
 export default async function StudentDashboard() {
-  const session = (await getSession()) as sessionType;
+  const session = await getSession();
 
   const attendanceRecords = await getAttendanceRecords();
 
@@ -48,7 +47,7 @@ export default async function StudentDashboard() {
       >
         <h2 className="text-lg md:text-xl font-bold whitespace-nowrap">
           Welcome back,{" "}
-          <span className="text-primary">{session.user.firstName}</span>
+          <span className="text-primary">{session?.user?.name}</span>
         </h2>
         <p className="md:text-lg font-medium text-neutral-700 dark:text-neutral-300">
           Here{`'`}s a quick overview of your Activities

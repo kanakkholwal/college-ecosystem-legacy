@@ -1,8 +1,3 @@
-import { UserWithId } from "src/models/user";
+import type { Session } from "src/lib/auth-client";
 
-export type sessionUserType = Partial<UserWithId>;
-
-export type sessionType = {
-  user: UserWithId;
-  expires: Date;
-};
+export type sessionUserType = Session;

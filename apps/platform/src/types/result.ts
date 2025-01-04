@@ -20,4 +20,5 @@ export type ResultType = {
   semesters: Semester[];
   createdAt?: Date;
   updatedAt?: Date;
+  gender: "male" | "female" | "not_specified";
 };

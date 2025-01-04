@@ -20,18 +20,19 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { useAtom } from "jotai";
 import { Trash } from "lucide-react";
-import React, { useState } from "react";
+import type React from "react";
+import { useState } from "react";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
-import { EventTypeWithID, RawEvent } from "src/models/time-table";
+import type { EventTypeWithID, RawEvent } from "src/models/time-table";
 import { daysMap, timeMap } from "./constants";
 import {
   editingEventAtom,
-  FormattedTimetable,
+  type FormattedTimetable,
   isEditingAtom,
   timetableDataAtom,
 } from "./store";
 
-export const EditTimetableDialog: React.FC<{}> = ({}) => {
+export const EditTimetableDialog: React.FC = () => {
   const [timetableData, setTimetableData] = useAtom(timetableDataAtom);
   const [editingEvent, setEditingEvent] = useAtom(editingEventAtom);
   const [isEditing, setIsEditing] = useAtom(isEditingAtom);
@@ -105,6 +106,7 @@ export const EditTimetableDialog: React.FC<{}> = ({}) => {
     setNewEvent({ title: "", description: "" });
   };
 
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const handleEventChange = (field: keyof typeof newEvent, value: any) => {
     setNewEvent((prevEvent) => ({ ...prevEvent, [field]: value }));
   };
@@ -186,7 +188,7 @@ export const EditTimetableDialog: React.FC<{}> = ({}) => {
           ]?.events.map((event, eventIndex) => {
             return (
               <div
-                key={eventIndex}
+                key={event.title}
                 className={cn(
                   "flex items-center justify-between whitespace-nowrap gap-2 border p-2 rounded-lg bg-gray-200",
                   editingEvent.eventIndex === eventIndex ? "bg-primary/10" : ""
@@ -255,7 +257,7 @@ export function TimeTableMetaData({ className }: React.ComponentProps<"form">) {
               onChange={(e) => {
                 setTimetableData({
                   ...timetableData,
-                  year: parseInt(e.target.value),
+                  year: Number.parseInt(e.target.value),
                 });
               }}
             />
@@ -272,7 +274,7 @@ export function TimeTableMetaData({ className }: React.ComponentProps<"form">) {
               onChange={(e) => {
                 setTimetableData({
                   ...timetableData,
-                  semester: parseInt(e.target.value),
+                  semester: Number.parseInt(e.target.value),
                 });
               }}
             />
@@ -283,7 +285,7 @@ export function TimeTableMetaData({ className }: React.ComponentProps<"form">) {
           <div className="grid gap-4 w-full grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4">
             {DEPARTMENTS_LIST.map((department, index) => {
               return (
-                <label key={index} className={RadioStyle.label}>
+                <label key={department.code} className={RadioStyle.label}>
                   {department.name}
                   <input
                     type="radio"

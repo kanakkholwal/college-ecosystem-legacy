@@ -34,12 +34,12 @@ import {
   EyeNoneIcon,
 } from "@radix-ui/react-icons";
 import {
-  Column,
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  Table as TableType,
-  VisibilityState,
+  type Column,
+  type ColumnDef,
+  type ColumnFiltersState,
+  type SortingState,
+  type Table as TableType,
+  type VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,

@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
@@ -31,7 +31,10 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { AttendanceRecordWithId } from "src/models/attendance-record";
+import type {
+  PersonalAttendanceRecord,
+  PersonalAttendance,
+} from "~/db/schema/attendance_record";
 import {
   calculateWeeklyTrend,
   formatAttendanceForSubjects,
@@ -54,18 +57,19 @@ const chartConfig = {
 } as ChartConfig;
 
 interface Props {
-  attendanceRecords: AttendanceRecordWithId[];
+  attendanceRecords: (PersonalAttendance & {
+    records: PersonalAttendanceRecord[];
+  })[];
 }
 
 export function OverallAttendanceChart({ attendanceRecords }: Props) {
   const totalClasses = attendanceRecords.reduce(
-    (sum, record) => sum + record.totalClasses,
+    (sum, record) => sum + record.records.length,
     0
   );
   const attendedClasses = attendanceRecords.reduce(
     (sum, record) =>
-      sum +
-      record.attendance.filter((attendance) => attendance.isPresent).length,
+      sum + record.records.filter((attendance) => attendance.isPresent).length,
     0
   );
   const absentClasses = totalClasses - attendedClasses;
@@ -86,9 +90,9 @@ export function OverallAttendanceChart({ attendanceRecords }: Props) {
       <CardHeader className="items-center pb-0">
         <CardTitle>Overall Attendance </CardTitle>
         <CardDescription>
-          Trending {weeklyTrend?.growth! > 0 ? "up" : "down"} by{" "}
+          Trending {(weeklyTrend?.growth ?? 0) > 0 ? "up" : "down"} by{" "}
           {weeklyTrend?.percentage.toFixed(1) || 0}% this week
-          {weeklyTrend?.growth! > 0 ? (
+          {(weeklyTrend?.growth ?? 0) > 0 ? (
             <TrendingUp className="h-4 w-4 inline-block" />
           ) : (
             <TrendingDown className="h-4 w-4 inline-block" />

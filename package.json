@@ -10,20 +10,20 @@
     "build:server": "cd apps/server && npm run build"
   },
   "devDependencies": {
-    "prettier": "^3.2.5",
-    "turbo": "^2.0.10",
-    "typescript": "^5.4.5"
+    "prettier": "^3.4.2",
+    "turbo": "^2.3.3",
+    "typescript": "^5.7.2"
   },
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "npm@10.5.0",
+  "packageManager": "pnpm@9.15.2",
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "dependencies": {
-    "ioredis": "^5.4.1",
-    "tsup": "^8.1.0"
+    "dotenv": "^16.4.7",
+    "tsup": "^8.3.5"
   }
 }

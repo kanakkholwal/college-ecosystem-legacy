@@ -1,4 +1,7 @@
-import { AttendanceRecordWithId } from "src/models/attendance-record";
+import type {
+  PersonalAttendanceRecord,
+  PersonalAttendance,
+} from "~/db/schema/attendance_record";
 
 interface WeeklyTrend {
   weekStart: Date;
@@ -7,25 +10,31 @@ interface WeeklyTrend {
 }
 
 export function calculateWeeklyTrend(
-  attendanceRecords: AttendanceRecordWithId[]
+  attendanceRecords: (PersonalAttendance & {
+    records: PersonalAttendanceRecord[];
+  })[]
 ): WeeklyTrend[] {
   // Flatten all attendance records into a single array
   const allAttendance = attendanceRecords.flatMap((record) =>
-    record.attendance.map((a) => ({
-      date: new Date(a.date),
+    record.records.map((a) => ({
+      date: a.date,
       isPresent: a.isPresent,
     }))
   );
 
   // Sort attendance by date
-  allAttendance.sort((a, b) => a.date.getTime() - b.date.getTime());
+  allAttendance.sort(
+    (a, b) => (a.date?.getTime() ?? 0) - (b.date?.getTime() ?? 0)
+  );
 
   const weeklyStats: {
     [weekStart: string]: { present: number; total: number };
   } = {};
 
   // Group attendance by week
-  allAttendance.forEach(({ date, isPresent }) => {
+  for (const record of allAttendance) {
+    const { date, isPresent } = record;
+    if (!date) continue;
     const weekStart = new Date(
       date.getFullYear(),
       date.getMonth(),
@@ -41,7 +50,7 @@ export function calculateWeeklyTrend(
     if (isPresent) {
       weeklyStats[weekKey].present++;
     }
-  });
+  }
 
   // Calculate weekly percentages and growth
   const weeklyTrend: WeeklyTrend[] = Object.entries(weeklyStats).map(
@@ -78,76 +87,92 @@ interface SubjectAttendance {
 }
 
 export function formatAttendanceForSubjects(
-  attendanceRecords: AttendanceRecordWithId[]
+  attendanceRecords: (PersonalAttendance & {
+    records: PersonalAttendanceRecord[];
+  })[]
 ): SubjectAttendance[] {
   return attendanceRecords.map((record) => {
-    const attendedClasses = record.attendance.filter((a) => a.isPresent).length;
+    const attendedClasses = record.records.filter((a) => a.isPresent).length;
     return {
       subjectName: record.subjectName,
-      totalClasses: record.totalClasses,
+      totalClasses: record.records.length,
       attendedClasses: attendedClasses,
     };
   });
 }
 
 export const getMonthlyAttendanceData = (
-  attendanceRecords: AttendanceRecordWithId[]
+  attendanceRecords: (PersonalAttendance & {
+    records: PersonalAttendanceRecord[];
+  })[]
 ) => {
   const monthlyData: {
     [key: string]: { month: string; attended: number; absent: number };
   } = {};
 
-  attendanceRecords.forEach((record) => {
-    record.attendance.forEach(({ date, isPresent }) => {
-      const month = new Date(date).toLocaleString("default", {
+  for (const record of attendanceRecords) {
+    for (const { date, isPresent } of record.records) {
+      const month = date?.toLocaleString("default", {
         month: "long",
         year: "numeric",
       });
 
-      if (!monthlyData[month]) {
+      if (month && !monthlyData[month]) {
         monthlyData[month] = { month, attended: 0, absent: 0 };
       }
 
-      if (isPresent) {
-        monthlyData[month].attended += 1;
-      } else {
-        monthlyData[month].absent += 1;
+      if (month) {
+        if (isPresent) {
+          monthlyData[month].attended += 1;
+        } else {
+          monthlyData[month].absent += 1;
+        }
       }
-    });
-  });
+    }
+  }
 
   return Object.values(monthlyData);
 };
 
-export function getSafeAttendance(attendanceRecords: AttendanceRecordWithId[]) {
-  const distinctData = attendanceRecords
+export function getSafeAttendance(
+  attendanceRecords: (PersonalAttendance & {
+    records: PersonalAttendanceRecord[];
+  })[]
+) {
+  const atRiskSubjects = attendanceRecords
     .map((record) => {
-      const attendedClasses = record.attendance.filter(
-        (a) => a.isPresent
-      ).length;
+      const totalClasses = record.records.length || 0;
+      const attendedClasses = record.records.filter((a) => a.isPresent).length;
+
+      // Avoid dividing by zero
+      const attendanceRate =
+        totalClasses > 0 ? attendedClasses / totalClasses : 1;
+
       return {
         subject: record.subjectName,
-        totalClasses: record.totalClasses,
-        attendedClasses: attendedClasses,
+        totalClasses,
+        attendedClasses,
+        attendanceRate,
       };
     })
-    .filter((data) => {
-      return data.attendedClasses / data.totalClasses < 0.75;
-    });
-  if (distinctData.length === 0) {
+    .filter((data) => data.attendanceRate < 0.75);
+
+  if (atRiskSubjects.length === 0) {
     return {
       className: "text-green-500 bg-green-500/10",
       message: "You are doing great! Keep it up.",
     };
-  } else if (distinctData.length === 1) {
+  }
+
+  if (atRiskSubjects.length === 1) {
     return {
       className: "text-orange-500 bg-orange-500/10",
-      message: `You are missing classes for ${distinctData[0].subject}.`,
-    };
-  } else {
-    return {
-      className: "text-red-500 bg-red-500/10",
-      message: `You are missing classes for ${distinctData.length} subjects.`,
+      message: `You are missing classes for ${atRiskSubjects[0].subject}.`,
     };
   }
+
+  return {
+    className: "text-red-500 bg-red-500/10",
+    message: `You are missing classes for ${atRiskSubjects.length} subjects.`,
+  };
 }

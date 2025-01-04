@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
-import { getSession } from "src/lib/auth";
-import { sessionType } from "src/types/session";
+import { getSession } from "src/lib/auth-server";
 import ChatForm from "./components/form";
 // import ChatHistory from "./components/history";
 import Wrapper from "./components/wrapper";
@@ -15,9 +14,9 @@ export const metadata: Metadata = {
 };
 
 export default async function ChatBotPage() {
-  const session = (await getSession()) as sessionType | null;
+  const session = await getSession();
   if (!session?.user) {
-    return redirect("/login");
+    return redirect("/sign-in");
   }
 
   return (

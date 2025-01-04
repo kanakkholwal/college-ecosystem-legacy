@@ -1,6 +1,6 @@
 "use server";
 import { revalidatePath } from "next/cache";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import Announcement, {
   AnnouncementTypeWithId,
@@ -19,7 +19,7 @@ export async function createAnnouncement(
     // Validate the announcement data
     const announcement = new Announcement({
       ...announcementData,
-      createdBy: session.user._id,
+      createdBy: session.user.id,
     });
     await announcement.save();
     revalidatePath(`/announcements`);

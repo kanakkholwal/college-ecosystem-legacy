@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: `Communities | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-  description: `Explore different communities`,
+  description: "Explore different communities",
 };
 
 export default async function CommunitiesPage() {

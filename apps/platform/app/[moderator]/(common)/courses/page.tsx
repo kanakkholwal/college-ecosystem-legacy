@@ -11,20 +11,20 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { getCourses } from "src/lib/course/actions";
+import { getCourses } from "~/actions/course";
 import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
 
 type Props = {
   params: Promise<{
     moderator: string;
-  }>
+  }>;
   searchParams?: Promise<{
     query?: string;
     page?: string;
     department?: string;
     type?: string;
-  }>
+  }>;
 };
 
 export async function generateMetadata(
@@ -34,7 +34,8 @@ export async function generateMetadata(
   const params = await props.params;
   return {
     title: `Courses | ${params.moderator} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-    description: "Search for courses based on their name, code, department, and type.",
+    description:
+      "Search for courses based on their name, code, department, and type.",
   };
 }
 
@@ -89,11 +90,7 @@ export default async function CoursesPage(props: Props) {
         >
           {courses.map((course) => {
             return (
-              <Card
-                key={course._id}
-                variant="glass"
-                className="hover:shadow-lg"
-              >
+              <Card key={course.id} variant="glass" className="hover:shadow-lg">
                 <CardHeader>
                   <CardTitle>{course.name}</CardTitle>
                   <CardDescription className="font-semibold">

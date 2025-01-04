@@ -3,9 +3,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import { getPollById, updateVotes } from "src/lib/poll/actions";
-import type { sessionType } from "src/types/session";
 import { PollRender } from "../components/poll-component";
 import Polling from "./polling";
 
@@ -14,7 +13,7 @@ import type { Metadata } from "next";
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ pollId: string }>
+  params: Promise<{ pollId: string }>;
 }): Promise<Metadata> {
   const { pollId } = await params;
   const poll = await getPollById(pollId);
@@ -37,11 +36,11 @@ export async function generateMetadata({
 interface Props {
   params: Promise<{
     pollId: string;
-  }>
+  }>;
 }
 
 export default async function Dashboard({ params }: Props) {
-  const session = (await getSession()) as sessionType;
+  const session = await getSession();
   const { pollId } = await params;
   const poll = await getPollById(pollId);
   if (!poll) {
@@ -73,11 +72,13 @@ export default async function Dashboard({ params }: Props) {
         {closesAlready ? (
           <PollRender poll={poll} />
         ) : (
-          <Polling
-            poll={poll}
-            user={session.user}
-            updateVotes={updateVotes.bind(null, poll._id)}
-          />
+          session?.user && (
+            <Polling
+              poll={poll}
+              user={session.user}
+              updateVotes={updateVotes.bind(null, poll._id)}
+            />
+          )
         )}
       </div>
     </>

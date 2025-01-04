@@ -153,7 +153,7 @@ export const possible = [
 export function generateValues(array: any[]): string[] {
   const result = [] as string[];
 
-  array.forEach((item) => {
+  for (const item of array) {
     const { branch, start, end, pre } = item;
 
     for (let i = start; i <= end; i++) {
@@ -161,7 +161,7 @@ export function generateValues(array: any[]): string[] {
       const value = `${pre}${branch}${String(i).padStart(3, "0")}`;
       result.push(value);
     }
-  });
+  }
 
   return result;
 }

@@ -38,7 +38,7 @@ import {
   rawAnnouncementSchema,
   RELATED_FOR_TYPES,
 } from "src/models/announcement";
-import { z } from "zod";
+import type { z } from "zod";
 
 export default function CreateAnnouncement() {
   const form = useForm<z.infer<typeof rawAnnouncementSchema>>({

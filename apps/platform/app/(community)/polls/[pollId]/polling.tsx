@@ -6,12 +6,12 @@ import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { database } from "src/lib/firebase";
 
-import { PollType } from "src/models/poll";
-import { sessionType } from "src/types/session";
+import type { Session } from "src/lib/auth-client";
+import type { PollType } from "src/models/poll";
 
 interface PollingProps {
   poll: PollType;
-  user: sessionType["user"];
+  user: Session["user"];
   updateVotes: (voteData: PollType["votes"]) => Promise<PollType>;
 }
 
@@ -22,7 +22,7 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
     if (voteData) {
       let updatedVotes = [...voteData];
       const existingVoteIndex = updatedVotes.findIndex(
-        (vote) => vote.userId === user._id && vote.option === option
+        (vote) => vote.userId === user.id && vote.option === option
       );
 
       if (existingVoteIndex > -1) {
@@ -31,11 +31,9 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
         }
       } else {
         if (!poll.multipleChoice) {
-          updatedVotes = updatedVotes.filter(
-            (vote) => vote.userId !== user._id
-          );
+          updatedVotes = updatedVotes.filter((vote) => vote.userId !== user.id);
         }
-        updatedVotes.push({ option, userId: user._id });
+        updatedVotes.push({ option, userId: user.id });
       }
 
       set(ref(database, `polls/${poll._id}/votes`), updatedVotes);
@@ -82,6 +80,7 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
         const { count, percent } = parseVotes(voteData, option);
 
         return (
+          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
           <div key={`${option}-${index}`} className="relative bg-white/20">
             <div
               className="z-[-1] h-full bg-primary/20 rounded-lg absolute top-0 bottom-0 left-0 right-auto transition-all bg-opacity-40 dark:bg-dark-primary/20"
@@ -121,35 +120,35 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
 function notAllowed(
   voteData: PollType["votes"],
   multipleChoice: boolean,
-  user: sessionType["user"],
+  user: Session["user"],
   option: string
 ) {
   switch (true) {
     case !multipleChoice:
       return {
-        disabled: voteData?.some((vote) => vote.userId === user._id),
+        disabled: voteData?.some((vote) => vote.userId === user.id),
         message: "You can only vote once",
-        btnText: voteData?.some((vote) => vote.userId === user._id)
+        btnText: voteData?.some((vote) => vote.userId === user.id)
           ? "Voted"
           : "Vote",
       };
-    case !multipleChoice && voteData?.some((vote) => vote.userId === user._id):
+    case !multipleChoice && voteData?.some((vote) => vote.userId === user.id):
       return {
         disabled: true,
         message: "You can only vote once",
-        btnText: voteData?.some((vote) => vote.userId === user._id)
+        btnText: voteData?.some((vote) => vote.userId === user.id)
           ? "Voted"
           : "Vote",
       };
     case multipleChoice &&
       voteData?.some(
-        (vote) => vote.userId === user._id && vote.option === option
+        (vote) => vote.userId === user.id && vote.option === option
       ):
       return {
         disabled: true,
         message: "You have already voted",
         btnText: voteData?.some(
-          (vote) => vote.userId === user._id && vote.option === option
+          (vote) => vote.userId === user.id && vote.option === option
         )
           ? "Voted"
           : "Vote",

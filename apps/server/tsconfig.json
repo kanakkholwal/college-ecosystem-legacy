@@ -12,6 +12,6 @@
       "~/*": ["./src/*"]
     },
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*","package.json","tsconfig.json"],
   "exclude": ["node_modules", "dist"]
 }

@@ -1,6 +1,6 @@
 import axios from "axios";
 import HTMLParser from "node-html-parser";
-import type { rawResultType } from "~/types/result";
+import type { rawResultType } from "../types/result";
 
 const PROGRAMME_KEYS = {
     "Dual Degree": ["dcs", "dec"],
@@ -79,7 +79,7 @@ const fetchData = async (
         }
         return Promise.resolve([response.data.toString(),"successfully fetched"])
     } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data:");
         return Promise.resolve([null, (error as Error).toString()])
     }
 };
@@ -187,9 +187,9 @@ export async function scrapeResult(rollNo: string): Promise<{
     data: rawResultType | null;
     error?: string | null;
 }> {
-    const data = await getInfo(rollNo);
+    const data = await getInfoFromRollNo(rollNo);
 
-    console.log("Roll No: %s, Data: %o", rollNo, data);
+    console.log("Roll No: %s", rollNo);
     try {
         console.log("evaluating");
         const [result,msg] = await fetchData(data.url, rollNo, data.headers);
@@ -254,7 +254,7 @@ const headerMap: Record<
         RequestVerificationToken: "4FFEE8F3-14C9-27C4-B370-598406BF99C1",
     },
 };
-async function getInfo(rollNo: string) {
+export async function getInfoFromRollNo(rollNo: string) {
     // split the roll no into 3 parts starting two characters then 3 characters and then 3 characters
     const matches = [
         rollNo.toLowerCase().substring(0, 2), // 20

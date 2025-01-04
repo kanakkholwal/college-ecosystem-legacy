@@ -1,11 +1,14 @@
-import { RouterCard, type RouterCardLink } from "@/components/common/router-card";
+import {
+  RouterCard,
+  type RouterCardLink,
+} from "@/components/common/router-card";
 import { CalendarDays, CalendarPlus } from "lucide-react";
 import { getInfo } from "./actions";
 
 export default async function Schedules(props: {
   params: Promise<{
     moderator: string;
-  }>
+  }>;
 }) {
   const data = await getInfo();
   const params = await props.params;

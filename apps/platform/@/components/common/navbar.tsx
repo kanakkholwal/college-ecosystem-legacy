@@ -13,20 +13,20 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Bug, Cloud, LogOut, UserRound } from "lucide-react";
 
-import { signOut } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuGithub } from "react-icons/lu";
 import { RiTwitterXFill } from "react-icons/ri";
-import { sessionType } from "src/types/session";
+import type { Session } from "src/lib/auth-client";
+import { authClient } from "src/lib/auth-client"; //import the auth client
+import type { SidenavLinkType } from "./sidebar";
 import { SidebarContent } from "./sidebar";
-import Image from "next/image";
-import { SidenavLinkType } from "./sidebar";
 
 interface NavbarProps {
-  user: sessionType["user"];
+  user: Session["user"];
   showBreadcrumbs?: boolean;
   sidebarLinks?: SidenavLinkType[];
 }
@@ -34,30 +34,13 @@ interface SocialLink {
   href: string;
   icon: React.ElementType;
 }
-const socials: SocialLink[] = [
-  {
-    href: "https://x.com/kanakkholwal",
-    icon: RiTwitterXFill,
-  },
-  {
-    href: "https://linkedin.com/in/kanak-kholwal",
-    icon: FiLinkedin,
-  },
-  {
-    href: "https://github.com/kanakkholwal",
-    icon: LuGithub,
-  },
-  {
-    href: "https://instagram.com/kanakkholwal",
-    icon: BsInstagram,
-  },
-];
 
 export default function Navbar({
   user,
   showBreadcrumbs = false,
   sidebarLinks,
 }: NavbarProps) {
+  const router = useRouter();
   const pathname = usePathname();
 
   return (
@@ -85,7 +68,7 @@ export default function Navbar({
                 <Link
                   href={link.href}
                   target="_blank"
-                  key={`socials_${index}`}
+                  key={link.href}
                   className="hover:text-primary hover:-translate-y-1 ease-in duration-300 flex justify-center items-center h-16 icon"
                 >
                   <link.icon className="w-5 h-5" />
@@ -101,12 +84,12 @@ export default function Navbar({
                 variant="link"
                 size="icon"
                 rounded="full"
-                className={user.profilePicture !== null ? " p-0" : ""}
+                className={user.image !== null ? " p-0" : ""}
               >
-                {user.profilePicture !== null ? (
+                {user.name !== null ? (
                   <Image
-                    src={user.profilePicture!}
-                    alt={user.firstName!}
+                    src={user.image as string}
+                    alt={user.name}
                     width={40}
                     height={40}
                     className="size-8 rounded-full"
@@ -119,11 +102,9 @@ export default function Navbar({
             <DropdownMenuContent className="w-56" side="bottom" align="end">
               <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                  {/* <p className="block md:hidden text-sm font-medium leading-none">{user.firstName}</p> */}
+                  {/* <p className="block md:hidden text-sm font-medium leading-none">{user.name}</p> */}
                   <p className="text-xs capitalize leading-none text-primary md:font-medium ">
-                    {user.firstName!.toLowerCase() +
-                      " " +
-                      user.lastName?.toLowerCase()}
+                    {user.name.toLowerCase()}
                   </p>
                   <p className="text-xs leading-none text-muted-foreground ">
                     {user.email}
@@ -132,15 +113,23 @@ export default function Navbar({
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup>
-                {user.roles!.includes("student") && (
+                {user.other_roles.includes("student") && (
                   <DropdownMenuItem asChild>
-                    <Link href={`/results/${user.rollNo}`}>
+                    <Link href={`/results/${user.username}`}>
                       <UserRound className="mr-2 h-4 w-4" />
                       <span>Your Result</span>
                     </Link>
                   </DropdownMenuItem>
                 )}
-                {user.roles!.map((role) => {
+                {user.role === "admin" && (
+                  <DropdownMenuItem asChild>
+                    <Link href={"/admin"}>
+                      <UserRound className="mr-2 h-4 w-4" />
+                      <span>Admin Dashboard</span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                {user.other_roles.map((role) => {
                   return (
                     <DropdownMenuItem asChild key={role}>
                       <Link href={`/${role}`}>
@@ -152,7 +141,9 @@ export default function Navbar({
                 })}
                 <DropdownMenuItem asChild>
                   <Link
-                    href={`https://github.com/kanakkholwal/college-ecosystem/issues`}
+                    href={
+                      "https://github.com/kanakkholwal/college-ecosystem/issues"
+                    }
                     target="_blank"
                   >
                     <Bug className="mr-2 h-4 w-4" />
@@ -168,7 +159,15 @@ export default function Navbar({
 
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                onClick={() => signOut({ callbackUrl: pathname })}
+                onClick={async () => {
+                  await authClient.signOut({
+                    fetchOptions: {
+                      onSuccess: () => {
+                        router.push("/sign-in"); // redirect to login page
+                      },
+                    },
+                  });
+                }}
                 className="cursor-pointer"
               >
                 <LogOut className="mr-2 h-4 w-4" />
@@ -188,6 +187,7 @@ export default function Navbar({
                   className="text-slate-500 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-300"
                 >
                   <span className="sr-only">Navigation</span>
+                  {/* biome-ignore lint/a11y/noSvgWithoutTitle: <explanation> */}
                   <svg width={24} height={24}>
                     <path
                       d="M5 6h14M5 12h14M5 18h14"
@@ -210,10 +210,10 @@ export default function Navbar({
               {pathname
                 .split("/")
                 .slice(1)
-                .map((item, index) => {
+                .map((item: string, index: number) => {
                   return (
                     <li
-                      key={index}
+                      key={item.concat(index.toString())}
                       className={cn(
                         "flex items-center text-slate-900 ",
                         index !== 0 && "truncate"
@@ -246,3 +246,22 @@ export default function Navbar({
     </div>
   );
 }
+
+const socials: SocialLink[] = [
+  {
+    href: "https://x.com/kanakkholwal",
+    icon: RiTwitterXFill,
+  },
+  {
+    href: "https://linkedin.com/in/kanak-kholwal",
+    icon: FiLinkedin,
+  },
+  {
+    href: "https://github.com/kanakkholwal",
+    icon: LuGithub,
+  },
+  {
+    href: "https://instagram.com/kanakkholwal",
+    icon: BsInstagram,
+  },
+];

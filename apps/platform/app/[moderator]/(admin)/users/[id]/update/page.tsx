@@ -1,12 +1,12 @@
 import { GoBackButton } from "@/components/common/go-back";
 import { notFound } from "next/navigation";
-import { getUser } from "src/lib/users/actions";
+import { getUser } from "~/actions/dashboard.admin";
 import UpdateUserForm from "./components";
 
 interface PageProps {
   params: Promise<{
     id: string;
-  }>
+  }>;
 }
 
 export default async function UpdateUserPage({ params }: PageProps) {
@@ -22,13 +22,11 @@ export default async function UpdateUserPage({ params }: PageProps) {
         <h1 className="text-2xl font-bold">Update User</h1>
         <div className="flex items-center space-x-2">
           <span className="text-gray-700 font-semibold">User ID:</span>
-          <span className="font-medium">{user._id}</span>
+          <span className="font-medium">{user.id}</span>
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-gray-700 font-semibold">Name:</span>
-          <span className="font-medium">
-            {user.firstName} {user.lastName}
-          </span>
+          <span className="font-medium">{user.name}</span>
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-gray-700 font-semibold">Email:</span>
@@ -40,7 +38,7 @@ export default async function UpdateUserPage({ params }: PageProps) {
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-gray-700 font-semibold">Roles:</span>
-          <span className="font-medium">{user.roles.join(", ")}</span>
+          <span className="font-medium">{user.other_roles.join(", ")}</span>
         </div>
         <div className="flex items-center space-x-2">
           <span className="text-gray-700 font-semibold">Joined At:</span>

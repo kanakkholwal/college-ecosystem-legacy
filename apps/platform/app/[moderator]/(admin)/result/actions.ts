@@ -1,7 +1,7 @@
 "use server";
 
 import dbConnect from "src/lib/dbConnect";
-import ResultModel, { ResultTypeWithId } from "src/models/result";
+import ResultModel, { type ResultTypeWithId } from "src/models/result";
 
 export async function getBasicInfo() {
   try {
@@ -12,17 +12,33 @@ export async function getBasicInfo() {
     }
     const updatedAt = JSON.parse(JSON.stringify(firstRanker)).updatedAt;
 
-    const count = await Promise.all([
-      ResultModel.countDocuments(),
-      ResultModel.distinct("branch"),
-      ResultModel.distinct("batch"),
-    ]);
+    const [results, branches, batches, hasBacklogs, activeStudents] =
+      await Promise.all([
+        ResultModel.countDocuments(),
+        ResultModel.distinct("branch"),
+        ResultModel.distinct("batch"),
+        ResultModel.countDocuments({ "semesters.courses.cgpi": 0 }),
+        ResultModel.countDocuments({
+          $or: [
+            {
+              programme: "B.Tech",
+              "semesters.length": { $lt: 8 },
+            },
+            {
+              programme: "Dual Degree",
+              "semesters.length": { $lt: 10 },
+            },
+          ],
+        }),
+      ]);
 
     return Promise.resolve({
       counts: {
-        results: count[0],
-        branches: count[1].length,
-        batches: count[2].length,
+        results,
+        branches: branches.length,
+        batches: batches.length,
+        hasBacklogs,
+        activeStudents,
       },
       asOf: updatedAt,
     });

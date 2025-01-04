@@ -1,14 +1,10 @@
 "use client";
 import type React from "react";
-import {
-  Suspense,
-  useEffect,
-  useState
-} from "react";
+import { Suspense, useEffect, useState } from "react";
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
-  fallback: React.ReactElement;
+  fallback: (err: Error) => React.ReactNode;
 }
 
 export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
@@ -45,7 +41,7 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
   }, []);
 
   if (error) {
-    return fallback;
+    return fallback(error);
   }
 
   return <>{children}</>;
@@ -93,9 +89,5 @@ export const ErrorBoundaryWithSuspense: React.FC<
     return fallback;
   }
 
-  return (
-    <Suspense fallback={loadingFallback}>
-      {children}
-    </Suspense>
-  );
+  return <Suspense fallback={loadingFallback}>{children}</Suspense>;
 };

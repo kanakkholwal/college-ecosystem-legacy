@@ -10,7 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { getCourses } from "src/lib/course/actions";
+import { getCourses } from "~/actions/course";
 import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
 
@@ -28,16 +28,14 @@ export const metadata: Metadata = {
     "NITH Courses Search",
   ],
 };
-export default async function CoursesPage(
-  props: {
-    searchParams?: Promise<{
-      query?: string;
-      page?: string;
-      department?: string;
-      type?: string;
-    }>;
-  }
-) {
+export default async function CoursesPage(props: {
+  searchParams?: Promise<{
+    query?: string;
+    page?: string;
+    department?: string;
+    type?: string;
+  }>;
+}) {
   const searchParams = await props.searchParams;
   const query = searchParams?.query || "";
   const currentPage = Number(searchParams?.page) || 1;
@@ -75,10 +73,7 @@ export default async function CoursesPage(
           data-aos="fade-up"
           data-aos-anchor-placement="center-bottom"
         >
-          <Suspense
-            fallback={<Skeleton className="h-12 w-full " />
-            }
-          >
+          <Suspense fallback={<Skeleton className="h-12 w-full " />}>
             <SearchBox departments={departments} types={types} />
           </Suspense>
         </div>
@@ -98,7 +93,7 @@ export default async function CoursesPage(
             return (
               <Card
                 variant="glass"
-                key={course._id}
+                key={course.id}
                 className="hover:shadow-lg animate-in popup flex flex-col items-stretch justify-between"
                 style={{
                   animationDelay: `${i * 100}ms`,

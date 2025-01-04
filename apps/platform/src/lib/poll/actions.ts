@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import Poll, { PollType, RawPollType } from "src/models/poll";
 
@@ -15,7 +15,7 @@ export async function createPoll(pollData: RawPollType) {
     // Validate the poll data
     const poll = new Poll({
       ...pollData,
-      createdBy: session.user._id,
+      createdBy: session.user.id,
     });
     await poll.save();
     revalidatePath(`/polls`);
@@ -80,10 +80,10 @@ export async function voteOnPoll(
     if (!poll) {
       return Promise.reject("Poll not found");
     }
-    if (poll.votes.includes(session.user._id)) {
+    if (poll.votes.includes(session.user.id)) {
       return Promise.reject("You have already voted on this poll");
     }
-    poll.votes.push(session.user._id);
+    poll.votes.push(session.user.id);
     await poll.save();
     return Promise.resolve(JSON.parse(JSON.stringify(poll)));
   } catch (err) {
@@ -150,7 +150,7 @@ export async function getPollsCreatedByLoggedInUser(): Promise<PollType[]> {
       return Promise.reject("You need to be logged in to view your polls");
     }
     await dbConnect();
-    const polls = await Poll.find({ createdBy: session.user._id });
+    const polls = await Poll.find({ createdBy: session.user.id });
     return Promise.resolve(JSON.parse(JSON.stringify(polls)));
   } catch (err) {
     console.error(err);

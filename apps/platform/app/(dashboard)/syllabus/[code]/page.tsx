@@ -13,21 +13,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { authOptions } from "app/api/auth/[...nextauth]/options";
-import { getServerSession } from "next-auth/next";
-import { revalidatePath } from "next/cache";
+
 import Image from "next/image";
 import Link from "next/link";
-import { getCourseByCode } from "src/lib/course/actions";
-import dbConnect from "src/lib/dbConnect";
-import CourseModel, { type booksAndRefType, type prevPaperType } from "src/models/course";
+import { getCourseByCode, updateBooksAndRefPublic } from "~/actions/course";
+import dbConnect from "~/lib/dbConnect";
+
 import { AddPrevsModal, AddRefsModal } from "./modal";
 import { IconMap } from "./render-link";
 
 import type { Metadata, ResolvingMetadata } from "next";
+import { getSession } from "~/lib/auth-server";
 
 type Props = {
-  params: Promise<{ code: string }>
+  params: Promise<{ code: string }>;
 };
 
 export async function generateMetadata(
@@ -35,58 +34,27 @@ export async function generateMetadata(
   parent: ResolvingMetadata
 ): Promise<Metadata> {
   // read route params
-  const {code} = await params;
-  const course = await getCourseByCode(code);
-  if (!course) return notFound();
+  const { code } = await params;
+  const data = await getCourseByCode(code);
+  if (!data) return notFound();
 
   return {
-    title: `${course.name} | ${course.code} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-    description: `Syllabus of ${course.name} (${course.code})`,
+    title: `${data.course.name} | ${data.course.code} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+    description: `Syllabus of ${data.course.name} (${data.course.code})`,
   };
 }
 
 export default async function CoursePage(props: Props) {
   const params = await props.params;
 
-  const session = await getServerSession(authOptions);
+  const session = await getSession();
 
-  await dbConnect();
-  const course = await getCourseByCode(params.code);
-  if (!course) {
+  const data = await getCourseByCode(params.code);
+  if (!data) {
     return notFound();
   }
-  console.log(course);
-
-  async function addPrevPaper(paper: prevPaperType): Promise<boolean> {
-    "use server";
-    await dbConnect();
-    const course = await CourseModel.findOne({ code: params.code });
-    if (!course) return Promise.reject("Course not found");
-    if (course.prev_papers.find((p: prevPaperType) => p.link === paper.link)) {
-      return Promise.reject("Paper already exists");
-    }
-    course.prev_papers.push(paper);
-    await course.save();
-    revalidatePath(`/syllabus/${course.code}`);
-    return Promise.resolve(true);
-  }
-  async function addReference(ref: booksAndRefType): Promise<boolean> {
-    "use server";
-    await dbConnect();
-    const course = await CourseModel.findOne({ code: params.code });
-    if (!course) return Promise.reject("Course not found");
-    if (
-      course.books_and_references.find(
-        (p: booksAndRefType) => p.link === ref.link
-      )
-    ) {
-      return Promise.reject("Reference already exists");
-    }
-    course.books_and_references.push(ref);
-    await course.save();
-    revalidatePath(`/syllabus/${course.code}`);
-    return Promise.resolve(true);
-  }
+  console.log(data);
+  const { course, booksAndReferences, previousPapers, chapters } = data;
 
   return (
     <>
@@ -118,7 +86,7 @@ export default async function CoursePage(props: Props) {
           </TabsList>
           <TabsContent value="chapters">
             <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1">
-              {course.chapters.map((chapter, index) => {
+              {chapters.map((chapter, index) => {
                 return (
                   <Card variant="glass" key={chapter.title}>
                     <CardHeader className="flex-row gap-2 items-center px-5 py-4">
@@ -143,54 +111,65 @@ export default async function CoursePage(props: Props) {
             </div>
           </TabsContent>
           <TabsContent value="books_and_references">
-            {course.books_and_references.length > 0 ? (
+            {booksAndReferences.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {course.books_and_references.map(
-                  (ref: booksAndRefType, index: number) => {
-                    const iconsSrc = IconMap.has(
-                      ref.type as booksAndRefType["type"]
-                    )
-                      ? IconMap.get(ref.type as booksAndRefType["type"])
-                      : OthersPng;
-                    return (
-                      <Card key={ref.link}>
-                        <CardHeader className="md:flex-row md:justify-between gap-2">
-                          <div className="w-16 h-16 p-3 aspect-square rounded-full flex justify-center items-center  bg-slate-100 dark:bg-gray-800 font-bold text-lg">
-                            {iconsSrc ? (
-                              <Image
-                                src={iconsSrc}
-                                className="w-10 h-10"
-                                width={40}
-                                height={40}
-                                alt={ref.link}
-                              />
-                            ) : (
-                              <Image
-                                src={OthersPng}
-                                className="w-10 h-10"
-                                width={40}
-                                height={40}
-                                alt={ref.link}
-                              />
-                            )}
-                          </div>
-                          <div className="flex-auto grow">
-                            <CardTitle className="break-words">
-                              {ref.name}
-                            </CardTitle>
-                            <a
-                              href={ref.link}
-                              target="_blank"
-                              className="text-primary mt-2 text-sm font-semibold" rel="noreferrer"
-                            >
-                              Go to Link
-                            </a>
-                          </div>
-                        </CardHeader>
-                      </Card>
-                    );
-                  }
-                )}
+                {booksAndReferences.map((ref) => {
+                  const iconsSrc = IconMap.has(
+                    ref.type as
+                      | "book"
+                      | "reference"
+                      | "drive"
+                      | "youtube"
+                      | "others"
+                  )
+                    ? IconMap.get(
+                        ref.type as
+                          | "book"
+                          | "reference"
+                          | "drive"
+                          | "youtube"
+                          | "others"
+                      )
+                    : OthersPng;
+                  return (
+                    <Card key={ref.link}>
+                      <CardHeader className="md:flex-row md:justify-between gap-2">
+                        <div className="w-16 h-16 p-3 aspect-square rounded-full flex justify-center items-center  bg-slate-100 dark:bg-gray-800 font-bold text-lg">
+                          {iconsSrc ? (
+                            <Image
+                              src={iconsSrc}
+                              className="w-10 h-10"
+                              width={40}
+                              height={40}
+                              alt={ref.link}
+                            />
+                          ) : (
+                            <Image
+                              src={OthersPng}
+                              className="w-10 h-10"
+                              width={40}
+                              height={40}
+                              alt={ref.link}
+                            />
+                          )}
+                        </div>
+                        <div className="flex-auto grow">
+                          <CardTitle className="break-words">
+                            {ref.name}
+                          </CardTitle>
+                          <a
+                            href={ref.link}
+                            target="_blank"
+                            className="text-primary mt-2 text-sm font-semibold"
+                            rel="noreferrer"
+                          >
+                            Go to Link
+                          </a>
+                        </div>
+                      </CardHeader>
+                    </Card>
+                  );
+                })}
               </div>
             ) : (
               <p className="text-center text-gray-600 dark:text-gray-400 text-md font-semibold pt-5">
@@ -199,11 +178,11 @@ export default async function CoursePage(props: Props) {
             )}
             <div className="flex w-full items-center justify-center p-4">
               {session?.user ? (
-                <AddRefsModal code={course.code} addReference={addReference} />
+                <AddRefsModal code={course.code} courseId={course.id} />
               ) : (
                 <p className="text-center text-gray-600 dark:text-gray-400 text-md font-semibold pt-5">
                   <Link
-                    href="/login"
+                    href="/sign-in"
                     className="text-primary font-semibold hover:underline"
                   >
                     Login
@@ -214,9 +193,9 @@ export default async function CoursePage(props: Props) {
             </div>
           </TabsContent>
           <TabsContent value="prev_papers">
-            {course.prev_papers.length > 0 ? (
+            {previousPapers.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {course.prev_papers.map((paper, index) => {
+                {previousPapers.map((paper, index) => {
                   return (
                     <div
                       className="flex items-center p-4 gap-3 border border-border hover:border-primary rounded-md"
@@ -245,11 +224,11 @@ export default async function CoursePage(props: Props) {
 
             <div className="flex w-full items-center justify-center p-4">
               {session?.user ? (
-                <AddPrevsModal code={course.code} addPrevPaper={addPrevPaper} />
+                <AddPrevsModal code={course.code} courseId={course.id} />
               ) : (
                 <p className="text-center text-gray-600 dark:text-gray-400 text-md font-semibold pt-5">
                   <Link
-                    href="/login"
+                    href="/sign-in"
                     className="text-primary font-semibold hover:underline"
                   >
                     Login

@@ -10,6 +10,8 @@ The following is a set of guidelines for contributing to the College Ecosystem p
   - [Reporting Bugs](#reporting-bugs)
   - [Suggesting Enhancements](#suggesting-enhancements)
   - [Pull Requests](#pull-requests)
+  - [Design Icons Or Layouts](#design-icons-and-layouts)
+  - [Help Needed](#help-needed)
 - [Development Setup](#development-setup)
 - [Project Structure](#project-structure)
 - [Coding Guidelines](#coding-guidelines)
@@ -35,6 +37,28 @@ Before creating an enhancement suggestion, please check if an issue already exis
 
 - **Ensure the enhancement was not already suggested** by searching on GitHub under [Issues](https://github.com/your-repo/college-ecosystem/issues).
 - **If you're unable to find an open issue addressing the suggestion,** open a new one.
+
+
+### Design Icons and Layouts
+
+Designers can contribute to the frontend applications by creating and improving the visual elements of the project. Here are some ways designers can help:
+
+- **Create Icons**: Design custom icons that align with the project's theme and improve the user interface.
+- **Design Layouts**: Propose new layouts or improve existing ones to enhance user experience and accessibility.
+- **Style Guides**: Develop and maintain a style guide to ensure consistency across the application.
+- **Review UI/UX**: Provide feedback on the user interface and user experience, suggesting improvements where necessary.
+- **Collaborate with Developers**: Work closely with developers to implement designs and ensure they are feasible and functional.
+
+To contribute, designers can:
+
+1. Fork the repository and create a branch for their design changes.
+2. Add or update design files in the appropriate directory.
+3. Submit a pull request with a description of the changes and any relevant design files or mockups.
+
+### Help Needed
+
+- **AI Chatbot**: Create a chatbot with open source LLM or free LLM api (that don't use ou data to train) to help question-answer about platform and anything abou the college.
+- **Create Icons**:Create or design a set of Svg icons for the platform with consistent stroke and style
 
 ### Pull Requests
 

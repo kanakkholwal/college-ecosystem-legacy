@@ -1,5 +1,8 @@
-import mongoose, { ConnectOptions, Mongoose } from "mongoose";
-// import "server-only";
+import { loadEnvConfig } from "@next/env";
+import mongoose, { type ConnectOptions, type Mongoose } from "mongoose";
+
+const projectDir = process.cwd();
+loadEnvConfig(projectDir);
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
@@ -53,5 +56,7 @@ async function dbConnect(dbName: string = defaultDb): Promise<Mongoose> {
 
   return cached.conn ? cached.conn : await cached.promise;
 }
+
+
 
 export default dbConnect;

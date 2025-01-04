@@ -26,7 +26,7 @@ async function getCalender({
 import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
-  searchParams: Promise<{ year?: number; sem?: "even" | "odd" }>
+  searchParams: Promise<{ year?: number; sem?: "even" | "odd" }>;
 };
 
 export async function generateMetadata(

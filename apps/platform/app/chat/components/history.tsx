@@ -20,7 +20,7 @@ export default function ChatHistory() {
       <div className="grid gap-3 mt-5 w-full">
         {chats.map((chat: ChatType, index: number) => (
           <ChatButton
-            key={index}
+            key={chat.id}
             chat={chat}
             style={{
               animationDelay: `${index * 100}ms`,

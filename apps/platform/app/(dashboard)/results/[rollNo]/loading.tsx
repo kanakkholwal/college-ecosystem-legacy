@@ -36,9 +36,9 @@ export default function Loading() {
               <Skeleton className="h-3 w-10 mx-auto mt-8 " />
               <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
                 <div className="w-full flex flex-wrap items-center gap-4 text-sm mx-auto justify-center">
-                  <Skeleton className={"py-1.5 px-3 rounded-md"}></Skeleton>
-                  <Skeleton className={"py-1.5 px-3 rounded-md"}></Skeleton>
-                  <Skeleton className={"py-1.5 px-3 rounded-md"}></Skeleton>
+                  <Skeleton className={"py-1.5 px-3 rounded-md"} />
+                  <Skeleton className={"py-1.5 px-3 rounded-md"} />
+                  <Skeleton className={"py-1.5 px-3 rounded-md"} />
                 </div>
               </div>
             </div>
@@ -57,7 +57,7 @@ export default function Loading() {
           {Array.from({
             length: 3,
           }).map((_, index) => {
-            return <SemCardLoader key={index} />;
+            return <SemCardLoader key={index.toString()} />;
           })}
         </div>
       </div>
@@ -137,7 +137,7 @@ function SemCardLoader() {
         })?.map((_, index) => (
           <div
             className="flex justify-between items-center py-2 gap-2 border-b border-border last:border-b-0"
-            key={index}
+            key={index.toString()}
           >
             <div className="flex items-start flex-col">
               <Skeleton className="w-40 h-6 mb-1" />

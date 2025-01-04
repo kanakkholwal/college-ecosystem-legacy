@@ -1,4 +1,4 @@
-import { getSession } from "src/lib/auth";
+import { getSession } from "src/lib/auth-server";
 import admin from "src/lib/firebaseAdmin";
 
 import dbConnect from "src/lib/dbConnect";
@@ -23,7 +23,7 @@ export async function UploadFile({
   }
 
   const uploadedAt = new Date();
-  const uploadedBy = session.user._id;
+  const uploadedBy = session.user.id;
 
   const bucket = admin
     .storage()

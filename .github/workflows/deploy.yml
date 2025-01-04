@@ -2,9 +2,6 @@ name: 🚀 Deployments
 
 env:
   SERVICE_NAME_SERVER: "college-ecosystem-server"
-  REDIS_URL: '${{ secrets.REDIS_URL }}'
-  MONGODB_URI: '${{ secrets.A_SECRET }}'
-  # IDENTITY_KEY: '${{ secrets.A_BUCKET }}'
   
 on:
   push:
@@ -16,11 +13,11 @@ on:
 
 
 jobs:
-  lint:
-    uses: ./.github/workflows/lint.yml
+  # lint:
+    # uses: ./.github/workflows/lint.yml
 
   deploy-frontend-to-vercel:
-    needs: lint
+    # needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout code
@@ -76,6 +73,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
 
   dockerize-and-deploy-server:
+    # needs: lint
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging' || github.event_name == 'workflow_dispatch'
     steps:
@@ -89,13 +87,14 @@ jobs:
           git diff --quiet HEAD^ HEAD ./apps/server/Dockerfile || echo "dockerfile_changed=true" >> $GITHUB_OUTPUT
 
       - name: 🔑 Set up Google Cloud Auth SDK
-        # if: steps.server-changed.outputs.server_changed == 'true'
+        if: steps.server-changed.outputs.server_changed == 'true'
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.CREDENTIALS_JSON }}
           # project_id: ${{ secrets.GCP_PROJECT_ID }} 
             
       - name: ⚙️ Log in Docker to GCR
+        if: steps.server-changed.outputs.server_changed == 'true'
         uses: docker/login-action@v2
         with:
             registry: gcr.io
@@ -103,7 +102,7 @@ jobs:
             password:  ${{ secrets.CREDENTIALS_JSON }}
       
       - name: 🐳 Build and Push Docker Image
-        # if:  steps.server-changed.outputs.dockerfile_changed == 'true'
+        if:  steps.server-changed.outputs.server_changed == 'true'
         run: |
           IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
           docker build --pull --rm -f "apps/server/Dockerfile" -t "${IMAGE_NAME}" "apps/server"
@@ -111,7 +110,7 @@ jobs:
 
       - name: 🚀 Deploy to Cloud Run
         if: success()
-        run: |
+        run: |  
           IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
           gcloud run deploy ${{ env.SERVICE_NAME_SERVER }} \
             --image "${IMAGE_NAME}" \

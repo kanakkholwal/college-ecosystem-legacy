@@ -57,6 +57,7 @@ export function SidebarContent({
     <>
       {/* <h3 className="text-xl font-bold">Community</h3> */}
       <button
+        type="button"
         className={cn(
           "group rounded-lg w-full flex justify-start items-center gap-2 p-2 animate-in popup  transition-colors ",
           "text-sm font-semibold whitespace-nowrap border border-transparent backdrop-blur-2xl bg-white/30 hover:border-primary/50 hover:shadow text-gray-700 hover:text-primary"
@@ -68,7 +69,7 @@ export function SidebarContent({
       <div className="grid gap-3 mt-5 w-full">
         {sidebarLinks?.map((link, index) => (
           <SideLink
-            key={index}
+            key={link.href}
             link={link}
             style={{
               animationDelay: `${index * 100}ms`,

@@ -48,7 +48,7 @@ export function UploadImage({ onUpload }: UploadImageProps) {
     setUploadSuccess(false);
 
     const formData = new FormData();
-    formData.append("file", selectedFile!);
+    formData.append("file", selectedFile);
     formData.append("name", meta.name);
     formData.append("path", meta.path);
     formData.append(
@@ -112,7 +112,7 @@ export function UploadImage({ onUpload }: UploadImageProps) {
             {files &&
               files.length > 0 &&
               files.map((file, i) => (
-                <FileUploaderItem key={i} index={i}>
+                <FileUploaderItem key={file.size} index={i}>
                   <Paperclip className="h-4 w-4 stroke-current" />
                   <span>{file.name}</span>
                 </FileUploaderItem>
