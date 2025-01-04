@@ -12,9 +12,9 @@ const withSerwist = withSerwistInit({
 
 
 const nextConfig = {
-    // reactStrictMode: true,
+    reactStrictMode: true,
     crossOrigin: 'anonymous',
-    output: "standalone",
+    // output: "standalone",
     logging: {
         fetches: {
             fullUrl: false

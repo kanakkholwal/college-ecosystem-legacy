@@ -9,7 +9,7 @@ const payloadSchema = z.record(z.union([z.string(), z.number(), z.array(z.string
 
 type Payload = z.infer<typeof payloadSchema>;
 
-export function ResetPasswordEmail(payload: Payload) {
+export function ResetPasswordEmail({payload}: {payload: Payload}) {
   
   const email = payload.email as string;
   const userName = payload.name as string;

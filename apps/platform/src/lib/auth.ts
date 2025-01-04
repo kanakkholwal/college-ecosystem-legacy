@@ -100,7 +100,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
 
 export const auth = betterAuth({
   appName: "College Platform",
-  baseURL: process.env.BETTER_AUTH_URL,
+  baseURL: process.env.BASE_URL,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {

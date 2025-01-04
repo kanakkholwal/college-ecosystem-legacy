@@ -1,10 +1,13 @@
 import { type NextRequest, NextResponse } from "next/server";
 import { Resend } from 'resend';
 import { z } from 'zod';
+import { render } from '@react-email/components';
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// const resend = new Resend(process.env.RESEND_API_KEY);
+
 
 import { getEmailTemplate } from '@/emails';
+import { handleEmailFire } from "@/emails/helper";
 
 const payloadSchema = z.object({
   template_key: z.string(),
@@ -15,10 +18,14 @@ const payloadSchema = z.object({
 
 
 export async function POST(request: NextRequest) {
-
   try {
+
+    const identityKey = request.headers.get('X-IDENTITY-KEY') || '';
+    if (identityKey !== process.env.SERVER_IDENTITY) {
+      return NextResponse.json({ error: 'Missing or invalid SERVER_IDENTITY' }, { status: 403 });
+    }
+
     const body = await request.json();
-    console.log(body);
 
     const res = payloadSchema.safeParse(body);
     if (!res.success) {
@@ -26,18 +33,20 @@ export async function POST(request: NextRequest) {
     }
     const { template_key, targets, subject, payload } = res.data;
 
-    const { data, error } = await resend.emails.send({
-      from: 'College Platform <onboarding@nith.eu.org>',
-      to: [...targets],
+
+    const EmailTemplate = getEmailTemplate({ template_key, payload });
+
+    const emailHtml = await render(EmailTemplate);
+    const response = await handleEmailFire('College Platform <platform@nith.eu.org>', {
+      to: targets,
       subject: subject,
-      react: getEmailTemplate({ template_key, payload }),
-    });
-
-    if (error) {
-      return Response.json({ error }, { status: 500 });
+      html: emailHtml,
+    })
+    if(response.rejected.length > 0) {
+      return NextResponse.json({ error: response.rejected }, { status: 400 });
     }
-
-    return Response.json({ data });
+    return NextResponse.json({ data: response.accepted });
+  
   } catch (error) {
     return Response.json({ error }, { status: 500 });
   }

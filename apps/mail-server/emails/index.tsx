@@ -15,7 +15,7 @@ export function getEmailTemplate({ template_key, payload }: {
     if (email_templates.has(template_key)) {
         const EmailComponent = email_templates.get(template_key)
         return <EmailWrapper>
-            <EmailComponent {...payload} />
+            <EmailComponent payload={payload} />
         </EmailWrapper>
     }
     return null

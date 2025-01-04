@@ -118,7 +118,7 @@ export const updateResult = async (req: Request, res: Response) => {
     
 }
 
-export async function assignRankToResults(req: Request, res: Response) {
+export const assignRankToResults = async (req: Request, res: Response)=> {
     try {
         const time = new Date();
         await dbConnect();
@@ -239,7 +239,7 @@ const freshersDataSchema = z.array(z.object({
     gender: z.enum(["male","female","not_specified"]),
 }))
 
-export async function importFreshers(req: Request, res: Response){
+export const  importFreshers =async (req: Request, res: Response) =>{
     try{
         const time = new Date();
         await dbConnect();
