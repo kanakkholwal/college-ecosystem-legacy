@@ -2,6 +2,12 @@ import { Router } from 'express';
 import { getDepartments, getDepartmentsList } from '../controllers/http-department';
 import { getFacultyByEmailHandler, getFacultyListByDepartmentHandler, refreshFacultyListHandler } from '../controllers/http-faculty_list';
 import { addResult, assignRankToResults, getResult, getResultByRollNoFromSite, importFreshers, updateResult } from '../controllers/http-result';
+import rateLimit from 'express-rate-limit';
+
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+});
 
 const router = Router();
 
@@ -14,7 +20,7 @@ router.get('/departments/list', getDepartmentsList);
 
 // Endpoint to get all the faculties from the database
 router.get('/faculties/search/:email', getFacultyByEmailHandler);
-router.get('/faculties/refresh', refreshFacultyListHandler);
+router.get('/faculties/refresh', limiter, refreshFacultyListHandler);
 router.get('/faculties/:departmentCode', getFacultyListByDepartmentHandler);
 
 
