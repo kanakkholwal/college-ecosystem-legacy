@@ -6,6 +6,7 @@ import { users,sessions,accounts } from "~/db/schema/auth-schema";
 
 export async function users_CountAndGrowth(timeInterval: string): Promise<{
   count: number;
+  total: number;
   growth: number;
   trend: "increase" | "decrease" | "stable";
 }> {
@@ -38,6 +39,9 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
     default:
       throw new Error("Invalid time interval provided");
   }
+
+  const totalUsers = await db.select({ count: sql<number>`COUNT(*)` }).from(users).execute();
+  const total = totalUsers[0]?.count ?? 0;
 
   // Fetch the count of users from the current interval
   const currentCountQuery = await db
@@ -73,6 +77,7 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
 
   return {
     count: currentCount === Number.POSITIVE_INFINITY ? 100 : currentCount,
+    total,
     growth,
     trend,
   };

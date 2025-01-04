@@ -39,12 +39,6 @@ const quick_links = [
     Icon: SiGoogleclassroom,
   },
   {
-    href: "/attendance",
-    title: "Attendance Manager",
-    description: "Manage your attendance here.",
-    Icon: BookUser,
-  },
-  {
     href: "/schedules",
     title: "Schedules",
     description: "Check your schedules here.",

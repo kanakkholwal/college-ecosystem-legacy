@@ -10,8 +10,10 @@ import { auth } from "src/lib/auth";
 import ForgotPassword from "./forget-password";
 import ResetPassword from "./reset-password";
 import SignInForm from "./sign-in";
+import { cn } from "@/lib/utils";
 
-const TABS = ["sign-in", "sign-up", "forget-password"];
+
+const TABS = ["sign-in", "sign-up", "forget-password","reset-password", "verify-email"];
 
 interface Props {
   searchParams: Promise<{
@@ -42,11 +44,14 @@ export default async function SignInPage({ searchParams }: Props) {
             <CardHeader>
               <TabsList className="flex justify-around space-x-4 flex-wrap">
                 {TABS.map((tab) => {
+
                   return (
                     <TabsTrigger
                       key={tab}
                       value={tab}
-                      className="capitalize w-full flex-1"
+                      className={cn("capitalize w-full flex-1",
+                        ["reset-password", "verify-email"].includes(tab) ? "hidden" : ""
+                      )}
                     >
                       {tab.replace("-", " ")}
                     </TabsTrigger>

@@ -28,6 +28,7 @@ export type rawLinkType = {
   items?: {
     title: string;
     path: string;
+    allowed_roles: Session["user"]["role"] | Session["user"]["other_roles"] | "*";
 
   }[];
 };
@@ -48,6 +49,7 @@ const all_links: rawLinkType[] = [
       {
         title: "Create User",
         path: "/new",
+        allowed_roles: ["admin", "moderator"],
       },
     ],
   },
@@ -60,10 +62,12 @@ const all_links: rawLinkType[] = [
       {
         title: "Scraping",
         path: "/scraping",
+        allowed_roles: ["admin", "moderator"],
       },
       {
         title: "Import",
         path: "/import",
+        allowed_roles: ["admin", "moderator"],
       },
     ],
   },
@@ -86,14 +90,21 @@ const all_links: rawLinkType[] = [
     allowed_roles: ["*"],
   },
   {
+    title: "Personal Attendance",
+    icon: CalendarRange,
+    path: "/attendance-personal",
+    allowed_roles: ["student"],
+  },
+  {
     title: "Classrooms",
     icon: SiGoogleclassroom,
     path: "/rooms",
-    allowed_roles: ["*"],
+    allowed_roles: ["cr","faculty","admin"],
     items: [
       {
         title: "Create Classroom",
         path: "/new",
+        allowed_roles: ["admin", "moderator"],
       },
     ],
   },
@@ -101,16 +112,12 @@ const all_links: rawLinkType[] = [
 
 const getSideNavLinks = (role: string) => {
   return all_links
-    .filter((link) => {
-      return (
-        link.allowed_roles.includes(role) || link.allowed_roles.includes("*")
-      );
-    })
+    .filter((link) => link.allowed_roles.includes(role) || link.allowed_roles.includes("*"))
     .map((link) => ({
       title: link.title,
       icon: link.icon,
       href: `/${role}${link.path}`,
-      items: link?.items?.map((item) => ({
+      items: link?.items?.filter((link) => link.allowed_roles.includes(role) || link.allowed_roles.includes("*"))?.map((item) => ({
         title: item.title,
         href: `/${role}${link.path}${item.path}`,
       })),
