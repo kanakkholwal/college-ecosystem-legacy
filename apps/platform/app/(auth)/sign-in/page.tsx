@@ -1,3 +1,4 @@
+import { AppLogo } from "@/components/logo";
 // import SignUpForm from "./sign-up";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -27,26 +28,19 @@ export default async function SignInPage({ searchParams }: Props) {
   const { tab } = await searchParams;
 
   return (
-    <div className="min-h-screen w-full mx-auto px-4 relative h-[100vh] flex-col items-center justify-center bg-background-gradient">
+    <div className="min-h-screen w-full mx-auto lg:px-4 relative h-[100vh] flex-col items-center justify-center bg-background-gradient">
       <div className="lg:p-8 @container flex flex-col justify-center items-center m-auto">
         <Card
           variant="glass"
-          className="m-auto flex flex-col justify-center space-y-6 max-w-[35rem]  mx-auto w-full mt-32 @lg:mt-0"
+          className="m-auto flex flex-col justify-center space-y-6 max-w-[35rem] mx-auto w-full mt-32 @lg:mt-0"
         >
-          <div className="flex flex-col gap-2 justify-center items-center mx-auto">
-            <h1 className="text-2xl md:text-7xl font-bold text-center relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary whitespace-nowrap">
-              NITH
-            </h1>
-            <h2 className="text-md md:text-xl font-semibold capitalize text-slate-700 text-center">
-              {process.env.NEXT_PUBLIC_WEBSITE_NAME}
-            </h2>
-          </div>
+          <AppLogo className="mt-12"/>
           <Tabs
             defaultValue={TABS.includes(tab) ? tab : TABS[0]}
             className="w-full"
           >
             <CardHeader>
-              <TabsList className="flex justify-around space-x-4">
+              <TabsList className="flex justify-around space-x-4 flex-wrap">
                 {TABS.map((tab) => {
                   return (
                     <TabsTrigger
@@ -60,7 +54,7 @@ export default async function SignInPage({ searchParams }: Props) {
                 })}
               </TabsList>
             </CardHeader>
-            <CardContent className="px-10">
+            <CardContent className="px-4 @lg:px-10">
               <TabsContent value="sign-in">
                 <SignInForm />
               </TabsContent>

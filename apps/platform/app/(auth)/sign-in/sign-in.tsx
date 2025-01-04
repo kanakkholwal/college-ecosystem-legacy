@@ -1,6 +1,7 @@
 "use client";
 
 import { authClient } from "src/lib/auth-client";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
@@ -154,7 +155,7 @@ export default function SignInForm() {
               <p className="text-right mt-2 text-sm font-medium">
                 <Link
                   href="/sign-in?tab=forget-password"
-                  className="text-primary hover:underline"
+                  className="text-primary hover:underline text-xs"
                   shallow
                 >
                   Forgot Password?
@@ -166,6 +167,7 @@ export default function SignInForm() {
                 type="submit"
                 className="mt-2 tracking-wide"
                 variant="default"
+                rounded="full"
               >
                 {isLoading && (
                   <AiOutlineLoading className="mr-2 h-4 w-4 animate-spin" />
@@ -190,6 +192,7 @@ export default function SignInForm() {
               type="button"
               disabled={isLoading}
               width={"full"}
+              rounded="full"
               onClick={async () => {
                 setIsLoading(true);
                 await authClient.signIn.social({
