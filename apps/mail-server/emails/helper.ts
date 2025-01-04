@@ -9,6 +9,7 @@ type Payload = {
 const smtpSettings = {
   host: "smtp-relay.sendinblue.com", // "smtp.gmail.com", //replace with your email provider
   port: 587,
+  // secure: false, // true for 465, false for other ports
   auth: {
     user: process.env.MAIL_EMAIL as string,
     pass: process.env.MAIL_PASSWORD as string,
