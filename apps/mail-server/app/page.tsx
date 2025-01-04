@@ -1,8 +1,7 @@
-import { redirect } from "next/navigation"
+import { redirect } from "next/navigation";
 
 export default function Page() {
+  redirect("https://app.nith.eu.org");
 
-  redirect("https://app.nith.eu.org")
-
-  return <h1>Hello, Home page!</h1>
+  return <h1>Hello, Home page!</h1>;
 }
