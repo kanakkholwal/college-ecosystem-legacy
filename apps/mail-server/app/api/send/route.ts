@@ -42,7 +42,10 @@ export async function POST(request: NextRequest) {
       }, { status: 400 });
     }
     const { template_key, targets, subject, payload } = res.data;
-
+    console.log("Sending email to", targets);
+    console.log("Subject", subject);
+    console.log("Template", template_key);
+    console.log("Payload", payload);
     const EmailTemplate = getEmailTemplate({ template_key, payload });
 
     const emailHtml = await render(EmailTemplate);
@@ -54,6 +57,7 @@ export async function POST(request: NextRequest) {
         html: emailHtml,
       }
     );
+    console.log("Email sent", response);
     if (response.rejected.length > 0) {
       return NextResponse.json({ error: response.rejected, data: null }, { status: 400 });
     }
