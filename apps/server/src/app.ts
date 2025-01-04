@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
     status: 'healthy'
   });
 });
-const CORS_ORIGINS = ['nith.eu.org', "app.nith.eu.org"];
+const CORS_ORIGINS = ['https://nith.eu.org', 'https://app.nith.eu.org'];
 
 const SERVER_IDENTITY = process.env.SERVER_IDENTITY
 if (!SERVER_IDENTITY)
