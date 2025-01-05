@@ -20,7 +20,7 @@ type Payload = z.infer<typeof payloadSchema>;
 export function WelcomeVerifyEmail({ payload }: { payload: Payload }) {
     const platform_name = payload.platform_name as string;
     const userName = payload.name as string;
-    const previewText = `Hi ${userName}, Click the button below to reset your password.`;
+    const previewText = `Welcome to ${platform_name}! Verify your email address to get started.`;
     const verifyUrl = payload.verification_url as string;
 
     return (
