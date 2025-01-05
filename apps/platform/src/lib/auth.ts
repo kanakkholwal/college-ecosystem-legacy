@@ -183,7 +183,7 @@ export const auth = betterAuth({
             payload: {
               name: user.name,
               email: user.email,
-              reset_link: verification_url,
+              verification_url: verification_url,
             },
           })
         });

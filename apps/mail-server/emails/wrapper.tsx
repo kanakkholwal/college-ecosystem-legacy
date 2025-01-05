@@ -12,6 +12,10 @@ import {
   Text,
 } from "@react-email/components";
 
+const baseUrl = process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : "";
+
 export default function EmailWrapper({
   children,
 }: {
@@ -61,7 +65,7 @@ export default function EmailWrapper({
                           alt="Instagram"
                           className="mx-[4px]"
                           height="36"
-                          src="https://react.email/static/instagram-logo.png"
+                          src={`${baseUrl}/static/github-logo.png`}
                           width="36"
                         />
                       </Link>
