@@ -64,8 +64,13 @@ export async function getResults(
     const results = await ResultModel.find(filterQuery)
       .sort([
         { "rank.college": "asc" },
-        { $expr: { $gt: [{ $size: '$semesters' }, 0] } }
-            ])
+        { 
+          $expr:{ 
+            $gt: [{ $size: '$semesters' }, 0]
+              }
+        }
+        
+        ])
       .skip(skip)
       .limit(resultsPerPage)
       .exec();
