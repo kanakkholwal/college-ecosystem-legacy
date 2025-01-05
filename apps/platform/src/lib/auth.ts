@@ -177,10 +177,11 @@ export const auth = betterAuth({
         }>("/api/send", {
           method: "POST",
           body: JSON.stringify({
-            template_key: "reset-password",
+            template_key: "welcome_verify",
             targets: [user.email],
-            subject: "Reset Password",
+            subject: "Welcome to College Platform",
             payload: {
+              platform_name: "College Platform",
               name: user.name,
               email: user.email,
               verification_url: verification_url,

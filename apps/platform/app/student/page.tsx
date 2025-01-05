@@ -40,7 +40,7 @@ export default async function StudentDashboard() {
               We are changing the way you interact with the platform and adding new features.
             </p>
             <Link
-              href="https://github.com/kanakkholwal/college-ecosystem/issues"
+              href="https://forms.gle/v8Angn9VCbt9oVko7"
               target="_blank"
               rel="noopener noreferrer"
               className="underline mx-1"

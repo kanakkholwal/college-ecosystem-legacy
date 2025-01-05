@@ -17,7 +17,9 @@ import * as z from "zod";
 import { createAttendance } from "~/actions/record.personal";
 
 export const rawAttendanceRecordSchema = z.object({
-  subjectCode: z.string(),
+  subjectCode: z.string().regex(/^[A-Z]{2}-\d{3}$/, {
+    message: "Subject code must be in the format 'EC-969'",
+  }),
   subjectName: z.string(),
 });
 

@@ -27,11 +27,13 @@ export function WelcomeVerifyEmail({ payload }: { payload: Payload }) {
         <>
             <Preview>{previewText}</Preview>
             <Text className="text-gray-800 text-lg">
+                Hi {userName},
+                {"\n"}
                 Welcome to <strong>{platform_name}</strong>! We're thrilled to have
                 you join our community.
             </Text>
             <Text className="text-gray-800 mt-4">
-                Please verify your email address to get started:
+                Please verify your email address ({payload.email}) to get started.
             </Text>
             <Button
                 className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg mt-4 hover:bg-blue-700"

@@ -150,6 +150,30 @@ export default function Navbar({
                     <span>Report an issue</span>
                   </Link>
                 </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                    href={
+                      "https://forms.gle/u2ptK12iRVdn5oXF7"
+                    }
+                    target="_blank"
+                  >
+                    <Bug className="mr-2 h-4 w-4" />
+                    <span>
+                      Give an feedback
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem asChild>
+                  <Link
+                  href="https://forms.gle/v8Angn9VCbt9oVko7"
+                    target="_blank"
+                  >
+                    <Bug className="mr-2 h-4 w-4" />
+                    <span>
+                      Suggest a feature
+                    </span>
+                  </Link>
+                </DropdownMenuItem>
               </DropdownMenuGroup>
               <DropdownMenuSeparator />
               <DropdownMenuItem disabled>

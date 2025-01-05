@@ -26,7 +26,7 @@ export default async function SchedulesPage() {
                     <AlertDescription>
 
                         <Link
-                            href="https://github.com/kanakkholwal/college-ecosystem/issues"
+                            href="https://forms.gle/v8Angn9VCbt9oVko7"
                             target="_blank"
                             rel="noopener noreferrer"
                             className="underline mx-1"
