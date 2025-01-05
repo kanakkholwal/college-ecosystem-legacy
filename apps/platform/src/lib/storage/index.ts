@@ -77,7 +77,7 @@ export async function DeleteFile(
   try {
     const bucket = admin
       .storage()
-      .bucket(`gs://` + process.env.FIREBASE_STORAGE_BUCKET);
+      .bucket(`gs://${process.env.FIREBASE_STORAGE_BUCKET}`);
     const file = bucket.file(path);
     await file.delete();
     await dbConnect();
