@@ -1,5 +1,6 @@
 import axios from "axios";
 import HTMLParser from "node-html-parser";
+import { getDepartmentCoursePrefix } from "../constants/departments";
 import type { rawResultType } from "../types/result";
 
 const PROGRAMME_KEYS = {
@@ -111,7 +112,7 @@ const parseResult = (
         branch: info.branch,
         batch: info.batch,
         programme: info.programme,
-        semesters: [],
+        semesters: [] as rawResultType["semesters"],
     };
 
     student.name =
@@ -172,6 +173,10 @@ const parseResult = (
                 .pop() as unknown as number;
         });
     });
+    const [branch_change,department] = determineBranchChange(student);
+    if(branch_change && department !== null){
+        student.branch = department;
+    }
 
     console.log("Result parsed");
     return Promise.resolve(student);
@@ -349,4 +354,32 @@ export function determineProgramme(RollNo: string) {
         default:
             return "B.Tech";
     }
+}
+
+
+export function determineBranchChange(result: rawResultType) : [boolean,string | null]{
+    if(result.semesters.length <= 2){
+        return [false,null]
+    }
+    
+    const semesters = result.semesters.slice(2);
+    const course_codes = semesters.flatMap(semester => semester.courses.map(course => course.code));
+    // get the unique course codes
+    const unique_course_codes = [...new Set(course_codes)];
+    //  get the unique courses with prefix 
+    const unique_courses_prefix = unique_course_codes.map((course_code: string) => course_code.toUpperCase().split("-")[0]);
+    // count the number of courses with the same prefix using hashmap
+    const course_count = unique_courses_prefix.reduce((acc, course) => {
+        acc[course] = (acc[course] || 0) + 1;
+        return acc;
+    }, {} as Record<string, number>);
+    //  get the highest count of the courses
+    const max_courses = Math.max(...Object.values(course_count));
+    // get the course prefix with the highest count
+    const course_prefix = Object.keys(course_count).find(course => course_count[course] === max_courses);
+    const department = getDepartmentCoursePrefix(course_prefix || "");
+    if(!(department.trim() === "") && department !== "other" && department !== result.branch){
+        return [true,department]
+    }
+    return [false,null]
 }

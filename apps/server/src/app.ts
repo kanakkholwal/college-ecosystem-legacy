@@ -1,7 +1,7 @@
 import type { NextFunction, Request, Response } from 'express';
 import express from 'express';
-import httpRoutes from './routes/httpRoutes';
 import rateLimit from 'express-rate-limit';
+import httpRoutes from './routes/httpRoutes';
 
 
 const limiter = rateLimit({
@@ -30,21 +30,21 @@ if (!SERVER_IDENTITY)
 
 
 // Middleware to handle custom CORS logic
-app.use((req: Request, res: Response, next: NextFunction) => {
+// Middleware to handle custom CORS logic
+app.use((req: Request, res: Response, next: NextFunction): void => {
   const origin = req.header('Origin') || '';
-
   const identityKey = req.header('X-IDENTITY-KEY') || '';
 
   // Allow requests without an Origin header (e.g., server-to-server API calls)
   if (!origin) {
-    // Enforce SERVER_IDENTITY for server-to-server API calls
     if (identityKey === SERVER_IDENTITY) {
-      return next();
+      next();
+      return;
     }
-    return res.status(403).json({ error: 'Missing or invalid SERVER_IDENTITY' });
+    res.status(403).json({ error: 'Missing or invalid SERVER_IDENTITY' });
+    return;
 
   }
-
 
   // Check CORS for specific origins
   if (
@@ -56,10 +56,14 @@ app.use((req: Request, res: Response, next: NextFunction) => {
     res.header('Access-Control-Allow-Headers', 'Content-Type,X-IDENTITY-KEY');
     res.header('Access-Control-Allow-Credentials', 'true');
     if (req.method === 'OPTIONS') {
-      return res.sendStatus(200); // Preflight request
+      res.sendStatus(200); // Preflight request
+      return;
+
     }
   } else {
-    return res.status(403).json({ error: 'CORS policy does not allow this origin' });
+    res.status(403).json({ error: 'CORS policy does not allow this origin' });
+    return;
+
   }
 
   next();

@@ -1,41 +1,47 @@
-import {
-  RouterCard,
-  type RouterCardLink,
-} from "@/components/common/router-card";
-import { CalendarDays, CalendarPlus } from "lucide-react";
-import { getInfo } from "./cr.actions";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { RocketIcon } from "@radix-ui/react-icons";
+import Link from "next/link";
+import { getSession } from "~/lib/auth-server";
 
-export default async function CRDashboard() {
-  const { studentInfo, timetables } = await getInfo();
 
-  const quick_links: RouterCardLink[] = [
-    {
-      href: "/cr/schedules/create",
-      title: "New Time Table",
-      description: "Create new timetable here.",
-      Icon: CalendarPlus,
-    },
-    ...timetables.map((timetable) => ({
-      href: `/cr/schedules/${timetable.department_code}/${timetable.year}/${timetable.semester}`,
-      title: timetable.sectionName,
-      description: "View your timetable here.",
-      Icon: CalendarDays,
-    })),
-  ];
+export default async function FacultyDashboard() {
+  const session = await getSession();
+
 
   return (
-    <>
-      <div className="grid grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 text-left gap-4">
-        {quick_links.map((link, i) => (
-          <RouterCard
-            key={link.href}
-            {...link}
-            style={{
-              animationDelay: `${i * 500}ms`,
-            }}
-          />
-        ))}
-      </div>
-    </>
+    <div className="w-full mx-auto space-y-5">
+      <section id="welcome-header">
+        <h2 className="text-base md:text-lg font-semibold whitespace-nowrap">Hi, {session?.user?.name}</h2>
+        <p className="text-slate-600 dark:text-slate-400">
+          Welcome to the dashboard.
+        </p>
+      </section>
+      <section id="main-section">
+
+        <Alert className="mt-4">
+          <RocketIcon className="h-4 w-4" />
+          <AlertTitle>
+            Suggest a feature for the platform here.(what do you want to see here?)
+          </AlertTitle>
+          <AlertDescription>
+            <p>
+              We are changing the way you interact with the platform and adding new features.
+            </p>
+            <Link
+              href="https://forms.gle/v8Angn9VCbt9oVko7"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline mx-1"
+            >
+              Suggest a feature here
+            </Link>{" "}
+          </AlertDescription>
+        </Alert>
+
+      </section>
+
+    </div>
   );
 }
+
+

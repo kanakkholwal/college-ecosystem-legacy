@@ -3,6 +3,7 @@ export interface Department {
     code: string;
     short: string;
     roll_keys: string[];
+    course_prefix: string;
     page: string;
 }
 
@@ -12,6 +13,7 @@ export const DEPARTMENTS_LIST: readonly Department[] = [
         code: "cse",
         short: "CSE",
         roll_keys: ["bcs", "dcs", "mcs"],
+        course_prefix:"CS",
         page: "https://nith.ac.in/computer-science-engineering"
     },
     {
@@ -19,6 +21,7 @@ export const DEPARTMENTS_LIST: readonly Department[] = [
         code: "ece",
         short: "ECE",
         roll_keys: ["bec", "dec", "mec"],
+        course_prefix:"EC",
         page: "https://nith.ac.in/electronics-communication-engineering"
     },
     {
@@ -26,6 +29,7 @@ export const DEPARTMENTS_LIST: readonly Department[] = [
         code: "ee",
         short: "EE",
         roll_keys: ["bee", "mee"],
+        course_prefix:"EE",
         page: "https://nith.ac.in/electrical-engineering"
     },
     {
@@ -33,6 +37,7 @@ export const DEPARTMENTS_LIST: readonly Department[] = [
         code: "me",
         short: "ME",
         roll_keys: ["bme", "mme"],
+        course_prefix:"ME",
         page: "https://nith.ac.in/mechanical-engineering"
     },
     {
@@ -40,6 +45,7 @@ export const DEPARTMENTS_LIST: readonly Department[] = [
         code: "ce",
         short: "CE",
         roll_keys: ["bce", "mce"],
+        course_prefix:"CE",
         page: "https://nith.ac.in/Departments/topic/130"
     },
     {
@@ -47,6 +53,7 @@ export const DEPARTMENTS_LIST: readonly Department[] = [
         code: "che",
         short: "CHE",
         roll_keys: ["bch", "mch"],
+        course_prefix:"CH",
         page: "https://nith.ac.in/chemistry"
     },
     {
@@ -54,6 +61,7 @@ export const DEPARTMENTS_LIST: readonly Department[] = [
         code: "mse",
         short: "MSE",
         roll_keys: ["bms", "mms"],
+        course_prefix:"MS",
         page: "https://nith.ac.in/material-science-engineering"
     },
     {
@@ -61,6 +69,7 @@ export const DEPARTMENTS_LIST: readonly Department[] = [
         code: "mnc",
         short: "MNC",
         roll_keys: ["bma", "mma"],
+        course_prefix:"MA",
         page: "https://nith.ac.in/mathematics-scientific-computing"
     },
     {
@@ -68,6 +77,7 @@ export const DEPARTMENTS_LIST: readonly Department[] = [
         code: "arc",
         short: "ARC",
         roll_keys: ["bar", "mar"],
+        course_prefix:"AR",
         page: "https://nith.ac.in/Departments/topic/287"
     },
     {
@@ -75,6 +85,7 @@ export const DEPARTMENTS_LIST: readonly Department[] = [
         code: "phy",
         short: "PHY",
         roll_keys: ["bph", "mph"],
+        course_prefix:"PH",
         page: "https://nith.ac.in/physics-photonics-science"
     },
 ] as const;
@@ -99,6 +110,11 @@ export const getDepartmentCode = (name: string) => {
 export const getDepartmentShort = (code: string) => {
     const department = DEPARTMENTS_LIST.find((dept) => dept.code === code);
     return department ? department.short : "";
+}
+
+export const getDepartmentCoursePrefix = (course_prefix: string) => {
+    const department = DEPARTMENTS_LIST.find((dept) => dept.course_prefix === course_prefix);
+    return department ? department.name : "";
 }
 
 export const getDepartmentByRollNo = (rollNo: string) => {

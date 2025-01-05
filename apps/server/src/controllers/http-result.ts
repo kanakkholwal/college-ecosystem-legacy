@@ -118,174 +118,111 @@ export const updateResult = async (req: Request, res: Response) => {
     
 }
 
-export const assignRankToResults = async (req: Request, res: Response)=> {
+export const assignRankToResults = async (req: Request, res: Response) => {
     try {
-        const time = new Date();
-        await dbConnect();
-
-        const aggregationPipeline = [
-            {
-                $set: {
-                    latestSemester: { $arrayElemAt: ["$semesters", -1] },
-                },
-            },
-            {
-                $sort: { "latestSemester.cgpi": -1 },
-            },
-            {
-                $group: {
-                    _id: null,
-                    results: { $push: "$$ROOT" },
-                },
-            },
-            {
-                $unwind: { path: "$results", includeArrayIndex: "collegeRank" },
-            },
-            {
-                $set: {
-                    "results.rank.college": { $add: ["$collegeRank", 1] },
-                },
-            },
-            {
-                $group: {
-                    _id: "$results.batch",
-                    results: { $push: "$results" },
-                },
-            },
-            {
-                $unwind: { path: "$results", includeArrayIndex: "batchRank" },
-            },
-            {
-                $set: {
-                    "results.rank.batch": { $add: ["$batchRank", 1] },
-                },
-            },
-            {
-                $group: {
-                    _id: { batch: "$results.batch", branch: "$results.branch" },
-                    results: { $push: "$results" },
-                },
-            },
-            {
-                $unwind: { path: "$results", includeArrayIndex: "branchRank" },
-            },
-            {
-                $set: {
-                    "results.rank.branch": { $add: ["$branchRank", 1] },
-                },
-            },
-            {
-                $group: {
-                    _id: { batch: "$results.batch", branch: "$results.branch" },
-                    results: { $push: "$results" },
-                },
-            },
-            {
-                $unwind: { path: "$results", includeArrayIndex: "classRank" },
-            },
-            {
-                $set: {
-                    "results.rank.class": { $add: ["$classRank", 1] },
-                },
-            },
-            {
-                $replaceRoot: { newRoot: "$results" },
-            },
-            // Remove the latestSemester field
-            {
-                $unset: "latestSemester",
-            },
-            {
-                $merge: {
-                    into: "results",
-                    whenMatched: "merge",
-                    whenNotMatched: "discard",
-                },
-            },
-        ] as PipelineStage[];
-
-        const resultsWithRanks = await ResultModel.aggregate(aggregationPipeline);
-
-        await Promise.all(
-            resultsWithRanks.map(async (result) => {
-                const { _id, rank } = result;
-                await ResultModel.findByIdAndUpdate(_id, { rank });
-            })
-        );
-
-        console.log("Ranks assigned successfully.");
-
-        return res.status(200).json({
-            error: false,
-            message: "Ranks assigned successfully.",
-            data: {
-                timeTaken: `${(new Date().getTime() - time.getTime()) / 1000}s`,
-                lastUpdated: new Date().toISOString()
-            }
-        });
+      const time = new Date();
+      await dbConnect();
+  
+      const aggregationPipeline: PipelineStage[] = [
+        { $set: { latestSemester: { $arrayElemAt: ['$semesters', -1] } } },
+        { $sort: { 'latestSemester.cgpi': -1 } },
+        { $group: { _id: null, results: { $push: '$$ROOT' } } },
+        { $unwind: { path: '$results', includeArrayIndex: 'collegeRank' } },
+        { $set: { 'results.rank.college': { $add: ['$collegeRank', 1] } } },
+        { $group: { _id: '$results.batch', results: { $push: '$results' } } },
+        { $unwind: { path: '$results', includeArrayIndex: 'batchRank' } },
+        { $set: { 'results.rank.batch': { $add: ['$batchRank', 1] } } },
+        { $group: { _id: { batch: '$results.batch', branch: '$results.branch' }, results: { $push: '$results' } } },
+        { $unwind: { path: '$results', includeArrayIndex: 'branchRank' } },
+        { $set: { 'results.rank.branch': { $add: ['$branchRank', 1] } } },
+        { $group: { _id: { batch: '$results.batch', branch: '$results.branch' }, results: { $push: '$results' } } },
+        { $unwind: { path: '$results', includeArrayIndex: 'classRank' } },
+        { $set: { 'results.rank.class': { $add: ['$classRank', 1] } } },
+        { $replaceRoot: { newRoot: '$results' } },
+        { $unset: 'latestSemester' },
+        { $merge: { into: 'results', whenMatched: 'merge', whenNotMatched: 'discard' } },
+      ];
+  
+      const resultsWithRanks = await ResultModel.aggregate(aggregationPipeline);
+  
+      await Promise.all(
+        resultsWithRanks.map(async (result) => {
+          const { _id, rank } = result;
+          await ResultModel.findByIdAndUpdate(_id, { rank });
+        })
+      );
+  
+      return res.status(200).json({
+        error: false,
+        message: 'Ranks assigned successfully.',
+        data: {
+          timeTaken: `${(new Date().getTime() - time.getTime()) / 1000}s`,
+          lastUpdated: new Date().toISOString(),
+        },
+      });
     } catch (error) {
-        console.log(error);
-        return Promise.resolve({
-            error: true,
-            message: "An error occurred",
-            data: error || "Internal Server Error"
-        });
+      console.error(error);
+      return res.status(500).json({
+        error: true,
+        message: 'An error occurred',
+        data: error || 'Internal Server Error',
+      });
     }
-}
-
+  };
 const freshersDataSchema = z.array(z.object({
     name: z.string(),
     rollNo: z.string(),
     gender: z.enum(["male","female","not_specified"]),
 }))
 
-export const  importFreshers =async (req: Request, res: Response) =>{
-    try{
-        const time = new Date();
-        await dbConnect();
-
-        const data = req.body;
-        const parsedData = freshersDataSchema.safeParse(data);
-        if(!parsedData.success){
-            return res.status(400).json({
-                error: true,
-                message: "Invalid data",
-                data: parsedData.error
-            });
-        }
-        const results = parsedData.data.map(async(student) => {
-            const data = await getInfoFromRollNo(student.rollNo);
-            return {
-                name: student.name,
-                rollNo: student.rollNo,
-                branch: data.branch,
-                batch: data.batch,
-                programme:data.programme,
-                gender:student.gender,
-                semesters: []
-            }
+export const importFreshers = async (req: Request, res: Response) => {
+    try {
+      const time = new Date();
+      await dbConnect();
+  
+      const data = req.body;
+      const parsedData = freshersDataSchema.safeParse(data);
+  
+      if (!parsedData.success) {
+        return res.status(400).json({
+          error: true,
+          message: 'Invalid data',
+          data: parsedData.error.errors,
+        });
+      }
+  
+      const results = await Promise.all(
+        parsedData.data.map(async (student) => {
+          const data = await getInfoFromRollNo(student.rollNo);
+          return {
+            name: student.name,
+            rollNo: student.rollNo,
+            branch: data.branch,
+            batch: data.batch,
+            programme: data.programme,
+            gender: student.gender,
+            semesters: [],
+          };
         })
-
-        const resultsWithRanks = await ResultModel.insertMany(results);
-
-        console.log("Freshers imported successfully.");
-
-        return res.status(200).json({
-            error: false,
-            message: "Freshers imported successfully.",
-            data: {
-                timeTaken: `${(new Date().getTime() - time.getTime()) / 1000}s`,
-                lastUpdated: new Date().toISOString(),
-                results: `${resultsWithRanks.length} freshers imported`
-            }
-        });
-
-    }catch(error){
-        console.log(error);
-        return Promise.resolve({
-            error: true,
-            message: "An error occurred",
-            data: error || "Internal Server Error"
-        });
+      );
+  
+      const resultsWithRanks = await ResultModel.insertMany(results);
+  
+      return res.status(200).json({
+        error: false,
+        message: 'Freshers imported successfully.',
+        data: {
+          timeTaken: `${(new Date().getTime() - time.getTime()) / 1000}s`,
+          lastUpdated: new Date().toISOString(),
+          results: `${resultsWithRanks.length} freshers imported`,
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({
+        error: true,
+        message: 'An error occurred',
+        data: error || 'Internal Server Error',
+      });
     }
-}
+  };
