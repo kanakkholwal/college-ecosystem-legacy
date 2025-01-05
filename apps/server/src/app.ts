@@ -36,7 +36,7 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
   const identityKey = req.header('X-IDENTITY-KEY') || '';
 
   // Allow requests without an Origin header (e.g., server-to-server API calls)
-  if (!origin) {
+  if (!origin && (process.env.NODE_ENV !== 'production')) {
     if (identityKey === SERVER_IDENTITY) {
       next();
       return;
