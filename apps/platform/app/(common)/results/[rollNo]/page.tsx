@@ -14,6 +14,7 @@ type Props = {
   params: Promise<{ rollNo: string }>;
   searchParams?: Promise<{
     update?: string;
+    new?: string;
   }>;
 };
 
@@ -34,7 +35,8 @@ export default async function ResultsPage(props: Props) {
   const searchParams = await props.searchParams;
 
   const update_result = searchParams?.update === "true";
-  const result = await getResultByRollNo(params.rollNo, update_result);
+  const is_new = searchParams?.new === "true";
+  const result = await getResultByRollNo(params.rollNo, update_result,is_new);
   if (!result) {
     return notFound();
   }

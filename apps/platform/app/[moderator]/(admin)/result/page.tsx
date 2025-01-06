@@ -3,6 +3,8 @@ import { NotepadText } from "lucide-react";
 
 import { getBasicInfo } from "./actions";
 
+import {AssignRankCard} from "./client";
+
 export default async function AdminResultPage() {
   const { counts, asOf } = await getBasicInfo();
 
@@ -21,6 +23,7 @@ export default async function AdminResultPage() {
             <p className="text-xs text-muted-foreground">{`As of ${asOf}`}</p>
           </CardContent>
         </Card>
+        <AssignRankCard />
       </div>
     </>
   );

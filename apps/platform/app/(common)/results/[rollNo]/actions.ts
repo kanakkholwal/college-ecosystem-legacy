@@ -7,7 +7,8 @@ import { serverFetch } from "~/lib/server-fetch";
 
 export async function getResultByRollNo(
   rollNo: string,
-  update?: boolean
+  update?: boolean,
+  is_new?: boolean
 ): Promise<ResultTypeWithId> {
   await dbConnect();
   const result = await ResultModel.findOne({
@@ -18,9 +19,24 @@ export async function getResultByRollNo(
       data: ResultTypeWithId | null;
       message: string;
       error: boolean;
-    }>("/api/results/:rollNo/update",{
-      params: {rollNo}
-    });
+    }>("/api/results/:rollNo/update",
+      {
+        params: { rollNo }
+      });
+    if (response.error || !response.data) {
+      return JSON.parse(JSON.stringify(result));
+    }
+    return JSON.parse(JSON.stringify(response.data));
+  }
+  if (!result && is_new) {
+    const response = await serverFetch<{
+      data: ResultTypeWithId | null;
+      message: string;
+      error: boolean;
+    }>("/api/results/:rollNo/add",
+      {
+        params: { rollNo }
+      });
     if (response.error || !response.data) {
       return JSON.parse(JSON.stringify(result));
     }
