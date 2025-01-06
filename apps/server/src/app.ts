@@ -60,6 +60,10 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
     next();
     return; // Explicitly end processing here
   }
+  if (identityKey === SERVER_IDENTITY){
+        next();
+     return; // Explicitly end processing here
+  }
 
   // Block invalid CORS origins
   res.status(403).json({ error: 'CORS policy does not allow this origin' });
