@@ -213,31 +213,32 @@ export const auth = betterAuth({
   },
   user: {
     additionalFields: {
-      role: {
-        type: "string",
-        required: true,
-        input: false,
-      },
-      other_roles: {
-        type: "string[]",
-        required: false,
-        input: false,
-      },
-      gender: {
-        type: "string",
-        input: true,
-      },
-      username: {
-        type: "string",
-        required: true,
-        unique: true,
-        input: true,
-      },
-      department: {
-        type: "string",
-        required: true,
-        input: true,
-      },
+        role: {
+          type: "string",
+          required: true,
+          input: false,
+        },
+        other_roles: {
+          type: "string[]",
+          required: true,
+          input: true,
+        },
+        gender: {
+          type: "string",
+          input: true,
+        },
+        username: {
+          type: "string",
+          required: true,
+          unique: true,
+          input: true,
+        },
+        department: {
+          type: "string",
+          required: true,
+          input: true,
+        },
+  
     },
   },
   account: {

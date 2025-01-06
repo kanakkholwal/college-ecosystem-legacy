@@ -75,7 +75,8 @@ export default function SignUpForm() {
         name: data.name,
         username: data.email.split("@")[0],
         gender: "male",
-        department: getDepartmentName("ece"),
+        department: getDepartmentName("ece"), // automatically corrects it on the backend
+        other_roles:["student"],
       },
       {
         onRequest: () => {

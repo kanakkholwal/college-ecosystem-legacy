@@ -102,7 +102,7 @@ export default function AttendanceRecord({
                   <p className="text-xl font-semibold">{absentClasses}</p>
                 </div>
                 <div className="p-4 border rounded-md shadow">
-                  <h5 className="text-sm font-medium whitespace-nowrap">Attendance Percentage</h5>
+                  <h5 className="text-sm font-medium whitespace-nowrap">Attendance</h5>
                   <p className={cn(
                     "text-xl font-semibold",
                     Number(attendancePercentage) < 75 ? Number(attendancePercentage) < 50 ? "text-red-500" : "text-yellow-500"
