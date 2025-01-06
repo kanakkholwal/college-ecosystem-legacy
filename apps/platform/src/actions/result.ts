@@ -51,7 +51,7 @@ export async function getResultByRollNo(
 }
 
 export async function assignRanks() {
-    const {data:response} = await serverFetch<{
+    const response = await serverFetch<{
         error: boolean;
         message: string;
         data: object | null;
@@ -59,10 +59,9 @@ export async function assignRanks() {
         method: "POST",
     });
 
-    console.log(response);
-
-    if (response.data.error) {
-        return Promise.reject("Failed to assign ranks");
+    if(!response.data  || response.data?.error) {
+        return Promise.resolve(false);
     }
+    
     return Promise.resolve(true);
 }
