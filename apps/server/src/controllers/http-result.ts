@@ -31,7 +31,7 @@ export const getResult = async (req: Request, res: Response) => {
     res.json({
         data: resultData,
         message: "Result found",
-        error: false,
+        error: true,
     });
 }
 
