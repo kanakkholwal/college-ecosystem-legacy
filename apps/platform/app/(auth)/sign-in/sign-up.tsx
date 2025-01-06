@@ -8,7 +8,6 @@ import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { BiLockOpenAlt } from "react-icons/bi";
-import { FcGoogle } from "react-icons/fc";
 import { LuMail } from "react-icons/lu";
 
 import {
@@ -22,7 +21,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -49,7 +47,7 @@ const FormSchema = z.object({
       message:
         "Password must contain at least one uppercase letter, one lowercase letter, and one number",
     }),
-    name: z.string(),
+  name: z.string(),
 });
 
 export default function SignUpForm() {
@@ -75,7 +73,7 @@ export default function SignUpForm() {
         password: data.password,
         callbackURL: redirect,
         name: data.name,
-        username:data.email.split("@")[0],
+        username: data.email.split("@")[0],
         gender: "male",
         department: getDepartmentName("ece"),
       },
@@ -97,12 +95,12 @@ export default function SignUpForm() {
   return (
     <>
       <main className="flex flex-col items-center justify-center w-full p-4 space-y-4">
-      <CardTitle>Sign Up</CardTitle>
-                                <CardDescription className="mt-2 mb-5">
-                                    Create a new account for platform access.
-                                </CardDescription>
-                                <div className={cn("grid gap-6 w-full text-left py-4")}>
-                                <Form {...form}>
+        <CardTitle>Sign Up</CardTitle>
+        <CardDescription className="mt-2 mb-5">
+          Create a new account for platform access.
+        </CardDescription>
+        <div className={cn("grid gap-6 w-full text-left py-4")}>
+          <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
               <FormField
                 control={form.control}
@@ -182,7 +180,9 @@ export default function SignUpForm() {
                   </FormItem>
                 )}
               />
-
+              <p className="text-left mt-2 text-sm font-medium text-gray-600">
+                You must use your NITH email to sign up.(you'll get a verification link in your email if your email isn't in the database)
+              </p>
 
               <Button
                 disabled={isLoading}

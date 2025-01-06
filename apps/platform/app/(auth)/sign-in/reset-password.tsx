@@ -118,7 +118,8 @@ export default function ResetPassword() {
             />
             <Button
               className="mt-2 tracking-wide"
-              type="submit"
+              variant="default"
+              rounded="full" type="submit"
               disabled={isSubmitting}
             >
               {isSubmitting ? "Resetting..." : "Reset Password"}
