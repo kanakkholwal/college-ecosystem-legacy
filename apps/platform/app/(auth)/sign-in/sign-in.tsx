@@ -109,7 +109,7 @@ export default function SignInForm() {
                       </FormLabel>
                       <FormControl className="relative">
                         <Input
-                          placeholder="name@example.com"
+                          placeholder="rollNo@nith.ac.in"
                           type="email"
                           autoCapitalize="none"
                           autoComplete="email"

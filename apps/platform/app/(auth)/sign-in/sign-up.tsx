@@ -26,6 +26,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiOutlineLoading } from "react-icons/ai";
 
+import { FcGoogle } from "react-icons/fc";
 import { getDepartmentName } from "src/constants/departments";
 import * as z from "zod";
 
@@ -84,6 +85,11 @@ export default function SignUpForm() {
         },
         onResponse: () => {
           setIsLoading(false);
+        },
+        onSuccess(context) {
+          console.log(context);
+          toast.success("Account created successfully");
+
         },
         onError: (ctx: { error: { message: string } }) => {
           console.log(ctx);
@@ -199,7 +205,7 @@ export default function SignUpForm() {
               </Button>
             </form>
           </Form>
-          {/* <div className="relative z-0">
+          <div className="relative z-0">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-t-primary/10" />
             </div>
@@ -208,13 +214,15 @@ export default function SignUpForm() {
                 Or continue with
               </span>
             </div>
-          </div> */}
-          {/* <div className="grid  grid-cols-1">
+          </div>
+          <div className="grid  grid-cols-1">
             <Button
               variant="light"
               type="button"
               disabled={isLoading}
-              width={"full"}
+              width="full"
+              rounded="full"
+
               onClick={async () => {
                 setIsLoading(true);
                 await authClient.signIn.social({
@@ -231,7 +239,7 @@ export default function SignUpForm() {
               )}
               {isLoading ? "Signing in..." : "Sign Up with Google"}
             </Button>
-          </div> */}
+          </div>
         </div>
       </main>
     </>

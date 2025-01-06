@@ -60,7 +60,7 @@ export default function ResetPassword() {
       }
 
       console.log(data);
-      toast.success("Password reset successful");
+      toast.success("Password reset successful,Can Login now ");
     } catch (err) {
       console.error(err);
       toast.error("An error occurred. Please try again.");
