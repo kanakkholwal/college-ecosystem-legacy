@@ -181,7 +181,7 @@ export default function SignUpForm() {
                 )}
               />
               <p className="text-left mt-2 text-sm font-medium text-gray-600">
-                You must use your NITH email to sign up.(you'll get a verification link in your email if your email isn't in the database)
+                You must use your NITH email to sign up.(you{"'"}ll get a verification link in your email if your email isn{"'"}t in the database)
               </p>
 
               <Button
