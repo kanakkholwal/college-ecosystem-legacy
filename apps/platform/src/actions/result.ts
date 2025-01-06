@@ -9,7 +9,7 @@ export async function getResultByRollNo(
     rollNo: string,
     update?: boolean,
     is_new?: boolean
-): Promise<ResultTypeWithId> {
+): Promise<ResultTypeWithId | null> {
     await dbConnect();
     const result = await ResultModel.findOne({
         rollNo,
@@ -25,7 +25,7 @@ export async function getResultByRollNo(
                 params: { rollNo }
             });
         if (response.error || !response.data) {
-            return JSON.parse(JSON.stringify(result));
+            return JSON.parse(JSON.stringify(null));
         }
         await assignRanks();
         return JSON.parse(JSON.stringify(response.data.data));
@@ -41,7 +41,7 @@ export async function getResultByRollNo(
                 params: { rollNo }
             });
         if (response.error || !response.data) {
-            return JSON.parse(JSON.stringify(result));
+            return JSON.parse(JSON.stringify(null));
         }
         await assignRanks();
 
