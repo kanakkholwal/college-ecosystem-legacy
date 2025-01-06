@@ -4,7 +4,7 @@ import { Mail } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ResultTypeWithId, Semester } from "src/models/result";
-import { getResultByRollNo } from "./actions";
+import { getResultByRollNo } from "~/actions/result";
 import { CgpiCard, RankCard, SemCard } from "./components/card";
 import { CGPIChart } from "./components/chart";
 
@@ -41,15 +41,7 @@ export default async function ResultsPage(props: Props) {
     return notFound();
   }
 
-  const chartData = result.semesters.map((semester: Semester) => {
-    return {
-      semester: `Semester ${semester.semester}`,
-      sgpi: semester.sgpi.toFixed(2),
-      cgpi: semester.cgpi.toFixed(2),
-      Sgpi: semester.sgpi.toFixed(2),
-      Cgpi: semester.cgpi.toFixed(2),
-    };
-  });
+
 
   return (
     <>
@@ -115,7 +107,7 @@ export default async function ResultsPage(props: Props) {
           </div>
           <TabsContent value="table">
             <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1 @lg:grid-cols-2 @4xl:grid-cols-3">
-              {result.semesters?.map((semester: Semester, index: number) => {
+              {result.semesters?.map((semester: Semester) => {
                 return <SemCard key={semester.semester} semester={semester} />;
               })}
             </div>
