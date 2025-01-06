@@ -51,7 +51,7 @@ export async function getResultByRollNo(
 }
 
 export async function assignRanks() {
-    const response = await serverFetch<{
+    const {data:response} = await serverFetch<{
         error: boolean;
         message: string;
         data: object | null;
