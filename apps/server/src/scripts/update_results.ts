@@ -42,14 +42,14 @@ const taskData = {
 
 const updateResult = async (ENV: "production" | "testing") => {
     try {
+        console.log("Updating results");
         await dbConnect(ENV);
 
         const results = await ResultModel.find({
             $expr: {
                 $lt: [{ $size: '$semesters' }, 8],
-                $eq: ['$batch', 2024],
-
-            }
+            },
+            batch:2024
         }).select('rollNo');
         console.log(results.length)
         const rollArray = results.map(result => result.rollNo);
