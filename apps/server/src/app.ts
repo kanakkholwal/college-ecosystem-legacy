@@ -30,23 +30,21 @@ if (!SERVER_IDENTITY)
 
 
 // Middleware to handle custom CORS logic
-// Middleware to handle custom CORS logic
 app.use((req: Request, res: Response, next: NextFunction): void => {
   const origin = req.header('Origin') || '';
   const identityKey = req.header('X-IDENTITY-KEY') || '';
 
-  // Allow requests without an Origin header (e.g., server-to-server API calls)
-  if (!origin && (process.env.NODE_ENV !== 'production')) {
+  // Server-to-server calls with X-IDENTITY-KEY
+  if (!origin) {
     if (identityKey === SERVER_IDENTITY) {
       next();
       return;
     }
     res.status(403).json({ error: 'Missing or invalid SERVER_IDENTITY' });
     return;
-
   }
 
-  // Check CORS for specific origins
+  // CORS logic for browser requests
   if (
     (process.env.NODE_ENV === 'production' && CORS_ORIGINS.some(o => origin.endsWith(o))) ||
     (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost:'))
@@ -58,16 +56,15 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
     if (req.method === 'OPTIONS') {
       res.sendStatus(200); // Preflight request
       return;
-
     }
   } else {
     res.status(403).json({ error: 'CORS policy does not allow this origin' });
     return;
-
   }
 
   next();
 });
+
 
 // Routes
 app.use('/api', httpRoutes);
