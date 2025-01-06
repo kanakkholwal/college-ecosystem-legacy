@@ -258,6 +258,12 @@ const headerMap: Record<
         CSRFToken: "{F1E16363-FEDA-48AF-88E9-8A186425C213}",
         RequestVerificationToken: "4FFEE8F3-14C9-27C4-B370-598406BF99C1",
     },
+    24: {
+        url: "http://results.nith.ac.in/scheme24/studentresult/result.asp",
+        Referer: "http://results.nith.ac.in/scheme24/studentresult/index.asp",
+        CSRFToken: "{0696D16E-58AD-472B-890E-6537BE62A5EA}",
+        RequestVerificationToken: "F797B72F-DC73-D06D-6B19-012ED5EBA98B",
+    },
 };
 export async function getInfoFromRollNo(rollNo: string) {
     // split the roll no into 3 parts starting two characters then 3 characters and then 3 characters

@@ -43,13 +43,19 @@ const taskData = {
 const updateResult = async (ENV: "production" | "testing") => {
     try {
         await dbConnect(ENV);
-        
-        const results = await ResultModel.find({ $expr: { $lt: [{ $size: '$semesters' }, 8] } }).select('rollNo');
+
+        const results = await ResultModel.find({
+            $expr: {
+                $lt: [{ $size: '$semesters' }, 8],
+                $eq: ['$batch', 2024],
+
+            }
+        }).select('rollNo');
         console.log(results.length)
         const rollArray = results.map(result => result.rollNo);
         console.log(`Updating ${rollArray.length} results`);
         taskData.processable = rollArray.length;
-        
+
         for (let i = 0; i < rollArray.length; i += BATCH_SIZE) {
 
             const batch = rollArray.slice(i, i + BATCH_SIZE);
