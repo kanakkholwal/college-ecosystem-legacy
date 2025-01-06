@@ -74,6 +74,9 @@ export async function assignRanks() {
   }>("/api/result/assign-ranks", {
     method: "POST",
   });
+
+  console.log(response);
+
   if (response.error) {
     return Promise.reject("Failed to assign ranks");
   }

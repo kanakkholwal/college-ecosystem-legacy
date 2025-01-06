@@ -21,12 +21,13 @@ export async function getResultByRollNo(
       error: boolean;
     }>("/api/results/:rollNo/update",
       {
+        method: "POST",
         params: { rollNo }
       });
     if (response.error || !response.data) {
       return JSON.parse(JSON.stringify(result));
     }
-    return JSON.parse(JSON.stringify(response.data));
+    return JSON.parse(JSON.stringify(response.data.data));
   }
   if (!result && is_new) {
     const response = await serverFetch<{
@@ -35,12 +36,13 @@ export async function getResultByRollNo(
       error: boolean;
     }>("/api/results/:rollNo/add",
       {
+        method: "POST",
         params: { rollNo }
       });
     if (response.error || !response.data) {
       return JSON.parse(JSON.stringify(result));
     }
-    return JSON.parse(JSON.stringify(response.data));
+    return JSON.parse(JSON.stringify(response.data.data));
   }
   return JSON.parse(JSON.stringify(result));
 }
