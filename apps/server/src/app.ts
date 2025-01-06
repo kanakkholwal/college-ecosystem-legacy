@@ -40,7 +40,7 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
       next();
       return;
     }
-    res.status(403).json({ error: 'Missing or invalid SERVER_IDENTITY' });
+    res.status(403).json({ error:true,data: 'Missing or invalid SERVER_IDENTITY' });
     return;
   }
 
@@ -57,12 +57,15 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
       res.sendStatus(200); // Preflight request
       return;
     }
-  } else {
-    res.status(403).json({ error: 'CORS policy does not allow this origin' });
-    return;
+    next();
+    return; // Explicitly end processing here
   }
 
-  next();
+  // Block invalid CORS origins
+  res.status(403).json({ 
+    error:true,
+    data: 'CORS policy does not allow this origin' 
+  });
 });
 
 

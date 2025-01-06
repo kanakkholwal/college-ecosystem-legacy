@@ -1,11 +1,10 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import {
   boolean,
-  integer,
   pgTable,
   text,
   timestamp,
-  uuid,
+  uuid
 } from "drizzle-orm/pg-core";
 
 import { users } from "./auth-schema";
@@ -13,6 +12,7 @@ import { users } from "./auth-schema";
 export const personalAttendanceRecords = pgTable(
   "personal_attendance_records",
   {
+    id: uuid("id").defaultRandom().primaryKey(),
     date: timestamp("date", { withTimezone: true }).defaultNow(),
     isPresent: boolean("is_present").notNull(),
     userId: text("user_id")

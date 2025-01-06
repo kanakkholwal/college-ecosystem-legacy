@@ -220,7 +220,7 @@ export const auth = betterAuth({
       },
       other_roles: {
         type: "string[]",
-        required: true,
+        required: false,
         input: false,
       },
       gender: {

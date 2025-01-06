@@ -78,7 +78,6 @@ export default function SignUpForm() {
         username:data.email.split("@")[0],
         gender: "male",
         department: getDepartmentName("ece"),
-        other_roles: ["student"],
       },
       {
         onRequest: () => {
@@ -102,8 +101,8 @@ export default function SignUpForm() {
                                 <CardDescription className="mt-2 mb-5">
                                     Create a new account for platform access.
                                 </CardDescription>
-        <div className={cn("grid gap-6 w-full text-left px-4")}>
-          <Form {...form}>
+                                <div className={cn("grid gap-6 w-full text-left py-4")}>
+                                <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
               <FormField
                 control={form.control}
@@ -116,7 +115,7 @@ export default function SignUpForm() {
                       </FormLabel>
                       <FormControl className="relative">
                         <Input
-                          placeholder="your name"
+                          placeholder="Your Name"
                           type="text"
                           autoCapitalize="none"
                           autoComplete="name"
@@ -190,6 +189,7 @@ export default function SignUpForm() {
                 type="submit"
                 className="mt-2 tracking-wide"
                 variant="default"
+                rounded="full"
               >
                 {isLoading && (
                   <AiOutlineLoading className="mr-2 h-4 w-4 animate-spin" />
@@ -198,7 +198,7 @@ export default function SignUpForm() {
               </Button>
             </form>
           </Form>
-          <div className="relative z-0">
+          {/* <div className="relative z-0">
             <div className="absolute inset-0 flex items-center">
               <span className="w-full border-t border-t-primary/10" />
             </div>
@@ -207,7 +207,7 @@ export default function SignUpForm() {
                 Or continue with
               </span>
             </div>
-          </div>
+          </div> */}
           {/* <div className="grid  grid-cols-1">
             <Button
               variant="light"
