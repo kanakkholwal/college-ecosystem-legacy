@@ -10,6 +10,7 @@ import { auth } from "src/lib/auth";
 import ForgotPassword from "./forget-password";
 import ResetPassword from "./reset-password";
 import SignInForm from "./sign-in";
+import SignUpForm from "./sign-up";
 import { cn } from "@/lib/utils";
 
 
@@ -64,20 +65,7 @@ export default async function SignInPage({ searchParams }: Props) {
                 <SignInForm />
               </TabsContent>
               <TabsContent value="sign-up">
-                <Alert>
-                  <Terminal className="h-4 w-4" />
-                  <AlertTitle>Not available yet</AlertTitle>
-                  <AlertDescription>
-                    Sign up is not available at the moment. Please try again
-                    later.
-                  </AlertDescription>
-                </Alert>
-
-                {/* <CardTitle>Sign Up</CardTitle>
-                                <CardDescription>
-                                    Create a new account for platform access.
-                                </CardDescription>
-                                <SignUpForm /> */}
+                <SignUpForm />
               </TabsContent>
               <TabsContent value="forget-password">
                 <ForgotPassword />

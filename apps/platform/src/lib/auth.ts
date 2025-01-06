@@ -34,16 +34,18 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
 
   if (isStudent) {
     console.log("Student");
-    const { data: response } = await serverFetch<{
+    const res  = await serverFetch<{
       message: string;
       data: ResultType | null;
       error?: string | null;
-    }>("/api/results/:rollNo", {
-      method: "POST",
+    }>("/api/results/:rollNo/get", {
+      method: "GET",
       params: {
         rollNo: username
       }
     });
+    const response = res.data;
+    console.log(res);
     console.log(response?.data ? "has result" : "No result");
 
     if (!response?.data) {

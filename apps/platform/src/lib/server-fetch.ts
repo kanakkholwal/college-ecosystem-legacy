@@ -17,6 +17,7 @@ export const serverFetch = createFetch({
     headers: {
         "Content-Type": "application/json",
         "X-IDENTITY-KEY": SERVER_IDENTITY,
+        "Origin": process.env.BASE_URL,
     },
 })
 
@@ -25,6 +26,7 @@ export const mailFetch = createFetch({
     headers: {
         "Content-Type": "application/json",
         "X-IDENTITY-KEY": SERVER_IDENTITY,
+        "Origin": process.env.BASE_URL,
     },
 })
 

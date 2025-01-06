@@ -2,13 +2,7 @@
 
 import { authClient } from "src/lib/auth-client";
 
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import React from "react";
+import { CardDescription, CardTitle } from "@/components/ui/card";
 
 import { useState } from "react";
 
@@ -34,8 +28,8 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiOutlineLoading } from "react-icons/ai";
 
-import * as z from "zod";
 import { getDepartmentName } from "src/constants/departments";
+import * as z from "zod";
 
 const FormSchema = z.object({
   email: z
@@ -55,9 +49,10 @@ const FormSchema = z.object({
       message:
         "Password must contain at least one uppercase letter, one lowercase letter, and one number",
     }),
+    name: z.string(),
 });
 
-export default function Unauthorized() {
+export default function SignUpForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams?.get("redirect") || "/";
@@ -79,10 +74,11 @@ export default function Unauthorized() {
         email: data.email,
         password: data.password,
         callbackURL: redirect,
-        name: "Kanak Kholwal",
-        username: "21dec026",
+        name: data.name,
+        username:data.email.split("@")[0],
         gender: "male",
         department: getDepartmentName("ece"),
+        other_roles: ["student"],
       },
       {
         onRequest: () => {
@@ -102,9 +98,39 @@ export default function Unauthorized() {
   return (
     <>
       <main className="flex flex-col items-center justify-center w-full p-4 space-y-4">
+      <CardTitle>Sign Up</CardTitle>
+                                <CardDescription className="mt-2 mb-5">
+                                    Create a new account for platform access.
+                                </CardDescription>
         <div className={cn("grid gap-6 w-full text-left px-4")}>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
+              <FormField
+                control={form.control}
+                name="name"
+                render={({ field }) => (
+                  <FormItem>
+                    <div className="relative group">
+                      <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
+                        <LuMail className="w-4 h-4" />
+                      </FormLabel>
+                      <FormControl className="relative">
+                        <Input
+                          placeholder="your name"
+                          type="text"
+                          autoCapitalize="none"
+                          autoComplete="name"
+                          disabled={isLoading}
+                          autoCorrect="off"
+                          className="pl-10 pr-5"
+                          {...field}
+                        />
+                      </FormControl>
+                    </div>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
               <FormField
                 control={form.control}
                 name="email"
@@ -116,7 +142,7 @@ export default function Unauthorized() {
                       </FormLabel>
                       <FormControl className="relative">
                         <Input
-                          placeholder="name@example.com"
+                          placeholder="rollNo@nith.ac.in"
                           type="email"
                           autoCapitalize="none"
                           autoComplete="email"
@@ -158,14 +184,6 @@ export default function Unauthorized() {
                 )}
               />
 
-              <p className="text-right mt-2 text-sm font-medium">
-                <Link
-                  href="/forgot-password"
-                  className="text-primary hover:underline"
-                >
-                  Forgot Password?
-                </Link>
-              </p>
 
               <Button
                 disabled={isLoading}
@@ -176,7 +194,7 @@ export default function Unauthorized() {
                 {isLoading && (
                   <AiOutlineLoading className="mr-2 h-4 w-4 animate-spin" />
                 )}
-                Sign In with Email
+                Sign Up with Email
               </Button>
             </form>
           </Form>
@@ -190,7 +208,7 @@ export default function Unauthorized() {
               </span>
             </div>
           </div>
-          <div className="grid  grid-cols-1">
+          {/* <div className="grid  grid-cols-1">
             <Button
               variant="light"
               type="button"
@@ -198,10 +216,10 @@ export default function Unauthorized() {
               width={"full"}
               onClick={async () => {
                 setIsLoading(true);
-                // await authClient.signIn.social({
-                //   provider: "google",
-                //   callbackURL: redirect,
-                // });
+                await authClient.signIn.social({
+                  provider: "google",
+                  callbackURL: redirect,
+                });
                 setIsLoading(false);
               }}
             >
@@ -210,9 +228,9 @@ export default function Unauthorized() {
               ) : (
                 <FcGoogle className=" h-6 w-6" />
               )}
-              {isLoading ? "Signing in..." : "Sign in with Google"}
+              {isLoading ? "Signing in..." : "Sign Up with Google"}
             </Button>
-          </div>
+          </div> */}
         </div>
       </main>
     </>

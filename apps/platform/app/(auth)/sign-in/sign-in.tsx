@@ -1,7 +1,6 @@
 "use client";
 
 import { authClient } from "src/lib/auth-client";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardTitle } from "@/components/ui/card";
