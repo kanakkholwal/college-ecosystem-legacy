@@ -61,7 +61,7 @@ export async function assignRanks() {
 
     console.log(response);
 
-    if (response.error) {
+    if (response.data.error) {
         return Promise.reject("Failed to assign ranks");
     }
     return Promise.resolve(true);
