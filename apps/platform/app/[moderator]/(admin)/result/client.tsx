@@ -1,6 +1,6 @@
 "use client";
 import { NotepadText } from "lucide-react";
-import {assignRanks} from "./actions";
+import {assignRanks} from "~/actions/result";
 import toast from "react-hot-toast";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
