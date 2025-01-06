@@ -53,6 +53,7 @@ const buttonVariants = cva(
           "text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br",
         gradient_purple:
           "text-white bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 hover:bg-gradient-to-br",
+        raw: ""
       },
       size: {
         default: "h-10 px-4 px-5 py-2.5 [&>svg]:w-5 [&>svg]:h-5",
@@ -93,7 +94,7 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
   asChild?: boolean;
 }

@@ -1,20 +1,13 @@
 "use client";
 import { Input } from "@/components/ui/input";
+import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { Search } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { IoMdOptions } from "react-icons/io";
 import { useDebouncedCallback } from "use-debounce";
 
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 
 type Props = {
   branches: string[];
@@ -26,7 +19,6 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  const [open, setOpen] = useState(false);
 
   const handleSearch = useDebouncedCallback((term: string) => {
     console.log(`Searching... ${term}`);
@@ -60,42 +52,34 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
         <Suspense
           key={"filter_key"}
           fallback={
-            <button className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
+            <button type="button" className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
               <span className="relative text-base font-semibold text-primary dark:text-white">
                 <IoMdOptions className="w-5 h-5" />
               </span>
             </button>
           }
         >
-          <Sheet open={open} onOpenChange={setOpen}>
-            <SheetTrigger asChild>
-              <button className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
-                <span className="relative text-base font-semibold text-primary dark:text-white">
-                  <IoMdOptions className="w-5 h-5" />
-                </span>
-              </button>
-            </SheetTrigger>
-            <SheetContent>
-              <SheetHeader className="mb-5">
-                <SheetTitle>Filter Results</SheetTitle>
-                <SheetDescription>
-                  Filter by branches, batch,Programme
-                </SheetDescription>
-              </SheetHeader>
-              <div className="mb-4">
+          <ResponsiveDialog 
+            title="Filter Results"
+            description="Filter by branches, batch,Programme"
+            btnProps={{
+              variant: "raw",
+              size: "icon",
+              children:  <span className="relative text-base font-semibold text-primary dark:text-white">
+              <IoMdOptions className="w-5 h-5" />
+            </span>,
+            className:"overflow-hidden relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max"
+            }}
+          >
+          <div className="mb-4">
                 <p className="text-sm font-semibold text-slate-600 mb-2">
                   By Branches
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <Button
-                    variant="slate"
-                    size="sm"
-                    className={
-                      "text-xs !h-8 " +
-                      (searchParams.get("branch")?.toString() === "all"
-                        ? "bg-accent-foreground hover:bg-accent-foreground/90 text-white"
-                        : "")
-                    }
+                      variant={searchParams.get("branch")?.toString() === "all" ? "default_light" : "slate"}
+                      size="sm"
+                      className="text-xs !h-8 capitalize"
                     onClick={() => {
                       handleFilter("branch", "all");
                     }}
@@ -105,15 +89,10 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                   {branches.map((branch) => (
                     <Button
                       key={branch}
-                      variant="slate"
+                      variant={searchParams.get("branch")?.toString() === branch ? "default_light" : "slate"}
                       size="sm"
-                      className={
-                        "text-xs !h-8 capitalize " +
-                        ((searchParams.get("branch")?.toString() ?? "all") ===
-                        branch
-                          ? "bg-accent-foreground hover:bg-accent-foreground/90 text-white"
-                          : "")
-                      }
+                      className="text-xs !h-8 capitalize"
+                      
                       onClick={() => {
                         handleFilter("branch", branch);
                       }}
@@ -129,13 +108,10 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <Button
-                    variant="slate"
+                    variant={searchParams.get("batch")?.toString() === "all" ? "default_light" : "slate"}
                     size="sm"
                     className={
-                      "text-xs !h-8 " +
-                      (searchParams.get("batch")?.toString() === "all"
-                        ? "bg-accent-foreground hover:bg-accent-foreground/90 text-white"
-                        : "")
+                      "text-xs !h-8 capitalize"
                     }
                     onClick={() => {
                       handleFilter("batch", "all");
@@ -146,15 +122,9 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                   {batches.map((batch) => (
                     <Button
                       key={batch}
-                      variant="slate"
+                      variant={searchParams.get("batch")?.toString() === batch ? "default_light" : "slate"}
                       size="sm"
-                      className={
-                        "text-xs !h-8 capitalize " +
-                        ((searchParams.get("batch")?.toString() ?? "all") ===
-                        batch.toString()
-                          ? "bg-accent-foreground hover:bg-accent-foreground/90 text-white"
-                          : "")
-                      }
+                      className={"text-xs !h-8 capitalize "}
                       onClick={() => {
                         handleFilter("batch", batch);
                       }}
@@ -170,13 +140,10 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                 </p>
                 <div className="flex flex-wrap gap-2">
                   <Button
-                    variant="slate"
+                    variant={searchParams.get("programme")?.toString() === "all" ? "default_light" : "slate"}
                     size="sm"
                     className={
-                      "text-xs !h-8 " +
-                      (searchParams.get("programme")?.toString() === "all"
-                        ? "bg-accent-foreground hover:bg-accent-foreground/90 text-white"
-                        : "")
+                      "text-xs !h-8 capitalize"
                     }
                     onClick={() => {
                       handleFilter("programme", "all");
@@ -187,14 +154,10 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                   {programmes.map((programme) => (
                     <Button
                       key={programme}
-                      variant="slate"
+                      variant={searchParams.get("programme")?.toString() === programme ? "default_light" : "slate"}
                       size="sm"
                       className={
-                        "text-xs !h-8 capitalize " +
-                        ((searchParams.get("programme")?.toString() ??
-                          "all") === programme
-                          ? "bg-accent-foreground hover:bg-accent-foreground/90 text-white"
-                          : "")
+                        "text-xs !h-8 capitalize"
                       }
                       onClick={() => {
                         handleFilter("programme", programme);
@@ -206,25 +169,7 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                 </div>
               </div>
 
-              <div className="mt-auto flex flex-col  gap-2 w-full ">
-                <Button
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                >
-                  Apply Filters
-                </Button>
-                <Button
-                  variant="secondary"
-                  onClick={() => {
-                    setOpen(false);
-                  }}
-                >
-                  Clear Filters
-                </Button>
-              </div>
-            </SheetContent>
-          </Sheet>
+          </ResponsiveDialog>
         </Suspense>
       </div>
       <Suspense
@@ -246,7 +191,7 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
         />
       </Suspense>
       <div className="absolute top-0 bottom-0 right-0">
-        <button className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
+        <button type="button" className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
           <span className="relative text-base font-semibold text-white">
             <Search className="w-5 h-5" />
           </span>
