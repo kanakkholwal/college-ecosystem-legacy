@@ -39,9 +39,9 @@ College Ecosystem is a monorepo for various projects aimed at creating a compreh
 
 - **Frontend**: Next.js, React, TypeScript
 - **Backend**: Express, TypeScript, Node.js
-- **Database**: MongoDB with mongoose,Upstash Redis, Postgres (will use)
+- **Database**: MongoDB with mongoose,Upstash Redis, Postgres SQL with Drizzle ORM
 - **Build Tools**: Turbo
-- **Other**: Docker, ESLint, Prettier, Jest
+- **Other**: Docker, ESLint, Prettier (Biome on local), Jest
 
 ## Deployment
 
