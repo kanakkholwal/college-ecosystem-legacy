@@ -17,8 +17,8 @@ export default function Navbar({
   return (
     <div
       className={cn(
-        "sticky marker:lg:static left-0 top-0 lg:top-5 lg:mt-5 z-50 inset-inline-0 mx-auto w-full max-w-[720px] lg:px-6 lg:rounded-full lg:overflow-hidden ",
-        "backdrop-blur-2xl lg:bg-white/20 lg:border lg:border-gray-300 bg-gradient-to-b from-primary/5"
+        "sticky marker:md:static left-0 top-0 md:top-5 md:mt-5 z-50 inset-inline-0 mx-auto w-full max-w-[720px] md:px-4 md:rounded-full md:overflow-hidden",
+        "backdrop-blur-2xl md:bg-white/20 md:border md:border-gray-300 bg-gradient-to-b from-primary/5"
       )}
     >
       <nav
