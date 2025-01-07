@@ -2,82 +2,12 @@ import { BorderBeam } from "@/components/animation/border-beam";
 import { RouterCard } from "@/components/common/router-card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { RocketIcon } from "@radix-ui/react-icons";
-import {
-  AudioLines,
-  BookUser,
-  Bot,
-  CalendarDays,
-  CalendarRange,
-  Grid3X3,
-} from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { GrAnnounce } from "react-icons/gr";
-import { LiaReadme } from "react-icons/lia";
-import { MdOutlinePoll } from "react-icons/md";
-import { SiGoogleclassroom } from "react-icons/si";
 import { auth } from "src/lib/auth";
-// import Greetings from "./greeting";
 
-const quick_links = [
-  {
-    href: "/results",
-    title: "Results",
-    description: "Check your results here.",
-    Icon: Grid3X3,
-  },
-  {
-    href: "/syllabus",
-    title: "Syllabus",
-    description: "Check your syllabus here.",
-    Icon: LiaReadme,
-  },
-  {
-    href: "/classroom-availability",
-    title: "Classroom Availability",
-    description: "Check the availability of classrooms here.",
-    Icon: SiGoogleclassroom,
-  },
-  {
-    href: "/schedules",
-    title: "Schedules",
-    description: "Check your schedules here.",
-    Icon: CalendarDays,
-    disabled: true,
-  },
-  {
-    href: "/misc/calender",
-    title: "Academic Calender",
-    description: "Check the academic calender here.",
-    Icon: CalendarRange,
-    disabled: true,
-  },
-  {
-    title: "Community",
-    href: "/community",
-    Icon: AudioLines,
-    description: "Join the community and interact with your peers.",
-  },
-  {
-    title: "Announcements",
-    href: "/announcements",
-    Icon: GrAnnounce,
-    description: "Check out the latest announcements.",
-  },
-  {
-    title: "Polls",
-    href: "/polls",
-    Icon: MdOutlinePoll,
-    description: "Participate in polls.",
-  },
-  {
-    href: "/chat",
-    title: "Chatbot",
-    description: "Chat with the college chatbot.(Beta)",
-    Icon: Bot,
-    disabled: true,
-  },
-];
+import { quick_links } from "@/constants/links";
+
 
 export default async function Dashboard() {
   const session = await auth.api.getSession({

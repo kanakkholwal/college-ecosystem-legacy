@@ -1,10 +1,11 @@
 import RoomCard from "@/components/application/room-card";
 import SearchBox from "@/components/application/room-search";
 import { Skeleton } from "@/components/ui/skeleton";
-
+import ErrorBanner from "@/components/utils/error";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
 import { listAllRoomsWithHistory } from "~/actions/room";
+import { getSession } from "~/lib/auth-server";
 
 type Props = {
   searchParams: Promise<{
@@ -20,6 +21,7 @@ export const metadata: Metadata = {
 
 export default async function RoomsPage(props: Props) {
   const searchParams = await props.searchParams;
+  const session= await getSession();
 
   const rooms = await listAllRoomsWithHistory({
     status: searchParams.currentStatus,
@@ -53,13 +55,7 @@ export default async function RoomsPage(props: Props) {
         </div>
       </section>
       <ErrorBoundaryWithSuspense
-        fallback={
-          <div className="max-w-[1440px] mx-auto grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            <div className="text-center text-2xl font-bold text-neutral-900 dark:text-neutral-100">
-              An error occurred while fetching rooms.
-            </div>
-          </div>
-        }
+        fallback={<ErrorBanner />}
         loadingFallback={
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {[...Array(8)].map((_, i) => (
@@ -75,6 +71,7 @@ export default async function RoomsPage(props: Props) {
               <RoomCard
                 key={room.id}
                 room={room}
+                user={session?.user}
                 style={{
                   animationDelay: `${i * 100}ms`,
                 }}

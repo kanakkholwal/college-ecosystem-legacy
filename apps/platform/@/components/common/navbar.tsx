@@ -13,17 +13,22 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { Bug, Cloud, LogOut, UserRound } from "lucide-react";
 
-import Image from "next/image";
+import {
+  Avatar,
+  AvatarFallback,
+  AvatarImage,
+} from "@/components/ui/avatar";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuGithub } from "react-icons/lu";
 import { RiTwitterXFill } from "react-icons/ri";
-import type { Session } from "src/lib/auth-client";
-import { authClient } from "src/lib/auth-client"; //import the auth client
+import type { Session } from "~/lib/auth-client";
+import { authClient } from "~/lib/auth-client"; 
 import type { SidenavLinkType } from "./sidebar";
 import { SidebarContent } from "./sidebar";
+
 
 interface NavbarProps {
   user: Session["user"];
@@ -46,7 +51,7 @@ export default function Navbar({
   return (
     <div
       className={cn(
-        "sticky marker:lg:static left-0 top-0 lg:mt-5 z-50 inset-inline-0 mx-auto w-full lg:rounded-xl lg:overflow-hidden backdrop-blur-2xl lg:bg-white/20 border-gray-300/50 bg-gradient-to-b from-primary/5 "
+        "sticky marker:lg:static left-0 top-0 lg:top-5 lg:mt-5 z-50 inset-inline-0 mx-auto w-full lg:px-6 lg:rounded-full lg:overflow-hidden backdrop-blur-2xl lg:bg-white/20 border-gray-300/50 bg-gradient-to-b from-primary/5 "
       )}
     >
       <nav
@@ -63,13 +68,13 @@ export default function Navbar({
         </Link>
         <div className="flex items-center gap-5">
           <div className="items-center gap-5 hidden sm:inline-flex">
-            {socials.map((link, index) => {
+            {socials.map((link) => {
               return (
                 <Link
                   href={link.href}
                   target="_blank"
                   key={link.href}
-                  className="hover:text-primary hover:-translate-y-1 ease-in duration-300 flex justify-center items-center h-16 icon"
+                  className="hover:text-primary hover:-translate-y-1 ease-in duration-300 flex justify-center items-center h-16 icon "
                 >
                   <link.icon className="w-5 h-5" />
                 </Link>
@@ -84,19 +89,14 @@ export default function Navbar({
                 variant="link"
                 size="icon"
                 rounded="full"
-                className={user.image !== null ? " p-0" : ""}
               >
-                {user.name !== null ? (
-                  <Image
-                    src={user.image as string}
-                    alt={user.name}
-                    width={40}
-                    height={40}
-                    className="size-8 rounded-full"
-                  />
-                ) : (
-                  <UserRound />
-                )}
+                <Avatar>
+                  <AvatarImage src={user.image as string} alt={user.username} className="size-8 rounded-full" />
+                  <AvatarFallback className="hover:no-underline">
+                    {user.name.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56" side="bottom" align="end">
@@ -165,7 +165,7 @@ export default function Navbar({
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link
-                  href="https://forms.gle/v8Angn9VCbt9oVko7"
+                    href="https://forms.gle/v8Angn9VCbt9oVko7"
                     target="_blank"
                   >
                     <Bug className="mr-2 h-4 w-4" />
