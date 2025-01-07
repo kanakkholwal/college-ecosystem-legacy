@@ -63,7 +63,7 @@ function generateEventDuration(): number {
   return durations[Math.floor(Math.random() * durations.length)]
 }
 
-export function generateMockEvents(): CalendarEvent[] {
+ function generateMockEvents(): CalendarEvent[] {
   const events: CalendarEvent[] = []
   const startDate = startOfMonth(new Date())
 
