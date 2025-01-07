@@ -56,12 +56,12 @@ export async function assignRanks() {
         error: boolean;
         message: string;
         data: object | null;
-    }>("/api/result/assign-ranks", {
+    }>("/api/results/assign-ranks", {
         method: "POST",
     });
-
+    console.log(response)
     if (!response.data || response.data?.error) {
-        return Promise.resolve(false);
+        return Promise.reject(response.data?.message);
     }
 
     return Promise.resolve(true);

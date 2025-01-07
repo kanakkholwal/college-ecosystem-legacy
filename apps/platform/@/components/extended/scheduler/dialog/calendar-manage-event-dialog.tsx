@@ -15,6 +15,7 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -70,6 +71,7 @@ export default function CalendarManageEventDialog() {
     setSelectedEvent,
     events,
     setEvents,
+    editingEnabled
   } = useCalendarContext()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -123,100 +125,112 @@ export default function CalendarManageEventDialog() {
     setSelectedEvent(null)
     form.reset()
   }
+  if (!selectedEvent) return null
 
   return (
     <Dialog open={manageEventDialogOpen} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Manage event</DialogTitle>
+          <DialogTitle>
+            {editingEnabled ? 'Manage event' : selectedEvent?.title}
+          </DialogTitle>
+          {!editingEnabled && <DialogDescription>
+            <span>{format(selectedEvent?.start, 'h:mm a')}</span>
+            <span>-</span>
+            <span>{format(selectedEvent?.end, 'h:mm a')}</span>
+          </DialogDescription>}
         </DialogHeader>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="title"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-bold">Title</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Event title" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
 
-            <FormField
-              control={form.control}
-              name="start"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-bold">Start</FormLabel>
-                  <FormControl>
-                    <DateTimePicker value={field.value}
-                      onChange={field.onChange} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+        {editingEnabled ?
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="title"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold">Title</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Event title" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="end"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-bold">End</FormLabel>
-                  <FormControl>
-                    <DateTimePicker value={field.value}
-                      onChange={field.onChange} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="start"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold">Start</FormLabel>
+                    <FormControl>
+                      <DateTimePicker value={field.value}
+                        onChange={field.onChange} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <FormField
-              control={form.control}
-              name="color"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel className="font-bold">Color</FormLabel>
-                  <FormControl>
-                    <ColorPicker field={field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+              <FormField
+                control={form.control}
+                name="end"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold">End</FormLabel>
+                    <FormControl>
+                      <DateTimePicker value={field.value}
+                        onChange={field.onChange} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
 
-            <DialogFooter className="flex justify-between gap-2">
-              <AlertDialog>
-                <AlertDialogTrigger asChild>
-                  <Button variant="destructive" type="button">
-                    Delete
-                  </Button>
-                </AlertDialogTrigger>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Delete event</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Are you sure you want to delete this event? This action
-                      cannot be undone.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={handleDelete}>
+              <FormField
+                control={form.control}
+                name="color"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="font-bold">Color</FormLabel>
+                    <FormControl>
+                      <ColorPicker field={field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <DialogFooter className="flex justify-between gap-2">
+                <AlertDialog>
+                  <AlertDialogTrigger asChild>
+                    <Button variant="destructive" type="button">
                       Delete
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-              <Button type="submit">Update event</Button>
-            </DialogFooter>
-          </form>
-        </Form>
+                    </Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Delete event</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to delete this event? This action
+                        cannot be undone.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction onClick={handleDelete}>
+                        Delete
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+                <Button type="submit">Update event</Button>
+              </DialogFooter>
+            </form>
+          </Form> : <div className="grid grid-cols-1 gap-4 w-full h-full">
+            {selectedEvent?.description}
+          </div>}
       </DialogContent>
     </Dialog>
   )

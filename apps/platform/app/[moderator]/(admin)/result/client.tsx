@@ -17,7 +17,6 @@ export function AssignRankCard() {
     <CardContent>
       <Button variant="default_light" size="sm" onClick={() => {
         console.log("Assign Rank")
-        assignRanks()
         toast.promise(assignRanks(), {
           loading: 'Assigning Rank...',
           success: 'Rank Assigned',

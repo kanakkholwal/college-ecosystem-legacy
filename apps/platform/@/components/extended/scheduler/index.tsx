@@ -17,6 +17,7 @@ export default function Scheduler({
   date,
   setDate,
   calendarIconIsToday = true,
+  editingEnabled = false
 }: CalendarProps) {
   return (
     <CalendarProvider
@@ -27,13 +28,14 @@ export default function Scheduler({
       date={date}
       setDate={setDate}
       calendarIconIsToday={calendarIconIsToday}
+      editingEnabled={editingEnabled}
     >
       <CalendarHeader>
         <CalendarHeaderDate />
-        <CalendarHeaderActions>
+        {editingEnabled &&(<CalendarHeaderActions>
           <CalendarHeaderActionsMode />
           <CalendarHeaderActionsAdd />
-        </CalendarHeaderActions>
+        </CalendarHeaderActions>)}
       </CalendarHeader>
       <CalendarBody />
     </CalendarProvider>

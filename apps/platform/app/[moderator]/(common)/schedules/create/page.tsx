@@ -23,6 +23,7 @@ export default function CreateTimeTablePage() {
         setMode={(mode) => setMode(mode)}
         date={date}
         setDate={(date) => setDate(date)}
+        editingEnabled={false}
       />
     </>
   );

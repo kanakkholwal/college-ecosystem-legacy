@@ -6,6 +6,7 @@ export type CalendarProps = {
   date: Date
   setDate: (date: Date) => void
   calendarIconIsToday?: boolean
+  editingEnabled?: boolean
 }
 
 export type CalendarContextType = CalendarProps & {
@@ -22,7 +23,7 @@ export type CalendarEvent = {
   color: string
   start: Date
   end: Date,
-  description?: string
+  description?: string | React.ReactNode
 }
 
 export const calendarModes = ['day', 'week', 'month'] as const

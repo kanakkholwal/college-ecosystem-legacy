@@ -7,7 +7,7 @@ import CalendarHeaderDateIcon from './calendar-header-date-icon'
 export default function CalendarHeaderDate() {
   const { date } = useCalendarContext()
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-2" suppressHydrationWarning={true}>
       <CalendarHeaderDateIcon />
       <div>
         <div className="flex items-center gap-1">
