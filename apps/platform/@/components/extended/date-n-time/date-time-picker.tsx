@@ -15,22 +15,21 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-const DateTimePickerSchema = z.date({
-  required_error: "A date and time is required.",
-});
+const DateTimePickerSchema = z.string().datetime()
+
 
 type DateTimePickerType = z.infer<typeof DateTimePickerSchema>;
 
 interface DateTimePickerProps {
-    value: DateTimePickerType;
-    onChange: (value: DateTimePickerType) => void;
-  
+  value: DateTimePickerType;
+  onChange: (value: DateTimePickerType) => void;
+
 }
 
 export function DateTimePicker(field: DateTimePickerProps) {
   function handleDateSelect(date: Date | undefined) {
     if (date) {
-      field.onChange(date);
+      field.onChange(date.toISOString())
     }
   }
 
@@ -52,7 +51,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
       }
     }
 
-    field.onChange(newDate);
+    field.onChange(newDate.toISOString());
   }
 
   return (
@@ -77,7 +76,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
         <div className="sm:flex">
           <Calendar
             mode="single"
-            selected={field.value}
+            selected={new Date(field.value)}
             onSelect={handleDateSelect}
             autoFocus
           />
@@ -92,7 +91,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
                       size="icon"
                       variant={
                         field.value &&
-                        field.value.getHours() % 12 === hour % 12
+                          new Date(field.value).getHours() % 12 === hour % 12
                           ? "default"
                           : "ghost"
                       }
@@ -114,7 +113,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
                     key={minute}
                     size="icon"
                     variant={
-                      field.value && field.value.getMinutes() === minute
+                      field.value && new Date(field.value).getMinutes() === minute
                         ? "default"
                         : "ghost"
                     }
@@ -137,8 +136,8 @@ export function DateTimePicker(field: DateTimePickerProps) {
                     size="icon"
                     variant={
                       field.value &&
-                      ((ampm === "AM" && field.value.getHours() < 12) ||
-                        (ampm === "PM" && field.value.getHours() >= 12))
+                        ((ampm === "AM" && new Date(field.value).getHours() < 12) ||
+                          (ampm === "PM" && new Date(field.value).getHours() >= 12))
                         ? "default"
                         : "ghost"
                     }

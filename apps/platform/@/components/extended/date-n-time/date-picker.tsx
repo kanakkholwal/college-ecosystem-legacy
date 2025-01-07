@@ -26,7 +26,7 @@ interface DateTimePickerTypeProps {
     onChange: (value: DatePickerType) => void;
 }
 
-export function DatePickerForm(field : DateTimePickerTypeProps) {
+export function DatePicker(field : DateTimePickerTypeProps) {
 
 
 

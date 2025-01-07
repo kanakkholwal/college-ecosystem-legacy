@@ -153,7 +153,7 @@ export default function CalendarManageEventDialog() {
                 <FormItem>
                   <FormLabel className="font-bold">Start</FormLabel>
                   <FormControl>
-                    <DateTimePicker value={new Date(field.value)}
+                    <DateTimePicker value={field.value}
                       onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
@@ -168,7 +168,7 @@ export default function CalendarManageEventDialog() {
                 <FormItem>
                   <FormLabel className="font-bold">End</FormLabel>
                   <FormControl>
-                    <DateTimePicker value={new Date(field.value)}
+                    <DateTimePicker value={field.value}
                       onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />

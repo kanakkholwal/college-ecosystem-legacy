@@ -27,7 +27,7 @@ interface DateTimePicker24hTypeProps {
 }
 
 
-export function DateTimePicker24hForm( field : DateTimePicker24hTypeProps) {
+export function DateTimePicker24h( field : DateTimePicker24hTypeProps) {
 
 
   function handleDateSelect(date: Date | undefined) {
