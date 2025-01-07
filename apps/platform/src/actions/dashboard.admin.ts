@@ -2,7 +2,7 @@
 import type { InferSelectModel } from "drizzle-orm";
 import { and, asc, desc, eq, like, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
-import { users,sessions,accounts } from "~/db/schema/auth-schema";
+import { accounts, sessions, users } from "~/db/schema/auth-schema";
 
 export async function users_CountAndGrowth(timeInterval: string): Promise<{
   count: number;

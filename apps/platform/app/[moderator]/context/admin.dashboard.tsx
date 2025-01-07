@@ -15,7 +15,7 @@ export default async function AdminDashboard() {
     count: userCount,
     growth: userGrowth,
     trend: userTrend,
-  } = await users_CountAndGrowth("this_month");
+  } = await users_CountAndGrowth("this_week");
 
   const usersByGender = await getUsersByGender();
   const usersByRole = await getUsersByRole();

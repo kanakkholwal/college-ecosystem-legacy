@@ -1,11 +1,19 @@
+"use client"
 import { GoBackButton } from "@/components/common/go-back";
-import { TimeTableEditor } from "@/components/custom/time-table";
+import Scheduler from "@/components/extended/scheduler";
 
-export default async function CreateTimeTablePage() {
+export default function CreateTimeTablePage() {
   return (
     <>
       <GoBackButton />
-      <TimeTableEditor mode="create" />
+      <Scheduler 
+        events={[]}
+        setEvents={() => {}}
+        mode="day"
+        setMode={() => {}}
+        date={new Date()}
+        setDate={() => {}}
+      />
     </>
   );
 }

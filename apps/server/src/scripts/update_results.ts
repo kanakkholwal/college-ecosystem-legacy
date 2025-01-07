@@ -18,6 +18,7 @@ async function scrapeAndSaveResult(rollNo: string) {
         const existingResult = await ResultModel.findOne({ rollNo });
         if (existingResult) {
             existingResult.semesters = result.data.semesters;
+            existingResult.name = result.data.name;
             await existingResult.save();
             return { rollNo, success: true };
         }
@@ -83,6 +84,7 @@ const updateResult = async (ENV: "production" | "testing") => {
                 console.log(`Task: Success Rate: ${((taskData.success / taskData.processed) * 100).toFixed(2)}%`);
                 console.log(`Task: Failed Rate: ${((taskData.failed / taskData.processed) * 100).toFixed(2)}%`);
                 console.log(`Task: Last Roll Number: ${rollNo}`);
+                console.log(`Task: Progress: ${(taskData.processed / taskData.processable) * 100}%`);
                 console.log('---------------------------------');
                 console.log('failedRollNos:', taskData.failedRollNos);
             });

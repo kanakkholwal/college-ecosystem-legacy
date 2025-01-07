@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { titlesMap } from "@/constants/titles";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { FaRegUser } from "react-icons/fa";
@@ -25,10 +26,12 @@ export default function Navbar({ user }: { user: Session["user"] }) {
       <SidebarTrigger className="mx-2" />
 
       <div className="flex items-start flex-col">
-        <h3 className="text-lg font-bold">Dashboard</h3>
-        <h6 className="text-xs text-slate-500 dark:text-slate-400 font-semibold truncate w-full max-w-72">
-          {pathname}
-        </h6>
+      <h3 className="text-lg font-bold">
+          {titlesMap.get(pathname)?.title ?? "Dashboard"}
+        </h3>
+        <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold truncate w-full max-w-72">
+          {titlesMap.get(pathname)?.description ?? pathname}
+        </p>
       </div>
       <div className="ml-auto inline-flex gap-1 items-center">
         <div className="flex items-center space-x-2">
@@ -38,7 +41,6 @@ export default function Navbar({ user }: { user: Session["user"] }) {
                 type="button"
                 className="flex items-center space-x-2 px-3 py-1.5 rounded-lg"
               >
-                {/* <Image src={user.profilePicture} height={80} width={80} alt="avatar" className="w-8 h-8 rounded-full" /> */}
                 <span className="text-slate-500 dark:text-slate-300 text-sm ml-2 font-semibold hidden md:inline-block">
                   {user.name}
                 </span>

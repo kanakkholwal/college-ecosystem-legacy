@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     const emailHtml = await render(EmailTemplate);
     const response = await handleEmailFire(
-      "College Platform <platform@nith.eu.org>",
+      "College Platform <platform@nith.ac.in>",
       {
         to: targets,
         subject: subject,

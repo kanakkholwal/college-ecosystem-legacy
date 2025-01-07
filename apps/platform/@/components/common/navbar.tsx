@@ -92,7 +92,7 @@ export default function Navbar({
               >
                 <Avatar>
                   <AvatarImage src={user.image as string} alt={user.username} className="size-8 rounded-full" />
-                  <AvatarFallback className="hover:no-underline">
+                  <AvatarFallback className="!hover:no-underline">
                     {user.name.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
