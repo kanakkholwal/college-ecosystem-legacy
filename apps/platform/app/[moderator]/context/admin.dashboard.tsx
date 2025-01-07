@@ -13,7 +13,8 @@ export default async function AdminDashboard() {
   const {
     total: totalUsers,
     count: userCount,
-    growth: userGrowth,
+    growthPercent: userGrowth,
+    growth,
     trend: userTrend,
   } = await users_CountAndGrowth("this_week");
 
@@ -47,19 +48,20 @@ export default async function AdminDashboard() {
             </svg>}>
               <h4 className="text-3xl font-bold text-primary">
                 {totalUsers}
+                <span className="text-sm text-muted-foreground">/{userTrend * growth}</span>
               </h4>
               <p className="text-xs text-muted-foreground">
                 <span
-                  className={`${userTrend === "increase"
+                  className={`${userTrend === 1
                     ? "text-green-500"
-                    : userTrend === "decrease"
+                    : userTrend === -1
                       ? "text-red-500"
                       : "text-primary/80"
                     } text-base`}
                 >
-                  {userTrend === "increase" ? (
+                  {userTrend === 1 ? (
                     <TrendingUp className="inline-block mr-2 size-4" />
-                  ) : userTrend === "decrease" ? (
+                  ) : userTrend === -1 ? (
                     <TrendingDown className="inline-block mr-2 size-4" />
                   ) : (
                     <CircleDashed className="inline-block mr-2 size-4" />

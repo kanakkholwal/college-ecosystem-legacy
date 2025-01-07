@@ -1,3 +1,5 @@
+"use client"
+
 import CalendarBody from './body/calendar-body'
 import CalendarProvider from './calendar-provider'
 import type { CalendarProps } from './calendar-types'
@@ -37,3 +39,5 @@ export default function Scheduler({
     </CalendarProvider>
   )
 }
+
+

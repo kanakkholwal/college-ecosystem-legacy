@@ -1,3 +1,5 @@
+import { ColorPicker } from '@/components/extended/color-picker'
+import { DateTimePicker } from '@/components/extended/date-n-time'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,8 +12,6 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
-import { ColorPicker } from '@/components/ui/color-picker'
-import { DateTimePicker } from '@/components/ui/date-time-picker'
 import {
   Dialog,
   DialogContent,
@@ -153,7 +153,8 @@ export default function CalendarManageEventDialog() {
                 <FormItem>
                   <FormLabel className="font-bold">Start</FormLabel>
                   <FormControl>
-                    <DateTimePicker field={field} />
+                    <DateTimePicker value={new Date(field.value)}
+                      onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -167,7 +168,8 @@ export default function CalendarManageEventDialog() {
                 <FormItem>
                   <FormLabel className="font-bold">End</FormLabel>
                   <FormControl>
-                    <DateTimePicker field={field} />
+                    <DateTimePicker value={new Date(field.value)}
+                      onChange={field.onChange} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

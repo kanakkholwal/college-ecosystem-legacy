@@ -8,7 +8,8 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
   count: number;
   total: number;
   growth: number;
-  trend: "increase" | "decrease" | "stable";
+  growthPercent: number;
+  trend: -1 | 1 | 0
 }> {
   let startTime: Date;
 
@@ -64,22 +65,17 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
   const prevCount = prevCountQuery[0]?.count || 0;
 
   // Calculate growth percentage
-  const growth =
+  const growthPercent =
     prevCount === 0 ? 100 : ((currentCount - prevCount) / prevCount) * 100;
 
-  // Determine trend
-  let trend: "increase" | "decrease" | "stable" = "stable";
-  if (growth > 0) {
-    trend = "increase";
-  } else if (growth < 0) {
-    trend = "decrease";
-  }
+
 
   return {
     count: currentCount === Number.POSITIVE_INFINITY ? 100 : currentCount,
     total,
-    growth,
-    trend,
+    growth:currentCount - prevCount,
+    growthPercent,
+    trend: growthPercent > 0 ? 1 : growthPercent < 0 ? -1 : 0,
   };
 }
 

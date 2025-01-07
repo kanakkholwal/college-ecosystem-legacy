@@ -1,15 +1,15 @@
-import { useCalendarContext } from '../../calendar-context'
-import {
-  startOfMonth,
-  endOfMonth,
-  startOfWeek,
-  endOfWeek,
-  eachDayOfInterval,
-  isSameMonth,
-  isSameDay,
-  format,
-} from 'date-fns'
 import { cn } from '@/lib/utils'
+import {
+  eachDayOfInterval,
+  endOfMonth,
+  endOfWeek,
+  format,
+  isSameDay,
+  isSameMonth,
+  startOfMonth,
+  startOfWeek,
+} from 'date-fns'
+import { useCalendarContext } from '../../calendar-context'
 import CalendarEvent from '../../calendar-event'
 
 export default function CalendarBodyMonth() {
@@ -65,6 +65,13 @@ export default function CalendarBodyMonth() {
                 setDate(day)
                 setMode('day')
               }}
+              onKeyUp={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.stopPropagation()
+                  setDate(day)
+                  setMode('day')
+                }
+              }}
             >
               <div
                 className={cn(
@@ -90,6 +97,13 @@ export default function CalendarBodyMonth() {
                       e.stopPropagation()
                       setDate(day)
                       setMode('day')
+                    }}
+                    onKeyUp={(e) => {
+                      if (e.key === 'Enter' || e.key === ' ') {
+                        e.stopPropagation()
+                        setDate(day)
+                        setMode('day')
+                      }
                     }}
                   >
                     +{dayEvents.length - 3} more

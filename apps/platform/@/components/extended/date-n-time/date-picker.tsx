@@ -1,0 +1,66 @@
+"use client";
+
+import { CalendarIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
+import { z } from "zod";
+
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
+
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+
+const DatePickerFormSchema = z.date({
+  required_error: "A date and time is required.",
+})
+type DatePickerType = z.infer<typeof DatePickerFormSchema>
+
+interface DateTimePickerTypeProps {
+  
+    value: DatePickerType;
+    onChange: (value: DatePickerType) => void;
+}
+
+export function DatePickerForm(field : DateTimePickerTypeProps) {
+
+
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "w-full pl-3 text-left font-normal",
+            !field.value && "text-muted-foreground"
+          )}
+        >
+          {field.value ? (
+            format(field.value, "PPP")
+          ) : (
+            <span>Pick a date</span>
+          )}
+          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <Calendar
+          mode="single"
+          required={true}
+          selected={field.value}
+          onSelect={field.onChange}
+          disabled={(date) =>
+            date > new Date() || date < (new Date("1900-01-01"))
+          }
+          autoFocus
+        />
+      </PopoverContent>
+    </Popover>
+
+  );
+}

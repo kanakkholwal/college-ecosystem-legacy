@@ -8,7 +8,7 @@ export default function CalendarHeaderDateIcon() {
       <p className="flex h-6 w-full items-center justify-center bg-primary text-center text-xs font-semibold text-background uppercase">
         {format(date, 'MMM')}
       </p>
-      <p className="flex w-full items-center justify-center text-lg font-bold">
+      <p className="flex w-full items-center justify-center text-lg font-bold bg-white/30">
         {format(date, 'dd')}
       </p>
     </div>
