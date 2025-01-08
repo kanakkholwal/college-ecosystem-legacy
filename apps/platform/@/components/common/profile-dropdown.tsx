@@ -101,7 +101,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
             </div>
             <Separator className="my-2" />
 
-            <div className="flex flex-row gap-3">
+            <div className="flex flex-row gap-2 flex-wrap">
                 {SUPPORT_LINKS.map((link) => (
                     <Link
                         key={link.href}
@@ -112,7 +112,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
                     </Link>
                 ))}
             </div>
-            <div className="flex items-center justify-between gap-4 w-full flex-wrap">
+            <div className="flex items-center justify-between gap-4 w-full flex-wrap mt-2">
                 <div className="flex gap-2">
                     {socials.map((link) => {
                         return (

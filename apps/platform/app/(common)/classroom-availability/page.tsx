@@ -1,6 +1,8 @@
 import RoomCard from "@/components/application/room-card";
 import SearchBox from "@/components/application/room-search";
+import EmptyArea from "@/components/common/empty-area";
 import { Skeleton } from "@/components/ui/skeleton";
+import ConditionalRender from "@/components/utils/conditional-render";
 import ErrorBanner from "@/components/utils/error";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
@@ -65,6 +67,14 @@ export default async function RoomsPage(props: Props) {
           </div>
         }
       >
+        <ConditionalRender condition={rooms.length === 0}>
+          <EmptyArea
+            title="No rooms found"
+            description="No rooms found based on the search criteria."
+            />
+
+        </ConditionalRender>
+        <ConditionalRender condition={rooms.length > 0}>
         <div className="max-w-[1440px] mx-auto grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {rooms.map((room, i) => {
             return (
@@ -79,6 +89,8 @@ export default async function RoomsPage(props: Props) {
             );
           })}
         </div>
+
+        </ConditionalRender>
       </ErrorBoundaryWithSuspense>
     </>
   );

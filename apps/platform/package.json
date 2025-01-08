@@ -61,6 +61,7 @@
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.469.0",
     "mongoose": "^8.9.3",
+    "motion": "^11.16.1",
     "nanoid": "^5.0.9",
     "nexo-mdx": "^0.8.6",
     "next": "^15.1.3",

@@ -13,6 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import type { Matcher } from "react-day-picker";
 
 
 const DatePickerFormSchema = z.date({
@@ -21,7 +22,7 @@ const DatePickerFormSchema = z.date({
 type DatePickerType = z.infer<typeof DatePickerFormSchema>
 
 interface DateTimePickerTypeProps {
-  
+    disabled?: Matcher | Matcher[] | undefined
     value: DatePickerType;
     onChange: (value: DatePickerType) => void;
 }
@@ -54,9 +55,7 @@ export function DatePicker(field : DateTimePickerTypeProps) {
           required={true}
           selected={field.value}
           onSelect={field.onChange}
-          disabled={(date) =>
-            date > new Date() || date < (new Date("1900-01-01"))
-          }
+          disabled={field.disabled}
           autoFocus
         />
       </PopoverContent>

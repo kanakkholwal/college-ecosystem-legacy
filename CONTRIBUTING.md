@@ -38,7 +38,6 @@ Before creating an enhancement suggestion, please check if an issue already exis
 - **Ensure the enhancement was not already suggested** by searching on GitHub under [Issues](https://github.com/your-repo/college-ecosystem/issues).
 - **If you're unable to find an open issue addressing the suggestion,** open a new one.
 
-
 ### Design Icons and Layouts
 
 Designers can contribute to the frontend applications by creating and improving the visual elements of the project. Here are some ways designers can help:

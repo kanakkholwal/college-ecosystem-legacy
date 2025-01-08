@@ -3,6 +3,7 @@
 import CalendarBody from './body/calendar-body'
 import CalendarProvider from './calendar-provider'
 import type { CalendarProps } from './calendar-types'
+import { marginHoursSchema } from "./calendar-types"
 import CalendarHeaderActions from './header/actions/calendar-header-actions'
 import CalendarHeaderActionsAdd from './header/actions/calendar-header-actions-add'
 import CalendarHeaderActionsMode from './header/actions/calendar-header-actions-mode'
@@ -17,8 +18,16 @@ export default function Scheduler({
   date,
   setDate,
   calendarIconIsToday = true,
-  editingEnabled = false
+  editingEnabled = false,
+  margin_hours = [0,24]
 }: CalendarProps) {
+  
+  const response = marginHoursSchema.safeParse(margin_hours)
+  if(!response.success){
+    throw new Error(response.error.errors[0].message)
+  }
+
+
   return (
     <CalendarProvider
       events={events}
@@ -29,6 +38,7 @@ export default function Scheduler({
       setDate={setDate}
       calendarIconIsToday={calendarIconIsToday}
       editingEnabled={editingEnabled}
+      margin_hours={margin_hours}
     >
       <CalendarHeader>
         <CalendarHeaderDate />

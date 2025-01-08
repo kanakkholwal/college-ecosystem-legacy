@@ -48,7 +48,7 @@ export default async function AdminDashboard() {
             </svg>}>
               <h4 className="text-3xl font-bold text-primary">
                 {totalUsers}
-                <span className="text-sm text-muted-foreground">/{userTrend * growth}</span>
+                {/* <span className="text-sm text-muted-foreground">/{userTrend * growth}</span> */}
               </h4>
               <p className="text-xs text-muted-foreground">
                 <span

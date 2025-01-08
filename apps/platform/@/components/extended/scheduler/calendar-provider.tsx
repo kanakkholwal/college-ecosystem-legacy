@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { CalendarContext } from './calendar-context'
-import type { CalendarEvent, Mode } from './calendar-types'
+import type { CalendarEvent, Mode,MarginHours } from './calendar-types'
 import CalendarManageEventDialog from './dialog/calendar-manage-event-dialog'
 import CalendarNewEventDialog from './dialog/calendar-new-event-dialog'
 
@@ -13,6 +13,7 @@ export default function CalendarProvider({
   setDate,
   calendarIconIsToday = true,
   editingEnabled,
+  margin_hours,
   children,
 }: {
   events: CalendarEvent[]
@@ -23,7 +24,8 @@ export default function CalendarProvider({
   setDate: (date: Date) => void
   calendarIconIsToday: boolean
   children: React.ReactNode
-  editingEnabled:boolean
+  editingEnabled:boolean,
+  margin_hours?:MarginHours
 }) {
   const [newEventDialogOpen, setNewEventDialogOpen] = useState(false)
   const [manageEventDialogOpen, setManageEventDialogOpen] = useState(false)
@@ -45,7 +47,8 @@ export default function CalendarProvider({
         setManageEventDialogOpen,
         selectedEvent,
         setSelectedEvent,
-        editingEnabled
+        editingEnabled,
+        margin_hours
       }}
     >
       <CalendarNewEventDialog />

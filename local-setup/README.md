@@ -1,0 +1,33 @@
+# How to setup this project in your device
+
+## Prerequisites
+
+- [Node.js](https://nodejs.org/) >= 20
+- [PNPM](https://pnpm.io/) or [NPM](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm)
+- [Next.js](https://nextjs.org/docs)
+
+## Pre-setup steps
+
+- Install `turbo` package globally
+
+```bash
+npm install -g turbo@latest
+```
+
+- Download raw `data.json` file from this drive link and save in this folder. [Drive Link]("https://drive.google.com/file/d/1EA44xbZM4HdhGJ8xeP-rehsV3LYEyoIt/view?usp=sharing")
+
+- Run the `setup.js` file using node to add raw data to your database for testing the environment.
+
+```bash
+node ./local-setup/setup.js
+```
+
+## *NOTE* : Make sure to add proper Environment variables
+
+- Get Your `DATABASE_URL` from [here]("https://neon.tech/")
+- Get Your `MONGODB_URI` from [here]("https://www.mongodb.com/")
+- Get Your `BETTER_AUTH_SECRET` from [here]("https://www.better-auth.com/docs/installation")
+- Get Your `UPSTASH_REDIS_REST_URL` from [here]("https://upstash.com/")
+- Get Your `GOOGLE_ID` from [here]("https://console.cloud.google.com/")
+- Get Your `UPSTASH_REDIS_REST_URL` from [here]("https://firebase.google.com/")
+- Get Your `MAIL_EMAIL` from [here]("https://www.brevo.com/")

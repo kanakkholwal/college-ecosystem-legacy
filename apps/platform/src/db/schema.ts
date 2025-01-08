@@ -21,10 +21,17 @@ export {
 } from "./schema/course";
 export { rooms, roomUsageHistory } from "./schema/room";
 
+// export {
+//   departmentCodeEnum,
+//   dailyEvents,
+//   dailySchedules,
+//   timeSlots,
+//   timetables,
+// } from "./schema/time_table";
+
 export {
-  departmentCodeEnum,
-  dailyEvents,
-  dailySchedules,
-  timeSlots,
-  timetables,
-} from "./schema/time_table";
+  schedulesModeEnums,
+  scheduleAccess,
+  scheduleEvents,
+  schedules
+} from "./schema/schedule";
