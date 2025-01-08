@@ -23,6 +23,9 @@ app.get('/', (req, res) => {
   });
 });
 const CORS_ORIGINS = ['https://nith.eu.org', 'https://app.nith.eu.org'];
+const isOriginAllowed = (origin: string): boolean => {
+  return CORS_ORIGINS.some(o => origin.endsWith(o)) || (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost:'));
+};
 
 const SERVER_IDENTITY = process.env.SERVER_IDENTITY
 if (!SERVER_IDENTITY)
@@ -45,10 +48,11 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
   }
 
   // CORS logic for browser requests
-  if (
-    (process.env.NODE_ENV === 'production' && CORS_ORIGINS.some(o => origin.endsWith(o))) ||
-    (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost:'))
-  ) {
+  if (origin === 'null') {
+    res.status(403).json({ error: 'CORS policy does not allow null origin' });
+    return;
+  }
+  if (isOriginAllowed(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type,X-IDENTITY-KEY');
