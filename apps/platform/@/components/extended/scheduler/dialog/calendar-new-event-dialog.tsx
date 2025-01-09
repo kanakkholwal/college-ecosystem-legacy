@@ -28,6 +28,7 @@ const formSchema = z
     start: z.string().datetime(),
     end: z.string().datetime(),
     color: z.string(),
+    description:z.string()
   })
   .refine(
     (data) => {
@@ -52,6 +53,7 @@ export default function CalendarNewEventDialog() {
       start: format(date, "yyyy-MM-dd'T'HH:mm"),
       end: format(date, "yyyy-MM-dd'T'HH:mm"),
       color: 'blue',
+      description:""
     },
   })
 
@@ -62,6 +64,7 @@ export default function CalendarNewEventDialog() {
       start: new Date(values.start),
       end: new Date(values.end),
       color: values.color,
+      description:""
     }
 
     setEvents([...events, newEvent])

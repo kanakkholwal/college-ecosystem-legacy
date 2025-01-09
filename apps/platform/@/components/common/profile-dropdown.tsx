@@ -65,7 +65,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
             }}
         >
             <div className="flex gap-4 mx-auto">
-                <Avatar className="size-16 rounded-full">
+                <Avatar className="size-16 rounded-full bg-gray-200">
                     <AvatarImage
                         src={user.image as string}
                         alt={user.username}

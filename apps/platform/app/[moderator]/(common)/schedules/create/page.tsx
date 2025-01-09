@@ -109,7 +109,7 @@ export default function CreateSchedulePage() {
                     <FormItem>
                       <FormLabel>Description</FormLabel>
                       <FormControl>
-                        <Input placeholder="Schedule title." {...field} />
+                        <Input placeholder="Schedule description" {...field} />
                       </FormControl>
                       <FormDescription />
                       <FormMessage />
