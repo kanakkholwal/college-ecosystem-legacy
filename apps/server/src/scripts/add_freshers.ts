@@ -1,9 +1,9 @@
+import path from 'node:path';
 import readXlsxFile from 'read-excel-file/node';
 import { z } from "zod";
 import { getInfoFromRollNo } from "../lib/scrape";
 import ResultModel from "../models/result";
 import dbConnect from "../utils/dbConnect";
-import path from 'node:path';
 
 const freshersDataSchema = z.array(z.object({
     name: z.string(),
@@ -26,8 +26,7 @@ async function importFreshers(ENV: "production" | "testing", filePath: string) {
         const rows_info = new Map([
             [2, "name"],
             [3, "rollNo"],
-            [7, "gender"]
-
+            [4, "gender"]
         ])
         for (const row of sanitized_rows.slice(1)) {
             const data = {} as Record<string, string>;
@@ -45,7 +44,7 @@ async function importFreshers(ENV: "production" | "testing", filePath: string) {
         console.log(sanitized_data.slice(0, 5));
         const parsedData = freshersDataSchema.safeParse(sanitized_data);
         if (!parsedData.success) {
-            console.table({
+            console.log({
                 error: true,
                 message: "Invalid data",
                 data: parsedData.error
@@ -53,6 +52,7 @@ async function importFreshers(ENV: "production" | "testing", filePath: string) {
             process.exit(0)
             return
         }
+        console.log("valid Schema")
         const getSanitizedData = () => parsedData.data?.map(async (student) => {
             const data = await getInfoFromRollNo(student.rollNo);
             return {
@@ -68,6 +68,9 @@ async function importFreshers(ENV: "production" | "testing", filePath: string) {
         // verify the data against the schema and set the required keys
         
         const results = await Promise.all(getSanitizedData());
+        await ResultModel.deleteMany({
+            batch:"2024"
+        })
         const resultsWithRanks = await ResultModel.insertMany(results);
 
         console.log("Freshers imported successfully.");

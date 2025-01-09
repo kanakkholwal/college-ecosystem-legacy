@@ -13,91 +13,6 @@ import { accounts, sessions, users, verifications } from "~/db/schema";
 import type { ResultType } from "~/types/result";
 import { mailFetch, serverFetch } from "./server-fetch";
 
-type getUserInfoReturnType = {
-  email: string;
-  username: string;
-  other_roles: string[];
-  department: string;
-  name?: string;
-  emailVerified: boolean;
-};
-
-type FacultyType = {
-  name: string;
-  email: string;
-  department: string;
-};
-
-async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
-  const username = email.split("@")[0];
-  const isStudent = isValidRollNumber(username);
-
-  if (isStudent) {
-    console.log("Student");
-    const res  = await serverFetch<{
-      message: string;
-      data: ResultType | null;
-      error?: string | null;
-    }>("/api/results/:rollNo/get", {
-      method: "GET",
-      params: {
-        rollNo: username
-      }
-    });
-    const response = res.data;
-    console.log(res);
-    console.log(response?.data ? "has result" : "No result");
-
-    if (!response?.data) {
-      throw new APIError("BAD_REQUEST", {
-        message: "Result not found for the given roll number | Contact admin",
-      });
-    }
-
-    return {
-      other_roles: [ROLES.STUDENT],
-      department: getDepartmentByRollNo(username) as string,
-      name: response.data.name,
-      emailVerified: true,
-      email,
-      username,
-    };
-  }
-  const { data: response } = await serverFetch<{
-    message: string;
-    data: FacultyType | null;
-    error?: string | null;
-  }>("/api/faculties/search/:email", {
-    method: "POST",
-    params: {
-      email,
-    },
-  });
-  const faculty = response?.data;
-  console.log(faculty ? "is faculty" : "Not faculty");
-
-  if (faculty) {
-    console.log("Faculty");
-    console.log(faculty.email);
-    return {
-      other_roles: [ROLES.FACULTY],
-      department: faculty.department,
-      name: faculty.name,
-      emailVerified: true,
-      email,
-      username,
-    };
-  }
-  console.log("Other:Staff");
-  console.log(email);
-  return {
-    other_roles: [ROLES.STAFF],
-    department: "Staff",
-    email,
-    emailVerified: true,
-    username,
-  };
-}
 
 export const auth = betterAuth({
   appName: "College Platform",
@@ -209,6 +124,11 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
+      mapProfileToUser:async (profile)=>{
+            return {
+              image:profile.picture
+            }
+      }
     },
   },
   user: {
@@ -256,5 +176,92 @@ export const auth = betterAuth({
   },
   plugins: [username(), admin(), nextCookies()], // make sure this is the last plugin (nextCookies) in the array
 });
+
+type getUserInfoReturnType = {
+  email: string;
+  username: string;
+  other_roles: string[];
+  department: string;
+  name?: string;
+  emailVerified: boolean;
+};
+
+type FacultyType = {
+  name: string;
+  email: string;
+  department: string;
+};
+
+async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
+  const username = email.split("@")[0];
+  const isStudent = isValidRollNumber(username);
+
+  if (isStudent) {
+    console.log("Student");
+    const res  = await serverFetch<{
+      message: string;
+      data: ResultType | null;
+      error?: string | null;
+    }>("/api/results/:rollNo/get", {
+      method: "GET",
+      params: {
+        rollNo: username
+      }
+    });
+    const response = res.data;
+    console.log(res);
+    console.log(response?.data ? "has result" : "No result");
+
+    if (!response?.data) {
+      throw new APIError("BAD_REQUEST", {
+        message: "Result not found for the given roll number | Contact admin",
+      });
+    }
+
+    return {
+      other_roles: [ROLES.STUDENT],
+      department: getDepartmentByRollNo(username) as string,
+      name: response.data.name,
+      emailVerified: true,
+      email,
+      username,
+    };
+  }
+  const { data: response } = await serverFetch<{
+    message: string;
+    data: FacultyType | null;
+    error?: string | null;
+  }>("/api/faculties/search/:email", {
+    method: "POST",
+    params: {
+      email,
+    },
+  });
+  const faculty = response?.data;
+  console.log(faculty ? "is faculty" : "Not faculty");
+
+  if (faculty) {
+    console.log("Faculty");
+    console.log(faculty.email);
+    return {
+      other_roles: [ROLES.FACULTY],
+      department: faculty.department,
+      name: faculty.name,
+      emailVerified: true,
+      email,
+      username,
+    };
+  }
+  console.log("Other:Staff");
+  console.log(email);
+  return {
+    other_roles: [ROLES.STAFF],
+    department: "Staff",
+    email,
+    emailVerified: true,
+    username,
+  };
+}
+
 
 export type Session = typeof auth.$Infer.Session;
