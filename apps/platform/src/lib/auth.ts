@@ -1,4 +1,4 @@
-import { betterAuth, type User } from "better-auth";
+import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
@@ -8,7 +8,7 @@ import {
   getDepartmentByRollNo,
   isValidRollNumber,
 } from "~/constants/departments";
-import { db } from "~/db/connect"; // drizzle instance
+import { db } from "~/db/connect";
 import { accounts, sessions, users, verifications } from "~/db/schema";
 import type { ResultType } from "~/types/result";
 import { mailFetch, serverFetch } from "./server-fetch";
