@@ -249,6 +249,7 @@ export default function CreateSchedulePage() {
                         date={date}
                         setDate={(date) => setDate(date)}
                         editingEnabled={true}
+                        margin_hours={[8,18]}
                       />
                     </FormControl>
                     <FormDescription />

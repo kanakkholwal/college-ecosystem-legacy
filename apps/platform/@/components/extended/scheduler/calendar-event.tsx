@@ -26,38 +26,48 @@ function getOverlappingEvents(
 
 function calculateEventPosition(
   event: CalendarEventType,
-  allEvents: CalendarEventType[]
+  allEvents: CalendarEventType[],
+  margin_hours: [number, number]
 ): EventPosition {
-  const overlappingEvents = getOverlappingEvents(event, allEvents)
+  const [startMargin, endMargin] = margin_hours || [0, 24];
+  const totalMarginHours = endMargin - startMargin;
+
+  const overlappingEvents = getOverlappingEvents(event, allEvents);
   const group = [event, ...overlappingEvents].sort(
     (a, b) => a.start.getTime() - b.start.getTime()
-  )
-  const position = group.indexOf(event)
-  const width = `${100 / (overlappingEvents.length + 1)}%`
-  const left = `${(position * 100) / (overlappingEvents.length + 1)}%`
+  );
+  const position = group.indexOf(event);
+  const width = `${100 / (overlappingEvents.length + 1)}%`;
+  const left = `${(position * 100) / (overlappingEvents.length + 1)}%`;
 
-  const startHour = event.start.getHours()
-  const startMinutes = event.start.getMinutes()
+  // Adjust start and end times based on `margin_hours`
+  const eventStartHour = event.start.getHours();
+  const eventEndHour = event.end.getHours();
+  const adjustedStartHour = Math.max(eventStartHour, startMargin);
+  const adjustedEndHour = Math.min(eventEndHour, endMargin);
 
-  let endHour = event.end.getHours()
-  let endMinutes = event.end.getMinutes()
+  // Calculate top position and height only for the visible margin hours
+  const startMinutes = event.start.getMinutes();
+  const endMinutes = event.end.getMinutes();
+  const startPosition =
+    (adjustedStartHour - startMargin) * (128 / totalMarginHours) +
+    (startMinutes / 60) * (128 / totalMarginHours);
+  const endPosition =
+    (adjustedEndHour - startMargin) * (128 / totalMarginHours) +
+    (endMinutes / 60) * (128 / totalMarginHours);
 
-  if (!isSameDay(event.start, event.end)) {
-    endHour = 23
-    endMinutes = 59
-  }
-
-  const topPosition = startHour * 128 + (startMinutes / 60) * 128
-  const duration = endHour * 60 + endMinutes - (startHour * 60 + startMinutes)
-  const height = (duration / 60) * 128
+  const top = Math.max(0, startPosition); // Prevent negative positions
+  const height = Math.max(0, endPosition - startPosition); // Ensure proper height
 
   return {
     left,
     width,
-    top: `${topPosition}px`,
+    top: `${top}px`,
     height: `${height}px`,
-  }
+  };
 }
+
+
 
 export default function CalendarEvent({
   event,
@@ -68,15 +78,15 @@ export default function CalendarEvent({
   month?: boolean
   className?: string
 }) {
-  const { events, setSelectedEvent, setManageEventDialogOpen } =
+  const { events, setSelectedEvent, setManageEventDialogOpen, margin_hours } =
     useCalendarContext()
 
-  const style = month ? {} : calculateEventPosition(event, events)
+  const style = month ? {} : calculateEventPosition(event, events, margin_hours || [0, 24])
 
   return (
     <div
       key={event.id}
-      
+
       className={cn(
         `px-3 py-1.5 rounded-md truncate cursor-pointer transition-all duration-300 bg-${event.color}-500/10 hover:bg-${event.color}-500/20 border border-${event.color}-500`,
         !month && 'absolute',
