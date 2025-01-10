@@ -24,10 +24,10 @@ node ./local-setup/setup.js
 
 ## *NOTE* : Make sure to add proper Environment variables
 
-- Get Your `DATABASE_URL` from [here]("https://neon.tech/")
-- Get Your `MONGODB_URI` from [here]("https://www.mongodb.com/")
-- Get Your `BETTER_AUTH_SECRET` from [here]("https://www.better-auth.com/docs/installation")
-- Get Your `UPSTASH_REDIS_REST_URL` from [here]("https://upstash.com/")
-- Get Your `GOOGLE_ID` from [here]("https://console.cloud.google.com/")
-- Get Your `UPSTASH_REDIS_REST_URL` from [here]("https://firebase.google.com/")
-- Get Your `MAIL_EMAIL` from [here]("https://www.brevo.com/")
+- Get Your `DATABASE_URL` from [neon.tech]("https://neon.tech/")
+- Get Your `MONGODB_URI` from [mongodb]("https://www.mongodb.com/")
+- Get Your `BETTER_AUTH_SECRET` from [better-auth]("https://www.better-auth.com/docs/installation")
+- Get Your `UPSTASH_REDIS_REST_URL` from [upstash]("https://upstash.com/")
+- Get Your `GOOGLE_ID` from [gcp]("https://console.cloud.google.com/")
+- Get Your `FIREBASE_DATABASE_URL` from [firebase]("https://firebase.google.com/")
+- Get Your `MAIL_EMAIL` from [brevo]("https://www.brevo.com/")
