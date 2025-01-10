@@ -82,7 +82,7 @@ export default function SearchBar() {
         />
       </div>
 
-      <div className="flex items-end space-x-4 text-sm text-gray-600">
+      <div className="flex items-end flex-wrap gap-2 text-sm text-gray-600">
         <div>
           <p className="text-gray-600 font-semibold text-sm">Search Field</p>
           <div className="flex items-center space-x-4">
@@ -100,9 +100,6 @@ export default function SearchBar() {
                     <SelectItem
                       key={field}
                       value={field}
-                      onClick={() => {
-                        setSearchField(field);
-                      }}
                     >
                       {field}
                     </SelectItem>
@@ -125,9 +122,6 @@ export default function SearchBar() {
                     <SelectItem
                       key={operator}
                       value={operator}
-                      onClick={() => {
-                        setSearchOperator(operator as searchParamsType["searchOperator"]);
-                      }}
                     >
                       {operator}
                     </SelectItem>
@@ -138,7 +132,6 @@ export default function SearchBar() {
           </div>
         </div>
         <Separator orientation="vertical" />
-
         <div>
           <p className="text-gray-600 font-semibold text-sm">Search Field</p>
 
@@ -159,9 +152,6 @@ export default function SearchBar() {
                     <SelectItem
                       key={field}
                       value={field}
-                      onClick={() => {
-                        setSortBy(field);
-                      }}
                     >
                       {field}
                     </SelectItem>
@@ -183,9 +173,6 @@ export default function SearchBar() {
                     <SelectItem
                       key={direction}
                       value={direction}
-                      onClick={() => {
-                        setSortDirection(direction as searchParamsType["sortDirection"]);
-                      }}
                     >
                       {direction}
                     </SelectItem>
@@ -220,7 +207,6 @@ export default function SearchBar() {
           </div>
         </div>
         <Separator orientation="vertical" />
-
         {/* Apply Button */}
         <Button
           size="sm"

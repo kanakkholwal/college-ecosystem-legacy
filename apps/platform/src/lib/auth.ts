@@ -38,10 +38,7 @@ export const auth = betterAuth({
           return {
             data: {
               ...user,
-              ...info,
-              // gender:user["gender"] !== "not_specified" ? user["gender"] : info.gender
-               // // biome-ignore lint/complexity/useLiteralKeys: <explanation>,
-               
+              ...info,             
             },
           };
         },
@@ -222,12 +219,13 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     const response = res.data;
     console.log(res);
     console.log(response?.data ? "has result" : "No result");
-
+    
     if (!response?.data) {
-      throw new APIError("BAD_REQUEST", {
+      throw new APIError("UPGRADE_REQUIRED", {
         message: "Result not found for the given roll number | Contact admin",
       });
     }
+    console.log(response.data?.gender);
 
     return {
       other_roles: [ROLES.STUDENT],
