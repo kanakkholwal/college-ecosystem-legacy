@@ -5,6 +5,7 @@ export const departmentNameEnum = pgEnum("department_name_enum", [
   "Staff",
   ...DEPARTMENTS,
 ] as [string, ...string[]]);
+
 export const userRolesEnum = pgEnum("user_roles_enum", [
   "admin",
   "student",
@@ -13,6 +14,11 @@ export const userRolesEnum = pgEnum("user_roles_enum", [
   "cr",
   "staff",
   "assistant",
+  "mmca",
+  "warden",
+  "librarian",
+  "assistant_warden",
+  "chief_warden",
 ] as [string, ...string[]]);
 
 export const userGenderEnum = pgEnum("user_gender_enum", [

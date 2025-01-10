@@ -1,12 +1,12 @@
 "use client";
 
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 import type * as React from "react";
 
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full gap-2 capitalize whitespace-nowrap font-semibold transition-colors",
+  "inline-flex items-center rounded-full gap-2 px-2.5 py-0.5  capitalize whitespace-nowrap font-semibold transition-colors",
   {
     variants: {
       variant: {
@@ -50,7 +50,7 @@ const badgeVariants = cva(
         glass:
           "backdrop-blur-lg bg-white/30 dark:bg-slate-800/15 backdrop-blur-xl border-white/10 dark:border-white/5 dark:text-white shadow",
         secondary:
-          "border border-input bg-secondary hover:bg-secondary/80 hover:text-accent-foreground dark:bg-gray-800 dark:border-gray-700  dark:text-white",
+          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
         outline: "text-foreground",
       },
       size: {
@@ -80,3 +80,4 @@ function Badge({ className, variant, size, ...props }: BadgeProps) {
 }
 
 export { Badge, badgeVariants };
+

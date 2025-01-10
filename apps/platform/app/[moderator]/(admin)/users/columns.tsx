@@ -3,16 +3,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
-import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import type { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
-import toast from "react-hot-toast";
+import Link from "next/link";
 import type { authClient } from "~/lib/auth-client";
+
+
 
 export type UserType = Awaited<ReturnType<typeof authClient.admin.listUsers>>["data"]["users"][number]
 
@@ -116,7 +111,7 @@ export const columns: ColumnDef<UserType>[] = [
         cell: ({ row }) => {
             return (
                 <div className="text-left font-medium">
-                        {row.getValue("gender")}
+                    {row.getValue("gender")}
                 </div>
             );
         },
@@ -134,8 +129,9 @@ export const columns: ColumnDef<UserType>[] = [
                 {(row.original as UserType)?.other_roles?.join(", ")}
             </div>;
         },
-        enableSorting: true,
+        enableSorting: false,
         enableHiding: true,
+        enableGrouping: true,
     },
     {
         id: "createdAt",
@@ -164,39 +160,14 @@ export const columns: ColumnDef<UserType>[] = [
         enableSorting: false,
         enableHiding: true,
         cell: ({ row }) => {
-            const user = row.original;
-            return (
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="h-8 w-8 p-0">
-                            <span className="sr-only">Open menu</span>
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end">
-                        <DropdownMenuItem
-                            onClick={() =>
-                                toast.promise(navigator.clipboard.writeText(user.id), {
-                                    loading: "Copying...",
-                                    success: "ID copied to clipboard",
-                                    error: "Failed to copy ID",
-                                })
-                            }
-                        >
-                            {" "}
-                            Copy ID{" "}
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                            onClick={() => {
-                                console.log("deleting user ", user);
-                                
-                            }}
-                        >
-                            <span className="text-red-600">Delete</span>
-                        </DropdownMenuItem>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            );
+            return <div className="text-left font-medium">
+                <Button variant="link" asChild>
+                    <Link href={`/admin/users/${row.original.id}`}>
+                        View user
+                    </Link>
+                </Button>
+            </div>;
         },
+
     },
 ];

@@ -1,4 +1,4 @@
-import { betterAuth } from "better-auth";
+import { betterAuth, type User } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
@@ -12,6 +12,7 @@ import { db } from "~/db/connect"; // drizzle instance
 import { accounts, sessions, users, verifications } from "~/db/schema";
 import type { ResultType } from "~/types/result";
 import { mailFetch, serverFetch } from "./server-fetch";
+
 
 
 export const auth = betterAuth({
@@ -38,6 +39,9 @@ export const auth = betterAuth({
             data: {
               ...user,
               ...info,
+              // gender:user["gender"] !== "not_specified" ? user["gender"] : info.gender
+               // // biome-ignore lint/complexity/useLiteralKeys: <explanation>,
+               
             },
           };
         },
@@ -229,7 +233,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     return {
       other_roles: [ROLES.STUDENT],
       department: getDepartmentByRollNo(username) as string,
-      name: response.data.name,
+      name: response.data.name.toUpperCase(),
       emailVerified: true,
       email,
       username,
@@ -255,7 +259,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     return {
       other_roles: [ROLES.FACULTY],
       department: faculty.department,
-      name: faculty.name,
+      name: faculty.name.toUpperCase(),
       emailVerified: true,
       email,
       username,

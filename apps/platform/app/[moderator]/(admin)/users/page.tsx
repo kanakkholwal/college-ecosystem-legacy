@@ -1,12 +1,12 @@
 "use client";
 import { DataTable } from "@/components/ui/data-table";
 import { ErrorBoundary } from "@/components/utils/error-boundary";
+import { LoaderCircle } from 'lucide-react';
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { authClient } from "~/lib/auth-client";
 import { columns } from "./columns";
 import SearchBar from "./search";
-import { LoaderCircle } from 'lucide-react';
 
 type UserType = Awaited<ReturnType<typeof authClient.admin.listUsers>>["data"]["users"][number];
 
@@ -94,24 +94,24 @@ export default function DashboardPage(props: PageProps) {
     <div className="space-y-6 my-5">
       <div className="container mx-auto py-10 px-2">
         <SearchBar />
-        {loading ? <div className="glassmorphism px-2 sm:px-4 pb-2 pt-4 rounded-lg space-y-4 flex items-center justify-center w-full">
+        {loading ? <div className="glassmorphism px-2 sm:px-4 pb-2 pt-4 rounded-lg space-y-4 flex items-center justify-center w-full min-h-80 border">
 
           <LoaderCircle className="size-12 text-primary animate-spin mx-auto" />
 
-        </div>:
-        <ErrorBoundary
-          fallback={(_) => {
-            return <div className="text-center">
-              {error || "Error fetching data"}
-            </div>
-          }}
-        >
-          <DataTable
-            data={users}
-            columns={columns}
-          />
-        </ErrorBoundary>
-}
+        </div> :
+          <ErrorBoundary
+            fallback={(_) => {
+              return <div className="text-center">
+                {error || "Error fetching data"}
+              </div>
+            }}
+          >
+            <DataTable
+              data={users}
+              columns={columns}
+            />
+          </ErrorBoundary>
+        }
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
 'use client';
 import {
   AnimatePresence,
-  Transition,
-  Variant,
+  type Transition,
+  type Variant,
   motion,
-  MotionProps,
+  type MotionProps,
 } from 'motion/react';
 import { cn } from '@/lib/utils';
 

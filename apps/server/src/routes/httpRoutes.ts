@@ -1,7 +1,7 @@
 import { type RequestHandler, Router } from 'express';
 import { getDepartments, getDepartmentsList } from '../controllers/http-department';
 import { getFacultyByEmailHandler, getFacultyListByDepartmentHandler, refreshFacultyListHandler } from '../controllers/http-faculty_list';
-import { addResult, assignRankToResults, getResult, getResultByRollNoFromSite, importFreshers, updateResult } from '../controllers/http-result';
+import { addResult, assignRankToResults,assignBranchChangeToResults, getResult, getResultByRollNoFromSite, importFreshers, updateResult } from '../controllers/http-result';
 
 
 
@@ -26,6 +26,7 @@ router.get('/faculties/:departmentCode', getFacultyListByDepartmentHandler);
 router.post('/results/import-freshers', importFreshers as unknown as RequestHandler);
 // Endpoint to assign ranks to the results in the database
 router.post('/results/assign-ranks', assignRankToResults as unknown as RequestHandler);
+router.post('/results/assign-branch-change', assignBranchChangeToResults as unknown as RequestHandler);
 // Endpoint to get result by rollNo scraped from the website
 router.post('/results/:rollNo', getResultByRollNoFromSite);
 // Endpoint to [get,add,update] result by rollNo from the database
