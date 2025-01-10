@@ -10,13 +10,20 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {
+  MultiSelector,
+  MultiSelectorContent,
+  MultiSelectorInput,
+  MultiSelectorItem,
+  MultiSelectorList,
+  MultiSelectorTrigger,
+} from "@/components/ui/multi-select";
+import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -26,19 +33,20 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formatDistance } from "date-fns";
-import type { InferSelectModel } from "drizzle-orm";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
 import { ROLES } from "src/constants/user";
 import * as z from "zod";
-// import toast from "react-hot-toast";
-import type { users } from "~/db/schema";
 import { authClient } from "~/lib/auth-client";
+
+import type { InferSelectModel } from "drizzle-orm";
+import type { users } from "~/db/schema";
 
 type UserType = InferSelectModel<typeof users>;
 
@@ -47,8 +55,7 @@ interface Props {
 }
 
 const formSchema = z.object({
-  // rollNo: z.string(),
-  // email: z.string().email(),
+  gender: z.enum(["male", "female", "not_specified"]),
   department: z.string(),
   other_roles: z.array(z.string()),
 });
@@ -59,10 +66,9 @@ export function UserUpdate({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      // rollNo: currentUser.rollNo,
-      // email: currentUser.email,
       department: currentUser.department,
       other_roles: currentUser.other_roles,
+      gender: currentUser.gender
     },
   });
 
@@ -75,58 +81,67 @@ export function UserUpdate({
     // });
   };
 
-  //TODO: Add roles field
   return (
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gender</FormLabel>
+                <FormControl>
+                  <ToggleGroup
+                    defaultValue={"not_specified"}
+                    value={field.value}
+                    onValueChange={(value) => field.onChange(value)}
+                    className="justify-start"
+                    type="single">
+                    {["male", "female", "not_specified"].map((item) => (
+                      <ToggleGroupItem value={item} key={item} size="sm" className="capitalize">{item.replace("_", " ")}</ToggleGroupItem>)
+                    )}
+                  </ToggleGroup>
+                </FormControl>
+
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="other_roles"
             render={({ field }) => (
-              <FormItem className="flex flex-row items-center justify-between rounded-lg border p-3 shadow-sm">
-                <div className="space-y-0.5">
-                  <FormLabel>Roles</FormLabel>
-                  <FormDescription>
-                    Roles define what a user can do in the system.
-                  </FormDescription>
-                </div>
-                <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 ">
-                  {ROLES.map((item, index) => (
-                    <FormField
-                      // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                      key={`${item}_${index}`}
-                      control={form.control}
-                      name="other_roles"
-                      render={({ field }) => {
-                        return (
-                          <FormItem
-                            key={item}
-                            className="flex flex-row items-start space-x-3 space-y-0"
-                          >
-                            <FormControl>
-                              <Switch
-                                checked={field.value?.includes(item)}
-                                onCheckedChange={(checked) => {
-                                  return checked
-                                    ? field.onChange([...field.value, item])
-                                    : field.onChange(
-                                      field.value?.filter(
-                                        (value) => value !== item
-                                      )
-                                    );
-                                }}
-                              />
-                            </FormControl>
-                            <FormLabel className="font-normal cursor-pointer">
-                              {item}
-                            </FormLabel>
-                          </FormItem>
-                        );
-                      }}
-                    />
-                  ))}
-                </div>
+              <FormItem>
+                <FormLabel>Roles</FormLabel>
+                <FormControl>
+                  <MultiSelector
+                    values={field.value}
+                    onValuesChange={field.onChange}
+                    loop
+                    className="max-w-xs"
+                  >
+                    <MultiSelectorTrigger>
+                      <MultiSelectorInput placeholder="Select Roles" />
+                    </MultiSelectorTrigger>
+                    <MultiSelectorContent>
+                      <MultiSelectorList>
+
+                        {ROLES.map((role) => {
+                          return (
+                            <MultiSelectorItem key={role} value={role} className="capitalize">
+                              {role.replace("_", " ")}
+                            </MultiSelectorItem>
+                          );
+                        })}
+                      </MultiSelectorList>
+                    </MultiSelectorContent>
+                  </MultiSelector>
+                </FormControl>
+
+                <FormDescription />
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -134,31 +149,25 @@ export function UserUpdate({
             control={form.control}
             name="department"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
+              <FormItem>
                 <FormLabel>Department</FormLabel>
-
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
+                <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
                     <SelectTrigger>
                       <SelectValue placeholder="Select a department" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {DEPARTMENTS_LIST.map((department) => {
+                    {DEPARTMENTS_LIST.map((dept) => {
                       return (
-                        <SelectItem
-                          key={department.code}
-                          value={department.name}
-                        >
-                          {department.name}
+                        <SelectItem key={dept.name} value={dept.name}>
+                          {dept.name}
                         </SelectItem>
                       );
                     })}
                   </SelectContent>
                 </Select>
+                <FormDescription />
                 <FormMessage />
               </FormItem>
             )}
@@ -175,9 +184,6 @@ export function UserUpdate({
 
 type SessionType = Awaited<ReturnType<typeof authClient.admin.listUsers>>["data"]["sessions"][number];
 
-// const cacheMap = new Map<string, SessionType[]>([
-//   ["sessions", []]
-// ]);
 
 export function UserSessions({
   currentUser,
@@ -218,11 +224,7 @@ export function UserSessions({
           success: "All sessions revoked successfully",
           error: "Failed to revoke all sessions",
         })
-        // .then(res => {
-        //   if (res.status === "success") {
-        //     setSessions([])
-        //     cacheMap.set("sessions", [])
-        //   }})
+
       }}>
         Revokes all
       </Button>
@@ -245,12 +247,12 @@ export function UserSessions({
             <TableCell>{session.id}</TableCell>
             <TableCell>{session.userAgent}</TableCell>
             <TableCell>
-              {formatDistance(new Date(session.createdAt),new Date(), {
+              {formatDistance(new Date(session.createdAt), new Date(), {
                 addSuffix: true,
               })}
             </TableCell>
             <TableCell>
-              {formatDistance(new Date(session.expiresAt),new Date(), {
+              {formatDistance(new Date(session.expiresAt), new Date(), {
                 addSuffix: true,
               })}
             </TableCell>
@@ -309,8 +311,25 @@ export function UserDisplay({ currentUser: user }: Props) {
         })}
       </tbody>
     </table>
+    <div className="flex gap-4 mt-5">
 
-    
+
+      <Button variant="destructive" onClick={() => {
+        const confirm = window.confirm("Are you sure you want to delete this user?")
+        if (!confirm) return;
+        toast.promise(authClient.admin.removeUser({
+          userId: user.id
+        }), {
+          loading: "Deleting user...",
+          success: "User deleted successfully",
+          error: "Failed to delete user",
+        })
+      }} size="sm">
+        Delete User
+      </Button>
+    </div>
+
+
 
   </div>
 }

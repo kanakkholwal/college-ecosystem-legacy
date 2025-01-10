@@ -25,7 +25,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select";
-import { Switch } from "@/components/ui/switch";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -40,7 +39,7 @@ const userSchema = z.object({
     email: z.string().email(),
     password: z.string(),
     role: z.string().default("user"),
-    gender: z.string().default("customValue"),
+    gender: z.string().default("not_specified"),
     other_roles: z.array(z.string()).default([]),
     department: z.string(),
 });
