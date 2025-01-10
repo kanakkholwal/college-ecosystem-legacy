@@ -12,21 +12,24 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
   trend: -1 | 1 | 0;
 }> {
   let startTime: Date;
+  let endTime: Date | null = null; // Used for the current partial interval
   let prevStartTime: Date;
   let prevEndTime: Date;
 
-  // Determine the start time based on the time interval
+  // Determine the start and previous intervals based on the time interval
   switch (timeInterval) {
-    case "last_hour":
+    case "last_hour": {
       startTime = new Date(Date.now() - 60 * 60 * 1000);
       prevStartTime = new Date(startTime.getTime() - 60 * 60 * 1000);
       prevEndTime = startTime;
       break;
-    case "last_24_hours":
+    }
+    case "last_24_hours": {
       startTime = new Date(Date.now() - 24 * 60 * 60 * 1000);
       prevStartTime = new Date(startTime.getTime() - 24 * 60 * 60 * 1000);
       prevEndTime = startTime;
       break;
+    }
     case "this_week": {
       const today = new Date();
       const startOfWeek = new Date(
@@ -35,22 +38,25 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
         today.getDate() - today.getDay()
       );
       startTime = startOfWeek;
+      endTime = today; // Current week up to now
       prevStartTime = new Date(startTime.getTime() - 7 * 24 * 60 * 60 * 1000);
       prevEndTime = startTime;
       break;
     }
     case "this_month": {
       const today = new Date();
-      startTime = new Date(today.getFullYear(), today.getMonth(), 1);
-      prevStartTime = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-      prevEndTime = new Date(today.getFullYear(), today.getMonth(), 0); // Last day of the previous month
+      startTime = new Date(today.getFullYear(), today.getMonth(), 1); // Start of this month
+      endTime = today; // Current month up to now
+      prevStartTime = new Date(today.getFullYear(), today.getMonth() - 1, 1); // Start of last month
+      prevEndTime = new Date(today.getFullYear(), today.getMonth(), 0); // Last day of last month
       break;
     }
     case "this_year": {
       const today = new Date();
-      startTime = new Date(today.getFullYear(), 0, 1);
-      prevStartTime = new Date(today.getFullYear() - 1, 0, 1);
-      prevEndTime = new Date(today.getFullYear() - 1, 11, 31); // Last day of the previous year
+      startTime = new Date(today.getFullYear(), 0, 1); // Start of this year
+      endTime = today; // Current year up to now
+      prevStartTime = new Date(today.getFullYear() - 1, 0, 1); // Start of last year
+      prevEndTime = new Date(today.getFullYear() - 1, 11, 31); // Last day of last year
       break;
     }
     default:
@@ -68,14 +74,20 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
   const currentCountQuery = await db
     .select({ count: sql<number>`COUNT(*)` })
     .from(users)
-    .where(sql`"createdAt" >= ${startTime}`);
+    .where(
+      endTime
+        ? sql`"createdAt" >= ${startTime} AND "createdAt" <= ${endTime}`
+        : sql`"createdAt" >= ${startTime}`
+    );
   const currentCount = currentCountQuery[0]?.count ?? 0;
 
   // Fetch the count of users in the previous interval
   const prevCountQuery = await db
     .select({ count: sql<number>`COUNT(*)` })
     .from(users)
-    .where(sql`"createdAt" >= ${prevStartTime} AND "createdAt" < ${prevEndTime}`);
+    .where(
+      sql`"createdAt" >= ${prevStartTime} AND "createdAt" <= ${prevEndTime}`
+    );
   const prevCount = prevCountQuery[0]?.count || 0;
 
   // Calculate growth and growth percentage
@@ -90,6 +102,7 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
     trend: growth > 0 ? 1 : growth < 0 ? -1 : 0,
   };
 }
+
 
 
 // Infer the User model from the schema

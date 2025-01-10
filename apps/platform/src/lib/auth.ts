@@ -38,7 +38,6 @@ export const auth = betterAuth({
             data: {
               ...user,
               ...info,
-              gender: "not_specified",
             },
           };
         },
@@ -68,7 +67,7 @@ export const auth = betterAuth({
             },
           })
         });
-        if(response.error) {
+        if (response.error) {
           throw new APIError("INTERNAL_SERVER_ERROR", {
             message: "Error sending email",
           });
@@ -105,7 +104,7 @@ export const auth = betterAuth({
             },
           })
         });
-        if(response.error) {
+        if (response.error) {
           throw new APIError("INTERNAL_SERVER_ERROR", {
             message: "Error sending email",
           });
@@ -124,41 +123,41 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_ID,
       clientSecret: process.env.GOOGLE_SECRET,
-      mapProfileToUser:async (profile)=>{
-            return {
-              image:profile.picture
-            }
+      mapProfileToUser: async (profile) => {
+        return {
+          image: profile.picture
+        }
       }
     },
   },
   user: {
     additionalFields: {
-        role: {
-          type: "string",
-          required: true,
-          input: false,
-        },
-        other_roles: {
-          type: "string[]",
-          required: true,
-          input: true,
-        },
-        gender: {
-          type: "string",
-          input: true,
-        },
-        username: {
-          type: "string",
-          required: true,
-          unique: true,
-          input: true,
-        },
-        department: {
-          type: "string",
-          required: true,
-          input: true,
-        },
-  
+      role: {
+        type: "string",
+        required: true,
+        input: false,
+      },
+      other_roles: {
+        type: "string[]",
+        required: true,
+        input: true,
+      },
+      gender: {
+        type: "string",
+        input: true,
+      },
+      username: {
+        type: "string",
+        required: true,
+        unique: true,
+        input: true,
+      },
+      department: {
+        type: "string",
+        required: true,
+        input: true,
+      },
+
     },
   },
   account: {
@@ -174,8 +173,16 @@ export const auth = betterAuth({
       domain: process.env.NODE_ENV === "production" ? "nith.eu.org" : undefined,
     },
   },
-  plugins: [username(), admin(), nextCookies()], // make sure this is the last plugin (nextCookies) in the array
+  plugins: [username(), admin({
+    defaultRole: "user",
+    adminRole: ["admin"],
+    defaultBanExpiresIn: 60 * 60 * 24 * 7 // 1 week
+
+  }), nextCookies()], // make sure this is the last plugin (nextCookies) in the array
 });
+
+const ALLOWED_ROLES = [ROLES.STUDENT, ROLES.FACULTY, ROLES.STAFF];
+const ALLOWED_GENDERS = ["male", "gender", "not_specified"];
 
 type getUserInfoReturnType = {
   email: string;
@@ -184,6 +191,7 @@ type getUserInfoReturnType = {
   department: string;
   name?: string;
   emailVerified: boolean;
+  gender: string
 };
 
 type FacultyType = {
@@ -198,7 +206,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
 
   if (isStudent) {
     console.log("Student");
-    const res  = await serverFetch<{
+    const res = await serverFetch<{
       message: string;
       data: ResultType | null;
       error?: string | null;
@@ -225,6 +233,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       emailVerified: true,
       email,
       username,
+      gender: response.data.gender || "not_specified"
     };
   }
   const { data: response } = await serverFetch<{
@@ -250,6 +259,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       emailVerified: true,
       email,
       username,
+      gender: "not_specified"
     };
   }
   console.log("Other:Staff");
@@ -260,6 +270,8 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     email,
     emailVerified: true,
     username,
+    gender: "not_specified"
+
   };
 }
 

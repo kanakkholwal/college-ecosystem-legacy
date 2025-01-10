@@ -23,7 +23,7 @@ export default function ErrorBoundary({
       <Alert>
         <Terminal className="h-4 w-4" />
         <AlertTitle>
-          If you had UMC(unfair means) or result not on the college site then it can't be helped,otherwise Try instructions below
+          If you had UMC(unfair means) or result not on the college site then it can{"'"}t be helped,otherwise Try instructions below
         </AlertTitle>
         <AlertDescription>
           <p>
