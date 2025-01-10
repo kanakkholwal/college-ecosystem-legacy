@@ -98,7 +98,7 @@ export default function RoomCard({ room, user, ...props }: Props) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex w-full flex-col sm:flex-row md:justify-around items-start gap-2">
+        <div className="flex w-full flex-row justify-around items-start file:flex-wrap gap-2">
           <div className="flex flex-col items-center gap-1">
             <span className="text-xs font-medium text-gray-700">Capacity</span>
             <Badge className="uppercase" variant="default_light" size="sm">
