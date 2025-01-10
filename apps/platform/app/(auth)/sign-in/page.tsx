@@ -42,8 +42,7 @@ export default async function SignInPage({ searchParams }: Props) {
             <CardHeader>
               <TabsList className="flex justify-around space-x-4 flex-wrap">
                 {TABS.map((tab) => {
-                  if(session && tab === "sign-up") return null;
-                  if(!session && tab === "sign-in") return null;
+                  if(session && (tab === "sign-up" || tab === "sign-in")) return null;
 
 
                   return (

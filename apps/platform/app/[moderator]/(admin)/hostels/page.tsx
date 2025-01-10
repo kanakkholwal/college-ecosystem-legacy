@@ -1,3 +1,5 @@
-export default async function StaticPages() {
+
+
+export default async function Hostels() {
   return <>Hostels</>;
 }

@@ -30,7 +30,7 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
       prevEndTime = startTime;
       break;
     }
-    case "this_week": {
+    case "last_week": {
       const today = new Date();
       const startOfWeek = new Date(
         today.getFullYear(),
@@ -43,7 +43,7 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
       prevEndTime = startTime;
       break;
     }
-    case "this_month": {
+    case "last_month": {
       const today = new Date();
       startTime = new Date(today.getFullYear(), today.getMonth(), 1); // Start of this month
       endTime = today; // Current month up to now
@@ -51,7 +51,7 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
       prevEndTime = new Date(today.getFullYear(), today.getMonth(), 0); // Last day of last month
       break;
     }
-    case "this_year": {
+    case "last_year": {
       const today = new Date();
       startTime = new Date(today.getFullYear(), 0, 1); // Start of this year
       endTime = today; // Current year up to now
@@ -92,7 +92,7 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
 
   // Calculate growth and growth percentage
   const growth = currentCount - prevCount;
-  const growthPercent = prevCount === 0 ? 100 : (growth / prevCount) * 100;
+  const growthPercent = prevCount === 0 ? 100 : (growth / (prevCount === 0 ? 1 :prevCount)) * 100;
 
   return {
     count: currentCount,
@@ -102,6 +102,8 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
     trend: growth > 0 ? 1 : growth < 0 ? -1 : 0,
   };
 }
+
+
 
 
 
@@ -121,38 +123,7 @@ interface UserListOptions {
   searchQuery?: string;
 }
 
-export async function listUsers(options: UserListOptions): Promise<User[]> {
-  const {
-    sortBy = "createdAt", // Default sort field
-    sortOrder = "desc", // Default sort order
-    limit = 10,
-    offset = 0,
-    searchQuery,
-  } = options;
 
-  const order = sortOrder === "desc" ? desc : asc;
-
-  const conditions = [];
-
-  // Add search condition for name or username
-  if (searchQuery) {
-    conditions.push(
-      like(users.name, `%${searchQuery}%`),
-      like(users.username, `%${searchQuery}%`)
-    );
-  }
-
-  const query = db
-    .select()
-    .from(users)
-    .where(conditions.length > 0 ? and(...conditions) : undefined)
-    .orderBy(order(users[sortBy]))
-    .limit(limit)
-    .offset(offset);
-
-  const results = await query;
-  return results;
-}
 
 export async function getUser(userId: string): Promise<User | null> {
   const user = await db
@@ -163,6 +134,16 @@ export async function getUser(userId: string): Promise<User | null> {
     .execute();
 
   return user.length > 0 ? user[0] : null; // Return the first user or null if not found
+}
+
+export async function updateUser(userId:string,data:Partial<User>):Promise<User|null>{
+  try{
+    await db.update(users).set(data).where(eq(users.id,userId)).execute();
+    return getUser(userId);
+  }catch(error){
+    console.error(error);
+    return null;
+  }
 }
 
 /**

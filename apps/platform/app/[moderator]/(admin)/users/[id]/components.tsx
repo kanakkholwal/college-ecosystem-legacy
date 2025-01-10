@@ -37,16 +37,16 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { formatDistance } from "date-fns";
+import type { InferSelectModel } from "drizzle-orm";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
 import { ROLES } from "src/constants/user";
 import * as z from "zod";
-import { authClient } from "~/lib/auth-client";
-
-import type { InferSelectModel } from "drizzle-orm";
+import { updateUser } from "~/actions/dashboard.admin";
 import type { users } from "~/db/schema";
+import { authClient } from "~/lib/auth-client";
 
 type UserType = InferSelectModel<typeof users>;
 
@@ -74,11 +74,13 @@ export function UserUpdate({
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data);
-    // toast.promise(updateUser(currentUser.id), {
-    //   loading: "Updating user...",
-    //   success: "User updated successfully",
-    //   error: "Failed to update user",
-    // });
+    toast.promise(updateUser(currentUser.id,{
+      ...data
+    }), {
+      loading: "Updating user...",
+      success: "User updated successfully",
+      error: "Failed to update user",
+    });
   };
 
   return (

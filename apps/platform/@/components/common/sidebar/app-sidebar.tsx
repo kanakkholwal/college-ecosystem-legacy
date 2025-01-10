@@ -99,12 +99,12 @@ const all_links: rawLinkType[] = [
     title: "Classrooms",
     icon: SiGoogleclassroom,
     path: "/rooms",
-    allowed_roles: ["cr","faculty","admin"],
+    allowed_roles: ["admin"],
     items: [
       {
         title: "Create Classroom",
         path: "/new",
-        allowed_roles: ["admin", "moderator"],
+        allowed_roles: ["admin"],
       },
     ],
   },
