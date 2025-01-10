@@ -25,7 +25,7 @@ export async function middleware(request: NextRequest) {
     }
   );
   if (!session) {
-    if (unauthorized_paths.includes(request.nextUrl.pathname)) {
+    if (request.nextUrl.pathname === "/sign-in") {
       return NextResponse.next();
     }
     return NextResponse.redirect(new URL("/sign-in", request.url));

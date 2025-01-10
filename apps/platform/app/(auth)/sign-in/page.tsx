@@ -1,17 +1,14 @@
 import { AppLogo } from "@/components/logo";
 // import SignUpForm from "./sign-up";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Terminal } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { headers } from "next/headers";
-import { redirect } from "next/navigation";
 import { auth } from "src/lib/auth";
 import ForgotPassword from "./forget-password";
 import ResetPassword from "./reset-password";
 import SignInForm from "./sign-in";
 import SignUpForm from "./sign-up";
-import { cn } from "@/lib/utils";
 
 
 const TABS = ["sign-in", "sign-up", "forget-password","reset-password", "verify-email"];
@@ -26,7 +23,7 @@ export default async function SignInPage({ searchParams }: Props) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  if (session) return redirect("/");
+  // if (session) return redirect("/");
 
   const { tab } = await searchParams;
 
@@ -45,6 +42,9 @@ export default async function SignInPage({ searchParams }: Props) {
             <CardHeader>
               <TabsList className="flex justify-around space-x-4 flex-wrap">
                 {TABS.map((tab) => {
+                  if(session && tab === "sign-up") return null;
+                  if(!session && tab === "sign-in") return null;
+
 
                   return (
                     <TabsTrigger
