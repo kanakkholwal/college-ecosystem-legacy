@@ -170,10 +170,6 @@ export const auth = betterAuth({
       trustedProviders: ["google"],
     },
   },
-  rateLimit: {
-    storage: "database",
-    modelName: "rateLimit", //optional by default "rateLimit" is used
-},
   advanced: {
     crossSubDomainCookies: {
       enabled: process.env.NODE_ENV === "production",
