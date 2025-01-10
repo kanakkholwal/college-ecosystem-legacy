@@ -29,14 +29,15 @@ interface MultiSelectorProps
 
 interface MultiSelectContextProps {
   value: string[]
-  onValueChange: (value: string | string[]) => void
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  onValueChange: (value: any) => void
   open: boolean
   setOpen: (value: boolean) => void
   inputValue: string
   setInputValue: React.Dispatch<React.SetStateAction<string>>
   activeIndex: number
   setActiveIndex: React.Dispatch<React.SetStateAction<number>>
-  ref: React.RefObject<HTMLInputElement>
+  ref: React.RefObject<HTMLInputElement | null>
   handleSelect: (e: React.SyntheticEvent<HTMLInputElement>) => void
 }
 
