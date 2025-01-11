@@ -13,6 +13,7 @@ type FunctionaryType = {
 type HostelType = {
     name: string;
     slug: string;
+    gender:"male"|"female";
     warden: {
         name: string;
         email: string;
@@ -111,9 +112,10 @@ function extractHostelsFromTable(table: HTMLElement): HostelType[] {
             if (name) {
                 // Push the current hostel before starting a new one
                 if (currentHostel) hostels.push(currentHostel);
-
+                
                 currentHostel = {
                     name,
+                    gender: name.toLowerCase().includes("boy") ? "male" : name.toLowerCase().includes("girl") ? "female":"male",
                     slug: name.toLowerCase().replace(/\s+/g, "-"),
                     warden: { name: "", email: "", phoneNumber: "" },
                     administrators: [],

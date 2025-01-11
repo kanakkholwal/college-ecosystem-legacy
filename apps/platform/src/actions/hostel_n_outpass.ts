@@ -1,8 +1,10 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import type { z } from "zod";
 import { createHostelSchema, createHostelStudentSchema } from "~/constants/hostel_n_outpass";
 import dbConnect from "~/lib/dbConnect";
+import { serverFetch } from "~/lib/server-fetch";
 import {
     HostelModel,
     HostelStudentModel,
@@ -10,6 +12,9 @@ import {
     OutPassModel
 } from "~/models/hostel_n_outpass";
 
+/*
+    Hostel Actions
+*/
 
 export async function createHostel(data: z.infer<typeof createHostelSchema>) {
     try {
@@ -68,6 +73,65 @@ export async function getHostels():Promise<{
         return Promise.resolve({ success: false, data: [] })
     }
 }
+
+type FunctionaryType = {
+    name: string;
+    email: string;
+    role: string;
+    phoneNumber: string;
+};
+
+type HostelType = {
+    name: string;
+    slug: string;
+    gender:"male"|"female";
+
+    warden: {
+        name: string;
+        email: string;
+        phoneNumber: string;
+    };
+    administrators: FunctionaryType[];
+};
+
+export async function importHostelsFromSite(){
+    try{
+        const {data:response} = await serverFetch<{
+            error: boolean;
+            message: string;
+            data: {
+                in_charges: FunctionaryType[];
+                hostels: HostelType[];
+            };
+        }>("/api/hostels",{
+            method:"GET"
+        });
+        if(response?.error || !response?.data){
+            return response
+        }
+        await dbConnect();
+        const hostels = response.data.hostels;
+        for await (const hostel of hostels){
+            const newHostel = new HostelModel({
+                name:hostel.name,
+                slug:hostel.slug,
+                gender:hostel.gender,
+                warden:hostel.warden,
+                administrators:hostel.administrators
+            });
+            await newHostel.save();
+        }
+        revalidatePath("/admin/hostels")
+        return {success:true}
+
+    }catch(err){
+        return {error:true,message:JSON.parse(JSON.stringify(err))}
+    }
+}
+
+/*
+    OutPass Actions
+*/
 
 export async function createOutPass(){
     try {

@@ -7,7 +7,7 @@ import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { LuBuilding } from "react-icons/lu";
 import { getHostels } from "~/actions/hostel_n_outpass";
 
-import { CreateHostelForm } from "./client";
+import { CreateHostelForm, ImportFromSiteButton } from "./client";
 
 export default async function HostelPage() {
     const {success,data:hostels} = await getHostels()
@@ -18,7 +18,7 @@ export default async function HostelPage() {
                 <div className="w-1/2">
                     <Heading level={3}>Hostels</Heading>
                 </div>
-                <div className="w-1/2 flex justify-end">
+                <div className="w-1/2 flex gap-2 justify-end">
                     <ResponsiveDialog
                         title="Add Hostel"
                         description="Add a new hostel to the system"
@@ -27,9 +27,10 @@ export default async function HostelPage() {
                             size: "sm",
                             children: "Add Hostel"
                         }}
-                    >
+                        >
                         <CreateHostelForm />
                     </ResponsiveDialog>
+                        {hostels.length === 0 && <ImportFromSiteButton/>}
                 </div>
             </div>
 

@@ -20,9 +20,11 @@ import {
 } from "@/components/ui/multi-select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import type z from "zod";
+import { createHostel, importHostelsFromSite } from "~/actions/hostel_n_outpass";
 
 
 import { createHostelSchema } from "~/constants/hostel_n_outpass";
@@ -45,6 +47,12 @@ export function CreateHostelForm() {
     });
     const handleSubmit = async (data: z.infer<typeof createHostelSchema>) => {
         try {
+
+            toast.promise(createHostel(data), {
+                loading: "Creating Hostel",
+                success: "Hostel created successfully",
+                error: "Failed to create hostel"
+            })
 
             toast.success("Hostel created successfully");
         } catch (error) {
@@ -204,5 +212,33 @@ export function CreateHostelForm() {
                 </Button>
             </form>
         </Form>
+    )
+}
+
+
+export function ImportFromSiteButton() {
+    const [loading, setLoading] = useState(false)
+
+    return (
+        <Button variant="success_light" size="sm" onClick={() =>{
+            setLoading(true)
+            toast.promise(importHostelsFromSite(),{
+                loading:"Importing Hostels",
+                // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+                success:(data:any) =>{
+                    if(data.error){
+                        return data.message
+                    }
+                    return "Hostels imported successfully"
+                },
+                error:"Failed to import hostels"
+            }).finally(() => {
+                setLoading(false)
+            })
+        }}
+        disabled={loading}
+        >
+            {loading ? "Importing Hostels" : "Import Hostels"}
+        </Button>
     )
 }
