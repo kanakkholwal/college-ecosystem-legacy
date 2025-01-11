@@ -4,8 +4,13 @@ export const ROLES = {
   ADMIN: "admin",
   FACULTY: "faculty",
   HOD: "hod",
-  MODERATOR: "moderator",
+  ASSISTANT: "assistant",
   STAFF: "staff",
+  MMCA: "mmca",
+  WARDEN: "warden",
+  LIBRARIAN: "librarian",
+  ASSISTANT_WARDEN: "assistant_warden",
+  CHIEF_WARDEN: "chief_warden",
 } as const;
 
 export const ROLES_LIST = Object.values(ROLES);

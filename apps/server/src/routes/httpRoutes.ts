@@ -1,8 +1,8 @@
 import { type RequestHandler, Router } from 'express';
 import { getDepartments, getDepartmentsList } from '../controllers/http-department';
 import { getFacultyByEmailHandler, getFacultyListByDepartmentHandler, refreshFacultyListHandler } from '../controllers/http-faculty_list';
-import { addResult, assignRankToResults,assignBranchChangeToResults, getResult, getResultByRollNoFromSite, importFreshers, updateResult } from '../controllers/http-result';
-
+import { getFunctionaryListByHostelHandler } from '../controllers/http-hostel';
+import { addResult, assignBranchChangeToResults, assignRankToResults, getResult, getResultByRollNoFromSite, importFreshers, updateResult } from '../controllers/http-result';
 
 
 const router = Router();
@@ -19,6 +19,8 @@ router.get('/faculties/search/:email', getFacultyByEmailHandler);
 router.get('/faculties/refresh', refreshFacultyListHandler);
 router.get('/faculties/:departmentCode', getFacultyListByDepartmentHandler);
 
+// Endpoint to get all the functionaries from the site
+router.get('/hostels', getFunctionaryListByHostelHandler as unknown as RequestHandler);
 
 
 /** RESULT ENDPOINTS */

@@ -3,17 +3,16 @@ import { z } from "zod"
 export const createHostelSchema = z.object({
     name: z.string(),
     slug: z.string(),
-    email: z.string(),
-    gender: z.enum(["male","female"]),
+    gender: z.enum(["male","female","guest_hostel"]),
     administrators: z.array(z.object({
         email: z.string().email(),
         role: z.enum(['warden', 'mmca', 'assistant_warden']),
-        userId: z.string()
+        userId: z.string().nullable()
     })),
     warden: z.object({
         name: z.string(),
         email: z.string().email(),
-        userId: z.string()
+        userId: z.string().nullable()
     }),
     students: z.array(z.string())
     
@@ -31,5 +30,5 @@ export const createHostelStudentSchema = z.object({
     banned: z.boolean(),
     bannedTill: z.date().nullable(),
     bannedReason: z.string().nullable()
-
 })
+

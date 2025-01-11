@@ -1,11 +1,16 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
+import { BiSpreadsheet } from "react-icons/bi";
 import { getCachedLabels, getResults } from "./action";
 import { ResultCard, SkeletonCard } from "./components/card";
 import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
 
+import EmptyArea from "@/components/common/empty-area";
+import ConditionalRender from "@/components/utils/conditional-render";
+import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
+
 
 export const metadata: Metadata = {
   title: `Results | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
@@ -80,41 +85,45 @@ export default async function ResultPage(props: {
           </Suspense>
         </div>
       </section>
-      <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4">
-        <Suspense
-          key={"results_key"}
-          fallback={
-            <>
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-              <SkeletonCard />
-            </>
-          }
-        >
-          {results.map((result, i) => {
-            return (
-              <ResultCard
-                key={result._id.toString()}
-                result={result}
-                style={{
-                  animationDelay: `${i * 100}ms`,
-                }}
-              />
-            );
+      <ErrorBoundaryWithSuspense
+        fallback={<EmptyArea Icon={BiSpreadsheet} title="Error" description="Failed to load results" />}
+        loadingFallback={<div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4">
+          {[...Array(6)].map((_, i) => {
+            return <SkeletonCard key={i.toString()} />;
           })}
-        </Suspense>
-      </div>
-      <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
-        <Suspense
-          key={"Pagination_key"}
-          fallback={<Skeleton className="h-12 w-full " />}
-        >
-          <Pagination totalPages={totalPages} />
-        </Suspense>
-      </div>
+        </div>}
+      >
+        <ConditionalRender condition={results.length > 0}>
+          <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4">
+            {results.map((result, i) => {
+              return (
+                <ResultCard
+                  key={result._id.toString()}
+                  result={result}
+                  style={{
+                    animationDelay: `${i * 100}ms`,
+                  }}
+                />
+              );
+            })}
+          </div>
+          <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
+            <Suspense
+              key={"Pagination_key"}
+              fallback={<Skeleton className="h-12 w-full " />}
+            >
+              <Pagination totalPages={totalPages} />
+            </Suspense>
+          </div>
+        </ConditionalRender>
+        <ConditionalRender condition={results.length === 0}>
+          <EmptyArea
+            Icon={BiSpreadsheet}
+            title="No Results Found"
+            description="There are no results to display for the given search criteria."
+          />
+        </ConditionalRender>
+      </ErrorBoundaryWithSuspense>
     </>
   );
 }

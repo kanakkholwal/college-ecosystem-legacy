@@ -52,7 +52,7 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
     res.status(403).json({ error: 'CORS policy does not allow null origin' });
     return;
   }
-  if (isOriginAllowed(origin)) {
+  if (isOriginAllowed(origin) || identityKey === SERVER_IDENTITY) {
     res.header('Access-Control-Allow-Origin', origin);
     res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
     res.header('Access-Control-Allow-Headers', 'Content-Type,X-IDENTITY-KEY');

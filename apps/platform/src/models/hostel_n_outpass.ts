@@ -3,8 +3,7 @@ import mongoose, { type Document, Schema } from "mongoose";
 export interface IHostelType extends Document {
     name: string;
     slug: string;
-    gender:"male"|"female",
-    email: string;
+    gender:"male"|"female" |"guest_hostel"
     administrators: { email: string; role: "warden" | "mmca" | "assistant_warden",userId:string }[];
     students: string[];
     warden: string;
@@ -16,8 +15,7 @@ export interface IHostelType extends Document {
 const HostelSchema = new Schema({
     name: { type: String, required: true },
     slug: { type: String, required: true, unique: true },
-    email: { type: String, required: true },
-    gender: { type: String,enum:["male","female"], required: true },
+    gender: { type: String,enum:["male","female","guest_hostel"], required: true },
     administrators: [
         {
             email: { type: String, required: true },

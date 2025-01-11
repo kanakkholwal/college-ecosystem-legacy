@@ -12,13 +12,17 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { Users } from 'lucide-react';
+import { BiSpreadsheet } from "react-icons/bi";
+import { GrSchedules } from "react-icons/gr";
+import { LuBookA, LuBuilding, LuSchool } from "react-icons/lu";
+import { PiStudentFill } from "react-icons/pi";
 import type { Session } from "~/lib/auth-client";
 
-import { CalendarRange, Grid3X3, UserRoundCog } from "lucide-react";
+import { CalendarRange } from "lucide-react";
 import { GrStorage } from "react-icons/gr";
-import { LiaReadme } from "react-icons/lia";
-import { SiGoogleclassroom } from "react-icons/si";
 import { TbDashboard } from "react-icons/tb";
+import { ROLES } from "~/constants";
 
 export type rawLinkType = {
   title: string;
@@ -29,7 +33,6 @@ export type rawLinkType = {
     title: string;
     path: string;
     allowed_roles: Session["user"]["role"] | Session["user"]["other_roles"] | "*";
-
   }[];
 };
 
@@ -37,37 +40,37 @@ const all_links: rawLinkType[] = [
   {
     title: "Dashboard",
     icon: TbDashboard,
-    path: "",
+    path: "/",
     allowed_roles: ["*"],
   },
   {
     title: "Users",
-    icon: UserRoundCog,
+    icon: Users,
     path: "/users",
-    allowed_roles: ["admin", "moderator"],
+    allowed_roles: [ROLES.ADMIN],
     items: [
       {
         title: "Create User",
         path: "/new",
-        allowed_roles: ["admin", "moderator"],
+        allowed_roles: [ROLES.ADMIN],
       },
     ],
   },
   {
     title: "Result",
-    icon: Grid3X3,
+    icon: BiSpreadsheet,
     path: "/result",
-    allowed_roles: ["admin", "moderator"],
+    allowed_roles: [ROLES.ADMIN],
     items: [
       {
         title: "Scraping",
         path: "/scraping",
-        allowed_roles: ["admin", "moderator"],
+        allowed_roles: [ROLES.ADMIN],
       },
       {
         title: "Import",
         path: "/import",
-        allowed_roles: ["admin", "moderator"],
+        allowed_roles: [ROLES.ADMIN],
       },
     ],
   },
@@ -75,17 +78,17 @@ const all_links: rawLinkType[] = [
     title: "Storage",
     icon: GrStorage,
     path: "/storage",
-    allowed_roles: ["admin", "moderator"],
+    allowed_roles: [ROLES.ADMIN],
   },
   {
     title: "Courses",
-    icon: LiaReadme,
+    icon: LuBookA,
     path: "/courses",
-    allowed_roles: ["*"],
+    allowed_roles: [ROLES.STUDENT,ROLES.CR,ROLES.FACULTY,ROLES.HOD,ROLES.ADMIN],
   },
   {
-    title: "Time Tables",
-    icon: CalendarRange,
+    title: "Schedules",
+    icon: GrSchedules,
     path: "/schedules",
     allowed_roles: ["*"],
   },
@@ -93,18 +96,44 @@ const all_links: rawLinkType[] = [
     title: "Personal Attendance",
     icon: CalendarRange,
     path: "/attendance-personal",
-    allowed_roles: ["student"],
+    allowed_roles: [ROLES.STUDENT],
   },
   {
-    title: "Classrooms",
-    icon: SiGoogleclassroom,
+    title: "Rooms",
+    icon: LuSchool,
     path: "/rooms",
-    allowed_roles: ["admin"],
+    allowed_roles: [ROLES.ADMIN],
     items: [
       {
         title: "Create Classroom",
         path: "/new",
-        allowed_roles: ["admin"],
+        allowed_roles: [ROLES.ADMIN],
+      },
+    ],
+  },
+  {
+    title: "Hostels",
+    icon: LuBuilding,
+    path: "/hostels",
+    allowed_roles: [ROLES.CHIEF_WARDEN,ROLES.ADMIN],
+    items: [
+      {
+        title: "Add Hostel",
+        path: "/add",
+        allowed_roles: [ROLES.CHIEF_WARDEN,ROLES.ADMIN],
+      },
+    ],
+  },
+  {
+    title: "Hosteler Students",
+    icon: PiStudentFill,
+    path: "/hostel/students",
+    allowed_roles: [ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA,ROLES.ADMIN],
+    items: [
+      {
+        title: "Add Hostelers Student",
+        path: "/add",
+        allowed_roles: [ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA,ROLES.ADMIN],
       },
     ],
   },

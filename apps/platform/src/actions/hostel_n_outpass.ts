@@ -6,6 +6,7 @@ import dbConnect from "~/lib/dbConnect";
 import {
     HostelModel,
     HostelStudentModel,
+    type IHostelType,
     OutPassModel
 } from "~/models/hostel_n_outpass";
 
@@ -52,6 +53,20 @@ export async function getHostel(slug: string) {
         return { error: err }
     }
 
+}
+
+export async function getHostels():Promise<{
+    success:boolean,
+    data:IHostelType[]
+}> {
+    try {
+        await dbConnect();
+        const hostels = await HostelModel.find({}).lean();
+        return Promise.resolve({ success: true, data: JSON.parse(JSON.stringify(hostels)) })
+    }
+    catch (err) {
+        return Promise.resolve({ success: false, data: [] })
+    }
 }
 
 export async function createOutPass(){

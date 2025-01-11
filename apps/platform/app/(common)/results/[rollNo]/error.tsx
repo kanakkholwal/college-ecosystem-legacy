@@ -1,9 +1,9 @@
 "use client";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import ErrorBanner from "@/components/utils/error";
-import { useEffect } from "react";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Terminal } from "lucide-react";
 import { usePathname } from "next/navigation";
+import { useEffect } from "react";
 
 export default function ErrorBoundary({
   error,
@@ -18,7 +18,7 @@ export default function ErrorBoundary({
     console.error(error);
   }, [error]);
   return (
-    <div className="flex items-center justify-center w-full h-full space-y-10">
+    <div className="flex items-center justify-center w-full h-full space-y-10 flex-col">
       <ErrorBanner />
       <Alert>
         <Terminal className="h-4 w-4" />

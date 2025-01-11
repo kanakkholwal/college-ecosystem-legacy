@@ -5,41 +5,40 @@ import { LuGithub } from "react-icons/lu";
 import { RiTwitterXFill } from "react-icons/ri";
 
 import {
-    AudioLines,
-    Bot,
-    CalendarDays,
-    CalendarRange,
-    Grid3X3
+  AudioLines,
+  Bot,
+  CalendarRange
 } from "lucide-react";
-import { GrAnnounce } from "react-icons/gr";
-import { LiaReadme } from "react-icons/lia";
+import { BiSpreadsheet } from "react-icons/bi";
+import { GrAnnounce, GrSchedules } from "react-icons/gr";
+import { LuBookA, LuSchool } from "react-icons/lu";
 import { MdOutlinePoll } from "react-icons/md";
-import { SiGoogleclassroom } from "react-icons/si";
+
 
 export const quick_links = [
   {
     href: "/results",
     title: "Results",
     description: "Check your results here.",
-    Icon: Grid3X3,
+    Icon: BiSpreadsheet,
   },
   {
     href: "/syllabus",
     title: "Syllabus",
     description: "Check your syllabus here.",
-    Icon: LiaReadme,
+    Icon: LuBookA,
   },
   {
     href: "/classroom-availability",
     title: "Classroom Availability",
     description: "Check the availability of classrooms here.",
-    Icon: SiGoogleclassroom,
+    Icon: LuSchool,
   },
   {
     href: "/schedules",
     title: "Schedules",
     description: "Check your schedules here.",
-    Icon: CalendarDays,
+    Icon: GrSchedules,
     disabled: true,
   },
   {
