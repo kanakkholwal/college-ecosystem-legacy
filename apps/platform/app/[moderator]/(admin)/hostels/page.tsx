@@ -35,8 +35,8 @@ export default async function HostelPage() {
             </div>
 
             <ErrorBoundaryWithSuspense
-                fallback={<EmptyArea title="Error" description="Failed to load hostels" />}
-                loadingFallback={<EmptyArea title="Loading" description="Loading hostels" />}
+                fallback={<EmptyArea  Icon={LuBuilding} title="Error" description="Failed to load hostels" />}
+                loadingFallback={<EmptyArea  Icon={LuBuilding} title="Loading..." description="Loading hostels..." />}
             >
 
                 <ConditionalRender condition={hostels.length > 0}>

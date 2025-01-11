@@ -226,9 +226,10 @@ export function ImportFromSiteButton() {
                 loading:"Importing Hostels",
                 // biome-ignore lint/suspicious/noExplicitAny: <explanation>
                 success:(data:any) =>{
-                    if(data.error){
-                        return data.message
-                    }
+                    console.log(data)
+                    // if(data.error){
+                    //     return data.message
+                    // }
                     return "Hostels imported successfully"
                 },
                 error:"Failed to import hostels"

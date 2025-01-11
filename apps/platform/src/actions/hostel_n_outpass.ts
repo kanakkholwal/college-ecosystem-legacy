@@ -84,8 +84,7 @@ type FunctionaryType = {
 type HostelType = {
     name: string;
     slug: string;
-    gender:"male"|"female";
-
+    gender:"male"|"female" | "guest_hostel"
     warden: {
         name: string;
         email: string;
@@ -125,7 +124,7 @@ export async function importHostelsFromSite(){
         return {success:true}
 
     }catch(err){
-        return {error:true,message:JSON.parse(JSON.stringify(err))}
+        return {error:true,...JSON.parse(JSON.stringify(err))}
     }
 }
 

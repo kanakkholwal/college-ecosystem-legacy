@@ -13,7 +13,7 @@ type FunctionaryType = {
 type HostelType = {
     name: string;
     slug: string;
-    gender:"male"|"female";
+    gender:"male"|"female" | "guest_hostel"
     warden: {
         name: string;
         email: string;
@@ -115,7 +115,7 @@ function extractHostelsFromTable(table: HTMLElement): HostelType[] {
                 
                 currentHostel = {
                     name,
-                    gender: name.toLowerCase().includes("boy") ? "male" : name.toLowerCase().includes("girl") ? "female":"male",
+                    gender: name.toLowerCase().includes("boy") ? "male" : name.toLowerCase().includes("girl") ? "female":"guest_hostel",
                     slug: name.toLowerCase().replace(/\s+/g, "-"),
                     warden: { name: "", email: "", phoneNumber: "" },
                     administrators: [],
@@ -126,7 +126,7 @@ function extractHostelsFromTable(table: HTMLElement): HostelType[] {
             const cells = row.querySelectorAll("td");
             if (cells.length >= 4) {
                 const name = cells[1]?.textContent?.trim();
-                const role = cells[2]?.textContent?.trim()?.toLowerCase() || "";
+                const role = cells[2]?.textContent?.trim()?.toLowerCase().split("").join("_") as "warden" | "mmca" | "assistant_warden";
                 const email = cells[4]?.textContent?.trim() || "";
                 const phoneNumber = cells[3]?.textContent?.trim() || "";
 

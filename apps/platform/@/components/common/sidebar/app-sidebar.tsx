@@ -105,7 +105,7 @@ const all_links: rawLinkType[] = [
     allowed_roles: [ROLES.ADMIN],
     items: [
       {
-        title: "Create Classroom",
+        title: "Add Room",
         path: "/new",
         allowed_roles: [ROLES.ADMIN],
       },
@@ -116,13 +116,7 @@ const all_links: rawLinkType[] = [
     icon: LuBuilding,
     path: "/hostels",
     allowed_roles: [ROLES.CHIEF_WARDEN,ROLES.ADMIN],
-    items: [
-      {
-        title: "Add Hostel",
-        path: "/add",
-        allowed_roles: [ROLES.CHIEF_WARDEN,ROLES.ADMIN],
-      },
-    ],
+    items: []
   },
   {
     title: "Hosteler Students",

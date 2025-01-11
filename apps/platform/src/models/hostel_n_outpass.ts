@@ -20,15 +20,15 @@ const HostelSchema = new Schema({
         {
             email: { type: String, required: true },
             role: { type: String, enum: ['warden', 'mmca', 'assistant_warden'], required: true },
-            userId: { type: String, required: true },
+            userId: { type: String, default: null},
         },
     ],
     wardenId: { 
         name: { type: String, required: true },
         email: { type: String, required: true },
-        userId: { type: String, required: true },
+        userId: { type: String, default: null },
     },
-    students: [{ type: Schema.Types.ObjectId, ref: 'Student' }],
+    students: [{ type: Schema.Types.ObjectId, ref: 'HostelStudent' }],
 }, { timestamps: true });
 
 export const HostelModel =
