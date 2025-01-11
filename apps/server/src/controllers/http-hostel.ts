@@ -126,8 +126,8 @@ function extractHostelsFromTable(table: HTMLElement): HostelType[] {
             const cells = row.querySelectorAll("td");
             if (cells.length >= 4) {
                 const name = cells[1]?.textContent?.trim();
-                const role = cells[2]?.textContent?.trim()?.toLowerCase().split("").join("_") as "warden" | "mmca" | "assistant_warden";
-                const email = cells[4]?.textContent?.trim() || "";
+                const role = cells[2]?.textContent?.trim()?.toLowerCase()?.trim()?.split(" ")?.join("_") as "warden" | "mmca" | "assistant_warden";
+                const email = cells[4]?.textContent?.trim()?.split("\n").length > 0 ? cells[4]?.textContent?.trim()?.split("\n")[0] : cells[4]?.textContent?.trim();
                 const phoneNumber = cells[3]?.textContent?.trim() || "";
 
                 if (role === "warden") {
