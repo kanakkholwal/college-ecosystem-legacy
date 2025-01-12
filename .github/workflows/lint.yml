@@ -3,8 +3,7 @@ name: 🧹 Lint
 on:
   push:
     branches:
-      - main
-      - staging
+        - '**'
   pull_request:
     branches:
       - main
@@ -39,8 +38,8 @@ jobs:
             npm install --force
           fi
 
-      - name: 📦 Install Turbo
-        run: npm install turbo --global
+      # - name: 📦 Install Turbo
+      #   run: npm install turbo --global
 
       - name: 💾 Cache Turbo
         uses: actions/cache@v4
@@ -49,42 +48,43 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ github.sha }}
           restore-keys: |
             ${{ runner.os }}-turbo-
+      - name: 🚀 Run Turbo lint
+        run: npx turbo run lint --cache-dir=.turbo
+      # - name: 🔍 Detect changed projects
+      #   id: changed
+      #   run: |
+      #     if git diff --quiet HEAD^ HEAD ./apps/platform; then
+      #       echo "platform_changed=false" >> $GITHUB_OUTPUT
+      #     else
+      #       echo "platform_changed=true" >> $GITHUB_OUTPUT
+      #     fi
+      #     if git diff --quiet HEAD^ HEAD ./apps/website; then
+      #       echo "website_changed=false" >> $GITHUB_OUTPUT
+      #     else
+      #       echo "website_changed=true" >> $GITHUB_OUTPUT
+      #     fi
+      #     if git diff --quiet HEAD^ HEAD ./apps/server; then
+      #       echo "server_changed=false" >> $GITHUB_OUTPUT
+      #     else
+      #       echo "server_changed=true" >> $GITHUB_OUTPUT
+      #     fi
+      #     if git diff --quiet HEAD^ HEAD ./apps/mail-server; then
+      #       echo "mail_server_changed=false" >> $GITHUB_OUTPUT
+      #     else
+      #       echo "mail_server_changed=true" >> $GITHUB_OUTPUT
+      #     fi
 
-      - name: 🔍 Detect changed projects
-        id: changed
-        run: |
-          if git diff --quiet HEAD^ HEAD ./apps/platform; then
-            echo "platform_changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "platform_changed=true" >> $GITHUB_OUTPUT
-          fi
-          if git diff --quiet HEAD^ HEAD ./apps/website; then
-            echo "website_changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "website_changed=true" >> $GITHUB_OUTPUT
-          fi
-          if git diff --quiet HEAD^ HEAD ./apps/server; then
-            echo "server_changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "server_changed=true" >> $GITHUB_OUTPUT
-          fi
-          if git diff --quiet HEAD^ HEAD ./apps/mail-server; then
-            echo "mail_server_changed=false" >> $GITHUB_OUTPUT
-          else
-            echo "mail_server_changed=true" >> $GITHUB_OUTPUT
-          fi
-
-      - name: 🚀 Run Turbo lint selectively
-        run: |
-          if [ "${{ steps.changed.outputs.platform_changed }}" = "true" ]; then
-            turbo run lint --cache-dir=.turbo --filter=platform
-          fi
-          if [ "${{ steps.changed.outputs.website_changed }}" = "true" ]; then
-            turbo run lint --cache-dir=.turbo --filter=website
-          fi
-          if [ "${{ steps.changed.outputs.server_changed }}" = "true" ]; then
-            turbo run lint --cache-dir=.turbo --filter=server
-          fi
-          if [ "${{ steps.changed.outputs.mail_server_changed }}" = "true" ]; then
-            turbo run lint --cache-dir=.turbo --filter=mail-server
-          fi
+      # - name: 🚀 Run Turbo lint selectively
+      #   run: |
+      #     if [ "${{ steps.changed.outputs.platform_changed }}" = "true" ]; then
+      #       turbo run lint --cache-dir=.turbo --filter=platform
+      #     fi
+      #     if [ "${{ steps.changed.outputs.website_changed }}" = "true" ]; then
+      #       turbo run lint --cache-dir=.turbo --filter=website
+      #     fi
+      #     if [ "${{ steps.changed.outputs.server_changed }}" = "true" ]; then
+      #       turbo run lint --cache-dir=.turbo --filter=server
+      #     fi
+      #     if [ "${{ steps.changed.outputs.mail_server_changed }}" = "true" ]; then
+      #       turbo run lint --cache-dir=.turbo --filter=mail-server
+      #     fi
