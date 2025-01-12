@@ -18,6 +18,24 @@ export const createHostelSchema = z.object({
     
 })
 
+export const updateHostelSchema = z.object({
+    administrators: z.array(z.object({
+        email: z.string().email(),
+        role: z.enum(['warden', 'mmca', 'assistant_warden']),
+        userId: z.string().nullable()
+    })),
+    warden: z.object({
+        name: z.string(),
+        email: z.string().email(),
+        userId: z.string().nullable()
+    }),
+    students: z.array(z.string().email())
+})
+
+export const updateHostelStudentSchema = z.object({
+    students: z.array(z.string().email())
+})
+
 export const createHostelStudentSchema = z.object({
     rollNumber: z.string(),
     userId: z.string(),

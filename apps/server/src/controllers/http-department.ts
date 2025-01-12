@@ -7,8 +7,18 @@ import type { Request, Response } from 'express';
 
 
 export const getDepartmentsList = async (req: Request, res: Response) => {
-    res.json(DEPARTMENTS);
+    res
+    .status(200)
+    .json({
+        error: false,
+        message: "Success",
+        data:DEPARTMENTS_LIST
+    });
 }
 export const getDepartments = async (req: Request, res: Response) => {
-    res.json(DEPARTMENTS_LIST);
+    res.status(200).json({
+        error: false,
+        message: "Success",
+        data:  DEPARTMENTS,
+    });
 }

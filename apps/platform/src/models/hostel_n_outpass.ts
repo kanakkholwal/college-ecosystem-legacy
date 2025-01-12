@@ -1,15 +1,23 @@
 import mongoose, { type Document, Schema } from "mongoose";
 
-export interface IHostelType extends Document {
+export interface RawHostelType {
     name: string;
     slug: string;
     gender:"male"|"female" |"guest_hostel"
-    administrators: { email: string; role: "warden" | "mmca" | "assistant_warden",userId:string }[];
+    administrators: { name:string,email: string; role: "warden" | "mmca" | "assistant_warden",userId:string }[];
     students: string[];
-    warden: string;
+    warden: {
+        name: string;
+        email: string;
+        userId: string;
+    };
     createdAt?: Date;
     updatedAt?: Date;
 }
+export interface HostelType extends RawHostelType {
+    _id: string;
+}
+export interface IHostelType extends Document ,RawHostelType{}
 
 // Hostel Schema & Model
 const HostelSchema = new Schema({
@@ -18,6 +26,7 @@ const HostelSchema = new Schema({
     gender: { type: String,enum:["male","female","guest_hostel"], required: true },
     administrators: [
         {
+            name: { type: String, required: true },
             email: { type: String, required: true },
             role: { type: String, enum: ['warden', 'mmca', 'assistant_warden'], required: true },
             userId: { type: String, default: null},

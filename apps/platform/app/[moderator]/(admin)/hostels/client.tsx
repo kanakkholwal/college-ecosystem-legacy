@@ -208,7 +208,7 @@ export function CreateHostelForm() {
                 </div>
 
                 <Button type="submit" disabled={form.formState.isSubmitting}>
-                    Create User
+                    Add Hostel
                 </Button>
             </form>
         </Form>

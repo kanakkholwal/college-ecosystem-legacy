@@ -6,33 +6,31 @@ import { getInfoFromRollNo, scrapeResult } from '../lib/scrape';
 import ResultModel from '../models/result';
 import dbConnect from '../utils/dbConnect';
 
-
-
-
 // Endpoint to get result by rollNo scraped from the website
 export const getResultByRollNoFromSite = async (req: Request, res: Response) => {
   const rollNo = req.params.rollNo;
   const data = await scrapeResult(rollNo);
 
-  res.json(data);
+  res.status(200).json(data);
 }
+
 export const getResult = async (req: Request, res: Response) => {
   const rollNo = req.params.rollNo;
   await dbConnect();
 
   const resultData = await ResultModel.findOne({ rollNo: rollNo });
   if (!resultData) {
-    res.json({
+    res.status(404).json({
       message: "Result not found",
       error: true,
       data: null,
     });
     return;
   }
-  res.json({
+  res.status(200).json({
     data: resultData,
     message: "Result found",
-    error: true,
+    error: false,
   });
 }
 
@@ -44,7 +42,7 @@ export const addResult = async (req: Request, res: Response) => {
 
   const resultData = await ResultModel.findOne({ rollNo: rollNo });
   if (resultData) {
-    res.json({
+    res.status(200).json({
       data: resultData,
       message: "Result already exists",
       error: false,
@@ -53,7 +51,7 @@ export const addResult = async (req: Request, res: Response) => {
   }
   const data = await scrapeResult(rollNo);
   if (data?.error || !data.data) {
-    res.json(data);
+    res.status(500).json(data);
     return;
   }
   const result = data.data;
@@ -67,11 +65,12 @@ export const addResult = async (req: Request, res: Response) => {
   });
   await newResult.save();
   console.log("Created ", rollNo);
-  res.json({
+  res.status(201).json({
     data: newResult,
     message: "Result added successfully",
     error: false,
   });
+  return;
 }
 
 export const updateResult = async (req: Request, res: Response) => {
@@ -82,7 +81,7 @@ export const updateResult = async (req: Request, res: Response) => {
 
     const resultData = await ResultModel.findOne({ rollNo: rollNo });
     if (!resultData) {
-      res.json({
+      res.status(404).json({
         message: "Result not found",
         error: true,
         data: null,
@@ -91,7 +90,7 @@ export const updateResult = async (req: Request, res: Response) => {
     }
     const data = await scrapeResult(rollNo);
     if (data?.error || !data.data) {
-      res.json(data);
+      res.status(500).json(data);
       return;
     }
     const result = data.data;
@@ -102,21 +101,21 @@ export const updateResult = async (req: Request, res: Response) => {
     resultData.semesters = result.semesters;
     await resultData.save();
     console.log("Updated ", rollNo);
-    res.json({
+    res.status(200).json({
       data: resultData,
       message: "Result updated successfully",
       error: false,
     });
+    return;
   } catch (error) {
     console.log(error);
-    res.json({
+    res.status(500).json({
       message: "An error occurred",
       error: true,
       data: error || "Internal Server Error"
     });
-
+    return;
   }
-
 }
 
 export const assignRankToResults = async (req: Request, res: Response) => {
@@ -170,6 +169,7 @@ export const assignRankToResults = async (req: Request, res: Response) => {
     });
   }
 };
+
 export const assignBranchChangeToResults = async (req: Request, res: Response) => {
   try {
     const startTime = new Date();
@@ -205,13 +205,6 @@ export const assignBranchChangeToResults = async (req: Request, res: Response) =
               in: { $toUpper: { $split: ["$$code", "-"][0] } },
             },
           },
-          // uniqueSuffixes: {
-          //   $map: {
-          //     input: { $setUnion: "$courseCodes" },
-          //     as: "code",
-          //     in: { $toUpper: { $split: ["$$code", "-"][1] } },
-          //   },
-          // },
         },
       },
       {
@@ -255,8 +248,6 @@ export const assignBranchChangeToResults = async (req: Request, res: Response) =
       // { $merge: { into: 'results', whenMatched: 'merge', whenNotMatched: 'discard' } }
     ]);
 
-
-
     return res.status(200).json({
       error: false,
       message: "Branch change script executed successfully",
@@ -274,7 +265,6 @@ export const assignBranchChangeToResults = async (req: Request, res: Response) =
     });
   }
 };
-
 
 const freshersDataSchema = z.array(z.object({
   name: z.string(),

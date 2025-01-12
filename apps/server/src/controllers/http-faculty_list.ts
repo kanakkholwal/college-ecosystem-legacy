@@ -1,4 +1,3 @@
-
 import axios from "axios";
 import type { Request, Response } from 'express';
 import HTMLParser from "node-html-parser";
@@ -13,7 +12,6 @@ type FacultyType = {
     department: string;
 }
 
-
 async function getFacultyListByDepartment(department: Department): Promise<{
     error: boolean;
     message: string;
@@ -21,9 +19,7 @@ async function getFacultyListByDepartment(department: Department): Promise<{
 }> {
     const url = department.page
     const response = await axios.get(url);
-    // console.log("Fetching", url);
     const document = HTMLParser.parse(response.data.toString());
-    // console.log("Fetched", url);
     const section = document.querySelector(".departmentTab#138");
     if (!section) {
         console.error("Invalid department page", department);
@@ -83,12 +79,11 @@ async function getFacultyList(): Promise<FacultyType[]> {
     return faculties;
 }
 
-
 export const getFacultyListByDepartmentHandler = async (req: Request, res: Response) => {
     const department = req.params.departmentCode;
     const dept = DEPARTMENTS_LIST.find(d => d.code === department);
     if (!dept) {
-        res.json({
+        res.status(400).json({
             error: true,
             message: "Invalid department",
             data: []
@@ -98,32 +93,30 @@ export const getFacultyListByDepartmentHandler = async (req: Request, res: Respo
     const facultyList = await Faculty.find({department})
 
     if (facultyList.length === 0) {
-        res.json({
+        res.status(404).json({
             error: true,
             message: "Faculty not found",
             data: []
         });
         return;
     }
-    res.json({
+    res.status(200).json({
         error: false,
         message: "Success",
         data: facultyList
     });
-    
-    
 }
 
 export const getFacultyListHandler = async (req: Request, res: Response) => {
     const data = await Faculty.find({})
-    res.json(data);
+    res.status(200).json(data);
 }
 
 export const getFacultyByEmailHandler = async (req: Request, res: Response) => {
     const email = req.params.email;
     const emailSchema = z.string().email();
     if(!emailSchema.safeParse(email).success) {
-        res.json({
+        res.status(400).json({
             error: true,
             message: "Invalid email",
             data: null
@@ -133,14 +126,14 @@ export const getFacultyByEmailHandler = async (req: Request, res: Response) => {
     await dbConnect()
     const faculty = await Faculty.findOne({email})
     if (!faculty) {
-        res.json({
+        res.status(404).json({
             error: true,
             message: "Faculty not found",
             data: null
         });
         return;
     }
-    res.json({
+    res.status(200).json({
         error: false,
         message: "Success",
         data: faculty
@@ -153,7 +146,7 @@ export const refreshFacultyListHandler = async (req: Request, res: Response) => 
         const faculties = await getFacultyList();
         await Faculty.deleteMany({});
         await Faculty.insertMany(faculties);
-        res.json({
+        res.status(200).json({
             error: false,
             message: "Success",
             data: faculties
@@ -161,22 +154,17 @@ export const refreshFacultyListHandler = async (req: Request, res: Response) => 
     }catch(e){
         if (e instanceof Error) {
             console.error(e.message);
-            res.json({
+            res.status(500).json({
                 error: true,
                 message: e.message,
                 data: []
             });
             return;
         }
-        res.json({
+        res.status(500).json({
             error: true,
             message: "Unknown error",
             data: []
         });
     }
-
 }
-
-
-
-

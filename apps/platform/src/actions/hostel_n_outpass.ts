@@ -2,12 +2,13 @@
 
 import { revalidatePath } from "next/cache";
 import type { z } from "zod";
-import { createHostelSchema, createHostelStudentSchema } from "~/constants/hostel_n_outpass";
+import { createHostelSchema, createHostelStudentSchema, updateHostelSchema } from "~/constants/hostel_n_outpass";
 import dbConnect from "~/lib/dbConnect";
 import { serverFetch } from "~/lib/server-fetch";
 import {
     HostelModel,
     HostelStudentModel,
+    type HostelType,
     type IHostelType,
     OutPassModel
 } from "~/models/hostel_n_outpass";
@@ -48,14 +49,45 @@ export async function createHostelStudent(data: z.infer<typeof createHostelStude
     }
 }
 
-export async function getHostel(slug: string) {
+export async function updateHostel(slug: string, data: z.infer<typeof updateHostelSchema>) {
     try {
+        const response = updateHostelSchema.safeParse(data);
+        if (!response.success) {
+            return {success: false, error: response.error }
+        }
         await dbConnect();
-        const hostel = await HostelModel.findOne({ slug }).populate('students').lean()
-        return { success: true, hostel:JSON.parse(JSON.stringify(hostel)) }
+        // map data.students (array of emails) to 
+        // const students = await HostelStudentModel.find({ email: { $in: data.students } }).select('_id').lean();
+        // data.students = students.map((student) => student._id) as string[];
+        await HostelModel
+            .findOneAndUpdate({ slug }, data, { new: true })
+            .exec();
+        return { success: true }
     }
     catch (err) {
-        return {  success: false,error: JSON.parse(JSON.stringify(err)) }
+        return { success: false,error: err }
+    }
+    finally{
+        revalidatePath(`/admin/hostels/${slug}`)
+    }
+
+}
+
+export async function getHostel(slug: string):Promise<{
+    success:boolean,
+    hostel:HostelType | null,
+    error?:object
+}> {
+    try {
+        await dbConnect();
+        const hostel = await HostelModel.findOne({ slug }).populate('students').lean();
+        if (!hostel) {
+            return Promise.resolve({ success: false, hostel: null })
+        }
+        return Promise.resolve({ success: true, hostel: JSON.parse(JSON.stringify(hostel)) })
+    }
+    catch (err) {
+        return Promise.reject({ success: false, hostel: null, error: JSON.parse(JSON.stringify(err)) })
     }
 
 }
@@ -74,14 +106,14 @@ export async function getHostels():Promise<{
     }
 }
 
-type FunctionaryType = {
+type RawFunctionaryType = {
     name: string;
     email: string;
     role: string;
     phoneNumber: string;
 };
 
-type HostelType = {
+type RawHostelType = {
     name: string;
     slug: string;
     gender: "male" | "female" | "guest_hostel"
@@ -90,7 +122,7 @@ type HostelType = {
         email: string;
         phoneNumber: string;
     };
-    administrators: FunctionaryType[];
+    administrators: RawFunctionaryType[];
 };
 
 export async function importHostelsFromSite(){
@@ -99,8 +131,8 @@ export async function importHostelsFromSite(){
             error: boolean;
             message: string;
             data: {
-                in_charges: FunctionaryType[];
-                hostels: HostelType[];
+                in_charges: RawFunctionaryType[];
+                hostels: RawHostelType[];
             };
         }>("/api/hostels",{
             method:"GET"
