@@ -23,12 +23,15 @@ const HostelSchema = new Schema({
             userId: { type: String, default: null},
         },
     ],
-    wardenId: { 
+    warden: { 
         name: { type: String, required: true },
         email: { type: String, required: true },
         userId: { type: String, default: null },
     },
-    students: [{ type: Schema.Types.ObjectId, ref: 'HostelStudent' }],
+    students: {
+        type: [{ type: Schema.Types.ObjectId, ref: 'HostelStudent' }],
+        default: [],
+    },
 }, { timestamps: true });
 
 export const HostelModel =

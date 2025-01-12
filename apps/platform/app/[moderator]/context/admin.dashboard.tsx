@@ -126,7 +126,7 @@ export default async function AdminDashboard() {
           <div className="w-full grid grid-cols-1 gap-3 divide-y divide-gray-200">
             <ActionBar
               title="Clear Cache"
-              description={<p  className="text-xs font-medium text-gray-700">Flush the cache to clear all cached data.</p>}
+              description={<p  className="text-xs font-medium text-gray-600">Flush the cache to clear all cached data.</p>}
               btnProps={{ variant: "link", size: "sm", children: "Flush Cache",effect:"underline" }}
               action={flushCache} />
           </div>

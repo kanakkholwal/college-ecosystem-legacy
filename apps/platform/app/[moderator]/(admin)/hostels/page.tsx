@@ -10,8 +10,9 @@ import { getHostels } from "~/actions/hostel_n_outpass";
 import { CreateHostelForm, ImportFromSiteButton } from "./client";
 
 export default async function HostelPage() {
-    const {success,data:hostels} = await getHostels()
-
+    const response = await getHostels()
+    console.log(response)
+    const {success,data:hostels} = response
     return (
         <div className="space-y-5 my-2">
             <div className="flex justify-between w-full">

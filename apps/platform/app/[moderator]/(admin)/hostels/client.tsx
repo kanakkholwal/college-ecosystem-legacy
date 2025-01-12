@@ -230,7 +230,7 @@ export function ImportFromSiteButton() {
                     // if(data.error){
                     //     return data.message
                     // }
-                    return "Hostels imported successfully"
+                    return data?.message || "Hostels imported successfully"
                 },
                 error:"Failed to import hostels"
             }).finally(() => {

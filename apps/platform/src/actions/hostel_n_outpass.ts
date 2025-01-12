@@ -94,6 +94,7 @@ type HostelType = {
 };
 
 export async function importHostelsFromSite(){
+    try{     
         const res = await serverFetch<{
             error: boolean;
             message: string;
@@ -104,25 +105,32 @@ export async function importHostelsFromSite(){
         }>("/api/hostels",{
             method:"GET"
         });
-        console.log(res)
-        return res
-        // if(response?.error || !response?.data){
-        //     return response
-        // }
-        // await dbConnect();
-        // const hostels = response.data.hostels;
-        // for await (const hostel of hostels){
-        //     const newHostel = new HostelModel({
-        //         name:hostel.name,
-        //         slug:hostel.slug,
-        //         gender:hostel.gender,
-        //         warden:hostel.warden,
-        //         administrators:hostel.administrators
-        //     });
-        //     await newHostel.save();
-        // }
-        // revalidatePath("/admin/hostels")
-        // return {success:true}
+        // console.log(res)
+        const response = res.data;
+        if(res?.error || response?.error || !response?.data){
+            return Promise.reject(response)
+        }
+        await dbConnect();
+        const hostels = response?.data?.hostels.map((hostel)=>{
+            return {
+                name:hostel.name,
+                slug:hostel.slug,
+                gender:hostel.gender,
+                warden:hostel.warden,
+                administrators:hostel.administrators,
+                students:[]
+            }
+
+        })
+        // await HostelModel.deleteMany({});
+        await HostelStudentModel.insertMany(hostels);
+
+        return {error:false,data:hostels, message:"Hostels imported successfully"}
+    }catch(err){
+        return Promise.reject({error:true,data:JSON.parse(JSON.stringify(err)), message:"Failed to import hostels"})
+    }finally{
+        revalidatePath("/admin/hostels")
+    }
 
 }
 

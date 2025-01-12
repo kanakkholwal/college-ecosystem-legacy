@@ -18,6 +18,7 @@ import { GrSchedules } from "react-icons/gr";
 import { LuBookA, LuBuilding, LuSchool } from "react-icons/lu";
 import { PiStudentFill } from "react-icons/pi";
 import type { Session } from "~/lib/auth-client";
+import { TbServer2 } from "react-icons/tb";
 
 import { CalendarRange } from "lucide-react";
 import { GrStorage } from "react-icons/gr";
@@ -54,6 +55,11 @@ const all_links: rawLinkType[] = [
         path: "/new",
         allowed_roles: [ROLES.ADMIN],
       },
+      {
+        title: "Fix User",
+        path: "/fix",
+        allowed_roles: [ROLES.ADMIN],
+      },
     ],
   },
   {
@@ -78,6 +84,12 @@ const all_links: rawLinkType[] = [
     title: "Storage",
     icon: GrStorage,
     path: "/storage",
+    allowed_roles: [ROLES.ADMIN],
+  },
+  {
+    title: "Server",
+    icon: TbServer2,
+    path: "/server",
     allowed_roles: [ROLES.ADMIN],
   },
   {
