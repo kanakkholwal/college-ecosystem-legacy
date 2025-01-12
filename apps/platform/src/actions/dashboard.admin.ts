@@ -76,9 +76,7 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
     .select({ count: sql<number>`COUNT(*)` })
     .from(users)
     .where(
-      endTime
-        ? sql`"createdAt" >= ${startTime} AND "createdAt" <= ${endTime}`
-        : sql`"createdAt" >= ${startTime}`
+      sql`"createdAt" >= ${startTime}`
     );
   const currentCount = currentCountQuery[0]?.count ?? 0;
 
