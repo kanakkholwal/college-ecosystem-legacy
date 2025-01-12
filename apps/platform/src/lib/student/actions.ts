@@ -48,7 +48,7 @@ function getYear(semesters: Semester[], programme: string): number {
     case 7:
       return 4;
     case 8:
-      return programme === "B.Tech" ? 6 : 5;
+      return programme === "B.Tech" ? -1 : 5;
     case 9:
       return 5;
     case 10:

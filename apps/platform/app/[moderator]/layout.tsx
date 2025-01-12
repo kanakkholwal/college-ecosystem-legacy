@@ -1,3 +1,4 @@
+import Navbar from "@/components/common/app-navbar";
 import { AppSidebar } from "@/components/common/sidebar/app-sidebar";
 import Page403 from "@/components/utils/403";
 import type { Metadata, ResolvingMetadata } from "next";
@@ -5,7 +6,6 @@ import { notFound, redirect } from "next/navigation";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { changeCase } from "~/utils/string";
-import Navbar from "./components/navbar";
 
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 

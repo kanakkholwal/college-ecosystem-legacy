@@ -51,11 +51,11 @@ export async function createHostelStudent(data: z.infer<typeof createHostelStude
 export async function getHostel(slug: string) {
     try {
         await dbConnect();
-        const hostel = await HostelModel.findOne({ slug }).populate('students');
-        return { success: true, hostel }
+        const hostel = await HostelModel.findOne({ slug }).populate('students').lean()
+        return { success: true, hostel:JSON.parse(JSON.stringify(hostel)) }
     }
     catch (err) {
-        return { error: err }
+        return {  success: false,error: JSON.parse(JSON.stringify(err)) }
     }
 
 }
@@ -120,10 +120,9 @@ export async function importHostelsFromSite(){
                 administrators:hostel.administrators,
                 students:[]
             }
-
         })
         // await HostelModel.deleteMany({});
-        await HostelStudentModel.insertMany(hostels);
+        await HostelModel.insertMany(hostels);
 
         return {error:false,data:hostels, message:"Hostels imported successfully"}
     }catch(err){

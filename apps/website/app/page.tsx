@@ -6,39 +6,39 @@ import Link from "next/link";
 const features = [
   {
     name: "Check Results",
-    description: `Instantly access your academic results with a quick search.`,
+    description: "Instantly access your academic results with a quick search.",
     icon: "/assets/results.png",
-    href: "https://app.nith.eu.org/results",
+    href: "https://app.nith.eu.org/results?utm_source=nith.eu.org",
   },
   {
     name: "Syllabus & Study Material",
-    description: `Find all your course materials in one place.`,
+    description: "Find all your course materials in one place.",
     icon: "/assets/syllabus.png",
-    href: "https://app.nith.eu.org/syllabus",
+    href: "https://app.nith.eu.org/syllabus?utm_source=nith.eu.org",
   },
   {
     name: "Attendance Manager",
-    description: `Keep track of your attendance effortlessly`,
+    description: "Keep track of your attendance effortlessly",
     icon: "/assets/attendance.png",
-    href: "https://app.nith.eu.org/attendance",
+    href: "https://app.nith.eu.org/attendance?utm_source=nith.eu.org",
   },
   {
     name: "Classroom Availability",
-    description: `Check the availability of classrooms in real-time.`,
+    description: "Check the availability of classrooms in real-time.",
     icon: "/assets/classroom.png",
-    href: "https://app.nith.eu.org/classroom-availablity",
+    href: "https://app.nith.eu.org/classroom-availablity?utm_source=nith.eu.org",
   },
   {
     name: "Announcements & Polls",
     description: `Stay updated with the latest news and participate in polls.`,
     icon: "/assets/polls.png",
-    href: "https://app.nith.eu.org/polls",
+    href: "https://app.nith.eu.org/polls?utm_source=nith.eu.org",
   },
   {
     name: "Community Groups",
     description: ` Connect with peers through community groups like subreddits`,
     icon: "/assets/community.png",
-    href: "https://app.nith.eu.org/community",
+    href: "https://app.nith.eu.org/community?utm_source=nith.eu.org",
   },
 ];
 
@@ -68,7 +68,7 @@ export default function HomePage() {
                 </p>
                 <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
                   <Link
-                    href="https://app.nith.eu.org"
+                    href="https://app.nith.eu.org?utm_source=nith.eu.org"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="relative flex h-11 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
