@@ -1,12 +1,16 @@
+import { ActionBar } from "@/components/application/action-bar";
 import { StatsCard } from "@/components/application/stats-card";
+import { Separator } from "@/components/ui/separator";
+import { Heading } from "@/components/ui/typography";
 import { CircleDashed, TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import {
+  flushCache,
   getActiveSessions,
   getUsersByDepartment,
   getUsersByGender,
   getUsersByRole,
-  users_CountAndGrowth,
+  users_CountAndGrowth
 } from "~/actions/dashboard.admin";
 
 export default async function AdminDashboard() {
@@ -25,7 +29,7 @@ export default async function AdminDashboard() {
 
   return (
     <div className="space-y-6 my-5">
-      <div className="flex justify-between gap-2 w-full flex-col lg:flex-row">
+      <div className="flex justify-between gap-2 w-full flex-col @4xl:flex-row divide-y @4xl:divide-x divide-gray-200">
         <div className="w-full">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {/* Total Users Card */}
@@ -116,8 +120,19 @@ export default async function AdminDashboard() {
         </div>
 
         {/* Messages Section */}
-        <div className="lg:w-1/3 p-3">
-          <h3 className="text-2xl font-semibold mb-2">Messages</h3>
+        <div className="@4xl:w-1/3 p-3">
+          <Heading level={4}>Actions</Heading>
+          <Separator className="mb-4"/>
+          <div className="w-full grid grid-cols-1 gap-3 divide-y divide-gray-200">
+            <ActionBar
+              title="Clear Cache"
+              description={<p  className="text-xs font-medium text-gray-700">Flush the cache to clear all cached data.</p>}
+              btnProps={{ variant: "link", size: "sm", children: "Flush Cache",effect:"underline" }}
+              action={flushCache} />
+          </div>
+          <Separator className="mt-2 mb-4"/>
+
+          <Heading level={4}>Messages</Heading>
           <div className="bg-white dark:bg-slate-800 px-4 py-10 rounded-lg text-center w-full">
             <p className="text-slate-600 dark:text-slate-400 mb-3">
               You have no new messages.

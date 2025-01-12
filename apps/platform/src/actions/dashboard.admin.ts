@@ -3,6 +3,7 @@ import type { InferSelectModel } from "drizzle-orm";
 import { and, asc, desc, eq, like, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
 import { accounts, sessions, users } from "~/db/schema/auth-schema";
+import redis from "~/lib/redis";
 
 export async function users_CountAndGrowth(timeInterval: string): Promise<{
   count: number;
@@ -104,7 +105,15 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
 }
 
 
-
+export async function flushCache() {
+  try{
+    await redis.flushall();
+    return Promise.resolve(true);
+  }catch(error){
+    console.error(error);
+    return Promise.reject(error);
+  }
+}
 
 
 // Infer the User model from the schema

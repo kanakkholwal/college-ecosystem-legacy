@@ -84,7 +84,7 @@ type FunctionaryType = {
 type HostelType = {
     name: string;
     slug: string;
-    gender:"male"|"female" | "guest_hostel"
+    gender: "male" | "female" | "guest_hostel"
     warden: {
         name: string;
         email: string;
@@ -94,8 +94,7 @@ type HostelType = {
 };
 
 export async function importHostelsFromSite(){
-    try{
-        const {data:response} = await serverFetch<{
+        const res = await serverFetch<{
             error: boolean;
             message: string;
             data: {
@@ -105,27 +104,26 @@ export async function importHostelsFromSite(){
         }>("/api/hostels",{
             method:"GET"
         });
-        if(response?.error || !response?.data){
-            return response
-        }
-        await dbConnect();
-        const hostels = response.data.hostels;
-        for await (const hostel of hostels){
-            const newHostel = new HostelModel({
-                name:hostel.name,
-                slug:hostel.slug,
-                gender:hostel.gender,
-                warden:hostel.warden,
-                administrators:hostel.administrators
-            });
-            await newHostel.save();
-        }
-        revalidatePath("/admin/hostels")
-        return {success:true}
+        console.log(res)
+        return res
+        // if(response?.error || !response?.data){
+        //     return response
+        // }
+        // await dbConnect();
+        // const hostels = response.data.hostels;
+        // for await (const hostel of hostels){
+        //     const newHostel = new HostelModel({
+        //         name:hostel.name,
+        //         slug:hostel.slug,
+        //         gender:hostel.gender,
+        //         warden:hostel.warden,
+        //         administrators:hostel.administrators
+        //     });
+        //     await newHostel.save();
+        // }
+        // revalidatePath("/admin/hostels")
+        // return {success:true}
 
-    }catch(err){
-        return {error:true,...JSON.parse(JSON.stringify(err))}
-    }
 }
 
 /*

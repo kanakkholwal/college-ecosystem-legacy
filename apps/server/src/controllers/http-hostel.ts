@@ -13,7 +13,7 @@ type FunctionaryType = {
 type HostelType = {
     name: string;
     slug: string;
-    gender:"male"|"female" | "guest_hostel"
+    gender: "male" | "female" | "guest_hostel"
     warden: {
         name: string;
         email: string;
@@ -112,10 +112,10 @@ function extractHostelsFromTable(table: HTMLElement): HostelType[] {
             if (name) {
                 // Push the current hostel before starting a new one
                 if (currentHostel) hostels.push(currentHostel);
-                
+
                 currentHostel = {
                     name,
-                    gender: name.toLowerCase().includes("boy") ? "male" : name.toLowerCase().includes("girl") ? "female":"guest_hostel",
+                    gender: name.toLowerCase().includes("boy") ? "male" : name.toLowerCase().includes("girl") ? "female" : "guest_hostel",
                     slug: name.toLowerCase().replace(/\s+/g, "-"),
                     warden: { name: "", email: "", phoneNumber: "" },
                     administrators: [],
@@ -127,13 +127,24 @@ function extractHostelsFromTable(table: HTMLElement): HostelType[] {
             if (cells.length >= 4) {
                 const name = cells[1]?.textContent?.trim();
                 const role = cells[2]?.textContent?.trim()?.toLowerCase()?.trim()?.split(" ")?.join("_") as "warden" | "mmca" | "assistant_warden";
-                const email = cells[4]?.textContent?.trim()?.split("\n").length > 0 ? cells[4]?.textContent?.trim()?.split("\n")[0] : cells[4]?.textContent?.trim();
+                const email = cells[4]?.textContent?.trim();
                 const phoneNumber = cells[3]?.textContent?.trim() || "";
 
                 if (role === "warden") {
-                    currentHostel.warden = { name, email, phoneNumber };
-                } else if (name && role && z.string().email().safeParse(email).success) {
-                    currentHostel.administrators.push({ name, role, email, phoneNumber });
+                    currentHostel.warden = {
+                        name,
+                        email: currentHostel.slug === "satpura-&-aravali-girls-hostel" ? email.split("\n")[1] : email,
+                        phoneNumber
+                    };
+                } else if (name && role && (
+                    currentHostel.slug === "satpura-&-aravali-girls-hostel" ? z.string().email().safeParse(email.split("\n")[0]).success : z.string().email().safeParse(email).success
+                )) {
+                    currentHostel.administrators.push({
+                        name,
+                        role,
+                        email: currentHostel.slug === "satpura-&-aravali-girls-hostel" ? email.split("\n")[0] : email,
+                        phoneNumber
+                    });
                 } else {
                     console.warn("Skipping invalid administrator row:", { name, email, role });
                 }
