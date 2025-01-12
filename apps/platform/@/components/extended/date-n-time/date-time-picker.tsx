@@ -15,21 +15,19 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-const DateTimePickerSchema = z.string().datetime()
-
+const DateTimePickerSchema = z.string().datetime();
 
 type DateTimePickerType = z.infer<typeof DateTimePickerSchema>;
 
 interface DateTimePickerProps {
   value: DateTimePickerType;
   onChange: (value: DateTimePickerType) => void;
-
 }
 
 export function DateTimePicker(field: DateTimePickerProps) {
   function handleDateSelect(date: Date | undefined) {
     if (date) {
-      field.onChange(date.toISOString())
+      field.onChange(date.toISOString());
     }
   }
 
@@ -91,14 +89,12 @@ export function DateTimePicker(field: DateTimePickerProps) {
                       size="icon"
                       variant={
                         field.value &&
-                          new Date(field.value).getHours() % 12 === hour % 12
+                        new Date(field.value).getHours() % 12 === hour % 12
                           ? "default"
                           : "ghost"
                       }
                       className="sm:w-full shrink-0 aspect-square"
-                      onClick={() =>
-                        handleTimeChange("hour", hour.toString())
-                      }
+                      onClick={() => handleTimeChange("hour", hour.toString())}
                     >
                       {hour}
                     </Button>
@@ -113,7 +109,8 @@ export function DateTimePicker(field: DateTimePickerProps) {
                     key={minute}
                     size="icon"
                     variant={
-                      field.value && new Date(field.value).getMinutes() === minute
+                      field.value &&
+                      new Date(field.value).getMinutes() === minute
                         ? "default"
                         : "ghost"
                     }
@@ -136,8 +133,10 @@ export function DateTimePicker(field: DateTimePickerProps) {
                     size="icon"
                     variant={
                       field.value &&
-                        ((ampm === "AM" && new Date(field.value).getHours() < 12) ||
-                          (ampm === "PM" && new Date(field.value).getHours() >= 12))
+                      ((ampm === "AM" &&
+                        new Date(field.value).getHours() < 12) ||
+                        (ampm === "PM" &&
+                          new Date(field.value).getHours() >= 12))
                         ? "default"
                         : "ghost"
                     }

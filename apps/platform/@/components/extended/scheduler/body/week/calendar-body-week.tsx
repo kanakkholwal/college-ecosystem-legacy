@@ -1,12 +1,12 @@
-import { useCalendarContext } from '../../calendar-context'
-import { startOfWeek, addDays } from 'date-fns'
-import CalendarBodyMarginDayMargin from '../day/calendar-body-margin-day-margin'
-import CalendarBodyDayContent from '../day/calendar-body-day-content'
+import { useCalendarContext } from "../../calendar-context";
+import { startOfWeek, addDays } from "date-fns";
+import CalendarBodyMarginDayMargin from "../day/calendar-body-margin-day-margin";
+import CalendarBodyDayContent from "../day/calendar-body-day-content";
 export default function CalendarBodyWeek() {
-  const { date } = useCalendarContext()
+  const { date } = useCalendarContext();
 
-  const weekStart = startOfWeek(date, { weekStartsOn: 1 })
-  const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i))
+  const weekStart = startOfWeek(date, { weekStartsOn: 1 });
+  const weekDays = Array.from({ length: 7 }, (_, i) => addDays(weekStart, i));
 
   return (
     <div className="flex divide-x flex-grow overflow-hidden">
@@ -27,5 +27,5 @@ export default function CalendarBodyWeek() {
         </div>
       </div>
     </div>
-  )
+  );
 }

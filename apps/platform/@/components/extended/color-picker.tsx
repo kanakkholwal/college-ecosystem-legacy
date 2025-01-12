@@ -1,12 +1,12 @@
-import { colorOptions } from '@/components/extended/scheduler/calendar-tailwind-classes'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { cn } from '@/lib/utils'
+import { colorOptions } from "@/components/extended/scheduler/calendar-tailwind-classes";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { cn } from "@/lib/utils";
 
 interface ColorPickerProps {
   field: {
-    value: string
-    onChange: (value: string) => void
-  }
+    value: string;
+    onChange: (value: string) => void;
+  };
 }
 
 export function ColorPicker({ field }: ColorPickerProps) {
@@ -22,12 +22,12 @@ export function ColorPicker({ field }: ColorPickerProps) {
           value={color.value}
           id={color.value}
           className={cn(
-            'size-6 border-0 shadow-none transition-all duration-200 accent-white',
+            "size-6 border-0 shadow-none transition-all duration-200 accent-white",
             `bg-${color.value}-500`
           )}
           aria-label={color.label}
         />
       ))}
     </RadioGroup>
-  )
+  );
 }

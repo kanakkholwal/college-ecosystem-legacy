@@ -18,8 +18,11 @@ export async function mongoToPgDatabase(
     console.log("MongoDB connected successfully!");
 
     /** MIGRATE USERS */
-    const mongoUsers = await mongoose.model("User")
-      .find().sort({ createdAt: 1 }).lean();
+    const mongoUsers = await mongoose
+      .model("User")
+      .find()
+      .sort({ createdAt: 1 })
+      .lean();
     console.log("mongoUsers:", mongoUsers.length);
     if (mongoUsers.length === 0) {
       console.log("No users to migrate!");

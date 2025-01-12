@@ -1,12 +1,12 @@
-'use client'
+"use client";
 
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group'
-import { useCalendarContext } from '../../calendar-context'
-import { calendarModeIconMap } from '../../calendar-mode-icon-map'
-import { type Mode, calendarModes } from '../../calendar-types'
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { useCalendarContext } from "../../calendar-context";
+import { calendarModeIconMap } from "../../calendar-mode-icon-map";
+import { type Mode, calendarModes } from "../../calendar-types";
 
 export default function CalendarHeaderActionsMode() {
-  const { mode, setMode } = useCalendarContext()
+  const { mode, setMode } = useCalendarContext();
 
   return (
     <ToggleGroup
@@ -15,7 +15,7 @@ export default function CalendarHeaderActionsMode() {
       variant="outline"
       value={mode}
       onValueChange={(value) => {
-        if (value) setMode(value as Mode)
+        if (value) setMode(value as Mode);
       }}
     >
       {calendarModes.map((modeValue) => (
@@ -31,5 +31,5 @@ export default function CalendarHeaderActionsMode() {
         </ToggleGroupItem>
       ))}
     </ToggleGroup>
-  )
+  );
 }

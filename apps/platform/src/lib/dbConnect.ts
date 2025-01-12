@@ -57,6 +57,4 @@ async function dbConnect(dbName: string = defaultDb): Promise<Mongoose> {
   return cached.conn ? cached.conn : await cached.promise;
 }
 
-
-
 export default dbConnect;

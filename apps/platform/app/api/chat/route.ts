@@ -5,7 +5,6 @@ import { type NextRequest, NextResponse } from "next/server";
 export const maxDuration = 45; // This function can run for a maximum of 5 seconds
 export const revalidate = 0; // disable cache
 
-
 const redis = Redis.fromEnv();
 
 async function loadDocument() {

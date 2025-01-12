@@ -1,13 +1,13 @@
-import { cn } from '@/lib/utils'
-import { format, isSameDay } from 'date-fns'
-import { useCalendarContext } from './context'
-import type { CalendarEvent as CalendarEventType } from './types'
+import { cn } from "@/lib/utils";
+import { format, isSameDay } from "date-fns";
+import { useCalendarContext } from "./context";
+import type { CalendarEvent as CalendarEventType } from "./types";
 
 interface EventPosition {
-  left: string
-  width: string
-  top: string
-  height: string
+  left: string;
+  width: string;
+  top: string;
+  height: string;
 }
 
 function getOverlappingEvents(
@@ -15,13 +15,13 @@ function getOverlappingEvents(
   events: CalendarEventType[]
 ): CalendarEventType[] {
   return events.filter((event) => {
-    if (event.id === currentEvent.id) return false
+    if (event.id === currentEvent.id) return false;
     return (
       currentEvent.start < event.end &&
       currentEvent.end > event.start &&
       isSameDay(currentEvent.start, event.start)
-    )
-  })
+    );
+  });
 }
 
 function calculateEventPosition(
@@ -67,62 +67,61 @@ function calculateEventPosition(
   };
 }
 
-
-
 export default function CalendarEvent({
   event,
   month = false,
   className,
 }: {
-  event: CalendarEventType
-  month?: boolean
-  className?: string
+  event: CalendarEventType;
+  month?: boolean;
+  className?: string;
 }) {
   const { events, setSelectedEvent, setManageEventDialogOpen, margin_hours } =
-    useCalendarContext()
+    useCalendarContext();
 
-  const style = month ? {} : calculateEventPosition(event, events, margin_hours || [0, 24])
+  const style = month
+    ? {}
+    : calculateEventPosition(event, events, margin_hours || [0, 24]);
 
   return (
     <div
       key={event.id}
-
       className={cn(
         `px-3 py-1.5 rounded-md truncate cursor-pointer transition-all duration-300 bg-${event.color}-500/10 hover:bg-${event.color}-500/20 border border-${event.color}-500`,
-        !month && 'absolute',
+        !month && "absolute",
         className
       )}
       style={style}
       onClick={(e) => {
-        e.stopPropagation()
-        setSelectedEvent(event)
-        setManageEventDialogOpen(true)
+        e.stopPropagation();
+        setSelectedEvent(event);
+        setManageEventDialogOpen(true);
       }}
       onKeyUp={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.stopPropagation()
-          setSelectedEvent(event)
-          setManageEventDialogOpen(true)
+        if (e.key === "Enter" || e.key === " ") {
+          e.stopPropagation();
+          setSelectedEvent(event);
+          setManageEventDialogOpen(true);
         }
       }}
     >
       <div
         className={cn(
           `flex flex-col w-full text-${event.color}-500`,
-          month && 'flex-row items-center justify-between'
+          month && "flex-row items-center justify-between"
         )}
       >
-        <p className={cn('font-bold truncate', month && 'text-xs')}>
+        <p className={cn("font-bold truncate", month && "text-xs")}>
           {event.title}
         </p>
-        <p className={cn('text-sm', month && 'text-xs')}>
-          <span>{format(event.start, 'h:mm a')}</span>
-          <span className={cn('mx-1', month && 'hidden')}>-</span>
-          <span className={cn(month && 'hidden')}>
-            {format(event.end, 'h:mm a')}
+        <p className={cn("text-sm", month && "text-xs")}>
+          <span>{format(event.start, "h:mm a")}</span>
+          <span className={cn("mx-1", month && "hidden")}>-</span>
+          <span className={cn(month && "hidden")}>
+            {format(event.end, "h:mm a")}
           </span>
         </p>
       </div>
     </div>
-  )
+  );
 }

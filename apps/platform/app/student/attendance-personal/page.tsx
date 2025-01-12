@@ -51,22 +51,22 @@ export default async function PersonalAttendanceManager() {
           ))}
         </div>
       </Suspense>
-
     </div>
   );
 }
 
-
 function CreateAttendanceRecordButton() {
-  return <ResponsiveDialog
-    title="Create Attendance Record"
-    description="Create a new attendance record for a subject."
-    btnProps={{
-      variant: "default_light",
-      size: "sm",
-      children: "Create Record",
-    }}
-  >
-    <CreateAttendanceRecord />
-  </ResponsiveDialog>
+  return (
+    <ResponsiveDialog
+      title="Create Attendance Record"
+      description="Create a new attendance record for a subject."
+      btnProps={{
+        variant: "default_light",
+        size: "sm",
+        children: "Create Record",
+      }}
+    >
+      <CreateAttendanceRecord />
+    </ResponsiveDialog>
+  );
 }

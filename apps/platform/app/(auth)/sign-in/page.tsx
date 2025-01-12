@@ -10,8 +10,13 @@ import ResetPassword from "./reset-password";
 import SignInForm from "./sign-in";
 import SignUpForm from "./sign-up";
 
-
-const TABS = ["sign-in", "sign-up", "forget-password","reset-password", "verify-email"];
+const TABS = [
+  "sign-in",
+  "sign-up",
+  "forget-password",
+  "reset-password",
+  "verify-email",
+];
 
 interface Props {
   searchParams: Promise<{
@@ -34,7 +39,7 @@ export default async function SignInPage({ searchParams }: Props) {
           variant="glass"
           className="m-auto flex flex-col justify-center space-y-6 max-w-[35rem] mx-auto w-full mt-32 @lg:mt-0"
         >
-          <AppLogo className="mt-12"/>
+          <AppLogo className="mt-12" />
           <Tabs
             defaultValue={TABS.includes(tab) ? tab : TABS[0]}
             className="w-full"
@@ -42,16 +47,18 @@ export default async function SignInPage({ searchParams }: Props) {
             <CardHeader>
               <TabsList className="flex justify-around space-x-4 flex-wrap">
                 {TABS.map((tab) => {
-                  if(session?.user && (tab === "sign-up" || tab === "sign-in")) return null;
-
+                  if (session?.user && (tab === "sign-up" || tab === "sign-in"))
+                    return null;
 
                   return (
                     <TabsTrigger
                       key={tab}
                       value={tab}
-                      className={cn("capitalize w-full flex-1",
-                        ["reset-password", "verify-email"].includes(tab) ? "hidden" : "",
-                        
+                      className={cn(
+                        "capitalize w-full flex-1",
+                        ["reset-password", "verify-email"].includes(tab)
+                          ? "hidden"
+                          : ""
                       )}
                     >
                       {tab.replace("-", " ")}

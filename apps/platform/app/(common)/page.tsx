@@ -8,7 +8,6 @@ import { auth } from "src/lib/auth";
 
 import { quick_links } from "@/constants/links";
 
-
 export default async function Dashboard() {
   const session = await auth.api.getSession({
     headers: await headers(),

@@ -93,7 +93,8 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
 
   // Calculate growth and growth percentage
   const growth = currentCount - prevCount;
-  const growthPercent = prevCount === 0 ? 100 : (growth / (prevCount === 0 ? 1 :prevCount)) * 100;
+  const growthPercent =
+    prevCount === 0 ? 100 : (growth / (prevCount === 0 ? 1 : prevCount)) * 100;
 
   return {
     count: currentCount,
@@ -104,17 +105,15 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
   };
 }
 
-
 export async function flushCache() {
-  try{
+  try {
     await redis.flushall();
     return Promise.resolve(true);
-  }catch(error){
+  } catch (error) {
     console.error(error);
     return Promise.reject(error);
   }
 }
-
 
 // Infer the User model from the schema
 type User = InferSelectModel<typeof users>;
@@ -132,8 +131,6 @@ interface UserListOptions {
   searchQuery?: string;
 }
 
-
-
 export async function getUser(userId: string): Promise<User | null> {
   const user = await db
     .select()
@@ -145,11 +142,14 @@ export async function getUser(userId: string): Promise<User | null> {
   return user.length > 0 ? user[0] : null; // Return the first user or null if not found
 }
 
-export async function updateUser(userId:string,data:Partial<User>):Promise<User|null>{
-  try{
-    await db.update(users).set(data).where(eq(users.id,userId)).execute();
+export async function updateUser(
+  userId: string,
+  data: Partial<User>
+): Promise<User | null> {
+  try {
+    await db.update(users).set(data).where(eq(users.id, userId)).execute();
     return getUser(userId);
-  }catch(error){
+  } catch (error) {
     console.error(error);
     return null;
   }
@@ -236,7 +236,6 @@ export async function getSessionsByUserAgent(): Promise<
 }
 
 export async function getTotalAccounts(): Promise<number> {
-
   const result = await db
     .select({ count: sql<number>`COUNT(*)` })
     .from(accounts)
@@ -244,11 +243,10 @@ export async function getTotalAccounts(): Promise<number> {
   return result[0]?.count ?? 0;
 }
 
-
-
-
 // Users with the most sessions
-export async function mostSessionsUsers(): Promise<{ userId: string; sessionCount: number }[]> {
+export async function mostSessionsUsers(): Promise<
+  { userId: string; sessionCount: number }[]
+> {
   const result = await db
     .select({
       userId: sessions.userId,
@@ -294,7 +292,9 @@ export async function sessionActivity(): Promise<{
 }
 
 // Total user growth over time
-export async function userGrowthOverTime(): Promise<{ date: string; count: number }[]> {
+export async function userGrowthOverTime(): Promise<
+  { date: string; count: number }[]
+> {
   const result = await db
     .select({
       date: sql<string>`DATE_TRUNC('month', "createdAt")`.as("date"),

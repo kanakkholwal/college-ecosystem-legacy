@@ -1,12 +1,11 @@
 import Image from "next/image";
 import ErrorImg from "./asset/error.png";
 
-
 type Props = {
   error?: Error;
   title?: string;
   description?: string;
-}
+};
 
 export default function ErrorBanner({ error, title, description }: Props) {
   if (error) {
@@ -25,7 +24,8 @@ export default function ErrorBanner({ error, title, description }: Props) {
         {title || "Oops! Something went wrong"}
       </h1>
       <p className="text-md text-red-400 text-center">
-        {description || "We are sorry, but something went wrong. Please try again later."}
+        {description ||
+          "We are sorry, but something went wrong. Please try again later."}
       </p>
     </div>
   );

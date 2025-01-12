@@ -34,18 +34,17 @@ const inputVariants = cva(
   }
 );
 export interface InputProps
-  extends 
   // HTMLInputElement,
   //   React.ComponentProps<"input">,
-    React.InputHTMLAttributes<HTMLInputElement>,
+  extends React.InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof inputVariants> {}
 
-const Input = React.forwardRef<HTMLInputElement,InputProps>(
-  ({ className, variant, type,rounded, ...props }, ref) => {
+const Input = React.forwardRef<HTMLInputElement, InputProps>(
+  ({ className, variant, type, rounded, ...props }, ref) => {
     return (
       <input
         type={type}
-        className={cn(inputVariants({ variant, className,rounded }))}
+        className={cn(inputVariants({ variant, className, rounded }))}
         ref={ref}
         {...props}
       />

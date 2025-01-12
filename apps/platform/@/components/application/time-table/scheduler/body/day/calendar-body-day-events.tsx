@@ -1,10 +1,10 @@
-import { useCalendarContext } from '../../calendar-context'
-import { isSameDay } from 'date-fns'
+import { useCalendarContext } from "../../calendar-context";
+import { isSameDay } from "date-fns";
 
 export default function CalendarBodyDayEvents() {
   const { events, date, setManageEventDialogOpen, setSelectedEvent } =
-    useCalendarContext()
-  const dayEvents = events.filter((event) => isSameDay(event.start, date))
+    useCalendarContext();
+  const dayEvents = events.filter((event) => isSameDay(event.start, date));
 
   return dayEvents.length > 0 ? (
     <div className="flex flex-col gap-2">
@@ -15,13 +15,13 @@ export default function CalendarBodyDayEvents() {
             key={event.id}
             className="flex items-center gap-2 px-2 cursor-pointer"
             onClick={() => {
-              setSelectedEvent(event)
-              setManageEventDialogOpen(true)
+              setSelectedEvent(event);
+              setManageEventDialogOpen(true);
             }}
             onKeyUp={(e) => {
-              if (e.key === 'Enter' || e.key === ' ') {
-                setSelectedEvent(event)
-                setManageEventDialogOpen(true)
+              if (e.key === "Enter" || e.key === " ") {
+                setSelectedEvent(event);
+                setManageEventDialogOpen(true);
               }
             }}
           >
@@ -37,5 +37,5 @@ export default function CalendarBodyDayEvents() {
     </div>
   ) : (
     <div className="p-2 text-muted-foreground">No events today...</div>
-  )
+  );
 }

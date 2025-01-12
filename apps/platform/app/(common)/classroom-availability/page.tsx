@@ -23,7 +23,7 @@ export const metadata: Metadata = {
 
 export default async function RoomsPage(props: Props) {
   const searchParams = await props.searchParams;
-  const session= await getSession();
+  const session = await getSession();
 
   const rooms = await listAllRoomsWithHistory({
     status: searchParams.currentStatus,
@@ -71,25 +71,23 @@ export default async function RoomsPage(props: Props) {
           <EmptyArea
             title="No rooms found"
             description="No rooms found based on the search criteria."
-            />
-
+          />
         </ConditionalRender>
         <ConditionalRender condition={rooms.length > 0}>
-        <div className="max-w-[1440px] mx-auto grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          {rooms.map((room, i) => {
-            return (
-              <RoomCard
-                key={room.id}
-                room={room}
-                user={session?.user}
-                style={{
-                  animationDelay: `${i * 100}ms`,
-                }}
-              />
-            );
-          })}
-        </div>
-
+          <div className="max-w-[1440px] mx-auto grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {rooms.map((room, i) => {
+              return (
+                <RoomCard
+                  key={room.id}
+                  room={room}
+                  user={session?.user}
+                  style={{
+                    animationDelay: `${i * 100}ms`,
+                  }}
+                />
+              );
+            })}
+          </div>
         </ConditionalRender>
       </ErrorBoundaryWithSuspense>
     </>

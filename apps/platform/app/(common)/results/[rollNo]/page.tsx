@@ -36,12 +36,10 @@ export default async function ResultsPage(props: Props) {
 
   const update_result = searchParams?.update === "true";
   const is_new = searchParams?.new === "true";
-  const result = await getResultByRollNo(params.rollNo, update_result,is_new);
+  const result = await getResultByRollNo(params.rollNo, update_result, is_new);
   if (!result) {
     return notFound();
   }
-
-
 
   return (
     <>

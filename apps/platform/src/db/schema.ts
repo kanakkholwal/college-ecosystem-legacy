@@ -33,5 +33,5 @@ export {
   schedulesModeEnums,
   scheduleAccess,
   scheduleEvents,
-  schedules
+  schedules,
 } from "./schema/schedule";

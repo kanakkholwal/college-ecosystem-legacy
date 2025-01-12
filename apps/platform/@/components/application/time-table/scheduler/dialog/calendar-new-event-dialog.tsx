@@ -1,12 +1,12 @@
-import { ColorPicker } from '@/components/extended/color-picker'
-import { DateTimePicker } from '@/components/extended/date-n-time'
-import { Button } from '@/components/ui/button'
+import { ColorPicker } from "@/components/extended/color-picker";
+import { DateTimePicker } from "@/components/extended/date-n-time";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from '@/components/ui/dialog'
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -14,48 +14,48 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { format } from 'date-fns'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { useCalendarContext } from '../calendar-context'
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { format } from "date-fns";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useCalendarContext } from "../calendar-context";
 
 const formSchema = z
   .object({
-    title: z.string().min(1, 'Title is required'),
+    title: z.string().min(1, "Title is required"),
     start: z.string().datetime(),
     end: z.string().datetime(),
     color: z.string(),
-    description:z.string()
+    description: z.string(),
   })
   .refine(
     (data) => {
-      const start = new Date(data.start)
-      const end = new Date(data.end)
-      return end >= start
+      const start = new Date(data.start);
+      const end = new Date(data.end);
+      return end >= start;
     },
     {
-      message: 'End time must be after start time',
-      path: ['end'],
+      message: "End time must be after start time",
+      path: ["end"],
     }
-  )
+  );
 
 export default function CalendarNewEventDialog() {
   const { newEventDialogOpen, setNewEventDialogOpen, date, events, setEvents } =
-    useCalendarContext()
+    useCalendarContext();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: '',
+      title: "",
       start: format(date, "yyyy-MM-dd'T'HH:mm"),
       end: format(date, "yyyy-MM-dd'T'HH:mm"),
-      color: 'blue',
-      description:""
+      color: "blue",
+      description: "",
     },
-  })
+  });
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     const newEvent = {
@@ -64,12 +64,12 @@ export default function CalendarNewEventDialog() {
       start: new Date(values.start),
       end: new Date(values.end),
       color: values.color,
-      description:""
-    }
+      description: "",
+    };
 
-    setEvents([...events, newEvent])
-    setNewEventDialogOpen(false)
-    form.reset()
+    setEvents([...events, newEvent]);
+    setNewEventDialogOpen(false);
+    form.reset();
   }
 
   return (
@@ -120,8 +120,8 @@ export default function CalendarNewEventDialog() {
                   <FormControl>
                     <DateTimePicker
                       value={field.value}
-
-                      onChange={field.onChange} />
+                      onChange={field.onChange}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -149,5 +149,5 @@ export default function CalendarNewEventDialog() {
         </Form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }

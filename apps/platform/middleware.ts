@@ -34,13 +34,14 @@ export async function middleware(request: NextRequest) {
     for (const [path, roles] of Object.entries(authorized_paths)) {
       if (
         request.nextUrl.pathname.startsWith(path) &&
-        !(session.user.other_roles.some((role) => roles.includes(role)) || roles.includes(session.user.role))
-
+        !(
+          session.user.other_roles.some((role) => roles.includes(role)) ||
+          roles.includes(session.user.role)
+        )
       ) {
         return NextResponse.redirect(new URL("/unauthorized", request.url));
       }
     }
-
   }
 
   return NextResponse.next();

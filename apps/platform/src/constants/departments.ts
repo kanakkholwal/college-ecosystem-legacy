@@ -119,17 +119,23 @@ export const getDepartmentByRollNo = (rollNo: string) => {
   }
 };
 
-const rollNoSchema = z.string().regex(/^\d{2}[a-z]{3}\d{3}$/i).refine((rollNo) => {
-  const numericPart = Number.parseInt(rollNo.slice(-3));
-  return numericPart >= 1 && numericPart <= 999;
-}, {
-  message: "Invalid roll number",
-});
+const rollNoSchema = z
+  .string()
+  .regex(/^\d{2}[a-z]{3}\d{3}$/i)
+  .refine(
+    (rollNo) => {
+      const numericPart = Number.parseInt(rollNo.slice(-3));
+      return numericPart >= 1 && numericPart <= 999;
+    },
+    {
+      message: "Invalid roll number",
+    }
+  );
 
 export function isValidRollNumber(rollNo: string): boolean {
   try {
-    const response = rollNoSchema.safeParse(rollNo)
-    return response.success
+    const response = rollNoSchema.safeParse(rollNo);
+    return response.success;
   } catch {
     return false;
   }

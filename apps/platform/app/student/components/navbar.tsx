@@ -14,7 +14,7 @@ export default function Navbar({ user }: { user: Session["user"] }) {
       <SidebarTrigger className="mx-2" />
 
       <div className="flex items-start flex-col">
-      <h3 className="text-lg font-bold">
+        <h3 className="text-lg font-bold">
           {titlesMap.get(pathname)?.title ?? "Dashboard"}
         </h3>
         <p className="text-xs text-slate-500 dark:text-slate-400 font-semibold truncate w-full max-w-72">
@@ -22,7 +22,7 @@ export default function Navbar({ user }: { user: Session["user"] }) {
         </p>
       </div>
       <div className="ml-auto inline-flex gap-1 items-center">
-        <ProfileDropdown user={user}/>
+        <ProfileDropdown user={user} />
       </div>
     </nav>
   );

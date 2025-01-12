@@ -77,7 +77,7 @@ export default function SignUpForm() {
         username: data.email.split("@")[0],
         gender: "male",
         department: getDepartmentName("ece"), // automatically corrects it on the backend
-        other_roles:["student"],
+        other_roles: ["student"],
       },
       {
         onRequest: () => {
@@ -89,7 +89,6 @@ export default function SignUpForm() {
         onSuccess(context) {
           console.log(context);
           toast.success("Account created successfully");
-
         },
         onError: (ctx: { error: { message: string } }) => {
           console.log(ctx);
@@ -188,7 +187,9 @@ export default function SignUpForm() {
                 )}
               />
               <p className="text-left mt-2 text-sm font-medium text-gray-600">
-                You must use your NITH email to sign up.(you{"'"}ll get a verification link in your email if your email isn{"'"}t in the database)
+                You must use your NITH email to sign up.(you{"'"}ll get a
+                verification link in your email if your email isn{"'"}t in the
+                database)
               </p>
 
               <Button
@@ -222,7 +223,6 @@ export default function SignUpForm() {
               disabled={isLoading}
               width="full"
               rounded="full"
-
               onClick={async () => {
                 setIsLoading(true);
                 await authClient.signIn.social({

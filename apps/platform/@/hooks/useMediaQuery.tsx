@@ -1,61 +1,61 @@
-import { useState } from 'react'
+import { useState } from "react";
 
-import { useIsomorphicLayoutEffect } from './useIsomorphicLayoutEffect'
+import { useIsomorphicLayoutEffect } from "./useIsomorphicLayoutEffect";
 
 type UseMediaQueryOptions = {
-  defaultValue?: boolean
-  initializeWithValue?: boolean
-}
+  defaultValue?: boolean;
+  initializeWithValue?: boolean;
+};
 
-const IS_SERVER = typeof window === 'undefined'
+const IS_SERVER = typeof window === "undefined";
 
 export function useMediaQuery(
   query: string,
   {
     defaultValue = false,
     initializeWithValue = true,
-  }: UseMediaQueryOptions = {},
+  }: UseMediaQueryOptions = {}
 ): boolean {
   const getMatches = (query: string): boolean => {
     if (IS_SERVER) {
-      return defaultValue
+      return defaultValue;
     }
-    return window.matchMedia(query).matches
-  }
+    return window.matchMedia(query).matches;
+  };
 
   const [matches, setMatches] = useState<boolean>(() => {
     if (initializeWithValue) {
-      return getMatches(query)
+      return getMatches(query);
     }
-    return defaultValue
-  })
+    return defaultValue;
+  });
 
   // Handles the change event of the media query.
   function handleChange() {
-    setMatches(getMatches(query))
+    setMatches(getMatches(query));
   }
 
   useIsomorphicLayoutEffect(() => {
-    const matchMedia = window.matchMedia(query)
+    const matchMedia = window.matchMedia(query);
 
     // Triggered at the first client-side load and if query changes
-    handleChange()
+    handleChange();
 
     // Use deprecated `addListener` and `removeListener` to support Safari < 14 (#135)
     if (matchMedia.addListener) {
-      matchMedia.addListener(handleChange)
+      matchMedia.addListener(handleChange);
     } else {
-      matchMedia.addEventListener('change', handleChange)
+      matchMedia.addEventListener("change", handleChange);
     }
 
     return () => {
       if (matchMedia.removeListener) {
-        matchMedia.removeListener(handleChange)
+        matchMedia.removeListener(handleChange);
       } else {
-        matchMedia.removeEventListener('change', handleChange)
+        matchMedia.removeEventListener("change", handleChange);
       }
-    }
-  }, [query])
+    };
+  }, [query]);
 
-  return matches
+  return matches;
 }

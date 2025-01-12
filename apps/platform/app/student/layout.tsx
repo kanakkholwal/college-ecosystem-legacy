@@ -7,22 +7,18 @@ import Navbar from "./components/navbar";
 
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
-
-
-
-
-
 export const metadata: Metadata = {
   title: `Student Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
   description: "Dashboard for students",
-}
+};
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
 }
 
-export default async function DashboardLayout({children}: DashboardLayoutProps) {
-
+export default async function DashboardLayout({
+  children,
+}: DashboardLayoutProps) {
   const session = (await getSession()) as Session;
   if (!session.user.other_roles.includes("student")) {
     return redirect("/");
@@ -60,5 +56,3 @@ export default async function DashboardLayout({children}: DashboardLayoutProps) 
     </SidebarProvider>
   );
 }
-
-

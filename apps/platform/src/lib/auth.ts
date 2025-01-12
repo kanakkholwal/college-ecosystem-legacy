@@ -13,8 +13,6 @@ import { accounts, sessions, users, verifications } from "~/db/schema";
 import type { ResultType } from "~/types/result";
 import { mailFetch, serverFetch } from "./server-fetch";
 
-
-
 export const auth = betterAuth({
   appName: "College Platform",
   baseURL: process.env.BASE_URL,
@@ -38,7 +36,7 @@ export const auth = betterAuth({
           return {
             data: {
               ...user,
-              ...info,             
+              ...info,
             },
           };
         },
@@ -66,7 +64,7 @@ export const auth = betterAuth({
               email: user.email,
               reset_link: verification_url,
             },
-          })
+          }),
         });
         if (response.error) {
           throw new APIError("INTERNAL_SERVER_ERROR", {
@@ -80,7 +78,6 @@ export const auth = betterAuth({
           message: "Error sending email",
         });
       }
-
     },
   },
   emailVerification: {
@@ -103,7 +100,7 @@ export const auth = betterAuth({
               email: user.email,
               verification_url: verification_url,
             },
-          })
+          }),
         });
         if (response.error) {
           throw new APIError("INTERNAL_SERVER_ERROR", {
@@ -117,7 +114,6 @@ export const auth = betterAuth({
           message: "Error sending email",
         });
       }
-
     },
   },
   socialProviders: {
@@ -126,9 +122,9 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_SECRET,
       mapProfileToUser: async (profile) => {
         return {
-          image: profile.picture
-        }
-      }
+          image: profile.picture,
+        };
+      },
     },
   },
   user: {
@@ -158,7 +154,6 @@ export const auth = betterAuth({
         required: true,
         input: true,
       },
-
     },
   },
   account: {
@@ -173,12 +168,15 @@ export const auth = betterAuth({
       domain: process.env.NODE_ENV === "production" ? "nith.eu.org" : undefined,
     },
   },
-  plugins: [username(), admin({
-    defaultRole: "user",
-    adminRole: ["admin"],
-    defaultBanExpiresIn: 60 * 60 * 24 * 7 // 1 week
-
-  }), nextCookies()], // make sure this is the last plugin (nextCookies) in the array
+  plugins: [
+    username(),
+    admin({
+      defaultRole: "user",
+      adminRole: ["admin"],
+      defaultBanExpiresIn: 60 * 60 * 24 * 7, // 1 week
+    }),
+    nextCookies(),
+  ], // make sure this is the last plugin (nextCookies) in the array
 });
 
 const ALLOWED_ROLES = [ROLES.STUDENT, ROLES.FACULTY, ROLES.STAFF];
@@ -191,7 +189,7 @@ type getUserInfoReturnType = {
   department: string;
   name?: string;
   emailVerified: boolean;
-  gender: string
+  gender: string;
 };
 
 type FacultyType = {
@@ -213,13 +211,13 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     }>("/api/results/:rollNo/get", {
       method: "GET",
       params: {
-        rollNo: username
-      }
+        rollNo: username,
+      },
     });
     const response = res.data;
     console.log(res);
     console.log(response?.data ? "has result" : "No result");
-    
+
     if (!response?.data) {
       throw new APIError("UPGRADE_REQUIRED", {
         message: "Result not found for the given roll number | Contact admin",
@@ -234,7 +232,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       emailVerified: true,
       email,
       username,
-      gender: response.data.gender || "not_specified"
+      gender: response.data.gender || "not_specified",
     };
   }
   const { data: response } = await serverFetch<{
@@ -260,7 +258,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       emailVerified: true,
       email,
       username,
-      gender: "not_specified"
+      gender: "not_specified",
     };
   }
   console.log("Other:Staff");
@@ -271,10 +269,8 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     email,
     emailVerified: true,
     username,
-    gender: "not_specified"
-
+    gender: "not_specified",
   };
 }
-
 
 export type Session = typeof auth.$Infer.Session;

@@ -13,7 +13,6 @@ import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
-
 type searchParamsType = {
   searchField?: "email" | "name" | undefined;
   searchOperator?: "contains" | "starts_with" | "ends_with" | undefined;
@@ -25,45 +24,83 @@ type searchParamsType = {
   filterField?: string | undefined;
   filterOperator?: "eq" | "ne" | "lt" | "lte" | "gt" | "gte" | undefined;
   filterValue?: string | undefined;
-}
+};
 
 export default function SearchBar() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const [searchField, setSearchField] = useState<searchParamsType["filterField"]>(searchParams.get("searchField") || "name");
-  const [searchOperator, setSearchOperator] = useState<searchParamsType["searchOperator"]>((searchParams.get("searchOperator") as searchParamsType["searchOperator"]) || "contains");
-  const [searchValue, setSearchValue] = useState<searchParamsType["searchValue"]>(searchParams.get("searchValue") || "");
+  const [searchField, setSearchField] = useState<
+    searchParamsType["filterField"]
+  >(searchParams.get("searchField") || "name");
+  const [searchOperator, setSearchOperator] = useState<
+    searchParamsType["searchOperator"]
+  >(
+    (searchParams.get(
+      "searchOperator"
+    ) as searchParamsType["searchOperator"]) || "contains"
+  );
+  const [searchValue, setSearchValue] = useState<
+    searchParamsType["searchValue"]
+  >(searchParams.get("searchValue") || "");
 
-  const [sortBy, setSortBy] = useState<searchParamsType["sortBy"]>(searchParams.get("sortBy") || "createdAt");
-  const [sortDirection, setSortDirection] = useState<searchParamsType["sortDirection"]>((searchParams.get("sortDirection") as searchParamsType["sortDirection"]) || "desc");
+  const [sortBy, setSortBy] = useState<searchParamsType["sortBy"]>(
+    searchParams.get("sortBy") || "createdAt"
+  );
+  const [sortDirection, setSortDirection] = useState<
+    searchParamsType["sortDirection"]
+  >(
+    (searchParams.get("sortDirection") as searchParamsType["sortDirection"]) ||
+      "desc"
+  );
 
-  const [offset, setOffset] = useState<searchParamsType["offset"]>(Number.parseInt(searchParams.get("offset") || "0", 0));
-  const [limit, setLimit] = useState<searchParamsType["limit"]>(Number.parseInt(searchParams.get("limit") || "100") || 100);
+  const [offset, setOffset] = useState<searchParamsType["offset"]>(
+    Number.parseInt(searchParams.get("offset") || "0", 0)
+  );
+  const [limit, setLimit] = useState<searchParamsType["limit"]>(
+    Number.parseInt(searchParams.get("limit") || "100") || 100
+  );
 
   // const [filterField, setFilterField] = useState<searchParamsType["filterField"]>(searchParams.get("filterField") || "");
   // const [filterOperator, setFilterOperator] = useState<searchParamsType["filterOperator"]>((searchParams.get("filterOperator") as searchParamsType["filterOperator"]) || "eq");
   // const [filterValue, setFilterValue] = useState<searchParamsType["filterValue"]>(searchParams.get("filterValue") || "");
 
   useEffect(() => {
-    setSearchField((searchParams.get("searchField") as searchParamsType["filterField"]) || "name");
-    setSearchOperator((searchParams.get("searchOperator") as searchParamsType["searchOperator"]) || "contains");
+    setSearchField(
+      (searchParams.get("searchField") as searchParamsType["filterField"]) ||
+        "name"
+    );
+    setSearchOperator(
+      (searchParams.get(
+        "searchOperator"
+      ) as searchParamsType["searchOperator"]) || "contains"
+    );
     setSearchValue((searchParams.get("searchValue") as string) || "");
     setSortBy((searchParams.get("sortBy") as string) || "createdAt");
-    setSortDirection((searchParams.get("sortDirection") as searchParamsType["sortDirection"]) || "desc");
+    setSortDirection(
+      (searchParams.get(
+        "sortDirection"
+      ) as searchParamsType["sortDirection"]) || "desc"
+    );
   }, [searchParams]);
 
   const updateParams = () => {
     const params = new URLSearchParams(searchParams.toString());
     if (searchField) params.set("searchField", searchField);
     if (searchOperator) params.set("searchOperator", searchOperator);
-    if (searchValue) params.set("searchValue", searchField === "email" ? searchValue.toLowerCase() : searchValue.toUpperCase());
+    if (searchValue)
+      params.set(
+        "searchValue",
+        searchField === "email"
+          ? searchValue.toLowerCase()
+          : searchValue.toUpperCase()
+      );
     if (sortBy) params.set("sortBy", sortBy);
     if (sortDirection) params.set("sortDirection", sortDirection);
     if (offset) params.set("offset", offset.toString());
     if (limit) params.set("limit", limit.toString());
     router.replace(`?${params.toString()}`);
-  }
+  };
 
   return (
     <div className="space-y-4 group mx-auto sm:mx-4 mb-2 width-[calc(100%_-_2rem)]">
@@ -78,7 +115,6 @@ export default function SearchBar() {
           className="w-full pl-10"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
-
         />
       </div>
 
@@ -97,10 +133,7 @@ export default function SearchBar() {
               <SelectContent>
                 {["email", "name"].map((field) => {
                   return (
-                    <SelectItem
-                      key={field}
-                      value={field}
-                    >
+                    <SelectItem key={field} value={field}>
                       {field}
                     </SelectItem>
                   );
@@ -111,18 +144,20 @@ export default function SearchBar() {
             {/* Search Operator */}
             <Select
               value={searchOperator}
-              onValueChange={(value) => setSearchOperator(value as searchParamsType["searchOperator"])}
+              onValueChange={(value) =>
+                setSearchOperator(value as searchParamsType["searchOperator"])
+              }
             >
               <SelectTrigger className="w-full h-8">
-                <SelectValue placeholder="searchOperator" className="h-6 text-sm" />
+                <SelectValue
+                  placeholder="searchOperator"
+                  className="h-6 text-sm"
+                />
               </SelectTrigger>
               <SelectContent>
                 {["contains", "starts_with", "ends_with"].map((operator) => {
                   return (
-                    <SelectItem
-                      key={operator}
-                      value={operator}
-                    >
+                    <SelectItem key={operator} value={operator}>
                       {operator}
                     </SelectItem>
                   );
@@ -149,10 +184,7 @@ export default function SearchBar() {
               <SelectContent>
                 {["createdAt", "name", "email"].map((field) => {
                   return (
-                    <SelectItem
-                      key={field}
-                      value={field}
-                    >
+                    <SelectItem key={field} value={field}>
                       {field}
                     </SelectItem>
                   );
@@ -162,18 +194,20 @@ export default function SearchBar() {
 
             <Select
               value={sortDirection}
-              onValueChange={(value) => setSortDirection(value as searchParamsType["sortDirection"])}
+              onValueChange={(value) =>
+                setSortDirection(value as searchParamsType["sortDirection"])
+              }
             >
               <SelectTrigger className="w-full h-8">
-                <SelectValue placeholder="Sort Direction" className="h-6 text-sm" />
+                <SelectValue
+                  placeholder="Sort Direction"
+                  className="h-6 text-sm"
+                />
               </SelectTrigger>
               <SelectContent>
                 {["asc", "desc"].map((direction) => {
                   return (
-                    <SelectItem
-                      key={direction}
-                      value={direction}
-                    >
+                    <SelectItem key={direction} value={direction}>
                       {direction}
                     </SelectItem>
                   );
@@ -194,7 +228,7 @@ export default function SearchBar() {
               min={1}
               max={500}
               onChange={(e) => setLimit(Number.parseInt(e.target.value))}
-              />
+            />
             <Input
               placeholder="Offset"
               className="h-8 max-w-16"
@@ -216,7 +250,6 @@ export default function SearchBar() {
         >
           Apply
         </Button>
-
       </div>
     </div>
   );

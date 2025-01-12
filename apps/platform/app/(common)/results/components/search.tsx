@@ -40,8 +40,7 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
     const params = new URLSearchParams(searchParams);
     if (key) {
       params.set(key, value);
-      if (value === "none")
-        params.delete(key)
+      if (value === "none") params.delete(key);
     } else {
       params.delete(key);
     }
@@ -54,7 +53,10 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
         <Suspense
           key={"filter_key"}
           fallback={
-            <button type="button" className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
+            <button
+              type="button"
+              className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max"
+            >
               <span className="relative text-base font-semibold text-primary dark:text-white">
                 <IoMdOptions className="w-5 h-5" />
               </span>
@@ -67,31 +69,38 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
             btnProps={{
               variant: "raw",
               size: "icon",
-              children: <span className="relative text-base font-semibold text-primary dark:text-white">
-                <IoMdOptions className="w-5 h-5" />
-              </span>,
-              className: "overflow-hidden relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max"
+              children: (
+                <span className="relative text-base font-semibold text-primary dark:text-white">
+                  <IoMdOptions className="w-5 h-5" />
+                </span>
+              ),
+              className:
+                "overflow-hidden relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max",
             }}
           >
             <div className="mb-4">
               <p className="text-sm font-semibold text-slate-600 mb-2">
                 By Branches
-                {searchParams.get("branch")?.toString() && (<Button
-                  variant={"link"}
-                  size="sm"
-                  className={
-                    "text-xs !h-8 capitalize"
-                  }
-                  onClick={() => {
-                    handleFilter("branch", "none");
-                  }}
-                >
-                  Clear all
-                </Button>)}
+                {searchParams.get("branch")?.toString() && (
+                  <Button
+                    variant={"link"}
+                    size="sm"
+                    className={"text-xs !h-8 capitalize"}
+                    onClick={() => {
+                      handleFilter("branch", "none");
+                    }}
+                  >
+                    Clear all
+                  </Button>
+                )}
               </p>
               <div className="flex flex-wrap gap-2">
                 <Button
-                  variant={searchParams.get("branch")?.toString() === "all" ? "default_light" : "slate"}
+                  variant={
+                    searchParams.get("branch")?.toString() === "all"
+                      ? "default_light"
+                      : "slate"
+                  }
                   size="sm"
                   className="text-xs !h-8 capitalize"
                   onClick={() => {
@@ -103,10 +112,13 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                 {branches.map((branch) => (
                   <Button
                     key={branch}
-                    variant={searchParams.get("branch")?.toString() === branch ? "default_light" : "slate"}
+                    variant={
+                      searchParams.get("branch")?.toString() === branch
+                        ? "default_light"
+                        : "slate"
+                    }
                     size="sm"
                     className="text-xs !h-8 capitalize"
-
                     onClick={() => {
                       handleFilter("branch", branch);
                     }}
@@ -119,26 +131,28 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
             <div className="mb-4">
               <p className="text-sm font-semibold text-slate-600 mb-2">
                 By Batch
-                {searchParams.get("batch")?.toString() && (<Button
-                  variant={"link"}
-                  size="sm"
-                  className={
-                    "text-xs !h-8 capitalize"
-                  }
-                  onClick={() => {
-                    handleFilter("batch", "none");
-                  }}
-                >
-                  Clear all
-                </Button>)}
+                {searchParams.get("batch")?.toString() && (
+                  <Button
+                    variant={"link"}
+                    size="sm"
+                    className={"text-xs !h-8 capitalize"}
+                    onClick={() => {
+                      handleFilter("batch", "none");
+                    }}
+                  >
+                    Clear all
+                  </Button>
+                )}
               </p>
               <div className="flex flex-wrap gap-2">
                 <Button
-                  variant={searchParams.get("batch")?.toString() === "all" ? "default_light" : "slate"}
-                  size="sm"
-                  className={
-                    "text-xs !h-8 capitalize"
+                  variant={
+                    searchParams.get("batch")?.toString() === "all"
+                      ? "default_light"
+                      : "slate"
                   }
+                  size="sm"
+                  className={"text-xs !h-8 capitalize"}
                   onClick={() => {
                     handleFilter("batch", "all");
                   }}
@@ -148,7 +162,11 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                 {batches.map((batch) => (
                   <Button
                     key={batch}
-                    variant={searchParams.get("batch")?.toString() === batch.toString() ? "default_light" : "slate"}
+                    variant={
+                      searchParams.get("batch")?.toString() === batch.toString()
+                        ? "default_light"
+                        : "slate"
+                    }
                     size="sm"
                     className={"text-xs !h-8 capitalize "}
                     onClick={() => {
@@ -163,26 +181,28 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
             <div className="mb-4">
               <p className="text-sm font-semibold text-slate-600 mb-2">
                 By Programme
-                {searchParams.get("programme")?.toString() && (<Button
-                  variant={"link"}
-                  size="sm"
-                  className={
-                    "text-xs !h-8 capitalize"
-                  }
-                  onClick={() => {
-                    handleFilter("programme", "none");
-                  }}
-                >
-                  Clear all
-                </Button>)}
+                {searchParams.get("programme")?.toString() && (
+                  <Button
+                    variant={"link"}
+                    size="sm"
+                    className={"text-xs !h-8 capitalize"}
+                    onClick={() => {
+                      handleFilter("programme", "none");
+                    }}
+                  >
+                    Clear all
+                  </Button>
+                )}
               </p>
               <div className="flex flex-wrap gap-2">
                 <Button
-                  variant={searchParams.get("programme")?.toString() === "all" ? "default_light" : "slate"}
-                  size="sm"
-                  className={
-                    "text-xs !h-8 capitalize"
+                  variant={
+                    searchParams.get("programme")?.toString() === "all"
+                      ? "default_light"
+                      : "slate"
                   }
+                  size="sm"
+                  className={"text-xs !h-8 capitalize"}
                   onClick={() => {
                     handleFilter("programme", "all");
                   }}
@@ -192,11 +212,13 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                 {programmes.map((programme) => (
                   <Button
                     key={programme}
-                    variant={searchParams.get("programme")?.toString() === programme ? "default_light" : "slate"}
-                    size="sm"
-                    className={
-                      "text-xs !h-8 capitalize"
+                    variant={
+                      searchParams.get("programme")?.toString() === programme
+                        ? "default_light"
+                        : "slate"
                     }
+                    size="sm"
+                    className={"text-xs !h-8 capitalize"}
                     onClick={() => {
                       handleFilter("programme", programme);
                     }}
@@ -206,7 +228,6 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                 ))}
               </div>
             </div>
-
           </ResponsiveDialog>
         </Suspense>
       </div>
@@ -229,7 +250,10 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
         />
       </Suspense>
       <div className="absolute top-0 bottom-0 right-0">
-        <button type="button" className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
+        <button
+          type="button"
+          className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
+        >
           <span className="relative text-base font-semibold text-white">
             <Search className="w-5 h-5" />
           </span>

@@ -47,4 +47,3 @@ export async function getBasicInfo() {
     return Promise.reject("Failed to fetch results");
   }
 }
-

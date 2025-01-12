@@ -37,8 +37,10 @@ export function RouterCard({
     >
       <h2 className="mtext-xl font-semibold">
         <Icon className="w-8 h-8 text-primary inline-block mr-2" />
-        {title} {disabled ? <span className="text-sm text-gray-400">(Maintenance)</span> : null}
-  
+        {title}{" "}
+        {disabled ? (
+          <span className="text-sm text-gray-400">(Maintenance)</span>
+        ) : null}
       </h2>
       <p className="max-w-[30ch] text-sm opacity-80">{description}</p>
       <p className="text-sm whitespace-nowrap font-semibold text-primary/80 transition-all group-hover:text-primary group-hover:translate-x-1 motion-reduce:transform-none">

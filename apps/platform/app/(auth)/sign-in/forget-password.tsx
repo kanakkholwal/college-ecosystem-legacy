@@ -130,7 +130,8 @@ export default function ForgotPassword() {
               <Button
                 className="mt-2 tracking-wide"
                 variant="default"
-                rounded="full" type="submit"
+                rounded="full"
+                type="submit"
                 disabled={isSubmitting}
               >
                 {isSubmitting ? "Sending..." : "Send reset link"}

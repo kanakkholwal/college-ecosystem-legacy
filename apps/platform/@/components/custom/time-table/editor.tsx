@@ -169,8 +169,10 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
               </TableCell>
               {Array.from(daysMap.entries()).map((_, dayIndex) => (
                 <TableCell
-                  key={`${index}-${// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-dayIndex}`}
+                  key={`${index}-${
+                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                    dayIndex
+                  }`}
                   className={cn(
                     "border-x text-center",
                     "focus-within:border focus-within:border-primary",
@@ -196,8 +198,10 @@ dayIndex}`}
                   ]?.events.map((event, eventIndex) => (
                     <Event
                       event={event}
-                      key={`${index}-${dayIndex}-event-${// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-eventIndex}`}
+                      key={`${index}-${dayIndex}-event-${
+                        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                        eventIndex
+                      }`}
                     />
                   ))}
                   {timetableData.schedule[dayIndex]?.timeSlots[index]?.events

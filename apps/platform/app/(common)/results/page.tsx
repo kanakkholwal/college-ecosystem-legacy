@@ -11,7 +11,6 @@ import ConditionalRender from "@/components/utils/conditional-render";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
 
-
 export const metadata: Metadata = {
   title: `Results | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
   description: "Check your results here.",
@@ -86,12 +85,20 @@ export default async function ResultPage(props: {
         </div>
       </section>
       <ErrorBoundaryWithSuspense
-        fallback={<EmptyArea Icon={BiSpreadsheet} title="Error" description="Failed to load results" />}
-        loadingFallback={<div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4">
-          {[...Array(6)].map((_, i) => {
-            return <SkeletonCard key={i.toString()} />;
-          })}
-        </div>}
+        fallback={
+          <EmptyArea
+            Icon={BiSpreadsheet}
+            title="Error"
+            description="Failed to load results"
+          />
+        }
+        loadingFallback={
+          <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4">
+            {[...Array(6)].map((_, i) => {
+              return <SkeletonCard key={i.toString()} />;
+            })}
+          </div>
+        }
       >
         <ConditionalRender condition={results.length > 0}>
           <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4">

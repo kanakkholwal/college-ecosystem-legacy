@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import NotFoundImg from "./404.svg";
 
-
 export const metadata: Metadata = {
   title: "Not Authorized | College Platform",
   description: "The page you are looking for does not exist.",

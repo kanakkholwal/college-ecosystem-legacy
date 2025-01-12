@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Check, X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { ChartBar } from 'lucide-react';
+import { ChartBar } from "lucide-react";
 
 interface Props {
   updateAttendanceRecord: (present: boolean) => Promise<string>;

@@ -35,11 +35,12 @@ export default function Form() {
           <div className="text-lg font-semibold">
             {process.env.NEXT_PUBLIC_WEBSITE_NAME} Chatbot
             <span className="text-xs text-gray-500 block">
-              Using {" "}
+              Using{" "}
               <a
                 target="_blank"
                 href="https://huggingface.co/deepset/roberta-base-squad2"
-                className="underline text-primary" rel="noreferrer"
+                className="underline text-primary"
+                rel="noreferrer"
               >
                 deepset/roberta-base-squad2
               </a>
@@ -47,7 +48,8 @@ export default function Form() {
               <a
                 target="_blank"
                 href="https://github.com/kanakkholwal/college-ecosystem/blob/main/apps/platform/public/doc/REFERENCE.md"
-                className="underline text-primary" rel="noreferrer"
+                className="underline text-primary"
+                rel="noreferrer"
               >
                 Reference
               </a>
@@ -93,7 +95,6 @@ export default function Form() {
           }}
         />
         <div className="flex items-center gap-1">
-
           <Button
             type="submit"
             size="sm"

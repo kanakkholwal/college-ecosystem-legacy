@@ -1,7 +1,7 @@
 "use server";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { and, desc, eq, like, sql } from "drizzle-orm";
-import { revalidatePath } from 'next/cache';
+import { revalidatePath } from "next/cache";
 import { db } from "~/db/connect";
 import { roomUsageHistory, rooms, users } from "~/db/schema";
 
@@ -200,7 +200,7 @@ export async function updateRoom(
       roomId,
     });
   }
-  revalidatePath("/classroom-availability","page")
+  revalidatePath("/classroom-availability", "page");
 
   return updatedRoom;
 }

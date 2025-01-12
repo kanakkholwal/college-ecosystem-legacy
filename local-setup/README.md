@@ -22,7 +22,7 @@ npm install -g turbo@latest
 node ./local-setup/setup.js
 ```
 
-## *NOTE* : Make sure to add proper Environment variables
+## _NOTE_ : Make sure to add proper Environment variables
 
 - Get Your `DATABASE_URL` from [neon.tech]("https://neon.tech/")
 - Get Your `MONGODB_URI` from [mongodb]("https://www.mongodb.com/")

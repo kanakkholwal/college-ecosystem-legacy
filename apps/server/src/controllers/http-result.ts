@@ -1,18 +1,21 @@
-import type { Request, Response } from 'express';
-import type { PipelineStage } from 'mongoose';
-import { z } from 'zod';
-import { getDepartmentCoursePrefix } from '../constants/departments';
-import { getInfoFromRollNo, scrapeResult } from '../lib/scrape';
-import ResultModel from '../models/result';
-import dbConnect from '../utils/dbConnect';
+import type { Request, Response } from "express";
+import type { PipelineStage } from "mongoose";
+import { z } from "zod";
+import { getDepartmentCoursePrefix } from "../constants/departments";
+import { getInfoFromRollNo, scrapeResult } from "../lib/scrape";
+import ResultModel from "../models/result";
+import dbConnect from "../utils/dbConnect";
 
 // Endpoint to get result by rollNo scraped from the website
-export const getResultByRollNoFromSite = async (req: Request, res: Response) => {
+export const getResultByRollNoFromSite = async (
+  req: Request,
+  res: Response
+) => {
   const rollNo = req.params.rollNo;
   const data = await scrapeResult(rollNo);
 
   res.status(200).json(data);
-}
+};
 
 export const getResult = async (req: Request, res: Response) => {
   const rollNo = req.params.rollNo;
@@ -32,7 +35,7 @@ export const getResult = async (req: Request, res: Response) => {
     message: "Result found",
     error: false,
   });
-}
+};
 
 // Endpoint to add result by rollNo from the from site to the database
 export const addResult = async (req: Request, res: Response) => {
@@ -71,7 +74,7 @@ export const addResult = async (req: Request, res: Response) => {
     error: false,
   });
   return;
-}
+};
 
 export const updateResult = async (req: Request, res: Response) => {
   const rollNo = req.params.rollNo;
@@ -112,11 +115,11 @@ export const updateResult = async (req: Request, res: Response) => {
     res.status(500).json({
       message: "An error occurred",
       error: true,
-      data: error || "Internal Server Error"
+      data: error || "Internal Server Error",
     });
     return;
   }
-}
+};
 
 export const assignRankToResults = async (req: Request, res: Response) => {
   try {
@@ -124,23 +127,39 @@ export const assignRankToResults = async (req: Request, res: Response) => {
     await dbConnect();
 
     const aggregationPipeline: PipelineStage[] = [
-      { $set: { latestSemester: { $arrayElemAt: ['$semesters', -1] } } },
-      { $sort: { 'latestSemester.cgpi': -1 } },
-      { $group: { _id: null, results: { $push: '$$ROOT' } } },
-      { $unwind: { path: '$results', includeArrayIndex: 'collegeRank' } },
-      { $set: { 'results.rank.college': { $add: ['$collegeRank', 1] } } },
-      { $group: { _id: '$results.batch', results: { $push: '$results' } } },
-      { $unwind: { path: '$results', includeArrayIndex: 'batchRank' } },
-      { $set: { 'results.rank.batch': { $add: ['$batchRank', 1] } } },
-      { $group: { _id: { batch: '$results.batch', branch: '$results.branch' }, results: { $push: '$results' } } },
-      { $unwind: { path: '$results', includeArrayIndex: 'branchRank' } },
-      { $set: { 'results.rank.branch': { $add: ['$branchRank', 1] } } },
-      { $group: { _id: { batch: '$results.batch', branch: '$results.branch' }, results: { $push: '$results' } } },
-      { $unwind: { path: '$results', includeArrayIndex: 'classRank' } },
-      { $set: { 'results.rank.class': { $add: ['$classRank', 1] } } },
-      { $replaceRoot: { newRoot: '$results' } },
-      { $unset: 'latestSemester' },
-      { $merge: { into: 'results', whenMatched: 'merge', whenNotMatched: 'discard' } },
+      { $set: { latestSemester: { $arrayElemAt: ["$semesters", -1] } } },
+      { $sort: { "latestSemester.cgpi": -1 } },
+      { $group: { _id: null, results: { $push: "$$ROOT" } } },
+      { $unwind: { path: "$results", includeArrayIndex: "collegeRank" } },
+      { $set: { "results.rank.college": { $add: ["$collegeRank", 1] } } },
+      { $group: { _id: "$results.batch", results: { $push: "$results" } } },
+      { $unwind: { path: "$results", includeArrayIndex: "batchRank" } },
+      { $set: { "results.rank.batch": { $add: ["$batchRank", 1] } } },
+      {
+        $group: {
+          _id: { batch: "$results.batch", branch: "$results.branch" },
+          results: { $push: "$results" },
+        },
+      },
+      { $unwind: { path: "$results", includeArrayIndex: "branchRank" } },
+      { $set: { "results.rank.branch": { $add: ["$branchRank", 1] } } },
+      {
+        $group: {
+          _id: { batch: "$results.batch", branch: "$results.branch" },
+          results: { $push: "$results" },
+        },
+      },
+      { $unwind: { path: "$results", includeArrayIndex: "classRank" } },
+      { $set: { "results.rank.class": { $add: ["$classRank", 1] } } },
+      { $replaceRoot: { newRoot: "$results" } },
+      { $unset: "latestSemester" },
+      {
+        $merge: {
+          into: "results",
+          whenMatched: "merge",
+          whenNotMatched: "discard",
+        },
+      },
     ];
 
     const resultsWithRanks = await ResultModel.aggregate(aggregationPipeline);
@@ -154,7 +173,7 @@ export const assignRankToResults = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       error: false,
-      message: 'Ranks assigned successfully.',
+      message: "Ranks assigned successfully.",
       data: {
         timeTaken: `${(new Date().getTime() - time.getTime()) / 1000}s`,
         lastUpdated: new Date().toISOString(),
@@ -164,13 +183,16 @@ export const assignRankToResults = async (req: Request, res: Response) => {
     console.error(error);
     return res.status(500).json({
       error: true,
-      message: 'An error occurred',
-      data: error || 'Internal Server Error',
+      message: "An error occurred",
+      data: error || "Internal Server Error",
     });
   }
 };
 
-export const assignBranchChangeToResults = async (req: Request, res: Response) => {
+export const assignBranchChangeToResults = async (
+  req: Request,
+  res: Response
+) => {
   try {
     const startTime = new Date();
     await dbConnect();
@@ -216,17 +238,33 @@ export const assignBranchChangeToResults = async (req: Request, res: Response) =
 
     // Prepare bulk operations
     const bulkOperations = results.map((result) => {
-      const courseCount: { [key: string]: number } = result.uniquePrefixes.reduce((acc: { [key: string]: number }, prefix: string) => {
-        acc[prefix] = (acc[prefix] || 0) + result.uniquePrefixes.filter((p: string) => p === prefix).length;
-        return acc;
-      }, {});
+      const courseCount: { [key: string]: number } =
+        result.uniquePrefixes.reduce(
+          (acc: { [key: string]: number }, prefix: string) => {
+            acc[prefix] =
+              (acc[prefix] || 0) +
+              result.uniquePrefixes.filter((p: string) => p === prefix).length;
+            return acc;
+          },
+          {}
+        );
 
-      const maxCourses = Math.max(...Object.values(courseCount) as number[]);
-      const maxPrefix = Object.keys(courseCount).find((prefix) => courseCount[prefix] === maxCourses);
+      const maxCourses = Math.max(...(Object.values(courseCount) as number[]));
+      const maxPrefix = Object.keys(courseCount).find(
+        (prefix) => courseCount[prefix] === maxCourses
+      );
       const department = getDepartmentCoursePrefix(maxPrefix || "");
 
-      const updates = { gender: result.gender !== "not_specified" ? result.gender : "not_specified", branch: result.branch };
-      if (department && department !== "other" && department !== result.branch) {
+      const updates = {
+        gender:
+          result.gender !== "not_specified" ? result.gender : "not_specified",
+        branch: result.branch,
+      };
+      if (
+        department &&
+        department !== "other" &&
+        department !== result.branch
+      ) {
         updates.branch = department;
         console.log(`Branch change detected for ${result.rollNo}`);
       }
@@ -244,7 +282,7 @@ export const assignBranchChangeToResults = async (req: Request, res: Response) =
       await ResultModel.bulkWrite(bulkOperations);
     }
     await ResultModel.aggregate([
-      { $unset: 'latestSemester' },
+      { $unset: "latestSemester" },
       // { $merge: { into: 'results', whenMatched: 'merge', whenNotMatched: 'discard' } }
     ]);
 
@@ -260,17 +298,19 @@ export const assignBranchChangeToResults = async (req: Request, res: Response) =
     console.error(error);
     return res.status(500).json({
       error: true,
-      message: 'An error occurred',
-      data: error || 'Internal Server Error',
+      message: "An error occurred",
+      data: error || "Internal Server Error",
     });
   }
 };
 
-const freshersDataSchema = z.array(z.object({
-  name: z.string(),
-  rollNo: z.string(),
-  gender: z.enum(["male", "female", "not_specified"]),
-}))
+const freshersDataSchema = z.array(
+  z.object({
+    name: z.string(),
+    rollNo: z.string(),
+    gender: z.enum(["male", "female", "not_specified"]),
+  })
+);
 
 export const importFreshers = async (req: Request, res: Response) => {
   try {
@@ -283,7 +323,7 @@ export const importFreshers = async (req: Request, res: Response) => {
     if (!parsedData.success) {
       return res.status(400).json({
         error: true,
-        message: 'Invalid data',
+        message: "Invalid data",
         data: parsedData.error.errors,
       });
     }
@@ -307,7 +347,7 @@ export const importFreshers = async (req: Request, res: Response) => {
 
     return res.status(200).json({
       error: false,
-      message: 'Freshers imported successfully.',
+      message: "Freshers imported successfully.",
       data: {
         timeTaken: `${(new Date().getTime() - time.getTime()) / 1000}s`,
         lastUpdated: new Date().toISOString(),
@@ -318,8 +358,8 @@ export const importFreshers = async (req: Request, res: Response) => {
     console.error(error);
     return res.status(500).json({
       error: true,
-      message: 'An error occurred',
-      data: error || 'Internal Server Error',
+      message: "An error occurred",
+      data: error || "Internal Server Error",
     });
   }
 };

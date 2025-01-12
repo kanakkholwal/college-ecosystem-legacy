@@ -4,16 +4,11 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import type { Session } from "~/lib/auth-client";
 
-
 interface NavbarProps {
   user: Session["user"];
 }
 
-
-export default function Navbar({
-  user
-}: NavbarProps) {
-
+export default function Navbar({ user }: NavbarProps) {
   return (
     <div
       className={cn(
@@ -40,5 +35,3 @@ export default function Navbar({
     </div>
   );
 }
-
-

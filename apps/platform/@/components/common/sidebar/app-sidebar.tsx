@@ -12,7 +12,7 @@ import {
   SidebarHeader,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import { Users } from 'lucide-react';
+import { Users } from "lucide-react";
 import { BiSpreadsheet } from "react-icons/bi";
 import { GrSchedules } from "react-icons/gr";
 import { LuBookA, LuBuilding, LuSchool } from "react-icons/lu";
@@ -33,7 +33,10 @@ export type rawLinkType = {
   items?: {
     title: string;
     path: string;
-    allowed_roles: Session["user"]["role"] | Session["user"]["other_roles"] | "*";
+    allowed_roles:
+      | Session["user"]["role"]
+      | Session["user"]["other_roles"]
+      | "*";
   }[];
 };
 
@@ -96,7 +99,13 @@ const all_links: rawLinkType[] = [
     title: "Courses",
     icon: LuBookA,
     path: "/courses",
-    allowed_roles: [ROLES.STUDENT,ROLES.CR,ROLES.FACULTY,ROLES.HOD,ROLES.ADMIN],
+    allowed_roles: [
+      ROLES.STUDENT,
+      ROLES.CR,
+      ROLES.FACULTY,
+      ROLES.HOD,
+      ROLES.ADMIN,
+    ],
   },
   {
     title: "Schedules",
@@ -127,19 +136,29 @@ const all_links: rawLinkType[] = [
     title: "Hostels",
     icon: LuBuilding,
     path: "/hostels",
-    allowed_roles: [ROLES.CHIEF_WARDEN,ROLES.ADMIN],
-    items: []
+    allowed_roles: [ROLES.CHIEF_WARDEN, ROLES.ADMIN],
+    items: [],
   },
   {
     title: "Hosteler Students",
     icon: PiStudentFill,
     path: "/hostel/students",
-    allowed_roles: [ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA,ROLES.ADMIN],
+    allowed_roles: [
+      ROLES.WARDEN,
+      ROLES.ASSISTANT_WARDEN,
+      ROLES.MMCA,
+      ROLES.ADMIN,
+    ],
     items: [
       {
         title: "Add Hostelers Student",
         path: "/add",
-        allowed_roles: [ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA,ROLES.ADMIN],
+        allowed_roles: [
+          ROLES.WARDEN,
+          ROLES.ASSISTANT_WARDEN,
+          ROLES.MMCA,
+          ROLES.ADMIN,
+        ],
       },
     ],
   },
@@ -147,15 +166,24 @@ const all_links: rawLinkType[] = [
 
 const getSideNavLinks = (role: string) => {
   return all_links
-    .filter((link) => link.allowed_roles.includes(role) || link.allowed_roles.includes("*"))
+    .filter(
+      (link) =>
+        link.allowed_roles.includes(role) || link.allowed_roles.includes("*")
+    )
     .map((link) => ({
       title: link.title,
       icon: link.icon,
       href: `/${role}${link.path}`,
-      items: link?.items?.filter((link) => link.allowed_roles.includes(role) || link.allowed_roles.includes("*"))?.map((item) => ({
-        title: item.title,
-        href: `/${role}${link.path}${item.path}`,
-      })),
+      items: link?.items
+        ?.filter(
+          (link) =>
+            link.allowed_roles.includes(role) ||
+            link.allowed_roles.includes("*")
+        )
+        ?.map((item) => ({
+          title: item.title,
+          href: `/${role}${link.path}${item.path}`,
+        })),
     }));
 };
 

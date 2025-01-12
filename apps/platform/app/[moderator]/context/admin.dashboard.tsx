@@ -10,7 +10,7 @@ import {
   getUsersByDepartment,
   getUsersByGender,
   getUsersByRole,
-  users_CountAndGrowth
+  users_CountAndGrowth,
 } from "~/actions/dashboard.admin";
 
 export default async function AdminDashboard() {
@@ -34,34 +34,39 @@ export default async function AdminDashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {/* Total Users Card */}
 
-
-            <StatsCard title="Total Users" Icon={<svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              className="h-4 w-4 text-muted-foreground"
+            <StatsCard
+              title="Total Users"
+              Icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  className="h-4 w-4 text-muted-foreground"
+                >
+                  <title>Users</title>
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              }
             >
-              <title>Users</title>
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>}>
               <h4 className="text-3xl font-bold text-primary">
                 {totalUsers}
                 {/* <span className="text-sm text-muted-foreground">/{userTrend * growth}</span> */}
               </h4>
               <p className="text-xs text-muted-foreground">
                 <span
-                  className={`${userTrend === 1
-                    ? "text-green-500"
-                    : userTrend === -1
-                      ? "text-red-500"
-                      : "text-primary/80"
-                    } text-base`}
+                  className={`${
+                    userTrend === 1
+                      ? "text-green-500"
+                      : userTrend === -1
+                        ? "text-red-500"
+                        : "text-primary/80"
+                  } text-base`}
                 >
                   {userTrend === 1 ? (
                     <TrendingUp className="inline-block mr-2 size-4" />
@@ -77,13 +82,23 @@ export default async function AdminDashboard() {
             </StatsCard>
 
             {/* Active Sessions Card */}
-            <StatsCard title="Active Sessions" Icon={<CircleDashed className="inline-block mr-2 size-4" />}>
-              <h4 className="text-3xl font-bold text-primary">{activeSessions}</h4>
-              <p className="text-xs text-muted-foreground">Currently active sessions</p>
+            <StatsCard
+              title="Active Sessions"
+              Icon={<CircleDashed className="inline-block mr-2 size-4" />}
+            >
+              <h4 className="text-3xl font-bold text-primary">
+                {activeSessions}
+              </h4>
+              <p className="text-xs text-muted-foreground">
+                Currently active sessions
+              </p>
             </StatsCard>
 
             {/* Users by Gender Card */}
-            <StatsCard title="Users by Gender" Icon={<CircleDashed className="inline-block mr-2 size-4" />}>
+            <StatsCard
+              title="Users by Gender"
+              Icon={<CircleDashed className="inline-block mr-2 size-4" />}
+            >
               <ul className="text-sm text-muted-foreground">
                 {usersByGender.map(({ gender, count }) => (
                   <li key={gender}>
@@ -94,7 +109,10 @@ export default async function AdminDashboard() {
             </StatsCard>
 
             {/* Users by Role Card */}
-            <StatsCard title="Users by Role" Icon={<CircleDashed className="inline-block mr-2 size-4" />}>
+            <StatsCard
+              title="Users by Role"
+              Icon={<CircleDashed className="inline-block mr-2 size-4" />}
+            >
               <ul className="text-sm text-muted-foreground">
                 {usersByRole.map(({ role, count }) => (
                   <li key={role}>
@@ -105,7 +123,10 @@ export default async function AdminDashboard() {
             </StatsCard>
 
             {/* Users by Department Card */}
-            <StatsCard title="Users by Department" Icon={<CircleDashed className="inline-block mr-2 size-4" />}>
+            <StatsCard
+              title="Users by Department"
+              Icon={<CircleDashed className="inline-block mr-2 size-4" />}
+            >
               <ul className="text-sm text-muted-foreground">
                 {usersByDepartment.map(({ department, count }) => (
                   <li key={department}>
@@ -115,22 +136,31 @@ export default async function AdminDashboard() {
               </ul>
             </StatsCard>
             {/* Account Creation Trends */}
-
           </div>
         </div>
 
         {/* Messages Section */}
         <div className="@4xl:w-1/3 p-3">
           <Heading level={4}>Actions</Heading>
-          <Separator className="mb-4"/>
+          <Separator className="mb-4" />
           <div className="w-full grid grid-cols-1 gap-3 divide-y divide-gray-200">
             <ActionBar
               title="Clear Cache"
-              description={<p  className="text-xs font-medium text-gray-600">Flush the cache to clear all cached data.</p>}
-              btnProps={{ variant: "link", size: "sm", children: "Flush Cache",effect:"underline" }}
-              action={flushCache} />
+              description={
+                <p className="text-xs font-medium text-gray-600">
+                  Flush the cache to clear all cached data.
+                </p>
+              }
+              btnProps={{
+                variant: "link",
+                size: "sm",
+                children: "Flush Cache",
+                effect: "underline",
+              }}
+              action={flushCache}
+            />
           </div>
-          <Separator className="mt-2 mb-4"/>
+          <Separator className="mt-2 mb-4" />
 
           <Heading level={4}>Messages</Heading>
           <div className="bg-white dark:bg-slate-800 px-4 py-10 rounded-lg text-center w-full">

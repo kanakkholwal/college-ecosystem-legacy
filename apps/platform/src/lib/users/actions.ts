@@ -17,9 +17,8 @@ export async function updateUser(userId: string) {
     };
   }
 }
-export async function getUser(userId: string){
+export async function getUser(userId: string) {
   try {
-    
     return Promise.resolve(JSON.parse(JSON.stringify({})));
   } catch (error) {
     console.log(error);

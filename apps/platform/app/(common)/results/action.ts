@@ -63,7 +63,7 @@ export async function getResults(
 
     const results = await ResultModel.find({
       ...filterQuery,
-      $expr: { $gt: [{ $size: "$semesters" }, 0] } // Add the condition here
+      $expr: { $gt: [{ $size: "$semesters" }, 0] }, // Add the condition here
     })
       .sort({ "rank.college": "asc" })
       .skip(skip)

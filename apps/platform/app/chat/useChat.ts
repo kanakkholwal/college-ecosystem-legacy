@@ -1,7 +1,7 @@
 import { nanoid } from "nanoid";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import type{ Message } from "./types";
+import type { Message } from "./types";
 
 interface ChatMessage extends Message {}
 
@@ -25,8 +25,6 @@ export function useChat(): UseChatResult {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const abortControllerRef = useRef<AbortController | null>(null);
-  
-
 
   const handleInputChange = useCallback(
     (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -87,7 +85,7 @@ export function useChat(): UseChatResult {
           return prev;
         });
         scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
       } catch (err: any) {
         if (err.name === "AbortError") {
           setError("Request was cancelled");
@@ -102,8 +100,6 @@ export function useChat(): UseChatResult {
     },
     [input, isLoading]
   );
-
-
 
   return {
     messages,

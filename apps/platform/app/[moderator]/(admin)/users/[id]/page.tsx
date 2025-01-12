@@ -21,27 +21,25 @@ export default async function UpdateUserPage({ params }: PageProps) {
       <TabsTransitionPanel
         items={[
           {
-            title: 'User Details',
-            subtitle: 'View user sessions',
+            title: "User Details",
+            subtitle: "View user sessions",
             content: <UserDisplay currentUser={user} />,
-            id: "1"
+            id: "1",
           },
           {
-            title: 'User Sessions',
-            subtitle: 'Update user information',
-            content: <UserSessions  currentUser={user}/>,
-            id: "2"
+            title: "User Sessions",
+            subtitle: "Update user information",
+            content: <UserSessions currentUser={user} />,
+            id: "2",
           },
           {
-            title: 'Update User',
-            subtitle: 'Update user information',
+            title: "Update User",
+            subtitle: "Update user information",
             content: <UserUpdate currentUser={user} />,
-            id: "3"
-          }
+            id: "3",
+          },
         ]}
-
       />
-
     </div>
   );
 }

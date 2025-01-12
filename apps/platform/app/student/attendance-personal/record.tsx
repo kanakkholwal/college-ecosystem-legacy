@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/chart";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { cn } from "@/lib/utils";
-import { ChartBar } from 'lucide-react';
+import { ChartBar } from "lucide-react";
 import type { ViewBox } from "recharts/types/util/types";
 import { updateAttendanceRecord } from "~/actions/record.personal";
 import type { PersonalAttendanceWithRecords } from "~/db/schema/attendance_record";
@@ -46,19 +46,26 @@ export default function AttendanceRecord({
   const absentClasses = totalClasses - presentClasses;
 
   const chartData = [
-    { name: "Attended", value: presentClasses, fill: chartConfig.attended.color },
+    {
+      name: "Attended",
+      value: presentClasses,
+      fill: chartConfig.attended.color,
+    },
     { name: "Absent", value: absentClasses, fill: chartConfig.absent.color },
   ];
 
-  const attendancePercentage = totalClasses > 0 ? calculateAttendancePercentage(record).toFixed(2) : "0.00"
+  const attendancePercentage =
+    totalClasses > 0
+      ? calculateAttendancePercentage(record).toFixed(2)
+      : "0.00";
   const attendanceStatus = getAttendanceStatus(record);
-
-
-
 
   return (
     <div
-      className={cn("flex flex-wrap p-4 gap-4 rounded-lg border hover:border/30 transition-shadow shadow-sm", className)}
+      className={cn(
+        "flex flex-wrap p-4 gap-4 rounded-lg border hover:border/30 transition-shadow shadow-sm",
+        className
+      )}
       style={style}
     >
       {/* Header */}
@@ -73,11 +80,15 @@ export default function AttendanceRecord({
         {/* Status */}
         <div className="text-sm">
           <p className="font-medium">
-            Attendance: {presentClasses}/{totalClasses} ({attendancePercentage}%)
+            Attendance: {presentClasses}/{totalClasses} ({attendancePercentage}
+            %)
           </p>
           <p className="text-sm text-gray-700">{attendanceStatus}</p>
           <UpdateAttendanceRecord
-            updateAttendanceRecord={updateAttendanceRecord.bind(null, record.id)}
+            updateAttendanceRecord={updateAttendanceRecord.bind(
+              null,
+              record.id
+            )}
           >
             <ResponsiveDialog
               title={`Attendance Analytics for ${record.subjectName}`}
@@ -85,7 +96,7 @@ export default function AttendanceRecord({
               btnProps={{
                 variant: "default_light",
                 size: "icon_sm",
-                children: <ChartBar />
+                children: <ChartBar />,
               }}
             >
               <div className="grid grid-cols-1 @xs/dialog:grid-cols-2 gap-4">
@@ -102,23 +113,27 @@ export default function AttendanceRecord({
                   <p className="text-xl font-semibold">{absentClasses}</p>
                 </div>
                 <div className="p-4 border rounded-md shadow">
-                  <h5 className="text-sm font-medium whitespace-nowrap">Attendance</h5>
-                  <p className={cn(
-                    "text-xl font-semibold",
-                    Number(attendancePercentage) < 75 ? Number(attendancePercentage) < 50 ? "text-red-500" : "text-yellow-500"
-                      : "text-green-500"
-                  )}>
+                  <h5 className="text-sm font-medium whitespace-nowrap">
+                    Attendance
+                  </h5>
+                  <p
+                    className={cn(
+                      "text-xl font-semibold",
+                      Number(attendancePercentage) < 75
+                        ? Number(attendancePercentage) < 50
+                          ? "text-red-500"
+                          : "text-yellow-500"
+                        : "text-green-500"
+                    )}
+                  >
                     {attendancePercentage}%
-
                   </p>
                 </div>
               </div>
             </ResponsiveDialog>
           </UpdateAttendanceRecord>
-
         </div>
       </div>
-
 
       {/* Action */}
       <div className="flex justify-center flex-1">
@@ -139,7 +154,9 @@ export default function AttendanceRecord({
               >
                 <Label
                   position="center"
-                  content={({ viewBox }) => viewBox && renderPieLabel(viewBox, totalClasses)}
+                  content={({ viewBox }) =>
+                    viewBox && renderPieLabel(viewBox, totalClasses)
+                  }
                 />
               </Pie>
             </PieChart>
@@ -154,12 +171,13 @@ export default function AttendanceRecord({
           </div>
         )}
       </div>
-
     </div>
   );
 }
 
-function calculateAttendancePercentage(record: PersonalAttendanceWithRecords): number {
+function calculateAttendancePercentage(
+  record: PersonalAttendanceWithRecords
+): number {
   const totalClasses = record.records.length;
   if (totalClasses === 0) return 0;
 
@@ -186,7 +204,10 @@ function getAttendanceStatus(record: PersonalAttendanceWithRecords): string {
   return `Attend the next ${neededClasses} classes to get back on track.`;
 }
 
-function renderPieLabel(viewBox: ViewBox, totalClasses: number): React.ReactNode {
+function renderPieLabel(
+  viewBox: ViewBox,
+  totalClasses: number
+): React.ReactNode {
   const { cx, cy } = viewBox as { cx: number; cy: number };
   if (!cx || !cy) return null;
   return (

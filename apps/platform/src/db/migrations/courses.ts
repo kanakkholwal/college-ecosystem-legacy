@@ -16,8 +16,7 @@ export async function mongoToPgDatabase(
     await dbConnect(ENV);
 
     // Fetch courses from MongoDB
-    const coursesFromMongo = await mongoose.model("Course")
-          .find().lean();
+    const coursesFromMongo = await mongoose.model("Course").find().lean();
 
     // Start a transaction
     await db.transaction(async (trx) => {

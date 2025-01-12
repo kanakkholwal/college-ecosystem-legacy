@@ -1,19 +1,13 @@
-
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuGithub } from "react-icons/lu";
 import { RiTwitterXFill } from "react-icons/ri";
 
-import {
-  AudioLines,
-  Bot,
-  CalendarRange
-} from "lucide-react";
+import { AudioLines, Bot, CalendarRange } from "lucide-react";
 import { BiSpreadsheet } from "react-icons/bi";
 import { GrAnnounce, GrSchedules } from "react-icons/gr";
 import { LuBookA, LuSchool } from "react-icons/lu";
 import { MdOutlinePoll } from "react-icons/md";
-
 
 export const quick_links = [
   {
@@ -75,25 +69,25 @@ export const quick_links = [
   },
 ];
 interface SocialLink {
-    href: string;
-    icon: React.ElementType;
+  href: string;
+  icon: React.ElementType;
 }
 
 export const socials: SocialLink[] = [
-    {
-        href: "https://x.com/kanakkholwal",
-        icon: RiTwitterXFill,
-    },
-    {
-        href: "https://linkedin.com/in/kanak-kholwal",
-        icon: FiLinkedin,
-    },
-    {
-        href: "https://github.com/kanakkholwal",
-        icon: LuGithub,
-    },
-    {
-        href: "https://instagram.com/kanakkholwal",
-        icon: BsInstagram,
-    },
+  {
+    href: "https://x.com/kanakkholwal",
+    icon: RiTwitterXFill,
+  },
+  {
+    href: "https://linkedin.com/in/kanak-kholwal",
+    icon: FiLinkedin,
+  },
+  {
+    href: "https://github.com/kanakkholwal",
+    icon: LuGithub,
+  },
+  {
+    href: "https://instagram.com/kanakkholwal",
+    icon: BsInstagram,
+  },
 ];

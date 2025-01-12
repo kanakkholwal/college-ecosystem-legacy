@@ -15,22 +15,18 @@ import {
 } from "@/components/ui/popover";
 import type { Matcher } from "react-day-picker";
 
-
 const DatePickerFormSchema = z.date({
   required_error: "A date and time is required.",
-})
-type DatePickerType = z.infer<typeof DatePickerFormSchema>
+});
+type DatePickerType = z.infer<typeof DatePickerFormSchema>;
 
 interface DateTimePickerTypeProps {
-    disabled?: Matcher | Matcher[] | undefined
-    value: DatePickerType;
-    onChange: (value: DatePickerType) => void;
+  disabled?: Matcher | Matcher[] | undefined;
+  value: DatePickerType;
+  onChange: (value: DatePickerType) => void;
 }
 
-export function DatePicker(field : DateTimePickerTypeProps) {
-
-
-
+export function DatePicker(field: DateTimePickerTypeProps) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -41,11 +37,7 @@ export function DatePicker(field : DateTimePickerTypeProps) {
             !field.value && "text-muted-foreground"
           )}
         >
-          {field.value ? (
-            format(field.value, "PPP")
-          ) : (
-            <span>Pick a date</span>
-          )}
+          {field.value ? format(field.value, "PPP") : <span>Pick a date</span>}
           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -60,6 +52,5 @@ export function DatePicker(field : DateTimePickerTypeProps) {
         />
       </PopoverContent>
     </Popover>
-
   );
 }

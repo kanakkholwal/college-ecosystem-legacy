@@ -1,10 +1,10 @@
 import { ResetPasswordEmail } from "./reset-password";
-import { WelcomeVerifyEmail } from "./welcome-verify"
+import { WelcomeVerifyEmail } from "./welcome-verify";
 import EmailWrapper from "./wrapper";
 
 const email_templates = new Map([
   ["reset-password", ResetPasswordEmail],
-  ["welcome_verify", WelcomeVerifyEmail]
+  ["welcome_verify", WelcomeVerifyEmail],
 ]);
 
 export function getEmailTemplate({

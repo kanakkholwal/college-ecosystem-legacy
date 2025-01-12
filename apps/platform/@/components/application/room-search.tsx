@@ -42,7 +42,7 @@ export default function SearchBox() {
     } else {
       params.delete(value);
     }
-    if(value === "all") {
+    if (value === "all") {
       params.delete(key);
     }
     replace(`${pathname}?${params.toString()}`);
