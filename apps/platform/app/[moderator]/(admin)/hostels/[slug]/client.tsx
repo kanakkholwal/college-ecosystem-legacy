@@ -108,7 +108,7 @@ export function UpdateHostelForm() {
 }
 
 const updateHostelStudentSchema = z.object({
-  students: z.string().email(),
+  students: z.array(z.string().email()),
   rollNo: z.boolean(),
 });
 // ends with @nith.ac.in
@@ -162,11 +162,7 @@ export function UpdateStudentsForm() {
                       // split by comma and line break  and remove spaces
                       const emails = e.target.value
                         .split(/,|\n/)
-                        .map((email) => {
-                          // if(isValidRollNumber(email))
-                          //     return email.concat("@nith.ac.in")
-                          return email.trim();
-                        })
+                        .map((email) => isValidRollNumber(email) ? email.concat("@nith.ac.in") : email)
                         .filter(
                           (email) => emailSchema.safeParse(email).success
                         );

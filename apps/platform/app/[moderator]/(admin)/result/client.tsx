@@ -18,7 +18,7 @@ export function AssignRankCard() {
           size="sm"
           onClick={() => {
             console.log("Assign Rank");
-            toast.promise(serverApis.results.assignRanks(), {
+            toast.promise(serverApis.results.assignRank(), {
               loading: "Assigning Rank...",
               success: "Rank Assigned",
               error: "Failed to assign rank",
