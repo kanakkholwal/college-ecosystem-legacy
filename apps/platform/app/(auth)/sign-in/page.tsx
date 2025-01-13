@@ -25,7 +25,7 @@ interface Props {
 }
 
 export default async function SignInPage({ searchParams }: Props) {
-  const session = await auth.api.getSession({
+  const data = await auth.api.getSession({
     headers: await headers(),
   });
   // if (session) return redirect("/");
@@ -47,7 +47,7 @@ export default async function SignInPage({ searchParams }: Props) {
             <CardHeader>
               <TabsList className="flex justify-around space-x-4 flex-wrap">
                 {TABS.map((tab) => {
-                  if (session?.user && (tab === "sign-up" || tab === "sign-in"))
+                  if (data?.session?.expiresAt && new Date(data.session.expiresAt) < new Date() && (tab === "sign-up" || tab === "sign-in"))
                     return null;
 
                   return (

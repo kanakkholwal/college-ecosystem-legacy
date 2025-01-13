@@ -70,9 +70,9 @@ export interface IHostelStudentType extends Document {
   email: string;
   gender: "male" | "female";
   position: string;
-  hostel: string;
+  hostelId: string | null;
   roomNumber: string;
-  phoneNumber?: string;
+  phoneNumber?: string | null;
   banned: boolean;
   bannedTill?: Date;
   bannedReason?: string;
@@ -86,12 +86,13 @@ const HostelStudentSchema = new Schema(
   {
     rollNumber: { type: String, required: true, unique: true },
     name: { type: String, required: true },
-    email: { type: String, required: true },
+    email: { type: String, required: true , unique: true},
     gender: { type: String, required: true, enum: ["male", "female"] },
     position: { type: String, default: "none" },
-    hostel: { type: Schema.Types.ObjectId, ref: "Hostel", default: null },
+    userId: { type: String, default: null },
+    hostelId: { type: Schema.Types.ObjectId, ref: "Hostel", default: null },
     roomNumber: { type: String, required: true },
-    phoneNumber: { type: String },
+    phoneNumber: { type: String, default: null , unique: true},
     banned: { type: Boolean, default: false },
     bannedTill: { type: Date },
     bannedReason: { type: String },

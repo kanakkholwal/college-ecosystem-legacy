@@ -2,8 +2,10 @@ import { ActionBar } from "@/components/application/action-bar";
 import { StatsCard } from "@/components/application/stats-card";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/typography";
-import { CircleDashed, TrendingDown, TrendingUp } from "lucide-react";
+import { CircleDashed, Eye, TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
+import { FaGenderless } from "react-icons/fa";
+import { TbUsersGroup } from "react-icons/tb";
 import {
   flushCache,
   getActiveSessions,
@@ -16,7 +18,6 @@ import {
 export default async function AdminDashboard() {
   const {
     total: totalUsers,
-    count: userCount,
     growthPercent: userGrowth,
     growth,
     trend: userTrend,
@@ -56,17 +57,16 @@ export default async function AdminDashboard() {
             >
               <h4 className="text-3xl font-bold text-primary">
                 {totalUsers}
-                {/* <span className="text-sm text-muted-foreground">/{userTrend * growth}</span> */}
+                <span className="text-sm text-muted-foreground">/{userTrend * growth}</span>
               </h4>
               <p className="text-xs text-muted-foreground">
                 <span
-                  className={`${
-                    userTrend === 1
+                  className={`${userTrend === 1
                       ? "text-green-500"
                       : userTrend === -1
                         ? "text-red-500"
                         : "text-primary/80"
-                  } text-base`}
+                    } text-base`}
                 >
                   {userTrend === 1 ? (
                     <TrendingUp className="inline-block mr-2 size-4" />
@@ -84,7 +84,7 @@ export default async function AdminDashboard() {
             {/* Active Sessions Card */}
             <StatsCard
               title="Active Sessions"
-              Icon={<CircleDashed className="inline-block mr-2 size-4" />}
+              Icon={<TbUsersGroup className="inline-block mr-2 size-4" />}
             >
               <h4 className="text-3xl font-bold text-primary">
                 {activeSessions}
@@ -93,11 +93,30 @@ export default async function AdminDashboard() {
                 Currently active sessions
               </p>
             </StatsCard>
+            {/* Total Visitors Card */}
+            <StatsCard
+              title="Total Visitors"
+              Icon={<Eye  className="inline-block mr-2 size-4" />}
+            >
+              <p className="text-3xl mt-auto">
+                <img
+                  height={20}
+                  width={80}
+                  src="https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
+                  alt="Visitor counter"
+                  className="inline-block font-inherit h-4"
+                  loading="lazy"
+                />
+              </p>
+              <p className="text-xs text-muted-foreground">
+                Total visitors to the portal
+              </p>
+            </StatsCard>
 
             {/* Users by Gender Card */}
             <StatsCard
               title="Users by Gender"
-              Icon={<CircleDashed className="inline-block mr-2 size-4" />}
+              Icon={<FaGenderless className="inline-block mr-2 size-4" />}
             >
               <ul className="text-sm text-muted-foreground">
                 {usersByGender.map(({ gender, count }) => (

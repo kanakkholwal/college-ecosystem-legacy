@@ -1,4 +1,5 @@
 "use client";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,6 +16,7 @@ import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import * as z from "zod";
+import { updateHostel } from "~/actions/hostel_n_outpass";
 import { isValidRollNumber } from "~/constants/departments";
 import { updateHostelSchema } from "~/constants/hostel_n_outpass";
 
@@ -109,7 +111,8 @@ export function UpdateHostelForm() {
 
 const updateHostelStudentSchema = z.object({
   students: z.array(z.string().email()),
-  rollNo: z.boolean(),
+  rollNo: z.boolean().optional(),
+  search:z.string().optional(),
 });
 // ends with @nith.ac.in
 const emailSchema = z
@@ -119,11 +122,12 @@ const emailSchema = z
     message: "Email should end with @nith.ac.in",
   });
 
-export function UpdateStudentsForm() {
+export function UpdateStudentsForm({ slug }: { slug: string }) {
   const form = useForm<z.infer<typeof updateHostelStudentSchema>>({
     resolver: zodResolver(updateHostelStudentSchema),
     defaultValues: {
       students: [],
+      search:""
     },
   });
 
@@ -131,7 +135,23 @@ export function UpdateStudentsForm() {
     data: z.infer<typeof updateHostelStudentSchema>
   ) => {
     try {
-      console.log(data);
+      console.log("data",data);
+      toast.promise(updateHostel(slug, {
+        students: data.students,
+      }), {
+        loading: "Updating Students",
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        success: (data: any) =>{
+          console.log(data)
+          return "Students updated successfully"
+        },
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          error: (err: any) =>{
+          console.log(err)
+
+          return "Failed to update students"
+        }
+      })
 
       toast.success("Hostel created successfully");
     } catch (error) {
@@ -150,7 +170,10 @@ export function UpdateStudentsForm() {
             name="students"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Students Email</FormLabel>
+                <FormLabel>
+                  Students Email
+                  ({form.watch("students").length} students added)
+                </FormLabel>
                 <FormControl>
                   <Input
                     placeholder="Students Email"
@@ -161,12 +184,32 @@ export function UpdateStudentsForm() {
                     onChange={(e) => {
                       // split by comma and line break  and remove spaces
                       const emails = e.target.value
-                        .split(/,|\n/)
-                        .map((email) => isValidRollNumber(email) ? email.concat("@nith.ac.in") : email)
-                        .filter(
-                          (email) => emailSchema.safeParse(email).success
-                        );
+                        .split(/,|\n/) // Split by commas or newlines
+                        .map((entry) => {
+                          // Extract email if present in the entry
+                          const emailMatch = entry.match(/<([^>]+)>/); // Match the email within angle brackets
+                          if (emailMatch) {
+                            return emailMatch[1].toLowerCase().trim();
+                          }
+                          // Handle roll number pattern
+                          return isValidRollNumber(entry) ?
+                            entry.concat("@nith.ac.in").toLowerCase().trim() : entry.toLowerCase().trim()
+                        })
+                        .filter((email) => emailSchema.safeParse(email).success); // Validate emails
+                      console.log(emails, e.target.value
+                        .split(/,|\n/) // Split by commas or newlines
+                        .map((entry) => {
+                          // Extract email if present in the entry
+                          const emailMatch = entry.match(/<([^>]+)>/); // Match the email within angle brackets
+                          if (emailMatch) {
+                            return emailMatch[1].toLowerCase().trim()
+                          }
+                          // Handle roll number pattern
+                          return isValidRollNumber(entry) ?
+                            entry.concat("@nith.ac.in").toLowerCase().trim() : entry.toLowerCase().trim()
+                        }));
                       form.setValue("students", emails);
+
                     }}
                     disabled={form.formState.isSubmitting}
                   />
@@ -176,20 +219,20 @@ export function UpdateStudentsForm() {
               </FormItem>
             )}
           />
-          <div className="flex items-center justify-start gap-3 w-full">
-            {form.watch("students").map((student, index) => {
-              const studentError = emailSchema.safeParse(student).error;
+          <div className="flex items-center justify-start gap-3 w-full flex-wrap">
+            {form.watch("students").map((entry, index) => {
+              const studentError = emailSchema.safeParse(entry).error;
 
               return (
                 <div
-                  key={student}
+                  key={entry}
                   className="inline-flex justify-start items-start gap-2"
                 >
-                  <div className="inline-flex justify-start items-center space-x-2">
-                    <div>{student}</div>
-                    <Button
-                      type="button"
-                      size="icon_sm"
+                  <div className="inline-flex justify-start items-center space-x-2 bg-gray-200 p-1 rounded-lg">
+                    <div className="text-sm">{entry}</div>
+                    <Badge
+                      size="sm"
+                      className="h-5 w-5 cursor-pointer"
                       variant="destructive_light"
                       onClick={() => {
                         form.setValue(
@@ -198,8 +241,8 @@ export function UpdateStudentsForm() {
                         );
                       }}
                     >
-                      <X />
-                    </Button>
+                      <X className="w-4 h-4" />
+                    </Badge>
                   </div>
                   {studentError && (
                     <p className="text-red-500 text-xs">

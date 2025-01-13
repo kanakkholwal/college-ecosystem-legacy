@@ -1,6 +1,6 @@
 "use server";
 import type { InferSelectModel } from "drizzle-orm";
-import { and, asc, desc, eq, like, sql } from "drizzle-orm";
+import { asc, desc, eq, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
 import { accounts, sessions, users } from "~/db/schema/auth-schema";
 import redis from "~/lib/redis";
@@ -71,31 +71,23 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
     .execute();
   const total = totalUsers[0]?.count ?? 0;
 
-  // Fetch the count of users in the current interval
-  const currentCountQuery = await db
-    .select({ count: sql<number>`COUNT(*)` })
-    .from(users)
-    .where(
-      sql`"createdAt" >= ${startTime}`
-    );
-  const currentCount = currentCountQuery[0]?.count ?? 0;
 
   // Fetch the count of users in the previous interval
-  const prevCountQuery = await db
+  const periodCountQuery = await db
     .select({ count: sql<number>`COUNT(*)` })
     .from(users)
     .where(
       sql`"createdAt" >= ${prevStartTime} AND "createdAt" <= ${prevEndTime}`
     );
-  const prevCount = prevCountQuery[0]?.count || 0;
+  const periodCount = periodCountQuery[0]?.count || 0;
 
   // Calculate growth and growth percentage
-  const growth = currentCount - prevCount;
+  const growth = total - periodCount;
   const growthPercent =
-    prevCount === 0 ? 100 : (growth / (prevCount === 0 ? 1 : prevCount)) * 100;
+  periodCount === 0 ? 100 : (growth / (periodCount === 0 ? 1 : periodCount)) * 100;
 
   return {
-    count: currentCount,
+    count: total,
     total,
     growth,
     growthPercent,
