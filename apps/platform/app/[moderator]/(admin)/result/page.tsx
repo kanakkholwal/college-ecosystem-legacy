@@ -30,7 +30,7 @@ export default async function AdminResultPage() {
               size: "sm",
               children: "Assign Rank"
             }}
-            action={() => serverApis.results.assignRank()} />
+            action={serverApis.results.assignRank} />
         </StatsCard>
 
         <StatsCard
@@ -43,7 +43,7 @@ export default async function AdminResultPage() {
               size: "sm",
               children: "Fix Branch Change"
             }}
-            action={() => serverApis.results.assignBranchChange()} />
+            action={ serverApis.results.assignBranchChange} />
         </StatsCard>
       </div>
     </>
