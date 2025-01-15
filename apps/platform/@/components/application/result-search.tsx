@@ -95,21 +95,8 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                 )}
               </p>
               <div className="flex flex-wrap gap-2">
-                <Button
-                  variant={
-                    searchParams.get("branch")?.toString() === "all"
-                      ? "default_light"
-                      : "slate"
-                  }
-                  size="sm"
-                  className="text-xs !h-8 capitalize"
-                  onClick={() => {
-                    handleFilter("branch", "all");
-                  }}
-                >
-                  All
-                </Button>
-                {branches.map((branch) => (
+
+                {["all",...branches].map((branch) => (
                   <Button
                     key={branch}
                     variant={

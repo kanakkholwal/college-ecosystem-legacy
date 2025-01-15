@@ -79,3 +79,4 @@ yarn-error.log*
 coverage/
 dist/
 tmp/
+apps/platform/app/\[moderator]/(common)/courses/import/page.tsx

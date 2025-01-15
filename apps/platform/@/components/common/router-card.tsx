@@ -35,7 +35,7 @@ export function RouterCard({
       rel={external ? "noopener noreferrer" : undefined}
       style={style}
     >
-      <div className="flex w-full flex-row gap-2 items-center justify-center px-3 py-4">
+      <div className="flex w-full flex-row gap-2 items-center justify-center">
         <div className="flex justify-center items-center size-10 rounded-full bg-white/50 font-bold text-lg shrink-0">
           <Icon className="w-8 h-8 text-primary inline-block mr-2" />
         </div>

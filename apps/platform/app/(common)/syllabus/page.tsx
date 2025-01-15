@@ -1,19 +1,11 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import CourseCard from "@/components/application/course-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
 import { getCourses } from "~/actions/course";
-import Pagination from "./components/pagination";
-import SearchBox from "./components/search";
-import CourseCard from "@/components/application/course-card";
+
+import Pagination from "@/components/application/course-pagination";
+import SearchBox from "@/components/application/course-search";
 
 export const metadata: Metadata = {
   title: "Syllabus Search",

@@ -1,10 +1,10 @@
 import CourseCard from "@/components/application/course-card";
+import Pagination from "@/components/application/course-pagination";
+import SearchBox from "@/components/application/course-search";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata, ResolvingMetadata } from "next";
 import { Suspense } from "react";
 import { getCourses } from "~/actions/course";
-import Pagination from "./components/pagination";
-import SearchBox from "./components/search";
 
 type Props = {
   params: Promise<{
@@ -52,7 +52,9 @@ export default async function CoursesPage(props: Props) {
         <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
           <div className="relative pt-36 ml-auto">
             <div className="lg:w-3/4 text-center mx-auto">
-              <h1 className="text-gray-900 dark:text-white font-bold text-5xl md:text-6xl xl:text-7xl">
+              <h1
+                className="text-2xl lg:text-4xl font-bold text-neutral-900 dark:text-neutral-100 whitespace-nowrap"
+              >
                 Courses <span className="text-primary">Search</span>
               </h1>
 

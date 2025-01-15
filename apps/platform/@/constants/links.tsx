@@ -147,7 +147,7 @@ export const sidebar_links: rawLinkType[] = [
         allowed_roles: [ROLES.ADMIN],
       },
       {
-        title: "Import",
+        title: "Import from Excel",
         path: "/import",
         allowed_roles: [ROLES.ADMIN],
       },
