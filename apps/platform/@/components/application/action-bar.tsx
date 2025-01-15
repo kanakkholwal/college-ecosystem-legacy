@@ -28,8 +28,12 @@ export function ActionBar<T>({
       setLoading(true);
       await toast.promise(action(), {
         loading: "Taking action...",
-        success: "Action completed successfully",
-        error: "An error occurred while taking action",
+        success: (msg: string | undefined) => {
+          return msg || "Action completed successfully";
+        },
+        error: (msg: string | undefined) => {
+          return msg || "An error occurred while taking action";
+        },
       });
     } catch (err) {
       console.error(err);

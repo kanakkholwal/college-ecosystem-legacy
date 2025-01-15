@@ -2,6 +2,7 @@
 
 import dbConnect from "src/lib/dbConnect";
 import ResultModel from "src/models/result";
+import serverApis from "~/lib/server-apis";
 
 export async function getBasicInfo() {
   try {
@@ -45,5 +46,25 @@ export async function getBasicInfo() {
   } catch (err) {
     console.error(err);
     return Promise.reject("Failed to fetch results");
+  }
+}
+
+export async function assignRank() {
+  try {
+    await serverApis.results.assignRank();
+    return Promise.resolve("Rank assigned successfully");
+  } catch (err) {
+    console.error(err);
+    return Promise.reject("Failed to assign rank");
+  }
+}
+
+export async function assignBranchChange() {
+  try {
+    await serverApis.results.assignBranchChange();
+    return Promise.resolve("Branch change fixed successfully");
+  } catch (err) {
+    console.error(err);
+    return Promise.reject("Failed to fix branch change");
   }
 }

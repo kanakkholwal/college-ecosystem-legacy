@@ -112,7 +112,7 @@ export function UpdateHostelForm() {
 const updateHostelStudentSchema = z.object({
   students: z.array(z.string().email()),
   rollNo: z.boolean().optional(),
-  search:z.string().optional(),
+  search: z.string().optional(),
 });
 // ends with @nith.ac.in
 const emailSchema = z
@@ -127,7 +127,7 @@ export function UpdateStudentsForm({ slug }: { slug: string }) {
     resolver: zodResolver(updateHostelStudentSchema),
     defaultValues: {
       students: [],
-      search:""
+      search: "",
     },
   });
 
@@ -135,23 +135,26 @@ export function UpdateStudentsForm({ slug }: { slug: string }) {
     data: z.infer<typeof updateHostelStudentSchema>
   ) => {
     try {
-      console.log("data",data);
-      toast.promise(updateHostel(slug, {
-        students: data.students,
-      }), {
-        loading: "Updating Students",
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-        success: (data: any) =>{
-          console.log(data)
-          return "Students updated successfully"
-        },
-        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-          error: (err: any) =>{
-          console.log(err)
+      console.log("data", data);
+      toast.promise(
+        updateHostel(slug, {
+          students: data.students,
+        }),
+        {
+          loading: "Updating Students",
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          success: (data: any) => {
+            console.log(data);
+            return "Students updated successfully";
+          },
+          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+          error: (err: any) => {
+            console.log(err);
 
-          return "Failed to update students"
+            return "Failed to update students";
+          },
         }
-      })
+      );
 
       toast.success("Hostel created successfully");
     } catch (error) {
@@ -171,8 +174,8 @@ export function UpdateStudentsForm({ slug }: { slug: string }) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>
-                  Students Email
-                  ({form.watch("students").length} students added)
+                  Students Email ({form.watch("students").length} students
+                  added)
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -192,24 +195,30 @@ export function UpdateStudentsForm({ slug }: { slug: string }) {
                             return emailMatch[1].toLowerCase().trim();
                           }
                           // Handle roll number pattern
-                          return isValidRollNumber(entry) ?
-                            entry.concat("@nith.ac.in").toLowerCase().trim() : entry.toLowerCase().trim()
+                          return isValidRollNumber(entry)
+                            ? entry.concat("@nith.ac.in").toLowerCase().trim()
+                            : entry.toLowerCase().trim();
                         })
-                        .filter((email) => emailSchema.safeParse(email).success); // Validate emails
-                      console.log(emails, e.target.value
-                        .split(/,|\n/) // Split by commas or newlines
-                        .map((entry) => {
-                          // Extract email if present in the entry
-                          const emailMatch = entry.match(/<([^>]+)>/); // Match the email within angle brackets
-                          if (emailMatch) {
-                            return emailMatch[1].toLowerCase().trim()
-                          }
-                          // Handle roll number pattern
-                          return isValidRollNumber(entry) ?
-                            entry.concat("@nith.ac.in").toLowerCase().trim() : entry.toLowerCase().trim()
-                        }));
+                        .filter(
+                          (email) => emailSchema.safeParse(email).success
+                        ); // Validate emails
+                      console.log(
+                        emails,
+                        e.target.value
+                          .split(/,|\n/) // Split by commas or newlines
+                          .map((entry) => {
+                            // Extract email if present in the entry
+                            const emailMatch = entry.match(/<([^>]+)>/); // Match the email within angle brackets
+                            if (emailMatch) {
+                              return emailMatch[1].toLowerCase().trim();
+                            }
+                            // Handle roll number pattern
+                            return isValidRollNumber(entry)
+                              ? entry.concat("@nith.ac.in").toLowerCase().trim()
+                              : entry.toLowerCase().trim();
+                          })
+                      );
                       form.setValue("students", emails);
-
                     }}
                     disabled={form.formState.isSubmitting}
                   />

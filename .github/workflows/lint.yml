@@ -41,15 +41,16 @@ jobs:
       # - name: 📦 Install Turbo
       #   run: npm install turbo --global
 
-      - name: 💾 Cache Turbo
-        uses: actions/cache@v4
-        with:
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
-      - name: 🚀 Run Turbo lint
-        run: npx turbo run lint --cache-dir=.turbo
+      # - name: 💾 Cache Turbo
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: .turbo
+      #     key: ${{ runner.os }}-turbo-${{ github.sha }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-turbo-
+      - name: 🚀 Run lint
+        run: npm run lint
+        #  --cache-dir=.turbo
       # - name: 🔍 Detect changed projects
       #   id: changed
       #   run: |

@@ -6,12 +6,14 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { auth } from "src/lib/auth";
 
-import { quick_links } from "@/constants/links";
+import { quick_links, getLinksByRole } from "@/constants/links";
 
 export default async function Dashboard() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+
+  const links = getLinksByRole(session?.user?.other_roles[0], quick_links);
 
   return (
     <>
@@ -63,7 +65,7 @@ export default async function Dashboard() {
         </h2>
 
         <div className="mb-32 grid  lg:mb-0 lg:w-full mx-auto @5xl:max-w-6xl grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 text-left gap-4">
-          {quick_links.map((link, i) => (
+          {links.map((link, i) => (
             <RouterCard
               key={link.href}
               {...link}

@@ -1,15 +1,6 @@
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import CourseCard from "@/components/application/course-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata, ResolvingMetadata } from "next";
-import Link from "next/link";
 import { Suspense } from "react";
 import { getCourses } from "~/actions/course";
 import Pagination from "./components/pagination";
@@ -90,44 +81,11 @@ export default async function CoursesPage(props: Props) {
         >
           {courses.map((course) => {
             return (
-              <Card key={course.id} variant="glass" className="hover:shadow-lg">
-                <CardHeader>
-                  <CardTitle>{course.name}</CardTitle>
-                  <CardDescription className="font-semibold">
-                    {course.code}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex justify-around items-stretch gap-3 text-center">
-                  <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Type
-                    </p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {course.type}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      Credits
-                    </p>
-                    <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                      {course.credits}
-                    </p>
-                  </div>
-                </CardContent>
-                <CardFooter className="justify-between">
-                  <Button size="sm" variant="default_light" asChild>
-                    <Link href={`/${params.moderator}/courses/${course.code}`}>
-                      Edit Course
-                    </Link>
-                  </Button>
-                  <Button size="sm" variant="default" asChild>
-                    <Link href={`/syllabus/${course.code}`} target="_blank">
-                      View Course
-                    </Link>
-                  </Button>
-                </CardFooter>
-              </Card>
+              <CourseCard
+                key={course.id}
+                course={course}
+                authorized_role={params.moderator}
+              />
             );
           })}
         </Suspense>

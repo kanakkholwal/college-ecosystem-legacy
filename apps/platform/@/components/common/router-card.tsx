@@ -35,13 +35,17 @@ export function RouterCard({
       rel={external ? "noopener noreferrer" : undefined}
       style={style}
     >
-      <h2 className="mtext-xl font-semibold">
-        <Icon className="w-8 h-8 text-primary inline-block mr-2" />
-        {title}{" "}
-        {disabled ? (
-          <span className="text-sm text-gray-400">(Maintenance)</span>
-        ) : null}
-      </h2>
+      <div className="flex w-full flex-row gap-2 items-center justify-center px-3 py-4">
+        <div className="flex justify-center items-center size-10 rounded-full bg-white/50 font-bold text-lg shrink-0">
+          <Icon className="w-8 h-8 text-primary inline-block mr-2" />
+        </div>
+        <div className="flex-auto">
+          <h5 className="text-base font-semibold">{title}</h5>
+          {disabled ? (
+            <p className="text-sm font-semibold text-gray-700">(Maintenance)</p>
+          ) : null}
+        </div>
+      </div>
       <p className="max-w-[30ch] text-sm opacity-80">{description}</p>
       <p className="text-sm whitespace-nowrap font-semibold text-primary/80 transition-all group-hover:text-primary group-hover:translate-x-1 motion-reduce:transform-none">
         Go to {title}

@@ -1,10 +1,10 @@
+import { ResultCard, SkeletonCard } from "@/components/application/result-card";
+import Pagination from "@/components/application/result-pagination";
+import SearchBox from "@/components/application/result-search";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 import { BiSpreadsheet } from "react-icons/bi";
-import { getCachedLabels, getResults } from "./action";
-import { ResultCard, SkeletonCard } from "./components/card";
-import Pagination from "./components/pagination";
-import SearchBox from "./components/search";
+import { getCachedLabels, getResults } from "~/actions/result";
 
 import EmptyArea from "@/components/common/empty-area";
 import ConditionalRender from "@/components/utils/conditional-render";

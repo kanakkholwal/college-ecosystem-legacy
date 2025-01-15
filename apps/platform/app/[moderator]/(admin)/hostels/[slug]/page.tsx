@@ -57,7 +57,7 @@ export default async function HostelPage({
           <Heading level={5}>
             Hosteler Students ({hostel.students.length})
           </Heading>
-          <UpdateStudentsForm slug={slug}/>
+          <UpdateStudentsForm slug={slug} />
         </div>
       </div>
     </div>

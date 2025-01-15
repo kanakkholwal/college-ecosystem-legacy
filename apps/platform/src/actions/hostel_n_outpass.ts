@@ -59,7 +59,9 @@ export async function updateHostel(
   data: Partial<z.infer<typeof updateHostelSchema>>
 ) {
   try {
-    const hostel = await HostelModel.findOne({ slug }).lean() as IHostelType | null;
+    const hostel = (await HostelModel.findOne({
+      slug,
+    }).lean()) as IHostelType | null;
     if (!hostel) {
       return { success: false, error: "Hostel not found" };
     }
@@ -69,10 +71,15 @@ export async function updateHostel(
     }
     await dbConnect();
     if (data?.students) {
-      const students = await HostelStudentModel.find({ email: { $in: data?.students } }).lean();
+      const students = await HostelStudentModel.find({
+        email: { $in: data?.students },
+      }).lean();
       if (students.length !== (data.students ?? []).length) {
-        console.log("syncHostelStudents")
-        const response = await syncHostelStudents((hostel._id as string).toString(), data.students);
+        console.log("syncHostelStudents");
+        const response = await syncHostelStudents(
+          (hostel._id as string).toString(),
+          data.students
+        );
         if (!response.success) {
           return { success: false, error: response.error };
         }
@@ -96,57 +103,69 @@ const emailSchema = z
     message: "Email should end with @nith.ac.in",
   });
 
-async function syncHostelStudents(hostelId: string, student_emails: z.infer<typeof emailSchema>[]) {
+async function syncHostelStudents(
+  hostelId: string,
+  student_emails: z.infer<typeof emailSchema>[]
+) {
   try {
-    const hostel = await HostelModel.findById(hostelId) as IHostelType;
+    const hostel = (await HostelModel.findById(hostelId)) as IHostelType;
     const updates = [];
-    const result_updates = []
+    const result_updates = [];
     if (student_emails) {
-      const students = await HostelStudentModel.find({ email: { $in: student_emails } }).lean();
+      const students = await HostelStudentModel.find({
+        email: { $in: student_emails },
+      }).lean();
 
       for (const student_email of student_emails) {
-        const student = students.find(student => student.email === student_email);
+        const student = students.find(
+          (student) => student.email === student_email
+        );
         if (student) {
           updates.push({
             updateOne: {
               filter: {
-                email: student_email
+                email: student_email,
               },
               update: {
                 $set: {
                   hostelId: hostel._id,
                   gender: hostel.gender,
-                }
+                },
               },
-            }
-          })
+            },
+          });
           if (student.gender !== "not_specified") {
             result_updates.push({
               updateOne: {
                 filter: {
-                  email: student_email.split('@')[0]
+                  email: student_email.split("@")[0],
                 },
                 update: {
                   $set: {
-                    gender: hostel.gender
-                  }
-                }
-              }
-            })
+                    gender: hostel.gender,
+                  },
+                },
+              },
+            });
           }
         } else {
-          const response = await serverApis.results.getResultByRollNo(student_email.split('@')[0]);
+          const response = await serverApis.results.getResultByRollNo(
+            student_email.split("@")[0]
+          );
           if (response?.error || !response?.data) {
-            console.log('Error fetching student data', response?.error)
+            console.log("Error fetching student data", response?.error);
             continue;
           }
           const result = response.data;
           if (!result) {
-            console.log('result of Student not found', student_email)
+            console.log("result of Student not found", student_email);
             continue;
           }
-          if (result.data.gender !== hostel.gender && result.data.gender !== "not_specified") {
-            console.log("Student gender doesn't match", result.data)
+          if (
+            result.data.gender !== hostel.gender &&
+            result.data.gender !== "not_specified"
+          ) {
+            console.log("Student gender doesn't match", result.data);
             continue;
           }
 
@@ -156,29 +175,31 @@ async function syncHostelStudents(hostelId: string, student_emails: z.infer<type
                 rollNumber: result.data.rollNo,
                 userId: null,
                 name: result.data.name,
-                gender: result.data.gender !== "not_specified" ? result.data.gender : hostel.gender,
+                gender:
+                  result.data.gender !== "not_specified"
+                    ? result.data.gender
+                    : hostel.gender,
                 email: student_email,
                 hostelId: hostel._id,
                 roomNumber: "",
                 position: "",
-
-              }
+              },
             },
-          })
+          });
 
           if (result.data?.gender === "not_specified") {
             result_updates.push({
               updateOne: {
                 filter: {
-                  email: student_email.split('@')[0]
+                  email: student_email.split("@")[0],
                 },
                 update: {
                   $set: {
-                    gender: hostel.gender
-                  }
+                    gender: hostel.gender,
+                  },
                 },
-              }
-            })
+              },
+            });
           }
         }
       }
@@ -189,12 +210,10 @@ async function syncHostelStudents(hostelId: string, student_emails: z.infer<type
     if (result_updates.length > 0) {
       await ResultModel.bulkWrite(result_updates);
     }
-    return { success: true }
+    return { success: true };
+  } catch (err) {
+    return { success: false, error: err };
   }
-  catch (err) {
-    return { success: false, error: err }
-  }
-
 }
 
 export async function getHostel(slug: string): Promise<{
@@ -238,7 +257,6 @@ export async function getHostels(): Promise<{
     return Promise.resolve({ success: false, data: [] });
   }
 }
-
 
 export async function importHostelsFromSite() {
   try {

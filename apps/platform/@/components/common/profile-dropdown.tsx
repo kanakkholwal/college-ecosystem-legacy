@@ -54,10 +54,16 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
         children: (
           <Avatar className="size-8 rounded-full">
             <AvatarImage
-              src={user.image as string}
               alt={user.username}
               width={32}
               height={32}
+              src={
+                user.image
+                  ? (user.image as string)
+                  : user.gender !== "non_specified"
+                    ? `/assets/avatars/${user.gender}_user.png`
+                    : ""
+              }
             />
             <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>

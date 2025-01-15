@@ -13,6 +13,7 @@ import { Suspense } from "react";
 import { getCourses } from "~/actions/course";
 import Pagination from "./components/pagination";
 import SearchBox from "./components/search";
+import CourseCard from "@/components/application/course-card";
 
 export const metadata: Metadata = {
   title: "Syllabus Search",
@@ -73,7 +74,7 @@ export default async function CoursesPage(props: {
           data-aos="fade-up"
           data-aos-anchor-placement="center-bottom"
         >
-          <Suspense fallback={<Skeleton className="h-12 w-full " />}>
+          <Suspense fallback={<Skeleton className="h-12 w-full" />}>
             <SearchBox departments={departments} types={types} />
           </Suspense>
         </div>
@@ -91,33 +92,14 @@ export default async function CoursesPage(props: {
         >
           {courses.map((course, i) => {
             return (
-              <Card
-                variant="glass"
+              <CourseCard
                 key={course.id}
+                course={course}
                 className="hover:shadow-lg animate-in popup flex flex-col items-stretch justify-between"
                 style={{
                   animationDelay: `${i * 100}ms`,
                 }}
-              >
-                <CardHeader className="px-3 py-4">
-                  <CardTitle className="text-xl">{course.name}</CardTitle>
-                  <CardDescription className="font-semibold text-gray-700">
-                    {course.code}
-                  </CardDescription>
-                </CardHeader>
-                <CardFooter className="justify-between p-3">
-                  <Button
-                    size="sm"
-                    variant="default_light"
-                    className="uppercase"
-                  >
-                    {course.type}
-                  </Button>
-                  <Button size="sm" variant="default" asChild>
-                    <Link href={`/syllabus/${course.code}`}>View Course</Link>
-                  </Button>
-                </CardFooter>
-              </Card>
+              />
             );
           })}
         </Suspense>

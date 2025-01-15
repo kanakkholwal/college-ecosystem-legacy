@@ -71,7 +71,6 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
     .execute();
   const total = totalUsers[0]?.count ?? 0;
 
-
   // Fetch the count of users in the previous interval
   const periodCountQuery = await db
     .select({ count: sql<number>`COUNT(*)` })
@@ -84,7 +83,9 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
   // Calculate growth and growth percentage
   const growth = total - periodCount;
   const growthPercent =
-  periodCount === 0 ? 100 : (growth / (periodCount === 0 ? 1 : periodCount)) * 100;
+    periodCount === 0
+      ? 100
+      : (growth / (periodCount === 0 ? 1 : periodCount)) * 100;
 
   return {
     count: total,

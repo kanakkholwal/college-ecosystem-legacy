@@ -41,7 +41,7 @@ const rawResultSchema = z.object({
   branch: z.string(),
   batch: z.number(),
   programme: z.string(),
-  gender: z.enum(["male","female","not_specified"]).nullable(),
+  gender: z.enum(["male", "female", "not_specified"]).nullable(),
   semesters: z.array(
     z.object({
       sgpi: z.number(),
@@ -128,21 +128,21 @@ type APITypes = {
       payload: z.infer<typeof rollNoSchema>;
       response: z.infer<typeof rawResultSchema> & {
         _id: string;
-        gender:"male" |"female" |"not_specified";
+        gender: "male" | "female" | "not_specified";
       };
     };
     addResultByRollNo: {
       payload: z.infer<typeof rollNoSchema>;
       response: z.infer<typeof rawResultSchema> & {
         _id: string;
-        gender:"male" |"female" |"not_specified";
+        gender: "male" | "female" | "not_specified";
       };
     };
     updateResultByRollNo: {
       payload: z.infer<typeof rollNoSchema>;
       response: z.infer<typeof rawResultSchema> & {
         _id: string;
-        gender:"male" |"female" |"not_specified";
+        gender: "male" | "female" | "not_specified";
       };
     };
   };

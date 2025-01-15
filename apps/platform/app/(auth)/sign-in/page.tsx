@@ -1,10 +1,9 @@
 import { AppLogo } from "@/components/logo";
-// import SignUpForm from "./sign-up";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-import { headers } from "next/headers";
-import { auth } from "src/lib/auth";
+
+import { getSession } from "~/lib/auth-server";
 import ForgotPassword from "./forget-password";
 import ResetPassword from "./reset-password";
 import SignInForm from "./sign-in";
@@ -25,9 +24,7 @@ interface Props {
 }
 
 export default async function SignInPage({ searchParams }: Props) {
-  const data = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const data = await getSession();
   // if (session) return redirect("/");
 
   const { tab } = await searchParams;
@@ -47,7 +44,11 @@ export default async function SignInPage({ searchParams }: Props) {
             <CardHeader>
               <TabsList className="flex justify-around space-x-4 flex-wrap">
                 {TABS.map((tab) => {
-                  if (data?.session?.expiresAt && new Date(data.session.expiresAt) < new Date() && (tab === "sign-up" || tab === "sign-in"))
+                  if (
+                    data?.session?.expiresAt &&
+                    new Date(data.session.expiresAt) < new Date() &&
+                    (tab === "sign-up" || tab === "sign-in")
+                  )
                     return null;
 
                   return (

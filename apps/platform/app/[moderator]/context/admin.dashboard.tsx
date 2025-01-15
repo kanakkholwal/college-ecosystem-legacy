@@ -57,16 +57,19 @@ export default async function AdminDashboard() {
             >
               <h4 className="text-3xl font-bold text-primary">
                 {totalUsers}
-                <span className="text-sm text-muted-foreground">/{userTrend * growth}</span>
+                <span className="text-sm text-muted-foreground">
+                  /{userTrend * growth}
+                </span>
               </h4>
               <p className="text-xs text-muted-foreground">
                 <span
-                  className={`${userTrend === 1
+                  className={`${
+                    userTrend === 1
                       ? "text-green-500"
                       : userTrend === -1
                         ? "text-red-500"
                         : "text-primary/80"
-                    } text-base`}
+                  } text-base`}
                 >
                   {userTrend === 1 ? (
                     <TrendingUp className="inline-block mr-2 size-4" />
@@ -96,7 +99,7 @@ export default async function AdminDashboard() {
             {/* Total Visitors Card */}
             <StatsCard
               title="Total Visitors"
-              Icon={<Eye  className="inline-block mr-2 size-4" />}
+              Icon={<Eye className="inline-block mr-2 size-4" />}
             >
               <p className="text-3xl mt-auto">
                 <img
@@ -161,7 +164,7 @@ export default async function AdminDashboard() {
         {/* Messages Section */}
         <div className="@4xl:w-1/3 p-3">
           <Heading level={4}>Actions</Heading>
-          <Separator className="mb-4" />
+          <Separator className="mb-4 mt-2" />
           <div className="w-full grid grid-cols-1 gap-3 divide-y divide-gray-200">
             <ActionBar
               title="Clear Cache"

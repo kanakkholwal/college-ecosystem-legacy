@@ -29,7 +29,7 @@ export interface ResultTypeWithId {
   programme: string;
   semesters: Semester[];
   rank: Rank;
-  gender:"male" |"female" |"not_specified";
+  gender: "male" | "female" | "not_specified";
   createdAt?: Date;
   updatedAt?: Date;
 }
