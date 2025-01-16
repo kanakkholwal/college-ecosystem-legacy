@@ -6,29 +6,33 @@ import { useState, useRef } from "react";
 export default function ImportCoursesFromPDF() {
   const fileInputRef = useRef(null);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (!files) return;
 
     const file = files[0];
+    console.log(files)
     if (!file) return;
 
     const reader = new FileReader();
-    reader.onload = (e) => {
+    reader.onload = async (e) => {
+      console.log(e.target)
       if (!e.target) {
         return;
       }
       const data = e.target.result;
+      console.log(data)
+
       if (!data) {
         return;
       }
-      
-      const pdfDoc = new PdfDocument();
 
-      pdfDoc
-        .load(Buffer.from(new Uint8Array(data as ArrayBuffer)))
-        .then(console.log)
-        .catch(console.log);
+      const pdfDoc = new PdfDocument();
+      console.log(pdfDoc)
+
+      await pdfDoc.load(data as string)
+      console.log(pdfDoc)
+
     };
     reader.readAsArrayBuffer(file);
   };

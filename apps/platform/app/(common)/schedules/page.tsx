@@ -11,6 +11,7 @@ import Link from "next/link";
 import { getDepartmentName } from "src/constants/departments";
 import { getSession } from "src/lib/auth-server";
 import { getAllTimeTables } from "src/lib/time-table/actions";
+import { GrAnnounce, GrSchedules } from "react-icons/gr";
 
 import type { Metadata } from "next";
 
@@ -47,6 +48,7 @@ export default async function Dashboard() {
       {timeTables.length === 0 ? (
         <section className="max-w-6xl w-full xl:px-6 text-center">
           <EmptyArea
+            icons={[GrSchedules]}
             title="No Timetables found"
             description="There are no timetables created yet. Please check back later"
           />

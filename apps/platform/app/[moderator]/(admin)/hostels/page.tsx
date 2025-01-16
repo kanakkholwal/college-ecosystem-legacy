@@ -38,15 +38,15 @@ export default async function HostelPage() {
       <ErrorBoundaryWithSuspense
         fallback={
           <EmptyArea
-            Icon={LuBuilding}
+            icons={[LuBuilding]}
             title="Error"
             description="Failed to load hostels"
           />
         }
         loadingFallback={
           <EmptyArea
-            Icon={LuBuilding}
-            title="Loading..."
+          icons={[LuBuilding]}
+          title="Loading..."
             description="Loading hostels..."
           />
         }
@@ -66,7 +66,7 @@ export default async function HostelPage() {
         </ConditionalRender>
         <ConditionalRender condition={hostels.length === 0}>
           <EmptyArea
-            Icon={LuBuilding}
+            icons={[LuBuilding]}
             title="No Hostel Found"
             description="There are no hostels in the system. Click the button above to add a new hostel"
           />

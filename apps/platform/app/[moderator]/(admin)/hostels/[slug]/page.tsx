@@ -18,7 +18,7 @@ export default async function HostelPage({
   if (!success || !hostel) {
     return (
       <EmptyArea
-        Icon={LuBuilding}
+        icons={[LuBuilding]}
         title="No Hostel Found"
         description={`Hostel with slug ${slug} not found`}
       />

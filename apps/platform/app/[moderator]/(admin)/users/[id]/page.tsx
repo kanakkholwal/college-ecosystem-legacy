@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getUser } from "~/actions/dashboard.admin";
 import { UserDisplay, UserSessions, UserUpdate } from "./components";
 
-import { TabsTransitionPanel } from "./client";
+import { TabsTransitionPanel } from "@/components/ui/tabs-transition";
 
 interface PageProps {
   params: Promise<{
@@ -22,19 +22,16 @@ export default async function UpdateUserPage({ params }: PageProps) {
         items={[
           {
             title: "User Details",
-            subtitle: "View user sessions",
             content: <UserDisplay currentUser={user} />,
             id: "1",
           },
           {
             title: "User Sessions",
-            subtitle: "Update user information",
             content: <UserSessions currentUser={user} />,
             id: "2",
           },
           {
             title: "Update User",
-            subtitle: "Update user information",
             content: <UserUpdate currentUser={user} />,
             id: "3",
           },

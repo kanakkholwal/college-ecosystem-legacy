@@ -30,7 +30,7 @@ export default async function AnnouncementsPage() {
         </div>
         {announcements.length === 0 && (
           <EmptyArea
-            Icon={GrAnnounce}
+            icons={[GrAnnounce]}
             title="No announcements"
             description="There are no announcements at the moment."
           />

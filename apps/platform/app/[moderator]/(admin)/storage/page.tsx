@@ -48,14 +48,15 @@ export default async function StoragePage(props: PageProps) {
       >
         <ConditionalRender condition={files.length === 0}>
           <EmptyArea
-            Icon={FolderClosed}
+            icons={[FolderClosed]}
             title="No files found"
             description="No files found in the storage. You can upload a new file by clicking the button below."
-            actionPanel={
-              <Button variant="default_light" className="mx-auto" asChild>
-                <Link href="/storage/upload">Upload new file</Link>
-              </Button>
-            }
+            actionProps={{
+              variant: "default_light",
+              size: "sm",
+              children: <Link href="/storage/upload">Upload new file</Link>,
+              asChild: true,
+            }}
           />
         </ConditionalRender>
         <ConditionalRender condition={files.length > 0}>

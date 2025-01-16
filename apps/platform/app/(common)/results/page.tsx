@@ -87,9 +87,9 @@ export default async function ResultPage(props: {
       <ErrorBoundaryWithSuspense
         fallback={
           <EmptyArea
-            Icon={BiSpreadsheet}
-            title="Error"
-            description="Failed to load results"
+            icons={[BiSpreadsheet]}
+            title="Failed to load results"
+            description="An error occurred while fetching the results. Please try again later."
           />
         }
         loadingFallback={
@@ -125,9 +125,9 @@ export default async function ResultPage(props: {
         </ConditionalRender>
         <ConditionalRender condition={results.length === 0}>
           <EmptyArea
-            Icon={BiSpreadsheet}
+            icons={[BiSpreadsheet]}
             title="No Results Found"
-            description="There are no results to display for the given search criteria."
+            description="Try adjusting your search filters."
           />
         </ConditionalRender>
       </ErrorBoundaryWithSuspense>

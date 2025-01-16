@@ -35,3 +35,9 @@ export {
   scheduleEvents,
   schedules,
 } from "./schema/schedule";
+
+export {
+  calender_sem_event_tags,
+  calender_sem_event_participants,
+  calender_sem_events,
+} from "./schema/calender_sem";

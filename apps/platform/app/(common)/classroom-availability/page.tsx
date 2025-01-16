@@ -8,6 +8,8 @@ import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
 import { listAllRoomsWithHistory } from "~/actions/room";
 import { getSession } from "~/lib/auth-server";
+import {Search} from "lucide-react";
+
 
 type Props = {
   searchParams: Promise<{
@@ -69,8 +71,9 @@ export default async function RoomsPage(props: Props) {
       >
         <ConditionalRender condition={rooms.length === 0}>
           <EmptyArea
+            icons={[Search]}
             title="No rooms found"
-            description="No rooms found based on the search criteria."
+            description="Try adjusting your search filters."
           />
         </ConditionalRender>
         <ConditionalRender condition={rooms.length > 0}>

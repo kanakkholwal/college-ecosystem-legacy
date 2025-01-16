@@ -2,20 +2,22 @@ import { AppLogo } from "@/components/logo";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
-
+import {TabsTransitionPanel} from "@/components/ui/tabs-transition";
 import { getSession } from "~/lib/auth-server";
 import ForgotPassword from "./forget-password";
 import ResetPassword from "./reset-password";
 import SignInForm from "./sign-in";
 import SignUpForm from "./sign-up";
+import { changeCase } from "~/utils/string";
+// import VerifyEmail from "./verify-email";
 
 const TABS = [
-  "sign-in",
-  "sign-up",
-  "forget-password",
-  "reset-password",
-  "verify-email",
-];
+  ["sign-in",<SignInForm key="sign-in"/>],
+  ["sign-up",<SignUpForm  key="sign-up"/>],
+  ["forget-password",<ForgotPassword  key="forget-password"/>],
+  ["reset-password",<ResetPassword key="reset-password" />],
+  // ["verify-email",VerifyEmail]
+] as [string, React.ReactNode][];
 
 interface Props {
   searchParams: Promise<{
@@ -37,54 +39,32 @@ export default async function SignInPage({ searchParams }: Props) {
           className="m-auto flex flex-col justify-center space-y-6 max-w-[35rem] mx-auto w-full mt-32 @lg:mt-0"
         >
           <AppLogo className="mt-12" />
-          <Tabs
-            defaultValue={TABS.includes(tab) ? tab : TABS[0]}
+          <TabsTransitionPanel 
             className="w-full"
-          >
-            <CardHeader>
-              <TabsList className="flex justify-around space-x-4 flex-wrap">
-                {TABS.map((tab) => {
-                  if (
-                    data?.session?.expiresAt &&
-                    new Date(data.session.expiresAt) < new Date() &&
-                    (tab === "sign-up" || tab === "sign-in")
-                  )
-                    return null;
-
-                  return (
-                    <TabsTrigger
-                      key={tab}
-                      value={tab}
-                      className={cn(
-                        "capitalize w-full flex-1",
-                        ["reset-password", "verify-email"].includes(tab)
-                          ? "hidden"
-                          : ""
-                      )}
-                    >
-                      {tab.replace("-", " ")}
-                    </TabsTrigger>
-                  );
-                })}
-              </TabsList>
-            </CardHeader>
-            <CardContent className="px-4 @lg:px-10">
-              <TabsContent value="sign-in">
-                <SignInForm />
-              </TabsContent>
-              <TabsContent value="sign-up">
-                <SignUpForm />
-              </TabsContent>
-              <TabsContent value="forget-password">
-                <ForgotPassword />
-              </TabsContent>
-              <TabsContent value="reset-password">
-                <ResetPassword />
-              </TabsContent>
-              {/* biome-ignore lint/style/useSelfClosingElements: <explanation> */}
-              <TabsContent value="verify-email"></TabsContent>
-            </CardContent>
-          </Tabs>
+            items={
+              TABS.filter(([key, _]) => {
+                if (
+                  data?.session?.expiresAt &&
+                  new Date(data.session.expiresAt) < new Date() &&
+                  (key === "sign-up" || key === "sign-in")
+                )
+                  return false;
+                return true;
+              }).map(([key, Component]) => {
+                return {
+                  title: changeCase(key.replace("-", " "),"title"),
+                  id: key,
+                  content: Component,
+                }
+              })
+            }
+            classNames={{
+              tabList: "flex justify-around space-x-4 flex-wrap",
+              tabTrigger: "capitalize w-full flex-1",
+              tabContentList: "px-4 @lg:px-10"
+            }}
+          />
+          
         </Card>
       </div>
     </div>

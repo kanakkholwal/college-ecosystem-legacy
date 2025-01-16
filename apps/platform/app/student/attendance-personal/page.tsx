@@ -31,10 +31,15 @@ export default async function PersonalAttendanceManager() {
       {/* Empty State */}
       {attendance_records.length === 0 && (
         <EmptyArea
-          Icon={BookUser}
+          icons={[BookUser]}
           title="No attendance records"
           description="There are no attendance records at the moment."
-          actionPanel={<CreateAttendanceRecordButton />}
+          actionProps={{
+            asChild: true,
+            variant: "default_light",
+            size: "sm",
+            children: <CreateAttendanceRecordButton />
+          }}
         />
       )}
 
