@@ -2,16 +2,14 @@ import { BorderBeam } from "@/components/animation/border-beam";
 import { RouterCard } from "@/components/common/router-card";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { RocketIcon } from "@radix-ui/react-icons";
-import { headers } from "next/headers";
 import Link from "next/link";
-import { auth } from "src/lib/auth";
+import type { Session } from "~/lib/auth";
+import { getSession } from "~/lib/auth-server";
 
 import { quick_links, getLinksByRole } from "@/constants/links";
 
 export default async function Dashboard() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = (await getSession()) as Session;
 
   const links = getLinksByRole(session?.user?.other_roles[0], quick_links);
 
