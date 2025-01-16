@@ -271,10 +271,10 @@ export const socials: SocialLink[] = [
   },
 ];
 
-export const getLinksByRole = (
+export const getLinksByRole = <T extends rawLinkType | RouterCardLink>(
   role: string,
-  links: rawLinkType[] | RouterCardLink[]
-) => {
+  links: T[]
+): T[] => {
   return links.filter(
     (link) =>
       link.allowed_roles.includes(role) || link.allowed_roles.includes("*")
