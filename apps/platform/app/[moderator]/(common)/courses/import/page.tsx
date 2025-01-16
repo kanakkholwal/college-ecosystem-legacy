@@ -1,24 +1,32 @@
 "use client";
-import { PdfDocument } from "@pomgui/pdf-tables-parser";
-import React, { useState, useRef } from "react";
+import { PdfDocument } from "pdf-tables-parser";
+import type React from "react";
+import { useState, useRef } from "react";
 
 export default function ImportCoursesFromPDF() {
   const fileInputRef = useRef(null);
 
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+
+    const file = files[0];
     if (!file) return;
+
     const reader = new FileReader();
     reader.onload = (e) => {
-      if(e.target){
-        return
+      if (!e.target) {
+        return;
       }
       const data = e.target.result;
-
+      if (!data) {
+        return;
+      }
+      
       const pdfDoc = new PdfDocument();
 
       pdfDoc
-        .load(data)
+        .load(Buffer.from(new Uint8Array(data as ArrayBuffer)))
         .then(console.log)
         .catch(console.log);
     };
@@ -26,11 +34,11 @@ export default function ImportCoursesFromPDF() {
   };
 
   return <>
-  <input
-        type="file"
-        ref={fileInputRef}
-        onChange={handleFileChange}
-        style={{ marginBottom: "10px" }}
-      />
-</>;
+    <input
+      type="file"
+      ref={fileInputRef}
+      onChange={handleFileChange}
+      style={{ marginBottom: "10px" }}
+    />
+  </>;
 }
