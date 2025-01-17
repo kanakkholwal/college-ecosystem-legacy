@@ -37,7 +37,7 @@ export function RouterCard({
     >
       <div className="flex w-full flex-row gap-2 items-center justify-center">
         <div className="flex justify-center items-center size-10 rounded-full bg-white/50 font-bold text-lg shrink-0">
-          <Icon className="w-8 h-8 text-primary inline-block mr-2" />
+          <Icon className="size-6 text-primary inline-block" />
         </div>
         <div className="flex-auto">
           <h5 className="text-base font-semibold">{title}</h5>

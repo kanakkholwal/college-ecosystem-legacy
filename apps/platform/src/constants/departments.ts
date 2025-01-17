@@ -8,6 +8,7 @@ interface Department {
   page: string;
 }
 
+//  change this according to your college
 export const DEPARTMENTS_LIST: readonly Department[] = [
   {
     name: "Computer Science and Engineering",

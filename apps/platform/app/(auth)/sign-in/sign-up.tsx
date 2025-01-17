@@ -29,6 +29,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { getDepartmentName } from "src/constants/departments";
 import * as z from "zod";
+import {ORG_DOMAIN} from "~/project.config";
 
 const FormSchema = z.object({
   email: z
@@ -36,10 +37,9 @@ const FormSchema = z.object({
     .email({ message: "Invalid email format" })
     .min(5, { message: "Email must be at least 5 characters long" })
     .max(100, { message: "Email cannot exceed 100 characters" })
-    .refine((val) => val.endsWith("@nith.ac.in"), {
-      message: "Email must end with @nith.ac.in",
+    .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
+      message: `Email must end with @${ORG_DOMAIN}`,
     }),
-
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long" })
@@ -145,7 +145,7 @@ export default function SignUpForm() {
                       </FormLabel>
                       <FormControl className="relative">
                         <Input
-                          placeholder="rollNo@nith.ac.in"
+                          placeholder={`Email (e.g. user@${ORG_DOMAIN})`}
                           type="email"
                           autoCapitalize="none"
                           autoComplete="email"
@@ -186,7 +186,7 @@ export default function SignUpForm() {
                   </FormItem>
                 )}
               />
-              <p className="text-left mt-2 text-sm font-medium text-gray-600">
+              <p className="text-left mt-2 text-xs font-medium text-gray-600">
                 You must use your NITH email to sign up.(you{"'"}ll get a
                 verification link in your email if your email isn{"'"}t in the
                 database)

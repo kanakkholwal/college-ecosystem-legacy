@@ -19,6 +19,7 @@ import * as z from "zod";
 import { updateHostel } from "~/actions/hostel_n_outpass";
 import { isValidRollNumber } from "~/constants/departments";
 import { updateHostelSchema } from "~/constants/hostel_n_outpass";
+import {ORG_DOMAIN} from "~/project.config";
 
 export function UpdateHostelForm() {
   const form = useForm<z.infer<typeof updateHostelSchema>>({
@@ -114,13 +115,14 @@ const updateHostelStudentSchema = z.object({
   rollNo: z.boolean().optional(),
   search: z.string().optional(),
 });
-// ends with @nith.ac.in
+
+
 const emailSchema = z
   .string()
   .email()
-  .refine((email) => email.endsWith("@nith.ac.in"), {
-    message: "Email should end with @nith.ac.in",
-  });
+  .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
+    message: `Email must end with @${ORG_DOMAIN}`,
+  })
 
 export function UpdateStudentsForm({ slug }: { slug: string }) {
   const form = useForm<z.infer<typeof updateHostelStudentSchema>>({
@@ -196,7 +198,7 @@ export function UpdateStudentsForm({ slug }: { slug: string }) {
                           }
                           // Handle roll number pattern
                           return isValidRollNumber(entry)
-                            ? entry.concat("@nith.ac.in").toLowerCase().trim()
+                            ? entry.concat(`@${ORG_DOMAIN}`).toLowerCase().trim()
                             : entry.toLowerCase().trim();
                         })
                         .filter(
@@ -214,7 +216,7 @@ export function UpdateStudentsForm({ slug }: { slug: string }) {
                             }
                             // Handle roll number pattern
                             return isValidRollNumber(entry)
-                              ? entry.concat("@nith.ac.in").toLowerCase().trim()
+                            ? entry.concat(`@${ORG_DOMAIN}`).toLowerCase().trim()
                               : entry.toLowerCase().trim();
                           })
                       );

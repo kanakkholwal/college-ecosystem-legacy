@@ -1,14 +1,12 @@
 import { AppLogo } from "@/components/logo";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
-import {TabsTransitionPanel} from "@/components/ui/tabs-transition";
+import { Card } from "@/components/ui/card";
+import { TabsTransitionPanel } from "@/components/ui/tabs-transition";
 import { getSession } from "~/lib/auth-server";
+import { changeCase } from "~/utils/string";
 import ForgotPassword from "./forget-password";
 import ResetPassword from "./reset-password";
 import SignInForm from "./sign-in";
 import SignUpForm from "./sign-up";
-import { changeCase } from "~/utils/string";
 // import VerifyEmail from "./verify-email";
 
 const TABS = [
@@ -40,7 +38,8 @@ export default async function SignInPage({ searchParams }: Props) {
         >
           <AppLogo className="mt-12" />
           <TabsTransitionPanel 
-            className="w-full"
+            className="w-full mb-6"
+            defaultActiveIndex={TABS.findIndex(([key, _]) => key === tab) > -1 ? TABS.findIndex(([key, _]) => key === tab) : 0}
             items={
               TABS.filter(([key, _]) => {
                 if (
@@ -49,6 +48,10 @@ export default async function SignInPage({ searchParams }: Props) {
                   (key === "sign-up" || key === "sign-in")
                 )
                   return false;
+
+                if (key === "reset-password" && tab !== "reset-password")
+                  return false;
+
                 return true;
               }).map(([key, Component]) => {
                 return {
@@ -59,9 +62,9 @@ export default async function SignInPage({ searchParams }: Props) {
               })
             }
             classNames={{
-              tabList: "flex justify-around space-x-4 flex-wrap",
-              tabTrigger: "capitalize w-full flex-1",
-              tabContentList: "px-4 @lg:px-10"
+              tabList: "flex justify-around space-x-4 flex-wrap mx-4 @lg:mx-10 rounded-lg",
+              tabTrigger: "capitalize w-full flex-1 rounded-lg",
+              tabContentList: "px-4 @lg:px-10 border-0 pb-6"
             }}
           />
           

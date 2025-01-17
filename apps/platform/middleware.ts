@@ -3,15 +3,25 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import type { Session } from "~/lib/auth";
 
-// Paths that do not require authentication
-const unauthorized_paths = ["/sign-in", "/signup", "/forgot-password"];
 
-const authorized_paths = {
-  "/admin": ["admin"],
-  "/faculty": ["faculty"],
-  "/cr": ["faculty"],
-  "/student": ["faculty"],
-};
+
+const SIGN_IN_PATH = "/sign-in";
+
+const authorized_pathsMap = new Map([
+  ["/admin", ["admin"]],
+  ["/faculty", ["faculty"]],
+  ["/cr", ["faculty"]],
+  ["/student", ["faculty"]],
+]);
+
+const UN_PROTECTED_API_ROUTES = [
+  "/api/auth/*",
+
+]
+
+function isAuthorized(roles: string[], allowedRoles: string[]) {
+  return roles.some((role) => allowedRoles.includes(role));
+}
 
 export async function middleware(request: NextRequest) {
   const { data: session } = await betterFetch<Session>(
@@ -25,21 +35,76 @@ export async function middleware(request: NextRequest) {
     }
   );
   if (!session) {
-    if (request.nextUrl.pathname === "/sign-in") {
+    if (request.nextUrl.pathname === SIGN_IN_PATH) {
       return NextResponse.next();
     }
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+    return NextResponse.redirect(new URL(SIGN_IN_PATH, request.url));
   }
   if (session) {
-    for (const [path, roles] of Object.entries(authorized_paths)) {
+    // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page
+    if (request.nextUrl.pathname === SIGN_IN_PATH &&
+      (request.nextUrl.searchParams.get("tab") !== "reset-password" && !request.nextUrl.searchParams.get("token")?.trim())
+    ) {
+
+      return NextResponse.redirect(new URL("/", request.url));
+    }
+    // if the user is already authenticated 
+    const allows_roles = authorized_pathsMap.get(request.nextUrl.pathname);
+    if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
       if (
-        request.nextUrl.pathname.startsWith(path) &&
         !(
-          session.user.other_roles.some((role) => roles.includes(role)) ||
-          roles.includes(session.user.role)
+          isAuthorized([...session.user.other_roles,session.user.role], allows_roles)
         )
       ) {
         return NextResponse.redirect(new URL("/unauthorized", request.url));
+      }
+    }
+  }
+  if (request.method === "POST") {
+    if (!session) {
+      return NextResponse.redirect(new URL(SIGN_IN_PATH, request.url));
+    }
+    const allows_roles = authorized_pathsMap.get(request.nextUrl.pathname);
+    if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
+      if (
+        !(
+          isAuthorized([...session.user.other_roles,session.user.role], allows_roles)
+        )
+      ) {
+        return NextResponse.json({
+          status: "error",
+          message: "You are not authorized to perform this action",
+        }, {
+          status: 403,
+        })
+      }
+    }
+  }
+  if(request.nextUrl.pathname.startsWith("/api")){
+    if(UN_PROTECTED_API_ROUTES.some((route)=>new RegExp(route.replace("*",".*")).test(request.nextUrl.pathname))){
+      return NextResponse.next();
+    }
+    if (!session) {
+      return NextResponse.json({
+        status: "error",
+        message: "You are not authorized to perform this action",
+      }, {
+        status: 403,
+      })
+    }
+    const allows_roles = authorized_pathsMap.get(request.nextUrl.pathname);
+    if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
+      if (
+        !(
+          isAuthorized([...session.user.other_roles,session.user.role], allows_roles)
+        )
+      ) {
+        return NextResponse.json({
+          status: "error",
+          message: "You are not authorized to perform this action",
+        }, {
+          status: 403,
+        })
       }
     }
   }

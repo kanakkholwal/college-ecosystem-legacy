@@ -17,6 +17,7 @@ import {
   OutPassModel,
 } from "~/models/hostel_n_outpass";
 import ResultModel from "~/models/result";
+import {ORG_DOMAIN} from "~/project.config";
 
 /*
     Hostel Actions
@@ -95,13 +96,12 @@ export async function updateHostel(
   }
 }
 
-// ends with @nith.ac.in
 const emailSchema = z
   .string()
   .email()
-  .refine((email) => email.endsWith("@nith.ac.in"), {
-    message: "Email should end with @nith.ac.in",
-  });
+  .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
+    message: `Email must end with @${ORG_DOMAIN}`,
+  })
 
 async function syncHostelStudents(
   hostelId: string,

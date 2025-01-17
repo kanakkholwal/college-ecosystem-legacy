@@ -8,6 +8,9 @@ import { render } from "@react-email/components";
 import { getEmailTemplate } from "@/emails";
 import { handleEmailFire } from "@/emails/helper";
 
+
+const ORG_DOMAIN = "nith.ac.in";
+
 const payloadSchema = z.object({
   template_key: z.string(),
   targets: z.array(z.string().email()),
@@ -56,7 +59,7 @@ export async function POST(request: NextRequest) {
 
     const emailHtml = await render(EmailTemplate);
     const response = await handleEmailFire(
-      "College Platform <platform@nith.ac.in>",
+      `College Platform <platform@${ORG_DOMAIN}>`,
       {
         to: targets,
         subject: subject,

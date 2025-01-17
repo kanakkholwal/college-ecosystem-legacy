@@ -57,7 +57,6 @@
     "drizzle-orm": "^0.38.3",
     "firebase": "^11.1.0",
     "firebase-admin": "^13.0.2",
-    "framer-motion": "^11.18.0",
     "jotai": "^2.11.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.471.1",
