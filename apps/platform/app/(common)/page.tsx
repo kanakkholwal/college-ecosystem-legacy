@@ -17,7 +17,7 @@ export default async function Dashboard() {
         className="z-10 w-full max-w-6xl mx-auto relative space-y-4 text-left"
       >
         <h2
-          className="text-lg @md:text-2xl @lg:text-4xl font-bold  whitespace-nowrap text-neutral-900 dark:text-neutral-100"
+          className="text-lg md:text-2xl lg:text-4xl font-bold whitespace-nowrap text-neutral-900 dark:text-neutral-100"
           data-aos="fade-right"
           data-aos-duration="500"
         >

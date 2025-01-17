@@ -1,11 +1,11 @@
 "use client";
-// import "./greetings.css";
 import { BorderBeam } from "@/components/animation/border-beam";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { RocketIcon } from "@radix-ui/react-icons";
 import { motion } from "motion/react";
 import Link from "next/link";
 import type { Session } from "~/lib/auth";
+// import "./greetings.css";
 
 interface HeroSection{
   user: Session["user"]
@@ -26,18 +26,18 @@ export function HeroSection({ user }:HeroSection) {
           duration: 0.8,
           ease: "easeInOut",
         }}
-        className="relative flex flex-col gap-4 items-center justify-center px-4  z-50"
+        className="relative flex flex-col gap-4 items-center justify-center px-4 z-50"
       >
         <h2    
-        className="text-xl md:text-2xl lg:text-4xl font-bold text-center whitespace-nowrap text-neutral-900 dark:text-neutral-100"
+        className="text-xl md:text-2xl lg:text-4xl font-bold text-center whitespace-nowrap text-neutral-900"
         >
           {getGreeting()} {" "}
           <span className="text-primary">{user?.name}</span>
         </h2>
-        <h5 className="font-medium text-base md:text-lg text-neutral-600 dark:text-neutral-200 py-4">
+        <h5 className="font-medium text-base md:text-lg text-gray-700">
           Welcome to the College Ecosystem
         {/* <svg
-          className="hello__svg"
+          className="hello__svg h-10"
           viewBox="0 0 1230.94 414.57"
           xmlns="http://www.w3.org/2000/svg"
         >

@@ -47,7 +47,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head />
-      <body className={cn("min-h-screen antialiased", fontSans.variable)}>
+      <body className={cn("min-h-screen min-w-screen w-full antialiased", fontSans.variable)}>
         <Provider>{children} </Provider>
         {process.env.NODE_ENV === "production" && (
           <GoogleAnalytics gaId="G-SC4TQQ5PCW" />

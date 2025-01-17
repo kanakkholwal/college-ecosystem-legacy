@@ -1,12 +1,14 @@
+import type { Session } from "~/lib/auth-client";
+
 import { Users } from "lucide-react";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuBookA, LuBuilding, LuGithub, LuSchool } from "react-icons/lu";
 import { PiStudentFill } from "react-icons/pi";
 import { RiTwitterXFill } from "react-icons/ri";
-import { TbServer2 } from "react-icons/tb";
-import type { Session } from "~/lib/auth-client";
+// import { TbServer2 } from "react-icons/tb";
 
+import { IoCalendarOutline } from "react-icons/io5";
 import { GrStorage } from "react-icons/gr";
 import { TbDashboard } from "react-icons/tb";
 import { ROLES } from "~/constants";
@@ -160,11 +162,17 @@ export const sidebar_links: rawLinkType[] = [
     allowed_roles: [ROLES.ADMIN],
   },
   {
-    title: "Server",
-    icon: TbServer2,
-    path: "/server",
+    title: "Academic Calender",
+    icon: IoCalendarOutline,
+    path: "/academic-calender",
     allowed_roles: [ROLES.ADMIN],
   },
+  // {
+  //   title: "Server",
+  //   icon: TbServer2,
+  //   path: "/server",
+  //   allowed_roles: [ROLES.ADMIN],
+  // },
   {
     title: "Courses",
     icon: LuBookA,

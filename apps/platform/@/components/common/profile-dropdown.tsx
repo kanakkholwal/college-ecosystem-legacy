@@ -163,6 +163,10 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
 
 const SUPPORT_LINKS = [
   {
+    href: "https://github.com/kanakkholwal/college-ecosystem",
+    title: "Contribute to this project",
+  },
+  {
     href: "https://github.com/kanakkholwal/college-ecosystem/issues",
     title: "Report an issue",
   },
