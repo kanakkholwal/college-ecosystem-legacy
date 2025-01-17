@@ -16,7 +16,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import readXlsxFile from "read-excel-file";
 import z from "zod";
-import { bulkUpdateGenders } from "~/actions/result";
+import serverApis from "~/lib/server-apis";
 
 const freshersDataSchema = z.object({
   name: z.string(),
@@ -129,7 +129,7 @@ export default function ImportNewStudents() {
         <Button
           onClick={async () => {
             if (data === null) return;
-            toast.promise(bulkUpdateGenders(data), {
+            toast.promise(serverApis.results.importFreshers(data), {
               loading: "Updating data",
               success: "Data updated successfully",
               error: "Failed to update data",

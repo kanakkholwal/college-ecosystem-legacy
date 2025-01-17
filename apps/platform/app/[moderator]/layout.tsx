@@ -6,10 +6,10 @@ import { notFound, redirect } from "next/navigation";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { changeCase } from "~/utils/string";
-
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { ROLES } from "~/constants";
 
-const ALLOWED_ROLES = ["admin", "moderator", "cr", "hod", "faculty"];
+const ALLOWED_ROLES = [ROLES.ADMIN, ROLES.FACULTY,ROLES.CR,ROLES.FACULTY,ROLES.CHIEF_WARDEN,ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA,ROLES.HOD];
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -88,7 +88,7 @@ export default async function DashboardLayout({
 }
 
 function checkAuthorization(
-  moderator: string,
+  moderator: (typeof ALLOWED_ROLES)[number],
   session: Awaited<ReturnType<typeof getSession>>
 ) {
   // 1. No session, redirect to sign-in

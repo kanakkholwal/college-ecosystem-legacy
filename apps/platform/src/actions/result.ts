@@ -6,6 +6,7 @@ import ResultModel from "src/models/result";
 import { z } from "zod";
 import { serverFetch } from "~/lib/server-fetch";
 import redis from "src/lib/redis";
+import serverApis from "~/lib/server-apis";
 
 /*
 /*  For Public Search
@@ -217,7 +218,7 @@ export async function bulkUpdateGenders(
         data: parsedData.error,
       };
     }
-    await dbConnect("production");
+    await dbConnect();
 
     const batchSize = 8;
     for (let i = 0; i < parsedData.data.length; i += batchSize) {
@@ -225,20 +226,11 @@ export async function bulkUpdateGenders(
       await Promise.allSettled(
         batch.map(async (student) => {
           const result = await ResultModel.findOne({ rollNo: student.rollNo });
-          if (result && result.gender !== "not_specified") {
+          if (result && result.gender === "not_specified") {
             result.gender = student.gender;
             console.log(student.gender);
             await result.save();
-          } else {
-            const res = await serverFetch("/api/results/:rollNo/add", {
-              method: "POST",
-              params: { rollNo: student.rollNo },
-            });
-            if (!res.data) {
-              console.log(res.error);
-            }
-            console.log(res.data);
-          }
+          } 
         })
       );
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -250,3 +242,4 @@ export async function bulkUpdateGenders(
     return Promise.resolve(false);
   }
 }
+

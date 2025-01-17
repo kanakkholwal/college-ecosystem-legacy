@@ -1,8 +1,8 @@
 import EmptyArea from "@/components/common/empty-area";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { LuBuilding } from "react-icons/lu";
-import { getHostel } from "~/actions/hostel_n_outpass";
-import { UpdateStudentsForm } from "./client";
+import { getHostel } from "~/actions/hostel";
+import { UpdateStudentsForm } from "@/components/application/hostel/hostel-actions";
 
 export default async function HostelPage({
   params,

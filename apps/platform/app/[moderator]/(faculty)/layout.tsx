@@ -1,16 +1,14 @@
 import Page403 from "@/components/utils/403";
-import type { Metadata } from "next";
 import { getSession } from "src/lib/auth-server";
+import { ROLES } from "~/constants";
 
-export const metadata: Metadata = {
-  title: "Faculty Dashboard",
-  description: "Admin Dashboard ",
-};
+
+const ALLOWED_ROLES = [ROLES.FACULTY, ROLES.HOD, ROLES.ASSISTANT_WARDEN, ROLES.WARDEN]
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
   params: Promise<{
-    moderator: "faculty" | "hod";
+    moderator: (typeof ALLOWED_ROLES)[number];
   }>;
 }
 
@@ -22,10 +20,13 @@ export default async function DashboardLayout({
   const { moderator } = await params;
 
   if (
-    !(session?.user.other_roles.includes("faculty") && moderator === "faculty")
+    !(session?.user.other_roles.some((role) => ALLOWED_ROLES.includes(role as typeof ALLOWED_ROLES[number]))
+      && ALLOWED_ROLES.includes(moderator)
+      || session?.user?.role === ROLES.ADMIN
+    )
   ) {
     return <Page403 />;
   }
 
-  return <>{children}</>;
+  return children;
 }

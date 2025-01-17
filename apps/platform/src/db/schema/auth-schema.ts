@@ -38,6 +38,7 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updatedAt").notNull(),
   role: text("role").notNull().default("user"),
   other_roles: userRolesEnum("other_roles").array().notNull().default([]),
+  other_emails: text("other_emails").array().notNull().default([]),
   gender: userGenderEnum("gender")
     .notNull()
     .default("not_specified")

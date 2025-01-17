@@ -16,10 +16,10 @@ import { X } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import * as z from "zod";
-import { updateHostel } from "~/actions/hostel_n_outpass";
+import { updateHostel } from "~/actions/hostel";
 import { isValidRollNumber } from "~/constants/departments";
 import { updateHostelSchema } from "~/constants/hostel_n_outpass";
-import {ORG_DOMAIN} from "~/project.config";
+import { ORG_DOMAIN } from "~/project.config";
 
 export function UpdateHostelForm() {
   const form = useForm<z.infer<typeof updateHostelSchema>>({
@@ -144,21 +144,18 @@ export function UpdateStudentsForm({ slug }: { slug: string }) {
         }),
         {
           loading: "Updating Students",
-          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-          success: (data: any) => {
-            console.log(data);
-            return "Students updated successfully";
+          success: (msg: string | undefined) => {
+            console.log(msg);
+            return msg ||"Students updated successfully";
           },
-          // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-          error: (err: any) => {
-            console.log(err);
+          error: (msg: string | undefined) => {
+            console.log(msg);
 
-            return "Failed to update students";
+            return msg ||"Failed to update students";
           },
         }
       );
 
-      toast.success("Hostel created successfully");
     } catch (error) {
       toast.error("Failed to create user");
     }

@@ -27,7 +27,7 @@ import type z from "zod";
 import {
   createHostel,
   importHostelsFromSite,
-} from "~/actions/hostel_n_outpass";
+} from "~/actions/hostel";
 
 import { createHostelSchema } from "~/constants/hostel_n_outpass";
 
@@ -244,15 +244,11 @@ export function ImportFromSiteButton() {
         toast
           .promise(importHostelsFromSite(), {
             loading: "Importing Hostels",
-            // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-            success: (data: any) => {
+            success: (data: string |undefined) => {
               console.log(data);
-              // if(data.error){
-              //     return data.message
-              // }
-              return data?.message || "Hostels imported successfully";
+              return data || "Hostels imported successfully";
             },
-            error: "Failed to import hostels",
+            error: (msg:string |undefined) => msg || "Failed to import hostels",
           })
           .finally(() => {
             setLoading(false);

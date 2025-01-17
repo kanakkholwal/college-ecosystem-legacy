@@ -139,6 +139,11 @@ export const auth = betterAuth({
         required: true,
         input: true,
       },
+      other_emails: {
+        type: "string[]",
+        required: false,
+        input: false,
+      },
       gender: {
         type: "string",
         input: true,

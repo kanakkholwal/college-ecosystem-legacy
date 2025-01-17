@@ -139,7 +139,7 @@ type APITypes = {
       };
     };
     updateResultByRollNo: {
-      payload: z.infer<typeof rollNoSchema>;
+      payload: [z.infer<typeof rollNoSchema>,Partial<z.infer<typeof rawResultSchema>>];
       response: z.infer<typeof rawResultSchema> & {
         _id: string;
         gender: "male" | "female" | "not_specified";
@@ -191,14 +191,14 @@ const results = {
   ) => {
     return await serverFetch<
       ApiResponse<APITypes["results"]["importFreshers"]["response"]>
-    >("/results/import-freshers", {
+    >("/api/results/import-freshers", {
       method: "POST",
       body: payload,
     });
   },
   assignRank: async () => {
     return await serverFetch<ApiResponse<Record<string, string>>>(
-      "/results/assign-ranks",
+      "/api/results/assign-ranks",
       {
         method: "POST",
       }
@@ -206,7 +206,7 @@ const results = {
   },
   assignBranchChange: async () => {
     return await serverFetch<ApiResponse<Record<string, string>>>(
-      "/results/assign-branch-change",
+      "/api/results/assign-branch-change",
       {
         method: "POST",
       }
@@ -217,7 +217,7 @@ const results = {
   ) => {
     return await serverFetch<
       ApiResponse<APITypes["results"]["getResultByRollNoFromSite"]["response"]>
-    >("/results/:rollNo", {
+    >("/api/results/:rollNo", {
       method: "POST",
       params: { rollNo: payload },
     });
@@ -227,7 +227,7 @@ const results = {
   ) => {
     return await serverFetch<
       ApiResponse<APITypes["results"]["getResultByRollNo"]["response"]>
-    >("/results/:rollNo/get", {
+    >("/api/results/:rollNo/get", {
       method: "GET",
       params: { rollNo: payload },
     });
@@ -237,7 +237,7 @@ const results = {
   ) => {
     return await serverFetch<
       ApiResponse<APITypes["results"]["addResultByRollNo"]["response"]>
-    >("/results/:rollNo/add", {
+    >("/api/results/:rollNo/add", {
       method: "POST",
       params: { rollNo: payload },
     });
@@ -247,9 +247,10 @@ const results = {
   ) => {
     return await serverFetch<
       ApiResponse<APITypes["results"]["updateResultByRollNo"]["response"]>
-    >("/results/:rollNo/update", {
+    >("/api/results/:rollNo/update", {
       method: "POST",
-      params: { rollNo: payload },
+      params: { rollNo: payload[0] },
+      body: payload[1],
     });
   },
 } as const;
@@ -262,7 +263,7 @@ const hostels = {
   getAll: async () => {
     return await serverFetch<
       ApiResponse<APITypes["hostels"]["getAll"]["response"]>
-    >("/hostels", {
+    >("/api/hostels", {
       method: "GET",
     });
   },
@@ -275,7 +276,7 @@ const hostels = {
 const faculties = {
   searchByEmail: async (email: string) => {
     return await serverFetch<ApiResponse<FunctionaryType>>(
-      "/faculties/search/:email",
+      "/api/faculties/search/:email",
       {
         method: "GET",
         params: { email },
@@ -284,7 +285,7 @@ const faculties = {
   },
   refresh: async () => {
     return await serverFetch<ApiResponse<Record<string, string>>>(
-      "/faculties/refresh",
+      "/api/faculties/refresh",
       {
         method: "GET",
       }
@@ -292,7 +293,7 @@ const faculties = {
   },
   getByDepartment: async (departmentCode: string) => {
     return await serverFetch<ApiResponse<FunctionaryType[]>>(
-      "/faculties/:departmentCode",
+      "/api/faculties/:departmentCode",
       {
         method: "GET",
         params: { departmentCode },
@@ -307,13 +308,13 @@ const faculties = {
 
 const departments = {
   getAll: async () => {
-    return await serverFetch<ApiResponse<FunctionaryType[]>>("/departments", {
+    return await serverFetch<ApiResponse<FunctionaryType[]>>("/api/departments", {
       method: "GET",
     });
   },
   getList: async () => {
     return await serverFetch<ApiResponse<FunctionaryType[]>>(
-      "/departments/list",
+      "/api/departments/list",
       {
         method: "GET",
       }

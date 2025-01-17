@@ -104,7 +104,7 @@ export const HostelStudentModel =
   mongoose.models?.HostelStudent ||
   mongoose.model<IHostelStudentType>("HostelStudent", HostelStudentSchema);
 
-export interface IOutPassType extends Document {
+export interface rawOutPassType extends Document {
   student: string;
   roomNumber: string;
   address: string;
@@ -118,11 +118,22 @@ export interface IOutPassType extends Document {
   createdAt?: Date;
   updatedAt?: Date;
 }
+export interface IOutPassType extends Document ,rawOutPassType{}
+
+export type OutPassType = Omit<IOutPassType, "student" | "hostel"> & {
+  student: Pick<IHostelStudentType, "_id" | "name" | "email" | "rollNumber">;
+  hostel: Pick<IHostelType, "_id" | "name" | "slug" | "gender">;
+}
 
 // Out_pass Schema & Model
 const OutPassSchema = new Schema(
   {
     student: {
+      type: Schema.Types.ObjectId,
+      ref: "HostelStudent",
+      required: true,
+    },
+    hostel: {
       type: Schema.Types.ObjectId,
       ref: "HostelStudent",
       required: true,

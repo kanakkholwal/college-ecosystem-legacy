@@ -8,8 +8,8 @@ import { PiStudentFill } from "react-icons/pi";
 import { RiTwitterXFill } from "react-icons/ri";
 // import { TbServer2 } from "react-icons/tb";
 
-import { IoCalendarOutline } from "react-icons/io5";
 import { GrStorage } from "react-icons/gr";
+import { IoCalendarOutline } from "react-icons/io5";
 import { TbDashboard } from "react-icons/tb";
 import { ROLES } from "~/constants";
 
@@ -229,6 +229,24 @@ export const sidebar_links: rawLinkType[] = [
     path: "/hostels",
     allowed_roles: [ROLES.CHIEF_WARDEN, ROLES.ADMIN],
     items: [],
+  },
+  {
+    title: "Hostel",
+    icon: LuBuilding,
+    path: "/hostel",
+    allowed_roles: [ROLES.ADMIN,ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA],
+    items: [
+      {
+        title: "Out Pass",
+        path: "/out-pass/list",
+        allowed_roles: [ROLES.ADMIN,ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA],
+      },
+      {
+        title: "Out Pass Requests",
+        path: "/out-pass/requests",
+        allowed_roles: [ROLES.ADMIN,ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA],
+      },
+    ],
   },
   {
     title: "Hosteler Students",

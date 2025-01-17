@@ -29,12 +29,12 @@ export { rooms, roomUsageHistory } from "./schema/room";
 //   timetables,
 // } from "./schema/time_table";
 
-export {
-  schedulesModeEnums,
-  scheduleAccess,
-  scheduleEvents,
-  schedules,
-} from "./schema/schedule";
+// export {
+//   schedulesModeEnums,
+//   scheduleAccess,
+//   scheduleEvents,
+//   schedules,
+// } from "./schema/schedule";
 
 export {
   calender_sem_event_tags,

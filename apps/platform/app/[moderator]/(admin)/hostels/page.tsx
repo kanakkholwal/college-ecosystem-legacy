@@ -5,7 +5,7 @@ import { Heading } from "@/components/ui/typography";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { LuBuilding } from "react-icons/lu";
-import { getHostels } from "~/actions/hostel_n_outpass";
+import { getHostels } from "~/actions/hostel";
 
 import { CreateHostelForm, ImportFromSiteButton } from "./client";
 

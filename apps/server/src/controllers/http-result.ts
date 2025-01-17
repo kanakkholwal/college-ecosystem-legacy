@@ -4,6 +4,7 @@ import { z } from "zod";
 import { getDepartmentCoursePrefix } from "../constants/departments";
 import { getInfoFromRollNo, scrapeResult } from "../lib/scrape";
 import ResultModel from "../models/result";
+import type { rawResultSchema } from "../types/result";
 import dbConnect from "../utils/dbConnect";
 
 // Endpoint to get result by rollNo scraped from the website
@@ -78,6 +79,9 @@ export const addResult = async (req: Request, res: Response) => {
 
 export const updateResult = async (req: Request, res: Response) => {
   const rollNo = req.params.rollNo;
+  const custom_attributes = req.body as Partial<z.infer<typeof rawResultSchema>>;
+
+
 
   try {
     await dbConnect();
@@ -97,11 +101,16 @@ export const updateResult = async (req: Request, res: Response) => {
       return;
     }
     const result = data.data;
-    resultData.name = result.name;
-    resultData.branch = result.branch;
-    resultData.batch = result.batch;
-    resultData.programme = result.programme;
-    resultData.semesters = result.semesters;
+    await ResultModel.findByIdAndUpdate(resultData._id, {
+      $set: {
+        name: result.name,
+        branch: result.branch,
+        batch: result.batch,
+        programme: result.programme,
+        semesters: result.semesters,
+        ...(custom_attributes ? { ...custom_attributes } : {}),
+      }
+    });
     await resultData.save();
     console.log("Updated ", rollNo);
     res.status(200).json({
