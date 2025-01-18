@@ -100,6 +100,7 @@ const parseResult = (
     batch: info.batch,
     programme: info.programme,
     semesters: [] as rawResultType["semesters"],
+    gender:"not_specified"
   };
 
   student.name =
