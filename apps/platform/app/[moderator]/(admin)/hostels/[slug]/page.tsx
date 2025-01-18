@@ -1,8 +1,15 @@
+import { UpdateStudentsForm } from "@/components/application/hostel/hostel-actions";
 import EmptyArea from "@/components/common/empty-area";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import { Heading, Paragraph } from "@/components/ui/typography";
+import { ErrorBoundary } from "@/components/utils/error-boundary";
 import { LuBuilding } from "react-icons/lu";
 import { getHostel } from "~/actions/hostel";
-import { UpdateStudentsForm } from "@/components/application/hostel/hostel-actions";
 
 export default async function HostelPage({
   params,
@@ -24,6 +31,7 @@ export default async function HostelPage({
       />
     );
   }
+
   return (
     <div className="space-y-5 my-2">
       <div className="flex justify-between w-full">
@@ -54,10 +62,36 @@ export default async function HostelPage({
           </ul>
         </div>
         <div>
-          <Heading level={5}>
-            Hosteler Students ({hostel.students.length})
-          </Heading>
-          <UpdateStudentsForm slug={slug} />
+          <Accordion type="single" collapsible>
+            <AccordionItem value="update-hostel">
+              <AccordionTrigger>
+                <Heading level={5}>
+                  Update Hostel
+                </Heading>
+              </AccordionTrigger>
+              <AccordionContent>
+
+                <ErrorBoundary
+                  fallback={<p className="text-red-500">Failed to load students</p>}
+                >
+                  <UpdateStudentsForm slug={slug}
+                    student_emails={hostel.students.map((student) => student.email)}
+                  />
+                </ErrorBoundary>
+              </AccordionContent>
+            </AccordionItem>
+            <AccordionItem value="existing-students">
+              <AccordionTrigger>
+                <Heading level={5}>
+                  Hosteler Students ({hostel.students.length})
+                </Heading>
+              </AccordionTrigger>
+              <AccordionContent>
+
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+
         </div>
       </div>
     </div>

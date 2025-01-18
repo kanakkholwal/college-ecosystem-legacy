@@ -13,6 +13,9 @@ const PROMO = {
   description: "Join the Developer Student Club to learn, share and grow together.",
   link: "https://docs.google.com/forms/d/e/1FAIpQLSfWPMxccVswmU8_ffNmVDg-UFjlI01zEssWCUuUAFYcNA7YTg/viewform",
   label: "Register Now!",
+  showTill: "2022-01-19T19:00:00",
+  getConditionByUser: (user: Session["user"]) =>
+    user?.other_roles.includes(ROLES.STUDENT) && user.username.startsWith("24"),
 }
 
 export default async function Dashboard() {
@@ -23,11 +26,8 @@ export default async function Dashboard() {
   return (
     <>
       <ConditionalRender
-        condition={
-          session?.user?.other_roles.includes(ROLES.STUDENT)
-          && session?.user.username.startsWith("24")
-          && new Date() < new Date("2022-01-19T19:00:00")
-        }
+        condition={PROMO.getConditionByUser(session?.user) && new Date() < new Date(PROMO.showTill)}
+
       >
         <BannerPanel
           title={PROMO.title}
@@ -70,14 +70,3 @@ export default async function Dashboard() {
   );
 }
 
-function getGreeting(): string {
-  const currentHour = new Date().getHours();
-
-  if (currentHour >= 5 && currentHour < 12) {
-    return "Good morning!";
-  }
-  if (currentHour >= 12 && currentHour < 18) {
-    return "Good afternoon!";
-  }
-  return "Good evening!";
-}

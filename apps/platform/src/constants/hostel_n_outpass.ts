@@ -1,4 +1,15 @@
 import { z } from "zod";
+import { ORG_DOMAIN } from "~/project.config";
+
+
+
+export const emailSchema = z
+  .string()
+  .email()
+  .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
+    message: `Email must end with @${ORG_DOMAIN}`,
+  });
+
 
 export const createHostelSchema = z.object({
   name: z.string(),
@@ -6,44 +17,45 @@ export const createHostelSchema = z.object({
   gender: z.enum(["male", "female", "guest_hostel"]),
   administrators: z.array(
     z.object({
-      email: z.string().email(),
+      email: emailSchema,
       role: z.enum(["warden", "mmca", "assistant_warden"]),
       userId: z.string().nullable(),
     })
   ),
   warden: z.object({
     name: z.string(),
-    email: z.string().email(),
+    email: emailSchema,
     userId: z.string().nullable(),
   }),
   students: z.array(z.string()),
 });
 
+
 export const updateHostelSchema = z.object({
   administrators: z.array(
     z.object({
-      email: z.string().email(),
+      email: emailSchema,
       role: z.enum(["warden", "mmca", "assistant_warden"]),
       userId: z.string().nullable(),
     })
   ),
   warden: z.object({
     name: z.string(),
-    email: z.string().email(),
+    email: emailSchema,
     userId: z.string().nullable(),
   }),
-  students: z.array(z.string().email()),
+  students: z.array(emailSchema),
 });
 
 export const updateHostelStudentSchema = z.object({
-  students: z.array(z.string().email()),
+  students: z.array(emailSchema),
 });
 
 export const createHostelStudentSchema = z.object({
   rollNumber: z.string(),
   userId: z.string(),
   name: z.string(),
-  email: z.string().email(),
+  email: emailSchema,
   gender: z.enum(["male", "female"]),
   hostel: z.string(),
   roomNumber: z.string(),

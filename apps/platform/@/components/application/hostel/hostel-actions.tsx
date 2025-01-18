@@ -13,12 +13,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { X } from "lucide-react";
+import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import * as z from "zod";
 import { updateHostel } from "~/actions/hostel";
 import { isValidRollNumber } from "~/constants/departments";
-import { updateHostelSchema } from "~/constants/hostel_n_outpass";
+import { emailSchema, updateHostelSchema } from "~/constants/hostel_n_outpass";
 import { ORG_DOMAIN } from "~/project.config";
 
 export function UpdateHostelForm() {
@@ -37,7 +38,7 @@ export function UpdateHostelForm() {
   const handleSubmit = async (data: z.infer<typeof updateHostelSchema>) => {
     try {
       console.log(data);
-      // toast.promise(updateHostel(data), {
+      // toast.promise(updateHostel(data,false), {
       //     loading: "Creating Hostel",
       //     success: "Hostel created successfully",
       //     error: "Failed to create hostel"
@@ -111,161 +112,143 @@ export function UpdateHostelForm() {
 }
 
 const updateHostelStudentSchema = z.object({
-  students: z.array(z.string().email()),
+  students: z.array(emailSchema),
   rollNo: z.boolean().optional(),
   search: z.string().optional(),
 });
 
 
-const emailSchema = z
-  .string()
-  .email()
-  .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
-    message: `Email must end with @${ORG_DOMAIN}`,
-  })
+type UpdateStudentsFormProps = {
+  slug: string;
+  student_emails: string[];
+};
 
-export function UpdateStudentsForm({ slug }: { slug: string }) {
+
+
+export function UpdateStudentsForm({ slug, student_emails }: UpdateStudentsFormProps) {
+  const [students, setStudents] = useState<string[]>(student_emails);
+  const [updating, setUpdating] = useState(false);
+
   const form = useForm<z.infer<typeof updateHostelStudentSchema>>({
     resolver: zodResolver(updateHostelStudentSchema),
     defaultValues: {
-      students: [],
+      students: students,
       search: "",
     },
   });
 
-  const handleSubmit = async (
-    data: z.infer<typeof updateHostelStudentSchema>
-  ) => {
-    try {
-      console.log("data", data);
-      toast.promise(
-        updateHostel(slug, {
-          students: data.students,
-        }),
-        {
-          loading: "Updating Students",
-          success: (msg: string | undefined) => {
-            console.log(msg);
-            return msg ||"Students updated successfully";
-          },
-          error: (msg: string | undefined) => {
-            console.log(msg);
-
-            return msg ||"Failed to update students";
-          },
+  const handleEmailParsing = useCallback((input: string) => {
+    const parsedEmails = input
+      .split(/,|\n/) // Split by commas or newlines
+      .map((entry) => {
+        const emailMatch = entry.match(/<([^>]+)>/); // Extract email within angle brackets
+        if (emailMatch) {
+          return emailMatch[1].toLowerCase().trim();
         }
-      );
+        return isValidRollNumber(entry)
+          ? entry.concat(`@${ORG_DOMAIN}`).toLowerCase().trim()
+          : entry.toLowerCase().trim();
+      })
+      .filter((email) => emailSchema.safeParse(email).success); // Validate emails
 
-    } catch (error) {
-      toast.error("Failed to create user");
-    }
+    const uniqueEmails = Array.from(new Set([...students, ...parsedEmails])); // Merge without duplicates
+    setStudents(uniqueEmails); // Update state with merged emails
+    form.setValue("students", uniqueEmails);
+  }, [form, students])
+
+  const handleRemoveStudent = useCallback((index: number) => {
+    const updatedStudents = students.filter((_, i) => i !== index);
+    setStudents(updatedStudents);
+    form.setValue("students", updatedStudents);
+  }, [form, students])
+
+
+
+  const handleSubmit = async (data: z.infer<typeof updateHostelStudentSchema>) => {
+    setUpdating(true);
+    return new Promise(resolve => {
+      try {
+        toast.promise(
+          updateHostel(slug, { students: data.students }, true),
+          {
+            loading: "Updating students...",
+            success: (msg: string | undefined) => msg || "Students updated successfully",
+            error: "Failed to update students",
+          }
+        );
+      } catch {
+        toast.error("Unexpected error occurred while updating students.");
+      } finally {
+        setUpdating(false);
+        resolve(true);
+      }
+    });
   };
+
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-6 my-5 p-2"
+        className="space-y-6 my-5 p-3 md:px-6 bg-slate-100 border rounded-lg"
       >
-        <div className="grid grid-cols-1 gap-3">
+        <div className="flex gap-2 items-end flex-col @lg:flex-row w-full">
           <FormField
             control={form.control}
             name="students"
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="flex-1 w-full">
                 <FormLabel>
-                  Students Email ({form.watch("students").length} students
-                  added)
+                  Update Students Email ({form.watch("students").length} students added)
                 </FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Students Email"
+                    placeholder="Enter student emails"
                     type="text"
                     autoCapitalize="none"
                     autoComplete="email"
                     autoCorrect="off"
-                    onChange={(e) => {
-                      // split by comma and line break  and remove spaces
-                      const emails = e.target.value
-                        .split(/,|\n/) // Split by commas or newlines
-                        .map((entry) => {
-                          // Extract email if present in the entry
-                          const emailMatch = entry.match(/<([^>]+)>/); // Match the email within angle brackets
-                          if (emailMatch) {
-                            return emailMatch[1].toLowerCase().trim();
-                          }
-                          // Handle roll number pattern
-                          return isValidRollNumber(entry)
-                            ? entry.concat(`@${ORG_DOMAIN}`).toLowerCase().trim()
-                            : entry.toLowerCase().trim();
-                        })
-                        .filter(
-                          (email) => emailSchema.safeParse(email).success
-                        ); // Validate emails
-                      console.log(
-                        emails,
-                        e.target.value
-                          .split(/,|\n/) // Split by commas or newlines
-                          .map((entry) => {
-                            // Extract email if present in the entry
-                            const emailMatch = entry.match(/<([^>]+)>/); // Match the email within angle brackets
-                            if (emailMatch) {
-                              return emailMatch[1].toLowerCase().trim();
-                            }
-                            // Handle roll number pattern
-                            return isValidRollNumber(entry)
-                            ? entry.concat(`@${ORG_DOMAIN}`).toLowerCase().trim()
-                              : entry.toLowerCase().trim();
-                          })
-                      );
-                      form.setValue("students", emails);
-                    }}
-                    disabled={form.formState.isSubmitting}
+                    onChange={(e) => handleEmailParsing(e.target.value)}
+                    disabled={updating}
                   />
                 </FormControl>
-                <FormDescription />
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div className="flex items-center justify-start gap-3 w-full flex-wrap">
-            {form.watch("students").map((entry, index) => {
-              const studentError = emailSchema.safeParse(entry).error;
-
-              return (
-                <div
-                  key={entry}
-                  className="inline-flex justify-start items-start gap-2"
-                >
-                  <div className="inline-flex justify-start items-center space-x-2 bg-gray-200 p-1 rounded-lg">
-                    <div className="text-sm">{entry}</div>
-                    <Badge
-                      size="sm"
-                      className="h-5 w-5 cursor-pointer"
-                      variant="destructive_light"
-                      onClick={() => {
-                        form.setValue(
-                          "students",
-                          form.watch("students").filter((_, i) => i !== index)
-                        );
-                      }}
-                    >
-                      <X className="w-4 h-4" />
-                    </Badge>
-                  </div>
-                  {studentError && (
-                    <p className="text-red-500 text-xs">
-                      {studentError.message}
-                    </p>
-                  )}
-                </div>
-              );
-            })}
-          </div>
+          <Button type="submit" variant="default_light" className="mx-auto" disabled={updating}>
+            {updating ? "Updating..." : "Update Students"}
+          </Button>
         </div>
 
-        <Button type="submit" disabled={form.formState.isSubmitting}>
-          Update Hostel
-        </Button>
+        <div className="flex flex-wrap gap-3">
+          {form.watch("students").map((entry, index) => {
+            const studentError = emailSchema.safeParse(entry).error;
+
+            return (
+              <div key={entry} className="inline-flex items-start gap-2">
+                <div className="inline-flex items-center gap-2 bg-gray-200 p-1 rounded-lg">
+                  <span className="text-sm">{entry}</span>
+                  <Badge
+                    size="sm"
+                    className="size-5 p-1 cursor-pointer"
+                    variant="destructive_light"
+                    onClick={() => handleRemoveStudent(index)}
+
+                  >
+                    <X className="size-4" />
+                  </Badge>
+                </div>
+                {studentError && (
+                  <p className="text-red-500 text-xs">
+                    {studentError.message}
+                  </p>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+
       </form>
     </Form>
   );

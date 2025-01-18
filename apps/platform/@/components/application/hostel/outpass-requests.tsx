@@ -91,13 +91,12 @@ export default function DisplayOutPasses(props: PageProps) {
           </div>
         ) : (
           <ErrorBoundary
-            fallback={(_) => {
-              return (
+            fallback={
                 <div className="text-center">
                   {error || "Error fetching data"}
                 </div>
-              );
-            }}
+            
+            }
           >
             <DataTable data={outPasses} columns={columns} />
           </ErrorBoundary>

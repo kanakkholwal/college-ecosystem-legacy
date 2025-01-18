@@ -22,6 +22,10 @@ export interface RawHostelType {
 export interface HostelType extends RawHostelType {
   _id: string;
 }
+export interface HostelTypeWithStudents extends Omit<RawHostelType, "students"> {
+  _id: string;
+  students: IHostelStudentType[];
+}
 export interface IHostelType extends Document, RawHostelType {}
 
 // Hostel Schema & Model
@@ -76,7 +80,6 @@ export interface IHostelStudentType extends Document {
   banned: boolean;
   bannedTill?: Date;
   bannedReason?: string;
-
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -84,7 +87,7 @@ export interface IHostelStudentType extends Document {
 // HostelStudent Schema & Model
 const HostelStudentSchema = new Schema(
   {
-    rollNumber: { type: String, required: true, unique: true },
+    rollNumber: { type: String, required: true, },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     gender: { type: String, required: true, enum: ["male", "female"] },
@@ -92,7 +95,7 @@ const HostelStudentSchema = new Schema(
     userId: { type: String, default: null },
     hostelId: { type: Schema.Types.ObjectId, ref: "Hostel", default: null },
     roomNumber: { type: String, required: true },
-    phoneNumber: { type: String, default: null, unique: true },
+    phoneNumber: { type: String, default: null,},
     banned: { type: Boolean, default: false },
     bannedTill: { type: Date },
     bannedReason: { type: String },

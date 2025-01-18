@@ -20,8 +20,8 @@ export interface Semester {
   sgpi_total: number;
   cgpi_total: number;
 }
-export interface ResultTypeWithId {
-  _id: string;
+
+export type rawResultType = {
   name: string;
   rollNo: string;
   branch: string;
@@ -29,22 +29,16 @@ export interface ResultTypeWithId {
   programme: string;
   semesters: Semester[];
   rank: Rank;
-  gender: "male" | "female" | "not_specified";
   createdAt?: Date;
   updatedAt?: Date;
+  gender: "male" | "female" | "not_specified";
 }
 
-export interface IResultType extends Document {
-  name: string;
-  rollNo: string;
-  branch: string;
-  batch: number;
-  programme: string;
-  semesters: Semester[];
-  rank: Rank;
-  createdAt?: Date;
-  updatedAt?: Date;
-  gender: "male" | "female" | "not_specified";
+export interface ResultTypeWithId extends rawResultType{
+  _id: string;
+}
+
+export interface IResultType extends Document ,rawResultType{
 }
 
 const CourseSchema: Schema = new Schema({

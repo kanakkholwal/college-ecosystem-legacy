@@ -1,12 +1,14 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { z } from "zod";
+import type { z } from "zod";
 import { ROLES } from "~/constants";
+import type { emailSchema } from "~/constants/hostel_n_outpass";
 import {
     createHostelSchema,
     createHostelStudentSchema,
     updateHostelSchema,
+    updateHostelStudentSchema
 } from "~/constants/hostel_n_outpass";
 import { getSession } from "~/lib/auth-server";
 import dbConnect from "~/lib/dbConnect";
@@ -15,13 +17,13 @@ import {
     HostelModel,
     HostelStudentModel,
     type HostelType,
-    type IHostelType,
     type IHostelStudentType,
-    OutPassModel,
+    type HostelTypeWithStudents,
+    type IHostelType
 } from "~/models/hostel_n_outpass";
-import ResultModel from "~/models/result";
-import { ORG_DOMAIN } from "~/project.config";
-
+import ResultModel,{type ResultTypeWithId} from "~/models/result";
+import { getUserByEmail } from "./user";
+import mongoose from "mongoose";
 
 const allowedRolesForHostel = [ROLES.ADMIN, ROLES.STUDENT, ROLES.ASSISTANT_WARDEN, ROLES.WARDEN];
 type allowedRolesForHostelType = (typeof allowedRolesForHostel)[number]
@@ -63,52 +65,78 @@ export async function createHostelStudent(
 
 export async function updateHostel(
     slug: string,
-    data: Partial<z.infer<typeof updateHostelSchema>>
+    data: Partial<z.infer<typeof updateHostelSchema>> | z.infer<typeof updateHostelStudentSchema>,
+    studentsOnly?: boolean
 ) {
     try {
+        if (studentsOnly) {
+            const response = updateHostelStudentSchema.safeParse(data);
+            if (!response.success) {
+                return Promise.reject("Invalid schema has passed")
+            }
+        } else {
+            const response = updateHostelSchema.safeParse(data);
+            if (!response.success) {
+                return Promise.reject("Invalid schema has passed")
+            }
+        }
+        console.log("valid schema")
+
         const hostel = (await HostelModel.findOne({
             slug,
         }).lean()) as IHostelType | null;
         if (!hostel) {
             return Promise.reject("Hostel not found")
         }
-        const response = updateHostelSchema.safeParse(data);
-        if (!response.success) {
-            return Promise.reject("Invalid schema has passed")
-        }
-        console.log("valid schema")
+
         await dbConnect();
+        // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+        let changes = { ...data } as any;
+
+        // Convert email list to ObjectId
         if (data?.students) {
             const students = await HostelStudentModel.find({
-                email: { $in: data?.students },
-            }).lean();
+                email: { $in: data.students },
+            }).select("_id").lean();
+
             if (students.length !== (data.students ?? []).length) {
                 console.log("syncHostelStudents");
                 const response = await syncHostelStudents(
                     (hostel._id as string).toString(),
                     data.students
                 );
+
                 if (!response.success) {
-                    return Promise.reject(response.error)
+                    console.log("Failed to sync students", response.error);
+                    return Promise.reject(response.error);
                 }
+
+                if (response?.data) {
+                    changes.students = response.data.map((student) =>
+                        new mongoose.Types.ObjectId(student as string)
+                    );
+                } else {
+                    const { students, ...rest } = changes;
+                    changes = rest; // Remove `students` if no valid IDs are found
+                }
+            } else {
+                // Use the found student ObjectIds
+                changes.students = students.map((student) => student._id);
             }
         }
 
-        await HostelModel.findOneAndUpdate({ slug }, data, { new: true }).exec();
+
+        await HostelModel.findOneAndUpdate({ slug }, changes, { new: true }).exec();
         return Promise.resolve(`${hostel.name} has been updated`)
     } catch (err) {
+        console.log("Failed to update hostel", err)
         return Promise.reject(err?.toString())
     } finally {
         revalidatePath(`/admin/hostels/${slug}`);
     }
 }
 
-const emailSchema = z
-    .string()
-    .email()
-    .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
-        message: `Email must end with @${ORG_DOMAIN}`,
-    })
+
 
 async function syncHostelStudents(
     hostelId: string,
@@ -118,12 +146,15 @@ async function syncHostelStudents(
         const hostel = (await HostelModel.findById(hostelId)) as IHostelType;
         const updates = [];
         const result_updates = [];
+
+
         if (student_emails) {
             const students = await HostelStudentModel.find({
                 email: { $in: student_emails },
+                $nor: [{ hostelId: hostel._id }],
             }).lean();
 
-            for (const student_email of student_emails) {
+            for await (const student_email of student_emails) {
                 const student = students.find(
                     (student) => student.email === student_email
                 );
@@ -137,6 +168,8 @@ async function syncHostelStudents(
                                 $set: {
                                     hostelId: hostel._id,
                                     gender: hostel.gender,
+                                    roomNumber: "UNKNOWN",
+                                    position: "none",
                                 },
                             },
                         },
@@ -145,7 +178,7 @@ async function syncHostelStudents(
                         result_updates.push({
                             updateOne: {
                                 filter: {
-                                    email: student_email.split("@")[0],
+                                    rollNo: student_email.split("@")[0],
                                 },
                                 update: {
                                     $set: {
@@ -156,49 +189,45 @@ async function syncHostelStudents(
                         });
                     }
                 } else {
-                    const response = await serverApis.results.getResultByRollNo(
-                        student_email.split("@")[0]
-                    );
-                    if (response?.error || !response?.data) {
-                        console.log("Error fetching student data", response?.error);
-                        continue;
-                    }
-                    const result = response.data;
+                    const result = (await ResultModel.findOne({
+                        rollNo: student_email.split("@")[0],
+                    }).lean().exec()) as unknown as ResultTypeWithId;
                     if (!result) {
                         console.log("result of Student not found", student_email);
                         continue;
                     }
                     if (
-                        result.data.gender !== hostel.gender &&
-                        result.data.gender !== "not_specified"
+                        result.gender !== hostel.gender &&
+                        result.gender !== "not_specified"
                     ) {
-                        console.log("Student gender doesn't match", result.data);
+                        console.log("Student gender doesn't match", result);
                         continue;
                     }
+                    const studentUser = await getUserByEmail(student_email);
 
                     updates.push({
                         insertOne: {
                             document: {
-                                rollNumber: result.data.rollNo,
-                                userId: null,
-                                name: result.data.name,
+                                rollNumber: result.rollNo,
+                                userId: studentUser?.id || null,
+                                name: result.name,
                                 gender:
-                                    result.data.gender !== "not_specified"
-                                        ? result.data.gender
+                                    result.gender !== "not_specified"
+                                        ? result.gender
                                         : hostel.gender,
                                 email: student_email,
                                 hostelId: hostel._id,
-                                roomNumber: "",
-                                position: "",
+                                roomNumber: "UNKNOWN",
+                                position: "none",
                             },
                         },
                     });
 
-                    if (result.data?.gender === "not_specified") {
+                    if (result?.gender === "not_specified") {
                         result_updates.push({
                             updateOne: {
                                 filter: {
-                                    email: student_email.split("@")[0],
+                                    rollNo: student_email.split("@")[0],
                                 },
                                 update: {
                                     $set: {
@@ -217,7 +246,11 @@ async function syncHostelStudents(
         if (result_updates.length > 0) {
             await ResultModel.bulkWrite(result_updates);
         }
-        return { success: true };
+        const output = await HostelStudentModel.find({
+            hostelId,
+        }).select("_id").lean().exec();
+
+        return { success: true, data: output.map((student) => student?._id?.toString()) };
     } catch (err) {
         return { success: false, error: err?.toString() }
     }
@@ -225,7 +258,7 @@ async function syncHostelStudents(
 
 export async function getHostel(slug: string): Promise<{
     success: boolean;
-    hostel: HostelType | null;
+    hostel: HostelTypeWithStudents | null;
     error?: object;
 }> {
     try {
@@ -250,28 +283,32 @@ export async function getHostel(slug: string): Promise<{
 }
 
 
-export async function getHostelByUser(slug?:string): Promise<{
+interface getHostelByUserType {
     success: boolean;
+    message: string;
     hostel: HostelType | null;
-    message: string
-}> {
+    hosteler: IHostelStudentType | null;
+    inCharge: boolean;
+}
+
+export async function getHostelByUser(slug?: string): Promise<getHostelByUserType> {
     try {
         const session = await getSession();
         if (!session) {
-            return Promise.resolve({ success: false, hostel: null, message: "Session not found" });
+            return Promise.resolve({ success: false, hostel: null, message: "Session not found", hosteler: null, inCharge: false });
         }
         const is_allowed = session?.user?.other_roles?.some(role => allowedRolesForHostel.includes(role as allowedRolesForHostelType)) || allowedRolesForHostel.includes(session?.user?.role as allowedRolesForHostelType);
         if (!is_allowed) {
-            return Promise.resolve({ success: false, hostel: null, message: "User is not access hostel features" });
+            return Promise.resolve({ success: false, hostel: null, message: "User is not access hostel features", hosteler: null, inCharge: false });
         }
         await dbConnect();
         // (special) : if user is admin
         if (session.user.role === ROLES.ADMIN) {
             const hostel = await HostelModel.findOne({ slug }).lean();
             if (!hostel) {
-                return Promise.resolve({ success: false, hostel: null, message: "Hostel not found" });
+                return Promise.resolve({ success: false, hostel: null, message: "Hostel not found", hosteler: null, inCharge: true });
             }
-            return Promise.resolve({ success: true, hostel: JSON.parse(JSON.stringify(hostel)), message: "User is allowed to access hostel features" });
+            return Promise.resolve({ success: true, hostel: JSON.parse(JSON.stringify(hostel)), message: "User is allowed to access hostel features", hosteler: null, inCharge: true });
         }
 
         // Check if user is a student
@@ -280,9 +317,9 @@ export async function getHostelByUser(slug?:string): Promise<{
             // Check if user is a student of the hostel
             const hostel = await HostelModel.findById(hostelerStudent.hostelId).lean();
             if (!hostel) {
-                return Promise.resolve({ success: false, hostel: null, message: "Hostel not found" });
+                return Promise.resolve({ success: false, hostel: null, message: "Hostel not found", hosteler: JSON.parse(JSON.stringify(hostelerStudent)), inCharge: false });
             }
-            return Promise.resolve({ success: true, hostel: JSON.parse(JSON.stringify(hostel)), message: "User is allowed to access hostel features" });
+            return Promise.resolve({ success: true, hostel: JSON.parse(JSON.stringify(hostel)), message: "User is allowed to access hostel features", hosteler: JSON.parse(JSON.stringify(hostelerStudent)), inCharge: false });
         }
         // Check if user is a warden or administrator
         const hostel = await HostelModel.findOne({
@@ -294,10 +331,10 @@ export async function getHostelByUser(slug?:string): Promise<{
             ],
         }).lean();
         if (!hostel) {
-            return Promise.resolve({ success: false, hostel: null, message: "Hostel not found" });
+            return Promise.resolve({ success: false, hostel: null, message: "Hostel not found", hosteler: null, inCharge: false });
         }
-        return Promise.resolve({ success: true, hostel: JSON.parse(JSON.stringify(hostel)), message: "User is allowed to access hostel features" });
-        
+        return Promise.resolve({ success: true, hostel: JSON.parse(JSON.stringify(hostel)), message: "User is allowed to access hostel features", hosteler: null, inCharge: true });
+
 
     } catch (err) {
         console.log("Failed to fetch hostel", err)

@@ -83,7 +83,7 @@ function getGreeting(): string {
   if (currentHour >= 5 && currentHour < 12) {
     return "Good morning!";
   }
-  if (currentHour >= 12 && currentHour < 18) {
+  if (currentHour >= 12 && currentHour < 17) {
     return "Good afternoon!";
   }
   return "Good evening!";

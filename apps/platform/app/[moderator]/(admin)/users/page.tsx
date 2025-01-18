@@ -108,13 +108,11 @@ export default function DashboardPage(props: PageProps) {
           </div>
         ) : (
           <ErrorBoundary
-            fallback={(_) => {
-              return (
+            fallback={
                 <div className="text-center">
                   {error || "Error fetching data"}
                 </div>
-              );
-            }}
+            }
           >
             <DataTable data={users} columns={columns} />
           </ErrorBoundary>

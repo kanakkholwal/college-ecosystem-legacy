@@ -4,12 +4,14 @@ import { Suspense, useEffect, useState } from "react";
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
-  fallback: (err: Error) => React.ReactNode;
+  fallback: React.ReactNode;
+  callback?: (error: Error) => void;
 }
 
 export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
   children,
   fallback,
+  callback,
 }) => {
   const [error, setError] = useState<Error | null>(null);
 
@@ -41,7 +43,9 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
   }, []);
 
   if (error) {
-    return fallback(error);
+    console.error(error);
+    callback?.(error);
+    return fallback;
   }
 
   return <>{children}</>;
