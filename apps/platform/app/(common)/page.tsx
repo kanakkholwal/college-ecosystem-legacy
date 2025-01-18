@@ -1,8 +1,19 @@
 import { RouterCard } from "@/components/common/router-card";
+import { BannerPanel } from "@/components/utils/banner";
+import ConditionalRender from "@/components/utils/conditional-render";
 import { getLinksByRole, quick_links } from "@/constants/links";
+import Link from "next/link";
+import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { HeroSection } from "./greeting";
+
+const PROMO = {
+  title: "Join DSC!",
+  description: "Join the Developer Student Club to learn, share and grow together.",
+  link: "https://docs.google.com/forms/d/e/1FAIpQLSfWPMxccVswmU8_ffNmVDg-UFjlI01zEssWCUuUAFYcNA7YTg/viewform",
+  label: "Register Now!",
+}
 
 export default async function Dashboard() {
   const session = (await getSession()) as Session;
@@ -11,7 +22,25 @@ export default async function Dashboard() {
 
   return (
     <>
-      <HeroSection user={session?.user}/>
+      <ConditionalRender
+        condition={
+          session?.user?.other_roles.includes(ROLES.STUDENT)
+          // && session?.user.username.startsWith("24")
+        }
+      >
+        <BannerPanel
+          title={PROMO.title}
+          description={PROMO.description}
+          btnProps={{
+            asChild: true,
+            children: <Link href={PROMO.link} target="_blank" rel="noopener noreferrer">
+              {PROMO.label}
+            </Link>,
+            variant: "default_light",
+          }}
+        />
+      </ConditionalRender>
+      <HeroSection user={session?.user} />
       <section
         id="quick-links"
         className="z-10 w-full max-w-6xl mx-auto relative space-y-4 text-left"

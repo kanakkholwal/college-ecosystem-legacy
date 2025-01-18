@@ -5,7 +5,7 @@ import { authClient } from "src/lib/auth-client";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 
 import { useState } from "react";
-
+import {GENDER} from "~/constants";
 import { Button } from "@/components/ui/button";
 import { BiLockOpenAlt } from "react-icons/bi";
 import { LuMail } from "react-icons/lu";
@@ -75,7 +75,7 @@ export default function SignUpForm() {
         callbackURL: redirect,
         name: data.name,
         username: data.email.split("@")[0],
-        gender: "male",
+        gender: GENDER.NOT_SPECIFIED,
         department: getDepartmentName("ece"), // automatically corrects it on the backend
         other_roles: ["student"],
       },

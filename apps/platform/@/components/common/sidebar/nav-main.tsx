@@ -1,7 +1,7 @@
 "use client";
 
 import { ChevronRight } from "lucide-react";
-
+import {useSearchParams} from "next/navigation";
 import {
   Collapsible,
   CollapsibleContent,
@@ -34,6 +34,8 @@ export function NavMain({
     }[];
   }[];
 }) {
+  const searchParams = useSearchParams();
+
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -60,7 +62,7 @@ export function NavMain({
                       {item.items?.map((subItem) => (
                         <SidebarMenuSubItem key={subItem.title}>
                           <SidebarMenuSubButton asChild>
-                            <Link href={subItem.href}>
+                            <Link href={subItem.href + searchParams.toString()}>
                               <span>{subItem.title}</span>
                             </Link>
                           </SidebarMenuSubButton>

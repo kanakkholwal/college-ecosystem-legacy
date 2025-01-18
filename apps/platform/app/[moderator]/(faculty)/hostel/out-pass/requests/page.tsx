@@ -26,6 +26,7 @@ export default async function OutPassRequestsPage(props: PageProps) {
             />
         );
     }
+    
 
     return (
         <div className="space-y-5 my-2">
