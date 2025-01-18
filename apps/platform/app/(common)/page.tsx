@@ -25,7 +25,8 @@ export default async function Dashboard() {
       <ConditionalRender
         condition={
           session?.user?.other_roles.includes(ROLES.STUDENT)
-          // && session?.user.username.startsWith("24")
+          && session?.user.username.startsWith("24")
+          && new Date() < new Date("2022-01-19T19:00:00")
         }
       >
         <BannerPanel
