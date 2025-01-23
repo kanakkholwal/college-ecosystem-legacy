@@ -303,7 +303,7 @@ export async function getHostelByUser(slug?: string): Promise<getHostelByUserTyp
         }
         await dbConnect();
         // (special) : if user is admin
-        if (session.user.role === ROLES.ADMIN) {
+        if (session.user.role === ROLES.ADMIN && slug) {
             const hostel = await HostelModel.findOne({ slug }).lean();
             if (!hostel) {
                 return Promise.resolve({ success: false, hostel: null, message: "Hostel not found", hosteler: null, inCharge: true });

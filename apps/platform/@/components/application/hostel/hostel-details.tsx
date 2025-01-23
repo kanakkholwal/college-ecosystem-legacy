@@ -6,7 +6,7 @@ import { getSession } from "~/lib/auth-server";
 import type { HostelType } from "~/models/hostel_n_outpass";
 
 
-export async function HostelDetail({ hostel }: { hostel:HostelType  }) {
+export async function HostelDetail({ hostel }: { hostel: HostelType }) {
     const session = (await getSession()) as Session;
 
     const isWarden = hostel.warden.email === session.user.email || session.user?.other_emails?.includes(hostel.warden.email);
@@ -43,6 +43,32 @@ export async function HostelDetail({ hostel }: { hostel:HostelType  }) {
                 </Button>)}
             </Heading>
 
+        </div>
+    </div>
+}
+
+
+export function HostelDetailsForHosteler({ hostel }: { hostel: HostelType }) {
+    return <div className="space-y-5 my-2">
+        <div className="flex justify-between w-full">
+            <div className="lg:w-1/2">
+                <Heading level={3} className="font-bold text-gray-800">{hostel.name}</Heading>
+                <Paragraph className="capitalize !mt-0">
+                    Warden: {hostel.warden.name} <span className="lowercase">({hostel.warden.email})</span>
+                </Paragraph>
+            </div>
+        </div>
+        <div className="w-full">
+            <Heading level={6} className="text-gray-800">
+                InCharges
+            </Heading>
+            <ul className="list-disc list-inside">
+                {hostel.administrators.map((admin) => (
+                    <li key={admin.email}>
+                        {admin.name} - {admin.email}
+                    </li>
+                ))}
+            </ul>
         </div>
     </div>
 }

@@ -51,7 +51,7 @@ const FormSchema = z.object({
 
 export default function SignInForm() {
   const searchParams = useSearchParams();
-  const redirect = searchParams?.get("redirect") || "/";
+  const redirect = searchParams?.get("next") || "/";
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof FormSchema>>({

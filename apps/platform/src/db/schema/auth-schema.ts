@@ -43,6 +43,7 @@ export const users = pgTable("users", {
     .notNull()
     .default("not_specified")
     .$default(() => "not_specified"),
+  hostelId: text("hostelId").default("not_specified").$defaultFn(() => "not_specified"),
   department: departmentNameEnum("department").notNull(),
 });
 

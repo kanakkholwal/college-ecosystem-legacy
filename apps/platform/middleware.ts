@@ -24,6 +24,7 @@ function isAuthorized(roles: string[], allowedRoles: string[]) {
 }
 
 export async function middleware(request: NextRequest) {
+  const url = new URL(request.url);
   const { data: session } = await betterFetch<Session>(
     "/api/auth/get-session",
     {
@@ -38,25 +39,29 @@ export async function middleware(request: NextRequest) {
     if (request.nextUrl.pathname === SIGN_IN_PATH) {
       return NextResponse.next();
     }
-    return NextResponse.redirect(new URL(SIGN_IN_PATH, request.url));
+    // if the user is not authenticated and tries to access a page other than the sign-in page, redirect them to the sign-in page
+    url.searchParams.set("next", request.url);
+    url.pathname = SIGN_IN_PATH;
+    return NextResponse.redirect(url);
   }
   if (session) {
     // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page
     if (request.nextUrl.pathname === SIGN_IN_PATH &&
       (request.nextUrl.searchParams.get("tab") !== "reset-password" && !request.nextUrl.searchParams.get("token")?.trim())
     ) {
-
-      return NextResponse.redirect(new URL("/", request.url));
+      url.pathname = "/";
+      return NextResponse.redirect(url);
     }
     // if the user is already authenticated 
     const allows_roles = authorized_pathsMap.get(request.nextUrl.pathname);
     if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
       if (
         !(
-          isAuthorized([...session.user.other_roles,session.user.role], allows_roles)
+          isAuthorized([...session.user.other_roles, session.user.role], allows_roles)
         )
       ) {
-        return NextResponse.redirect(new URL("/unauthorized", request.url));
+        url.pathname = "/unauthorized";
+        return NextResponse.redirect(url);
       }
     }
   }
@@ -68,7 +73,7 @@ export async function middleware(request: NextRequest) {
     if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
       if (
         !(
-          isAuthorized([...session.user.other_roles,session.user.role], allows_roles)
+          isAuthorized([...session.user.other_roles, session.user.role], allows_roles)
         )
       ) {
         return NextResponse.json({
@@ -80,8 +85,8 @@ export async function middleware(request: NextRequest) {
       }
     }
   }
-  if(request.nextUrl.pathname.startsWith("/api")){
-    if(UN_PROTECTED_API_ROUTES.some((route)=>new RegExp(route.replace("*",".*")).test(request.nextUrl.pathname))){
+  if (request.nextUrl.pathname.startsWith("/api")) {
+    if (UN_PROTECTED_API_ROUTES.some((route) => new RegExp(route.replace("*", ".*")).test(request.nextUrl.pathname))) {
       return NextResponse.next();
     }
     if (!session) {
@@ -96,7 +101,7 @@ export async function middleware(request: NextRequest) {
     if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
       if (
         !(
-          isAuthorized([...session.user.other_roles,session.user.role], allows_roles)
+          isAuthorized([...session.user.other_roles, session.user.role], allows_roles)
         )
       ) {
         return NextResponse.json({
@@ -120,6 +125,7 @@ export const config = {
      * - _next/static (static files)
      * - _next/image (image optimization files)
      * - favicon.ico (favicon file)
+     * - manifest.manifest (manifest file)
      */
     "/((?!api|_next/static|_next/image|favicon.ico).*)",
   ],

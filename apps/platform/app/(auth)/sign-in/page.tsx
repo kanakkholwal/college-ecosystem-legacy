@@ -62,7 +62,7 @@ export default async function SignInPage({ searchParams }: Props) {
               })
             }
             classNames={{
-              tabList: "flex justify-around space-x-4 flex-wrap mx-4 @lg:mx-10 rounded-lg",
+              tabList: "flex justify-around gap-4 flex-wrap mx-4 @lg:mx-10 rounded-lg",
               tabTrigger: "capitalize w-full flex-1 rounded-lg",
               tabContentList: "px-4 @lg:px-10 border-0 pb-6"
             }}

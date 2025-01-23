@@ -1,10 +1,11 @@
-import { HostelDetail } from "@/components/application/hostel/hostel-details";
+import { HostelDetailsForHosteler } from "@/components/application/hostel/hostel-details";
 import EmptyArea from "@/components/common/empty-area";
 import { LuBuilding } from "react-icons/lu";
-// import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass"
 import { getHostelByUser } from "~/actions/hostel";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
+
+import {CONSTANTS} from "~/constants/outpass";
 
 interface PageProps {
     searchParams: Promise<{
@@ -15,9 +16,9 @@ interface PageProps {
 export default async function HostelPage(props: PageProps) {
     const { slug } = await props.searchParams;
     const session = (await getSession()) as Session;
-    const { success, message, hostel } = await getHostelByUser(slug);
+    const { success, message, hostel,hosteler } = await getHostelByUser(slug);
 
-    if (!success || !hostel) {
+    if (!success || !hostel || !hosteler) {
         return (
             <EmptyArea
                 icons={[LuBuilding]}
@@ -27,9 +28,13 @@ export default async function HostelPage(props: PageProps) {
         );
     }
 
+    console.dir(hosteler,{depth:null})
+
     return (
         <div className="space-y-5 my-2">
-            <HostelDetail hostel={hostel} />
+            <HostelDetailsForHosteler hostel={hostel} />
+            
+            
         </div>
     );
 }

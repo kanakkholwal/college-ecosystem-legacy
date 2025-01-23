@@ -144,6 +144,11 @@ export const auth = betterAuth({
         required: false,
         input: false,
       },
+      hostelId: {
+        type: "string",
+        required: false,
+        input: false,
+      },
       gender: {
         type: "string",
         input: true,
@@ -195,6 +200,7 @@ type getUserInfoReturnType = {
   name?: string;
   emailVerified: boolean;
   gender: string;
+  other_emails?: string[];
 };
 
 type FacultyType = {

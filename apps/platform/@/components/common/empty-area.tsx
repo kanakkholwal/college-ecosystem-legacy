@@ -7,7 +7,7 @@ import * as React from "react";
 export type EmptyAreaProps = {
   icons?: LucideIcon[] | React.FC<React.SVGProps<SVGSVGElement>>[];
   title: string;
-  description: string;
+  description: string | React.ReactNode;
   actionProps?: React.ComponentProps<typeof Button>;
 } & React.HTMLAttributes<HTMLDivElement>;
 
@@ -69,7 +69,7 @@ export default function EmptyArea({
         )}
       </div>
       <h2 className="text-foreground font-medium mt-6">{title}</h2>
-      <p className="text-sm text-muted-foreground mt-1 whitespace-pre-line">{description}</p>
+      <div className="text-sm text-muted-foreground mt-1 whitespace-pre-line">{description}</div>
       {actionProps && (
         <Button
           variant="outline"
