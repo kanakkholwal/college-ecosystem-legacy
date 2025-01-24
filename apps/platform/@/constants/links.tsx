@@ -207,7 +207,7 @@ export const sidebar_links: rawLinkType[] = [
     title: "Schedules",
     icon: GrSchedules,
     path: "/schedules",
-    allowed_roles: ["*"],
+    allowed_roles: [`!${ROLES.GUARD}`],
   },
   {
     title: "Personal Attendance",
