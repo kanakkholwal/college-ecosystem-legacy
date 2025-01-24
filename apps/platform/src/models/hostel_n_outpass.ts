@@ -22,7 +22,8 @@ export interface RawHostelType {
 export interface HostelType extends RawHostelType {
   _id: string;
 }
-export interface HostelTypeWithStudents extends Omit<RawHostelType, "students"> {
+export interface HostelTypeWithStudents
+  extends Omit<RawHostelType, "students"> {
   _id: string;
   students: IHostelStudentType[];
 }
@@ -85,16 +86,16 @@ export interface rawHostelStudentType {
 }
 
 export type HostelStudentType = Omit<rawHostelStudentType, "hostelId"> & {
-  hostelId: Pick<IHostelType, "_id" | "name" | "slug" | "gender">
+  hostelId: Pick<IHostelType, "_id" | "name" | "slug" | "gender">;
   _id: string;
-} 
+};
 // | rawHostelStudentType & { _id: string;}
 
-export interface IHostelStudentType extends Document,rawHostelStudentType{} 
+export interface IHostelStudentType extends Document, rawHostelStudentType {}
 // HostelStudent Schema & Model
 const HostelStudentSchema = new Schema(
   {
-    rollNumber: { type: String, required: true, },
+    rollNumber: { type: String, required: true },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
     gender: { type: String, required: true, enum: ["male", "female"] },
@@ -102,7 +103,7 @@ const HostelStudentSchema = new Schema(
     userId: { type: String, default: null },
     hostelId: { type: Schema.Types.ObjectId, ref: "Hostel", default: null },
     roomNumber: { type: String, required: true, default: "UNKNOWN" },
-    phoneNumber: { type: String, default: null,},
+    phoneNumber: { type: String, default: null },
     banned: { type: Boolean, default: false },
     bannedTill: { type: Date },
     bannedReason: { type: String },
@@ -122,19 +123,19 @@ export interface rawOutPassType {
   expectedOutTime: Date;
   expectedInTime: Date;
   actualOutTime: Date | null;
-  actualInTime: Date| null;
+  actualInTime: Date | null;
   status: "pending" | "approved" | "rejected";
   validTill: Date;
   createdAt?: Date;
   updatedAt?: Date;
 }
-export interface IOutPassType extends Document ,rawOutPassType{}
+export interface IOutPassType extends Document, rawOutPassType {}
 
 export type OutPassType = Omit<IOutPassType, "student" | "hostel"> & {
   student: Pick<IHostelStudentType, "_id" | "name" | "email" | "rollNumber">;
   hostel: Pick<IHostelType, "_id" | "name" | "slug" | "gender">;
   _id: string;
-}
+};
 
 // Out_pass Schema & Model
 const OutPassSchema = new Schema(

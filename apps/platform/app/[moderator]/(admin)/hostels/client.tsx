@@ -24,10 +24,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import type z from "zod";
-import {
-  createHostel,
-  importHostelsFromSite,
-} from "~/actions/hostel";
+import { createHostel, importHostelsFromSite } from "~/actions/hostel";
 
 import { createHostelSchema } from "~/constants/hostel_n_outpass";
 
@@ -244,11 +241,12 @@ export function ImportFromSiteButton() {
         toast
           .promise(importHostelsFromSite(), {
             loading: "Importing Hostels",
-            success: (data: string |undefined) => {
+            success: (data: string | undefined) => {
               console.log(data);
               return data || "Hostels imported successfully";
             },
-            error: (msg:string |undefined) => msg || "Failed to import hostels",
+            error: (msg: string | undefined) =>
+              msg || "Failed to import hostels",
           })
           .finally(() => {
             setLoading(false);

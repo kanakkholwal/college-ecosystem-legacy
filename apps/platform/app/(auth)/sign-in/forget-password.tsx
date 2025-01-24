@@ -22,8 +22,7 @@ import toast from "react-hot-toast";
 import { LuMail } from "react-icons/lu";
 import { authClient } from "src/lib/auth-client";
 import * as z from "zod";
-import {ORG_DOMAIN} from "~/project.config";
-
+import { ORG_DOMAIN } from "~/project.config";
 
 const FormSchema = z.object({
   email: z

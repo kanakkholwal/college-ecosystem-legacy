@@ -1,4 +1,3 @@
-
 import { ActionBar } from "@/components/application/action-bar";
 import { StatsCard } from "@/components/application/stats-card";
 import { Separator } from "@/components/ui/separator";
@@ -103,7 +102,7 @@ export default async function AdminDashboard() {
               Icon={<Eye className="inline-block mr-2 size-4" />}
             >
               <p className="text-3xl mt-auto">
-              {/* eslint-disable @next/next/no-img-element */}
+                {/* eslint-disable @next/next/no-img-element */}
                 <img
                   height={20}
                   width={80}

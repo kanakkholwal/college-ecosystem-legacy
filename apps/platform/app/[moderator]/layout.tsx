@@ -9,7 +9,17 @@ import { changeCase } from "~/utils/string";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import { ROLES } from "~/constants";
 
-const ALLOWED_ROLES = [ROLES.ADMIN, ROLES.FACULTY,ROLES.CR,ROLES.FACULTY,ROLES.CHIEF_WARDEN,ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA,ROLES.HOD];
+const ALLOWED_ROLES = [
+  ROLES.ADMIN,
+  ROLES.FACULTY,
+  ROLES.CR,
+  ROLES.FACULTY,
+  ROLES.CHIEF_WARDEN,
+  ROLES.WARDEN,
+  ROLES.ASSISTANT_WARDEN,
+  ROLES.MMCA,
+  ROLES.HOD,
+];
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

@@ -19,10 +19,10 @@ type Props = {
   }>;
 };
 
-export const metadata:Metadata= {
-    title:"Academic Calender",
-    description:"Check the academic calender here."
-}
+export const metadata: Metadata = {
+  title: "Academic Calender",
+  description: "Check the academic calender here.",
+};
 
 export default async function AcademicCalenderPage(props: Props) {
   const params = await props.params;
@@ -39,7 +39,6 @@ export default async function AcademicCalenderPage(props: Props) {
           As of {new Date().toLocaleString()}
         </p>
       </div>
-    
     </>
   );
 }

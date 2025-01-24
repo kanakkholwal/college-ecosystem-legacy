@@ -3,8 +3,6 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import type { Session } from "~/lib/auth";
 
-
-
 const SIGN_IN_PATH = "/sign-in";
 
 const authorized_pathsMap = new Map([
@@ -14,10 +12,7 @@ const authorized_pathsMap = new Map([
   ["/student", ["faculty"]],
 ]);
 
-const UN_PROTECTED_API_ROUTES = [
-  "/api/auth/*",
-
-]
+const UN_PROTECTED_API_ROUTES = ["/api/auth/*"];
 
 function isAuthorized(roles: string[], allowedRoles: string[]) {
   return roles.some((role) => allowedRoles.includes(role));
@@ -46,18 +41,21 @@ export async function middleware(request: NextRequest) {
   }
   if (session) {
     // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page
-    if (request.nextUrl.pathname === SIGN_IN_PATH &&
-      (request.nextUrl.searchParams.get("tab") !== "reset-password" && !request.nextUrl.searchParams.get("token")?.trim())
+    if (
+      request.nextUrl.pathname === SIGN_IN_PATH &&
+      request.nextUrl.searchParams.get("tab") !== "reset-password" &&
+      !request.nextUrl.searchParams.get("token")?.trim()
     ) {
       url.pathname = "/";
       return NextResponse.redirect(url);
     }
-    // if the user is already authenticated 
+    // if the user is already authenticated
     const allows_roles = authorized_pathsMap.get(request.nextUrl.pathname);
     if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
       if (
-        !(
-          isAuthorized([...session.user.other_roles, session.user.role], allows_roles)
+        !isAuthorized(
+          [...session.user.other_roles, session.user.role],
+          allows_roles
         )
       ) {
         url.pathname = "/unauthorized";
@@ -72,44 +70,59 @@ export async function middleware(request: NextRequest) {
     const allows_roles = authorized_pathsMap.get(request.nextUrl.pathname);
     if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
       if (
-        !(
-          isAuthorized([...session.user.other_roles, session.user.role], allows_roles)
+        !isAuthorized(
+          [...session.user.other_roles, session.user.role],
+          allows_roles
         )
       ) {
-        return NextResponse.json({
-          status: "error",
-          message: "You are not authorized to perform this action",
-        }, {
-          status: 403,
-        })
+        return NextResponse.json(
+          {
+            status: "error",
+            message: "You are not authorized to perform this action",
+          },
+          {
+            status: 403,
+          }
+        );
       }
     }
   }
   if (request.nextUrl.pathname.startsWith("/api")) {
-    if (UN_PROTECTED_API_ROUTES.some((route) => new RegExp(route.replace("*", ".*")).test(request.nextUrl.pathname))) {
+    if (
+      UN_PROTECTED_API_ROUTES.some((route) =>
+        new RegExp(route.replace("*", ".*")).test(request.nextUrl.pathname)
+      )
+    ) {
       return NextResponse.next();
     }
     if (!session) {
-      return NextResponse.json({
-        status: "error",
-        message: "You are not authorized to perform this action",
-      }, {
-        status: 403,
-      })
+      return NextResponse.json(
+        {
+          status: "error",
+          message: "You are not authorized to perform this action",
+        },
+        {
+          status: 403,
+        }
+      );
     }
     const allows_roles = authorized_pathsMap.get(request.nextUrl.pathname);
     if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
       if (
-        !(
-          isAuthorized([...session.user.other_roles, session.user.role], allows_roles)
+        !isAuthorized(
+          [...session.user.other_roles, session.user.role],
+          allows_roles
         )
       ) {
-        return NextResponse.json({
-          status: "error",
-          message: "You are not authorized to perform this action",
-        }, {
-          status: 403,
-        })
+        return NextResponse.json(
+          {
+            status: "error",
+            message: "You are not authorized to perform this action",
+          },
+          {
+            status: 403,
+          }
+        );
       }
     }
   }

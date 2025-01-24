@@ -45,8 +45,8 @@ export default async function HostelPage() {
         }
         loadingFallback={
           <EmptyArea
-          icons={[LuBuilding]}
-          title="Loading..."
+            icons={[LuBuilding]}
+            title="Loading..."
             description="Loading hostels..."
           />
         }

@@ -139,7 +139,10 @@ type APITypes = {
       };
     };
     updateResultByRollNo: {
-      payload: [z.infer<typeof rollNoSchema>,Partial<z.infer<typeof rawResultSchema>>];
+      payload: [
+        z.infer<typeof rollNoSchema>,
+        Partial<z.infer<typeof rawResultSchema>>,
+      ];
       response: z.infer<typeof rawResultSchema> & {
         _id: string;
         gender: "male" | "female" | "not_specified";
@@ -308,9 +311,12 @@ const faculties = {
 
 const departments = {
   getAll: async () => {
-    return await serverFetch<ApiResponse<FunctionaryType[]>>("/api/departments", {
-      method: "GET",
-    });
+    return await serverFetch<ApiResponse<FunctionaryType[]>>(
+      "/api/departments",
+      {
+        method: "GET",
+      }
+    );
   },
   getList: async () => {
     return await serverFetch<ApiResponse<FunctionaryType[]>>(

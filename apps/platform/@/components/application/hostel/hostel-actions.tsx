@@ -117,15 +117,15 @@ const updateHostelStudentSchema = z.object({
   search: z.string().optional(),
 });
 
-
 type UpdateStudentsFormProps = {
   slug: string;
   student_emails: string[];
 };
 
-
-
-export function UpdateStudentsForm({ slug, student_emails }: UpdateStudentsFormProps) {
+export function UpdateStudentsForm({
+  slug,
+  student_emails,
+}: UpdateStudentsFormProps) {
   const [students, setStudents] = useState<string[]>(student_emails);
   const [updating, setUpdating] = useState(false);
 
@@ -137,45 +137,49 @@ export function UpdateStudentsForm({ slug, student_emails }: UpdateStudentsFormP
     },
   });
 
-  const handleEmailParsing = useCallback((input: string) => {
-    const parsedEmails = input
-      .split(/,|\n/) // Split by commas or newlines
-      .map((entry) => {
-        const emailMatch = entry.match(/<([^>]+)>/); // Extract email within angle brackets
-        if (emailMatch) {
-          return emailMatch[1].toLowerCase().trim();
-        }
-        return isValidRollNumber(entry)
-          ? entry.concat(`@${ORG_DOMAIN}`).toLowerCase().trim()
-          : entry.toLowerCase().trim();
-      })
-      .filter((email) => emailSchema.safeParse(email).success); // Validate emails
-
-    const uniqueEmails = Array.from(new Set([...students, ...parsedEmails])); // Merge without duplicates
-    setStudents(uniqueEmails); // Update state with merged emails
-    form.setValue("students", uniqueEmails);
-  }, [form, students])
-
-  const handleRemoveStudent = useCallback((index: number) => {
-    const updatedStudents = students.filter((_, i) => i !== index);
-    setStudents(updatedStudents);
-    form.setValue("students", updatedStudents);
-  }, [form, students])
-
-
-
-  const handleSubmit = async (data: z.infer<typeof updateHostelStudentSchema>) => {
-    setUpdating(true);
-    return new Promise(resolve => {
-      try {
-        toast.promise(
-          updateHostel(slug, { students: data.students }, true),
-          {
-            loading: "Updating students...",
-            success: (msg: string | undefined) => msg || "Students updated successfully",
-            error: "Failed to update students",
+  const handleEmailParsing = useCallback(
+    (input: string) => {
+      const parsedEmails = input
+        .split(/,|\n/) // Split by commas or newlines
+        .map((entry) => {
+          const emailMatch = entry.match(/<([^>]+)>/); // Extract email within angle brackets
+          if (emailMatch) {
+            return emailMatch[1].toLowerCase().trim();
           }
-        );
+          return isValidRollNumber(entry)
+            ? entry.concat(`@${ORG_DOMAIN}`).toLowerCase().trim()
+            : entry.toLowerCase().trim();
+        })
+        .filter((email) => emailSchema.safeParse(email).success); // Validate emails
+
+      const uniqueEmails = Array.from(new Set([...students, ...parsedEmails])); // Merge without duplicates
+      setStudents(uniqueEmails); // Update state with merged emails
+      form.setValue("students", uniqueEmails);
+    },
+    [form, students]
+  );
+
+  const handleRemoveStudent = useCallback(
+    (index: number) => {
+      const updatedStudents = students.filter((_, i) => i !== index);
+      setStudents(updatedStudents);
+      form.setValue("students", updatedStudents);
+    },
+    [form, students]
+  );
+
+  const handleSubmit = async (
+    data: z.infer<typeof updateHostelStudentSchema>
+  ) => {
+    setUpdating(true);
+    return new Promise((resolve) => {
+      try {
+        toast.promise(updateHostel(slug, { students: data.students }, true), {
+          loading: "Updating students...",
+          success: (msg: string | undefined) =>
+            msg || "Students updated successfully",
+          error: "Failed to update students",
+        });
       } catch {
         toast.error("Unexpected error occurred while updating students.");
       } finally {
@@ -198,7 +202,8 @@ export function UpdateStudentsForm({ slug, student_emails }: UpdateStudentsFormP
             render={({ field }) => (
               <FormItem className="flex-1 w-full">
                 <FormLabel>
-                  Update Students Email ({form.watch("students").length} students added)
+                  Update Students Email ({form.watch("students").length}{" "}
+                  students added)
                 </FormLabel>
                 <FormControl>
                   <Input
@@ -215,7 +220,12 @@ export function UpdateStudentsForm({ slug, student_emails }: UpdateStudentsFormP
               </FormItem>
             )}
           />
-          <Button type="submit" variant="default_light" className="mx-auto" disabled={updating}>
+          <Button
+            type="submit"
+            variant="default_light"
+            className="mx-auto"
+            disabled={updating}
+          >
             {updating ? "Updating..." : "Update Students"}
           </Button>
         </div>
@@ -233,22 +243,17 @@ export function UpdateStudentsForm({ slug, student_emails }: UpdateStudentsFormP
                     className="size-5 p-1 cursor-pointer"
                     variant="destructive_light"
                     onClick={() => handleRemoveStudent(index)}
-
                   >
                     <X className="size-4" />
                   </Badge>
                 </div>
                 {studentError && (
-                  <p className="text-red-500 text-xs">
-                    {studentError.message}
-                  </p>
+                  <p className="text-red-500 text-xs">{studentError.message}</p>
                 )}
               </div>
             );
           })}
         </div>
-
-
       </form>
     </Form>
   );

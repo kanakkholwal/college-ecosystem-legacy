@@ -52,7 +52,10 @@ export default function SearchBox({ departments, types }: Props) {
       <div className="absolute top-0 bottom-0 left-0">
         <Suspense
           fallback={
-            <button type="button" className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
+            <button
+              type="button"
+              className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max"
+            >
               <span className="relative text-base font-semibold text-primary dark:text-white">
                 <IoMdOptions className="w-5 h-5" />
               </span>
@@ -101,7 +104,6 @@ export default function SearchBox({ departments, types }: Props) {
                         : "slate"
                     }
                     className="text-xs !h-8 capitalize"
-
                     onClick={() => {
                       handleFilter("department", department);
                     }}
@@ -138,7 +140,6 @@ export default function SearchBox({ departments, types }: Props) {
                     }
                     size="sm"
                     className="text-xs !h-8 capitalize"
-
                     onClick={() => {
                       handleFilter("type", type);
                     }}
@@ -148,10 +149,7 @@ export default function SearchBox({ departments, types }: Props) {
                 ))}
               </div>
             </div>
-
-
           </ResponsiveDialog>
-          
         </Suspense>
       </div>
       <Input
@@ -163,7 +161,10 @@ export default function SearchBox({ departments, types }: Props) {
         }}
       />
       <div className="absolute top-0 bottom-0 right-0">
-        <button  type="button" className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max">
+        <button
+          type="button"
+          className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
+        >
           <span className="relative text-base font-semibold text-white">
             <Search className="w-5 h-5" />
           </span>

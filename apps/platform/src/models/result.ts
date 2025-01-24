@@ -32,14 +32,13 @@ export type rawResultType = {
   createdAt?: Date;
   updatedAt?: Date;
   gender: "male" | "female" | "not_specified";
-}
+};
 
-export interface ResultTypeWithId extends rawResultType{
+export interface ResultTypeWithId extends rawResultType {
   _id: string;
 }
 
-export interface IResultType extends Document ,rawResultType{
-}
+export interface IResultType extends Document, rawResultType {}
 
 const CourseSchema: Schema = new Schema({
   name: { type: String, required: true },

@@ -79,9 +79,9 @@ export const addResult = async (req: Request, res: Response) => {
 
 export const updateResult = async (req: Request, res: Response) => {
   const rollNo = req.params.rollNo;
-  const custom_attributes = req.body as Partial<z.infer<typeof rawResultSchema>>;
-
-
+  const custom_attributes = req.body as Partial<
+    z.infer<typeof rawResultSchema>
+  >;
 
   try {
     await dbConnect();
@@ -109,7 +109,7 @@ export const updateResult = async (req: Request, res: Response) => {
         programme: result.programme,
         semesters: result.semesters,
         ...(custom_attributes ? { ...custom_attributes } : {}),
-      }
+      },
     });
     await resultData.save();
     console.log("Updated ", rollNo);

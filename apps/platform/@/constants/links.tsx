@@ -234,17 +234,32 @@ export const sidebar_links: rawLinkType[] = [
     title: "Hostel",
     icon: LuBuilding,
     path: "/hostel",
-    allowed_roles: [ROLES.ADMIN,ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA],
+    allowed_roles: [
+      ROLES.ADMIN,
+      ROLES.WARDEN,
+      ROLES.ASSISTANT_WARDEN,
+      ROLES.MMCA,
+    ],
     items: [
       {
         title: "Out Pass",
         path: "/out-pass/list",
-        allowed_roles: [ROLES.ADMIN,ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA],
+        allowed_roles: [
+          ROLES.ADMIN,
+          ROLES.WARDEN,
+          ROLES.ASSISTANT_WARDEN,
+          ROLES.MMCA,
+        ],
       },
       {
         title: "Out Pass Requests",
         path: "/out-pass/requests",
-        allowed_roles: [ROLES.ADMIN,ROLES.WARDEN,ROLES.ASSISTANT_WARDEN,ROLES.MMCA],
+        allowed_roles: [
+          ROLES.ADMIN,
+          ROLES.WARDEN,
+          ROLES.ASSISTANT_WARDEN,
+          ROLES.MMCA,
+        ],
       },
     ],
   },

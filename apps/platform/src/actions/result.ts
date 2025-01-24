@@ -230,7 +230,7 @@ export async function bulkUpdateGenders(
             result.gender = student.gender;
             console.log(student.gender);
             await result.save();
-          } 
+          }
         })
       );
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -242,4 +242,3 @@ export async function bulkUpdateGenders(
     return Promise.resolve(false);
   }
 }
-

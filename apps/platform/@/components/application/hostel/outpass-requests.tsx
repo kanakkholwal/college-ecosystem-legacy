@@ -8,8 +8,6 @@ import type { OutPassType } from "~/models/hostel_n_outpass";
 import { ORG_DOMAIN } from "~/project.config";
 import { columns } from "./outpass-request_columns";
 
-
-
 interface PageProps {
   searchParams: Promise<{
     searchField?: string;
@@ -92,10 +90,9 @@ export default function DisplayOutPasses(props: PageProps) {
         ) : (
           <ErrorBoundary
             fallback={
-                <div className="text-center">
-                  {error || "Error fetching data"}
-                </div>
-            
+              <div className="text-center">
+                {error || "Error fetching data"}
+              </div>
             }
           >
             <DataTable data={outPasses} columns={columns} />

@@ -2,8 +2,12 @@ import Page403 from "@/components/utils/403";
 import { getSession } from "src/lib/auth-server";
 import { ROLES } from "~/constants";
 
-
-const ALLOWED_ROLES = [ROLES.FACULTY, ROLES.HOD, ROLES.ASSISTANT_WARDEN, ROLES.WARDEN]
+const ALLOWED_ROLES = [
+  ROLES.FACULTY,
+  ROLES.HOD,
+  ROLES.ASSISTANT_WARDEN,
+  ROLES.WARDEN,
+];
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -20,9 +24,12 @@ export default async function DashboardLayout({
   const { moderator } = await params;
 
   if (
-    !(session?.user.other_roles.some((role) => ALLOWED_ROLES.includes(role as typeof ALLOWED_ROLES[number]))
-      && ALLOWED_ROLES.includes(moderator)
-      || session?.user?.role === ROLES.ADMIN
+    !(
+      (session?.user.other_roles.some((role) =>
+        ALLOWED_ROLES.includes(role as (typeof ALLOWED_ROLES)[number])
+      ) &&
+        ALLOWED_ROLES.includes(moderator)) ||
+      session?.user?.role === ROLES.ADMIN
     )
   ) {
     return <Page403 />;

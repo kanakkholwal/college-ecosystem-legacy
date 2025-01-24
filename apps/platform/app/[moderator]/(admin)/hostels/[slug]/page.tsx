@@ -65,17 +65,19 @@ export default async function HostelPage({
           <Accordion type="single" collapsible>
             <AccordionItem value="update-hostel">
               <AccordionTrigger>
-                <Heading level={5}>
-                  Update Hostel
-                </Heading>
+                <Heading level={5}>Update Hostel</Heading>
               </AccordionTrigger>
               <AccordionContent>
-
                 <ErrorBoundary
-                  fallback={<p className="text-red-500">Failed to load students</p>}
+                  fallback={
+                    <p className="text-red-500">Failed to load students</p>
+                  }
                 >
-                  <UpdateStudentsForm slug={slug}
-                    student_emails={hostel.students.map((student) => student.email)}
+                  <UpdateStudentsForm
+                    slug={slug}
+                    student_emails={hostel.students.map(
+                      (student) => student.email
+                    )}
                   />
                 </ErrorBoundary>
               </AccordionContent>
@@ -86,12 +88,9 @@ export default async function HostelPage({
                   Hosteler Students ({hostel.students.length})
                 </Heading>
               </AccordionTrigger>
-              <AccordionContent>
-
-              </AccordionContent>
+              <AccordionContent></AccordionContent>
             </AccordionItem>
           </Accordion>
-
         </div>
       </div>
     </div>

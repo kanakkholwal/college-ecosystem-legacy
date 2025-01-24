@@ -24,7 +24,7 @@ const rawResultSchema = z.object({
   semesters: z.array(semesterSchema),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
-  gender:z.enum(["male","female","not_specified"]),
+  gender: z.enum(["male", "female", "not_specified"]),
 });
 
 export type rawResultType = z.infer<typeof rawResultSchema>;

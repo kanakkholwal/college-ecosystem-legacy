@@ -35,7 +35,7 @@ export default function Navbar({ user }: NavbarProps) {
           </div>
         </nav>
       </div>
-        <BorderBeam className="z-1 md:rounded-full"/>
+      <BorderBeam className="z-1 md:rounded-full" />
     </div>
   );
 }

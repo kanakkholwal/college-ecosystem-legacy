@@ -8,8 +8,7 @@ import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
 import { listAllRoomsWithHistory } from "~/actions/room";
 import { getSession } from "~/lib/auth-server";
-import {Search} from "lucide-react";
-
+import { Search } from "lucide-react";
 
 type Props = {
   searchParams: Promise<{

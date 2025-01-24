@@ -95,8 +95,7 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
                 )}
               </p>
               <div className="flex flex-wrap gap-2">
-
-                {["all",...branches].map((branch) => (
+                {["all", ...branches].map((branch) => (
                   <Button
                     key={branch}
                     variant={

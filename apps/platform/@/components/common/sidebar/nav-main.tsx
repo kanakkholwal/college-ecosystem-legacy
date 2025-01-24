@@ -61,7 +61,10 @@ export function NavMain({
                     <SidebarMenuSub>
                       {item.items?.map((subItem) => {
                         // combine search params with the item.href and subItem.href to create a new URL
-                        const url = new URL(subItem.href,process.env.NEXT_PUBLIC_BASE_URL);
+                        const url = new URL(
+                          subItem.href,
+                          process.env.NEXT_PUBLIC_BASE_URL
+                        );
                         url.search = searchParams.toString();
                         return (
                           <SidebarMenuSubItem key={subItem.title}>

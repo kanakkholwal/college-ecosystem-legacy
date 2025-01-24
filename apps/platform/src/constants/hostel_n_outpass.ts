@@ -1,15 +1,12 @@
 import { z } from "zod";
 import { ORG_DOMAIN } from "~/project.config";
 
-
-
 export const emailSchema = z
   .string()
   .email()
   .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
     message: `Email must end with @${ORG_DOMAIN}`,
   });
-
 
 export const createHostelSchema = z.object({
   name: z.string(),
@@ -29,7 +26,6 @@ export const createHostelSchema = z.object({
   }),
   students: z.array(z.string()),
 });
-
 
 export const updateHostelSchema = z.object({
   administrators: z.array(
@@ -82,140 +78,138 @@ export const IN_CHARGES_EMAILS = [
     gender: "male",
     slug: "himgiri-boys-hostel",
     email: "wardenhimgiri@nith.ac.in",
-    role: "warden"
+    role: "warden",
   },
   {
     gender: "male",
     slug: "himgiri-boys-hostel",
     email: "kunjari@nith.ac.in",
-    role: "assistant_warden"
+    role: "assistant_warden",
   },
   {
     gender: "male",
     slug: "neelkanth-boys-hostel",
     email: "wardenneelkanth@nith.ac.in",
-    role: "warden"
+    role: "warden",
   },
   {
     gender: "male",
     slug: "neelkanth-boys-hostel",
     email: "anshulsharma@nith.ac.in",
-    role: "assistant_warden"
+    role: "assistant_warden",
   },
   {
     gender: "male",
     slug: "himadri-boys-hostel",
     email: "wardenhimadri@nith.ac.in",
-    role: "warden"
+    role: "warden",
   },
   {
     gender: "male",
     slug: "himadri-boys-hostel",
     email: "sandeep.phy@nith.ac.in",
-    role: "assistant_warden"
+    role: "assistant_warden",
   },
   {
     gender: "male",
     slug: "udaygiri-boys-hostel",
     email: "wardenudaygiri@nith.ac.in",
-    role: "warden"
+    role: "warden",
   },
   {
     gender: "male",
     slug: "udaygiri-boys-hostel",
     email: "jiwanjot@nith.ac.in",
-    role: "assistant_warden"
+    role: "assistant_warden",
   },
   {
     gender: "male",
     slug: "kailash-boys-hostel",
     email: "wardenkailash@nith.ac.in",
-    role: "warden"
+    role: "warden",
   },
   {
     gender: "male",
     slug: "kailash-boys-hostel",
     email: "akumar@nith.ac.in",
-    role: "assistant_warden"
+    role: "assistant_warden",
   },
   {
     gender: "male",
     slug: "vindyachal-boys-hostel",
     email: "wardenvindhyachal@nith.ac.in",
-    role: "warden"
+    role: "warden",
   },
   {
     gender: "male",
     slug: "vindyachal-boys-hostel",
     email: "mahavir@nith.ac.in",
-    role: "assistant_warden"
+    role: "assistant_warden",
   },
   {
     gender: "male",
     slug: "dhauladhar-boys-hostel",
     email: "wardendhauladhar@nith.ac.in",
-    role: "warden"
+    role: "warden",
   },
   {
     gender: "male",
     slug: "dhauladhar-boys-hostel",
     email: "hammad@nith.ac.in",
-    role: "assistant_warden"
+    role: "assistant_warden",
   },
   {
     gender: "female",
     slug: "ambika-girls-hostel",
     email: "wardenambika@nith.ac.in",
-    role: "warden"
+    role: "warden",
   },
   {
     gender: "female",
     slug: "ambika-girls-hostel",
     email: "bhartibakshi@nith.ac.in",
-    role: "assistant_warden"
+    role: "assistant_warden",
   },
   {
     gender: "female",
     slug: "parvati-girls-hostel",
     email: "wardenparvati@nith.ac.in",
-    role: "warden"
+    role: "warden",
   },
   {
     gender: "female",
     slug: "parvati-girls-hostel",
     email: "sroy@nith.ac.in",
-    role: "assistant_warden"
+    role: "assistant_warden",
   },
   {
     gender: "female",
     slug: "satpura-&-aravali-girls-hostel",
     email: " wardensatpura@nith.ac.in",
-    role: "warden"
+    role: "warden",
   },
   {
     gender: "female",
     slug: "satpura-&-aravali-girls-hostel",
     email: "wardenaravali@nith.ac.in",
-    role: "assistant_warden"
+    role: "assistant_warden",
   },
   {
     gender: "female",
     slug: "mani-mahesh-girls-hostel",
     email: "wardenmanimahesh@nith.ac.in",
-    role: "warden"
+    role: "warden",
   },
   {
     gender: "female",
     slug: "mani-mahesh-girls-hostel",
     email: "rinshu@nith.ac.in",
-    role: "assistant_warden"
+    role: "assistant_warden",
   },
   {
     gender: "male",
     slug: "shivalik-boys-hostel",
     email: "wardenshivalik@nith.ac.in",
-    role: "warden"
-  }
+    role: "warden",
+  },
 ] as const;
-
-

@@ -47,8 +47,7 @@ export default function CourseCard({
           <p className="text-xl font-bold text-gray-900 dark:text-white">
             {course.type}
           </p>
-          <p className="text-2xl font-bold text-gray-900 dark:text-white">
-          </p>
+          <p className="text-2xl font-bold text-gray-900 dark:text-white"></p>
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Credits</p>

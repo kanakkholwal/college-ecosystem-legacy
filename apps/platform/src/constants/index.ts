@@ -13,14 +13,14 @@ export const ROLES = {
   STAFF: "staff",
 } as const;
 
-export const ROLES_LIST: readonly string[] = Object.values(ROLES)
+export const ROLES_LIST: readonly string[] = Object.values(ROLES);
 
 export const ROLES_MAP = Object.fromEntries(
   Object.entries(ROLES).map(([key, value]) => [value, key])
 );
 
 export const GENDER = {
-  MALE:"male",
-  FEMALE:"female",
-  NOT_SPECIFIED:"not_specified",
-}
+  MALE: "male",
+  FEMALE: "female",
+  NOT_SPECIFIED: "not_specified",
+};

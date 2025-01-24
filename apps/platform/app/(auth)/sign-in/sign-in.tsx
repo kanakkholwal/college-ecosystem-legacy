@@ -25,7 +25,7 @@ import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiOutlineLoading } from "react-icons/ai";
-import {ORG_DOMAIN} from "~/project.config";
+import { ORG_DOMAIN } from "~/project.config";
 
 import * as z from "zod";
 
@@ -77,10 +77,9 @@ export default function SignInForm() {
         onResponse: () => {
           setIsLoading(false);
         },
-        onSuccess:() =>{
+        onSuccess: () => {
           toast.success("Logged In successfully");
-        }
-        ,
+        },
         onError: (ctx) => {
           console.log(ctx);
           // Handle the error

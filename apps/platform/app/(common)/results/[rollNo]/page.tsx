@@ -7,7 +7,7 @@ import type { ResultTypeWithId, Semester } from "src/models/result";
 import { getResultByRollNo } from "~/actions/result";
 import { CgpiCard, RankCard, SemCard } from "./components/card";
 import { CGPIChart } from "./components/chart";
-import {ORG_DOMAIN} from "~/project.config";
+import { ORG_DOMAIN } from "~/project.config";
 
 import type { Metadata, ResolvingMetadata } from "next";
 

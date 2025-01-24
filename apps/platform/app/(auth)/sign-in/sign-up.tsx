@@ -5,7 +5,7 @@ import { authClient } from "src/lib/auth-client";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 
 import { useState } from "react";
-import {GENDER} from "~/constants";
+import { GENDER } from "~/constants";
 import { Button } from "@/components/ui/button";
 import { BiLockOpenAlt } from "react-icons/bi";
 import { LuMail } from "react-icons/lu";
@@ -29,7 +29,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { getDepartmentName } from "src/constants/departments";
 import * as z from "zod";
-import {ORG_DOMAIN} from "~/project.config";
+import { ORG_DOMAIN } from "~/project.config";
 
 const FormSchema = z.object({
   email: z

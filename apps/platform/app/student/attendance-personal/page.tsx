@@ -38,7 +38,7 @@ export default async function PersonalAttendanceManager() {
             asChild: true,
             variant: "default_light",
             size: "sm",
-            children: <CreateAttendanceRecordButton />
+            children: <CreateAttendanceRecordButton />,
           }}
         />
       )}

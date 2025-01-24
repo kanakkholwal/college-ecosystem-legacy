@@ -33,7 +33,7 @@ import z from "zod";
 import { DEPARTMENTS_LIST } from "~/constants/departments";
 import { ROLES } from "~/constants/user";
 import { authClient } from "~/lib/auth-client";
-import {ORG_DOMAIN} from "~/project.config";
+import { ORG_DOMAIN } from "~/project.config";
 
 const userSchema = z.object({
   name: z.string(),
@@ -150,8 +150,7 @@ export default function CreateNewUser() {
                   <FormLabel>Email</FormLabel>
                   <FormControl>
                     <Input
-                                                placeholder={`Email (e.g. user@${ORG_DOMAIN})`}
-
+                      placeholder={`Email (e.g. user@${ORG_DOMAIN})`}
                       type="email"
                       autoCapitalize="none"
                       autoComplete="email"
