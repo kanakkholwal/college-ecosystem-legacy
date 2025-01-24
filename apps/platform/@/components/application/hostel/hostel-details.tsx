@@ -66,8 +66,8 @@ export async function HostelDetail({ hostel }: { hostel: HostelType }) {
 export function HostelDetailsForHosteler({ hostel }: { hostel: HostelType }) {
   return (
     <div className="space-y-5 my-2">
-      <div className="flex justify-between w-full">
-        <div className="lg:w-1/2">
+      <div className="w-full">
+        <div className="@2xl:w-1/2">
           <Heading level={3} className="font-bold text-gray-800">
             {hostel.name}
           </Heading>

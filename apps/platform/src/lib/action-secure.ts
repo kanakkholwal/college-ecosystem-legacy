@@ -6,7 +6,7 @@ const permissionsMap = new Map([
 
 export async function actionSecure(funcName: string): Promise<boolean> {
   const session = await getSession();
-  if (!session || !session.user) {
+  if (!session || !session?.user) {
     return false;
   }
   const roles = [...session.user.other_roles, session.user.role];

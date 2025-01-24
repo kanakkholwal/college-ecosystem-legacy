@@ -7,6 +7,8 @@ import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { HeroSection } from "./greeting";
+import { redirect } from "next/navigation";
+
 
 const PROMO = {
   title: "Join DSC!",
@@ -23,7 +25,9 @@ export default async function Dashboard() {
   const session = (await getSession()) as Session;
 
   const links = getLinksByRole(session?.user?.other_roles[0], quick_links);
-
+  if (session?.user.other_roles.includes(ROLES.GUARD)) {
+    return redirect(`/${ROLES.GUARD}`);
+  }
   return (
     <>
       <ConditionalRender

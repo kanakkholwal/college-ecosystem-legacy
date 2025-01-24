@@ -11,6 +11,7 @@ export const ROLES = {
   CHIEF_WARDEN: "chief_warden",
   LIBRARIAN: "librarian",
   STAFF: "staff",
+  GUARD:"guard"
 } as const;
 
 export const ROLES_LIST: readonly string[] = Object.values(ROLES);

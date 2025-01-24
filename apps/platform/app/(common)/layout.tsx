@@ -1,9 +1,8 @@
 import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
 import type { Metadata } from "next";
-import { headers } from "next/headers";
 import { redirect } from "next/navigation";
-import { auth } from "src/lib/auth";
+import { getSession } from "~/lib/auth-server";
 
 export const metadata: Metadata = {
   title: "NITH - College Platform",
@@ -17,14 +16,13 @@ type LayoutProps = Readonly<{
 }>;
 
 export default async function Layout({ children }: LayoutProps) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  });
+  const session = await getSession();
   const authorized = !!session?.user;
 
   if (!authorized) {
     return redirect("/sign-in");
   }
+
 
   return (
     <div className="flex min-h-screen h-full w-full flex-col items-center justify-start @container/layout-0 max-w-7xl min-w-screen mx-auto px-3 lg:py-10">

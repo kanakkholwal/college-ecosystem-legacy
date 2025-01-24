@@ -8,8 +8,8 @@ import Navbar from "@/components/common/app-navbar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
-  title: `Student Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
-  description: "Dashboard for students",
+  title: `Guard Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+  description: "Dashboard for guard",
 };
 
 interface DashboardLayoutProps {
@@ -20,13 +20,13 @@ export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
   const session = (await getSession()) as Session;
-  if (!session.user.other_roles.includes("student")) {
+  if (!session.user.other_roles.includes("guard")) {
     return redirect("/");
   }
 
   return (
     <SidebarProvider className="selection:bg-primary/10 selection:text-primary">
-      <AppSidebar user={session.user} moderator={"student"} />
+      <AppSidebar user={session.user} moderator={"guard"} />
       <SidebarInset className="flex flex-col flex-1 w-full relative z-0">
         <Navbar user={session.user} />
         <div

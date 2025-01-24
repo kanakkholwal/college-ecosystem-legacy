@@ -1,11 +1,9 @@
 import { HostelDetailsForHosteler } from "@/components/application/hostel/hostel-details";
+import OutpassList from "@/components/application/hostel/outpass-list";
 import OutpassRender from "@/components/application/hostel/outpass-render";
 import EmptyArea from "@/components/common/empty-area";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Heading } from "@/components/ui/typography";
 import ConditionalRender from "@/components/utils/conditional-render";
-import Link from "next/link";
 import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
 import { getOutPassForHosteler } from "~/actions/hostel_outpass";
@@ -38,12 +36,6 @@ export default async function HostelPage(props: PageProps) {
       <HostelDetailsForHosteler hostel={hostel} />
       <Separator />
       <ConditionalRender condition={!hosteler.banned}>
-        <div className="flex justify-between items-center w-full gap-2">
-          <Heading level={5}>Requested OutPass</Heading>
-          <Button variant="link" effect="underline">
-            <Link href="request">Request Outpass</Link>
-          </Button>
-        </div>
         <OutpassRender outpass={outPasses[0]} />
       </ConditionalRender>
       <ConditionalRender condition={hosteler.banned}>
@@ -53,7 +45,10 @@ export default async function HostelPage(props: PageProps) {
           description={`${hosteler.bannedReason} till ${hosteler.bannedTill ? new Date(hosteler.bannedTill).toLocaleString() : "N/A"}`}
         />
       </ConditionalRender>
-      <Separator />
+      <ConditionalRender condition={outPasses.length > 0}>
+        <Separator />
+        <OutpassList outPasses={outPasses} />
+      </ConditionalRender>
     </div>
   );
 }

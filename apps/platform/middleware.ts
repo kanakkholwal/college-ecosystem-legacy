@@ -10,6 +10,7 @@ const authorized_pathsMap = new Map([
   ["/faculty", ["faculty"]],
   ["/cr", ["faculty"]],
   ["/student", ["faculty"]],
+  ["/guard", ["guard"]],
 ]);
 
 const UN_PROTECTED_API_ROUTES = ["/api/auth/*"];

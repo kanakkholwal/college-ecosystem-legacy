@@ -18,13 +18,20 @@ import { BiSpreadsheet } from "react-icons/bi";
 import { GrAnnounce, GrSchedules } from "react-icons/gr";
 import { MdOutlinePoll } from "react-icons/md";
 
+
+export type AllowedRoleType = 
+  | Session["user"]["role"] 
+  | Session["user"]["other_roles"] 
+  | "*" 
+  | `!${Session["user"]["role"]}`;
+
 export type RouterCardLink = {
   href: string;
   title: string;
   description: string;
   external?: boolean;
   Icon: React.FC<React.SVGProps<SVGSVGElement>>;
-  allowed_roles: Session["user"]["role"] | Session["user"]["other_roles"] | "*";
+  allowed_roles: AllowedRoleType[] | AllowedRoleType;
   disabled?: boolean;
 };
 
@@ -100,15 +107,13 @@ export const quick_links: RouterCardLink[] = [
 export type rawLinkType = {
   title: string;
   path: string;
-  allowed_roles: Session["user"]["role"] | Session["user"]["other_roles"] | "*";
+  allowed_roles: AllowedRoleType[] | AllowedRoleType;
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
   items?: {
     title: string;
     path: string;
-    allowed_roles:
-      | Session["user"]["role"]
-      | Session["user"]["other_roles"]
-      | "*";
+    allowed_roles: AllowedRoleType[] | AllowedRoleType;
+
   }[];
 };
 
@@ -312,12 +317,41 @@ export const socials: SocialLink[] = [
   },
 ];
 
+
+
 export const getLinksByRole = <T extends rawLinkType | RouterCardLink>(
   role: string,
   links: T[]
 ): T[] => {
-  return links.filter(
-    (link) =>
-      link.allowed_roles.includes(role) || link.allowed_roles.includes("*")
+  return links.filter(link => 
+    checkRoleAccess(role, normalizeRoles(link.allowed_roles))
+  );
+};
+// Helper function to normalize allowed_roles to array
+const normalizeRoles = (roles: AllowedRoleType | AllowedRoleType[]): string[] => {
+  return Array.isArray(roles) 
+    ? roles.map(role => String(role)) 
+    : [String(roles)];
+};
+// Helper function to check role access with negation support
+const checkRoleAccess = (userRole: string, allowedRoles: string[]): boolean => {
+  // If allowed_roles is "*", allow access to everyone
+  if (allowedRoles.includes("*")) return true;
+
+  // Check for direct role match
+  if (allowedRoles.includes(userRole)) return true;
+
+  // Check for negation roles (starting with "!")
+  const positiveRoles = allowedRoles.filter(role => !role.startsWith("!"));
+  const negatedRoles = allowedRoles.filter(role => role.startsWith("!"));
+
+  // If there are positive roles specified, use standard inclusion logic
+  if (positiveRoles.length > 0) {
+    return positiveRoles.includes(userRole);
+  }
+
+  // If only negation roles are specified, allow access if user's role is not negated
+  return !negatedRoles.some(negRole => 
+    userRole === negRole.slice(1) // Remove "!" prefix for comparison
   );
 };
