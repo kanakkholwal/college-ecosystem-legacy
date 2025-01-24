@@ -79,9 +79,16 @@ export const addResult = async (req: Request, res: Response) => {
 
 export const updateResult = async (req: Request, res: Response) => {
   const rollNo = req.params.rollNo;
-  const custom_attributes = req.body as Partial<
-    z.infer<typeof rawResultSchema>
-  >;
+  const custom_attributes = rawResultSchema.partial().safeParse(req.body);
+  if (!custom_attributes.success) {
+    res.status(400).json({
+      message: "Invalid custom attributes",
+      error: true,
+      data: custom_attributes.error.errors,
+    });
+    return;
+  }
+  const valid_custom_attributes = custom_attributes.data;
 
   try {
     await dbConnect();
@@ -108,7 +115,7 @@ export const updateResult = async (req: Request, res: Response) => {
         batch: result.batch,
         programme: result.programme,
         semesters: result.semesters,
-        ...(custom_attributes ? { ...custom_attributes } : {}),
+        ...(valid_custom_attributes ? { ...valid_custom_attributes } : {}),
       },
     });
     await resultData.save();
