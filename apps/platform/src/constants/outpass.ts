@@ -1,19 +1,73 @@
 import { z } from "zod";
-import { ORG_DOMAIN } from "~/project.config";
 
 
-export const outPassSchema = z.object({
-    studentId: z.string(),
-    outTime: z.string(),
-    inTime: z.string(),
-    reason: z.string(),
-    status: z.enum(["pending", "approved", "rejected"]),
-    approvedBy: z.string(),
-    approvedAt: z.string(),
-    remarks: z.string(),
-    createdAt: z.string(),
-    updatedAt: z.string(),
+export const REASONS = [
+    "outing", "medical", "home", "market", "other"
+] as const;
+
+export const requestOutPassSchema = z.object({
+    roomNumber: z.string().nonempty().min(3)
+        .refine((value) => {
+            if (value === "UNKNOWN" || value.trim() === "") {
+                return false;
+            }
+            return true;
+        }, {
+            message: "Invalid room number"
+        }),
+    address: z.string().min(4).nonempty(),
+    reason: z.enum(REASONS, {
+        message: "Invalid reason"
+    }),
+    expectedOutTime: z.string().datetime().refine((value) => {
+        const outTime = new Date(value);
+        if (outTime < new Date()) {
+            return false;
+        }
+        return true;
+    },{
+        message: "Expected out time can't be in past",
+    }),
+    expectedInTime: z.string().datetime(),
+}).refine((data) => {
+    const outTime = new Date(data.expectedOutTime).getTime();
+    const inTime = new Date(data.expectedInTime).getTime();
+    if (inTime < outTime) {
+        return false;
+    }
+    return true;
+}, {
+    message: "Expected out time can't be more than expected in time",
+    path: ["expectedOutTime", "expectedInTime"]
 })
+    .refine((data) => {
+        const outTime = new Date(data.expectedOutTime);
+        const inTime = new Date(data.expectedInTime);
+        const sixPM = new Date(outTime);
+        sixPM.setHours(18, 0, 0, 0);
+        const eightPM = new Date(inTime);
+        eightPM.setHours(20, 0, 0, 0);
+
+        if ((data.reason === "market" || data.reason === "outing") && (outTime > sixPM || inTime > eightPM)) {
+            return false;
+        }
+        return true;
+    }, {
+        message: "For market or outing, expectedOutTime can't be more than 6 PM and expectedInTime can't be more than 8 PM",
+        path: ["expectedOutTime", "expectedInTime"]
+    })
+    .refine((data) => {
+        const outTime = new Date(data.expectedOutTime);
+        const inTime = new Date(data.expectedInTime);
+        // if reason market or outing inTime should be same day / today
+        if ((data.reason === "market" || data.reason === "outing") && outTime.getDate() !== inTime.getDate()) {
+            return false;
+        }
+        return true;
+    }, {
+        message: "For market or outing, expected in time should be same day",
+        path: ["expectedOutTime", "expectedInTime"]
+    })
 
 
 export const CONSTANTS = {

@@ -17,7 +17,7 @@ import {
     HostelModel,
     HostelStudentModel,
     type HostelType,
-    type IHostelStudentType,
+    type HostelStudentType,
     type HostelTypeWithStudents,
     type IHostelType
 } from "~/models/hostel_n_outpass";
@@ -287,7 +287,7 @@ interface getHostelByUserType {
     success: boolean;
     message: string;
     hostel: HostelType | null;
-    hosteler: IHostelStudentType | null;
+    hosteler: HostelStudentType | null;
     inCharge: boolean;
 }
 
@@ -312,7 +312,8 @@ export async function getHostelByUser(slug?: string): Promise<getHostelByUserTyp
         }
 
         // Check if user is a student
-        const hostelerStudent = await HostelStudentModel.findOne({ email: session.user.email, userId: session.user.id }).lean() as IHostelStudentType | null;
+        const hostelerStudent = await HostelStudentModel.findOne({ email: session.user.email, userId: session.user.id })
+        .populate("hostelId","_id name slug gender").lean() as HostelStudentType | null;
         if (hostelerStudent) {
             // Check if user is a student of the hostel
             const hostel = await HostelModel.findById(hostelerStudent.hostelId).lean();

@@ -67,7 +67,7 @@ export const HostelModel =
   mongoose.models?.Hostel ||
   mongoose.model<IHostelType>("Hostel", HostelSchema);
 
-export interface IHostelStudentType extends Document {
+export interface rawHostelStudentType {
   rollNumber: string;
   userId: string;
   name: string;
@@ -84,6 +84,13 @@ export interface IHostelStudentType extends Document {
   updatedAt?: Date;
 }
 
+export type HostelStudentType = Omit<rawHostelStudentType, "hostelId"> & {
+  hostelId: Pick<IHostelType, "_id" | "name" | "slug" | "gender">
+  _id: string;
+} 
+// | rawHostelStudentType & { _id: string;}
+
+export interface IHostelStudentType extends Document,rawHostelStudentType{} 
 // HostelStudent Schema & Model
 const HostelStudentSchema = new Schema(
   {
@@ -94,7 +101,7 @@ const HostelStudentSchema = new Schema(
     position: { type: String, default: "none" },
     userId: { type: String, default: null },
     hostelId: { type: Schema.Types.ObjectId, ref: "Hostel", default: null },
-    roomNumber: { type: String, required: true },
+    roomNumber: { type: String, required: true, default: "UNKNOWN" },
     phoneNumber: { type: String, default: null,},
     banned: { type: Boolean, default: false },
     bannedTill: { type: Date },
@@ -107,15 +114,15 @@ export const HostelStudentModel =
   mongoose.models?.HostelStudent ||
   mongoose.model<IHostelStudentType>("HostelStudent", HostelStudentSchema);
 
-export interface rawOutPassType extends Document {
+export interface rawOutPassType {
   student: string;
   roomNumber: string;
   address: string;
   reason: "outing" | "medical" | "home" | "market" | "other";
   expectedOutTime: Date;
   expectedInTime: Date;
-  actualOutTime: Date;
-  actualInTime: Date;
+  actualOutTime: Date | null;
+  actualInTime: Date| null;
   status: "pending" | "approved" | "rejected";
   validTill: Date;
   createdAt?: Date;
@@ -126,6 +133,7 @@ export interface IOutPassType extends Document ,rawOutPassType{}
 export type OutPassType = Omit<IOutPassType, "student" | "hostel"> & {
   student: Pick<IHostelStudentType, "_id" | "name" | "email" | "rollNumber">;
   hostel: Pick<IHostelType, "_id" | "name" | "slug" | "gender">;
+  _id: string;
 }
 
 // Out_pass Schema & Model
@@ -138,7 +146,7 @@ const OutPassSchema = new Schema(
     },
     hostel: {
       type: Schema.Types.ObjectId,
-      ref: "HostelStudent",
+      ref: "Hostel",
       required: true,
     },
     roomNumber: { type: String, required: true },
@@ -152,7 +160,7 @@ const OutPassSchema = new Schema(
     expectedOutTime: { type: Date, required: true },
     actualInTime: { type: Date, default: null },
     actualOutTime: { type: Date, default: null },
-    validTill: { type: Date, required: true },
+    validTill: { type: Date, default: null },
     status: {
       type: String,
       enum: ["pending", "approved", "rejected", "expired"],

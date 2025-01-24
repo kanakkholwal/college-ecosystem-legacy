@@ -96,8 +96,8 @@ export const columns: ColumnDef<OutPassType>[] = [
             return (
                 <div className="text-left font-medium">
                     {new Date(row.original.expectedOutTime).toLocaleDateString("en-US", timeOptions)}
-                    {row.original.actualInTime && (
-                        new Date(row.original.actualOutTime).toLocaleDateString("en-US", timeOptions)
+                    {row.original?.actualInTime && (
+                        new Date(row.original?.actualOutTime || "").toLocaleDateString("en-US", timeOptions)
                     )}
                 </div>
             );
