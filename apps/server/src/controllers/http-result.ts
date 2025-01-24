@@ -4,7 +4,7 @@ import { z } from "zod";
 import { getDepartmentCoursePrefix } from "../constants/departments";
 import { getInfoFromRollNo, scrapeResult } from "../lib/scrape";
 import ResultModel from "../models/result";
-import type { rawResultSchema } from "../types/result";
+import  { rawResultSchema } from "../types/result";
 import dbConnect from "../utils/dbConnect";
 
 // Endpoint to get result by rollNo scraped from the website
