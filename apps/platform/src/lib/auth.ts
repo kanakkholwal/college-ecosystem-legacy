@@ -13,6 +13,11 @@ import { accounts, sessions, users, verifications } from "~/db/schema";
 import type { ResultType } from "~/types/result";
 import { mailFetch, serverFetch } from "./server-fetch";
 
+const ALLOWED_ROLES = [ROLES.STUDENT, ROLES.FACULTY, ROLES.STAFF];
+const ALLOWED_GENDERS = ["male", "gender", "not_specified"];
+// const VERIFY_EMAIL_PATH_PREFIX = "/sign-in?tab=verify-email&token=";
+const VERIFY_EMAIL_PATH_PREFIX = "/verify-email?token=";
+
 export const auth = betterAuth({
   appName: "College Platform",
   baseURL: process.env.BASE_URL,
@@ -48,7 +53,7 @@ export const auth = betterAuth({
     requireEmailVerification: true,
     autoSignIn: true,
     sendResetPassword: async ({ user, url, token }, request) => {
-      const verification_url = `${process.env.BASE_URL}/sign-in?tab=reset-password&token=${token}`;
+      const verification_url = `${process.env.BASE_URL}${VERIFY_EMAIL_PATH_PREFIX}${token}`;
       try {
         const response = await mailFetch<{
           data: string[] | null;
@@ -83,7 +88,7 @@ export const auth = betterAuth({
   emailVerification: {
     sendOnSignUp: true,
     sendVerificationEmail: async ({ user, url, token }, request) => {
-      const verification_url = `${process.env.BASE_URL}/sign-in?tab=verify-email&token=${token}`;
+      const verification_url = `${process.env.BASE_URL}${VERIFY_EMAIL_PATH_PREFIX}${token}`;
       try {
         const response = await mailFetch<{
           data: string[] | null;
@@ -189,8 +194,7 @@ export const auth = betterAuth({
   ], // make sure this is the last plugin (nextCookies) in the array
 });
 
-const ALLOWED_ROLES = [ROLES.STUDENT, ROLES.FACULTY, ROLES.STAFF];
-const ALLOWED_GENDERS = ["male", "gender", "not_specified"];
+
 
 type getUserInfoReturnType = {
   email: string;

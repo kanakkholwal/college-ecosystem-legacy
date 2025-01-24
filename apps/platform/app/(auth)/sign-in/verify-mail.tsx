@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 import { authClient } from "src/lib/auth-client";
 import * as z from "zod";
 import { ORG_DOMAIN } from "~/project.config";
+import {redirect} from "next/navigation"
 
 const FormSchema = z.object({
   email: z
@@ -52,6 +53,7 @@ export default function VerifyEmail() {
             );
           } else {
             setVerified(true);
+            redirect("/sign-in");
           }
         })
         .catch((e) => {

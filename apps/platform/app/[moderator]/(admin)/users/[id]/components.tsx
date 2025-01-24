@@ -42,7 +42,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
-import { ROLES } from "src/constants/user";
+import { ROLES } from "~/constants/user";
 import * as z from "zod";
 import { updateUser } from "~/actions/dashboard.admin";
 import type { users } from "~/db/schema";

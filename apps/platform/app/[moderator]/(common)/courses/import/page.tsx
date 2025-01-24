@@ -1,5 +1,5 @@
 "use client";
-import { PdfDocument } from "pdf-tables-parser";
+// import { PdfDocument } from "pdf-tables-parser";
 import type React from "react";
 import { useState, useRef } from "react";
 
@@ -29,11 +29,11 @@ export default function ImportCoursesFromPDF() {
         return;
       }
 
-      const pdfDoc = new PdfDocument();
-      console.log(pdfDoc);
+      // const pdfDoc = new PdfDocument();
+      // console.log(pdfDoc);
 
-      await pdfDoc.load(data as string);
-      console.log(pdfDoc);
+      // await pdfDoc.load(data as string);
+      // console.log(pdfDoc);
     };
     reader.readAsArrayBuffer(file);
   };

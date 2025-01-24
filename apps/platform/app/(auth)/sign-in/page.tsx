@@ -7,14 +7,14 @@ import ForgotPassword from "./forget-password";
 import ResetPassword from "./reset-password";
 import SignInForm from "./sign-in";
 import SignUpForm from "./sign-up";
-// import VerifyEmail from "./verify-email";
+// import VerifyEmail from "./verify-mail";
 
 const TABS = [
   ["sign-in", <SignInForm key="sign-in" />],
   ["sign-up", <SignUpForm key="sign-up" />],
   ["forget-password", <ForgotPassword key="forget-password" />],
   ["reset-password", <ResetPassword key="reset-password" />],
-  // ["verify-email",VerifyEmail]
+  // ["verify-email", <VerifyEmail key="verify-email" />]
 ] as [string, React.ReactNode][];
 
 interface Props {
