@@ -91,7 +91,7 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/api")) {
     if (
       UN_PROTECTED_API_ROUTES.some((route) =>
-        new RegExp(route.replace("*", ".*")).test(request.nextUrl.pathname)
+        new RegExp(route.replace(/\*/g, ".*")).test(request.nextUrl.pathname)
       )
     ) {
       return NextResponse.next();
