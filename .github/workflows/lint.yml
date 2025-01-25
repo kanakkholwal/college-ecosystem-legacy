@@ -13,70 +13,33 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  lint-and-format:
+  lint:
+    name: 🧹 Lint project
     runs-on: ubuntu-latest
     steps:
-      - name: 📥 Checkout code
-        uses: actions/checkout@v4
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 9
 
-      - name: Cache turbo build setup
-        uses: actions/cache@v4
-        with: 
-          path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-turbo-
+    - name: Cache turbo build setup
+      uses: actions/cache@v4
+      with: 
+        path: .turbo
+        key: ${{ runner.os }}-turbo-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-turbo-
 
-      - name: 🛠️ Setup Node.js
-        uses: actions/setup-node@v4
-        with:
+    - name: 🛠️ Setup Node.js
+      uses: actions/setup-node@v4
+      with:
           node-version: 20.x
 
-      - name: 📦 Install dependencies
-        run: pnpm install
+    - name: 📦 Install dependencies
+      run: pnpm install
 
-      - name: 🚀 Run lint
-        run: pnpm lint
-        #  --cache-dir=.turbo
-      # - name: 🔍 Detect changed projects
-      #   id: changed
-      #   run: |
-      #     if git diff --quiet HEAD^ HEAD ./apps/platform; then
-      #       echo "platform_changed=false" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "platform_changed=true" >> $GITHUB_OUTPUT
-      #     fi
-      #     if git diff --quiet HEAD^ HEAD ./apps/website; then
-      #       echo "website_changed=false" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "website_changed=true" >> $GITHUB_OUTPUT
-      #     fi
-      #     if git diff --quiet HEAD^ HEAD ./apps/server; then
-      #       echo "server_changed=false" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "server_changed=true" >> $GITHUB_OUTPUT
-      #     fi
-      #     if git diff --quiet HEAD^ HEAD ./apps/mail-server; then
-      #       echo "mail_server_changed=false" >> $GITHUB_OUTPUT
-      #     else
-      #       echo "mail_server_changed=true" >> $GITHUB_OUTPUT
-      #     fi
+    - name: 🚀 Run lint
+      run: pnpm lint
 
-      # - name: 🚀 Run Turbo lint selectively
-      #   run: |
-      #     if [ "${{ steps.changed.outputs.platform_changed }}" = "true" ]; then
-      #       turbo run lint --cache-dir=.turbo --filter=platform
-      #     fi
-      #     if [ "${{ steps.changed.outputs.website_changed }}" = "true" ]; then
-      #       turbo run lint --cache-dir=.turbo --filter=website
-      #     fi
-      #     if [ "${{ steps.changed.outputs.server_changed }}" = "true" ]; then
-      #       turbo run lint --cache-dir=.turbo --filter=server
-      #     fi
-      #     if [ "${{ steps.changed.outputs.mail_server_changed }}" = "true" ]; then
-      #       turbo run lint --cache-dir=.turbo --filter=mail-server
-      #     fi

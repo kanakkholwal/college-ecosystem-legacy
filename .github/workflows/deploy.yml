@@ -1,5 +1,8 @@
 name: 🚀 Deployments
 
+env:
+  SERVICE_NAME_SERVER: "college-ecosystem-server"
+
 
 on:
   push:
@@ -9,22 +12,22 @@ on:
       
   workflow_dispatch:
 
+
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 
 jobs:
-  # lint:
-  #   uses: ./.github/workflows/lint.yml
+  lint:
+    uses: ./.github/workflows/lint.yml
+  
 
   deploy-frontend-to-vercel:
-    # needs: lint
+    needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2  # Fetch the current commit and its immediate parent
-          
+        
       - name: 🔍 Detect changed projects
         id: changed
         run: |
@@ -85,7 +88,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_MAIL_SERVER_PROJECT_ID }}
 
   dockerize-and-deploy-server:
-    # needs: lint
+    needs: lint
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging' || github.event_name == 'workflow_dispatch'
     steps:
