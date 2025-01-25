@@ -1,4 +1,4 @@
-name: 🧹 Lint
+name: 🧹 Lint project
 
 on:
   push:
