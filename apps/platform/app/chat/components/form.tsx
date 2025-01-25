@@ -38,11 +38,11 @@ export default function Form() {
               Using{" "}
               <a
                 target="_blank"
-                href="https://huggingface.co/deepset/roberta-base-squad2"
+                href="https://huggingface.co/google/gemma-1.1-2b-it"
                 className="underline text-primary"
                 rel="noreferrer"
               >
-                deepset/roberta-base-squad2
+                google/gemma-1.1-2b-it
               </a>
               {" | "}
               <a

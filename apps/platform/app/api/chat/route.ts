@@ -1,17 +1,27 @@
 import { HfInference } from "@huggingface/inference";
 import { type NextRequest, NextResponse } from "next/server";
 
-export const maxDuration = 45; // This function can run for a maximum of 5 seconds
-export const revalidate = 0; // disable cache
+import { COLLEGE_NAME, COLLEGE_WEBSITE } from "~/project.config";
 
 
-async function loadDocument() {
-  const rootUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
-  const response = await fetch(`${rootUrl}/doc/REFERENCE.md`);
+// TODO: create proper document for the chatbot
+export const maxDuration = 45;
+export const revalidate = 60 * 60 * 24;// 24 hours
+
+
+const REFERENCES_URLS: string[] = [
+  "https://github.com/kanakkholwal/college-ecosystem/raw/refs/heads/main/content/chatbot-reference.md",
+  COLLEGE_WEBSITE,
+]
+
+async function loadDocument(url: string) {
+  const response = await fetch(url);
   const text = await response.text();
-
   return text;
 }
+
+const referencesPromise = await Promise.allSettled(REFERENCES_URLS.map(loadDocument));
+const docs = referencesPromise.filter((promise) => promise.status === "fulfilled").map((promise) => promise.value).join("\n");
 
 export async function POST(request: NextRequest) {
   try {
@@ -19,30 +29,35 @@ export async function POST(request: NextRequest) {
 
     const { query } = body as { query: string };
 
-    // let data = await redis.hget("questions", query)
-    // if (data) {
-    //   return NextResponse.json(
-    //     {
-    //       answer: data,
-    //     },
-    //     {
-    //       status: 200,
-    //     }
-    //   );
-    // }
 
-    const hf = new HfInference(process.env.HUGGING_FACE_API_KEY);
+    const client = new HfInference(process.env.HUGGING_FACE_API_KEY);
 
-    const docs = await loadDocument();
-    const response = await hf.questionAnswering({
-      model: "deepset/roberta-base-squad2",
+    const chatCompletion = await client.chatCompletion({
+      model: "google/gemma-1.1-2b-it",
       inputs: {
         context: docs,
         question: query,
       },
+      messages: [
+        {
+          role: "assistant",
+          content: docs
+        },
+        {
+          role:"system",
+          content:`You are helpful assistant for college of ${COLLEGE_NAME}. You are required to help students or college people for college related stuff and general stuff`
+        },
+        {
+          role:"user",
+          content:query
+        }
+
+      ],
+      provider: "hf-inference",
+      max_tokens: 500
     });
-    const { answer } = response;
-    // await redis.hset("questions", { [query]: answer });
+    const { answer } = chatCompletion.choices[0].message
+
 
     return NextResponse.json(
       {

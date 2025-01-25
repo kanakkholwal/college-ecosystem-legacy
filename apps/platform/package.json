@@ -100,7 +100,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "drizzle-kit": "^0.30.1",
-    "eslint": "^9.18.0",
+    "eslint": "^9.19.0",
     "eslint-config-next": "^15.1.4",
     "postcss": "^8",
     "serwist": "^9.0.11",
