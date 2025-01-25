@@ -45,7 +45,7 @@ jobs:
 
       - name: 💾 Cache Vercel CLI
         uses: actions/cache@v4
-        if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true'
+        if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true' ||  steps.changed.outputs.mail_server_changed == 'true'
         with:
           path: ~/.vercel
           key: ${{ runner.os }}-vercel-${{ hashFiles('**/package-lock.json') }}
