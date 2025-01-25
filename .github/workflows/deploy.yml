@@ -1,8 +1,6 @@
 name: 🚀 Deployments
 
-env:
-  SERVICE_NAME_SERVER: "college-ecosystem-server"
-  
+
 on:
   push:
     branches:
@@ -10,6 +8,8 @@ on:
       - staging
       
   workflow_dispatch:
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 
 jobs:
@@ -36,7 +36,8 @@ jobs:
         uses: actions/setup-node@v4
         if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true'
         with:
-          node-version: '20'
+          node-version: 20.x
+          cache: "pnpm"
 
       - name: 💾 Cache Vercel CLI
         uses: actions/cache@v4
@@ -49,7 +50,7 @@ jobs:
 
       - name: 📦 Install Vercel CLI
         if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true'
-        run: npm install -g vercel
+        run: pnpm install -g vercel
 
 
       - name: 🎯 Deploy Platform to Staging

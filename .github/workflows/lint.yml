@@ -10,6 +10,8 @@ on:
       - staging
   workflow_call:
 
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
 jobs:
   lint-and-format:
     runs-on: ubuntu-latest
@@ -17,39 +19,25 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
+      - name: Cache turbo build setup
+        uses: actions/cache@v4
+        with: 
+          path: .turbo
+          key: ${{ runner.os }}-turbo-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-turbo-
+
       - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-
-      - name: 📦 Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.OS }}-node-
+          node-version: 20.x
+          cache: "pnpm"
 
       - name: 📦 Install dependencies
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install --force
-          fi
+        run: pnpm install
 
-      # - name: 📦 Install Turbo
-      #   run: npm install turbo --global
-
-      # - name: 💾 Cache Turbo
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: .turbo
-      #     key: ${{ runner.os }}-turbo-${{ github.sha }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-turbo-
       - name: 🚀 Run lint
-        run: npm run lint
+        run: pnpm lint
         #  --cache-dir=.turbo
       # - name: 🔍 Detect changed projects
       #   id: changed
