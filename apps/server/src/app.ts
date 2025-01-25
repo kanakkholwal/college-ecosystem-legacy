@@ -62,7 +62,8 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
     }
     next();
     return; // Explicitly end processing here
-  } else if (identityKey === SERVER_IDENTITY) {
+  } 
+   if (identityKey === SERVER_IDENTITY) {
     next();
     return; // Explicitly end processing here
   }
@@ -79,12 +80,13 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 app.use("/api", httpRoutes);
 
 // Error handling middleware
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
+ 
 app.use(
   (
     err: Error,
     req: express.Request,
     res: express.Response,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     _next: express.NextFunction
   ) => {
     console.error(err.stack);
