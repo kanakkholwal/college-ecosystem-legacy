@@ -29,3 +29,5 @@ export const mailFetch = createFetch({
     Origin: process.env.BASE_URL,
   },
 });
+
+

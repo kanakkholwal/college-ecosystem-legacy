@@ -1,4 +1,4 @@
-## Instructions
+# Instructions
 
 1. Define environment variables in `.env` file.
 

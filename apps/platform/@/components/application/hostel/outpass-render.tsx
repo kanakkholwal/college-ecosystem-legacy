@@ -14,6 +14,7 @@ import { COLLEGE_NAME } from "~/project.config";
 
 interface OutpassRenderProps {
   outpass: OutPassType;
+  viewOnly?: boolean;
 }
 
 const classNames = {
@@ -37,7 +38,7 @@ const classNames = {
   signature_value: "mt-3 text-sm text-gray-700 font-bold italic text-right group-[.special]:text-xs",
 };
 
-export default function OutpassRender({ outpass }: OutpassRenderProps) {
+export default function OutpassRender({ outpass,viewOnly=false }: OutpassRenderProps) {
   const outpassRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = async () => {
@@ -74,7 +75,7 @@ export default function OutpassRender({ outpass }: OutpassRenderProps) {
   return (
     <>
 
-      <div className="flex justify-between items-center w-full gap-2 flex-wrap">
+      {!viewOnly && (<div className="flex justify-between items-center w-full gap-2 flex-wrap">
         <Heading level={5}>Requested OutPass</Heading>
         <div className="flex gap-2 justify-end items-center flex-wrap">
           <Button type="button" variant="default_light" effect="shineHover" size="sm" onClick={handleDownload}>
@@ -84,7 +85,7 @@ export default function OutpassRender({ outpass }: OutpassRenderProps) {
             <Link href="request">Request Outpass<ArrowRight /></Link>
           </Button>
         </div>
-      </div>
+      </div>)}
       <div className="w-full overflow-auto h-full relative">
         <div className="fixed left-[-1200%] @2xl:relative @2xl:left-0">
           <div ref={outpassRef} className={classNames.root}>

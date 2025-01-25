@@ -78,3 +78,82 @@ export async function getOutPassForHosteler(): Promise<OutPassType[]> {
     return Promise.reject(err?.toString() || "Something went wrong");
   }
 }
+
+export async function getOutPassHistoryByRollNo(rollNo: string): Promise<OutPassType[]> {
+  try {
+
+    const outPasses = await OutPassModel.find({})
+      .populate({
+        path: "student",
+        match: { rollNumber: rollNo }, // Filter `student` by rollNumber
+      })
+      .populate("hostel")
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .lean();
+
+    // Filter out results where `student` was not matched
+    const filteredOutPasses = outPasses.filter((outPass) => outPass.student);
+
+    return Promise.resolve(JSON.parse(JSON.stringify(filteredOutPasses)));
+  } catch (err) {
+    console.error(err);
+    return Promise.reject(err?.toString() || "Something went wrong");
+  }
+}
+export async function getOutPassById(id: string): Promise<OutPassType | null> {
+  try {
+
+    const outPass = await OutPassModel.findById(id)
+      .populate("hostel")
+      .populate("student")
+      .lean();
+
+    return Promise.resolve(JSON.parse(JSON.stringify(outPass)));
+  } catch (err) {
+    console.error(err);
+    return Promise.reject(err?.toString() || "Something went wrong");
+  }
+}
+
+type actionType = "entry" | "exit";
+
+export async function allowEntryExit(id: string, action_type: actionType): Promise<string> {
+  try {
+    await dbConnect();
+
+    const outPass = await OutPassModel.findById(id)
+      .populate("hostel")
+      .populate("student")
+      .exec();
+    if (!outPass) {
+      return Promise.reject("Outpass not found")
+    }
+    if (outPass.status !== "approved" || outPass.status !== "in_use") {
+      return Promise.reject("Outpass is not approved or already processed")
+    }
+    if (action_type === "entry") {
+      if (outPass.actualInTime) {
+        return Promise.reject("Already allowed entry")
+      }
+
+      outPass.actualInTime = new Date();
+      outPass.status = "processed";
+      await outPass.save();
+      return Promise.resolve("Outpass updated successfully");
+    }
+    if (action_type === "exit") {
+      if (outPass.actualOutTime) {
+        return Promise.reject("Already allowed exit")
+      }
+      outPass.actualOutTime = new Date();
+      outPass.status = "in_use";
+      await outPass.save();
+      return Promise.resolve("Outpass updated successfully");
+    }
+    return Promise.reject("Invalid action type")
+  } catch (err) {
+    console.error(err);
+    return Promise.reject(err?.toString() || "Something went wrong");
+  }
+}

@@ -164,7 +164,7 @@ const OutPassSchema = new Schema(
     validTill: { type: Date, default: null },
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected", "expired"],
+      enum: ["pending", "approved", "rejected","in_use", "processed"],
       default: "pending",
     },
   },

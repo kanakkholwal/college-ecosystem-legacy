@@ -1,9 +1,6 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
 import { z } from "zod";
 import { render } from "@react-email/components";
-
-// const resend = new Resend(process.env.RESEND_API_KEY);
 
 import { getEmailTemplate } from "@/emails";
 import { handleEmailFire } from "@/emails/helper";

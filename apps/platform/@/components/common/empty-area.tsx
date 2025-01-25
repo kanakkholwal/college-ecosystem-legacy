@@ -21,8 +21,8 @@ export default function EmptyArea({
   return (
     <div
       className={cn(
-        "bg-background border-border hover:border-border/80 text-center",
-        "border-2 border-dashed rounded-xl p-14 w-full max-w-[620px]",
+        "bg-background border-primary/10 hover:border-primary/20 hover:shadow text-center",
+        "border border-dashed rounded-xl p-14 w-full max-w-[620px]",
         "group hover:bg-muted/50 transition duration-500 hover:duration-200 mx-auto",
         className
       )}
