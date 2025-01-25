@@ -1,6 +1,6 @@
 # College Ecosystem
 
-[![🧹 Lint](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/lint.yml/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/lint.yml)
+[![🧹 Lint](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/lint.yml/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/lint-project.yml)
 [![🚀 Deployments](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy.yml/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy.yml)
 [![CodeQL](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/github-code-scanning/codeql)
 [![Dependabot Updates](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/dependabot/dependabot-updates)
