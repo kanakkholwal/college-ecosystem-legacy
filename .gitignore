@@ -10,7 +10,7 @@ node_modules
 
 .vscode
 .venv
-pnpm-lock.yaml
+# pnpm-lock.yaml
 # Local env files
 .env
 .env.local
