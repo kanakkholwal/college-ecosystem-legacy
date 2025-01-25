@@ -124,7 +124,7 @@ export interface rawOutPassType {
   expectedInTime: Date;
   actualOutTime: Date | null;
   actualInTime: Date | null;
-  status: "pending" | "approved" | "rejected";
+  status: "pending" | "approved" | "rejected" | "in_use" | "processed";
   validTill: Date;
   createdAt?: Date;
   updatedAt?: Date;
@@ -137,7 +137,7 @@ export type OutPassType = Omit<IOutPassType, "student" | "hostel"> & {
   _id: string;
 };
 
-// Out_pass Schema & Model
+// Out_pass Schema 
 const OutPassSchema = new Schema(
   {
     student: {
