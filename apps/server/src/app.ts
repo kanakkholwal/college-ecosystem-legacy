@@ -23,11 +23,7 @@ app.get("/", (req, res) => {
 });
 const CORS_ORIGINS = ["https://nith.eu.org", "https://app.nith.eu.org"];
 const isOriginAllowed = (origin: string): boolean => {
-  return (
-    CORS_ORIGINS.some((o) => origin.endsWith(o)) ||
-    (process.env.NODE_ENV !== "production" &&
-      origin.startsWith("http://localhost:"))
-  );
+  return CORS_ORIGINS.includes(origin);
 };
 
 const SERVER_IDENTITY = process.env.SERVER_IDENTITY;
@@ -55,7 +51,7 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
     res.status(403).json({ error: "CORS policy does not allow null origin" });
     return;
   }
-  if (isOriginAllowed(origin) || identityKey === SERVER_IDENTITY) {
+  if (isOriginAllowed(origin)) {
     res.header("Access-Control-Allow-Origin", origin);
     res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
     res.header("Access-Control-Allow-Headers", "Content-Type,X-IDENTITY-KEY");
@@ -64,6 +60,9 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
       res.sendStatus(200); // Preflight request
       return;
     }
+    next();
+    return; // Explicitly end processing here
+  } else if (identityKey === SERVER_IDENTITY) {
     next();
     return; // Explicitly end processing here
   }
