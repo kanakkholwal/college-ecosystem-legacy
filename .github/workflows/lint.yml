@@ -10,7 +10,7 @@ on:
       - staging
   workflow_call:
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
+# concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
   lint:
