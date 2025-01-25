@@ -3,7 +3,6 @@ name: 🚀 Deployments
 env:
   SERVICE_NAME_SERVER: "college-ecosystem-server"
 
-
 on:
   push:
     branches:
@@ -12,9 +11,7 @@ on:
       
   workflow_dispatch:
 
-
 concurrency: ${{ github.workflow }}-${{ github.ref }}
-
 
 jobs:
   lint:
@@ -27,7 +24,7 @@ jobs:
     steps:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
-        
+
       - name: 🔍 Detect changed projects
         id: changed
         run: |
@@ -106,7 +103,6 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           credentials_json: ${{ secrets.CREDENTIALS_JSON }}
-          # project_id: ${{ secrets.GCP_PROJECT_ID }} 
             
       - name: ⚙️ Log in Docker to GCR
         if: steps.server-changed.outputs.server_changed == 'true'
