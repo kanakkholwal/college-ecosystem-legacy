@@ -31,6 +31,9 @@ const nextConfig = {
     experimental: {
         forceSwcTransforms: true,
     },
+    env:{
+        NODE_ENV: process.env.NODE_ENV ? process.env.NODE_ENV : "production", // specify measure for vercel and pnpm issue
+    }
 }
 
 export default withSerwist(nextConfig);
