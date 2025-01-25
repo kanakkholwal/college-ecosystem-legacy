@@ -11,6 +11,7 @@ import {
   Text,
 } from "@react-email/components";
 import { z } from "zod";
+
 const payloadSchema = z.record(
   z.union([z.string(), z.number(), z.array(z.string()), z.array(z.number())])
 );

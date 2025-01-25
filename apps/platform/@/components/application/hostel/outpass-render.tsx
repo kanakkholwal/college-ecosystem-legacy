@@ -7,7 +7,7 @@ import { toPng } from "html-to-image";
 import { ArrowRight } from 'lucide-react';
 import Link from "next/link";
 import { useRef } from "react";
-import Barcode from 'react-barcode';
+import Barcode from 'barcode-react';
 import { HiOutlineDownload } from "react-icons/hi";
 import type { OutPassType } from "~/models/hostel_n_outpass";
 import { COLLEGE_NAME } from "~/project.config";

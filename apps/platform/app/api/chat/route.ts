@@ -1,11 +1,9 @@
 import { HfInference } from "@huggingface/inference";
-import { Redis } from "@upstash/redis";
 import { type NextRequest, NextResponse } from "next/server";
 
 export const maxDuration = 45; // This function can run for a maximum of 5 seconds
 export const revalidate = 0; // disable cache
 
-const redis = Redis.fromEnv();
 
 async function loadDocument() {
   const rootUrl = process.env.NEXTAUTH_URL || "http://localhost:3000";
