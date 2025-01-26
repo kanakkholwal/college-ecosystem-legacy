@@ -7,9 +7,11 @@ import EmptyArea from '@/components/common/empty-area';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Separator } from '@/components/ui/separator';
 import { Heading } from "@/components/ui/typography";
 import ConditionalRender from '@/components/utils/conditional-render';
 import { ErrorBoundary } from "@/components/utils/error-boundary";
+import { useToast } from "@/hooks/use-toast";
 import { useExternalBarcodeScanner } from '@/hooks/useBarcodeScanner';
 import { ScanSearch } from 'lucide-react';
 import { useState } from 'react';
@@ -18,7 +20,6 @@ import { allowEntryExit } from "~/actions/hostel_outpass";
 import { apiFetch } from '~/lib/client-fetch';
 import OutpassList from './outpass-list';
 import OutpassRender from './outpass-render';
-import { useToast } from "@/hooks/use-toast"
 
 type responseType = {
     identifier: "rollNo";
@@ -102,8 +103,12 @@ export default function OutpassVerifier() {
                     loading: "Updating status...",
                     success: (msg: string | undefined) =>
                         msg || "Status updated successfully",
-                    error: (msg: unknown) => {
-                        console.log(msg)
+                    error: (err: Error | unknown) => {
+                        console.log(err);
+                        if(err instanceof Error) {
+                            return err.message;
+                        }
+                        console.error(err);
                         return "Failed to update status"
                     },
                 });
@@ -198,6 +203,7 @@ export default function OutpassVerifier() {
                                     }) : "Not exited yet"}
                             </span>
                         </div>
+                        <Separator orientation='vertical' />
                         <div className="flex flex-col text-gray-700">
                             <span className="font-bold">
                                 Actual In Time
@@ -211,6 +217,7 @@ export default function OutpassVerifier() {
                                     }) : "Not entered yet"}
                             </span>
                         </div>
+                        <Separator orientation='vertical' />
                         <div className="flex flex-col text-gray-700">
                             <span className="font-bold">
                                 Status
@@ -228,6 +235,7 @@ export default function OutpassVerifier() {
                                 {currentOutpass?.status}
                             </Badge>
                         </div>
+                        <Separator orientation='vertical' />
                     </div>
                     <div className="flex items-center justify-between my-auto">
                         <Button

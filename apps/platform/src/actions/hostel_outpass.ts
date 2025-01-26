@@ -132,6 +132,13 @@ export async function allowEntryExit(id: string, action_type: actionType): Promi
     if (outPass.status !== "approved" || outPass.status !== "in_use") {
       return Promise.reject("Outpass is not approved or already processed")
     }
+    if (outPass.status === "in_use" && action_type === "exit") {
+      return Promise.reject("Already allowed exit")
+    }
+    if (outPass.status === "processed" && action_type === "entry") {
+      return Promise.reject("Already allowed entry")
+    }
+
     if (action_type === "entry") {
       if (outPass.actualInTime) {
         return Promise.reject("Already allowed entry")
