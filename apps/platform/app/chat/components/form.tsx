@@ -4,12 +4,10 @@ import EmptyArea from "@/components/common/empty-area";
 import { GoBackButton } from "@/components/common/go-back";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import ConditionalRender from "@/components/utils/conditional-render";
-import { cn } from "@/lib/utils";
-import { Bot, Mic, Send } from "lucide-react";
+import { Bot, Send } from "lucide-react";
 import { useChat } from "../useChat";
 import ChatList from "./chat-list";
 
@@ -47,7 +45,7 @@ export default function Form() {
               {" | "}
               <a
                 target="_blank"
-                href="https://github.com/kanakkholwal/college-ecosystem/blob/main/apps/platform/public/doc/REFERENCE.md"
+                href="https://github.com/kanakkholwal/college-ecosystem/blob/main/content/chatbot-reference.md"
                 className="underline text-primary"
                 rel="noreferrer"
               >

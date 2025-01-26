@@ -18,6 +18,7 @@ import { allowEntryExit } from "~/actions/hostel_outpass";
 import { apiFetch } from '~/lib/client-fetch';
 import OutpassList from './outpass-list';
 import OutpassRender from './outpass-render';
+import { useToast } from "@/hooks/use-toast"
 
 type responseType = {
     identifier: "rollNo";
@@ -44,6 +45,8 @@ export default function OutpassVerifier() {
     const [error, setError] = useState('');
     const [updating, setUpdating] = useState(false);
     const [currentOutpass, setCurrentOutpass] = useState<OutPassType | null>(null);
+    const { toast: toastLg } = useToast()
+
 
 
     const fetchOutpassHistory = async (identifier: string) => {
@@ -99,13 +102,18 @@ export default function OutpassVerifier() {
                     loading: "Updating status...",
                     success: (msg: string | undefined) =>
                         msg || "Status updated successfully",
-                    error: (msg: unknown | undefined) =>{
+                    error: (msg: unknown) => {
                         console.log(msg)
-                        return"Failed to update status"
+                        return "Failed to update status"
                     },
                 });
-            } catch {
+            } catch (err) {
                 toast.error("Unexpected error occurred");
+                toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: err?.toString(),
+                })
             } finally {
                 setUpdating(false);
                 resolve(true);
@@ -183,11 +191,11 @@ export default function OutpassVerifier() {
                             </span>
                             <span className="font-medium text-left">
                                 {currentOutpass?.actualOutTime ?
-                                new Date(currentOutpass?.actualOutTime || "").toLocaleDateString("en-US", {
-                                    day: "numeric",
-                                    month: "long",
-                                    year: "numeric",
-                                }):"Not exited yet"}
+                                    new Date(currentOutpass?.actualOutTime || "").toLocaleDateString("en-US", {
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric",
+                                    }) : "Not exited yet"}
                             </span>
                         </div>
                         <div className="flex flex-col text-gray-700">
@@ -196,11 +204,11 @@ export default function OutpassVerifier() {
                             </span>
                             <span className="font-medium text-left">
                                 {currentOutpass?.actualInTime ?
-                                new Date(currentOutpass?.actualInTime || "").toLocaleDateString("en-US", {
-                                    day: "numeric",
-                                    month: "long",
-                                    year: "numeric",
-                                }):"Not entered yet"}
+                                    new Date(currentOutpass?.actualInTime || "").toLocaleDateString("en-US", {
+                                        day: "numeric",
+                                        month: "long",
+                                        year: "numeric",
+                                    }) : "Not entered yet"}
                             </span>
                         </div>
                         <div className="flex flex-col text-gray-700">
@@ -225,19 +233,19 @@ export default function OutpassVerifier() {
                         <Button
                             onClick={handleEntryExit}
                             disabled={updating || (!!currentOutpass?.actualInTime)}
-                            variant={currentOutpass?.actualInTime ? "glass":"default_light"}
+                            variant={currentOutpass?.actualInTime ? "glass" : "default_light"}
                             effect="shineHover"
                         >
-                            {currentOutpass?.actualInTime ? "Already Processed":currentOutpass?.actualOutTime ? "Allow Entry" : "Allow Exit" }
+                            {currentOutpass?.actualInTime ? "Already Processed" : currentOutpass?.actualOutTime ? "Allow Entry" : "Allow Exit"}
                         </Button>
                     </div>
 
                 </div>
                 <ErrorBoundary fallback={<EmptyArea title="An error occurred" description="Some error occurred while displaying Outpass. Please reload page." />}>
-                <OutpassRender outpass={outpassHistory[0]} viewOnly={true} />
+                    <OutpassRender outpass={outpassHistory[0]} viewOnly={true} />
                 </ErrorBoundary>
                 <ErrorBoundary fallback={<EmptyArea title="An error occurred" description="Some error occurred while displaying Outpass History. Please reload page." />}>
-                <OutpassList outPasses={outpassHistory} />
+                    <OutpassList outPasses={outpassHistory} />
                 </ErrorBoundary>
             </ConditionalRender>
 

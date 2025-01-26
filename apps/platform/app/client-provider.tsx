@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { Toaster as HotToaster } from "react-hot-toast";
 import { Gradient } from "whatamesh";
 import fallbackImg from "./fallback.png";
+import { Toaster } from "@/components/ui/toaster"
 
 // export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 //   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
@@ -66,6 +67,9 @@ export function Provider({ children }: { children: React.ReactNode }) {
           // Define default options
           duration: 2500,
         }}
+      />
+      <Toaster
+      
       />
       <div className="fixed bottom-2 right-2 left-auto top-auto z-50 flex gap-1 items-center">
         <span>

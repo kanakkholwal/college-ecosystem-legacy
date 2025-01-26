@@ -18,7 +18,7 @@ const ALLOWED_GENDERS = ["male", "gender", "not_specified"];
 // const VERIFY_EMAIL_PATH_PREFIX = "/sign-in?tab=verify-email&token=";
 const VERIFY_EMAIL_PATH_PREFIX = "/verify-email?token=";
 
-const baseUrl = process.env.VERCEL_URL || process.env.BASE_URL;
+const baseUrl = process.env.BASE_URL || process.env.VERCEL_URL;
 
 export const auth = betterAuth({
   appName: "College Platform",
