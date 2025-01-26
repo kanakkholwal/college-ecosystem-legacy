@@ -38,7 +38,7 @@ const classNames = {
   signature_value: "mt-3 text-sm text-gray-700 font-bold italic text-right group-[.special]:text-xs",
 };
 
-export default function OutpassRender({ outpass,viewOnly=false }: OutpassRenderProps) {
+export default function OutpassRender({ outpass, viewOnly = false }: OutpassRenderProps) {
   const outpassRef = useRef<HTMLDivElement>(null);
 
   const handleDownload = async () => {
@@ -173,7 +173,8 @@ export default function OutpassRender({ outpass,viewOnly=false }: OutpassRenderP
               <p className="mt-4">
                 For Office Use Only: This outpass is valid until{" "}
                 <strong>
-                  {new Date(outpass.validTill).toLocaleString("en-US")}
+                  {new Date(outpass.validTill || new Date(new Date().getFullYear(),new Date().getMonth(),new Date().getDate(),23,59,59,999))
+                  .toLocaleString("en-US")}
                 </strong>
               </p>
             </section>

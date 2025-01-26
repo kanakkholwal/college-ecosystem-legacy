@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import Navbar from "@/components/common/app-navbar";
-
+import { ROLES } from "~/constants";    
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
@@ -20,13 +20,13 @@ export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
   const session = (await getSession()) as Session;
-  if (!session.user.other_roles.includes("guard")) {
+  if (!session.user.other_roles.includes(ROLES.GUARD)) {
     return redirect("/");
   }
 
   return (
     <SidebarProvider className="selection:bg-primary/10 selection:text-primary">
-      <AppSidebar user={session.user} moderator={"guard"} />
+      <AppSidebar user={session.user} moderator={ROLES.GUARD} />
       <SidebarInset className="flex flex-col flex-1 w-full relative z-0">
         <Navbar user={session.user} />
         <div

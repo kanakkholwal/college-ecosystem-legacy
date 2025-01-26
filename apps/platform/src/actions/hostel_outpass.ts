@@ -40,6 +40,25 @@ export async function createOutPass(
     //   return Promise.reject("You are not authorized to request outpass for this user")
     // }
     await dbConnect();
+    // if reason is outing or market then validity should be the end of the day of expectedInTime
+    const validity = new Date();
+    if (data.reason === "outing" || data.reason === "market") {
+      const date = new Date(data.expectedInTime);
+      validity.setFullYear(date.getFullYear());
+      validity.setMonth(date.getMonth());
+      validity.setDate(date.getDate());
+      validity.setHours(23, 59, 59, 999);
+    }
+    // if reason is home or medical then validity should be +4 days from expectedInTime
+    if (data.reason === "home" || data.reason === "medical") {
+      const date = new Date(data.expectedInTime);
+      validity.setFullYear(date.getFullYear());
+      validity.setMonth(date.getMonth());
+      validity.setDate(date.getDate() + 4);
+      validity.setHours(23, 59, 59, 999);
+    }
+    // create a date of end of today directly on declaration
+
     const payload = {
       student: hosteler._id,
       hostel: hostel._id,
@@ -50,6 +69,7 @@ export async function createOutPass(
       expectedInTime: data.expectedInTime,
       expectedOutTime: data.expectedOutTime,
       status: "pending",
+      validTill: validity,
     };
     const newOutpass = await OutPassModel.create(payload);
     return Promise.resolve("Outpass Requested Successfully");
