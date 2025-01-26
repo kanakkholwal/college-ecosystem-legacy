@@ -125,6 +125,7 @@ const config = {
   },
   plugins: [
     require("tailwindcss-animate"),
+    require("tailwindcss-motion"),
     require("@tailwindcss/container-queries"),
     require("@tailwindcss/typography"),
   ],

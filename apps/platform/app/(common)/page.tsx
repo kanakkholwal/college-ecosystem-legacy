@@ -18,23 +18,20 @@ const PROMO = {
   label: "Register Now!",
   showTill: "2022-01-19T19:00:00",
   getConditionByUser: (user: Session["user"]) =>
-    user?.other_roles.includes(ROLES.STUDENT) && user.username.startsWith("24"),
+    user?.other_roles.includes(ROLES.STUDENT) && user?.username.startsWith("24") && new Date() < new Date(PROMO.showTill)
 };
 
 export default async function Dashboard() {
   const session = (await getSession()) as Session;
 
   const links = getLinksByRole(session?.user?.other_roles[0], quick_links);
-  if (session?.user.other_roles.includes(ROLES.GUARD)) {
+  if (session?.user.other_roles.includes(ROLES.GUARD) && session?.user.role !== ROLES.ADMIN) {
     return redirect(`/${ROLES.GUARD}`);
   }
   return (
     <>
       <ConditionalRender
-        condition={
-          PROMO.getConditionByUser(session?.user) &&
-          new Date() < new Date(PROMO.showTill)
-        }
+        condition={PROMO.getConditionByUser(session?.user)}
       >
         <BannerPanel
           title={PROMO.title}
