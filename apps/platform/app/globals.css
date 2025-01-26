@@ -4,13 +4,26 @@
 @plugin "tailwindcss-motion";
 @plugin "tailwindcss-animate";
 
-@config '../tailwind.config.ts';
 
 
 @theme {
   --font-display: "Satoshi", "sans-serif";
   --font-sans: 'Inter', 'Helvetica', 'Arial', sans-serif;
   --breakpoint-8xl: 1920px;
+
+  --spacing-1: 0.25rem;
+  --spacing-2: 0.5rem;
+  --spacing-3: 0.75rem;
+  --spacing-4: 1rem;
+  --spacing-5: 1.25rem;
+  --spacing-6: 1.5rem;
+
+  --duration: 300ms;
+  --duration-lg: 500ms;
+  --duration-xl: 700ms;
+  --duration-sm: 100ms;
+  --duration-xs: 50ms;
+
 
   --color-transparent: transparent;
   --color-current: currentColor;
