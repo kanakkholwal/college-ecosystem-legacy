@@ -180,7 +180,7 @@ export default function OutpassRender({ outpass, viewOnly = false }: OutpassRend
             </section>
             <footer className={classNames.footer}>
               <div className={classNames.qr_code}>
-                <Barcode value={outpass._id} height={100} width={2} format="pharmacode" displayValue={false} />
+                <Barcode value={outpass._id} id={outpass._id} height={100} width={2} format="pharmacode" displayValue={false} />
               </div>
               <div className={classNames.signature}>
                 <p className={classNames.signature}>Signature of Student</p>

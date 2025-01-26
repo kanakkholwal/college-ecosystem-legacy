@@ -3,7 +3,7 @@ import type { ResultTypeWithId } from "~/models/result";
 
 import dbConnect from "~/lib/dbConnect";
 import redis from "~/lib/redis";
-import ResultModel from "src/models/result";
+import ResultModel from "~/models/result";
 import { z } from "zod";
 import { serverFetch } from "~/lib/server-fetch";
 
@@ -54,10 +54,14 @@ export async function getResults(
 
     // Check cached results
     const cacheKey = `results_${query}_${currentPage}${filter ? `_${JSON.stringify(filter)}` : ""}`;
-    let cachedResults = null;
+    let cachedResults: getResultsReturnType | null = null;
     try {
-      if (!new_cache)
-        cachedResults = await redis.get(cacheKey) as getResultsReturnType | null;
+      if (!new_cache) {
+        const cachedData = await redis.get(cacheKey);
+        if (cachedData) {
+          cachedResults = JSON.parse(cachedData) as getResultsReturnType;
+        }
+      }
       else {
         await redis.del(cacheKey);
       }
@@ -107,9 +111,14 @@ export async function getCachedLabels(
   let cachedLabels: CachedLabels | null = null;
   try {
     try {
-      if (!new_cache) 
-        cachedLabels = await redis.get(cacheKey) as CachedLabels | null;
-      else await redis.del(cacheKey);
+      if (!new_cache) {
+        const cachedData = await redis.get(cacheKey);
+        if (cachedData) {
+          cachedLabels = JSON.parse(cachedData) as CachedLabels;
+        }
+      } else {
+        await redis.del(cacheKey);
+      }
     } catch (redisError) {
       console.error("Redis connection error:", redisError);
     }
