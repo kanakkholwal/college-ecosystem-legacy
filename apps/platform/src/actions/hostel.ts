@@ -1,5 +1,6 @@
 "use server";
 
+import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 import type { z } from "zod";
 import { ROLES } from "~/constants";
@@ -16,14 +17,12 @@ import serverApis from "~/lib/server-apis";
 import {
   HostelModel,
   HostelStudentModel,
-  type HostelType,
   type HostelStudentType,
+  type HostelType,
   type HostelTypeWithStudents,
   type IHostelType,
 } from "~/models/hostel_n_outpass";
-import ResultModel, { type ResultTypeWithId } from "~/models/result";
-import { getUserByEmail } from "./user";
-import mongoose from "mongoose";
+import ResultModel from "~/models/result";
 
 const allowedRolesForHostel = [
   ROLES.ADMIN,
@@ -144,130 +143,78 @@ export async function updateHostel(
   }
 }
 
-async function syncHostelStudents(
-  hostelId: string,
-  student_emails: z.infer<typeof emailSchema>[]
-) {
+async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
   try {
-    const hostel = (await HostelModel.findById(hostelId)) as IHostelType;
-    const updates = [];
-    const result_updates = [];
+    await dbConnect();
+    const hostel = await HostelModel.findById(hostelId);
+    if (!hostel) return { success: false, error: "Hostel not found" };
 
-    if (student_emails) {
-      const students = await HostelStudentModel.find({
-        email: { $in: student_emails },
-        $nor: [{ hostelId: hostel._id }],
-      }).lean();
+    const existingStudents = await HostelStudentModel.find({
+      email: { $in: studentEmails },
+    }).lean();
 
-      for await (const student_email of student_emails) {
-        const student = students.find(
-          (student) => student.email === student_email
-        );
-        if (student) {
-          updates.push({
-            updateOne: {
-              filter: {
-                email: student_email,
-              },
-              update: {
-                $set: {
-                  hostelId: hostel._id,
-                  gender: hostel.gender,
-                  roomNumber: "UNKNOWN",
-                  position: "none",
-                },
-              },
-            },
+    const rollNumbers = studentEmails.map((email) => email.split("@")[0]);
+    const results = await ResultModel.find({ rollNo: { $in: rollNumbers } }).lean();
+
+    const bulkOps= [];
+    const resultUpdates = [];
+
+      for await (const email of studentEmails) {
+      const student = existingStudents.find((s) => s.email === email);
+      const rollNumber = email.split("@")[0];
+      const result = results.find((r) => r.rollNo === rollNumber);
+
+      if (student && String(student.hostelId) !== String(hostelId)) {
+        bulkOps.push({
+          updateOne: {
+            filter: { email },
+            update: { $set: { hostelId, gender: hostel.gender, roomNumber: "UNKNOWN" } },
+          },
+        });
+
+        if (student.gender !== "not_specified") {
+          resultUpdates.push({
+            updateOne: { filter: { rollNo: rollNumber }, update: { $set: { gender: hostel.gender } } },
           });
-          if (student.gender !== "not_specified") {
-            result_updates.push({
-              updateOne: {
-                filter: {
-                  rollNo: student_email.split("@")[0],
-                },
-                update: {
-                  $set: {
-                    gender: hostel.gender,
-                  },
-                },
-              },
-            });
-          }
-        } else {
-          const result = (await ResultModel.findOne({
-            rollNo: student_email.split("@")[0],
-          })
-            .lean()
-            .exec()) as unknown as ResultTypeWithId;
-          if (!result) {
-            console.log("result of Student not found", student_email);
-            continue;
-          }
-          if (
-            result.gender !== hostel.gender &&
-            result.gender !== "not_specified"
-          ) {
-            console.log("Student gender doesn't match", result);
-            continue;
-          }
-          const studentUser = await getUserByEmail(student_email);
-
-          updates.push({
-            insertOne: {
-              document: {
-                rollNumber: result.rollNo,
-                userId: studentUser?.id || null,
-                name: result.name,
-                gender:
-                  result.gender !== "not_specified"
-                    ? result.gender
-                    : hostel.gender,
-                email: student_email,
-                hostelId: hostel._id,
-                roomNumber: "UNKNOWN",
-                position: "none",
-              },
+        }
+      } else if (!student && result) {
+        bulkOps.push({
+          insertOne: {
+            document: {
+              rollNumber: result.rollNo,
+              name: result.name,
+              email,
+              hostelId,
+              gender: result.gender !== "not_specified" ? result.gender : hostel.gender,
+              roomNumber: "UNKNOWN",
+              position: "none",
             },
-          });
+          },
+        });
 
-          if (result?.gender === "not_specified") {
-            result_updates.push({
-              updateOne: {
-                filter: {
-                  rollNo: student_email.split("@")[0],
-                },
-                update: {
-                  $set: {
-                    gender: hostel.gender,
-                  },
-                },
-              },
-            });
-          }
+        if (result.gender === "not_specified") {
+          resultUpdates.push({
+            updateOne: { filter: { rollNo: rollNumber }, update: { $set: { gender: hostel.gender } } },
+          });
         }
       }
     }
-    if (updates.length > 0) {
-      await HostelStudentModel.bulkWrite(updates);
-    }
-    if (result_updates.length > 0) {
-      await ResultModel.bulkWrite(result_updates);
-    }
-    const output = await HostelStudentModel.find({
-      hostelId,
-    })
-      .select("_id")
-      .lean()
-      .exec();
 
-    return {
-      success: true,
-      data: output.map((student) => student?._id?.toString()),
-    };
+    if (bulkOps.length) await HostelStudentModel.bulkWrite(bulkOps);
+    if (resultUpdates.length) await ResultModel.bulkWrite(resultUpdates);
+
+    // const updatedStudents = await HostelStudentModel.getStudentsByHostel(hostelId);
+
+    return { success: true, data:[] };
   } catch (err) {
-    return { success: false, error: err?.toString() };
+    console.error("syncHostelStudents Error:", err);
+    if (err instanceof Error) {
+      return { success: false, error: err.message };
+    }
+    return { success: false, error: "Failed to sync students" };
   }
 }
+
 
 export async function getHostel(slug: string): Promise<{
   success: boolean;

@@ -1,4 +1,5 @@
 import mongoose, { type Document, Schema } from "mongoose";
+import ResultModel from "./result";
 
 export interface RawHostelType {
   name: string;
@@ -64,9 +65,8 @@ const HostelSchema = new Schema(
   { timestamps: true }
 );
 
-export const HostelModel =
-  mongoose.models?.Hostel ||
-  mongoose.model<IHostelType>("Hostel", HostelSchema);
+
+
 
 export interface rawHostelStudentType {
   rollNumber: string;
@@ -110,10 +110,6 @@ const HostelStudentSchema = new Schema(
   },
   { timestamps: true }
 );
-
-export const HostelStudentModel =
-  mongoose.models?.HostelStudent ||
-  mongoose.model<IHostelStudentType>("HostelStudent", HostelStudentSchema);
 
 export interface rawOutPassType {
   student: string;
@@ -170,6 +166,84 @@ const OutPassSchema = new Schema(
   },
   { timestamps: true }
 );
+
+
+
+// 🟢 Pre-remove hook to clean up students if hostel is deleted
+HostelSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
+  await HostelStudentModel.updateMany({ hostelId: this._id }, { hostelId: null });
+  next();
+});
+
+// 🔴 Post-save hook for logging
+HostelSchema.post("save", (doc) => {
+  console.log(`✅ Hostel Created/Updated: ${doc.name}`);
+});
+
+// 🔵 Indexes for performance
+HostelStudentSchema.index({ email: 1, hostelId: 1 }, { unique: true });
+HostelStudentSchema.index({ rollNumber: 1 }, { unique: true });
+
+
+// 🟢 Pre-save hook: Ensure gender consistency with hostel
+// HostelStudentSchema.pre("save", async function (next) {
+//   const hostel = await HostelModel.findById(this.hostelId);
+//   if (!hostel) {
+//     return next(new Error("Hostel does not exist"));
+//   }
+
+//   if (this.gender !== hostel.gender) {
+//     return next(new Error("Student gender does not match hostel gender"));
+//   }
+
+//   next();
+// });
+
+// 🔴 Post-save hook: Auto-update ResultModel gender if missing
+HostelStudentSchema.post("save", async (doc) => {
+  await ResultModel.updateOne(
+    { rollNo: doc.rollNumber, gender: "not_specified" },
+    { $set: { gender: doc.gender } }
+  );
+});
+// 🔄 Instance Method: Change room number
+HostelStudentSchema.methods.changeRoom = async function (newRoom: string) {
+  this.roomNumber = newRoom;
+  return await this.save();
+};
+// 🏠 Static Method: Get students by hostel
+HostelStudentSchema.statics.getStudentsByHostel = async function (hostelId: string) : Promise<IHostelStudentType[]> {
+  return await this.find({ hostelId }).lean();
+}
+// 🔄 Static Method: Transfer students between hostels
+HostelStudentSchema.statics.transferStudents = async function (studentEmails: string[], newHostelId: string) {
+  const newHostel = await HostelModel.findById(newHostelId);
+  if (!newHostel) {
+    throw new Error("New hostel not found");
+  }
+
+  // Update students only if the gender matches
+  const updated = await this.updateMany(
+    { email: { $in: studentEmails }, gender: newHostel.gender },
+    { $set: { hostelId: newHostelId, roomNumber: "UNKNOWN" } }
+  );
+
+  if (updated.matchedCount === 0) {
+    throw new Error("No students matched the transfer criteria");
+  }
+
+  return { success: true, message: `${updated.modifiedCount} students transferred successfully` };
+};
+
+export const HostelStudentModel =
+  mongoose.models?.HostelStudent ||
+  mongoose.model<IHostelStudentType>("HostelStudent", HostelStudentSchema);
+
+
+export const HostelModel =
+  mongoose.models?.Hostel ||
+  mongoose.model<IHostelType>("Hostel", HostelSchema);
+
 
 export const OutPassModel =
   mongoose.models?.OutPass ||
