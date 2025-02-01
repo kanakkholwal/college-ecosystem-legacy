@@ -5,14 +5,15 @@ import type { PropsWithChildren } from "react";
 import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
 
-interface PageProps {
+
+interface HostelPageLayoutProps {
   children: React.ReactNode;
   searchParams: Promise<{
     slug?: string;
   }>;
 }
 
-export default async function HostelPageLayout(props: PageProps) {
+export default async function HostelPageLayout(props: HostelPageLayoutProps) {
   const searchParams = await props.searchParams;
 
   const { success, message, hostel, hosteler } = await getHostelByUser(
