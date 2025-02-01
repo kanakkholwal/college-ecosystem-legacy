@@ -1,24 +1,19 @@
 import { HostelDetailsForNonAdmins } from "@/components/application/hostel/hostel-details";
 import EmptyArea from "@/components/common/empty-area";
 import { Separator } from "@/components/ui/separator";
-import type { PropsWithChildren } from "react";
 import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
 
 
-interface HostelPageLayoutProps {
-  children: React.ReactNode;
-  searchParams: Promise<{
-    slug?: string;
-  }>;
-}
 
-export default async function HostelPageLayout(props: HostelPageLayoutProps) {
-  const searchParams = await props.searchParams;
+interface LayoutProps {
+  children: React.ReactNode
+ }
 
-  const { success, message, hostel, hosteler } = await getHostelByUser(
-    searchParams?.slug
-  );
+export default async function HostelPageLayout({ children, ...props }:LayoutProps) {
+  // const searchParams = await props.searchParams;
+  // TODO: FIX slug layout props issue
+  const { success, message, hostel, hosteler } = await getHostelByUser();
 
   if (!success || !hostel || !hosteler) {
     return (
@@ -34,7 +29,7 @@ export default async function HostelPageLayout(props: HostelPageLayoutProps) {
     <div className="space-y-5 my-2">
       <HostelDetailsForNonAdmins hostel={hostel} />
       <Separator />
-      {props.children}
+      {children}
     </div>
   );
 }
