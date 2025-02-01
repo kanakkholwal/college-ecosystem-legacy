@@ -7,7 +7,7 @@ import type { OutPassType } from "~/models/hostel_n_outpass";
 
 interface OutpassDetailsProps {
     outpass: OutPassType;
-    actions: boolean;
+    actions?: boolean;
 }
 
 const classNames = {
