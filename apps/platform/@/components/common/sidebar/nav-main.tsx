@@ -42,55 +42,53 @@ export function NavMain({
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
-          const url = new URL(
-            item.href,
-            process.env.NEXT_PUBLIC_BASE_URL
-          );
-          if(item?.preserveParams)
-            url.search = searchParams.toString();
+          const url = new URL(item.href, process.env.NEXT_PUBLIC_BASE_URL);
+          if (item?.preserveParams) url.search = searchParams.toString();
 
-          return <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild tooltip={item.title}>
-                <Link href={url.toString()}>
-                  <item.icon />
-                  <span>{item.title}</span>
-                </Link>
-              </SidebarMenuButton>
-              {item.items?.length ? (
-                <>
-                  <CollapsibleTrigger asChild>
-                    <SidebarMenuAction className="data-[state=open]:rotate-90">
-                      <ChevronRight />
-                      <span className="sr-only">Toggle</span>
-                    </SidebarMenuAction>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {item.items?.map((subItem) => {
-                        // combine search params with the item.href and subItem.href to create a new URL
-                        const url = new URL(
-                          subItem.href,
-                          process.env.NEXT_PUBLIC_BASE_URL
-                        );
-                        if (item?.preserveParams)
-                          url.search = searchParams.toString();
-                        return (
-                          <SidebarMenuSubItem key={subItem.title}>
-                            <SidebarMenuSubButton asChild>
-                              <Link href={url.toString()}>
-                                <span>{subItem.title}</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        );
-                      })}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </>
-              ) : null}
-            </SidebarMenuItem>
-          </Collapsible>
+          return (
+            <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild tooltip={item.title}>
+                  <Link href={url.toString()}>
+                    <item.icon />
+                    <span>{item.title}</span>
+                  </Link>
+                </SidebarMenuButton>
+                {item.items?.length ? (
+                  <>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuAction className="data-[state=open]:rotate-90">
+                        <ChevronRight />
+                        <span className="sr-only">Toggle</span>
+                      </SidebarMenuAction>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {item.items?.map((subItem) => {
+                          // combine search params with the item.href and subItem.href to create a new URL
+                          const url = new URL(
+                            subItem.href,
+                            process.env.NEXT_PUBLIC_BASE_URL
+                          );
+                          if (item?.preserveParams)
+                            url.search = searchParams.toString();
+                          return (
+                            <SidebarMenuSubItem key={subItem.title}>
+                              <SidebarMenuSubButton asChild>
+                                <Link href={url.toString()}>
+                                  <span>{subItem.title}</span>
+                                </Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          );
+                        })}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </>
+                ) : null}
+              </SidebarMenuItem>
+            </Collapsible>
+          );
         })}
       </SidebarMenu>
     </SidebarGroup>

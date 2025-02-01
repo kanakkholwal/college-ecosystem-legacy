@@ -9,7 +9,6 @@ import { getSession } from "~/lib/auth-server";
 import { HeroSection } from "./greeting";
 import { redirect } from "next/navigation";
 
-
 const PROMO = {
   title: "Join DSC!",
   description:
@@ -18,21 +17,24 @@ const PROMO = {
   label: "Register Now!",
   showTill: "2022-01-19T19:00:00",
   getConditionByUser: (user: Session["user"]) =>
-    user?.other_roles.includes(ROLES.STUDENT) && user?.username.startsWith("24") && new Date() < new Date(PROMO.showTill)
+    user?.other_roles.includes(ROLES.STUDENT) &&
+    user?.username.startsWith("24") &&
+    new Date() < new Date(PROMO.showTill),
 };
 
 export default async function Dashboard() {
   const session = (await getSession()) as Session;
 
   const links = getLinksByRole(session?.user?.other_roles[0], quick_links);
-  if (session?.user.other_roles.includes(ROLES.GUARD) && session?.user.role !== ROLES.ADMIN) {
+  if (
+    session?.user.other_roles.includes(ROLES.GUARD) &&
+    session?.user.role !== ROLES.ADMIN
+  ) {
     return redirect(`/${ROLES.GUARD}`);
   }
   return (
     <>
-      <ConditionalRender
-        condition={PROMO.getConditionByUser(session?.user)}
-      >
+      <ConditionalRender condition={PROMO.getConditionByUser(session?.user)}>
         <BannerPanel
           title={PROMO.title}
           description={PROMO.description}

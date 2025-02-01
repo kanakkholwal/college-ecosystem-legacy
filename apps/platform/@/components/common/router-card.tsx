@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
@@ -26,12 +26,11 @@ export function RouterCard({
   Icon,
   style,
   disabled,
-  preserveParams
+  preserveParams,
 }: RouterCardProps) {
   const searchParams = useSearchParams();
-  const url = new URL(href,process.env.NEXT_PUBLIC_BASE_URL);
-  if(preserveParams)
-    url.search = searchParams.toString();
+  const url = new URL(href, process.env.NEXT_PUBLIC_BASE_URL);
+  if (preserveParams) url.search = searchParams.toString();
 
   return (
     <Link

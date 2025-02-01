@@ -18,8 +18,6 @@ export default async function HostelPage(props: PageProps) {
 
   const { success, message, hostel, hosteler } = await getHostelByUser(slug);
 
-
-
   const outPasses = await getOutPassForHosteler();
   console.dir(outPasses[0], { depth: null });
   return (
@@ -28,7 +26,7 @@ export default async function HostelPage(props: PageProps) {
       <ConditionalRender condition={!hosteler?.banned}>
         <OutpassRender outpass={outPasses[0]} />
       </ConditionalRender>
-      <ConditionalRender condition={!!(hosteler?.banned)}>
+      <ConditionalRender condition={!!hosteler?.banned}>
         <EmptyArea
           icons={[LuBuilding]}
           title="You are banned from requesting outpass for the following reason"

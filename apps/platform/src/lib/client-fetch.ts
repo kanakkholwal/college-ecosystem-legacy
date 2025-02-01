@@ -1,6 +1,5 @@
 import { createFetch } from "@better-fetch/fetch";
 
-
 const baseURL = process.env.VERCEL_URL || process.env.NEXT_PUBLIC_BASE_URL;
 
 if (!baseURL) {
@@ -13,7 +12,7 @@ if (!baseURL) {
 export const apiFetch = createFetch({
   baseURL,
   headers: {
-      "Content-Type": "application/json",
-      Origin: process.env.NEXT_PUBLIC_BASE_URL,
+    "Content-Type": "application/json",
+    Origin: process.env.NEXT_PUBLIC_BASE_URL,
   },
 });

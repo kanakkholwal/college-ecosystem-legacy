@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import Navbar from "@/components/common/app-navbar";
-import { ROLES } from "~/constants";    
+import { ROLES } from "~/constants";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {

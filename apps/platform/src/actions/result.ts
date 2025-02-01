@@ -61,8 +61,7 @@ export async function getResults(
         if (cachedData) {
           cachedResults = JSON.parse(cachedData) as getResultsReturnType;
         }
-      }
-      else {
+      } else {
         await redis.del(cacheKey);
       }
     } catch (redisError) {
@@ -131,7 +130,12 @@ export async function getCachedLabels(
       cachedLabels = { branches, batches, programmes };
 
       // Cache labels for 6 months
-      await redis.set(cacheKey, JSON.stringify(cachedLabels), "EX", 60 * 60 * 24 * 30 * 6);
+      await redis.set(
+        cacheKey,
+        JSON.stringify(cachedLabels),
+        "EX",
+        60 * 60 * 24 * 30 * 6
+      );
     }
   } catch (error) {
     console.error("Error fetching cached labels:", error);

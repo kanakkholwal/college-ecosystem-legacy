@@ -65,9 +65,6 @@ const HostelSchema = new Schema(
   { timestamps: true }
 );
 
-
-
-
 export interface rawHostelStudentType {
   rollNumber: string;
   userId: string;
@@ -133,7 +130,7 @@ export type OutPassType = Omit<IOutPassType, "student" | "hostel"> & {
   _id: string;
 };
 
-// Out_pass Schema 
+// Out_pass Schema
 const OutPassSchema = new Schema(
   {
     student: {
@@ -160,20 +157,25 @@ const OutPassSchema = new Schema(
     validTill: { type: Date, default: null },
     status: {
       type: String,
-      enum: ["pending", "approved", "rejected","in_use", "processed"],
+      enum: ["pending", "approved", "rejected", "in_use", "processed"],
       default: "pending",
     },
   },
   { timestamps: true }
 );
 
-
-
 // 🟢 Pre-remove hook to clean up students if hostel is deleted
-HostelSchema.pre("deleteOne", { document: true, query: false }, async function (next) {
-  await HostelStudentModel.updateMany({ hostelId: this._id }, { hostelId: null });
-  next();
-});
+HostelSchema.pre(
+  "deleteOne",
+  { document: true, query: false },
+  async function (next) {
+    await HostelStudentModel.updateMany(
+      { hostelId: this._id },
+      { hostelId: null }
+    );
+    next();
+  }
+);
 
 // 🔴 Post-save hook for logging
 HostelSchema.post("save", (doc) => {
@@ -183,7 +185,6 @@ HostelSchema.post("save", (doc) => {
 // 🔵 Indexes for performance
 HostelStudentSchema.index({ email: 1, hostelId: 1 }, { unique: true });
 HostelStudentSchema.index({ rollNumber: 1 }, { unique: true });
-
 
 // 🟢 Pre-save hook: Ensure gender consistency with hostel
 // HostelStudentSchema.pre("save", async function (next) {
@@ -212,11 +213,16 @@ HostelStudentSchema.methods.changeRoom = async function (newRoom: string) {
   return await this.save();
 };
 // 🏠 Static Method: Get students by hostel
-HostelStudentSchema.statics.getStudentsByHostel = async function (hostelId: string) : Promise<IHostelStudentType[]> {
+HostelStudentSchema.statics.getStudentsByHostel = async function (
+  hostelId: string
+): Promise<IHostelStudentType[]> {
   return await this.find({ hostelId }).lean();
-}
+};
 // 🔄 Static Method: Transfer students between hostels
-HostelStudentSchema.statics.transferStudents = async function (studentEmails: string[], newHostelId: string) {
+HostelStudentSchema.statics.transferStudents = async function (
+  studentEmails: string[],
+  newHostelId: string
+) {
   const newHostel = await HostelModel.findById(newHostelId);
   if (!newHostel) {
     throw new Error("New hostel not found");
@@ -232,18 +238,19 @@ HostelStudentSchema.statics.transferStudents = async function (studentEmails: st
     throw new Error("No students matched the transfer criteria");
   }
 
-  return { success: true, message: `${updated.modifiedCount} students transferred successfully` };
+  return {
+    success: true,
+    message: `${updated.modifiedCount} students transferred successfully`,
+  };
 };
 
 export const HostelStudentModel =
   mongoose.models?.HostelStudent ||
   mongoose.model<IHostelStudentType>("HostelStudent", HostelStudentSchema);
 
-
 export const HostelModel =
   mongoose.models?.Hostel ||
   mongoose.model<IHostelType>("Hostel", HostelSchema);
-
 
 export const OutPassModel =
   mongoose.models?.OutPass ||

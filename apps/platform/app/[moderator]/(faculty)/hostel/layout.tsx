@@ -5,32 +5,35 @@ import type { PropsWithChildren } from "react";
 import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
 
-interface PageProps extends PropsWithChildren {
-    searchParams: Promise<{
-        slug?: string;
-    }>;
+interface PageProps {
+  children: React.ReactNode;
+  searchParams: Promise<{
+    slug?: string;
+  }>;
 }
 
 export default async function HostelPageLayout(props: PageProps) {
-    const searchParams = await props.searchParams;
+  const searchParams = await props.searchParams;
 
-    const { success, message, hostel, hosteler } = await getHostelByUser(searchParams?.slug);
+  const { success, message, hostel, hosteler } = await getHostelByUser(
+    searchParams?.slug
+  );
 
-    if (!success || !hostel || !hosteler) {
-        return (
-            <EmptyArea
-                icons={[LuBuilding]}
-                title="No Hostel Found for this user"
-                description={message}
-            />
-        );
-    }
-
+  if (!success || !hostel || !hosteler) {
     return (
-        <div className="space-y-5 my-2">
-            <HostelDetailsForNonAdmins hostel={hostel} />
-            <Separator />
-            {props.children}
-        </div>
+      <EmptyArea
+        icons={[LuBuilding]}
+        title="No Hostel Found for this user"
+        description={message}
+      />
     );
+  }
+
+  return (
+    <div className="space-y-5 my-2">
+      <HostelDetailsForNonAdmins hostel={hostel} />
+      <Separator />
+      {props.children}
+    </div>
+  );
 }

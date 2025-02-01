@@ -154,7 +154,9 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
     }).lean();
 
     const rollNumbers = studentEmails.map((email) => email.split("@")[0]);
-    const results = await ResultModel.find({ rollNo: { $in: rollNumbers } }).lean();
+    const results = await ResultModel.find({
+      rollNo: { $in: rollNumbers },
+    }).lean();
 
     const bulkOps = [];
     const resultUpdates = [];
@@ -168,13 +170,18 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
         bulkOps.push({
           updateOne: {
             filter: { email },
-            update: { $set: { hostelId, gender: hostel.gender, roomNumber: "UNKNOWN" } },
+            update: {
+              $set: { hostelId, gender: hostel.gender, roomNumber: "UNKNOWN" },
+            },
           },
         });
 
         if (student.gender !== "not_specified") {
           resultUpdates.push({
-            updateOne: { filter: { rollNo: rollNumber }, update: { $set: { gender: hostel.gender } } },
+            updateOne: {
+              filter: { rollNo: rollNumber },
+              update: { $set: { gender: hostel.gender } },
+            },
           });
         }
       } else if (!student && result) {
@@ -185,7 +192,10 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
               name: result.name,
               email,
               hostelId,
-              gender: result.gender !== "not_specified" ? result.gender : hostel.gender,
+              gender:
+                result.gender !== "not_specified"
+                  ? result.gender
+                  : hostel.gender,
               roomNumber: "UNKNOWN",
               position: "none",
             },
@@ -194,7 +204,10 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
 
         if (result.gender === "not_specified") {
           resultUpdates.push({
-            updateOne: { filter: { rollNo: rollNumber }, update: { $set: { gender: hostel.gender } } },
+            updateOne: {
+              filter: { rollNo: rollNumber },
+              update: { $set: { gender: hostel.gender } },
+            },
           });
         }
       }
@@ -214,7 +227,6 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
     return { success: false, error: "Failed to sync students" };
   }
 }
-
 
 export async function getHostel(slug: string): Promise<{
   success: boolean;

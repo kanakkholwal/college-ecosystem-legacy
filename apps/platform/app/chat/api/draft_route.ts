@@ -5,11 +5,9 @@
 
 // import { COLLEGE_NAME, COLLEGE_WEBSITE } from "~/project.config";
 
-
 // // TODO: create proper document for the chatbot
 // export const maxDuration = 45;
 // // export const revalidate = 60 * 60 * 24;// 24 hours
-
 
 // const REFERENCES_URLS: string[] = [
 //   "https://github.com/kanakkholwal/college-ecosystem/raw/refs/heads/main/content/chatbot-reference.md",

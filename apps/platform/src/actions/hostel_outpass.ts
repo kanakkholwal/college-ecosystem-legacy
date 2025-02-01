@@ -99,9 +99,10 @@ export async function getOutPassForHosteler(): Promise<OutPassType[]> {
   }
 }
 
-export async function getOutPassHistoryByRollNo(rollNo: string): Promise<OutPassType[]> {
+export async function getOutPassHistoryByRollNo(
+  rollNo: string
+): Promise<OutPassType[]> {
   try {
-
     const outPasses = await OutPassModel.find({})
       .populate({
         path: "student",
@@ -123,7 +124,6 @@ export async function getOutPassHistoryByRollNo(rollNo: string): Promise<OutPass
 }
 export async function getOutPassById(id: string): Promise<OutPassType | null> {
   try {
-
     const outPass = await OutPassModel.findById(id)
       .populate("hostel")
       .populate("student")
@@ -138,7 +138,10 @@ export async function getOutPassById(id: string): Promise<OutPassType | null> {
 
 type actionType = "entry" | "exit";
 
-export async function allowEntryExit(id: string, action_type: actionType): Promise<string> {
+export async function allowEntryExit(
+  id: string,
+  action_type: actionType
+): Promise<string> {
   try {
     await dbConnect();
 
@@ -147,21 +150,21 @@ export async function allowEntryExit(id: string, action_type: actionType): Promi
       .populate("student")
       .exec();
     if (!outPass) {
-      return Promise.reject("Outpass not found")
+      return Promise.reject("Outpass not found");
     }
     if (outPass.status !== "approved" || outPass.status !== "in_use") {
-      return Promise.reject("Outpass is not approved or already processed")
+      return Promise.reject("Outpass is not approved or already processed");
     }
     if (outPass.status === "in_use" && action_type === "exit") {
-      return Promise.reject("Already allowed exit")
+      return Promise.reject("Already allowed exit");
     }
     if (outPass.status === "processed" && action_type === "entry") {
-      return Promise.reject("Already allowed entry")
+      return Promise.reject("Already allowed entry");
     }
 
     if (action_type === "entry") {
       if (outPass.actualInTime) {
-        return Promise.reject("Already allowed entry")
+        return Promise.reject("Already allowed entry");
       }
 
       outPass.actualInTime = new Date();
@@ -171,17 +174,16 @@ export async function allowEntryExit(id: string, action_type: actionType): Promi
     }
     if (action_type === "exit") {
       if (outPass.actualOutTime) {
-        return Promise.reject("Already allowed exit")
+        return Promise.reject("Already allowed exit");
       }
       outPass.actualOutTime = new Date();
       outPass.status = "in_use";
       await outPass.save();
       return Promise.resolve("Outpass updated successfully");
     }
-    return Promise.reject("Invalid action type")
+    return Promise.reject("Invalid action type");
   } catch (err) {
     console.error(err);
     return Promise.reject(err?.toString() || "Something went wrong");
   }
 }
-

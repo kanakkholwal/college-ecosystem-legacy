@@ -6,9 +6,7 @@ export default async function GuardDashboard() {
 
   return (
     <div className="w-full mx-auto space-y-5">
-
-      <OutPassHandler/>
-
+      <OutPassHandler />
     </div>
   );
 }

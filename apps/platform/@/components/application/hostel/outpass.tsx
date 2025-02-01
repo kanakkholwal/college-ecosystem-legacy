@@ -1,7 +1,8 @@
 "use client";
-import { Button } from '@/components/ui/button';
 
+import { OutpassActionFooter } from "@/components/application/hostel/outpass-actions";
 import { Badge } from "@/components/ui/badge";
+import { format } from "date-fns";
 import type { OutPassType } from "~/models/hostel_n_outpass";
 
 interface OutpassDetailsProps {
@@ -39,12 +40,8 @@ export function OutpassDetails({ outpass }: OutpassDetailsProps) {
                 </Badge>
             </span>
             <span className={classNames.outpassInfo}>
-                {outpass.actualInTime ? <>
-                    {new Date(outpass.actualOutTime || "").toLocaleString("en-US")} - {new Date(outpass.actualInTime || "").toLocaleString("en-US")}
-                </> : <>
-                    {new Date(outpass.expectedOutTime || "").toLocaleString("en-US")} - {new Date(outpass.expectedInTime || "").toLocaleString("en-US")}
-                </>}
-
+                {format(new Date(outpass.expectedOutTime || ""), "dd/MM/yyyy hh:mm a")} - 
+                {format(new Date(outpass.expectedInTime || ""), "dd/MM/yyyy hh:mm a")}
             </span>
 
         </div>
@@ -78,14 +75,10 @@ export function OutpassWithActions({ outpass }: OutpassDetailsProps) {
                 </Badge>
             </span>
             <span className={classNames.outpassInfo}>
-                {outpass.actualInTime ? <>
-                    {new Date(outpass.actualOutTime || "").toLocaleString("en-US")} - {new Date(outpass.actualInTime || "").toLocaleString("en-US")}
-                </> : <>
-                    {new Date(outpass.expectedOutTime || "").toLocaleString("en-US")} - {new Date(outpass.expectedInTime || "").toLocaleString("en-US")}
-                </>}
+                {format(new Date(outpass.expectedOutTime || ""), "dd/MM/yyyy hh:mm a")} - 
+                {format(new Date(outpass.expectedInTime || ""), "dd/MM/yyyy hh:mm a")}
             </span>
-            <Button size="sm" variant="default_light" className="mt-2">Approve</Button>
-            <Button size="sm" variant="destructive_light" className="mt-2">Reject</Button>
+            <OutpassActionFooter />
 
 
         </div>

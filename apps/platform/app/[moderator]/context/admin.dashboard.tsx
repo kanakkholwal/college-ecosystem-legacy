@@ -6,7 +6,7 @@ import { CircleDashed, Eye, TrendingDown, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { FaGenderless } from "react-icons/fa";
 import { TbUsersGroup } from "react-icons/tb";
-import {getDepartmentCode} from "~/constants/departments";
+import { getDepartmentCode } from "~/constants/departments";
 import {
   flushCache,
   getActiveSessions,
@@ -154,7 +154,8 @@ export default async function AdminDashboard() {
               <ul className="text-sm text-muted-foreground">
                 {usersByDepartment.map(({ department, count }) => (
                   <li key={department}>
-                    {getDepartmentCode(department)}: <span className="font-bold">{count}</span>
+                    {getDepartmentCode(department)}:{" "}
+                    <span className="font-bold">{count}</span>
                   </li>
                 ))}
               </ul>

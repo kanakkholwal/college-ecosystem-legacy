@@ -23,7 +23,6 @@ export default async function Layout({ children }: LayoutProps) {
     return redirect("/sign-in");
   }
 
-
   return (
     <div className="flex min-h-screen h-full w-full flex-col items-center justify-start @container/layout-0 max-w-7xl min-w-screen mx-auto px-3 lg:py-10">
       <Navbar user={session.user} />

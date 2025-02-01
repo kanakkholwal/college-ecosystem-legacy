@@ -196,8 +196,6 @@ export const auth = betterAuth({
   ], // make sure this is the last plugin (nextCookies) in the array
 });
 
-
-
 type getUserInfoReturnType = {
   email: string;
   username: string;

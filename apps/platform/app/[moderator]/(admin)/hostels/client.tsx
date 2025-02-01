@@ -25,7 +25,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import type z from "zod";
 import { createHostel, importHostelsFromSite } from "~/actions/hostel";
-import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass"
+import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
 
 import { createHostelSchema } from "~/constants/hostel_n_outpass";
 
@@ -201,10 +201,12 @@ export function CreateHostelForm() {
                     </MultiSelectorTrigger>
                     <MultiSelectorContent>
                       <MultiSelectorList>
-                        {IN_CHARGES_EMAILS
-                        .filter((inCharge) => {
+                        {IN_CHARGES_EMAILS.filter((inCharge) => {
                           const formGender = form.getValues("gender");
-                          if (inCharge.gender === "not_specified" || inCharge.gender === formGender) 
+                          if (
+                            inCharge.gender === "not_specified" ||
+                            inCharge.gender === formGender
+                          )
                             return true;
                           return false;
                         }).map((inCharge) => {
@@ -214,7 +216,7 @@ export function CreateHostelForm() {
                               value={inCharge.email}
                               className="capitalize"
                             >
-                             {inCharge.email}
+                              {inCharge.email}
                             </MultiSelectorItem>
                           );
                         })}

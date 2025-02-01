@@ -10,17 +10,13 @@ interface PageProps {
 
 export default async function HostelPage(props: PageProps) {
   const searchParams = await props.searchParams;
-  const { success, message, hostel } = await getHostelByUser(searchParams?.slug);
-
-
+  const { success, message, hostel } = await getHostelByUser(
+    searchParams?.slug
+  );
 
   return (
     <div className="space-y-5">
-      <div className="grid w-full @5xl:max-w-6xl grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 text-left justify-start gap-4">
-        
-      </div>
+      {/* <div className="grid w-full @5xl:max-w-6xl grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 text-left justify-start gap-4"></div> */}
     </div>
   );
 }
-
-
