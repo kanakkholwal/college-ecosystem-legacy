@@ -7,6 +7,7 @@ import type { OutPassType } from "~/models/hostel_n_outpass";
 
 interface OutpassDetailsProps {
     outpass: OutPassType;
+    actions: boolean;
 }
 
 const classNames = {
@@ -16,7 +17,7 @@ const classNames = {
     outpassInfo: "text-sm text-gray-600",
 };
 
-export function OutpassDetails({ outpass }: OutpassDetailsProps) {
+export function OutpassDetails({ outpass,actions=false }: OutpassDetailsProps) {
     return (<div className={classNames.item}>
         {/* Outpass Details */}
         <div className={classNames.details}>
@@ -40,10 +41,10 @@ export function OutpassDetails({ outpass }: OutpassDetailsProps) {
                 </Badge>
             </span>
             <span className={classNames.outpassInfo}>
-                {format(new Date(outpass.expectedOutTime || ""), "dd/MM/yyyy hh:mm a")} - 
+                {format(new Date(outpass.expectedOutTime || ""), "dd/MM/yyyy hh:mm a")} -  
                 {format(new Date(outpass.expectedInTime || ""), "dd/MM/yyyy hh:mm a")}
             </span>
-
+            {actions && outpass.status === "pending" && <OutpassActionFooter outpassId={outpass?._id} />}
         </div>
 
 
@@ -51,38 +52,3 @@ export function OutpassDetails({ outpass }: OutpassDetailsProps) {
 }
 
 
-export function OutpassWithActions({ outpass }: OutpassDetailsProps) {
-    return (<div className={classNames.item}>
-        {/* Outpass Details */}
-        <div className={classNames.details}>
-            <span className={classNames.studentInfo}>{outpass.student.name} | {outpass.student.rollNumber}</span>
-            <span className={classNames.outpassInfo}>
-                {outpass.hostel.name} | Room No: {outpass.roomNumber}
-            </span>
-            <span className={classNames.outpassInfo}>
-                Reason: {outpass.reason} | Status:{" "}
-                <Badge
-                    size="sm"
-                    variant={
-                        outpass.status === "approved"
-                            ? "success_light"
-                            : outpass.status === "pending"
-                                ? "warning_light"
-                                : "destructive_light"
-                    }
-                >
-                    {outpass.status}
-                </Badge>
-            </span>
-            <span className={classNames.outpassInfo}>
-                {format(new Date(outpass.expectedOutTime || ""), "dd/MM/yyyy hh:mm a")} - 
-                {format(new Date(outpass.expectedInTime || ""), "dd/MM/yyyy hh:mm a")}
-            </span>
-            <OutpassActionFooter />
-
-
-        </div>
-
-
-    </div>);
-}

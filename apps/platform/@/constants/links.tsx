@@ -1,11 +1,11 @@
-import type { Session } from "~/lib/auth-client";
-
+"use client";
 import { Users } from "lucide-react";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuBookA, LuBuilding, LuGithub, LuSchool } from "react-icons/lu";
 import { PiStudentFill } from "react-icons/pi";
 import { RiTwitterXFill } from "react-icons/ri";
+import type { Session } from "~/lib/auth-client";
 // import { TbServer2 } from "react-icons/tb";
 
 import { GrStorage } from "react-icons/gr";

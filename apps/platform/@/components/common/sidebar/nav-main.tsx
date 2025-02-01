@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams,usePathname } from "next/navigation";
 
 export function NavMain({
   items,
@@ -36,6 +36,7 @@ export function NavMain({
   }[];
 }) {
   const searchParams = useSearchParams();
+  const pathname = usePathname()
 
   return (
     <SidebarGroup>
@@ -43,7 +44,8 @@ export function NavMain({
       <SidebarMenu>
         {items.map((item) => {
           const url = new URL(item.href, process.env.NEXT_PUBLIC_BASE_URL);
-          if (item?.preserveParams) url.search = searchParams.toString();
+          if (item?.preserveParams && pathname === item.href)
+            url.search = searchParams.toString();
 
           return (
             <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
@@ -70,7 +72,7 @@ export function NavMain({
                             subItem.href,
                             process.env.NEXT_PUBLIC_BASE_URL
                           );
-                          if (item?.preserveParams)
+                          if (item?.preserveParams && pathname === item.href)
                             url.search = searchParams.toString();
                           return (
                             <SidebarMenuSubItem key={subItem.title}>

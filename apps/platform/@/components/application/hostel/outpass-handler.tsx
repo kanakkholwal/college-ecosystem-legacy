@@ -122,7 +122,7 @@ export default function OutpassVerifier() {
         );
       } catch (err) {
         toast.error("Unexpected error occurred");
-        toast({
+        toastLg({
           variant: "destructive",
           title: "Uh oh! Something went wrong.",
           description: err?.toString(),

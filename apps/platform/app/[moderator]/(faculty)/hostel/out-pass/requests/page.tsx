@@ -1,5 +1,5 @@
 "use client";
-import { OutpassWithActions } from "@/components/application/hostel/outpass";
+import { OutpassDetails } from "@/components/application/hostel/outpass";
 import EmptyArea from "@/components/common/empty-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heading, Paragraph } from "@/components/ui/typography";
@@ -49,6 +49,7 @@ export default function OutPassRequestsPage() {
         <EmptyArea
           icons={[LuBuilding]}
           title="Error fetching outpass requests"
+          className="border-red-600 bg-red-200/30 text-red-600"
           description={
             error?.cause || "An error occurred while fetching outpass requests."
           }
@@ -90,9 +91,10 @@ export default function OutPassRequestsPage() {
                   <TabsContent key={status} value={status}>
                     {data.map((outpass) => {
                       return (
-                        <OutpassWithActions
+                        <OutpassDetails
                           key={outpass._id}
                           outpass={outpass}
+                          actions={status === "pending"}
                         />
                       );
                     })}

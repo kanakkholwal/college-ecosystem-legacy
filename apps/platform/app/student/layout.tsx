@@ -1,11 +1,11 @@
+import Navbar from "@/components/common/app-navbar";
 import { AppSidebar } from "@/components/common/sidebar/app-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
+import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
-import Navbar from "@/components/common/app-navbar";
-
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export const metadata: Metadata = {
   title: `Student Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
@@ -20,13 +20,13 @@ export default async function DashboardLayout({
   children,
 }: DashboardLayoutProps) {
   const session = (await getSession()) as Session;
-  if (!session.user.other_roles.includes("student")) {
+  if (!session.user.other_roles.includes(ROLES.STUDENT)) {
     return redirect("/");
   }
 
   return (
     <SidebarProvider className="selection:bg-primary/10 selection:text-primary">
-      <AppSidebar user={session.user} moderator={"student"} />
+      <AppSidebar user={session.user} moderator={ROLES.STUDENT} />
       <SidebarInset className="flex flex-col flex-1 w-full relative z-0">
         <Navbar user={session.user} />
         <div

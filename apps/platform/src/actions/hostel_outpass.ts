@@ -152,14 +152,14 @@ export async function allowEntryExit(
     if (!outPass) {
       return Promise.reject("Outpass not found");
     }
-    if (outPass.status !== "approved" || outPass.status !== "in_use") {
-      return Promise.reject("Outpass is not approved or already processed");
+    if (outPass.status !== "pending") {
+      return Promise.reject("Outpass is not approved yet");
     }
     if (outPass.status === "in_use" && action_type === "exit") {
       return Promise.reject("Already allowed exit");
     }
     if (outPass.status === "processed" && action_type === "entry") {
-      return Promise.reject("Already allowed entry");
+      return Promise.reject("Already processed entry");
     }
 
     if (action_type === "entry") {
@@ -183,6 +183,40 @@ export async function allowEntryExit(
     }
     return Promise.reject("Invalid action type");
   } catch (err) {
+    console.error(err);
+    return Promise.reject(err?.toString() || "Something went wrong");
+  }
+}
+
+export async function approveRejectOutPass(
+  id: string,
+  action: "approve" | "reject"
+): Promise<string> {
+  try {
+    await dbConnect();
+    const outPass = await OutPassModel.findById(id)
+      .populate("hostel")
+      .populate("student")
+      .exec();
+    if (!outPass) {
+      return Promise.reject("Outpass not found");
+    }
+    if (outPass.status !== "pending") {
+      return Promise.reject("Outpass is not pending");
+    }
+    if (action === "approve") {
+      outPass.status = "approved";
+      await outPass.save();
+      return Promise.resolve("Outpass approved successfully");
+    }
+    if (action === "reject") {
+      outPass.status = "rejected";
+      await outPass.save();
+      return Promise.resolve("Outpass rejected successfully");
+    }
+    return Promise.reject("Invalid action type");
+  }
+  catch (err) {
     console.error(err);
     return Promise.reject(err?.toString() || "Something went wrong");
   }

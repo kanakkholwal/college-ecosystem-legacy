@@ -9,7 +9,7 @@ export type RouterCardLink = {
   title: string;
   description: string;
   external?: boolean;
-  Icon: React.ElementType;
+  Icon: React.FC<React.SVGProps<SVGSVGElement>>;
   disabled?: boolean;
   preserveParams?: boolean;
 };

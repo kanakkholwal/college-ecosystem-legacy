@@ -124,7 +124,7 @@ export interface rawOutPassType {
 }
 export interface IOutPassType extends Document, rawOutPassType {}
 
-export type OutPassType = Omit<IOutPassType, "student" | "hostel"> & {
+export type OutPassType = Omit<rawOutPassType, "student" | "hostel"> & {
   student: Pick<IHostelStudentType, "_id" | "name" | "email" | "rollNumber">;
   hostel: Pick<IHostelType, "_id" | "name" | "slug" | "gender">;
   _id: string;
