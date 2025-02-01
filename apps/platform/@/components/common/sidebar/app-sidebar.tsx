@@ -26,6 +26,7 @@ const getSideNavLinks = (role: string) => {
       title: link.title,
       icon: link.icon,
       href: `/${role}${link.path}`,
+      preserveParams: link?.preserveParams,
       items: link?.items
         ?.filter(
           (link) =>

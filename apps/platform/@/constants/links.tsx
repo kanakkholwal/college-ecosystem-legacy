@@ -109,11 +109,11 @@ export type rawLinkType = {
   path: string;
   allowed_roles: AllowedRoleType[] | AllowedRoleType;
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
+  preserveParams?:boolean;
   items?: {
     title: string;
     path: string;
     allowed_roles: AllowedRoleType[] | AllowedRoleType;
-
   }[];
 };
 
@@ -239,6 +239,7 @@ export const sidebar_links: rawLinkType[] = [
     title: "Hostel",
     icon: LuBuilding,
     path: "/hostel",
+    preserveParams:true,
     allowed_roles: [
       ROLES.ADMIN,
       ROLES.WARDEN,

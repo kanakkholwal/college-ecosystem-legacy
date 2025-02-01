@@ -25,6 +25,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import type z from "zod";
 import { createHostel, importHostelsFromSite } from "~/actions/hostel";
+import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass"
 
 import { createHostelSchema } from "~/constants/hostel_n_outpass";
 
@@ -185,7 +186,9 @@ export function CreateHostelForm() {
                       field.onChange(
                         values.map((email) => ({
                           email,
-                          role: email.split(".")[0],
+                          role: IN_CHARGES_EMAILS.find(
+                            (inCharge) => inCharge.email === email
+                          )?.role,
                           userId: null,
                         }))
                       );
@@ -198,14 +201,20 @@ export function CreateHostelForm() {
                     </MultiSelectorTrigger>
                     <MultiSelectorContent>
                       <MultiSelectorList>
-                        {["mmca.hostel@nith.ac.in"].map((role) => {
+                        {IN_CHARGES_EMAILS
+                        .filter((inCharge) => {
+                          const formGender = form.getValues("gender");
+                          if (inCharge.gender === "not_specified" || inCharge.gender === formGender) 
+                            return true;
+                          return false;
+                        }).map((inCharge) => {
                           return (
                             <MultiSelectorItem
-                              key={role}
-                              value={role}
+                              key={inCharge.email}
+                              value={inCharge.email}
                               className="capitalize"
                             >
-                              {role.replace("_", " ")}
+                             {inCharge.email}
                             </MultiSelectorItem>
                           );
                         })}

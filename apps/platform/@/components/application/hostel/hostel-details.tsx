@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { Heading, Paragraph } from "@/components/ui/typography";
-// import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass"
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import type { HostelType } from "~/models/hostel_n_outpass";
@@ -63,7 +62,7 @@ export async function HostelDetail({ hostel }: { hostel: HostelType }) {
   );
 }
 
-export function HostelDetailsForHosteler({ hostel }: { hostel: HostelType }) {
+export function HostelDetailsForNonAdmins({ hostel }: { hostel: HostelType }) {
   return (
     <div className="space-y-5 my-2">
       <div className="w-full">

@@ -1,3 +1,5 @@
+"use client"
+import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import Link from "next/link";
@@ -9,6 +11,7 @@ export type RouterCardLink = {
   external?: boolean;
   Icon: React.ElementType;
   disabled?: boolean;
+  preserveParams?: boolean;
 };
 
 export interface RouterCardProps extends RouterCardLink {
@@ -23,10 +26,16 @@ export function RouterCard({
   Icon,
   style,
   disabled,
+  preserveParams
 }: RouterCardProps) {
+  const searchParams = useSearchParams();
+  const url = new URL(href,process.env.NEXT_PUBLIC_BASE_URL);
+  if(preserveParams)
+    url.search = searchParams.toString();
+
   return (
     <Link
-      href={href}
+      href={url?.toString()}
       className={cn(
         "group rounded-lg flex flex-col justify-between gap-3 border border-gray-50/30 px-5 py-4 animate-in popup transition-colors backdrop-blur-2xl hover:bg-white/10 hover:shadow hover:border-primary/5",
         disabled ? "pointer-events-none cursor-not-allowed" : ""

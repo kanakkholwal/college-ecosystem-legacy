@@ -184,3 +184,4 @@ export async function allowEntryExit(id: string, action_type: actionType): Promi
     return Promise.reject(err?.toString() || "Something went wrong");
   }
 }
+

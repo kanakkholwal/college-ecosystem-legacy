@@ -24,7 +24,7 @@ export default async function NotFoundFallbackPage({ params }: Props) {
           <>
             The page{" "}
             <span className="font-bold text-primary p-1 bg-primary/20 rounded-md">
-              {notFound.join("/")}
+              {moderator}/{notFound.join("/")}
             </span>{" "}
             was not found.
           </>

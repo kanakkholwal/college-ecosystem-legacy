@@ -34,7 +34,7 @@ type responseType = {
 }
 
 async function fetchByIdentifier(identifier: string) {
-    return await apiFetch<responseType>(`/api/outpass?identifier=${identifier}`);
+    return await apiFetch<responseType>(`/api/outpass/status?identifier=${identifier}`);
 }
 
 

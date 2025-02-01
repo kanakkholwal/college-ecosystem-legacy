@@ -88,7 +88,16 @@ export default async function HostelPage({
                   Hosteler Students ({hostel.students.length})
                 </Heading>
               </AccordionTrigger>
-              <AccordionContent></AccordionContent>
+              <AccordionContent>
+                <div className="grid w-full mx-auto @5xl:max-w-6xl grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 text-left gap-4">
+                  {hostel.students.map((student) => (
+                    <div key={student.email}>
+                      <Heading level={6}>{student.name}</Heading>
+                      <Paragraph>{student.email}</Paragraph>
+                    </div>
+                  ))}
+                </div>
+              </AccordionContent>
             </AccordionItem>
           </Accordion>
         </div>

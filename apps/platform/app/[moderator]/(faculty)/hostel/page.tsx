@@ -1,10 +1,6 @@
-import { HostelDetail } from "@/components/application/hostel/hostel-details";
-import EmptyArea from "@/components/common/empty-area";
-import { LuBuilding } from "react-icons/lu";
-// import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass"
+// import { RouterCard } from "@/components/common/router-card";
+// import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
-import type { Session } from "~/lib/auth";
-import { getSession } from "~/lib/auth-server";
 
 interface PageProps {
   searchParams: Promise<{
@@ -13,23 +9,18 @@ interface PageProps {
 }
 
 export default async function HostelPage(props: PageProps) {
-  const { slug } = await props.searchParams;
-  const session = (await getSession()) as Session;
-  const { success, message, hostel } = await getHostelByUser(slug);
+  const searchParams = await props.searchParams;
+  const { success, message, hostel } = await getHostelByUser(searchParams?.slug);
 
-  if (!success || !hostel) {
-    return (
-      <EmptyArea
-        icons={[LuBuilding]}
-        title="No Hostel Found for this user"
-        description={message}
-      />
-    );
-  }
+
 
   return (
-    <div className="space-y-5 my-2">
-      <HostelDetail hostel={hostel} />
+    <div className="space-y-5">
+      <div className="grid w-full @5xl:max-w-6xl grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 text-left justify-start gap-4">
+        
+      </div>
     </div>
   );
 }
+
+

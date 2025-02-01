@@ -28,6 +28,7 @@ export function NavMain({
     href: string;
     icon: React.FC<React.SVGProps<SVGSVGElement>>;
     isActive?: boolean;
+    preserveParams?: boolean;
     items?: {
       title: string;
       href: string;
@@ -40,11 +41,18 @@ export function NavMain({
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
-        {items.map((item) => (
-          <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
+        {items.map((item) => {
+          const url = new URL(
+            item.href,
+            process.env.NEXT_PUBLIC_BASE_URL
+          );
+          if(item?.preserveParams)
+            url.search = searchParams.toString();
+
+          return <Collapsible key={item.title} asChild defaultOpen={item.isActive}>
             <SidebarMenuItem>
               <SidebarMenuButton asChild tooltip={item.title}>
-                <Link href={item.href}>
+                <Link href={url.toString()}>
                   <item.icon />
                   <span>{item.title}</span>
                 </Link>
@@ -65,7 +73,8 @@ export function NavMain({
                           subItem.href,
                           process.env.NEXT_PUBLIC_BASE_URL
                         );
-                        url.search = searchParams.toString();
+                        if (item?.preserveParams)
+                          url.search = searchParams.toString();
                         return (
                           <SidebarMenuSubItem key={subItem.title}>
                             <SidebarMenuSubButton asChild>
@@ -82,7 +91,7 @@ export function NavMain({
               ) : null}
             </SidebarMenuItem>
           </Collapsible>
-        ))}
+        })}
       </SidebarMenu>
     </SidebarGroup>
   );

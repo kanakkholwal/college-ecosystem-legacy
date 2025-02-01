@@ -111,7 +111,7 @@ export async function updateHostel(
         console.log("syncHostelStudents");
         const response = await syncHostelStudents(
           (hostel._id as string).toString(),
-          data.students
+          [...new Set(data.students)]
         );
 
         if (!response.success) {
@@ -156,10 +156,10 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
     const rollNumbers = studentEmails.map((email) => email.split("@")[0]);
     const results = await ResultModel.find({ rollNo: { $in: rollNumbers } }).lean();
 
-    const bulkOps= [];
+    const bulkOps = [];
     const resultUpdates = [];
 
-      for await (const email of studentEmails) {
+    for await (const email of studentEmails) {
       const student = existingStudents.find((s) => s.email === email);
       const rollNumber = email.split("@")[0];
       const result = results.find((r) => r.rollNo === rollNumber);
@@ -205,7 +205,7 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
 
     // const updatedStudents = await HostelStudentModel.getStudentsByHostel(hostelId);
 
-    return { success: true, data:[] };
+    return { success: true, data: [] };
   } catch (err) {
     console.error("syncHostelStudents Error:", err);
     if (err instanceof Error) {
