@@ -2,24 +2,23 @@ import { RouterCard } from "@/components/common/router-card";
 import { BannerPanel } from "@/components/utils/banner";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { getLinksByRole, quick_links } from "@/constants/links";
-import Link from "next/link";
+// import Link from "next/link";
 import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
-import { HeroSection } from "./greeting";
+import { HeroSection } from "./client";
 import { redirect } from "next/navigation";
 
 const PROMO = {
-  title: "Join DSC!",
+  title: "Update your Gender",
   description:
-    "Join the Developer Student Club to learn, share and grow together.",
-  link: "https://docs.google.com/forms/d/e/1FAIpQLSfWPMxccVswmU8_ffNmVDg-UFjlI01zEssWCUuUAFYcNA7YTg/viewform",
-  label: "Register Now!",
+    "We are updating our records to better serve you for upcoming new features.",
+  label: "Update Now!",
   showTill: "2022-01-19T19:00:00",
   getConditionByUser: (user: Session["user"]) =>
     user?.other_roles.includes(ROLES.STUDENT) &&
-    user?.username.startsWith("24") &&
-    new Date() < new Date(PROMO.showTill),
+    user?.gender === "not_specified" && 
+    new Date() < new Date(PROMO.showTill)
 };
 
 export default async function Dashboard() {
@@ -39,12 +38,7 @@ export default async function Dashboard() {
           title={PROMO.title}
           description={PROMO.description}
           btnProps={{
-            asChild: true,
-            children: (
-              <Link href={PROMO.link} target="_blank" rel="noopener noreferrer">
-                {PROMO.label}
-              </Link>
-            ),
+            children: PROMO.label,
             variant: "default_light",
           }}
         />

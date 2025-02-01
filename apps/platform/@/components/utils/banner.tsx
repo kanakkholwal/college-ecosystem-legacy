@@ -1,22 +1,33 @@
 "use client";
 import { BorderBeam } from "@/components/animation/border-beam";
-
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import type React from "react";
 
-interface BannerPanelProps {
+interface BannerActionPropsBase {
   className?: string;
   title: string | React.ReactNode;
   description: string | React.ReactNode;
-  btnProps?: React.ComponentProps<typeof Button>;
 }
+
+interface BannerActionWithBtnProps extends BannerActionPropsBase {
+  btnProps: React.ComponentProps<typeof Button>;
+  actionComponent?: never;
+}
+
+interface BannerActionWithComponent extends BannerActionPropsBase {
+  btnProps?: never;
+  actionComponent: React.ReactNode;
+}
+
+type BannerPanelProps = BannerActionWithBtnProps | BannerActionWithComponent;
 
 export function BannerPanel({
   className,
   description,
   title,
   btnProps,
+  actionComponent,
 }: BannerPanelProps) {
   return (
     <div
@@ -31,14 +42,17 @@ export function BannerPanel({
           <div className="mx-2 text-muted-foreground">•</div>
           {description}
         </div>
-        <Button
-          size="sm"
-          variant="outline"
-          {...btnProps}
-          className={cn("min-w-24", btnProps?.className)}
-        />
+        <div className="min-w-24">
+          {actionComponent ? actionComponent :
+            <Button
+              size="sm"
+              variant="outline"
+              {...btnProps}
+              className={cn("min-w-24", btnProps?.className)}
+            />}
+        </div>
       </div>
-      <BorderBeam className="z-1 md:rounded-full" />
+      <BorderBeam />
     </div>
   );
 }
