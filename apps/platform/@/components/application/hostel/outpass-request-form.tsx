@@ -55,7 +55,7 @@ export default function RequestOutPassForm<T>({
       toast.error("Failed to request outpass");
     }
   };
-  console.log(form.formState);
+  console.log(form.getValues(),form.formState.isValid);
 
   return (
     <Form {...form}>

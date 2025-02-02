@@ -56,7 +56,7 @@ export default function OutPassRequestsPage() {
         />
       </ConditionalRender>
       <ConditionalRender condition={isLoading}>
-        <SkeletonCardArea />
+        <SkeletonCardArea className="mx-auto" skeletonClassName="bg-gray-200"/>
       </ConditionalRender>
       <ConditionalRender condition={!!data}>
         <ConditionalRender

@@ -8,14 +8,6 @@ export default async function FacultyDashboard() {
 
   return (
     <div className="w-full mx-auto space-y-5">
-      <section id="welcome-header">
-        <h2 className="text-base md:text-lg font-semibold whitespace-nowrap">
-          Hi, {session?.user?.name}
-        </h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Welcome to the dashboard.
-        </p>
-      </section>
       <section id="main-section">
         <Alert className="mt-4">
           <RocketIcon className="h-4 w-4" />

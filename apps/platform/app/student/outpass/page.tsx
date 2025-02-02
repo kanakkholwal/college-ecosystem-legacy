@@ -22,7 +22,6 @@ export default async function HostelPage(props: PageProps) {
   console.dir(outPasses[0], { depth: null });
   return (
     <div className="space-y-5">
-      <Separator />
       <ConditionalRender condition={!hosteler?.banned}>
         <OutpassRender outpass={outPasses[0]} />
       </ConditionalRender>

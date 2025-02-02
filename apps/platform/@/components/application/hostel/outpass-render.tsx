@@ -102,7 +102,7 @@ export default function OutpassRender({
               Download <HiOutlineDownload />
             </Button>
             <Button variant="link" effect="hoverUnderline" size="sm" asChild>
-              <Link href="request">
+              <Link href="outpass/request">
                 Request Outpass
                 <ArrowRight />
               </Link>
