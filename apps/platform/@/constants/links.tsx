@@ -1,4 +1,3 @@
-"use client";
 import { Users } from "lucide-react";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
@@ -20,9 +19,10 @@ import { MdOutlinePoll } from "react-icons/md";
 
 export type AllowedRoleType =
   | Session["user"]["role"]
-  | Session["user"]["other_roles"]
+  | Session["user"]["other_roles"][number]
   | "*"
-  | `!${Session["user"]["role"]}`;
+  | `!${Session["user"]["role"]}`
+  | `!${Session["user"]["other_roles"][number]}`;
 
 export type RouterCardLink = {
   href: string;

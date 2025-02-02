@@ -1,13 +1,10 @@
+import RequestOutPassForm from "@/components/application/hostel/outpass-request-form";
 import EmptyArea from "@/components/common/empty-area";
+import { Heading } from "@/components/ui/typography";
+import type { Metadata } from "next";
 import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
-import type { Session } from "~/lib/auth";
-import { getSession } from "~/lib/auth-server";
-import RequestOutPassForm from "@/components/application/hostel/outpass-request-form";
-import { CONSTANTS } from "~/constants/outpass";
 import { createOutPass } from "~/actions/hostel_outpass";
-import ConditionalRender from "@/components/utils/conditional-render";
-import type { Metadata } from "next";
 
 interface PageProps {
   searchParams: Promise<{
@@ -16,14 +13,13 @@ interface PageProps {
 }
 
 export const metadata: Metadata = {
-  title: "Request Outpass",
-  description: "Request Outpass",
+  title: "Outpass form",
+  description: "Fill the outpass form to get an outpass",
 };
 
 export default async function RequestOutPassPage(props: PageProps) {
   const { slug } = await props.searchParams;
-  const session = (await getSession()) as Session;
-  const { success, message, hostel, hosteler } = await getHostelByUser(slug);
+  const { success, message, hosteler } = await getHostelByUser(slug);
 
   if (!success || !hosteler) {
     return (
@@ -39,16 +35,10 @@ export default async function RequestOutPassPage(props: PageProps) {
 
   return (
     <div className="space-y-5 my-2">
-      <ConditionalRender condition={!hosteler.banned}>
-        <RequestOutPassForm student={hosteler} onSubmit={createOutPass} />
-      </ConditionalRender>
-      <ConditionalRender condition={hosteler.banned}>
-        <EmptyArea
-          icons={[LuBuilding]}
-          title="You are banned from requesting outpass for the following reason"
-          description={`${hosteler.bannedReason} till ${hosteler.bannedTill ? new Date(hosteler.bannedTill).toLocaleString() : "N/A"}`}
-        />
-      </ConditionalRender>
+      <Heading level={4}>
+        Request an Outpass
+      </Heading>
+      <RequestOutPassForm student={hosteler} onSubmit={createOutPass} />
     </div>
   );
 }

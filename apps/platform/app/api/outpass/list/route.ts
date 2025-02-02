@@ -1,7 +1,7 @@
 import { Types } from "mongoose";
 import { type NextRequest, NextResponse } from "next/server";
 import { getHostelByUser } from "~/actions/hostel";
-import { OutPassModel } from "~/models/hostel_n_outpass";
+import { OutPassModel, type OutPassType } from "~/models/hostel_n_outpass";
 
 export async function GET(request: NextRequest) {
   try {
@@ -18,34 +18,35 @@ export async function GET(request: NextRequest) {
       return new NextResponse(message, { status: 400 });
     }
     const hostelId = new Types.ObjectId(hostel._id); // Ensure ObjectId type
-    const outPasses = await OutPassModel.find({ hostel: hostelId })
+    const outPasses = JSON.parse(JSON.stringify(await OutPassModel.find({ hostel: hostelId })
       .populate("hostel")
       .populate("student")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(limit)
-      .lean();
+      .lean())) as OutPassType[];
 
     // Total count for pagination
     const totalCount = await OutPassModel.countDocuments({ hostel: hostelId });
 
     // Group outpass by status
-    // const groupedOutPasses: Record<string, OutPassType[]> = {};
-    // for (const outPass of outPasses) {
-    //     if (!groupedOutPasses[outPass.status]) {
-    //         groupedOutPasses[outPass.status] = [];
-    //     }
-    //     groupedOutPasses[outPass.status].push(outPass);
-    // }
-
-    const groupedOutPasses = Object.groupBy(outPasses, ({ status }) => status);
+    const groupedOutPasses= new Map<string, OutPassType[]>();
+    for (const outPass of outPasses) {
+        if (!groupedOutPasses.has(outPass.status)) {
+            groupedOutPasses.set(outPass.status, []);
+        }
+        const outPassesForStatus = groupedOutPasses.get(outPass.status) as OutPassType[];
+        groupedOutPasses.set(outPass.status, [...outPassesForStatus, outPass]);
+    }
+    // `Object.groupBy` not supported in serverless functions
+    // const groupedOutPasses = Object.groupBy(outPasses, (outpass) => outpass.status);
 
     return NextResponse.json(
       {
         totalPages: Math.ceil(totalCount / limit),
         currentPage: page,
         totalCount,
-        groupedOutPasses,
+        groupedOutPasses:Array.from(groupedOutPasses),
       },
       { status: 200 }
     );

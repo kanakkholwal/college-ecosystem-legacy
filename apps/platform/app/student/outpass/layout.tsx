@@ -4,6 +4,9 @@ import { Separator } from "@/components/ui/separator";
 import type { PropsWithChildren } from "react";
 import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
+import ConditionalRender from "@/components/utils/conditional-render";
+
+
 
 interface PageProps extends PropsWithChildren {
   searchParams: Promise<{
@@ -32,7 +35,16 @@ export default async function HostelPageLayout(props: PageProps) {
     <div className="space-y-5">
       <HostelDetailsForNonAdmins hostel={hostel} />
       <Separator />
-      {props.children}
+      <ConditionalRender condition={hosteler?.banned}>
+        <EmptyArea
+          icons={[LuBuilding]}
+          title="You are banned from requesting outpass for the following reason"
+          description={`${hosteler.bannedReason} till ${hosteler.bannedTill ? new Date(hosteler.bannedTill).toLocaleString() : "N/A"}`}
+        />
+      </ConditionalRender>
+      <ConditionalRender condition={!hosteler?.banned}>
+        {props.children}
+      </ConditionalRender>
     </div>
   );
 }
