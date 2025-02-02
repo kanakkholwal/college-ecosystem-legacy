@@ -56,6 +56,7 @@ export default function RequestOutPassForm<T>({
     }
   };
   console.log(form.getValues(),form.formState.isValid);
+  console.log(form.formState.errors);
 
   return (
     <Form {...form}>
@@ -204,7 +205,7 @@ export default function RequestOutPassForm<T>({
           {form.formState.errors.root?.message}
         </p>
         <div className="flex flex-wrap gap-2">
-          <Button type="submit" disabled={!form.formState.isValid}>
+          <Button type="submit">
             Request Outpass
           </Button>
           <Button

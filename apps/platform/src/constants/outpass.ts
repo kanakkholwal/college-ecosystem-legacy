@@ -57,7 +57,7 @@ export const requestOutPassSchema = z
     },
     {
       message: "Expected out time can't be more than expected in time",
-      path: ["expectedOutTime", "expectedInTime"],
+      path: ["expectedOutTime"],
     }
   )
   .refine(
@@ -80,7 +80,7 @@ export const requestOutPassSchema = z
     {
       message:
         "For market or outing, expectedOutTime can't be more than 6 PM and expectedInTime can't be more than 8 PM",
-      path: ["expectedOutTime", "expectedInTime"],
+      path: [ "expectedInTime"],
     }
   )
   .refine(
@@ -98,8 +98,8 @@ export const requestOutPassSchema = z
     },
     {
       message: "For market or outing, expected in time should be same day",
-      path: ["expectedOutTime", "expectedInTime"],
-    }
+      path: ["expectedInTime"],
+    },
   );
 
 export const CONSTANTS = {
