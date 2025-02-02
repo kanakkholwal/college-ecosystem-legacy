@@ -6,10 +6,11 @@ import { Heading } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { format } from 'date-fns';
 import { toPng } from "html-to-image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, LoaderCircle } from "lucide-react";
 import Link from "next/link";
 import { QRCodeSVG } from 'qrcode.react';
-import { useRef } from "react";
+import { useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { HiOutlineDownload } from "react-icons/hi";
 import type { OutPassType } from "~/models/hostel_n_outpass";
 import { COLLEGE_NAME } from "~/project.config";
@@ -53,14 +54,16 @@ export default function OutpassRender({
   viewOnly = false,
 }: OutpassRenderProps) {
   const outpassRef = useRef<HTMLDivElement>(null);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const handleDownload = async () => {
     if (outpassRef.current) {
       try {
+        setIsDownloading(true);
         await new Promise((resolve) => setTimeout(resolve, 500)); // Ensures rendering completion
         const rect = outpassRef.current.getBoundingClientRect(); // Get actual size
         const scaleFactor = 2; // Improves quality
-  
+
         const dataUrl = await toPng(outpassRef.current, {
           cacheBust: true,
           backgroundColor: "white",
@@ -71,20 +74,24 @@ export default function OutpassRender({
             transformOrigin: "top left",
           },
         });
-  
-  
+
+
         const link = document.createElement("a");
         link.href = dataUrl;
         link.download = `Outpass_${outpass.student.rollNumber}.png`;
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        toast.success("Outpass downloaded successfully.");
       } catch (e) {
         console.error(e);
+        toast.error("Failed to download outpass. Please try again later.");
+      } finally {
+        setIsDownloading(false);
       }
     }
   };
-  
+
 
   return (
     <>
@@ -94,12 +101,16 @@ export default function OutpassRender({
           <div className="flex gap-2 justify-end items-center flex-wrap">
             <Button
               type="button"
-              variant="default_light"
+              variant={outpass.status === "pending" ? "warning_light" : ("default_light")}
               effect="shineHover"
               size="sm"
               onClick={handleDownload}
+              disabled={isDownloading || outpass.status === "pending"}
             >
-              Download <HiOutlineDownload />
+              {outpass.status === "pending" ? "Download not allowed yet" : <>
+                {isDownloading ? <LoaderCircle className="animate-spin" /> : "Download"}
+                {!isDownloading ? <HiOutlineDownload /> : "Downloading..."}
+              </>}
             </Button>
             <Button variant="link" effect="hoverUnderline" size="sm" asChild>
               <Link href="outpass/request">
@@ -124,7 +135,7 @@ export default function OutpassRender({
               <div className={classNames.meta_item}>
                 <span className={classNames.meta_label}>Date</span>
                 <span className={classNames.meta_value}>
-                {format(new Date(outpass.createdAt || ""), "dd/MM/yyyy")}
+                  {format(new Date(outpass.createdAt || ""), "dd/MM/yyyy")}
                 </span>
               </div>
               <div className={classNames.meta_item}>
@@ -134,10 +145,10 @@ export default function OutpassRender({
                     size="sm"
                     variant={
                       outpass.status === "approved"
-                      ? "success_light"
-                      : (outpass.status === "rejected" || outpass.status === "processed")
-                        ? "destructive_light":outpass.status === "pending" ? "warning_light"
-                        : "default_light"
+                        ? "success_light"
+                        : (outpass.status === "rejected" || outpass.status === "processed")
+                          ? "destructive_light" : outpass.status === "pending" ? "warning_light"
+                            : "default_light"
                     }
                   >
                     {outpass.status}
@@ -168,13 +179,13 @@ export default function OutpassRender({
               <div className={classNames.field}>
                 <span className={classNames.label}>Expected Out Time:</span>
                 <span className={classNames.value}>
-                {format(new Date(outpass.expectedOutTime || ""), "dd/MM/yyyy hh:mm a")}
+                  {format(new Date(outpass.expectedOutTime || ""), "dd/MM/yyyy hh:mm a")}
                 </span>
               </div>
               <div className={classNames.field}>
                 <span className={classNames.label}>Expected In Time:</span>
                 <span className={classNames.value}>
-                {format(new Date(outpass.expectedInTime || ""), "dd/MM/yyyy hh:mm a")}
+                  {format(new Date(outpass.expectedInTime || ""), "dd/MM/yyyy hh:mm a")}
                 </span>
               </div>
               <div className={classNames.field}>
@@ -194,7 +205,7 @@ export default function OutpassRender({
               <p className="mt-4">
                 For Office Use Only: This outpass is valid until{" "}
                 <strong>
-                {format(new Date(
+                  {format(new Date(
                     outpass.validTill ||
                     new Date(
                       new Date().getFullYear(),
