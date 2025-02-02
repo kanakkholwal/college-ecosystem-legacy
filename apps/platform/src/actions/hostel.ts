@@ -23,6 +23,8 @@ import {
   type IHostelType,
 } from "~/models/hostel_n_outpass";
 import ResultModel from "~/models/result";
+import {format} from "date-fns";
+
 
 const allowedRolesForHostel = [
   ROLES.ADMIN,
@@ -335,6 +337,17 @@ export async function getHostelByUser(
           inCharge: false,
         });
       }
+
+      if(hostelerStudent.banned){
+        return Promise.resolve({
+          success: false,
+          hostel: JSON.parse(JSON.stringify(hostel)),
+          message: `User is banned from accessing hostel features till ${hostelerStudent.bannedTill ? format(new Date(hostelerStudent.bannedTill), "dd/MM/yyyy HH:mm:ss") : "unknown"}`,
+          hosteler: JSON.parse(JSON.stringify(hostelerStudent)),
+          inCharge: false,
+        })
+      }
+
       return Promise.resolve({
         success: true,
         hostel: JSON.parse(JSON.stringify(hostel)),

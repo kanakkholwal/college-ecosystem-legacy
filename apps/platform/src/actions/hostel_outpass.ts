@@ -1,10 +1,11 @@
 "use server";
+import { format } from "date-fns";
 import type z from "zod";
 import { getHostelByUser } from "~/actions/hostel";
 import { REASONS, requestOutPassSchema } from "~/constants/outpass";
 // import { getSession } from "~/lib/auth-server";
 import dbConnect from "~/lib/dbConnect";
-import { OutPassModel, type OutPassType } from "~/models/hostel_n_outpass";
+import { HostelStudentModel, OutPassModel, type OutPassType } from "~/models/hostel_n_outpass";
 
 /*
     OutPass Actions
@@ -29,7 +30,7 @@ export async function createOutPass(
 
     if (hosteler.banned) {
       return Promise.reject(
-        `${hosteler.bannedReason} till ${hosteler.bannedTill ? new Date(hosteler.bannedTill).toLocaleString() : "N/A"}`
+        `User is banned from accessing hostel features till ${hosteler.bannedTill ? format(new Date(hosteler.bannedTill), "dd/MM/yyyy HH:mm:ss") : "unknown"}`
       );
     }
     if (!REASONS.includes(data.reason)) {
@@ -40,6 +41,12 @@ export async function createOutPass(
     //   return Promise.reject("You are not authorized to request outpass for this user")
     // }
     await dbConnect();
+
+    if(data.roomNumber !== hosteler.roomNumber && data.roomNumber !== "UNKNOWN"){
+      await HostelStudentModel.updateOne({_id: hosteler._id}, {roomNumber: data.roomNumber});
+    }
+    
+
     // if reason is outing or market then validity should be the end of the day of expectedInTime
     const validity = new Date();
     if (data.reason === "outing" || data.reason === "market") {
@@ -63,7 +70,7 @@ export async function createOutPass(
       student: hosteler._id,
       hostel: hostel._id,
       rollNumber: hosteler.rollNumber,
-      roomNumber: hosteler.roomNumber,
+      roomNumber: data.roomNumber,
       address: data.address,
       reason: data.reason,
       expectedInTime: data.expectedInTime,
@@ -71,7 +78,8 @@ export async function createOutPass(
       status: "pending",
       validTill: validity,
     };
-    const newOutpass = await OutPassModel.create(payload);
+    await OutPassModel.create(payload);
+
     return Promise.resolve("Outpass Requested Successfully");
   } catch (err) {
     console.error(err);

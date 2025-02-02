@@ -1,7 +1,10 @@
 import RequestOutPassForm from "@/components/application/hostel/outpass-request-form";
 import EmptyArea from "@/components/common/empty-area";
+import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/typography";
+import { ArrowLeft } from 'lucide-react';
 import type { Metadata } from "next";
+import Link from "next/link";
 import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
 import { createOutPass } from "~/actions/hostel_outpass";
@@ -31,10 +34,16 @@ export default async function RequestOutPassPage(props: PageProps) {
     );
   }
 
-  console.dir(hosteler, { depth: null });
+  // console.dir(hosteler, { depth: null });
 
   return (
-    <div className="space-y-5 my-2">
+    <div className="space-y-3 my-2">
+        <Button variant="link" size="sm" effect="hoverUnderline" asChild>
+          <Link href="/student/outpass">
+            <ArrowLeft />
+            Go Back
+          </Link>
+        </Button>
       <Heading level={4}>
         Request an Outpass
       </Heading>

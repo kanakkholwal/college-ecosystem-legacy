@@ -1,5 +1,6 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import { cn } from "@/lib/utils"
+import {ResponsiveContainer} from "@/components/common/container"
 
 export function SkeletonCard({className,skeletonClassName}: {className?: string, skeletonClassName?: string}) {
     return (
@@ -15,11 +16,11 @@ export function SkeletonCard({className,skeletonClassName}: {className?: string,
 
 export function SkeletonCardArea({ className, count = 6, key = "SkeletonCardArea",skeletonClassName,cardClassName }: { className?: string, count?: number, key?: string,skeletonClassName?: string,cardClassName?: string }) {
     return (
-        <div className={cn("grid w-full @5xl:max-w-6xl grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 text-left justify-start gap-4", className)}>
+        <ResponsiveContainer className={cn("justify-center", className)}>
             {[...Array(count)].map((_, i) => (
                 <SkeletonCard key={key + i.toString()} className={cardClassName} skeletonClassName={skeletonClassName}/>
             ))}
-        </div>
+        </ResponsiveContainer>
 
     )
 }

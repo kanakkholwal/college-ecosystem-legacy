@@ -22,7 +22,7 @@ export const requestOutPassSchema = z
           return true;
         },
         {
-          message: "Invalid room number",
+          message: "Invalid room number provided or room number is UNKNOWN",
         }
       ),
     address: z.string().min(4).nonempty(),
