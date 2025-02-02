@@ -100,7 +100,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
             className="rounded-md h-8 p-3 inline-flex justify-start gap-2 items-center text-sm font-medium capitalize border bg-gray-200 text-gray-700 hover:border-primary hover:text-primary whitespace-nowrap"
           >
             {link.Icon && <link.Icon className="h-3 w-3 inline-block" />}
-            <span>{link.title}</span>
+            <span className="truncate">{link.title}</span>
           </Link>
         ))}
       </div>

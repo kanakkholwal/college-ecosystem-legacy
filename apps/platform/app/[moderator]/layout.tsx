@@ -19,6 +19,7 @@ const ALLOWED_ROLES = [
   ROLES.ASSISTANT_WARDEN,
   ROLES.MMCA,
   ROLES.HOD,
+  ROLES.GUARD,
 ];
 
 interface DashboardLayoutProps {
