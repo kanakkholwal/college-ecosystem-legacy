@@ -8,7 +8,7 @@ export function SkeletonCard({className,skeletonClassName}: {className?: string,
             <Skeleton className={cn("h-[125px] w-[250px] rounded-xl",skeletonClassName)}/>
             <div className="space-y-2">
                 <Skeleton className={cn("h-4 w-[250px]",skeletonClassName)} />
-                <Skeleton className={cn("h-4 w-[250px]",skeletonClassName)} />
+                <Skeleton className={cn("h-4 w-[200px]",skeletonClassName)} />
             </div>
         </div>
     )

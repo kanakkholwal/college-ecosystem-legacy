@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil(totalCount / limit),
         currentPage: page,
         totalCount,
-        groupedOutPasses:Array.from(groupedOutPasses),
+        groupedOutPasses:Object.fromEntries(groupedOutPasses),
       },
       { status: 200 }
     );

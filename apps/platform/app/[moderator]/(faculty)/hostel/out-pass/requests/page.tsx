@@ -1,5 +1,6 @@
 "use client";
 import { OutpassDetails } from "@/components/application/hostel/outpass";
+import { ResponsiveContainer } from "@/components/common/container";
 import EmptyArea from "@/components/common/empty-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Heading, Paragraph } from "@/components/ui/typography";
@@ -34,7 +35,10 @@ const fetcher: Fetcher<OutpassResponse, string> = async (url: string) => {
 export default function OutPassRequestsPage() {
   const { data, error, isLoading } = useSWR<OutpassResponse>(
     "/api/outpass/list",
-    fetcher
+    fetcher,
+    {
+      revalidateOnMount: true,
+    }
   );
   console.log(data, error, isLoading);
 
@@ -56,7 +60,7 @@ export default function OutPassRequestsPage() {
         />
       </ConditionalRender>
       <ConditionalRender condition={isLoading}>
-        <SkeletonCardArea className="mx-auto" skeletonClassName="bg-gray-200"/>
+        <SkeletonCardArea className="mx-auto" skeletonClassName="bg-gray-200" />
       </ConditionalRender>
       <ConditionalRender condition={!!data}>
         <ConditionalRender
@@ -86,18 +90,20 @@ export default function OutPassRequestsPage() {
               })}
             </TabsList>
             {Object.entries(data?.groupedOutPasses ?? {}).map(
-              ([status, data]) => {
+              ([status, data], index) => {
                 return (
-                  <TabsContent key={status} value={status}>
-                    {data.map((outpass) => {
-                      return (
-                        <OutpassDetails
-                          key={outpass._id}
-                          outpass={outpass}
-                          actions={status === "pending"}
-                        />
-                      );
-                    })}
+                  <TabsContent key={status + index.toString()} value={status}>
+                    <ResponsiveContainer>
+                      {data.map((outpass) => {
+                        return (
+                          <OutpassDetails
+                            key={outpass._id}
+                            outpass={outpass}
+                            actionEnabled={status === "pending"}
+                          />
+                        );
+                      })}
+                    </ResponsiveContainer>
                   </TabsContent>
                 );
               }

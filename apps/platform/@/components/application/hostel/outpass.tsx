@@ -7,7 +7,7 @@ import type { OutPassType } from "~/models/hostel_n_outpass";
 
 interface OutpassDetailsProps {
     outpass: OutPassType;
-    actions?: boolean;
+    actionEnabled?: boolean;
 }
 
 const classNames = {
@@ -17,7 +17,7 @@ const classNames = {
     outpassInfo: "text-sm text-gray-600",
 };
 
-export function OutpassDetails({ outpass,actions=false }: OutpassDetailsProps) {
+export function OutpassDetails({ outpass,actionEnabled=false }: OutpassDetailsProps) {
     return (<div className={classNames.item}>
         {/* Outpass Details */}
         <div className={classNames.details}>
@@ -41,10 +41,10 @@ export function OutpassDetails({ outpass,actions=false }: OutpassDetailsProps) {
                 </Badge>
             </span>
             <span className={classNames.outpassInfo}>
-                {format(new Date(outpass.expectedOutTime || ""), "dd/MM/yyyy hh:mm a")} -  
+                {format(new Date(outpass.expectedOutTime || ""), "dd/MM/yyyy hh:mm a")}{" -  "} 
                 {format(new Date(outpass.expectedInTime || ""), "dd/MM/yyyy hh:mm a")}
             </span>
-            {actions && outpass.status === "pending" && <OutpassActionFooter outpassId={outpass?._id} />}
+            {actionEnabled && outpass.status === "pending" && <OutpassActionFooter outpassId={outpass?._id} />}
         </div>
 
 
