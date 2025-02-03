@@ -7,6 +7,9 @@ export const REASONS = [
   "market",
   "other",
 ] as const;
+export const OUTPASS_STATUS = [
+  "pending" , "approved" , "rejected" , "in_use" , "processed"
+] as const;
 
 export const requestOutPassSchema = z
   .object({

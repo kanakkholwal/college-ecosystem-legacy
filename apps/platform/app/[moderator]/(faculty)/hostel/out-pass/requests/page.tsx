@@ -8,6 +8,7 @@ import ConditionalRender from "@/components/utils/conditional-render";
 import { SkeletonCardArea } from "@/components/utils/skeleton-cards";
 import { LuBuilding } from "react-icons/lu";
 import useSWR, { type Fetcher } from "swr";
+import { OUTPASS_STATUS } from "~/constants/outpass";
 import type { OutPassType } from "~/models/hostel_n_outpass";
 
 interface OutpassResponse {
@@ -38,6 +39,9 @@ export default function OutPassRequestsPage() {
     fetcher,
     {
       revalidateOnMount: true,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      refreshInterval: 1000 * 60,
     }
   );
   console.log(data, error, isLoading);
@@ -60,56 +64,52 @@ export default function OutPassRequestsPage() {
         />
       </ConditionalRender>
       <ConditionalRender condition={isLoading}>
-        <SkeletonCardArea className="mx-auto" skeletonClassName="bg-gray-200" />
+        <SkeletonCardArea className="mx-auto" skeletonClassName="bg-gray-200" count={8} />
       </ConditionalRender>
       <ConditionalRender condition={!!data}>
-        <ConditionalRender
-          condition={Object.keys(data?.groupedOutPasses ?? {}).length === 0}
-        >
-          <EmptyArea
-            icons={[LuBuilding]}
-            title="No outpass requests found"
-            description="No outpass requests found."
-          />
-        </ConditionalRender>
-        <ConditionalRender
-          condition={Object.keys(data?.groupedOutPasses ?? {}).length > 0}
-        >
-          <Tabs defaultValue={Object.keys(data?.groupedOutPasses ?? {})[0]}>
-            <TabsList>
-              {Object.keys(data?.groupedOutPasses ?? {}).map((status) => {
-                return (
-                  <TabsTrigger
-                    key={status}
-                    value={status}
-                    className="capitalize"
+        <Tabs defaultValue={OUTPASS_STATUS[0]}>
+          <TabsList>
+            {OUTPASS_STATUS.map((status) => {
+              return (
+                <TabsTrigger
+                  key={status}
+                  value={status}
+                  className="capitalize"
+                >
+                  {status}
+                </TabsTrigger>
+              );
+            })}
+          </TabsList>
+          {OUTPASS_STATUS.map(
+            (status, index) => {
+              return (
+                <TabsContent key={status + index.toString()} value={status}>
+                  <ResponsiveContainer>
+                    {data?.groupedOutPasses[status]?.map((outpass) => {
+                      return (
+                        <OutpassDetails
+                          key={outpass._id}
+                          outpass={outpass}
+                          actionEnabled={status === "pending"}
+                        />
+                      );
+                    })}
+                  </ResponsiveContainer>
+                  <ConditionalRender
+                    condition={data?.groupedOutPasses[status]?.length === 0}
                   >
-                    {status}
-                  </TabsTrigger>
-                );
-              })}
-            </TabsList>
-            {Object.entries(data?.groupedOutPasses ?? {}).map(
-              ([status, data], index) => {
-                return (
-                  <TabsContent key={status + index.toString()} value={status}>
-                    <ResponsiveContainer>
-                      {data.map((outpass) => {
-                        return (
-                          <OutpassDetails
-                            key={outpass._id}
-                            outpass={outpass}
-                            actionEnabled={status === "pending"}
-                          />
-                        );
-                      })}
-                    </ResponsiveContainer>
-                  </TabsContent>
-                );
-              }
-            )}
-          </Tabs>
-        </ConditionalRender>
+                    <EmptyArea
+                      icons={[LuBuilding]}
+                      title="No outpass requests found"
+                      description={`No outpass requests found for ${status} status.`}
+                    />
+                  </ConditionalRender>
+                </TabsContent>
+              );
+            }
+          )}
+        </Tabs>
       </ConditionalRender>
     </div>
   );

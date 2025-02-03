@@ -20,6 +20,8 @@ const ALLOWED_ROLES = [
   ROLES.MMCA,
   ROLES.HOD,
   ROLES.GUARD,
+  ROLES.LIBRARIAN,
+  ROLES.STUDENT,
 ];
 
 interface DashboardLayoutProps {
@@ -114,9 +116,10 @@ function checkAuthorization(
   // 2. Invalid role
   if (!ALLOWED_ROLES.includes(moderator)) {
     console.log("Invalid moderator role:", moderator);
-    const destination = session.user.other_roles.includes("student")
-      ? "/"
-      : session.user.other_roles[0] || "/";
+    // const destination = session.user.other_roles.includes("student")
+    //   ? "/"
+    //   : session.user.other_roles[0] || "/";
+    const destination = session.user.other_roles?.length > 0 ? session.user.other_roles[0] : "/";
     return {
       redirect: { destination },
       authorized: false,

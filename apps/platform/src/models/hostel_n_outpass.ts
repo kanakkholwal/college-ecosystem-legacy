@@ -1,5 +1,6 @@
 import mongoose, { type Document, Schema } from "mongoose";
 import ResultModel from "./result";
+import type {REASONS,OUTPASS_STATUS} from "~/constants/outpass";
 
 export interface RawHostelType {
   name: string;
@@ -112,12 +113,12 @@ export interface rawOutPassType {
   student: string;
   roomNumber: string;
   address: string;
-  reason: "outing" | "medical" | "home" | "market" | "other";
+  reason: typeof REASONS[number];
   expectedOutTime: Date;
   expectedInTime: Date;
   actualOutTime: Date | null;
   actualInTime: Date | null;
-  status: "pending" | "approved" | "rejected" | "in_use" | "processed";
+  status: typeof OUTPASS_STATUS[number];
   validTill: Date;
   createdAt?: Date;
   updatedAt?: Date;

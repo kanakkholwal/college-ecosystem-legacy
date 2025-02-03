@@ -1,5 +1,5 @@
 import { getSession } from "~/lib/auth-server";
-import { DashboardTemplate } from "./context/dashboards";
+import { DashboardTemplate } from "./dashboards";
 import { Separator } from "@/components/ui/separator";
 import { Heading, Paragraph } from "@/components/ui/typography";
 
@@ -14,7 +14,7 @@ export default async function ModeratorDashboard(props: Props) {
   const session = await getSession();
 
   return (
-    <div className="space-y-6 my-5">
+    <div className="w-full space-y-6 my-5">
       <div className="w-full">
         <div className="@2xl:w-1/2">
           <Heading level={3} className="font-bold text-gray-800">
