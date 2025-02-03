@@ -1,7 +1,7 @@
-import { getSession } from "~/lib/auth-server";
-import { DashboardTemplate } from "./dashboards";
 import { Separator } from "@/components/ui/separator";
 import { Heading, Paragraph } from "@/components/ui/typography";
+import { getSession } from "~/lib/auth-server";
+import { DashboardTemplate } from "./dashboards";
 
 interface Props {
   params: Promise<{
@@ -15,16 +15,16 @@ export default async function ModeratorDashboard(props: Props) {
 
   return (
     <div className="w-full space-y-6 my-5">
-      <div className="w-full">
+      <section id="welcome-header" className="w-full">
         <div className="@2xl:w-1/2">
-          <Heading level={3} className="font-bold text-gray-800">
+          <Heading level={3} className="text-base md:text-lg font-bold text-gray-800">
             Hi, {session?.user?.name}
           </Heading>
-          <Paragraph className="capitalize !mt-0">
+          <Paragraph className="!mt-0 text-slate-600">
             Welcome to the {params.moderator} dashboard.
           </Paragraph>
         </div>
-      </div>
+      </section>
       <Separator />
       <DashboardTemplate user_role={params.moderator} />
     </div>
