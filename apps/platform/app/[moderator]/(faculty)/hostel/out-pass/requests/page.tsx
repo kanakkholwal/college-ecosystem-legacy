@@ -97,7 +97,7 @@ export default function OutPassRequestsPage() {
                     })}
                   </ResponsiveContainer>
                   <ConditionalRender
-                    condition={data?.groupedOutPasses[status]?.length === 0}
+                    condition={data?.groupedOutPasses[status] === undefined || data?.groupedOutPasses[status]?.length === 0}
                   >
                     <EmptyArea
                       icons={[LuBuilding]}
