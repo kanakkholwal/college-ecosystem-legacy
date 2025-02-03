@@ -1,6 +1,9 @@
-import mongoose, { type Document, Schema } from "mongoose";
+import { eq } from "drizzle-orm";
+import mongoose, { type CallbackError, type Document, Schema } from "mongoose";
+import type { OUTPASS_STATUS, REASONS } from "~/constants/outpass";
+import { db } from "~/db/connect";
+import { users } from "~/db/schema/auth-schema";
 import ResultModel from "./result";
-import type {REASONS,OUTPASS_STATUS} from "~/constants/outpass";
 
 export interface RawHostelType {
   name: string;
@@ -68,7 +71,7 @@ const HostelSchema = new Schema(
 
 export interface rawHostelStudentType {
   rollNumber: string;
-  userId: string;
+  userId: string | null;
   name: string;
   email: string;
   gender: "male" | "female";
@@ -91,7 +94,7 @@ export type HostelStudentType = Omit<rawHostelStudentType, "hostelId"> & {
 
 export interface IHostelStudentType extends Document, rawHostelStudentType {}
 // HostelStudent Schema & Model
-const HostelStudentSchema = new Schema(
+const HostelStudentSchema = new Schema<IHostelStudentType>(
   {
     rollNumber: { type: String, required: true },
     name: { type: String, required: true },
@@ -200,9 +203,42 @@ HostelStudentSchema.index({ rollNumber: 1 }, { unique: true });
 
 //   next();
 // });
+// 🟢 Pre-save hook: Ensure userId is updated
+
+HostelStudentSchema.pre("save", async (next) =>{
+  const student = this as unknown as IHostelStudentType;
+
+  try {
+    // Fetch userId from PostgreSQL based on student's email
+    const userRecord = await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.email, student.email))
+      .limit(1);
+
+    if (userRecord.length > 0) {
+      const userId = userRecord[0].id;
+      student.userId = userId;
+
+      // Update hostelId in PostgreSQL users table
+      await db
+        .update(users)
+        .set({ hostelId: student.hostelId?.toString() ?? "not_specified" })
+        .where(eq(users.id, userId));
+    } else {
+      student.userId = null;
+    }
+
+    next();
+  } catch (error) {
+    next(error as CallbackError);
+  }
+});
+
 
 // 🔴 Post-save hook: Auto-update ResultModel gender if missing
 HostelStudentSchema.post("save", async (doc) => {
+
   await ResultModel.updateOne(
     { rollNo: doc.rollNumber, gender: "not_specified" },
     { $set: { gender: doc.gender } }
