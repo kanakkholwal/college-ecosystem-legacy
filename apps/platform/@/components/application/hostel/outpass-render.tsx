@@ -218,6 +218,9 @@ export default function OutpassRender({
                     )
                   ), "dd/MM/yyyy hh:mm a")}
                 </strong>
+                {new Date(outpass.validTill || "").getTime() < new Date().getTime() && (
+                  <span className="text-red-500 italic"> (Expired)</span>
+                )}
               </p>
             </section>
             <footer className={classNames.footer}>
