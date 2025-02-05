@@ -144,11 +144,10 @@ export async function getOutPassById(id: string): Promise<OutPassType | null> {
   }
 }
 
-type actionType = "entry" | "exit";
 
 export async function allowEntryExit(
   id: string,
-  action_type: actionType
+  action_type: "entry" | "exit"
 ): Promise<string> {
   try {
     await dbConnect();

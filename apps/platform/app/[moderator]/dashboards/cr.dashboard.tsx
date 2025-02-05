@@ -1,10 +1,9 @@
+import { ResponsiveContainer } from "@/components/common/container";
 import {
   RouterCard,
   type RouterCardLink,
 } from "@/components/common/router-card";
-import { CalendarDays, CalendarPlus } from "lucide-react";
-import { getInfo } from "./cr.actions";
-import { ResponsiveContainer } from "@/components/common/container";
+import { getInfo } from "~/actions/dashboard.cr";
 
 export default async function CRDashboard() {
   const { studentInfo, timetables } = await getInfo();

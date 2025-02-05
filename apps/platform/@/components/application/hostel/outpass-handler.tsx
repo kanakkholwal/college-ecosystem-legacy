@@ -17,9 +17,12 @@ import { ScanSearch } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { allowEntryExit } from "~/actions/hostel_outpass";
+import { LogOut,LogIn } from 'lucide-react';
+
 import { apiFetch } from "~/lib/client-fetch";
 import OutpassList from "./outpass-list";
 import OutpassRender from "./outpass-render";
+import { format } from "date-fns";
 
 type responseType =
   | {
@@ -201,13 +204,7 @@ export default function OutpassVerifier() {
               <span className="font-bold">Actual Out Time</span>
               <span className="font-medium text-left">
                 {currentOutpass?.actualOutTime
-                  ? new Date(
-                      currentOutpass?.actualOutTime || ""
-                    ).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })
+                  ? format(new Date(currentOutpass.actualOutTime || ""), "dd/MM/yyyy hh:mm a")
                   : "Not exited yet"}
               </span>
             </div>
@@ -216,13 +213,7 @@ export default function OutpassVerifier() {
               <span className="font-bold">Actual In Time</span>
               <span className="font-medium text-left">
                 {currentOutpass?.actualInTime
-                  ? new Date(
-                      currentOutpass?.actualInTime || ""
-                    ).toLocaleDateString("en-US", {
-                      day: "numeric",
-                      month: "long",
-                      year: "numeric",
-                    })
+                  ? format(new Date(currentOutpass.actualInTime || ""), "dd/MM/yyyy hh:mm a")
                   : "Not entered yet"}
               </span>
             </div>

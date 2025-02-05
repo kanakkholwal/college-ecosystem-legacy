@@ -191,43 +191,73 @@ HostelStudentSchema.index({ email: 1, hostelId: 1 }, { unique: true });
 HostelStudentSchema.index({ rollNumber: 1 }, { unique: true });
 
 // 🟢 Pre-save hook: Ensure gender consistency with hostel
-// HostelStudentSchema.pre("save", async function (next) {
-//   const hostel = await HostelModel.findById(this.hostelId);
-//   if (!hostel) {
-//     return next(new Error("Hostel does not exist"));
-//   }
+HostelStudentSchema.pre("save", async function (next) {
+  if(this.hostelId === null) return next();
+  
+  const hostel = await HostelModel.findById(this.hostelId);
+  if (!hostel) {
+    return next(new Error("Hostel does not exist"));
+  }
 
-//   if (this.gender !== hostel.gender) {
-//     return next(new Error("Student gender does not match hostel gender"));
-//   }
+  // if (this.gender !== hostel.gender) {
+  //   return next(new Error("Student gender does not match hostel gender"));
+  // }
 
-//   next();
-// });
+  next();
+});
 // 🟢 Pre-save hook: Ensure userId is updated
 
+async function updateCorrespondingUserId(student: IHostelStudentType) {
+  const userRecord = await db
+    .select({ id: users.id })
+    .from(users)
+    .where(eq(users.email, student.email))
+    .limit(1);
+
+  if (userRecord.length > 0) {
+    const userId = userRecord[0].id;
+    student.userId = userId;
+
+    await db
+      .update(users)
+      .set({ hostelId: student.hostelId?.toString() ?? "not_specified" })
+      .where(eq(users.id, userId));
+  } else {
+    student.userId = null;
+  }
+}
+
+// Pre hook for insertMany
+HostelStudentSchema.pre("insertMany", async  (next, docs) =>{
+  try {
+    for await (const student of docs) {
+      // Fetch userId from PostgreSQL based on student's email
+      await updateCorrespondingUserId(student as unknown as IHostelStudentType);
+    }
+    next();
+  } catch (error) {
+    next(error as CallbackError);
+  }
+});
+
+// Pre hook for insertOne (save)
+HostelStudentSchema.pre("save", async function (next) {
+  const student = this as unknown as IHostelStudentType;
+
+  try {
+    // Fetch userId from PostgreSQL based on student's email
+    await updateCorrespondingUserId(student);
+    next();
+  } catch (error) {
+    next(error as CallbackError);
+  }
+});
 HostelStudentSchema.pre("save", async (next) =>{
   const student = this as unknown as IHostelStudentType;
 
   try {
     // Fetch userId from PostgreSQL based on student's email
-    const userRecord = await db
-      .select({ id: users.id })
-      .from(users)
-      .where(eq(users.email, student.email))
-      .limit(1);
-
-    if (userRecord.length > 0) {
-      const userId = userRecord[0].id;
-      student.userId = userId;
-
-      // Update hostelId in PostgreSQL users table
-      await db
-        .update(users)
-        .set({ hostelId: student.hostelId?.toString() ?? "not_specified" })
-        .where(eq(users.id, userId));
-    } else {
-      student.userId = null;
-    }
+    await updateCorrespondingUserId(student);
 
     next();
   } catch (error) {
