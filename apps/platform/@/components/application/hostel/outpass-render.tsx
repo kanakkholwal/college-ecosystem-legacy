@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import BarCode from "barcode-react";
 import { format } from 'date-fns';
 import { toPng } from "html-to-image";
 import { ArrowRight, LoaderCircle } from "lucide-react";
@@ -233,6 +234,7 @@ export default function OutpassRender({
                   title={outpass.student.rollNumber}
                   className="size-20"
                 />
+                {/* <BarCode value={outpass._id} width={1}/> */}
               </div>
               <div className={classNames.signature}>
                 <p className={classNames.signature}>Signature of Student</p>

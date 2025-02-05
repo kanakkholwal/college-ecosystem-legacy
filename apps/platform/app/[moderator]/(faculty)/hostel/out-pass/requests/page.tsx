@@ -10,6 +10,7 @@ import { LuBuilding } from "react-icons/lu";
 import useSWR, { type Fetcher } from "swr";
 import { OUTPASS_STATUS } from "~/constants/outpass";
 import type { OutPassType } from "~/models/hostel_n_outpass";
+import useSWRMutation from 'swr/mutation'
 
 interface OutpassResponse {
   totalPages: number;

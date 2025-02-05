@@ -13,16 +13,15 @@ import ConditionalRender from "@/components/utils/conditional-render";
 import { ErrorBoundary } from "@/components/utils/error-boundary";
 import { useToast } from "@/hooks/use-toast";
 import { useExternalBarcodeScanner } from "@/hooks/useBarcodeScanner";
-import { ScanSearch } from "lucide-react";
+import { CircleCheckBig, LogIn, LogOut, ScanSearch } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { allowEntryExit } from "~/actions/hostel_outpass";
-import { LogOut,LogIn } from 'lucide-react';
 
+import { format } from "date-fns";
 import { apiFetch } from "~/lib/client-fetch";
 import OutpassList from "./outpass-list";
 import OutpassRender from "./outpass-render";
-import { format } from "date-fns";
 
 type responseType =
   | {
@@ -238,15 +237,25 @@ export default function OutpassVerifier() {
           <div className="flex items-center justify-between my-auto">
             <Button
               onClick={handleEntryExit}
-              disabled={updating || !!currentOutpass?.actualInTime}
+              disabled={updating || currentOutpass?.actualInTime === null}
               variant={currentOutpass?.actualInTime ? "glass" : "default_light"}
               effect="shineHover"
             >
+              {updating ? <>
+                <LoaderCircle className="animate-spin" />
+                Allowing {currentOutpass?.actualInTime ? "Exit" : "Entry"}
+              </>:<>
               {currentOutpass?.actualInTime
                 ? "Already Processed"
                 : currentOutpass?.actualOutTime
                   ? "Allow Entry"
                   : "Allow Exit"}
+              {currentOutpass?.actualInTime
+                ? <CircleCheckBig />
+                : currentOutpass?.actualOutTime
+                  ? <LogIn/>
+                  : <LogOut/>}
+              </>}
             </Button>
           </div>
         </div>
