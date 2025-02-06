@@ -12,6 +12,8 @@ import { Separator } from "@/components/ui/separator";
 import { Search } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { SlidersHorizontal } from 'lucide-react';
+import { cn } from "@/lib/utils";
 
 type searchParamsType = {
   searchField?: "email" | "name" | undefined;
@@ -29,6 +31,7 @@ type searchParamsType = {
 export default function SearchBar() {
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
 
   const [searchField, setSearchField] = useState<
     searchParamsType["filterField"]
@@ -51,7 +54,7 @@ export default function SearchBar() {
     searchParamsType["sortDirection"]
   >(
     (searchParams.get("sortDirection") as searchParamsType["sortDirection"]) ||
-      "desc"
+    "desc"
   );
 
   const [offset, setOffset] = useState<searchParamsType["offset"]>(
@@ -68,7 +71,7 @@ export default function SearchBar() {
   useEffect(() => {
     setSearchField(
       (searchParams.get("searchField") as searchParamsType["filterField"]) ||
-        "name"
+      "name"
     );
     setSearchOperator(
       (searchParams.get(
@@ -105,7 +108,7 @@ export default function SearchBar() {
   return (
     <div className="space-y-4 group mx-auto sm:mx-4 mb-2 width-[calc(100%_-_2rem)]">
       {/* Search Input */}
-      <div className="flex items-center w-full rounded-xl relative">
+      <div className="flex items-center w-full rounded-xl relative gap-3">
         <Search
           size={20}
           className="absolute left-3 top-1/2 transform -translate-y-1/2 group-focus-within:text-primary/80"
@@ -113,12 +116,30 @@ export default function SearchBar() {
         <Input
           placeholder="Search query..."
           className="w-full pl-10"
+          type="search"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
         />
+        <Button
+          variant="default_light"
+          size="sm"
+          onClick={() => setOpen(!open)}
+        >
+          <SlidersHorizontal />
+        </Button>
+        <Button
+          size="sm"
+          onClick={() => {
+            updateParams(); // Apply changes immediately
+          }}
+        >
+          Apply
+        </Button>
       </div>
 
-      <div className="flex items-end flex-wrap gap-2 text-sm text-gray-600">
+      <div className={cn("flex items-end flex-wrap gap-2 text-sm text-gray-600",
+        open ? "h-16" : "h-0",
+        "transition-all delay-150 duration-300 overflow-hidden w-full")}>
         <div>
           <p className="text-gray-600 font-semibold text-sm">Search Field</p>
           <div className="flex items-center space-x-4">
@@ -240,16 +261,6 @@ export default function SearchBar() {
             />
           </div>
         </div>
-        <Separator orientation="vertical" />
-        {/* Apply Button */}
-        <Button
-          size="sm"
-          onClick={() => {
-            updateParams(); // Apply changes immediately
-          }}
-        >
-          Apply
-        </Button>
       </div>
     </div>
   );

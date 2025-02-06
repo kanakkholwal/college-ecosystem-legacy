@@ -1,20 +1,22 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Check, X } from "lucide-react";
+import { Check, X,Trash2 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { ChartBar } from "lucide-react";
 
 interface Props {
   updateAttendanceRecord: (present: boolean) => Promise<string>;
+  deleteAttendanceRecord: () => Promise<string>;
   children: React.ReactNode;
 }
 
 export default function UpdateAttendanceRecord({
   updateAttendanceRecord,
+  deleteAttendanceRecord,
   children,
 }: Props) {
   const [updating, setUpdating] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const handleUpdate = async (present: boolean) => {
     setUpdating(true);
@@ -28,6 +30,23 @@ export default function UpdateAttendanceRecord({
       console.error(error);
     }
     setUpdating(false);
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this record?"))
+      return;
+
+    setDeleting(true);
+    try {
+      toast.promise(deleteAttendanceRecord(), {
+        loading: "Deleting Record",
+        success: "Record Deleted Successfully",
+        error: "Failed to delete Record",
+      });
+    } catch (error) {
+      console.error(error);
+    }
+    setDeleting(false);
   };
 
   return (
@@ -47,6 +66,15 @@ export default function UpdateAttendanceRecord({
         onClick={() => handleUpdate(false)}
       >
         <X />
+      </Button>
+      <Button
+        variant="destructive_light"
+        size="icon_sm"
+        disabled={updating}
+        onClick={() => handleDelete()}
+        className="absolute right-2 top-2 left-auto bg-transparent"
+      >
+        <Trash2 />
       </Button>
       {children}
     </div>

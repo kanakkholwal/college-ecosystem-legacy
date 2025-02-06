@@ -9,7 +9,6 @@ import { format } from 'date-fns';
 import { toPng } from "html-to-image";
 import { ArrowRight, LoaderCircle } from "lucide-react";
 import Link from "next/link";
-import { QRCodeSVG } from 'qrcode.react';
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiOutlineDownload } from "react-icons/hi";
@@ -226,15 +225,15 @@ export default function OutpassRender({
             </section>
             <footer className={classNames.footer}>
               <div className={classNames.qr_code}>
-                <QRCodeSVG
+                {/* <QRCodeSVG
                   value={outpass._id}
                   id={outpass._id}
                   size={256}
                   level="H"
                   title={outpass.student.rollNumber}
                   className="size-20"
-                />
-                {/* <BarCode value={outpass._id} width={1}/> */}
+                /> */}
+                <BarCode value={outpass._id} className="max-w-xs" height={100}/>
               </div>
               <div className={classNames.signature}>
                 <p className={classNames.signature}>Signature of Student</p>

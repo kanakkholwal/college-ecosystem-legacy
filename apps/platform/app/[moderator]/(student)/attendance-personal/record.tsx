@@ -13,7 +13,7 @@ import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { cn } from "@/lib/utils";
 import { ChartBar } from "lucide-react";
 import type { ViewBox } from "recharts/types/util/types";
-import { updateAttendanceRecord } from "~/actions/record.personal";
+import { updateAttendanceRecord, deleteAttendanceRecord} from "~/actions/record.personal";
 import type { PersonalAttendanceWithRecords } from "~/db/schema/attendance_record";
 import UpdateAttendanceRecord from "./update-record";
 
@@ -63,7 +63,7 @@ export default function AttendanceRecord({
   return (
     <div
       className={cn(
-        "flex flex-wrap p-4 gap-4 rounded-lg border hover:border/30 transition-shadow shadow-sm",
+        "flex flex-wrap p-4 gap-4 rounded-lg border hover:border/30 transition-shadow shadow-sm relative",
         className
       )}
       style={style}
@@ -86,6 +86,10 @@ export default function AttendanceRecord({
           <p className="text-sm text-gray-700">{attendanceStatus}</p>
           <UpdateAttendanceRecord
             updateAttendanceRecord={updateAttendanceRecord.bind(
+              null,
+              record.id
+            )}
+            deleteAttendanceRecord={deleteAttendanceRecord.bind(
               null,
               record.id
             )}
