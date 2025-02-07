@@ -29,3 +29,17 @@ export async function getInfo(): Promise<{
     timetables: JSON.parse(JSON.stringify(timetables)),
   });
 }
+
+
+export async function getCrInfo(){
+  const session = await getSession();
+
+  if (!session?.user.other_roles.includes("cr")) {
+    throw new Error("You are not authorized to perform this action");
+  }
+
+  await dbConnect();
+  const studentInfo = await getStudentInfo(session?.user.username);
+
+}
+

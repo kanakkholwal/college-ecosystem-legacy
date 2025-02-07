@@ -8,6 +8,7 @@ const LIST_TYPE = {
   ALL: "all",
   BACKLOG: "has_backlog",
   NEW_SEMESTER: "new_semester",
+  DUAL_DEGREE: "dual_degree",
 } as const;
 
 const TASK_STATUS = {
@@ -513,6 +514,10 @@ async function getListOfRollNos(list_type: listType): Promise<Set<string>> {
     case LIST_TYPE.NEW_SEMESTER:
       // has less than 8 semesters
       query = { $expr: { $gt: [{ $size: "$semesters" }, 8] } };
+      break;
+    case LIST_TYPE.DUAL_DEGREE:
+      // has less than 8 semesters
+      query = { programme:"Dual Degree" };
       break;
     case LIST_TYPE.ALL:
       query = {};
