@@ -10,7 +10,7 @@ const semesterSchema = z.object({
   sgpi: z.number(),
   cgpi: z.number(),
   courses: z.array(courseSchema),
-  semester: z.number(),
+  semester: z.string(),
   sgpi_total: z.number(),
   cgpi_total: z.number(),
 });
