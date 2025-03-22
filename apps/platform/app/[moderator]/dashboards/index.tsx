@@ -1,21 +1,26 @@
 import EmptyArea from "@/components/common/empty-area";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import ConditionalRender from "@/components/utils/conditional-render";
 import ErrorBanner from "@/components/utils/error";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { SkeletonCardArea } from "@/components/utils/skeleton-cards";
 import { RocketIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import AdminDashboard from "./admin.dashboard";
+import ChiefWardenDashboard from "./chief_warden.dashboard";
 import CRDashboard from "./cr.dashboard";
 import GuardDashboard from "./guard.dashboard";
 import StudentDashboard from "./student.dashboard";
-import ConditionalRender from "@/components/utils/conditional-render";
+import WardenDashboard from "./warden.dashboard";
 
 const dashboard_templates = new Map([
     ["admin", AdminDashboard],
     ["cr", CRDashboard],
     ["guard", GuardDashboard],
     ["student", StudentDashboard],
+    ["warden", WardenDashboard],
+    ["assistant_warden", WardenDashboard],
+    ["chief_warden", ChiefWardenDashboard],
 ]);
 
 export function DashboardTemplate({ user_role }: { user_role: string; }) {

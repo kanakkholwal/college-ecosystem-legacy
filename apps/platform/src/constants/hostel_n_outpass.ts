@@ -61,11 +61,13 @@ export const createHostelStudentSchema = z.object({
   bannedReason: z.string().nullable(),
 });
 
+export const CHIEF_WARDEN_MAIL = `cw@${ORG_DOMAIN}`;
+
 export const IN_CHARGES_EMAILS = [
   {
     gender: "not_specified",
     slug: "*",
-    email: "cw@nith.ac.in",
+    email: CHIEF_WARDEN_MAIL,
     role: "chief_warden",
   },
   {

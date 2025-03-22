@@ -1,6 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { getSession } from "~/lib/auth-server";
+import { changeCase } from "~/utils/string";
 import { DashboardTemplate } from "./dashboards";
 
 interface Props {
@@ -21,7 +22,7 @@ export default async function ModeratorDashboard(props: Props) {
             Hi, {session?.user?.name}
           </Heading>
           <Paragraph className="!mt-0 text-slate-600">
-            Welcome to the {params.moderator} dashboard.
+            Welcome to the {changeCase(params.moderator.replaceAll("_"," "),"title")} dashboard.
           </Paragraph>
         </div>
       </section>
