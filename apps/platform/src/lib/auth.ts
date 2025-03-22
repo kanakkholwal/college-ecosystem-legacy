@@ -10,6 +10,7 @@ import {
 } from "~/constants/departments";
 import { db } from "~/db/connect";
 import { accounts, sessions, users, verifications } from "~/db/schema";
+import { ORG_DOMAIN } from "~/project.config";
 import type { ResultType } from "~/types/result";
 import { mailFetch, serverFetch } from "./server-fetch";
 
@@ -182,7 +183,7 @@ export const auth = betterAuth({
   advanced: {
     crossSubDomainCookies: {
       enabled: process.env.NODE_ENV === "production",
-      domain: process.env.NODE_ENV === "production" ? "nith.eu.org" : undefined,
+      domain: process.env.NODE_ENV === "production" ? ORG_DOMAIN : undefined,
     },
   },
   plugins: [
