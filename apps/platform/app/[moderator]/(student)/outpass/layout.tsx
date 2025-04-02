@@ -8,7 +8,8 @@ import { getHostelByUser } from "~/actions/hostel";
 
 
 
-interface PageProps extends PropsWithChildren {
+interface PageProps {
+  children: React.ReactNode;
   searchParams: Promise<{
     slug?: string;
   }>;

@@ -5,6 +5,8 @@
 // import "aos/dist/aos.css";
 // import type { ThemeProviderProps } from "next-themes";
 // import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { Toaster } from "@/components/ui/toaster";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Image from "next/image";
 import { Next13ProgressBar } from "next13-progressbar";
 import type React from "react";
@@ -12,11 +14,19 @@ import { useEffect, useState } from "react";
 import { Toaster as HotToaster } from "react-hot-toast";
 import { Gradient } from "whatamesh";
 import fallbackImg from "./fallback.png";
-import { Toaster } from "@/components/ui/toaster";
-
 // export function ThemeProvider({ children, ...props }: ThemeProviderProps) {
 //   return <NextThemesProvider {...props}>{children}</NextThemesProvider>;
 // }
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+      refetchOnReconnect: true,
+    },
+  },
+});
 
 export function Provider({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState<boolean>(true);
@@ -38,7 +48,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
     }
   }, []);
   return (
-    <>
+    <QueryClientProvider client={queryClient}>
       {isLoaded ? (
         <canvas
           id="gradient-canvas"
@@ -81,6 +91,6 @@ export function Provider({ children }: { children: React.ReactNode }) {
           />
         </span>
       </div>
-    </>
+    </QueryClientProvider>
   );
 }

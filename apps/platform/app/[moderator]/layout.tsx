@@ -1,13 +1,13 @@
 import Navbar from "@/components/common/app-navbar";
 import { AppSidebar } from "@/components/common/sidebar/app-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import Page403 from "@/components/utils/403";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { changeCase } from "~/utils/string";
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import { ROLES } from "~/constants";
 
 const ALLOWED_ROLES = [
   ROLES.ADMIN,
@@ -68,7 +68,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <SidebarProvider className="selection:bg-primary/10 selection:text-primary">
+    <SidebarProvider className="selection:bg-primary/10 selection:text-primary bg-slate-100">
       <AppSidebar user={session.user} moderator={moderator} />
       <SidebarInset className="flex flex-col flex-1 w-full relative z-0">
         <Navbar user={session.user} />

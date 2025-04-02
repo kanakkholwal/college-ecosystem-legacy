@@ -1,101 +1,134 @@
-National Institute of Technology Hamirpur (NIT Hamirpur or NITH) is a public technical university located in Hamirpur, Himachal Pradesh, India. It was declared to be an Institute of National Importance by the Government of India under the Institutes of Technology Act.
+# National Institute of Technology Hamirpur (NIT Hamirpur)
 
-The institute was established in 1984 as a Regional Engineering College. It was upgraded to NIT[2] in 2003 by the parliament of India. NIT Hamirpur offers a comprehensive curriculum for undergraduate, graduate and doctorate studies in various fields of architecture, engineering, pure sciences and humanities
+**Official Website:** [https://nith.ac.in/](https://nith.ac.in/)
 
-Foundation
-The institute came into existence on 7 August 1986 as Regional Engineering College, Hamirpur in Hamirpur, Himachal Pradesh, India. It was a joint enterprise of the Government of India and the Government of Himachal Pradesh. The classes commenced at Government Polytechnic College, Hamirpur as REC Hamirpur did not initially have a campus. The classes and administration moved to their current location in 1987. At its inception, the institute only had three departments, Civil Engineering, Electrical and Electronics Engineering and Mechanical Engineering. Later, two more departments, Electronics and Communication Engineering (1988) and Computer Science and Engineering (1989) were added. The department of Architecture was established in 2000. Recently in 2013, the Chemical Engineering department came into existence. The institute offered undergraduate courses until 2005. Thereafter, graduate and Ph.D programs became available.
+## Overview
 
-On 26 June 2002, REC Hamirpur was awarded the status of deemed university and upgraded into a National Institute of Technology. As a result of this transition the institute came under the sole purview of the Government of India. It was awarded the status of Institute of National Importance by an Act of Parliament along with other NITs and IITs. NIT Hamirpur has been ranked as best NIT in terms of infrastructure by the World Bank in 2007.
-Campus
-The institute campus is situated in the Hamirpur district of Himachal Pradesh, India, at an altitude of 900 meters above sea level. The campus is spread across 320 acres and is located on a hilly terrain which is surrounded by pine trees.[citation needed] The distance to campus from main bus terminus of Hamirpur city is approximately 4 kilometers. The nearest situated airport is Kangra Airport at 86.9 kilometers. Bus and cab facilities are easily available for the campus.
+The National Institute of Technology Hamirpur (NIT Hamirpur or NITH) is a public technical university located in Hamirpur, Himachal Pradesh, India. Established in 1986 as a Regional Engineering College, it was elevated to the status of National Institute of Technology in 2002 and recognized as an Institute of National Importance. NIT Hamirpur offers undergraduate, postgraduate, and doctoral programs across various disciplines, including engineering, architecture, sciences, and humanities.
 
-Being a residential campus, there are eight boys' hostels and four girls' hostels, with residences for the faculty and staff. Some hostels have four-seated or triple-seated rooms, while others have doublets and singlets. Mega Hostel is the newest and largest in its capacity.
+## History
 
-Hostels
-Boys' Hostels
+### Foundation and Evolution
 
-Kailash Boys' Hostel
-Shivalik Boys' Hostel
-Dhauladhar Boys' Hostel
-Vindhyachal Boys' Hostel
-Neelkanth Boys' Hostel
-Himadri Hostel
-Himgiri Hostel
-Udaygiri Hostel
-Girls' Hostels
+NIT Hamirpur was founded on August 7, 1986, as Regional Engineering College (REC) Hamirpur, a collaborative venture between the Government of India and the Government of Himachal Pradesh. Initially, the institute operated from the Government Polytechnic College, Hamirpur, before relocating to its current campus in 1987. The inaugural departments were Civil Engineering, Electrical and Electronics Engineering, and Mechanical Engineering. Subsequent additions included Electronics and Communication Engineering in 1988, Computer Science and Engineering in 1989, Architecture in 2000, and Chemical Engineering in 2013. The institute initially focused on undergraduate programs, expanding to postgraduate and doctoral studies from 2005 onwards.
 
-Parvati Girls' Hostel
-Ambika Girls' Hostel
-Aravali Hostel
-Manimahesh Girls' Hostel
-Satpura Hostel
-Computer Centre
-Computer Centre is a central facility, which caters to the needs of academic departments. The aim of the centre is to provide professional services, promote and assist the use of new computing technology among the students, staff and administration.[6] The website of NITH, is also maintained by the computer center.
+### Transition to NIT
 
-Central Library
-The institute library was set up in 1986 in one room of Government Polytechnic Hamirpur and was shifted to the institute campus in 1988 in Visvesvarya Block. At present it is in a separate building with the floor area of 3200 square meters. The library has more than 100,000 books and numerous scientific journals in both print and electronic format. The reading halls of the library can accommodate around 600 people at a time. Building is facilitated with water coolers, heaters Wi-Fi etc.[7] The library uses OPAC to issue books.
+On June 26, 2002, REC Hamirpur was conferred deemed university status and rebranded as the National Institute of Technology. This transition brought the institute under the exclusive jurisdiction of the Government of India. In 2007, the World Bank recognized NIT Hamirpur as the best NIT in terms of infrastructure.
 
-Sports
-NIT Hamirpur provides sports facilities for indoor and outdoor games. Teams are sent out to compete in university-level sports competition. Sports facilities include Karate, cricket, football, lawn tennis, basketball, volleyball, table tennis, badminton and athletics.[8] Annual sports events such as Lalkar is also celebrated with several events such as relay, shot put, 100m race etc. Inter branch and inter year sports matches such as football and cricket are also held round the year.
+## Campus
 
-Health Centre
-NIT Hacentre. It is equipped with basic medical facilities and in case of emergency, patients are referred to the Zonal Hospital, Hamirpur.[9]
+Nestled in the Hamirpur district of Himachal Pradesh at an altitude of 900 meters, the NIT Hamirpur campus spans 320 acres of hilly terrain adorned with pine trees. The campus is approximately 4 kilometers from Hamirpur's main bus terminus, with the nearest airport being Kangra Airport, situated 86.9 kilometers away. Transportation options to the campus include readily available bus and cab services.
 
-Organization and administration
-Departments
-NIT Hamirpur has 13 departments and a center of excellence. The academic departments at NIT Hamirpur include the following
+### Residential Facilities
 
-Computer Science and Engineering
-Civil Engineering
-Chemical Engineering
-Electronics and Communication Engineering
-Electrical Engineering
-Mechanical Engineering
-Material Sciences & Engineering
-Chemistry
-Mathematics & Scientific Computing
-Physics & Photonic Science
-Architecture
-Humanities & Social Sciences
-Management Studies
-Center
-The a center of excellence located at NIT Hamirpur is
+As a residential institution, NIT Hamirpur provides accommodation for students, faculty, and staff. The campus houses eight boys' hostels and five girls' hostels, each equipped with amenities to ensure a comfortable living environment. The Mega Hostel is the newest and largest facility, offering modern accommodations.
 
-Centre for Energy Studies
+#### Boys' Hostels
 
-Student life
-Hill'ffair
+- Kailash Boys' Hostel
+- Shivalik Boys' Hostel
+- Dhauladhar Boys' Hostel
+- Vindhyachal Boys' Hostel
+- Neelkanth Boys' Hostel
+- Himadri Hostel
+- Himgiri Hostel
+- Udaygiri Hostel
 
-Students performing at Open Air Theater during Hill'ffair 2005
-Hill'ffair is a cultural event of the institute, organized at the national level, with the involvement of bands, singers, musicians, artist, poets and participants from all across the country. Two days and three nights of performance with over a wide genre of dance, music, drama.[13] Cultural activities and various student clubs are a few options that act as a catalyst in developing technical, managerial, conceptual skills amongst students. NIT Hamirpur provides a number of such platforms in the forms of clubs to its students to select a club as per his/her likes and channelize their energies in translating their ideas into reality. The event is a three day long event which consists of a star night, where several artists such as
+#### Girls' Hostels
 
-NIMBUS
-NIMBUS is the annual technical festival of National Institute of Technology, Hamirpur, Himachal Pradesh, India. It is touted to be an amalgamation of ideas, expressions, innovations, prototypes, knowledge channels, taken to the most premier levels. In NIMBUS all the departmental teams compete with their best projects, demonstrations and Events. Students from Himachal and outside Himachal Pradesh come to participate in
+- Parvati Girls' Hostel
+- Ambika Girls' Hostel
+- Aravali Hostel
+- Manimahesh Girls' Hostel
+- Satpura Hostel
 
-these events. There are two types of teams, core and departmental teams. The departmental teams are:
+### Academic Facilities
 
-ABRAXAS (Eng. Physics)- Best departmental team of NIMBUS-2k24
-OJAS (Electrical Eng.)
-MEDEXTROUS (Mechanical Eng.)
-VIBHAV (Electronics & Comm)
-C HELIX (Civil Eng.)
-Hermetica (Chemical Eng.)
-Team .EXE (Computer Science and Engineering)
-Design O Crats (Architecture)
-Metamorph (Material science Eng.)
-Matcom(MNC Department)
-and the core teams are:
+- **Computer Centre:** Serving as a central hub for computing needs, the Computer Centre supports academic departments by offering professional services and promoting the adoption of new computing technologies. It also maintains the institute's official website.
 
-Team Finance and Treasury
-Resurgence
-Pixonoids
-Public Relations
-Music Club
-Rhythmeecz
-Discipline Club
-Organization Club
-Fine Art Club
-Team Technical
-Lalkaar
+- **Central Library:** Established in 1986, the Central Library occupies a 3,200 square meter building and houses over 100,000 books alongside numerous scientific journals in both print and electronic formats. Its reading halls can accommodate approximately 600 individuals and are equipped with amenities such as water coolers, heaters, and Wi-Fi. The library utilizes an Online Public Access Catalog (OPAC) system for book issuance.
 
-National Institute of Technology Hamirpur is one of the premier technical institutes in Northern India. The Institute presently provides sports facilities for both outdoor and indoor activity. A standard size stadium with provision of pavilion has been provided to the student where the games like Cricket, Football, Basketball, Volleyball, Lawn Tennis martial art karate for self defense and Athletics are played. Student's Activity Center(SAC) is recently build with world class facilities to host various extra-curricular activities by the students.
+### Sports and Recreation
+
+NIT Hamirpur offers a comprehensive range of sports facilities for both indoor and outdoor activities, including cricket, football, lawn tennis, basketball, volleyball, table tennis, badminton, karate, kabaddi, and athletics. The institute hosts annual sports events like "Lalkar," featuring competitions such as relay races, shot put, and 100-meter sprints. Inter-branch and inter-year matches in sports like football and cricket are organized throughout the year.
+
+### Health Centre
+
+The on-campus Health Centre provides basic medical facilities to students, faculty, and staff. In cases of emergency, patients are referred to the nearby Zonal Hospital in Hamirpur.
+
+## Academics
+
+### Departments
+
+NIT Hamirpur comprises 13 academic departments and a Centre for Energy Studies, each dedicated to fostering excellence in education and research.
+
+- **Engineering Departments:**
+  - Computer Science and Engineering
+  - Civil Engineering
+  - Chemical Engineering
+  - Electronics and Communication Engineering
+  - Electrical Engineering
+  - Mechanical Engineering
+  - Material Sciences & Engineering
+
+- **Science Departments:**
+  - Chemistry
+  - Mathematics & Scientific Computing
+  - Physics & Photonic Science
+
+- **Other Departments:**
+  - Architecture
+  - Humanities & Social Sciences
+  - Management Studies
+
+- **Centre of Excellence:**
+  - Centre for Energy Studies
+
+### Programs Offered
+
+NIT Hamirpur offers a diverse array of programs:
+
+- **Undergraduate Programs:**
+  - Bachelor of Technology (B.Tech) in various engineering disciplines
+  - Bachelor of Architecture (B.Arch)
+
+- **Postgraduate Programs:**
+  - Master of Technology (M.Tech)
+  - Master of Architecture (M.Arch)
+  - Master of Science (M.Sc)
+  - Master of Business Administration (MBA)
+
+- **Doctoral Programs:**
+  - Ph.D. in multiple disciplines
+
+### Admissions
+
+- **Undergraduate Admissions:** Admission to B.Tech and B.Arch programs is based on performance in the Joint Entrance Examination (JEE) Main, followed by centralized counseling through the Joint Seat Allocation Authority (JoSAA).
+
+- **Postgraduate Admissions:**
+  - M.Tech and M.Arch admissions require valid GATE scores and participation in the Centralized Counseling for M.Tech/M.Arch (CCMT).
+  - M.Sc admissions are based on IIT JAM scores and centralized counseling via the Centralized Counseling for M.Sc (CCMN).
+  - MBA admissions consider scores from CAT/MAT/GMAT/CMAT, followed by group discussions and personal interviews.
+
+- **Doctoral Admissions:** Ph.D. candidates must have a relevant master's degree with a minimum of 60% marks (55% for SC/ST candidates). Selection involves a written test and/or interview conducted by the respective departments.
+
+## Student Life
+
+### Cultural and Technical Festivals
+
+- **Hill'ffair:** The annual cultural festival featuring performances from bands, singers, musicians, artists, and poets nationwide. Events span dance, music, drama, and other cultural activities.
+
+- **NIMBUS:** The annual technical festival showcasing innovations, projects, and competitions across various engineering and science disciplines. Departmental teams compete, and students from across the country participate.
+
+### Clubs and Societies
+
+NIT Hamirpur hosts numerous student clubs and societies that promote extracurricular engagement and skill development. These include technical clubs, cultural societies, sports clubs, and special interest groups catering to diverse student interests.
+
+## Achievements
+
+NIT Hamirpur has garnered recognition for its academic and research contributions. Notable achievements include:
+
+- **Research Projects:** Faculty members have secured prestigious projects, such as the development of high-power grid-friendly conductive and static wireless chargers for electric vehicles.
+
+- **Patents:** Faculty have been granted patents for innovations like amine-functionalized polymer membranes for electrochemical reduction of CO₂ to hydrocar

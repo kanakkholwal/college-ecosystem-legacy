@@ -42,6 +42,7 @@ const userSchema = z.object({
   role: z.string().default("user"),
   gender: z.string().default("not_specified"),
   other_roles: z.array(z.string()).default([]),
+  other_emails: z.array(z.string().email()).default([]),
   department: z.string(),
 });
 
@@ -68,6 +69,7 @@ export default function CreateNewUser() {
         data: {
           gender: data.gender,
           other_roles: data.other_roles,
+          other_emails: data.other_emails,
           username: data.email.split("@")[0],
           department: data.department,
         },

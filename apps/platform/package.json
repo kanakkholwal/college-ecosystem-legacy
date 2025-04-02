@@ -44,6 +44,7 @@
     "@serwist/next": "^9.0.11",
     "@tailwindcss/container-queries": "^0.1.1",
     "@tailwindcss/typography": "^0.5.16",
+    "@tanstack/react-query": "^5.71.3",
     "@tanstack/react-table": "^8.20.6",
     "@xenova/transformers": "^2.17.2",
     "axios": "^1.7.9",
