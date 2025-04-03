@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
   try {
     await dbConnect();
     const results = await Result.find({
-      batch: "2020",
+      batch: "2024",
     }).limit(250);
 
     return NextResponse.json(

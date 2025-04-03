@@ -24,6 +24,7 @@ import {
 } from "~/models/hostel_n_outpass";
 import ResultModel from "~/models/result";
 import {format} from "date-fns";
+import { ORG_DOMAIN } from "~/project.config";
 
 
 const allowedRolesForHostel = [
@@ -435,4 +436,86 @@ export async function importHostelsFromSite() {
   } finally {
     revalidatePath("/admin/hostels");
   }
+}
+
+type  importStudentsPayload = Array<{
+  rollNo: string;
+  name: string;
+  cgpi: number;
+}>
+
+export async function importStudentsWithCgpi(hostelId:string,payload:importStudentsPayload){
+    try{
+      await dbConnect();
+    const hostel = await HostelModel.findById(hostelId);
+    if (!hostel) return { success: false, error: "Hostel not found" };
+
+    const rollNumbers = payload.map((student) => student.rollNo);
+    const bulkOps = [];
+    const resultUpdates = [];
+
+
+    const existingStudents = await HostelStudentModel.find({
+      rollNo: { $in: rollNumbers },
+    }).lean();
+    const results = await ResultModel.find({
+      rollNo: { $in: rollNumbers },
+    }).lean();
+    for await (const student of payload) {
+      const existingStudent = existingStudents.find((s) => s.rollNo === student.rollNo);
+      const result = results.find((r) => r.rollNo === student.rollNo);
+
+      if(existingStudent){
+        bulkOps.push({
+          updateOne: {
+            filter: { rollNo: student.rollNo },
+            update: {
+              $set: { hostelId, cgpi: student.cgpi },
+            },
+          },
+        });
+      }else{
+        bulkOps.push({
+          insertOne: {
+            document: {
+              rollNumber: student.rollNo,
+              name: student.name,
+              email:`${student.rollNo}@${ORG_DOMAIN}`,
+              hostelId,
+              gender:
+                result?.gender !== "not_specified"
+                  ? result?.gender
+                  : hostel.gender,
+              roomNumber: "UNKNOWN",
+              position: "none",
+              cgpi:student.cgpi
+            },
+          },
+        })
+      }
+      
+      
+      if(result?.gender === "not_specified"){
+        resultUpdates.push({
+          updateOne: {
+            filter: { rollNo: student.rollNo },
+            update: { $set: { gender: hostel.gender } },
+          },
+        });
+      }
+
+    }
+
+    if (bulkOps.length) await HostelStudentModel.bulkWrite(bulkOps);
+    if (resultUpdates.length) await ResultModel.bulkWrite(resultUpdates);
+
+    return Promise.resolve("Imported successfully")
+
+    
+
+    }catch(err){
+        console.log("Failed to import students",err);
+        return Promise.reject("Failed to import students");
+    }
+
 }
