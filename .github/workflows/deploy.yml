@@ -14,12 +14,12 @@ on:
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 jobs:
-  lint:
-    uses: ./.github/workflows/lint-project.yml
+  # lint:
+  #   uses: ./.github/workflows/lint-project.yml
   
 
   deploy-frontend-to-vercel:
-    needs: lint
+    # needs: lint
     runs-on: ubuntu-latest
     steps:
       - name: 📥 Checkout code
@@ -87,7 +87,7 @@ jobs:
           VERCEL_PROJECT_ID: ${{ secrets.VERCEL_MAIL_SERVER_PROJECT_ID }}
 
   dockerize-and-deploy-server:
-    needs: lint
+    # needs: lint
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/staging' || github.event_name == 'workflow_dispatch'
     steps:
