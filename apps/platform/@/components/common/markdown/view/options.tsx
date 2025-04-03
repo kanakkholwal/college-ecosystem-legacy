@@ -27,19 +27,18 @@ const monoFont = Fira_Code({
 function extractTextFromNode(node: NodeType): string {
   if (node.type === "text") {
     return node.value || "";
-  }  if (Array.isArray(node.children)) {
+  }
+  if (Array.isArray(node.children)) {
     return node.children.map((child) => extractTextFromNode(child)).join("");
-  } 
-    return "";
-  
+  }
+  return "";
 }
 
 export function RenderCodeBlock({
   children,
   className,
   node,
-}: RenderCodeBlockProps): JSX.Element 
-{
+}: RenderCodeBlockProps): JSX.Element {
   const [state, setState] = React.useState<"copy" | "idle">("idle");
   const textContent = extractTextFromNode(node);
 

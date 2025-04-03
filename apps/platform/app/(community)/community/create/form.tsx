@@ -133,38 +133,36 @@ export default function CreateCommunityPost() {
         />
         {form.watch("category").toLowerCase() === "departmental" && (
           <FormField
-              control={form.control}
-              name="subCategory"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Sub Category</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field?.value || undefined}
-                    disabled={form.formState.isSubmitting}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select a Sub category" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      {SUB_CATEGORY_TYPES.map((type) => {
-                        return (
-                          <SelectItem key={type} value={type}>
-                            {type}
-                          </SelectItem>
-                        );
-                      })}
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    The Sub category of the post.
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            control={form.control}
+            name="subCategory"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Sub Category</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field?.value || undefined}
+                  disabled={form.formState.isSubmitting}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a Sub category" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {SUB_CATEGORY_TYPES.map((type) => {
+                      return (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+                <FormDescription>The Sub category of the post.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         )}
         <Button type="submit" width="md" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? "Publishing..." : "Publish Post"}

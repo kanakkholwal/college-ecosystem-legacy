@@ -2,7 +2,7 @@ import { getSession } from "src/lib/auth-server";
 import admin from "src/lib/firebaseAdmin";
 
 import dbConnect from "src/lib/dbConnect";
-import FileModel, { FileWithID } from "src/models/file";
+import FileModel, { type FileWithID } from "src/models/file";
 
 interface UploadFileProps {
   name: string;
@@ -27,7 +27,7 @@ export async function UploadFile({
 
   const bucket = admin
     .storage()
-    .bucket(`gs://` + process.env.FIREBASE_STORAGE_BUCKET);
+    .bucket(`gs://${process.env.FIREBASE_STORAGE_BUCKET}`);
 
   // Read the file content as a buffer
   const arrayBuffer = await file.arrayBuffer();
@@ -107,6 +107,7 @@ export async function GetFiles({
   type,
 }: GetFilesProps): Promise<FileWithID[]> {
   await dbConnect();
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const searchQuery = {} as Record<string, any>;
   if (query) {
     // searchQuery.$text = { $search: query };

@@ -23,7 +23,7 @@ export default function Footer() {
             <p className="mb-12 xl:w-4/5 font-medium text-slate-600">
               Created by{" "}
               <Link
-                href="https://kanakkholwal.eu.org"
+                href="https://kanakkholwal.eu.org?utm_source=nith.eu.org"
                 className="text-slate-900 dark:text-slate-200 font-semibold"
               >
                 Kanak
@@ -50,7 +50,7 @@ export default function Footer() {
           <div>
             <div className="flex items-center gap-5">
               <Link
-                href="https://x.com/kanakkholwal"
+                href="https://x.com/kanakkholwal?utm_source=nith.eu.org"
                 className={
                   "text-slate-500 hover:text-primary hover:-translate-y-1 ease-in duration-300 flex justify-center items-center h-8 icon"
                 }
@@ -58,7 +58,7 @@ export default function Footer() {
                 <RiTwitterXFill className="w-5 h-5" />
               </Link>
               <Link
-                href="https://linkedin.com/in/kanak-kholwal"
+                href="https://linkedin.com/in/kanak-kholwal?utm_source=nith.eu.org"
                 className={
                   "text-slate-500 hover:text-primary hover:-translate-y-1 ease-in duration-300 flex justify-center items-center h-8 icon"
                 }
@@ -66,7 +66,7 @@ export default function Footer() {
                 <FiLinkedin className="w-5 h-5" />
               </Link>
               <Link
-                href="https://github.com/kanakkholwal"
+                href="https://github.com/kanakkholwal?utm_source=nith.eu.org"
                 className={
                   "text-slate-500 hover:text-primary hover:-translate-y-1  ease-in duration-300 flex justify-center items-center h-16 icon"
                 }
@@ -74,7 +74,7 @@ export default function Footer() {
                 <LuGithub className="w-5 h-5" />
               </Link>
               <Link
-                href="https://instagram.com/kanakkholwal"
+                href="https://instagram.com/kanakkholwal?utm_source=nith.eu.org"
                 className={
                   "text-slate-500 hover:text-primary hover:-translate-y-1  ease-in duration-300 flex justify-center items-center h-16 icon"
                 }

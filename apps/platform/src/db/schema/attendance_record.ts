@@ -1,11 +1,5 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
-import {
-  boolean,
-  pgTable,
-  text,
-  timestamp,
-  uuid
-} from "drizzle-orm/pg-core";
+import { boolean, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
 
 import { users } from "./auth-schema";
 

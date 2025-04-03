@@ -1,8 +1,9 @@
 "use server";
 import type { InferSelectModel } from "drizzle-orm";
-import { and, asc, desc, eq, like, sql } from "drizzle-orm";
+import { asc, desc, eq, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
 import { accounts, sessions, users } from "~/db/schema/auth-schema";
+import redis from "~/lib/redis";
 
 export async function users_CountAndGrowth(timeInterval: string): Promise<{
   count: number;
@@ -12,22 +13,25 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
   trend: -1 | 1 | 0;
 }> {
   let startTime: Date;
+  let endTime: Date | null = null; // Used for the current partial interval
   let prevStartTime: Date;
   let prevEndTime: Date;
 
-  // Determine the start time based on the time interval
+  // Determine the start and previous intervals based on the time interval
   switch (timeInterval) {
-    case "last_hour":
+    case "last_hour": {
       startTime = new Date(Date.now() - 60 * 60 * 1000);
       prevStartTime = new Date(startTime.getTime() - 60 * 60 * 1000);
       prevEndTime = startTime;
       break;
-    case "last_24_hours":
+    }
+    case "last_24_hours": {
       startTime = new Date(Date.now() - 24 * 60 * 60 * 1000);
       prevStartTime = new Date(startTime.getTime() - 24 * 60 * 60 * 1000);
       prevEndTime = startTime;
       break;
-    case "this_week": {
+    }
+    case "last_week": {
       const today = new Date();
       const startOfWeek = new Date(
         today.getFullYear(),
@@ -35,22 +39,25 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
         today.getDate() - today.getDay()
       );
       startTime = startOfWeek;
+      endTime = today; // Current week up to now
       prevStartTime = new Date(startTime.getTime() - 7 * 24 * 60 * 60 * 1000);
       prevEndTime = startTime;
       break;
     }
-    case "this_month": {
+    case "last_month": {
       const today = new Date();
-      startTime = new Date(today.getFullYear(), today.getMonth(), 1);
-      prevStartTime = new Date(today.getFullYear(), today.getMonth() - 1, 1);
-      prevEndTime = new Date(today.getFullYear(), today.getMonth(), 0); // Last day of the previous month
+      startTime = new Date(today.getFullYear(), today.getMonth(), 1); // Start of this month
+      endTime = today; // Current month up to now
+      prevStartTime = new Date(today.getFullYear(), today.getMonth() - 1, 1); // Start of last month
+      prevEndTime = new Date(today.getFullYear(), today.getMonth(), 0); // Last day of last month
       break;
     }
-    case "this_year": {
+    case "last_year": {
       const today = new Date();
-      startTime = new Date(today.getFullYear(), 0, 1);
-      prevStartTime = new Date(today.getFullYear() - 1, 0, 1);
-      prevEndTime = new Date(today.getFullYear() - 1, 11, 31); // Last day of the previous year
+      startTime = new Date(today.getFullYear(), 0, 1); // Start of this year
+      endTime = today; // Current year up to now
+      prevStartTime = new Date(today.getFullYear() - 1, 0, 1); // Start of last year
+      prevEndTime = new Date(today.getFullYear() - 1, 11, 31); // Last day of last year
       break;
     }
     default:
@@ -64,26 +71,24 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
     .execute();
   const total = totalUsers[0]?.count ?? 0;
 
-  // Fetch the count of users in the current interval
-  const currentCountQuery = await db
-    .select({ count: sql<number>`COUNT(*)` })
-    .from(users)
-    .where(sql`"createdAt" >= ${startTime}`);
-  const currentCount = currentCountQuery[0]?.count ?? 0;
-
   // Fetch the count of users in the previous interval
-  const prevCountQuery = await db
+  const periodCountQuery = await db
     .select({ count: sql<number>`COUNT(*)` })
     .from(users)
-    .where(sql`"createdAt" >= ${prevStartTime} AND "createdAt" < ${prevEndTime}`);
-  const prevCount = prevCountQuery[0]?.count || 0;
+    .where(
+      sql`"createdAt" >= ${prevStartTime} AND "createdAt" <= ${prevEndTime}`
+    );
+  const periodCount = periodCountQuery[0]?.count || 0;
 
   // Calculate growth and growth percentage
-  const growth = currentCount - prevCount;
-  const growthPercent = prevCount === 0 ? 100 : (growth / prevCount) * 100;
+  const growth = total - periodCount;
+  const growthPercent =
+    periodCount === 0
+      ? 100
+      : (growth / (periodCount === 0 ? 1 : periodCount)) * 100;
 
   return {
-    count: currentCount,
+    count: total,
     total,
     growth,
     growthPercent,
@@ -91,6 +96,15 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
   };
 }
 
+export async function flushCache() {
+  try {
+    await redis.flushall();
+    return Promise.resolve(true);
+  } catch (error) {
+    console.error(error);
+    return Promise.reject(error);
+  }
+}
 
 // Infer the User model from the schema
 type User = InferSelectModel<typeof users>;
@@ -108,39 +122,6 @@ interface UserListOptions {
   searchQuery?: string;
 }
 
-export async function listUsers(options: UserListOptions): Promise<User[]> {
-  const {
-    sortBy = "createdAt", // Default sort field
-    sortOrder = "desc", // Default sort order
-    limit = 10,
-    offset = 0,
-    searchQuery,
-  } = options;
-
-  const order = sortOrder === "desc" ? desc : asc;
-
-  const conditions = [];
-
-  // Add search condition for name or username
-  if (searchQuery) {
-    conditions.push(
-      like(users.name, `%${searchQuery}%`),
-      like(users.username, `%${searchQuery}%`)
-    );
-  }
-
-  const query = db
-    .select()
-    .from(users)
-    .where(conditions.length > 0 ? and(...conditions) : undefined)
-    .orderBy(order(users[sortBy]))
-    .limit(limit)
-    .offset(offset);
-
-  const results = await query;
-  return results;
-}
-
 export async function getUser(userId: string): Promise<User | null> {
   const user = await db
     .select()
@@ -150,6 +131,19 @@ export async function getUser(userId: string): Promise<User | null> {
     .execute();
 
   return user.length > 0 ? user[0] : null; // Return the first user or null if not found
+}
+
+export async function updateUser(
+  userId: string,
+  data: Partial<User>
+): Promise<User | null> {
+  try {
+    await db.update(users).set(data).where(eq(users.id, userId)).execute();
+    return getUser(userId);
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
 }
 
 /**
@@ -233,7 +227,6 @@ export async function getSessionsByUserAgent(): Promise<
 }
 
 export async function getTotalAccounts(): Promise<number> {
-
   const result = await db
     .select({ count: sql<number>`COUNT(*)` })
     .from(accounts)
@@ -241,11 +234,10 @@ export async function getTotalAccounts(): Promise<number> {
   return result[0]?.count ?? 0;
 }
 
-
-
-
 // Users with the most sessions
-export async function mostSessionsUsers(): Promise<{ userId: string; sessionCount: number }[]> {
+export async function mostSessionsUsers(): Promise<
+  { userId: string; sessionCount: number }[]
+> {
   const result = await db
     .select({
       userId: sessions.userId,
@@ -291,7 +283,9 @@ export async function sessionActivity(): Promise<{
 }
 
 // Total user growth over time
-export async function userGrowthOverTime(): Promise<{ date: string; count: number }[]> {
+export async function userGrowthOverTime(): Promise<
+  { date: string; count: number }[]
+> {
   const result = await db
     .select({
       date: sql<string>`DATE_TRUNC('month', "createdAt")`.as("date"),

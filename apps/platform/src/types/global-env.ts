@@ -19,11 +19,7 @@ const envVariables = z.object({
   BASE_SERVER_URL: z.string().url(),
   NEXT_PUBLIC_BASE_SERVER_URL: z.string().url(),
 
-  UPSTASH_REDIS_REST_URL: z.string(),
-  UPSTASH_REDIS_REST_TOKEN: z.string(),
-
-  RESEND_EMAIL_FROM: z.string(),
-  RESEND_API_TOKEN: z.string().email(),
+  REDIS_URL: z.string(),
 
   HUGGING_FACE_API_KEY: z.string(),
   FIREWORKS_API_KEY: z.string(),

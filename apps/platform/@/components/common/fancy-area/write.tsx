@@ -246,7 +246,10 @@ export function Write({ textValue, setTextValue, disabled, ...props }: Props) {
 
       <Sheet>
         <SheetTrigger asChild>
-          <button type="button" className="text-sm text-muted-foreground prose-none mt-1">
+          <button
+            type="button"
+            className="text-sm text-muted-foreground prose-none mt-1"
+          >
             <BsMarkdown className="text-gray-700 h-4 w-5 mr-2 inline-block" />
             Supports markdown.
           </button>
@@ -276,8 +279,6 @@ export function Write({ textValue, setTextValue, disabled, ...props }: Props) {
           </div>
         </SheetContent>
       </Sheet>
-
-    
     </div>
   );
 }

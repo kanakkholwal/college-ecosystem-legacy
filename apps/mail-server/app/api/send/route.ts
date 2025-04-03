@@ -1,12 +1,11 @@
 import { type NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
 import { z } from "zod";
 import { render } from "@react-email/components";
 
-// const resend = new Resend(process.env.RESEND_API_KEY);
-
 import { getEmailTemplate } from "@/emails";
 import { handleEmailFire } from "@/emails/helper";
+
+const ORG_DOMAIN = "nith.ac.in";
 
 const payloadSchema = z.object({
   template_key: z.string(),
@@ -21,12 +20,15 @@ export async function POST(request: NextRequest) {
   try {
     const identityKey = request.headers.get("X-IDENTITY-KEY") || "";
     if (identityKey !== process.env.SERVER_IDENTITY) {
-      console.log("Missing or invalid SERVER_IDENTITY","received:",identityKey);
+      console.log(
+        "Missing or invalid SERVER_IDENTITY",
+        "received:",
+        identityKey
+      );
       return NextResponse.json(
         {
           error: "Missing or invalid SERVER_IDENTITY",
-          data: null
-
+          data: null,
         },
         { status: 403 }
       );
@@ -36,10 +38,13 @@ export async function POST(request: NextRequest) {
 
     const res = payloadSchema.safeParse(body);
     if (!res.success) {
-      return NextResponse.json({
-        error: res.error,
-        data: null
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          error: res.error,
+          data: null,
+        },
+        { status: 400 }
+      );
     }
     const { template_key, targets, subject, payload } = res.data;
     console.log("Sending email to", targets);
@@ -50,7 +55,7 @@ export async function POST(request: NextRequest) {
 
     const emailHtml = await render(EmailTemplate);
     const response = await handleEmailFire(
-      "College Platform <platform@nith.ac.in>",
+      `College Platform <platform@${ORG_DOMAIN}>`,
       {
         to: targets,
         subject: subject,
@@ -59,9 +64,15 @@ export async function POST(request: NextRequest) {
     );
     console.log("Email sent", response);
     if (response.rejected.length > 0) {
-      return NextResponse.json({ error: response.rejected, data: null }, { status: 400 });
+      return NextResponse.json(
+        { error: response.rejected, data: null },
+        { status: 400 }
+      );
     }
-    return NextResponse.json({ data: response.accepted, error: null }, { status: 200 });
+    return NextResponse.json(
+      { data: response.accepted, error: null },
+      { status: 200 }
+    );
   } catch (error) {
     return Response.json({ error, data: null }, { status: 500 });
   }

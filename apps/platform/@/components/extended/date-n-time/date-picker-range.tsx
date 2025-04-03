@@ -33,10 +33,7 @@ interface DateTimePickerProps {
   };
 }
 
-export function DatePickerWithRange({
-  field,
-  ...props
-}: DateTimePickerProps) {
+export function DatePickerWithRange({ field, ...props }: DateTimePickerProps) {
   const handleSelect = (range: DateRange) => {
     if (range?.from && range.to) {
       field.onChange({

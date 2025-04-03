@@ -7,6 +7,7 @@ import type { ResultTypeWithId, Semester } from "src/models/result";
 import { getResultByRollNo } from "~/actions/result";
 import { CgpiCard, RankCard, SemCard } from "./components/card";
 import { CGPIChart } from "./components/chart";
+import { ORG_DOMAIN } from "~/project.config";
 
 import type { Metadata, ResolvingMetadata } from "next";
 
@@ -36,12 +37,10 @@ export default async function ResultsPage(props: Props) {
 
   const update_result = searchParams?.update === "true";
   const is_new = searchParams?.new === "true";
-  const result = await getResultByRollNo(params.rollNo, update_result,is_new);
+  const result = await getResultByRollNo(params.rollNo, update_result, is_new);
   if (!result) {
     return notFound();
   }
-
-
 
   return (
     <>
@@ -61,7 +60,7 @@ export default async function ResultsPage(props: Props) {
           <h5 className="mt-8 text-xl font-semibold text-gray-700 dark:text-gray-300 text-center mx-auto uppercase">
             {result.rollNo}
             <Link
-              href={`mailto:${result.rollNo}@nith.ac.in`}
+              href={`mailto:${result.rollNo}@${ORG_DOMAIN}`}
               className="inline-block text-primary hover:text-primaryLight ease-in duration-300 align-middle ml-2 -mt-1"
               title={"Contact via mail"}
             >

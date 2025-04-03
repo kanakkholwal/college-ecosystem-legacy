@@ -1,9 +1,8 @@
-import ConditionalRender from "@/components/utils/conditional-render";
+import { Separator } from "@/components/ui/separator";
+import { Heading, Paragraph } from "@/components/ui/typography";
 import { getSession } from "~/lib/auth-server";
 import { changeCase } from "~/utils/string";
-import AdminDashboard from "./context/admin.dashboard";
-import CRDashboard from "./context/cr.dashboard";
-import FacultyDashboard from "./context/faculty.dashboard";
+import { DashboardTemplate } from "./dashboards";
 
 interface Props {
   params: Promise<{
@@ -16,27 +15,19 @@ export default async function ModeratorDashboard(props: Props) {
   const session = await getSession();
 
   return (
-    <div className="space-y-6 my-5">
-      <div>
-        <h2 className="text-3xl font-semibold">Hi, {session?.user?.name}</h2>
-        <p className="text-slate-600 dark:text-slate-400">
-          Welcome to the dashboard.
-        </p>
-      </div>
-
-      <ConditionalRender
-        condition={
-          params.moderator === "admin" || params.moderator === "moderator"
-        }
-      >
-        <AdminDashboard />
-      </ConditionalRender>
-      <ConditionalRender condition={params.moderator === "cr"}>
-        <CRDashboard />
-      </ConditionalRender>
-      <ConditionalRender condition={params.moderator === "faculty"}>
-        <FacultyDashboard />
-      </ConditionalRender>
+    <div className="w-full space-y-6 my-5">
+      <section id="welcome-header" className="w-full">
+        <div className="@2xl:w-1/2">
+          <Heading level={3} className="text-base md:text-lg font-bold text-gray-800">
+            Hi, {session?.user?.name}
+          </Heading>
+          <Paragraph className="!mt-0 text-slate-600">
+            Welcome to the {changeCase(params.moderator.replaceAll("_"," "),"title")} dashboard.
+          </Paragraph>
+        </div>
+      </section>
+      <Separator />
+      <DashboardTemplate user_role={params.moderator} />
     </div>
   );
 }

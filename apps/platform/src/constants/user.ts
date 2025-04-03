@@ -1,8 +1,14 @@
 export const ROLES = [
   "student",
-  "cr",
-  "admin",
   "faculty",
   "hod",
-  "moderator",
+  "cr",
+  "staff",
+  "assistant",
+  "mmca",
+  "warden",
+  "librarian",
+  "assistant_warden",
+  "chief_warden",
+  "guard",
 ] as const;

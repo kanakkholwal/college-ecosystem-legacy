@@ -56,7 +56,9 @@ export function ResponsiveDialog({
         <DialogTrigger asChild>
           <Button {...btnProps} />
         </DialogTrigger>
-        <DialogContent className={cn("sm:max-w-[425px] @container/dialog", className)}>
+        <DialogContent
+          className={cn("sm:max-w-[425px] @container/dialog", className)}
+        >
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{description}</DialogDescription>
@@ -83,7 +85,9 @@ export function ResponsiveDialog({
           <DrawerTitle>{title}</DrawerTitle>
           <DrawerDescription>{description}</DrawerDescription>
         </DrawerHeader>
-        <div className={cn("px-4 w-full @container/dialog", className)}>{children}</div>
+        <div className={cn("px-4 w-full @container/dialog", className)}>
+          {children}
+        </div>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>

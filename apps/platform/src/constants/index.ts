@@ -1,15 +1,38 @@
+import { z } from "zod";
+
 export const ROLES = {
+  ADMIN: "admin",
   STUDENT: "student",
   CR: "cr",
-  ADMIN: "admin",
   FACULTY: "faculty",
   HOD: "hod",
-  MODERATOR: "moderator",
+  ASSISTANT: "assistant",
+  MMCA: "mmca",
+  WARDEN: "warden",
+  ASSISTANT_WARDEN: "assistant_warden",
+  CHIEF_WARDEN: "chief_warden",
+  LIBRARIAN: "librarian",
   STAFF: "staff",
+  GUARD: "guard",
 } as const;
 
-export const ROLES_LIST = Object.values(ROLES);
+export const ROLES_LIST: readonly string[] = Object.values(ROLES);
 
 export const ROLES_MAP = Object.fromEntries(
   Object.entries(ROLES).map(([key, value]) => [value, key])
 );
+
+export const GENDER = {
+  MALE: "male",
+  FEMALE: "female",
+  NOT_SPECIFIED: "not_specified",
+};
+
+import { ORG_DOMAIN } from "~/project.config";
+
+export const emailSchema = z
+  .string()
+  .email()
+  .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
+    message: `Email must end with @${ORG_DOMAIN}`,
+  });

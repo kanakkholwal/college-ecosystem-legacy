@@ -16,7 +16,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import readXlsxFile from "read-excel-file";
 import z from "zod";
-import { bulkUpdateGenders } from "~/actions/result";
+import serverApis from "~/lib/server-apis";
 
 const freshersDataSchema = z.object({
   name: z.string(),
@@ -35,8 +35,9 @@ export default function ImportNewStudents() {
     gender: string;
   }>({ name: "Name", rollNo: "Roll No.", gender: "Gender" });
 
-  const [data, setData] = useState<z.infer<typeof freshersDataSchema>[] | null>(null)
-
+  const [data, setData] = useState<z.infer<typeof freshersDataSchema>[] | null>(
+    null
+  );
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -63,8 +64,11 @@ export default function ImportNewStudents() {
       const parsed_data = sanitized_data.map((data) => ({
         name: data[requiredKeys.name],
         rollNo: data[requiredKeys.rollNo],
-        gender: data[requiredKeys.gender].toLowerCase().trim() as "male" | "female" | "not_specified"
-      }))
+        gender: data[requiredKeys.gender].toLowerCase().trim() as
+          | "male"
+          | "female"
+          | "not_specified",
+      }));
       // console.log(parsed_data);
       setData(parsed_data);
       // verify the data against the schema and set the required keys
@@ -75,8 +79,7 @@ export default function ImportNewStudents() {
     <div className="space-y-6">
       <div className="grid w-full max-w-sm items-center gap-1.5">
         <Label htmlFor="excel">
-          Import Excel file
-          (Only .xlsx files are supported)
+          Import Excel file (Only .xlsx files are supported)
         </Label>
         <Input
           id="excel"
@@ -118,23 +121,23 @@ export default function ImportNewStudents() {
               setRequiredKeys({ ...requiredKeys, gender: e.target.value })
             }
           />
-
         </div>
       </div>
       <div className="grid w-full max-w-sm items-center gap-1.5">
         <Label>Imported Data</Label>
-        <span className="text-sm">
-          {data !== null ? data.length : 0} rows
-        </span>
-        <Button onClick={async() => {
-          if(data === null) return;
-          toast.promise(bulkUpdateGenders(data),{
-            loading: "Updating data",
-            success: "Data updated successfully",
-            error: "Failed to update data"
-            
-          })
-        }}>Save Data</Button>
+        <span className="text-sm">{data !== null ? data.length : 0} rows</span>
+        <Button
+          onClick={async () => {
+            if (data === null) return;
+            toast.promise(serverApis.results.importFreshers(data), {
+              loading: "Updating data",
+              success: "Data updated successfully",
+              error: "Failed to update data",
+            });
+          }}
+        >
+          Save Data
+        </Button>
       </div>
       <ConditionalRender condition={tableData !== null}>
         <Table>

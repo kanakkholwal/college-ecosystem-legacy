@@ -7,11 +7,12 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
-import React, { Suspense } from "react";
+import type React from "react";
+import { Suspense } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import { ChartContainer } from "@/components/ui/chart";
-import { Semester } from "src/models/result";
+import type { Semester } from "src/models/result";
 
 export const CGPIChartLoader: React.FC = () => {
   return (
@@ -29,8 +30,8 @@ export const CGPIChart: React.FC<CGPIChartProps> = ({ semesters }) => {
   const chartData = semesters.map((semester: Semester) => {
     return {
       semester: `Semester ${semester.semester}`,
-      sgpi: parseFloat(semester.sgpi.toFixed(2)),
-      cgpi: parseFloat(semester.cgpi.toFixed(2)),
+      sgpi: Number.parseFloat(semester.sgpi.toFixed(2)),
+      cgpi: Number.parseFloat(semester.cgpi.toFixed(2)),
     };
   });
 

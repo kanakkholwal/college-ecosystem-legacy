@@ -5,7 +5,7 @@ import { authClient } from "src/lib/auth-client";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 
 import { useState } from "react";
-
+import { GENDER } from "~/constants";
 import { Button } from "@/components/ui/button";
 import { BiLockOpenAlt } from "react-icons/bi";
 import { LuMail } from "react-icons/lu";
@@ -29,6 +29,7 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { getDepartmentName } from "src/constants/departments";
 import * as z from "zod";
+import { ORG_DOMAIN } from "~/project.config";
 
 const FormSchema = z.object({
   email: z
@@ -36,10 +37,9 @@ const FormSchema = z.object({
     .email({ message: "Invalid email format" })
     .min(5, { message: "Email must be at least 5 characters long" })
     .max(100, { message: "Email cannot exceed 100 characters" })
-    .refine((val) => val.endsWith("@nith.ac.in"), {
-      message: "Email must end with @nith.ac.in",
+    .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
+      message: `Email must end with @${ORG_DOMAIN}`,
     }),
-
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long" })
@@ -54,7 +54,7 @@ const FormSchema = z.object({
 export default function SignUpForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const redirect = searchParams?.get("redirect") || "/";
+  const redirect = searchParams?.get("next") || "/";
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -75,9 +75,9 @@ export default function SignUpForm() {
         callbackURL: redirect,
         name: data.name,
         username: data.email.split("@")[0],
-        gender: "male",
+        gender: GENDER.NOT_SPECIFIED,
         department: getDepartmentName("ece"), // automatically corrects it on the backend
-        other_roles:["student"],
+        other_roles: ["student"],
       },
       {
         onRequest: () => {
@@ -89,7 +89,6 @@ export default function SignUpForm() {
         onSuccess(context) {
           console.log(context);
           toast.success("Account created successfully");
-
         },
         onError: (ctx: { error: { message: string } }) => {
           console.log(ctx);
@@ -146,7 +145,7 @@ export default function SignUpForm() {
                       </FormLabel>
                       <FormControl className="relative">
                         <Input
-                          placeholder="rollNo@nith.ac.in"
+                          placeholder={`Email (e.g. user@${ORG_DOMAIN})`}
                           type="email"
                           autoCapitalize="none"
                           autoComplete="email"
@@ -187,8 +186,10 @@ export default function SignUpForm() {
                   </FormItem>
                 )}
               />
-              <p className="text-left mt-2 text-sm font-medium text-gray-600">
-                You must use your NITH email to sign up.(you{"'"}ll get a verification link in your email if your email isn{"'"}t in the database)
+              <p className="text-left mt-2 text-xs font-medium text-gray-600">
+                You must use your NITH email to sign up.(you{"'"}ll get a
+                verification link in your email if your email isn{"'"}t in the
+                database)
               </p>
 
               <Button
@@ -222,7 +223,6 @@ export default function SignUpForm() {
               disabled={isLoading}
               width="full"
               rounded="full"
-
               onClick={async () => {
                 setIsLoading(true);
                 await authClient.signIn.social({

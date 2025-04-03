@@ -2,22 +2,24 @@
   "name": "college-ecosystem",
   "private": true,
   "scripts": {
-    "build": "turbo build",
-    "dev": "turbo dev",
-    "lint": "turbo lint",
+    "build": "turbo run build",
+    "dev": "turbo run dev",
+    "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md}\"",
-    "dev:server": "cd apps/server && npm run dev",
-    "build:server": "cd apps/server && npm run build"
+    "dev:server": "cd apps/server && turbo run dev",
+    "build:server": "cd apps/platform && turbo run build",
+    "dev:platform": "cd apps/platform && turbo run dev",
+    "build:platform": "cd apps/platform && turbo run build"
   },
   "devDependencies": {
     "prettier": "^3.4.2",
     "turbo": "^2.3.3",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.3"
   },
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "pnpm@9.15.2",
+  "packageManager": "pnpm@9.15.4",
   "workspaces": [
     "apps/*",
     "packages/*"

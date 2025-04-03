@@ -4,12 +4,10 @@ import EmptyArea from "@/components/common/empty-area";
 import { GoBackButton } from "@/components/common/go-back";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Textarea } from "@/components/ui/textarea";
 import ConditionalRender from "@/components/utils/conditional-render";
-import { cn } from "@/lib/utils";
-import { Bot, Mic, Send } from "lucide-react";
+import { Bot, Send } from "lucide-react";
 import { useChat } from "../useChat";
 import ChatList from "./chat-list";
 
@@ -35,19 +33,21 @@ export default function Form() {
           <div className="text-lg font-semibold">
             {process.env.NEXT_PUBLIC_WEBSITE_NAME} Chatbot
             <span className="text-xs text-gray-500 block">
-              Using {" "}
+              Using{" "}
               <a
                 target="_blank"
-                href="https://huggingface.co/deepset/roberta-base-squad2"
-                className="underline text-primary" rel="noreferrer"
+                href="https://huggingface.co/google/gemma-1.1-2b-it"
+                className="underline text-primary"
+                rel="noreferrer"
               >
-                deepset/roberta-base-squad2
+                google/gemma-1.1-2b-it
               </a>
               {" | "}
               <a
                 target="_blank"
-                href="https://github.com/kanakkholwal/college-ecosystem/blob/main/apps/platform/public/doc/REFERENCE.md"
-                className="underline text-primary" rel="noreferrer"
+                href="https://github.com/kanakkholwal/college-ecosystem/blob/main/content/chatbot-reference.md"
+                className="underline text-primary"
+                rel="noreferrer"
               >
                 Reference
               </a>
@@ -93,7 +93,6 @@ export default function Form() {
           }}
         />
         <div className="flex items-center gap-1">
-
           <Button
             type="submit"
             size="sm"

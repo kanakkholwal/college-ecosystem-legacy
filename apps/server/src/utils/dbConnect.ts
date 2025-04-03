@@ -1,16 +1,16 @@
 import mongoose, { type ConnectOptions, type Mongoose } from "mongoose";
-import dotenv from "dotenv"
+import dotenv from "dotenv";
 
-dotenv.config()
+dotenv.config();
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
 declare const global: {
-    mongoose: { conn: Mongoose | null; promise: Promise<Mongoose> | null };
+  mongoose: { conn: Mongoose | null; promise: Promise<Mongoose> | null };
 };
 
 if (!MONGODB_URI) {
-    throw new Error("Please define the MONGODB_URI environment variable");
+  throw new Error("Please define the MONGODB_URI environment variable");
 }
 
 /**
@@ -21,39 +21,39 @@ if (!MONGODB_URI) {
 let cached = global.mongoose || { conn: null, promise: null };
 
 if (!cached) {
-    cached = global.mongoose = { conn: null, promise: null };
+  cached = global.mongoose = { conn: null, promise: null };
 }
 const defaultDb =
-    process.env.NODE_ENV === "production" ? "production" : "testing";
+  process.env.NODE_ENV === "production" ? "production" : "testing";
 
 async function dbConnect(dbName: string = defaultDb): Promise<Mongoose> {
-    if (cached.conn) {
-        return cached.conn;
+  if (cached.conn) {
+    return cached.conn;
+  }
+
+  if (!cached.promise) {
+    const opts: ConnectOptions = {
+      dbName,
+    };
+
+    try {
+      mongoose.set("strictQuery", false);
+      cached.promise = mongoose
+        .connect(
+          `${MONGODB_URI} + "?retryWrites=true&w=majority&appName=nith"`,
+          opts
+        )
+        .then((mongoose) => {
+          console.log("Connected to MongoDB to database:", dbName);
+          return mongoose;
+        });
+    } catch (err) {
+      console.error("Error connecting to MongoDB:", err);
+      throw err;
     }
+  }
 
-    if (!cached.promise) {
-        const opts: ConnectOptions = {
-            dbName,
-        };
-
-        try {
-            mongoose.set("strictQuery", false);
-            cached.promise = mongoose
-                .connect(
-                    `${MONGODB_URI} + "?retryWrites=true&w=majority&appName=nith"`,
-                    opts
-                )
-                .then((mongoose) => {
-                    console.log("Connected to MongoDB to database:", dbName);
-                    return mongoose;
-                });
-        } catch (err) {
-            console.error("Error connecting to MongoDB:", err);
-            throw err;
-        }
-    }
-
-    return cached.conn ? cached.conn : await cached.promise;
+  return cached.conn ? cached.conn : await cached.promise;
 }
 
 export default dbConnect;

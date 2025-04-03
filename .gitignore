@@ -6,7 +6,7 @@ node_modules
 .husky
 .pnp
 .pnp.js
-pnpm-*.yaml
+# pnpm-*.yaml
 
 .vscode
 .venv
@@ -22,10 +22,8 @@ pnpm-*.yaml
 apps/**/.env*.local
 apps/**/.env*.development
 apps/**/.env
-# Golang
-/apps/golang-server/bin
-/apps/golang-server/pkg
-/apps/golang-server/main
+
+
 
 # Ignore cache files
 .turbo

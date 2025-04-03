@@ -1,3 +1,5 @@
+import { z } from "zod";
+
 interface Department {
   name: string;
   code: string;
@@ -6,6 +8,7 @@ interface Department {
   page: string;
 }
 
+//  change this according to your college
 export const DEPARTMENTS_LIST: readonly Department[] = [
   {
     name: "Computer Science and Engineering",
@@ -117,13 +120,24 @@ export const getDepartmentByRollNo = (rollNo: string) => {
   }
 };
 
-export function isValidRollNumber(rollNo: string): boolean {
-  const rollNoPattern = /^\d{2}[a-z]{3}\d{3}$/i;
+const rollNoSchema = z
+  .string()
+  .regex(/^\d{2}[a-z]{3}\d{3}$/i)
+  .refine(
+    (rollNo) => {
+      const numericPart = Number.parseInt(rollNo.slice(-3));
+      return numericPart >= 1 && numericPart <= 999;
+    },
+    {
+      message: "Invalid roll number",
+    }
+  );
 
-  if (!rollNoPattern.test(rollNo)) {
+export function isValidRollNumber(rollNo: string): boolean {
+  try {
+    const response = rollNoSchema.safeParse(rollNo);
+    return response.success;
+  } catch {
     return false;
   }
-
-  const numericPart = Number.parseInt(rollNo.slice(-3));
-  return numericPart >= 1 && numericPart <= 999;
 }

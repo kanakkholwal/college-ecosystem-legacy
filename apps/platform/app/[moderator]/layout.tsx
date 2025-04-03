@@ -1,15 +1,28 @@
+import Navbar from "@/components/common/app-navbar";
 import { AppSidebar } from "@/components/common/sidebar/app-sidebar";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import Page403 from "@/components/utils/403";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound, redirect } from "next/navigation";
+import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { changeCase } from "~/utils/string";
-import Navbar from "./components/navbar";
 
-import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-
-const ALLOWED_ROLES = ["admin", "moderator", "cr", "hod", "faculty"];
+const ALLOWED_ROLES = [
+  ROLES.ADMIN,
+  ROLES.FACULTY,
+  ROLES.CR,
+  ROLES.FACULTY,
+  ROLES.CHIEF_WARDEN,
+  ROLES.WARDEN,
+  ROLES.ASSISTANT_WARDEN,
+  ROLES.MMCA,
+  ROLES.HOD,
+  ROLES.GUARD,
+  ROLES.LIBRARIAN,
+  ROLES.STUDENT,
+];
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -55,7 +68,7 @@ export default async function DashboardLayout({
   }
 
   return (
-    <SidebarProvider className="selection:bg-primary/10 selection:text-primary">
+    <SidebarProvider className="selection:bg-primary/10 selection:text-primary bg-slate-100">
       <AppSidebar user={session.user} moderator={moderator} />
       <SidebarInset className="flex flex-col flex-1 w-full relative z-0">
         <Navbar user={session.user} />
@@ -67,7 +80,7 @@ export default async function DashboardLayout({
           <div className="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
         </div>
 
-        <main className="content p-4 md:p-6 z-2 @container space-y-10">
+        <main className="content p-4 md:p-6 z-2 @container space-y-10 min-h-screen h-full">
           {children}
         </main>
         <div
@@ -88,7 +101,7 @@ export default async function DashboardLayout({
 }
 
 function checkAuthorization(
-  moderator: string,
+  moderator: (typeof ALLOWED_ROLES)[number],
   session: Awaited<ReturnType<typeof getSession>>
 ) {
   // 1. No session, redirect to sign-in
@@ -103,9 +116,10 @@ function checkAuthorization(
   // 2. Invalid role
   if (!ALLOWED_ROLES.includes(moderator)) {
     console.log("Invalid moderator role:", moderator);
-    const destination = session.user.other_roles.includes("student")
-      ? "/"
-      : session.user.other_roles[0] || "/";
+    // const destination = session.user.other_roles.includes("student")
+    //   ? "/"
+    //   : session.user.other_roles[0] || "/";
+    const destination = session.user.other_roles?.length > 0 ? session.user.other_roles[0] : "/";
     return {
       redirect: { destination },
       authorized: false,

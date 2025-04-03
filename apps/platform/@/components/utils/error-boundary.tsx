@@ -1,15 +1,18 @@
 "use client";
 import type React from "react";
 import { Suspense, useEffect, useState } from "react";
+import ErrorBanner from "@/components/utils/error";
 
 interface ErrorBoundaryProps {
   children: React.ReactNode;
-  fallback: (err: Error) => React.ReactNode;
+  fallback?: React.ReactNode;
+  callback?: (error: Error) => void;
 }
 
 export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
   children,
   fallback,
+  callback,
 }) => {
   const [error, setError] = useState<Error | null>(null);
 
@@ -41,7 +44,9 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
   }, []);
 
   if (error) {
-    return fallback(error);
+    console.error(error);
+    callback?.(error);
+    return fallback ? fallback : <ErrorBanner />;
   }
 
   return <>{children}</>;
@@ -49,13 +54,14 @@ export const ErrorBoundary: React.FC<ErrorBoundaryProps> = ({
 
 interface ErrorBoundaryWithSuspenseProps {
   children: React.ReactNode;
-  fallback: React.ReactNode;
+  fallback?: React.ReactNode;
   loadingFallback: React.ReactNode;
+  callback?: (error: Error) => void;
 }
 
 export const ErrorBoundaryWithSuspense: React.FC<
   ErrorBoundaryWithSuspenseProps
-> = ({ children, fallback, loadingFallback }) => {
+> = ({ children, fallback, loadingFallback,callback }) => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
@@ -86,7 +92,9 @@ export const ErrorBoundaryWithSuspense: React.FC<
   }, []);
 
   if (error) {
-    return fallback;
+    console.error(error);
+    callback?.(error);
+    return fallback ? fallback : <ErrorBanner />;
   }
 
   return <Suspense fallback={loadingFallback}>{children}</Suspense>;

@@ -16,24 +16,12 @@ export interface Semester {
   sgpi: number;
   cgpi: number;
   courses: Course[];
-  semester: number;
+  semester: number | string;
   sgpi_total: number;
   cgpi_total: number;
 }
-export interface ResultTypeWithId {
-  _id: string;
-  name: string;
-  rollNo: string;
-  branch: string;
-  batch: number;
-  programme: string;
-  semesters: Semester[];
-  rank: Rank;
-  createdAt?: Date;
-  updatedAt?: Date;
-}
 
-export interface IResultType extends Document {
+export type rawResultType = {
   name: string;
   rollNo: string;
   branch: string;
@@ -44,7 +32,13 @@ export interface IResultType extends Document {
   createdAt?: Date;
   updatedAt?: Date;
   gender: "male" | "female" | "not_specified";
+};
+
+export interface ResultTypeWithId extends rawResultType {
+  _id: string;
 }
+
+export interface IResultType extends Document, rawResultType {}
 
 const CourseSchema: Schema = new Schema({
   name: { type: String, required: true },
@@ -56,7 +50,7 @@ const SemesterSchema: Schema = new Schema({
   sgpi: { type: Number, required: true },
   cgpi: { type: Number, required: true },
   courses: { type: [CourseSchema], required: true },
-  semester: { type: Number, required: true },
+  semester: { type: Schema.Types.Mixed, required: true },
   sgpi_total: { type: Number, required: true },
   cgpi_total: { type: Number, required: true },
 });

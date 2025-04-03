@@ -31,9 +31,9 @@ export default function Toggle({
             {
               loading: `Updating ${roomNumber} status...`,
               success: `${roomNumber} status updated`,
-            
+
               // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-                          error: (err:any) => {
+              error: (err: any) => {
                 console.log(err);
                 return err.message || `${roomNumber} status update failed`;
               },

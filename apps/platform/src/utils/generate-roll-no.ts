@@ -150,7 +150,8 @@ export const possible = [
     end: 53,
   },
 ];
-export function generateValues(array: any[]): string[] {
+type Possible = (typeof possible)[number];
+export function generateValues(array: Possible[]): string[] {
   const result = [] as string[];
 
   for (const item of array) {

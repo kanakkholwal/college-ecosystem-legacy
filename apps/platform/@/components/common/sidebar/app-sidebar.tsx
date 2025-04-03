@@ -14,113 +14,29 @@ import {
 } from "@/components/ui/sidebar";
 import type { Session } from "~/lib/auth-client";
 
-import { CalendarRange, Grid3X3, UserRoundCog } from "lucide-react";
-import { GrStorage } from "react-icons/gr";
-import { LiaReadme } from "react-icons/lia";
-import { SiGoogleclassroom } from "react-icons/si";
-import { TbDashboard } from "react-icons/tb";
-
-export type rawLinkType = {
-  title: string;
-  path: string;
-  allowed_roles: Session["user"]["role"] | Session["user"]["other_roles"] | "*";
-  icon: React.FC<React.SVGProps<SVGSVGElement>>;
-  items?: {
-    title: string;
-    path: string;
-    allowed_roles: Session["user"]["role"] | Session["user"]["other_roles"] | "*";
-
-  }[];
-};
-
-const all_links: rawLinkType[] = [
-  {
-    title: "Dashboard",
-    icon: TbDashboard,
-    path: "",
-    allowed_roles: ["*"],
-  },
-  {
-    title: "Users",
-    icon: UserRoundCog,
-    path: "/users",
-    allowed_roles: ["admin", "moderator"],
-    items: [
-      {
-        title: "Create User",
-        path: "/new",
-        allowed_roles: ["admin", "moderator"],
-      },
-    ],
-  },
-  {
-    title: "Result",
-    icon: Grid3X3,
-    path: "/result",
-    allowed_roles: ["admin", "moderator"],
-    items: [
-      {
-        title: "Scraping",
-        path: "/scraping",
-        allowed_roles: ["admin", "moderator"],
-      },
-      {
-        title: "Import",
-        path: "/import",
-        allowed_roles: ["admin", "moderator"],
-      },
-    ],
-  },
-  {
-    title: "Storage",
-    icon: GrStorage,
-    path: "/storage",
-    allowed_roles: ["admin", "moderator"],
-  },
-  {
-    title: "Courses",
-    icon: LiaReadme,
-    path: "/courses",
-    allowed_roles: ["*"],
-  },
-  {
-    title: "Time Tables",
-    icon: CalendarRange,
-    path: "/schedules",
-    allowed_roles: ["*"],
-  },
-  {
-    title: "Personal Attendance",
-    icon: CalendarRange,
-    path: "/attendance-personal",
-    allowed_roles: ["student"],
-  },
-  {
-    title: "Classrooms",
-    icon: SiGoogleclassroom,
-    path: "/rooms",
-    allowed_roles: ["cr","faculty","admin"],
-    items: [
-      {
-        title: "Create Classroom",
-        path: "/new",
-        allowed_roles: ["admin", "moderator"],
-      },
-    ],
-  },
-];
+import { sidebar_links } from "@/constants/links";
 
 const getSideNavLinks = (role: string) => {
-  return all_links
-    .filter((link) => link.allowed_roles.includes(role) || link.allowed_roles.includes("*"))
+  return sidebar_links
+    .filter(
+      (link) =>
+        link.allowed_roles.includes(role) || link.allowed_roles.includes("*")
+    )
     .map((link) => ({
       title: link.title,
       icon: link.icon,
       href: `/${role}${link.path}`,
-      items: link?.items?.filter((link) => link.allowed_roles.includes(role) || link.allowed_roles.includes("*"))?.map((item) => ({
-        title: item.title,
-        href: `/${role}${link.path}${item.path}`,
-      })),
+      preserveParams: link?.preserveParams,
+      items: link?.items
+        ?.filter(
+          (link) =>
+            link.allowed_roles.includes(role) ||
+            link.allowed_roles.includes("*")
+        )
+        ?.map((item) => ({
+          title: item.title,
+          href: `/${role}${link.path}${item.path}`,
+        })),
     }));
 };
 

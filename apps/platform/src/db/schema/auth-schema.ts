@@ -5,6 +5,7 @@ export const departmentNameEnum = pgEnum("department_name_enum", [
   "Staff",
   ...DEPARTMENTS,
 ] as [string, ...string[]]);
+
 export const userRolesEnum = pgEnum("user_roles_enum", [
   "admin",
   "student",
@@ -13,6 +14,12 @@ export const userRolesEnum = pgEnum("user_roles_enum", [
   "cr",
   "staff",
   "assistant",
+  "mmca",
+  "warden",
+  "librarian",
+  "assistant_warden",
+  "chief_warden",
+  "guard",
 ] as [string, ...string[]]);
 
 export const userGenderEnum = pgEnum("user_gender_enum", [
@@ -32,10 +39,14 @@ export const users = pgTable("users", {
   updatedAt: timestamp("updatedAt").notNull(),
   role: text("role").notNull().default("user"),
   other_roles: userRolesEnum("other_roles").array().notNull().default([]),
+  other_emails: text("other_emails").array().notNull().default([]),
   gender: userGenderEnum("gender")
     .notNull()
     .default("not_specified")
     .$default(() => "not_specified"),
+  hostelId: text("hostelId")
+    .default("not_specified")
+    .$defaultFn(() => "not_specified"),
   department: departmentNameEnum("department").notNull(),
 });
 

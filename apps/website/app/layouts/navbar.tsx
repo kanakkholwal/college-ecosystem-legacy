@@ -20,7 +20,7 @@ export default function Navbar() {
 
           <Button variant="default_light" className="rounded-full" asChild>
             <Link
-              href="https://app.nith.eu.org"
+              href="https://app.nith.eu.org?utm_source=nith.eu.org"
               target="_blank"
               rel="noopener noreferrer"
             >

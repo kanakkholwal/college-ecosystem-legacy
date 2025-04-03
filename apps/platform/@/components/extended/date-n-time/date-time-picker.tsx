@@ -15,25 +15,24 @@ import {
 } from "@/components/ui/popover";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
-const DateTimePickerSchema = z.string().datetime()
-
+const DateTimePickerSchema = z.string().datetime();
 
 type DateTimePickerType = z.infer<typeof DateTimePickerSchema>;
 
 interface DateTimePickerProps {
   value: DateTimePickerType;
   onChange: (value: DateTimePickerType) => void;
-
+  // schema?:typeof  z.Schema;
 }
 
 export function DateTimePicker(field: DateTimePickerProps) {
   function handleDateSelect(date: Date | undefined) {
     if (date) {
-      field.onChange(date.toISOString())
+      field.onChange(date.toISOString());
     }
   }
 
-  function handleTimeChange(type: "hour" | "minute" | "ampm", value: string) {
+  function handleTimeChange(type: "hour" | "minute" | "am_pm", value: string) {
     const currentDate = field.value || new Date();
     const newDate = new Date(currentDate);
 
@@ -42,7 +41,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
       newDate.setHours(newDate.getHours() >= 12 ? hour + 12 : hour);
     } else if (type === "minute") {
       newDate.setMinutes(Number.parseInt(value, 10));
-    } else if (type === "ampm") {
+    } else if (type === "am_pm") {
       const hours = newDate.getHours();
       if (value === "AM" && hours >= 12) {
         newDate.setHours(hours - 12);
@@ -88,17 +87,15 @@ export function DateTimePicker(field: DateTimePickerProps) {
                   .map((hour) => (
                     <Button
                       key={hour}
-                      size="icon"
+                      size="icon_sm"
                       variant={
                         field.value &&
-                          new Date(field.value).getHours() % 12 === hour % 12
-                          ? "default"
+                        new Date(field.value).getHours() % 12 === hour % 12
+                          ? "default_light"
                           : "ghost"
                       }
                       className="sm:w-full shrink-0 aspect-square"
-                      onClick={() =>
-                        handleTimeChange("hour", hour.toString())
-                      }
+                      onClick={() => handleTimeChange("hour", hour.toString())}
                     >
                       {hour}
                     </Button>
@@ -111,10 +108,11 @@ export function DateTimePicker(field: DateTimePickerProps) {
                 {Array.from({ length: 12 }, (_, i) => i * 5).map((minute) => (
                   <Button
                     key={minute}
-                    size="icon"
+                    size="icon_sm"
                     variant={
-                      field.value && new Date(field.value).getMinutes() === minute
-                        ? "default"
+                      field.value &&
+                      new Date(field.value).getMinutes() === minute
+                        ? "default_light"
                         : "ghost"
                     }
                     className="sm:w-full shrink-0 aspect-square"
@@ -129,22 +127,24 @@ export function DateTimePicker(field: DateTimePickerProps) {
               <ScrollBar orientation="horizontal" className="sm:hidden" />
             </ScrollArea>
             <ScrollArea className="">
-              <div className="flex sm:flex-col p-2">
-                {["AM", "PM"].map((ampm) => (
+              <div className="flex sm:flex-col p-2 gap-2">
+                {["AM", "PM"].map((am_pm) => (
                   <Button
-                    key={ampm}
-                    size="icon"
+                    key={am_pm}
+                    size="icon_sm"
                     variant={
                       field.value &&
-                        ((ampm === "AM" && new Date(field.value).getHours() < 12) ||
-                          (ampm === "PM" && new Date(field.value).getHours() >= 12))
-                        ? "default"
-                        : "ghost"
+                      ((am_pm === "AM" &&
+                        new Date(field.value).getHours() < 12) ||
+                        (am_pm === "PM" &&
+                          new Date(field.value).getHours() >= 12))
+                        ? "default_light"
+                        : "secondary"
                     }
                     className="sm:w-full shrink-0 aspect-square"
-                    onClick={() => handleTimeChange("ampm", ampm)}
+                    onClick={() => handleTimeChange("am_pm", am_pm)}
                   >
-                    {ampm}
+                    {am_pm}
                   </Button>
                 ))}
               </div>

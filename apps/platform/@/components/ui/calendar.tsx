@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import type * as React from "react";
@@ -6,9 +6,10 @@ import { DayPicker } from "react-day-picker";
 
 import { cn } from "@/lib/utils";
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>
+export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
-const btnRawClassName = "inline-flex items-center justify-center gap-2 whitespace-nowrap capitalize rounded-md text-sm font-semibold tracking-wide ring-offset-background transition-duration-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50"
+const btnRawClassName =
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap capitalize rounded-md text-sm font-semibold tracking-wide ring-offset-background transition-duration-500 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50";
 
 function Calendar({
   className,
@@ -24,10 +25,16 @@ function Calendar({
         row: "flex flex-col space-y-4 sm:space-y-0 flex w-full mt-2",
         months: "flex flex-col space-y-4 sm:space-y-0 relative",
         nav: "space-x-1 flex items-center",
-        
+
         //  (single mode)
-        button_previous: cn("size-6 bg-slate-200 hover:bg-primary/30 rounded-lg inline-flex justify-center items-center cursor-pointer hover:[&>svg]:text-primary","absolute top-1 left-3 z-10"),
-        button_next: cn("size-6 bg-slate-200 hover:bg-primary/30 rounded-lg inline-flex justify-center items-center cursor-pointer hover:[&>svg]:text-primary","absolute top-1 right-3 z-10"),
+        button_previous: cn(
+          "size-6 bg-slate-200 hover:bg-primary/30 rounded-lg inline-flex justify-center items-center cursor-pointer hover:[&>svg]:text-primary",
+          "absolute top-1 left-3 z-10"
+        ),
+        button_next: cn(
+          "size-6 bg-slate-200 hover:bg-primary/30 rounded-lg inline-flex justify-center items-center cursor-pointer hover:[&>svg]:text-primary",
+          "absolute top-1 right-3 z-10"
+        ),
 
         // header (single mode)
         caption: "flex justify-center pt-1 relative items-center h-8",
@@ -46,12 +53,13 @@ function Calendar({
         // months (single mode)
         month_grid: "w-full border-collapse space-y-1",
         month_caption: "flex justify-center pt-1 relative items-center",
-        month:"space-y-4",
+        month: "space-y-4",
         // weeks  (single mode)
         weeks: "flex flex-col space-y-1",
         week: "flex w-full space-x-1",
         weekdays: "flex w-full space-x-1",
-        weekday: "text-muted-foreground rounded-md w-8 font-medium text-[0.8rem]",
+        weekday:
+          "text-muted-foreground rounded-md w-8 font-medium text-[0.8rem]",
         // days
         day: cn(
           btnRawClassName,
@@ -61,8 +69,10 @@ function Calendar({
           "day-outside text-gray-500 hover:bg-transparent aria-selected:text-primary/50 aria-selected:text-primary/90",
         disabled: "text-gray-400 opacity-80",
         day_hidden: "invisible",
-        today: "text-primary border !border-primary/50 font-semibold hover:text-primary !hover:border-primary/50",
-        selected:"!bg-primary/30 text-primary !hover:text-primary !hover:bg-primary/30",
+        today:
+          "text-primary border !border-primary/50 font-semibold hover:text-primary !hover:border-primary/50",
+        selected:
+          "!bg-primary/30 text-primary !hover:text-primary !hover:bg-primary/30",
         focused: "shadow-md",
         range_end: "range_end border border-primary/50 rounded-r-md",
         range_start: "range_end border border-primary/50 rounded-l-md",
@@ -72,19 +82,19 @@ function Calendar({
       components={{
         PreviousMonthButton: ({ className, ...props }) => (
           <button {...props} className={cn(className)}>
-            <ChevronLeft className="size-4"/>
-          </button>),
+            <ChevronLeft className="size-4" />
+          </button>
+        ),
         NextMonthButton: ({ className, ...props }) => (
           <button {...props} className={cn(className)}>
-            <ChevronRight className="size-4"/>
+            <ChevronRight className="size-4" />
           </button>
         ),
       }}
       {...props}
     />
-  )
+  );
 }
-Calendar.displayName = "Calendar"
+Calendar.displayName = "Calendar";
 
 export { Calendar };
-

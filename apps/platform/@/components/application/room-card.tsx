@@ -4,7 +4,7 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardHeader
+  CardHeader,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -38,10 +38,9 @@ interface Props extends React.ComponentProps<typeof Card> {
 export default function RoomCard({ room, user, ...props }: Props) {
   const authorized = user
     ? user?.role === "admin" ||
-    user.other_roles?.includes("cr") ||
-    user.other_roles?.includes("faculty")
+      user.other_roles?.includes("cr") ||
+      user.other_roles?.includes("faculty")
     : false;
-  
 
   const handleSwitch = (value: boolean) => {
     if (!(user && authorized)) return;
@@ -50,9 +49,7 @@ export default function RoomCard({ room, user, ...props }: Props) {
         room.id,
         {
           currentStatus:
-            room.currentStatus === "available"
-              ? "occupied"
-              : "available",
+            room.currentStatus === "available" ? "occupied" : "available",
         },
         {
           userId: user.id,
@@ -62,8 +59,9 @@ export default function RoomCard({ room, user, ...props }: Props) {
         loading: `Updating ${room.roomNumber} status...`,
         success: `Room ${room.roomNumber} status updated successfully!`,
         error: `Failed to update ${room.roomNumber} status!`,
-      })
-  }
+      }
+    );
+  };
 
   return (
     <Card
@@ -78,10 +76,14 @@ export default function RoomCard({ room, user, ...props }: Props) {
           </div>
           {authorized && (
             <div className="inline-flex flex-col items-end text-left ml-auto">
-              <Label htmlFor="switch" className="text-xs text-gray-700 font-semibold">
+              <Label
+                htmlFor="switch"
+                className="text-xs text-gray-700 font-semibold"
+              >
                 {room.currentStatus === "available" ? "Occupy" : "Release"}
               </Label>
-              <Switch id="switch"
+              <Switch
+                id="switch"
                 defaultChecked={!(room.currentStatus === "available")}
                 checked={!(room.currentStatus === "available")}
                 onCheckedChange={(value) => handleSwitch(value)}
@@ -89,7 +91,10 @@ export default function RoomCard({ room, user, ...props }: Props) {
             </div>
           )}
         </div>
-        <CardDescription className="font-semibold text-xs text-gray-700 p-2 bg-white/30 rounded" suppressHydrationWarning={true}>
+        <CardDescription
+          className="font-semibold text-xs text-gray-700 p-2 bg-white/30 rounded"
+          suppressHydrationWarning={true}
+        >
           Last updated:{" "}
           {room.lastUpdatedTime
             ? formatDateAgo(new Date(room.lastUpdatedTime).toISOString())
@@ -98,7 +103,7 @@ export default function RoomCard({ room, user, ...props }: Props) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex w-full flex-col sm:flex-row md:justify-around items-start gap-2">
+        <div className="flex w-full flex-row justify-around items-start file:flex-wrap gap-2">
           <div className="flex flex-col items-center gap-1">
             <span className="text-xs font-medium text-gray-700">Capacity</span>
             <Badge className="uppercase" variant="default_light" size="sm">

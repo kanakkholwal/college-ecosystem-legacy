@@ -19,7 +19,7 @@ export async function getStudentInfo(rollNo: string): Promise<studentInfoType> {
   if (!result) {
     return Promise.reject("Student not found");
   }
-  
+
   return Promise.resolve({
     currentSemester: result.semesters.length + 1,
     currentYear: getYear(result.semesters, result.programme),
@@ -30,7 +30,7 @@ export async function getStudentInfo(rollNo: string): Promise<studentInfoType> {
     name: result.name,
     rank: result.rank,
     departmentCode: getDepartmentCode(result.branch),
-    roles:  ["student"],
+    roles: ["student"],
   });
 }
 function getYear(semesters: Semester[], programme: string): number {
@@ -48,7 +48,7 @@ function getYear(semesters: Semester[], programme: string): number {
     case 7:
       return 4;
     case 8:
-      return programme === "B.Tech" ? 6 : 5;
+      return programme === "B.Tech" ? -1 : 5;
     case 9:
       return 5;
     case 10:

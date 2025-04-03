@@ -25,6 +25,7 @@ import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiOutlineLoading } from "react-icons/ai";
+import { ORG_DOMAIN } from "~/project.config";
 
 import * as z from "zod";
 
@@ -34,8 +35,8 @@ const FormSchema = z.object({
     .email({ message: "Invalid email format" })
     .min(5, { message: "Email must be at least 5 characters long" })
     .max(100, { message: "Email cannot exceed 100 characters" })
-    .refine((val) => val.endsWith("@nith.ac.in"), {
-      message: "Email must end with @nith.ac.in",
+    .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
+      message: `Email must end with @${ORG_DOMAIN}`,
     }),
 
   password: z
@@ -50,7 +51,7 @@ const FormSchema = z.object({
 
 export default function SignInForm() {
   const searchParams = useSearchParams();
-  const redirect = searchParams?.get("redirect") || "/";
+  const redirect = searchParams?.get("next") || "/";
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -61,7 +62,7 @@ export default function SignInForm() {
     },
   });
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+    // console.log(data);
 
     await authClient.signIn.email(
       {
@@ -75,6 +76,9 @@ export default function SignInForm() {
         },
         onResponse: () => {
           setIsLoading(false);
+        },
+        onSuccess: () => {
+          toast.success("Logged In successfully");
         },
         onError: (ctx) => {
           console.log(ctx);
@@ -109,7 +113,7 @@ export default function SignInForm() {
                       </FormLabel>
                       <FormControl className="relative">
                         <Input
-                          placeholder="rollNo@nith.ac.in"
+                          placeholder={`Email (e.g. user@${ORG_DOMAIN})`}
                           type="email"
                           autoCapitalize="none"
                           autoComplete="email"

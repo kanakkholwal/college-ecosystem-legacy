@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 const courseSchema = z.object({
   name: z.string(),
@@ -10,7 +10,7 @@ const semesterSchema = z.object({
   sgpi: z.number(),
   cgpi: z.number(),
   courses: z.array(courseSchema),
-  semester: z.number(),
+  semester: z.string(),
   sgpi_total: z.number(),
   cgpi_total: z.number(),
 });
@@ -24,6 +24,7 @@ const rawResultSchema = z.object({
   semesters: z.array(semesterSchema),
   createdAt: z.date().optional(),
   updatedAt: z.date().optional(),
+  gender: z.enum(["male", "female", "not_specified"]),
 });
 
 export type rawResultType = z.infer<typeof rawResultSchema>;

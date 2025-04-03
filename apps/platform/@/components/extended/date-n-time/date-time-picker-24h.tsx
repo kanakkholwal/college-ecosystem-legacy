@@ -17,19 +17,15 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 
 const DateTimePicker24hFormSchema = z.date({
   required_error: "A date and time is required.",
-})
-type DateTimePicker24hType = z.infer<typeof DateTimePicker24hFormSchema>
+});
+type DateTimePicker24hType = z.infer<typeof DateTimePicker24hFormSchema>;
 
 interface DateTimePicker24hTypeProps {
-    value: DateTimePicker24hType;
-    onChange: (value: DateTimePicker24hType) => void;
-  
+  value: DateTimePicker24hType;
+  onChange: (value: DateTimePicker24hType) => void;
 }
 
-
-export function DateTimePicker24h( field : DateTimePicker24hTypeProps) {
-
-
+export function DateTimePicker24h(field: DateTimePicker24hTypeProps) {
   function handleDateSelect(date: Date | undefined) {
     if (date) {
       field.onChange(date);
@@ -47,7 +43,6 @@ export function DateTimePicker24h( field : DateTimePicker24hTypeProps) {
     }
 
     field.onChange(newDate);
-
   }
 
   return (
@@ -86,15 +81,12 @@ export function DateTimePicker24h( field : DateTimePicker24hTypeProps) {
                       key={hour}
                       size="icon"
                       variant={
-                        field.value &&
-                          field.value.getHours() === hour
+                        field.value && field.value.getHours() === hour
                           ? "default"
                           : "ghost"
                       }
                       className="sm:w-full shrink-0 aspect-square"
-                      onClick={() =>
-                        handleTimeChange("hour", hour.toString())
-                      }
+                      onClick={() => handleTimeChange("hour", hour.toString())}
                     >
                       {hour}
                     </Button>
@@ -104,26 +96,23 @@ export function DateTimePicker24h( field : DateTimePicker24hTypeProps) {
             </ScrollArea>
             <ScrollArea className="w-64 sm:w-auto">
               <div className="flex sm:flex-col p-2">
-                {Array.from({ length: 12 }, (_, i) => i * 5).map(
-                  (minute) => (
-                    <Button
-                      key={minute}
-                      size="icon"
-                      variant={
-                        field.value &&
-                          field.value.getMinutes() === minute
-                          ? "default"
-                          : "ghost"
-                      }
-                      className="sm:w-full shrink-0 aspect-square"
-                      onClick={() =>
-                        handleTimeChange("minute", minute.toString())
-                      }
-                    >
-                      {minute.toString().padStart(2, '0')}
-                    </Button>
-                  )
-                )}
+                {Array.from({ length: 12 }, (_, i) => i * 5).map((minute) => (
+                  <Button
+                    key={minute}
+                    size="icon"
+                    variant={
+                      field.value && field.value.getMinutes() === minute
+                        ? "default"
+                        : "ghost"
+                    }
+                    className="sm:w-full shrink-0 aspect-square"
+                    onClick={() =>
+                      handleTimeChange("minute", minute.toString())
+                    }
+                  >
+                    {minute.toString().padStart(2, "0")}
+                  </Button>
+                ))}
               </div>
               <ScrollBar orientation="horizontal" className="sm:hidden" />
             </ScrollArea>
@@ -131,6 +120,5 @@ export function DateTimePicker24h( field : DateTimePicker24hTypeProps) {
         </div>
       </PopoverContent>
     </Popover>
-
   );
 }

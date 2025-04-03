@@ -21,6 +21,14 @@ export {
 } from "./schema/course";
 export { rooms, roomUsageHistory } from "./schema/room";
 
+
+// export {
+//   students,
+//   allotmentSlots,
+//   hostelRooms,
+//   roomMembers,
+// } from "./schema/allotment";
+
 // export {
 //   departmentCodeEnum,
 //   dailyEvents,
@@ -29,9 +37,15 @@ export { rooms, roomUsageHistory } from "./schema/room";
 //   timetables,
 // } from "./schema/time_table";
 
+// export {
+//   schedulesModeEnums,
+//   scheduleAccess,
+//   scheduleEvents,
+//   schedules,
+// } from "./schema/schedule";
+
 export {
-  schedulesModeEnums,
-  scheduleAccess,
-  scheduleEvents,
-  schedules
-} from "./schema/schedule";
+  calender_sem_event_tags,
+  calender_sem_event_participants,
+  calender_sem_events,
+} from "./schema/calender_sem";

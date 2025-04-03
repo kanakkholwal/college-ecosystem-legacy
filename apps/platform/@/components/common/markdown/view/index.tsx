@@ -1,5 +1,5 @@
 "use client";
-import ReactMarkdown, { Options } from "react-markdown";
+import ReactMarkdown, { type Options } from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";

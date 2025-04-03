@@ -1,8 +1,11 @@
 # College Ecosystem
 
-[![Trigger Deployments](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy.yml/badge.svg?branch=main)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy.yml)
+[![🧹 Lint project](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/lint-project.yml/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/lint-project.yml)
+[![🚀 Deployments](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy.yml/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy.yml)
+[![CodeQL](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/github-code-scanning/codeql)
+[![Dependabot Updates](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/dependabot/dependabot-updates/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/dependabot/dependabot-updates)
 
-College Ecosystem is a monorepo for various projects aimed at creating a comprehensive platform for managing and interacting with different aspects of a college environment. It includes frontend applications built with Next.js and a backend server using Express and TypeScript.
+**College Ecosystem** is a monorepo for various projects aimed at creating a comprehensive platform for managing and interacting with different aspects of a college environment. It includes frontend applications built with Next.js and a backend server using Express and TypeScript.
 
 <!-- Welcome to the College Ecosystem monorepo, housing various projects related to college management and services. This repository utilizes Yarn Workspaces and Turbo Repo for efficient project management. -->
 
@@ -13,7 +16,7 @@ College Ecosystem is a monorepo for various projects aimed at creating a compreh
 - [Tech Stack](#tech-stack)
 - [Deployment](#deployment)
 - [Contributing](#contributing)
-- [License](#license)
+<!-- - [License](#license) -->
 
 ## Features
 

@@ -29,7 +29,7 @@ export function RoleSwitcher({ user }: { user: Session["user"] }) {
             </span>
             {/* <span className="truncate text-xs">{activeRole.role}</span> */}
           </div>
-          <ChevronsUpDown className="ml-auto" />
+          <ChevronsUpDown className="ml-auto hidden" />
         </SidebarMenuButton>
       </SidebarMenuItem>
     </SidebarMenu>

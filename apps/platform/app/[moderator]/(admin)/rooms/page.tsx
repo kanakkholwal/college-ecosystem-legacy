@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { BadgePlus } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
-import { changeCase } from "src/utils/string";
+import { changeCase } from "~/utils/string";
 
 import { getRoomsInfo, listAllRoomsWithHistory } from "~/actions/room";
 import { getSession } from "~/lib/auth-server";
