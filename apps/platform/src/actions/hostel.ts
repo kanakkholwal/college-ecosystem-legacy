@@ -444,11 +444,11 @@ type  importStudentsPayload = Array<{
   cgpi: number;
 }>
 
-export async function importStudentsWithCgpi(hostelId:string,payload:importStudentsPayload){
+export async function importStudentsWithCgpi(hostelId:string,payload:importStudentsPayload):Promise<string>{
     try{
       await dbConnect();
     const hostel = await HostelModel.findById(hostelId);
-    if (!hostel) return { success: false, error: "Hostel not found" };
+    if (!hostel) return Promise.reject("Hostel Not Found")
 
     const rollNumbers = payload.map((student) => student.rollNo);
     const bulkOps = [];
