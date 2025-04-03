@@ -226,7 +226,7 @@ export async function addHostelRooms(hostelId: string, rooms: z.infer<typeof roo
     return {
       error: false,
       message: "Rooms added successfully",
-      data: newRooms
+      data: null
     }
 
   }catch (error) {

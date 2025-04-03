@@ -24,7 +24,7 @@ const HostelRoomSchema = new Schema<IHostelRoom>({
     },
 });
 
-export const HostelRoomModel = mongoose.model<IHostelRoom>("HostelRoom", HostelRoomSchema);
+export const HostelRoomModel = mongoose?.models?.HostelRoom || mongoose.model<IHostelRoom>("HostelRoom", HostelRoomSchema);
 
 // 👥 Room Members Schema
 export interface IRoomMember extends Document {
@@ -42,7 +42,7 @@ const RoomMemberSchema = new Schema<IRoomMember>({
 
 });
 
-export const RoomMemberModel = mongoose.model<IRoomMember>("RoomMember", RoomMemberSchema);
+export const RoomMemberModel = mongoose?.models?.RoomMember || mongoose.model<IRoomMember>("RoomMember", RoomMemberSchema);
 
 // ⏳ Allotment Slots Schema
 export interface IAllotmentSlot extends Document {
@@ -60,4 +60,4 @@ const AllotmentSlotSchema = new Schema<IAllotmentSlot>({
     hostelId: { type: Schema.Types.ObjectId, ref: "Hostel", required: true },
 });
 
-export const AllotmentSlotModel = mongoose.model<IAllotmentSlot>("AllotmentSlot", AllotmentSlotSchema);
+export const AllotmentSlotModel = mongoose?.models?.AllotmentSlot ||mongoose.model<IAllotmentSlot>("AllotmentSlot", AllotmentSlotSchema);
