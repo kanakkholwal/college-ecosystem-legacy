@@ -13,10 +13,10 @@ import {
 import { useState } from "react";
 import wordsToNumbers from 'words-to-numbers';
 import { filterColumnsByCallback, filterRowsByCallback } from "~/utils/xlsx";
-import {addHostelRooms} from "~/actions/allotment-process";
+import { addHostelRooms } from "~/actions/allotment-process";
 import toast from "react-hot-toast";
 
-export default function ImportRooms({hostelId}:{hostelId:string}) {
+export default function ImportRooms({ hostelId }: { hostelId: string }) {
     const [extractedKeys, setExtractedKeys] = useState<string[]>([]);
     const [data, setData] = useState<string[][]>([]);
     const [numberKey, setNumKey] = useState<number>();
@@ -31,18 +31,22 @@ export default function ImportRooms({hostelId}:{hostelId:string}) {
         }
         const processedData = data.map((row) => {
 
-            const seater = wordsToNumbers(row[seaterKey].split(" ")?.[0].toLowerCase()) as string;
+            const seater = Number.parseInt(
+                wordsToNumbers(
+                    (row[seaterKey] !== null && row[seaterKey] !== undefined ? row[seaterKey].toString() : "one").split(" ")?.[0].toLowerCase()
+                )?.toString() || "1"
+            );
             return {
                 roomNumber: row[numberKey],
                 capacity: seater,
-                occupied_seats:0,
-                isLocked:false,
+                occupied_seats: 0,
+                isLocked: false,
                 hostStudent: null,
                 hostel: hostelId,
             };
         });
         console.log(processedData);
-        toast.promise(addHostelRooms(hostelId,processedData), {
+        toast.promise(addHostelRooms(hostelId, processedData), {
             loading: "Importing Students...",
             success: "Students Imported Successfully",
             error: (error: string) => {
@@ -86,7 +90,7 @@ export default function ImportRooms({hostelId}:{hostelId:string}) {
                             <SelectValue placeholder={"Room Number Key"} />
                         </SelectTrigger>
                         <SelectContent>
-                            {extractedKeys.map((row,index) => {
+                            {extractedKeys.map((row, index) => {
                                 if (row === "") return null;
 
                                 return (<SelectItem key={row} value={index.toString()}>
@@ -109,7 +113,7 @@ export default function ImportRooms({hostelId}:{hostelId:string}) {
                             <SelectValue placeholder={"Room Number Key"} />
                         </SelectTrigger>
                         <SelectContent>
-                            {extractedKeys.map((row,index) => {
+                            {extractedKeys.map((row, index) => {
                                 if (row === "") return null;
                                 return (<SelectItem key={row} value={index.toString()}>
                                     {row}

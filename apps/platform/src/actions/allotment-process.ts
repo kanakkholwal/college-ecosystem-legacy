@@ -194,11 +194,13 @@ const hostelRoomSchema = z.object({
   hostStudent: z.string().nullable(),
   isLocked: z.boolean().default(false),
   hostel: z.string(),
-})
+});
 
-export async function addHostelRooms(hostelId: string, rooms: z.infer<typeof hostelRoomSchema>[]) {
+const roomsSchema = z.array(hostelRoomSchema);
+
+export async function addHostelRooms(hostelId: string, rooms: z.infer<typeof roomsSchema>) {
   // verify payload
-  const validatedPayload = z.array(hostelRoomSchema).safeParse(rooms);
+  const validatedPayload = roomsSchema.safeParse(rooms);
   if (validatedPayload.success === false) {
     return {
       error: true,
@@ -219,7 +221,13 @@ export async function addHostelRooms(hostelId: string, rooms: z.infer<typeof hos
       }
     }
 
-    const newRooms = await HostelRoomModel.insertMany(rooms.map((room) => ({ ...room, hostel: hostelId })));
+    const newRooms = await HostelRoomModel.insertMany(validatedRooms);
+    // update the allotment process to open
+    return {
+      error: false,
+      message: "Rooms added successfully",
+      data: newRooms
+    }
 
   }catch (error) {
     console.log(error);
