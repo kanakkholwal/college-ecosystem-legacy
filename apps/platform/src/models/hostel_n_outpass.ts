@@ -88,6 +88,9 @@ export type HostelStudentType = Omit<rawHostelStudentType, "hostelId"> & {
   hostelId: Pick<IHostelType, "_id" | "name" | "slug" | "gender">;
   _id: string;
 };
+export type HostelStudentJson = rawHostelStudentType & {
+  _id: string;
+};
 // | rawHostelStudentType & { _id: string;}
 
 export interface IHostelStudentType extends Document, rawHostelStudentType {}

@@ -50,7 +50,7 @@ export async function HostelDetail({ hostel }: { hostel: HostelType }) {
           ))}
         </ul>
         <Heading level={5} className="text-gray-800">
-          Hosteler Students ({hostel.students.length})
+          Hosteler Students ({hostel.students.count})
           {isWarden && (
             <Button variant="link" size="sm">
               Update Students

@@ -10,14 +10,10 @@ import { getHostelByUser } from "~/actions/hostel";
 
 export default async function HostelPageLayout(props: {
   children: React.ReactNode;
-  searchParams:Promise<{
-    slug: string;
-}>
 }) {
-  const searchParams = await props.searchParams;
 
   const { success, message, hostel, hosteler } = await getHostelByUser(
-    searchParams?.slug
+    
   );
 
   if (!success || !hostel || !hosteler) {

@@ -19,7 +19,7 @@ import {
   HostelStudentModel,
   type HostelStudentType,
   type HostelType,
-  type HostelTypeWithStudents,
+  type HostelStudentJson,
   type IHostelType,
 } from "~/models/hostel_n_outpass";
 import ResultModel from "~/models/result";
@@ -241,13 +241,12 @@ export async function getHostel(slug: string): Promise<{
 }> {
   try {
     await dbConnect();
-    const hostel = await HostelModel.findOne({ slug })
-      .lean();
+    const hostel = JSON.parse(JSON.stringify((await HostelModel.findOne({ slug })))) as HostelType | null;
     if (!hostel) {
       return Promise.resolve({ success: false, hostel: null });
     }
     const hostelStudents = await HostelStudentModel.countDocuments({
-      hostelId: hostel._id,
+      hostelId: hostel?._id,
     });
 
     return Promise.resolve({
@@ -449,7 +448,7 @@ export async function importHostelsFromSite() {
   }
 }
 
-type  importStudentsPayload = Array<{
+type importStudentsPayload = Array<{
   rollNo: string;
   name: string;
   cgpi: number;
@@ -529,3 +528,18 @@ export async function importStudentsWithCgpi(hostelId:string,payload:importStude
     }
 
 }
+
+
+export async function getStudentsByHostelId(hostelId:string):Promise<HostelStudentJson[]>{
+  try{
+    await dbConnect();
+    const students = await HostelStudentModel.find({hostelId})
+    .sort({createdAt:-1})
+    .lean();
+    return Promise.resolve(JSON.parse(JSON.stringify(students)));
+  }catch(err){
+    console.log("Failed to fetch students",err);
+    return Promise.reject("Failed to fetch students");
+  }
+}
+

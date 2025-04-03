@@ -3,6 +3,8 @@ import { Heading, Paragraph } from "@/components/ui/typography";
 import { LuBuilding } from "react-icons/lu";
 import { getHostel } from "~/actions/hostel";
 
+import ImportRooms from "./client";
+
 export default async function HostelRoomAllotmentPage({
     params,
 }: {
@@ -25,7 +27,7 @@ export default async function HostelRoomAllotmentPage({
         );
     }
 
-    
+
 
     return (
         <div className="space-y-5 my-2">
@@ -37,6 +39,8 @@ export default async function HostelRoomAllotmentPage({
                     </Paragraph>
                 </div>
             </div>
+
+            <ImportRooms />
 
 
         </div>

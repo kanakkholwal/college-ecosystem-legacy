@@ -2,16 +2,17 @@
 
 import z from "zod";
 import dbConnect from "~/lib/dbConnect";
-import {redis} from "~/lib/redis";
-import {AllotmentSlotModel} from "~/models/allotment";
+import { redis } from "~/lib/redis";
+import { AllotmentSlotModel } from "~/models/allotment";
 
-import { HostelModel, HostelStudentModel } from "~/models/hostel_n_outpass";
-import { HostelRoomModel, RoomMemberModel } from "~/models/allotment";
-
+import { getStudentsByHostelId } from "~/actions/hostel";
+import { SLOT_CAPACITY, SLOT_DURATION, SLOT_TIME_GAP } from "~/constants/allotment-process";
+import { HostelRoomModel } from "~/models/allotment";
+import { HostelModel } from "~/models/hostel_n_outpass";
 
 const allotmentProcessSchema = z.object({
-    status: z.enum(["open", "closed","paused","waiting"]),
-    hostelId: z.string(),
+  status: z.enum(["open", "closed", "paused", "waiting"]),
+  hostelId: z.string(),
 })
 
 export async function getAllotmentProcess(hostelId: string) {
@@ -27,10 +28,10 @@ export async function getAllotmentProcess(hostelId: string) {
   return JSON.parse(allotmentProcess)
 }
 
-export async function updateAllotmentProcess(hostelId: string,payload:z.infer<typeof allotmentProcessSchema>){
+export async function updateAllotmentProcess(hostelId: string, payload: z.infer<typeof allotmentProcessSchema>) {
   // verify payload
   const validatedPayload = allotmentProcessSchema.safeParse(payload);
-  if(validatedPayload.success === false){
+  if (validatedPayload.success === false) {
     return {
       error: true,
       message: "Invalid payload",
@@ -66,7 +67,7 @@ export async function closeAllotment(hostelId: string) {
 const slotSchema = z.object({
   startingTime: z.string().datetime(),
   endingTime: z.string().datetime(),
-  
+
   allotedFor: z.array(z.string()),
   hostelId: z.string(),
 })
@@ -77,11 +78,10 @@ const slotSchema = z.object({
   @param {object} payload - The payload for the allotment slot
 */
 
-export async function createAllotmentSlot(hostelId:string,payload:z.infer<typeof slotSchema>)
-{
+export async function createAllotmentSlot(hostelId: string, payload: z.infer<typeof slotSchema>) {
   // verify payload
   const validatedPayload = slotSchema.safeParse(payload);
-  if(validatedPayload.success === false){
+  if (validatedPayload.success === false) {
     return {
       error: true,
       message: "Invalid payload",
@@ -91,11 +91,11 @@ export async function createAllotmentSlot(hostelId:string,payload:z.infer<typeof
   await dbConnect();
 
   const hostel = await HostelModel.findById(hostelId);
-  if(!hostel){
+  if (!hostel) {
     return {
       error: true,
-      message:"Hostel Not Found",
-      data:null
+      message: "Hostel Not Found",
+      data: null
     }
   }
 
@@ -108,11 +108,127 @@ export async function createAllotmentSlot(hostelId:string,payload:z.infer<typeof
   });
 
   return {
-    error:false,
-    message:"Slot created successfully",
-    data:null
+    error: false,
+    message: "Slot created successfully",
+    data: null
   }
 
+}
+
+// create Allotment Slots for an hostel
+export async function distributeSlots(hostelId: string) {
+  try {
+    await dbConnect();
+    // get all students sorted by cgpi
+    const hostelStudents = await getStudentsByHostelId(hostelId);
+    if (!hostelStudents) {
+      return {
+        error: true,
+        message: "Hostel Not Found",
+        data: null
+      }
+    }
+    // create slot batches of `SLOT_CAPACITY` students
+    const slots = [];
+
+    for (let i = 0; i < hostelStudents.length; i += SLOT_CAPACITY) {
+      const slot = hostelStudents.slice(i, i + SLOT_CAPACITY);
+      slots.push(slot);
+    }
+    // create allotment slots for each batch and assign them to the students within the batch and gap of `SLOT_TIME_GAP` minutes
+    const allotmentSlots = [];
+    const currentTime = new Date();
+    const currentHour = currentTime.getHours();
+    const currentMinute = currentTime.getMinutes();
+    const currentTimeInMinutes = currentHour * 60 + currentMinute;
+    const slotDurationInMinutes = SLOT_DURATION + SLOT_TIME_GAP;
+    let slotStartTime = currentTimeInMinutes;
+    for await(const slot of slots) {
+      const slotEndTime = slotStartTime + SLOT_DURATION;
+      const startTime = new Date(currentTime);
+      startTime.setMinutes(slotStartTime);
+      const endTime = new Date(currentTime);
+      endTime.setMinutes(slotEndTime);
+
+      const allotmentSlot = await AllotmentSlotModel.create({
+        startingTime: startTime,
+        endingTime: endTime,
+        allotedFor: slot.map((student) => student._id),
+        hostelId,
+      });
+
+      allotmentSlots.push(allotmentSlot);
+      slotStartTime += slotDurationInMinutes;
+    }
+
+    // update the allotment process to open
+    // await redis.set(`allotment-process-${hostelId}`, JSON.stringify({ status: "open", hostelId }));
+
+    return {
+      error: false,
+      message: "Slots created successfully",
+      data: allotmentSlots
+    }
+
+
+
+
+  } catch (error) {
+    console.log(error);
+    return {
+      error: true,
+      message: "Internal Server Error",
+      data: null
+    }
+  }
+
+}
+
+
+// add rooms for the hostel
+
+const hostelRoomSchema = z.object({
+  roomNumber: z.number(),
+  capacity: z.number().min(1).max(7),
+  occupied_seats: z.number().default(0),
+  hostStudent: z.string().optional(),
+  isLocked: z.boolean().default(false),
+  hostel: z.string(),
+})
+
+export async function addHostelRooms(hostelId: string, rooms: z.infer<typeof hostelRoomSchema>[]) {
+  // verify payload
+  const validatedPayload = z.array(hostelRoomSchema).safeParse(rooms);
+  if (validatedPayload.success === false) {
+    return {
+      error: true,
+      message: "Invalid payload",
+      data: validatedPayload.error.format(),
+    };
+  }
+  const validatedRooms = validatedPayload.data;
+  try{
+    await dbConnect();
+    // check if hostel exists
+    const hostel = await HostelModel.findById(hostelId);
+    if (!hostel) {
+      return {
+        error: true,
+        message: "Hostel Not Found",
+        data: null
+      }
+    }
+
+    const newRooms = await HostelRoomModel.insertMany(rooms.map((room) => ({ ...room, hostel: hostelId })));
+
+  }catch (error) {
+    console.log(error);
+    return {
+      error: true,
+      message: "Internal Server Error",
+      data: null
+    }
+  }
 }
 
 
