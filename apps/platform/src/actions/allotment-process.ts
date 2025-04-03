@@ -188,10 +188,10 @@ export async function distributeSlots(hostelId: string) {
 // add rooms for the hostel
 
 const hostelRoomSchema = z.object({
-  roomNumber: z.number(),
+  roomNumber: z.string(),
   capacity: z.number().min(1).max(7),
   occupied_seats: z.number().default(0),
-  hostStudent: z.string().optional(),
+  hostStudent: z.string().nullable(),
   isLocked: z.boolean().default(false),
   hostel: z.string(),
 })

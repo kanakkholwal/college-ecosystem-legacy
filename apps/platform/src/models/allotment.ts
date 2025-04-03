@@ -3,7 +3,7 @@ import mongoose, { Schema, type Document } from "mongoose";
 
 // 🏠 Hostel Rooms Schema
 export interface IHostelRoom extends Document {
-    roomNumber: number;
+    roomNumber: string;
     capacity: number;
     occupied_seats: number;
     hostStudent?: string;
@@ -12,10 +12,10 @@ export interface IHostelRoom extends Document {
 }
 
 const HostelRoomSchema = new Schema<IHostelRoom>({
-    roomNumber: { type: Number, required: true },
+    roomNumber: { type: String, required: true },
     capacity: { type: Number, required: true, min: 1, max: 7 },
     occupied_seats: { type: Number, default: 0 },
-    hostStudent: { type: String, ref: "HostelStudent", },
+    hostStudent: { type: Schema.Types.ObjectId, ref: "HostelStudent" },
     isLocked: { type: Boolean, default: false },
     hostel: {
         type: Schema.Types.ObjectId,
