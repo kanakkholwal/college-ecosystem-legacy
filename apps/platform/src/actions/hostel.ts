@@ -1,10 +1,10 @@
 "use server";
 
+import { format } from "date-fns";
 import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
 import type { z } from "zod";
 import { ROLES } from "~/constants";
-import type { emailSchema } from "~/constants/hostel_n_outpass";
 import {
   createHostelSchema,
   createHostelStudentSchema,
@@ -23,7 +23,6 @@ import {
   type IHostelType,
 } from "~/models/hostel_n_outpass";
 import ResultModel from "~/models/result";
-import {format} from "date-fns";
 import { ORG_DOMAIN } from "~/project.config";
 
 
@@ -233,20 +232,32 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
 
 export async function getHostel(slug: string): Promise<{
   success: boolean;
-  hostel: HostelTypeWithStudents | null;
+  hostel: HostelType & {
+    students:{
+      count:number
+    }
+  } | null;
   error?: object;
 }> {
   try {
     await dbConnect();
     const hostel = await HostelModel.findOne({ slug })
-      .populate("students")
       .lean();
     if (!hostel) {
       return Promise.resolve({ success: false, hostel: null });
     }
+    const hostelStudents = await HostelStudentModel.countDocuments({
+      hostelId: hostel._id,
+    });
+
     return Promise.resolve({
       success: true,
-      hostel: JSON.parse(JSON.stringify(hostel)),
+      hostel: JSON.parse(JSON.stringify({
+        ...hostel,
+        students: {
+          count: hostelStudents,
+        },
+      })),
     });
   } catch (err) {
     return Promise.reject({
@@ -470,7 +481,9 @@ export async function importStudentsWithCgpi(hostelId:string,payload:importStude
           updateOne: {
             filter: { rollNo: student.rollNo },
             update: {
-              $set: { hostelId, cgpi: student.cgpi },
+              $set: { hostelId, 
+                cgpi: student?.cgpi || 0,
+                gender: hostel.gender },
             },
           },
         });
@@ -482,13 +495,10 @@ export async function importStudentsWithCgpi(hostelId:string,payload:importStude
               name: student.name,
               email:`${student.rollNo}@${ORG_DOMAIN}`,
               hostelId,
-              gender:
-                result?.gender !== "not_specified"
-                  ? result?.gender
-                  : hostel.gender,
+              gender: hostel.gender,
               roomNumber: "UNKNOWN",
               position: "none",
-              cgpi:student.cgpi
+              cgpi:student?.cgpi || 0
             },
           },
         })

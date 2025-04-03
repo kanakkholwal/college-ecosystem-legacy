@@ -15,7 +15,7 @@ export interface RawHostelType {
     role: "warden" | "mmca" | "assistant_warden";
     userId: string;
   }[];
-  students: string[];
+  // students: string[];
   warden: {
     name: string;
     email: string;
@@ -28,9 +28,9 @@ export interface HostelType extends RawHostelType {
   _id: string;
 }
 export interface HostelTypeWithStudents
-  extends Omit<RawHostelType, "students"> {
+  extends RawHostelType {
   _id: string;
-  students: IHostelStudentType[];
+  // students: IHostelStudentType[];
 }
 export interface IHostelType extends Document, RawHostelType {}
 
@@ -61,10 +61,7 @@ const HostelSchema = new Schema(
       email: { type: String, required: true },
       userId: { type: String, default: null },
     },
-    students: {
-      type: [{ type: Schema.Types.ObjectId, ref: "HostelStudent" }],
-      default: [],
-    },
+
   },
   { timestamps: true }
 );
@@ -84,6 +81,7 @@ export interface rawHostelStudentType {
   bannedReason?: string;
   createdAt?: Date;
   updatedAt?: Date;
+  cgpi?: number | null;
 }
 
 export type HostelStudentType = Omit<rawHostelStudentType, "hostelId"> & {
@@ -101,6 +99,7 @@ const HostelStudentSchema = new Schema<IHostelStudentType>(
     email: { type: String, required: true, unique: true },
     gender: { type: String, required: true, enum: ["male", "female"] },
     position: { type: String, default: "none" },
+    cgpi: { type: Number, default: null },
     userId: { type: String, default: null },
     hostelId: { type: Schema.Types.ObjectId, ref: "Hostel", default: null },
     roomNumber: { type: String, required: true, default: "UNKNOWN" },

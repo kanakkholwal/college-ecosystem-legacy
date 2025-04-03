@@ -1,18 +1,18 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import readXlsxFile from "read-excel-file";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from "@/components/ui/select"
-import { Button } from "@/components/ui/button";
+} from "@/components/ui/select";
+import { useState } from "react";
 import toast from "react-hot-toast";
+import readXlsxFile from "read-excel-file";
 
 type  importStudentsPayload = {
     rollNo: string;
@@ -78,7 +78,8 @@ export function ImportStudents({importFn}:{
                     onChange={handleFileChange}
                 />
             </div>
-            <div className="flex gap-4 flex-wrap">
+            {data.length > 0 && (<div className="flex w-full items-center gap-3 flex-wrap mt-5">
+                <div className="grid w-full items-center gap-2.5 @lg:grid-cols-3">
                 <div className="grid w-full max-w-sm items-center gap-1.5">
                     <Label htmlFor="rollNoKey">
                         Roll No Key
@@ -139,14 +140,17 @@ export function ImportStudents({importFn}:{
                         </SelectContent>
                     </Select>
                 </div>
+                </div>
+                <div>
 
                 <Button
                 onClick={processData}
-                disabled={!rollNoKey || !nameKey || !data.length || !cgpiKey}
+                disabled={!rollNoKey || !nameKey || !cgpiKey}
                 >
                     Process Data
                 </Button>
-            </div>
+                </div>
+            </div>)}
         </div>
     )
 }
