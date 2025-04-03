@@ -40,7 +40,7 @@ export default async function HostelRoomAllotmentPage({
                 </div>
             </div>
 
-            <ImportRooms />
+            <ImportRooms hostelId={hostel?._id}/>
 
 
         </div>

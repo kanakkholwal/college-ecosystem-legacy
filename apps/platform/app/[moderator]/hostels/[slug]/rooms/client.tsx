@@ -14,7 +14,7 @@ import { useState } from "react";
 import wordsToNumbers from 'words-to-numbers';
 import { filterColumnsByCallback, filterRowsByCallback } from "~/utils/xlsx";
 
-export default function ImportRooms() {
+export default function ImportRooms({hostelId}:{hostelId:string}) {
     const [extractedKeys, setExtractedKeys] = useState<string[]>([]);
     const [data, setData] = useState<string[][]>([]);
     const [numberKey, setNumKey] = useState<number>();
@@ -32,7 +32,11 @@ export default function ImportRooms() {
             const seater = wordsToNumbers(row[seaterKey].split(" ")?.[0].toLowerCase())
             return {
                 roomNumber: row[numberKey],
-                capacity: seater
+                capacity: seater,
+                occupied_seats:0,
+                isLocked:false,
+                hostStudent: null,
+                hostel: hostelId,
             };
         });
         console.log(processedData);
