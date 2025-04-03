@@ -6,6 +6,6 @@ export default async function HostelRoomAllotmentPage(){
     </>
 }
 
-type Room
+// type Room
 
-function RoomCard(room:)
+// function RoomCard(room:)
