@@ -8,14 +8,12 @@ import { getHostelByUser } from "~/actions/hostel";
 
 
 
-interface PageProps {
+export default async function HostelPageLayout(props: {
   children: React.ReactNode;
-  searchParams: Promise<{
-    slug?: string;
-  }>;
-}
-
-export default async function HostelPageLayout(props: PageProps) {
+  searchParams:Promise<{
+    slug: string;
+}>
+}) {
   const searchParams = await props.searchParams;
 
   const { success, message, hostel, hosteler } = await getHostelByUser(
