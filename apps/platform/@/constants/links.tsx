@@ -228,10 +228,10 @@ export const sidebar_links: rawLinkType[] = [
     ],
   },
   {
-    title: "Hostels",
+    title: "All Hostels",
     icon: LuBuilding,
     path: "/hostels",
-    allowed_roles: [ROLES.CHIEF_WARDEN, ROLES.ADMIN],
+    allowed_roles: [ROLES.CHIEF_WARDEN, ROLES.ADMIN,ROLES.ASSISTANT_WARDEN,ROLES.WARDEN,ROLES.MMCA],
     items: [],
   },
   {

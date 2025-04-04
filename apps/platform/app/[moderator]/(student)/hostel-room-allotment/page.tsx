@@ -9,6 +9,7 @@ import { Lock, Unlock } from "lucide-react";
 import { MdOutlineChair } from "react-icons/md";
 import {
   getAllotmentProcess,
+  getHostRoom,
   getHostelRooms,
   getUpcomingSlots
 } from "~/actions/allotment-process";
@@ -37,6 +38,8 @@ export default async function HostelRoomAllotmentPage() {
   }
   const { hostel,hosteler } = hostelResponse;
   const allotmentProcess = await getAllotmentProcess(hostel._id);
+  const {data} = await getHostRoom(hosteler?._id as string);
+
 
   let hostelRoomsResponse: Awaited<ReturnType<typeof getHostelRooms>> | null = null;
   let upcomingSlotsResponse: Awaited<ReturnType<typeof getUpcomingSlots>> | null = null;
@@ -54,6 +57,9 @@ export default async function HostelRoomAllotmentPage() {
       console.log(upcomingSlotsResponse.message);
     }
   }
+
+  const hostJoinedRoom = data?.room;
+  console.log(hostJoinedRoom)
 
 
 
@@ -119,12 +125,13 @@ export default async function HostelRoomAllotmentPage() {
           </div>
           <ResponsiveContainer className="mx-auto">
             {hostelRoomsResponse?.data?.map((room) => {
-              const joinable = room.occupied_seats < room.capacity && !room.isLocked
+              const joinable = (hostJoinedRoom ? !(hostJoinedRoom._id === room._id):false) || room.occupied_seats < room.capacity && !room.isLocked;
               return (
                 <RoomCard
                   key={room._id}
                   room={room}
                   joinable={joinable}
+                  hostId={hosteler?._id as string}
                 />
               );
             })}
@@ -140,9 +147,10 @@ export default async function HostelRoomAllotmentPage() {
 type RoomCardProps = {
   room: HostelRoomJson,
   joinable: boolean
+  hostId: string
 };
 
-function RoomCard({ room,joinable }: RoomCardProps) {
+function RoomCard({ room,joinable,hostId }: RoomCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md p-4 space-y-3 hover:shadow-lg border hover:border-primary transition-shadow duration-300">
       <div>
@@ -170,7 +178,7 @@ function RoomCard({ room,joinable }: RoomCardProps) {
       <div className="">
       {(room.occupied_seats >= room.capacity ) ? <>
         <span className="text-sm text-red-500">Room is full</span>
-      </> : <ViewRoomButton room={room} joinable={joinable}/>}
+      </> : <ViewRoomButton room={room} joinable={joinable} hostId={hostId}/>}
     </div>
     </div>
   );

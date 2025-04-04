@@ -12,7 +12,8 @@ import { getHostel } from "~/actions/hostel";
 import {
   ChangeAllotmentProcessStatusButton,
   DistributeSlotsButton,
-  RoomsTable,
+  DownloadSlotButton,
+  RoomsTable
 } from "./client";
 
 import { SLOT_CAPACITY, SLOT_DURATION, SLOT_TIME_GAP } from "~/constants/allotment-process";
@@ -79,6 +80,7 @@ export default async function HostelRoomAllotmentPage({
           </p>
 
           <DistributeSlotsButton hostelId={hostel._id} />
+          <DownloadSlotButton hostelId={hostel._id} />
         </StatsCard>
       </ResponsiveContainer>
 
