@@ -1,5 +1,5 @@
 import { MdOutlineChair } from "react-icons/md";
-
+import {ResponsiveDialog} from "@/components/ui/responsive-dialog";
 
 type HostelRoomType = {
     _id: string;

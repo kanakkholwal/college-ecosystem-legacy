@@ -21,10 +21,9 @@ export default function ImportExcel() {
         <ExcelFileHandler
             callBackFn={async (data) => {
                 console.log(data);
-                return "success";
+             
             }}
-            acceptTypes={[".xlsx"]}
-            multiple={false}
+            
         />
         {extractedKeys.length > 0 && (<div className="flex w-full items-center gap-3 flex-wrap mt-5">
             <div className="grid w-full items-center gap-2.5 grid-cols-1 @lg:grid-cols-3">
