@@ -12,9 +12,7 @@ export function ViewRoomButton({
     room: HostelRoomJson
 }) {
     return (
-        <div
-            className={cn("bg-background border-primary/10 hover:border-primary/20 hover:shadow text-center")}
-        >
+        <>
             <ResponsiveDialog
                 btnProps={{
                     variant: "ghost",
@@ -45,6 +43,6 @@ export function ViewRoomButton({
                     </div>
                 </div>
             </ResponsiveDialog>
-        </div>
+        </>
     );
 }

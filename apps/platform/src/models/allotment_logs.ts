@@ -22,7 +22,7 @@ const AllotmentLogSchema = new Schema<AllotmentLog>({
 });
 
 // Export AllotmentLog Model
-const AllotmentLogModel = mongoose.model<AllotmentLog>(
+const AllotmentLogModel = mongoose.models?.AllotmentLog || mongoose.model<AllotmentLog>(
   "AllotmentLog",
   AllotmentLogSchema
 );

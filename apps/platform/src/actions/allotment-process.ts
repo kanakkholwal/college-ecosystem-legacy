@@ -8,9 +8,10 @@ import {
   SLOT_DURATION,
   SLOT_TIME_GAP,
 } from "~/constants/allotment-process";
+import type { emailSchema } from "~/constants/user";
 import dbConnect from "~/lib/dbConnect";
 import { redis } from "~/lib/redis";
-import { AllotmentSlotModel, type HostelRoomJson, HostelRoomModel } from "~/models/allotment";
+import { AllotmentSlotModel, type HostelRoomJson, HostelRoomModel, RoomMemberModel } from "~/models/allotment";
 import { HostelModel } from "~/models/hostel_n_outpass";
 
 const allotmentProcessSchema = z.object({
@@ -215,7 +216,7 @@ export async function getUpcomingSlots(hostelId: string) {
       data: upcomingSlots,
     };
 
-  }catch(err){
+  } catch (err) {
     console.log(err);
     return {
       error: true,
@@ -299,7 +300,7 @@ export async function getHostelRooms(hostelId: string): Promise<{
     }
 
     const rooms = await HostelRoomModel.aggregate([
-      { 
+      {
         $match: { hostel: new mongoose.Types.ObjectId(hostelId) } // Ensure hostelId is an ObjectId
       },
       {
@@ -331,6 +332,82 @@ export async function getHostelRooms(hostelId: string): Promise<{
       error: true,
       message: "Internal Server Error",
       data: [],
+    };
+  }
+}
+
+// add members to room
+
+
+export async function addRoomMembers(roomId: string, hostId: string, members: z.infer<typeof emailSchema>[]) {
+  try {
+    await dbConnect();
+    // check if room exists
+    const room = await HostelRoomModel.findById(roomId);
+    if (!room) {
+      return {
+        error: true,
+        message: "Room Not Found",
+        data: null,
+      };
+    }
+    // check if host exists
+    if (room.hostStudent.toString() !== hostId) {
+      return {
+        error: true,
+        message: "You are not the host of this room",
+        data: null,
+      };
+    }
+    const uniqueMembers = [...new Set(members.map((member) => member.toLowerCase()))];
+
+    if (room.occupied_seats + uniqueMembers.length > room.capacity) {
+      return {
+        error: true,
+        message: "Room capacity exceeded",
+        data: null,
+      };
+    }
+    // check if the members are also HostelStudents
+    const hostelStudentsPromise = await Promise.allSettled(uniqueMembers.map(async (member) => {
+      const hostelStudent = await RoomMemberModel.findOne({
+        email: member,
+      })
+      if (!hostelStudent) {
+        return null;
+      }
+      return hostelStudent._id;
+    }));
+    const invalidMembers = hostelStudentsPromise.filter((member) => member.status === "rejected" || member.value === null)
+  
+    const validMembers = hostelStudentsPromise.filter((member) => member.status === "fulfilled" && member.value !== null )
+    .map((member) => "value" in member && (member?.value as mongoose.Types.ObjectId));
+
+    const roomMembers = await RoomMemberModel.insertMany(
+      validMembers.map((member) => ({
+        student: member,
+        room: roomId,
+        hostel: room.hostel,
+      }))
+    );
+    // update the room with the new members
+    room.occupied_seats += validMembers.length;
+    room.hostStudent = hostId;
+    await room.save();
+    // update the allotment process to open
+    return {
+      error: false,
+      message: "Members added successfully",
+      data: roomMembers,
+    }
+
+
+  } catch (err) {
+    console.log(err);
+    return {
+      error: true,
+      message: "Internal Server Error",
+      data: null,
     };
   }
 }
