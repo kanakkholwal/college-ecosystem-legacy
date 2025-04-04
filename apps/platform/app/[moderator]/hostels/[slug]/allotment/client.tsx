@@ -138,7 +138,7 @@ export function RoomsTable({ rooms }: RoomsTableProps) {
             <TableRow key={room._id}>
               <TableCell className="font-medium">{room.roomNumber}</TableCell>
               <TableCell>
-                  <div className="flex flex-row items-centerW gap-2">
+                  <div className="flex flex-row items-center gap-2">
                     {Array.from({ length: room.capacity }).map((_, index) => {
                       return (
                         <MdOutlineChair

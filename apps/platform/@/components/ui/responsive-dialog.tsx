@@ -26,7 +26,7 @@ import { useState, useMemo } from "react";
 
 export type ResponsiveDialogProps = {
   children: React.ReactNode;
-  title: string;
+  title: string | React.ReactNode;
   description: string;
   btnProps: React.ComponentProps<typeof Button>;
   defaultOpen?: boolean;

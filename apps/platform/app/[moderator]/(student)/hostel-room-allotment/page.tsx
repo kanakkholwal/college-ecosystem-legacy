@@ -35,7 +35,7 @@ export default async function HostelRoomAllotmentPage() {
 
     </div>;
   }
-  const { hostel } = hostelResponse;
+  const { hostel,hosteler } = hostelResponse;
   const allotmentProcess = await getAllotmentProcess(hostel._id);
 
   let hostelRoomsResponse: Awaited<ReturnType<typeof getHostelRooms>> | null = null;
@@ -54,6 +54,8 @@ export default async function HostelRoomAllotmentPage() {
       console.log(upcomingSlotsResponse.message);
     }
   }
+
+
 
 
 
@@ -115,12 +117,14 @@ export default async function HostelRoomAllotmentPage() {
               Select a room to view details and allotment options.
             </p>
           </div>
-          <ResponsiveContainer>
+          <ResponsiveContainer className="mx-auto">
             {hostelRoomsResponse?.data?.map((room) => {
+              const joinable = room.occupied_seats < room.capacity && !room.isLocked
               return (
                 <RoomCard
                   key={room._id}
                   room={room}
+                  joinable={joinable}
                 />
               );
             })}
@@ -134,23 +138,25 @@ export default async function HostelRoomAllotmentPage() {
 }
 
 type RoomCardProps = {
-  room: HostelRoomJson
+  room: HostelRoomJson,
+  joinable: boolean
 };
 
-function RoomCard({ room }: RoomCardProps) {
+function RoomCard({ room,joinable }: RoomCardProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow duration-300">
+    <div className="bg-white rounded-lg shadow-md p-4 space-y-3 hover:shadow-lg border hover:border-primary transition-shadow duration-300">
       <div>
-        <h6 className="text-base font-semibold mb-4">
+        <h6 className="text-base font-semibold mb-2">
           {room.roomNumber}
-          {room.isLocked ? <Lock className="text-red-500 inline-block ml-2" /> : <Unlock className="text-green-500 inline-block ml-2" />}
+          {room.isLocked ? <Lock className="text-red-500 inline-block size-5 ml-2" /> : <Unlock className="text-green-500 inline-block size-5 ml-2" />}
           </h6>
         <p className="text-gray-500 text-sm">
           {room.capacity} Seater | <span className="text-gray-500 font-bold inline-block">
             {room.occupied_seats}/ {room.capacity}
-          </span> </p>
+          </span> 
+          </p>
       </div>
-      <div className="flex flex-row items-centerW gap-2">
+      <div className="flex flex-row items-center gap-2">
         {Array.from({ length: room.capacity }).map((_, index) => {
           return (
             <MdOutlineChair
@@ -159,13 +165,13 @@ function RoomCard({ room }: RoomCardProps) {
             />
           );
         })}
-        <span className="text-grey-500 text-sm">
-          {room.occupied_seats}/ {room.capacity}
-        </span>
+        
       </div>
+      <div className="">
       {(room.occupied_seats >= room.capacity ) ? <>
         <span className="text-sm text-red-500">Room is full</span>
-      </> : <ViewRoomButton room={room} />}
+      </> : <ViewRoomButton room={room} joinable={joinable}/>}
+    </div>
     </div>
   );
 }

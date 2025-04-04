@@ -120,7 +120,7 @@ export const getDepartmentByRollNo = (rollNo: string) => {
   }
 };
 
-const rollNoSchema = z
+export const rollNoSchema = z
   .string()
   .regex(/^\d{2}[a-z]{3}\d{3}$/i)
   .refine(
