@@ -11,7 +11,7 @@ import { HostelRoomModel } from "~/models/allotment";
 import { HostelModel } from "~/models/hostel_n_outpass";
 
 const allotmentProcessSchema = z.object({
-  status: z.enum(["open", "closed", "paused", "waiting"]),
+  status: z.enum(["open", "closed", "paused", "waiting","completed"]),
   hostelId: z.string(),
 })
 

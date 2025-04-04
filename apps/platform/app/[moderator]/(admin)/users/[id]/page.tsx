@@ -3,6 +3,7 @@ import { getUser } from "~/actions/dashboard.admin";
 import { UserDisplay, UserSessions, UserUpdate } from "./components";
 
 import { TabsTransitionPanel } from "@/components/ui/tabs-transition";
+import { getHostels } from "~/actions/hostel";
 
 interface PageProps {
   params: Promise<{
@@ -15,6 +16,8 @@ export default async function UpdateUserPage({ params }: PageProps) {
   if (!user) {
     return notFound();
   }
+
+  const {data} = await getHostels()
 
   return (
     <div className="space-y-6 my-5">
@@ -32,7 +35,7 @@ export default async function UpdateUserPage({ params }: PageProps) {
           },
           {
             title: "Update User",
-            content: <UserUpdate currentUser={user} />,
+            content: <UserUpdate currentUser={user} hostels={data}/>,
             id: "3",
           },
         ]}

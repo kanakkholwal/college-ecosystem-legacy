@@ -17,10 +17,10 @@ import dbConnect from "~/lib/dbConnect";
 import serverApis from "~/lib/server-apis";
 import {
   HostelModel,
+  type HostelStudentJson,
   HostelStudentModel,
   type HostelStudentType,
   type HostelType,
-  type HostelStudentJson,
   type IHostelType,
 } from "~/models/hostel_n_outpass";
 import ResultModel from "~/models/result";
@@ -403,7 +403,7 @@ export async function getHostelByUser(
 
 export async function getHostels(): Promise<{
   success: boolean;
-  data: IHostelType[];
+  data: HostelType[];
 }> {
   try {
     await dbConnect();

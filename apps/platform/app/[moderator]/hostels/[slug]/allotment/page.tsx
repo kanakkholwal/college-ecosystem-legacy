@@ -1,6 +1,10 @@
+import { StatsCard } from "@/components/application/stats-card";
+import { ResponsiveContainer } from "@/components/common/container";
 import EmptyArea from "@/components/common/empty-area";
+import { Badge } from "@/components/ui/badge";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { LuBuilding } from "react-icons/lu";
+import { getAllotmentProcess } from "~/actions/allotment-process";
 import { getHostel } from "~/actions/hostel";
 
 export default async function HostelRoomAllotmentPage({
@@ -25,7 +29,10 @@ export default async function HostelRoomAllotmentPage({
         );
     }
 
-    
+    const allotmentProcess = await getAllotmentProcess(hostel._id);
+
+
+
 
     return (
         <div className="space-y-5 my-2">
@@ -37,6 +44,23 @@ export default async function HostelRoomAllotmentPage({
                     </Paragraph>
                 </div>
             </div>
+
+            <ResponsiveContainer className="!mt-5">
+
+                <StatsCard
+                    title="Allotment Process"
+                >
+                    
+                    <p className="text-xs text-muted-foreground">
+                        Allotment process is <Badge variant="outline" className="capitalize">{allotmentProcess?.status}</Badge> for this hostel
+                    </p>
+
+                </StatsCard>
+
+
+
+            </ResponsiveContainer>
+
 
 
         </div>

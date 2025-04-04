@@ -1,8 +1,11 @@
 
+import { ResponsiveContainer } from "@/components/common/container";
 import EmptyArea from "@/components/common/empty-area";
+import { RouterCard } from "@/components/common/router-card";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { LuBuilding } from "react-icons/lu";
 import { getHostel } from "~/actions/hostel";
+
 
 export default async function HostelPage({
     params,
@@ -55,8 +58,31 @@ export default async function HostelPage({
                         ))}
                     </ul>
                 </div>
-                
+
             </div>
+
+
+            <ResponsiveContainer>
+                <RouterCard
+                    Icon={LuBuilding}
+                    title="Room Allotment"
+                    description="Manage room allotment for this hostel"
+                    href={`${slug}/allotment`}
+                />
+                <RouterCard
+                    Icon={LuBuilding}
+                    title="Hostel Student"
+                    description="View all students in this hostel"
+                    href={`${slug}/students`}
+                />
+                <RouterCard
+                    Icon={LuBuilding}
+                    title="Hostel Rooms"
+                    description="View all rooms in this hostel"
+                    href={`${slug}/rooms`}
+                />
+
+            </ResponsiveContainer>
         </div>
     );
 }
