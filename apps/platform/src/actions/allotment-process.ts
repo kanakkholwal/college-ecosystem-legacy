@@ -12,7 +12,7 @@ import type { emailSchema } from "~/constants/user";
 import dbConnect from "~/lib/dbConnect";
 import { redis } from "~/lib/redis";
 import { AllotmentSlotModel, type HostelRoomJson, HostelRoomModel, RoomMemberModel } from "~/models/allotment";
-import { HostelModel } from "~/models/hostel_n_outpass";
+import { HostelModel, HostelStudentModel } from "~/models/hostel_n_outpass";
 
 const allotmentProcessSchema = z.object({
   status: z.enum(["open", "closed", "paused", "waiting", "completed"]),
@@ -379,9 +379,9 @@ export async function addRoomMembers(roomId: string, hostId: string, members: z.
       return hostelStudent._id;
     }));
     const invalidMembers = hostelStudentsPromise.filter((member) => member.status === "rejected" || member.value === null)
-  
-    const validMembers = hostelStudentsPromise.filter((member) => member.status === "fulfilled" && member.value !== null )
-    .map((member) => "value" in member && (member?.value as mongoose.Types.ObjectId));
+
+    const validMembers = hostelStudentsPromise.filter((member) => member.status === "fulfilled" && member.value !== null)
+      .map((member) => "value" in member && (member?.value as mongoose.Types.ObjectId));
 
     const roomMembers = await RoomMemberModel.insertMany(
       validMembers.map((member) => ({
@@ -394,12 +394,126 @@ export async function addRoomMembers(roomId: string, hostId: string, members: z.
     room.occupied_seats += validMembers.length;
     room.hostStudent = hostId;
     await room.save();
+
+    // remove students from the AllotmentSlotModel
+    await AllotmentSlotModel.updateMany(
+      { allotedFor: { $in: validMembers } },
+      { $pull: { allotedFor: { $in: validMembers } } }
+    );
+
     // update the allotment process to open
     return {
       error: false,
       message: "Members added successfully",
       data: roomMembers,
     }
+
+
+  } catch (err) {
+    console.log(err);
+    return {
+      error: true,
+      message: "Internal Server Error",
+      data: null,
+    };
+  }
+}
+
+export async function joinRoom(roomId: string, joinerId: string) {
+  try {
+    await dbConnect();
+    // check if room exists
+    const room = await HostelRoomModel.findById(roomId);
+    if (!room) {
+      return {
+        error: true,
+        message: "Room Not Found",
+        data: null,
+      };
+    }
+    if (room.isLocked) {
+      return {
+        error: true,
+        message: "Room is Locked",
+        data: null,
+      };
+    }
+    if (room.occupied_seats >= room.capacity) {
+      return {
+        error: true,
+        message: "Room is Full",
+        data: null,
+      };
+    }
+    const joinerStudent = await HostelStudentModel.findById(joinerId);
+    if (!joinerStudent) {
+      return {
+        error: true,
+        message: "Joiner Not Found",
+        data: null,
+      };
+    }
+
+    const hostStudent = await HostelStudentModel.findById(room.hostStudent);
+    if (!hostStudent) {
+      //  if room has not hostStudent 
+      room.hostStudent = joinerStudent._id;
+      await room.save();
+      return {
+        error: false,
+        message: "Room Joined Successfully",
+        data: null,
+      };
+    }
+
+    //  if room has hostStudent 
+
+    if (room.hostStudent.toString() === joinerId) {
+      return {
+        error: true,
+        message: "You are already the host of this room",
+        data: null,
+      };
+    }
+
+    if ((hostStudent.cgpi as number) > (joinerStudent.cgpi as number)) {
+      room.hostStudent = hostStudent._id;
+    } else {
+      room.hostStudent = joinerStudent._id;
+      // remove previous host from the RoomMemberModel and add the new host
+      await RoomMemberModel.findOneAndUpdate(
+        { student: hostStudent._id, room: roomId },
+        { student: joinerStudent._id }
+      )
+    }
+
+    await room.save();
+    // remove students from the AllotmentSlotModel
+    await AllotmentSlotModel.updateMany(
+      {
+        hostelId: room.hostel,
+        startingTime: { $gte: new Date() },
+
+      },
+      { $pull: { allotedFor: { $in: [joinerStudent._id] } } }
+    );
+    //  add previous host to the latest AllotmentSlotModel
+    await AllotmentSlotModel.updateMany(
+      {
+        hostelId: room.hostel,
+        startingTime: { $gte: new Date() },
+      },
+      { $push: { allotedFor: { $in: [hostStudent._id] } } }
+    );
+
+
+    return {
+      error: false,
+      message: "Room Joined Successfully",
+      data: null,
+    }
+
+
 
 
   } catch (err) {

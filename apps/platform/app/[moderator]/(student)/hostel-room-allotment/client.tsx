@@ -15,7 +15,7 @@ export function ViewRoomButton({
         <>
             <ResponsiveDialog
                 btnProps={{
-                    variant: "ghost",
+                    variant: "default_light",
                     children: "View",
                 }}
                 title={room.roomNumber}

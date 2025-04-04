@@ -4,6 +4,8 @@ import ErrorBanner from "@/components/utils/error";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { SkeletonCardArea } from "@/components/utils/skeleton-cards";
 import { cn } from "@/lib/utils";
+// import { getSession } from "~/lib/auth-server";
+import { Lock, Unlock } from "lucide-react";
 import { MdOutlineChair } from "react-icons/md";
 import {
   getAllotmentProcess,
@@ -11,15 +13,15 @@ import {
   getUpcomingSlots
 } from "~/actions/allotment-process";
 import { getHostelByUser } from "~/actions/hostel";
-import { getSession } from "~/lib/auth-server";
 
 import type { HostelRoomJson } from "~/models/allotment";
 import { ViewRoomButton } from "./client";
 
+import { ResponsiveContainer } from "@/components/common/container";
 
 
 export default async function HostelRoomAllotmentPage() {
-  const session = await getSession();
+  // const session = await getSession();
   const hostelResponse = await getHostelByUser();
 
   console.log(hostelResponse);
@@ -113,15 +115,16 @@ export default async function HostelRoomAllotmentPage() {
               Select a room to view details and allotment options.
             </p>
           </div>
-
-          {hostelRoomsResponse?.data?.map((room) => {
-            return (
-              <RoomCard
-                key={room._id}
-                room={room}
-              />
-            );
-          })}
+          <ResponsiveContainer>
+            {hostelRoomsResponse?.data?.map((room) => {
+              return (
+                <RoomCard
+                  key={room._id}
+                  room={room}
+                />
+              );
+            })}
+          </ResponsiveContainer>
         </ConditionalRender>
 
 
@@ -138,8 +141,14 @@ function RoomCard({ room }: RoomCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow duration-300">
       <div>
-        <h6 className="text-base font-semibold mb-4">{room.roomNumber}</h6>
-        <p className="text-gray-500 text-sm">{room.capacity} Seater</p>
+        <h6 className="text-base font-semibold mb-4">
+          {room.roomNumber}
+          {room.isLocked ? <Lock className="text-red-500 inline-block ml-2" /> : <Unlock className="text-green-500 inline-block ml-2" />}
+          </h6>
+        <p className="text-gray-500 text-sm">
+          {room.capacity} Seater | <span className="text-gray-500 font-bold inline-block">
+            {room.occupied_seats}/ {room.capacity}
+          </span> </p>
       </div>
       <div className="flex flex-row items-centerW gap-2">
         {Array.from({ length: room.capacity }).map((_, index) => {
@@ -154,14 +163,9 @@ function RoomCard({ room }: RoomCardProps) {
           {room.occupied_seats}/ {room.capacity}
         </span>
       </div>
-      <div className="mt-2">
-        <span
-          className={`text-sm ${room.isLocked ? "text-red-500" : "text-green-500"}`}
-        >
-          {room.isLocked ? "Locked" : "Unlocked"}
-        </span>
-      </div>
-      <ViewRoomButton room={room} />
+      {(room.occupied_seats >= room.capacity ) ? <>
+        <span className="text-sm text-red-500">Room is full</span>
+      </> : <ViewRoomButton room={room} />}
     </div>
   );
 }
