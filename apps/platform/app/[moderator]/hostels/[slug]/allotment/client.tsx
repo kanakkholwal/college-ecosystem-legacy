@@ -133,7 +133,7 @@ export function RoomsTable({ rooms }: RoomsTableProps) {
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="relative">
           {rooms.map((room) => (
             <TableRow key={room._id}>
               <TableCell className="font-medium">{room.roomNumber}</TableCell>
@@ -143,7 +143,7 @@ export function RoomsTable({ rooms }: RoomsTableProps) {
                       return (
                         <MdOutlineChair
                           key={`room.${index.toString()}`}
-                          className={cn(`text-gray-500 font-bold inline-block ${index <= room.occupied_seats ? "text-green-500" : "text-gray-500"}`)}
+                          className={cn(`text-gray-500 font-bold inline-block ${(index + 1) <= room.occupied_seats ? "text-green-500" : "text-gray-500"}`)}
                         />
                       );
                     })}

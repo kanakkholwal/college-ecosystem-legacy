@@ -1,17 +1,16 @@
 "use server";
 
+import mongoose from "mongoose";
 import z from "zod";
-import dbConnect from "~/lib/dbConnect";
-import { redis } from "~/lib/redis";
-import { AllotmentSlotModel } from "~/models/allotment";
-
 import { getStudentsByHostelId } from "~/actions/hostel";
 import {
   SLOT_CAPACITY,
   SLOT_DURATION,
   SLOT_TIME_GAP,
 } from "~/constants/allotment-process";
-import { type HostelRoomJson, HostelRoomModel } from "~/models/allotment";
+import dbConnect from "~/lib/dbConnect";
+import { redis } from "~/lib/redis";
+import { AllotmentSlotModel, type HostelRoomJson, HostelRoomModel } from "~/models/allotment";
 import { HostelModel } from "~/models/hostel_n_outpass";
 
 const allotmentProcessSchema = z.object({
@@ -272,7 +271,9 @@ export async function getHostelRooms(hostelId: string): Promise<{
     }
 
     const rooms = await HostelRoomModel.aggregate([
-      { $match: { hostel: hostelId } }, // Filter by hostelId
+      { 
+        $match: { hostel: new mongoose.Types.ObjectId(hostelId) } // Ensure hostelId is an ObjectId
+      },
       {
         $addFields: {
           numericRoomNumber: {
@@ -285,9 +286,11 @@ export async function getHostelRooms(hostelId: string): Promise<{
           }
         }
       },
-      { $sort: { numericRoomNumber: 1 } }, // Sort in descending order
-      { $project: { numericRoomNumber: 0 } } // Remove numeric field from output
+      { $sort: { numericRoomNumber: 1 } }, // Sort numerically in descending order
+      { $project: { numericRoomNumber: 0 } } // Exclude extracted field from output
     ]);
+
+    // console.log(rooms)
 
     return {
       error: false,
