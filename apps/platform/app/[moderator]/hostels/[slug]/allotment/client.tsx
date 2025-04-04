@@ -1,5 +1,4 @@
 "use client";
-
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -18,8 +17,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 import { Edit, Lock, Unlock } from "lucide-react";
 import toast from "react-hot-toast";
+import { MdOutlineChair } from "react-icons/md";
 import {
   distributeSlots,
   updateAllotmentProcess,
@@ -115,18 +116,18 @@ const getStatus = (
   return ["bg-gray-500", "Unknown"];
 };
 
-function onLockToggle(roomId: string) {}
+function onLockToggle(roomId: string) { }
 
-function onEdit(room: HostelRoomJson) {}
+function onEdit(room: HostelRoomJson) { }
+
 export function RoomsTable({ rooms }: RoomsTableProps) {
   return (
-    <div className="rounded-md border">
-      <Table>
-        <TableHeader>
+    <div className="my-10">
+      <Table className="relative rounded-md border">
+        <TableHeader className="sticky top-0 z-10 bg-white">
           <TableRow>
             <TableHead>Room No.</TableHead>
-            <TableHead>Capacity</TableHead>
-            <TableHead>Occupied</TableHead>
+            <TableHead>Filled (Occupied/Capacity)</TableHead>
             <TableHead>Status</TableHead>
             <TableHead>Lock Status</TableHead>
             <TableHead>Actions</TableHead>
@@ -136,9 +137,21 @@ export function RoomsTable({ rooms }: RoomsTableProps) {
           {rooms.map((room) => (
             <TableRow key={room._id}>
               <TableCell className="font-medium">{room.roomNumber}</TableCell>
-              <TableCell>{room.capacity}</TableCell>
-              <TableCell>{room.occupied_seats}</TableCell>
-              <TableCell>{room.capacity}</TableCell>
+              <TableCell>
+                  <div className="flex flex-row items-centerW gap-2">
+                    {Array.from({ length: room.capacity }).map((_, index) => {
+                      return (
+                        <MdOutlineChair
+                          key={`room.${index.toString()}`}
+                          className={cn(`text-gray-500 font-bold inline-block ${index <= room.occupied_seats ? "text-green-500" : "text-gray-500"}`)}
+                        />
+                      );
+                    })}
+                    <span className="text-grey-500 text-sm">
+                      {room.occupied_seats}/ {room.capacity}
+                      </span>
+                  </div>
+              </TableCell>
               <TableCell>
                 <Badge
                   className={getStatus(room.occupied_seats, room.capacity)[0]}

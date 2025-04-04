@@ -11,7 +11,7 @@ import {
   SLOT_DURATION,
   SLOT_TIME_GAP,
 } from "~/constants/allotment-process";
-import { HostelRoomModel, type HostelRoomJson } from "~/models/allotment";
+import { type HostelRoomJson, HostelRoomModel } from "~/models/allotment";
 import { HostelModel } from "~/models/hostel_n_outpass";
 
 const allotmentProcessSchema = z.object({
@@ -270,7 +270,25 @@ export async function getHostelRooms(hostelId: string): Promise<{
         data: [],
       };
     }
-    const rooms = await HostelRoomModel.find({ hostel: hostelId });
+
+    const rooms = await HostelRoomModel.aggregate([
+      { $match: { hostel: hostelId } }, // Filter by hostelId
+      {
+        $addFields: {
+          numericRoomNumber: {
+            $toInt: {
+              $arrayElemAt: [
+                { $split: [{ $replaceAll: { input: "$roomNumber", find: "G-", replacement: "0" } }, "-"] },
+                0
+              ]
+            }
+          }
+        }
+      },
+      { $sort: { numericRoomNumber: 1 } }, // Sort in descending order
+      { $project: { numericRoomNumber: 0 } } // Remove numeric field from output
+    ]);
+
     return {
       error: false,
       message: "Rooms fetched successfully",
