@@ -197,6 +197,34 @@ export async function distributeSlots(hostelId: string) {
   }
 }
 
+// get upcoming slots for an hostel
+export async function getUpcomingSlots(hostelId: string) {
+  try {
+    await dbConnect();
+
+    const upcomingSlots = await AllotmentSlotModel.find({
+      hostelId,
+      startingTime: { $gte: new Date() },
+    }).sort({
+      startingTime: 1,
+    })
+    // console.log(upcomingSlots)
+    return {
+      error: false,
+      message: "Slots fetched successfully",
+      data: upcomingSlots,
+    };
+
+  }catch(err){
+    console.log(err);
+    return {
+      error: true,
+      message: "Internal Server Error",
+      data: [],
+    };
+  }
+}
+
 // add rooms for the hostel
 
 const hostelRoomSchema = z.object({
@@ -279,7 +307,7 @@ export async function getHostelRooms(hostelId: string): Promise<{
           numericRoomNumber: {
             $toInt: {
               $arrayElemAt: [
-                { $split: [{ $replaceAll: { input: "$roomNumber", find: "G-", replacement: "0" } }, "-"] },
+                { $split: [{ $replaceAll: { input: "$roomNumber", find: "G-", replacement: "" } }, "-"] },
                 0
               ]
             }

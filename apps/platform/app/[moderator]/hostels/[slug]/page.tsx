@@ -64,19 +64,19 @@ export default async function HostelPage({
           Icon={LuBuilding}
           title="Room Allotment"
           description="Manage room allotment for this hostel"
-          href={`/${moderator}/hostels${slug}/allotment`}
+          href={`/${moderator}/hostels/${slug}/allotment`}
         />
         <RouterCard
           Icon={LuBuilding}
           title="Hostel Student"
           description="View all students in this hostel"
-          href={`${moderator}/hostels${slug}/students`}
+          href={`${moderator}/hostels/${slug}/students`}
         />
         <RouterCard
           Icon={LuBuilding}
           title="Hostel Rooms"
           description="View all rooms in this hostel"
-          href={`/${moderator}/hostels${slug}/rooms`}
+          href={`/${moderator}/hostels/${slug}/rooms`}
         />
       </ResponsiveContainer>
     </div>

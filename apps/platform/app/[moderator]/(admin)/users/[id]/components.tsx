@@ -236,7 +236,7 @@ export function UserUpdate({
             name="hostelId"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Department</FormLabel>
+                <FormLabel>Hostel</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value || "not_specified"}

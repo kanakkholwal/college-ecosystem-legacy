@@ -233,12 +233,12 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
 export async function getHostel(slug: string): Promise<{
   success: boolean;
   hostel:
-    | (HostelType & {
-        students: {
-          count: number;
-        };
-      })
-    | null;
+  | (HostelType & {
+    students: {
+      count: number;
+    };
+  })
+  | null;
   error?: object;
 }> {
   try {
@@ -314,6 +314,7 @@ export async function getHostelByUser(
     await dbConnect();
     // (special) : if user is admin
     if (session.user.role === ROLES.ADMIN && slug) {
+      console.log("if user is admin and slug is present");
       const hostel = await HostelModel.findOne({ slug }).lean();
       if (!hostel) {
         return Promise.resolve({
@@ -333,10 +334,30 @@ export async function getHostelByUser(
       });
     }
 
+
+    const hostel = await HostelModel.findOne({
+      $or: [
+        { _id: new mongoose.Types.ObjectId(session?.user?.hostelId as string) },
+        { "warden.email": session.user.email as string },
+        { "warden.email": { $in: session.user?.other_emails || [] } },
+        { "administrators.email": session.user.email as string },
+        { "administrators.email": { $in: session.user?.other_emails || [] } },
+      ],
+    }).lean();
+    if (!hostel) {
+      console.log("Hostel not found");
+      return Promise.resolve({
+        success: false,
+        hostel: null,
+        message: "Hostel not found",
+        hosteler: null,
+        inCharge: false,
+      });
+    }
     // Check if user is a student
     const hostelerStudent = (await HostelStudentModel.findOne({
       email: session.user.email,
-      userId: session.user.id,
+      // userId: session.user.id,
     })
       .populate("hostelId", "_id name slug gender")
       .lean()) as HostelStudentType | null;
@@ -373,24 +394,7 @@ export async function getHostelByUser(
         inCharge: false,
       });
     }
-    // Check if user is a warden or administrator
-    const hostel = await HostelModel.findOne({
-      $or: [
-        { "warden.email": session.user.email as string },
-        { "warden.email": { $in: session.user?.other_emails || [] } },
-        { "administrators.email": session.user.email as string },
-        { "administrators.email": { $in: session.user?.other_emails || [] } },
-      ],
-    }).lean();
-    if (!hostel) {
-      return Promise.resolve({
-        success: false,
-        hostel: null,
-        message: "Hostel not found",
-        hosteler: null,
-        inCharge: false,
-      });
-    }
+
     return Promise.resolve({
       success: true,
       hostel: JSON.parse(JSON.stringify(hostel)),

@@ -8,25 +8,52 @@ import { MdOutlineChair } from "react-icons/md";
 import {
   getAllotmentProcess,
   getHostelRooms,
+  getUpcomingSlots
 } from "~/actions/allotment-process";
 import { getHostelByUser } from "~/actions/hostel";
 import { getSession } from "~/lib/auth-server";
 
 import type { HostelRoomJson } from "~/models/allotment";
+import { ViewRoomButton } from "./client";
 
 
 
 export default async function HostelRoomAllotmentPage() {
   const session = await getSession();
-  const { hostel } = await getHostelByUser();
-  if (!hostel) {
-    return <div className="text-center text-gray-500">No hostel found</div>;
+  const hostelResponse = await getHostelByUser();
+
+  console.log(hostelResponse);
+
+  if (!hostelResponse.success || !hostelResponse.hostel) {
+    return <div className="w-full">
+      <EmptyArea
+        title={hostelResponse.message}
+        description="Please contact the admin to assign you a hostel."
+      />
+
+    </div>;
   }
+  const { hostel } = hostelResponse;
   const allotmentProcess = await getAllotmentProcess(hostel._id);
-  const hostelRoomsResponse = await getHostelRooms(hostel._id);
-  if (hostelRoomsResponse.error) {
-    console.log(hostelRoomsResponse.message);
+
+  let hostelRoomsResponse: Awaited<ReturnType<typeof getHostelRooms>> | null = null;
+  let upcomingSlotsResponse: Awaited<ReturnType<typeof getUpcomingSlots>> | null = null;
+
+  if (allotmentProcess?.status === "open") {
+    hostelRoomsResponse = await getHostelRooms(hostel._id);
+
+
+    if (hostelRoomsResponse?.error) {
+      console.log(hostelRoomsResponse.message);
+    }
+
+    upcomingSlotsResponse = await getUpcomingSlots(hostel._id);
+    if (upcomingSlotsResponse?.error) {
+      console.log(upcomingSlotsResponse.message);
+    }
   }
+
+
 
   return (
     <div className="space-y-5 my-2">
@@ -71,6 +98,15 @@ export default async function HostelRoomAllotmentPage() {
         </ConditionalRender>
 
         <ConditionalRender condition={allotmentProcess?.status === "open"}>
+          {upcomingSlotsResponse?.error && <EmptyArea
+            title="Something went while fetching slots"
+            description={upcomingSlotsResponse?.message}
+          />}
+          {hostelRoomsResponse?.error && <EmptyArea
+            title="Something went while fetching rooms"
+            description={hostelRoomsResponse?.message}
+          />}
+
           <div>
             <h2 className="text-2xl font-bold">Hostel Room Allotment</h2>
             <p className="text-gray-500">
@@ -78,7 +114,7 @@ export default async function HostelRoomAllotmentPage() {
             </p>
           </div>
 
-          {hostelRoomsResponse.data.map((room) => {
+          {hostelRoomsResponse?.data?.map((room) => {
             return (
               <RoomCard
                 key={room._id}
@@ -102,8 +138,8 @@ function RoomCard({ room }: RoomCardProps) {
   return (
     <div className="bg-white rounded-lg shadow-md p-4 cursor-pointer hover:shadow-lg transition-shadow duration-300">
       <div>
-        <h6 className="text-base font-semibold">{room.roomNumber}</h6>
-        <p className="text-gray-500 text-sm">Capacity: {room.capacity}</p>
+        <h6 className="text-base font-semibold mb-4">{room.roomNumber}</h6>
+        <p className="text-gray-500 text-sm">{room.capacity} Seater</p>
       </div>
       <div className="flex flex-row items-centerW gap-2">
         {Array.from({ length: room.capacity }).map((_, index) => {
@@ -125,6 +161,7 @@ function RoomCard({ room }: RoomCardProps) {
           {room.isLocked ? "Locked" : "Unlocked"}
         </span>
       </div>
+      <ViewRoomButton room={room} />
     </div>
   );
 }
