@@ -6,6 +6,7 @@ import { Heading, Paragraph } from "@/components/ui/typography";
 import { LuBuilding } from "react-icons/lu";
 import { getAllotmentProcess } from "~/actions/allotment-process";
 import { getHostel } from "~/actions/hostel";
+import { ChangeAllotmentProcessStatusButton, DistributeSlotsButton } from "./client";
 
 export default async function HostelRoomAllotmentPage({
     params,
@@ -45,15 +46,35 @@ export default async function HostelRoomAllotmentPage({
                 </div>
             </div>
 
-            <ResponsiveContainer className="!mt-5">
+            <ResponsiveContainer>
 
                 <StatsCard
                     title="Allotment Process"
                 >
-                    
+
                     <p className="text-xs text-muted-foreground">
                         Allotment process is <Badge variant="outline" className="capitalize">{allotmentProcess?.status}</Badge> for this hostel
                     </p>
+
+                    <ChangeAllotmentProcessStatusButton
+                        currentStatus={allotmentProcess?.status}
+                        hostelId={hostel._id}
+                    />
+
+                </StatsCard>
+                <StatsCard
+                    title="Allotment Slots"
+                >
+
+                    <p className="text-xs text-muted-foreground">
+                        Create allotment slots for this hostel
+
+                    </p>
+
+                    <DistributeSlotsButton
+                    
+                        hostelId={hostel._id}
+                    />
 
                 </StatsCard>
 
@@ -62,6 +83,12 @@ export default async function HostelRoomAllotmentPage({
             </ResponsiveContainer>
 
 
+            <div className="w-full ">
+                <Heading level={4} className="mb-2">
+                    Manual Check
+                </Heading>
+                <Paragraph className="text-muted-foreground">Allotment process is <Badge variant="outline" className="capitalize">{allotmentProcess?.status}</Badge> for this hostel</Paragraph>
+            </div>
 
         </div>
     );

@@ -26,17 +26,17 @@ export default async function UpdateUserPage({ params }: PageProps) {
           {
             title: "User Details",
             content: <UserDisplay currentUser={user} />,
-            id: "1",
+            id: "user_details",
           },
           {
             title: "User Sessions",
             content: <UserSessions currentUser={user} />,
-            id: "2",
+            id: "user_sessions",
           },
           {
             title: "Update User",
             content: <UserUpdate currentUser={user} hostels={data}/>,
-            id: "3",
+            id: "user_update",
           },
         ]}
       />
