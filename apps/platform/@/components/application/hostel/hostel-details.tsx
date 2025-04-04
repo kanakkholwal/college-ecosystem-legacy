@@ -49,14 +49,7 @@ export async function HostelDetail({ hostel }: { hostel: HostelType }) {
             </li>
           ))}
         </ul>
-        <Heading level={5} className="text-gray-800">
-          Hosteler Students ({hostel.students.count})
-          {isWarden && (
-            <Button variant="link" size="sm">
-              Update Students
-            </Button>
-          )}
-        </Heading>
+
       </div>
     </div>
   );

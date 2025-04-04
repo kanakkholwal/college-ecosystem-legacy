@@ -49,7 +49,7 @@ export function ImportStudents({ importFn }: {
             return;
         }
         const processedData: importStudentsPayload = data.map((row) => {
-            const rollNo = row[rollNoKey];
+            const rollNo = row[rollNoKey].toLowerCase();
             const name = row[nameKey];
             const cgpi = Number.parseInt(row[cgpiKey]);
             return { rollNo, name, cgpi };

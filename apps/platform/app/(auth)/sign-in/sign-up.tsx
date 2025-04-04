@@ -30,16 +30,10 @@ import { FcGoogle } from "react-icons/fc";
 import { getDepartmentName } from "src/constants/departments";
 import * as z from "zod";
 import { ORG_DOMAIN } from "~/project.config";
+import { emailSchema } from "~/constants/user";
 
 const FormSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "Invalid email format" })
-    .min(5, { message: "Email must be at least 5 characters long" })
-    .max(100, { message: "Email cannot exceed 100 characters" })
-    .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
-      message: `Email must end with @${ORG_DOMAIN}`,
-    }),
+  email: emailSchema,
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long" })
@@ -75,7 +69,7 @@ export default function SignUpForm() {
         callbackURL: redirect,
         name: data.name,
         username: data.email.split("@")[0],
-        gender: GENDER.NOT_SPECIFIED,
+        // gender: GENDER.NOT_SPECIFIED,
         department: getDepartmentName("ece"), // automatically corrects it on the backend
         other_roles: ["student"],
       },

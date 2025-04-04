@@ -3,6 +3,7 @@ import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
 import { admin, username } from "better-auth/plugins";
+import { getHostelStudent } from "~/actions/hostel";
 import { ROLES } from "~/constants";
 import {
   getDepartmentByRollNo,
@@ -10,12 +11,11 @@ import {
 } from "~/constants/departments";
 import { db } from "~/db/connect";
 import { accounts, sessions, users, verifications } from "~/db/schema";
-import { ORG_DOMAIN } from "~/project.config";
 import type { ResultType } from "~/types/result";
 import { mailFetch, serverFetch } from "./server-fetch";
 
 const ALLOWED_ROLES = [ROLES.STUDENT, ROLES.FACULTY, ROLES.STAFF];
-const ALLOWED_GENDERS = ["male", "gender", "not_specified"];
+
 // const VERIFY_EMAIL_PATH_PREFIX = "/sign-in?tab=verify-email&token=";
 const VERIFY_EMAIL_PATH_PREFIX = "/verify-email?token=";
 
@@ -141,6 +141,7 @@ export const auth = betterAuth({
         type: "string",
         required: true,
         input: false,
+        defaultValue: "user",
       },
       other_roles: {
         type: "string[]",
@@ -156,10 +157,12 @@ export const auth = betterAuth({
         type: "string",
         required: false,
         input: false,
+        defaultValue: "not_specified",
       },
       gender: {
         type: "string",
         input: true,
+        defaultValue: "not_specified",
       },
       username: {
         type: "string",
@@ -180,12 +183,12 @@ export const auth = betterAuth({
       trustedProviders: ["google"],
     },
   },
-  advanced: {
-    crossSubDomainCookies: {
-      enabled: process.env.NODE_ENV === "production",
-      domain: process.env.NODE_ENV === "production" ? ORG_DOMAIN : undefined,
-    },
-  },
+  // advanced: {
+  //   crossSubDomainCookies: {
+  //     enabled: process.env.NODE_ENV === "production",
+  //     domain: process.env.NODE_ENV === "production" ? ORG_DOMAIN : undefined,
+  //   },
+  // },
   plugins: [
     username(),
     admin({
@@ -206,6 +209,7 @@ type getUserInfoReturnType = {
   emailVerified: boolean;
   gender: string;
   other_emails?: string[];
+  hostelId: string | null;
 };
 
 type FacultyType = {
@@ -241,6 +245,16 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     }
     console.log(response.data?.gender);
 
+    const hostelStudent = await getHostelStudent({
+      rollNo: username,
+      email: email,
+      gender:response.data?.gender,
+      name: response.data.name,
+      cgpi: response.data.semesters.at(-1)?.cgpi || 0,
+    })
+    
+     
+
     return {
       other_roles: [ROLES.STUDENT],
       department: getDepartmentByRollNo(username) as string,
@@ -248,7 +262,8 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       emailVerified: true,
       email,
       username,
-      gender: response.data.gender || "not_specified",
+      gender: hostelStudent.gender || "not_specified",
+      hostelId: hostelStudent.hostelId || "not_specified",
     };
   }
   const { data: response } = await serverFetch<{
@@ -275,6 +290,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       email,
       username,
       gender: "not_specified",
+      hostelId:null,
     };
   }
   console.log("Other:Staff");
@@ -286,6 +302,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     emailVerified: true,
     username,
     gender: "not_specified",
+    hostelId:null,
   };
 }
 
