@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Check, X,Trash2 } from "lucide-react";
+import { Check, X, Trash2 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 
@@ -33,8 +33,7 @@ export default function UpdateAttendanceRecord({
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Are you sure you want to delete this record?"))
-      return;
+    if (!window.confirm("Are you sure you want to delete this record?")) return;
 
     setDeleting(true);
     try {

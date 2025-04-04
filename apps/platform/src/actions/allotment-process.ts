@@ -6,14 +6,18 @@ import { redis } from "~/lib/redis";
 import { AllotmentSlotModel } from "~/models/allotment";
 
 import { getStudentsByHostelId } from "~/actions/hostel";
-import { SLOT_CAPACITY, SLOT_DURATION, SLOT_TIME_GAP } from "~/constants/allotment-process";
-import { HostelRoomModel } from "~/models/allotment";
+import {
+  SLOT_CAPACITY,
+  SLOT_DURATION,
+  SLOT_TIME_GAP,
+} from "~/constants/allotment-process";
+import { HostelRoomModel, type HostelRoomJson } from "~/models/allotment";
 import { HostelModel } from "~/models/hostel_n_outpass";
 
 const allotmentProcessSchema = z.object({
-  status: z.enum(["open", "closed", "paused", "waiting","completed"]),
+  status: z.enum(["open", "closed", "paused", "waiting", "completed"]),
   hostelId: z.string(),
-})
+});
 
 export async function getAllotmentProcess(hostelId: string) {
   const allotmentProcess = await redis.get(`allotment-process-${hostelId}`);
@@ -21,14 +25,17 @@ export async function getAllotmentProcess(hostelId: string) {
     const payload = {
       status: "waiting",
       hostelId,
-    }
+    };
     await redis.set(`allotment-process-${hostelId}`, JSON.stringify(payload));
     return payload;
   }
-  return JSON.parse(allotmentProcess)
+  return JSON.parse(allotmentProcess);
 }
 
-export async function updateAllotmentProcess(hostelId: string, payload: z.infer<typeof allotmentProcessSchema>) {
+export async function updateAllotmentProcess(
+  hostelId: string,
+  payload: z.infer<typeof allotmentProcessSchema>
+) {
   // verify payload
   const validatedPayload = allotmentProcessSchema.safeParse(payload);
   if (validatedPayload.success === false) {
@@ -39,30 +46,41 @@ export async function updateAllotmentProcess(hostelId: string, payload: z.infer<
     };
   }
   const { status } = validatedPayload.data;
-  await redis.set(`allotment-process-${hostelId}`, JSON.stringify(validatedPayload.data));
+  await redis.set(
+    `allotment-process-${hostelId}`,
+    JSON.stringify(validatedPayload.data)
+  );
 
   return {
     error: false,
     message: "Allotment process updated successfully",
     data: validatedPayload.data,
-  }
+  };
 }
 // ⏳ Manage Allotment Slots
 export async function startAllotment(hostelId: string) {
-  await redis.set(`allotment-process-${hostelId}`, JSON.stringify({ status: "open", hostelId }));
+  await redis.set(
+    `allotment-process-${hostelId}`,
+    JSON.stringify({ status: "open", hostelId })
+  );
   return { error: false, message: "Allotment process started" };
 }
 
 export async function pauseAllotment(hostelId: string) {
-  await redis.set(`allotment-process-${hostelId}`, JSON.stringify({ status: "paused", hostelId }));
+  await redis.set(
+    `allotment-process-${hostelId}`,
+    JSON.stringify({ status: "paused", hostelId })
+  );
   return { error: false, message: "Allotment process paused" };
 }
 
 export async function closeAllotment(hostelId: string) {
-  await redis.set(`allotment-process-${hostelId}`, JSON.stringify({ status: "closed", hostelId }));
+  await redis.set(
+    `allotment-process-${hostelId}`,
+    JSON.stringify({ status: "closed", hostelId })
+  );
   return { error: false, message: "Allotment process closed" };
 }
-
 
 const slotSchema = z.object({
   startingTime: z.string().datetime(),
@@ -70,7 +88,7 @@ const slotSchema = z.object({
 
   allotedFor: z.array(z.string()),
   hostelId: z.string(),
-})
+});
 
 /*
   create Allotment Slot for an hostel
@@ -78,7 +96,10 @@ const slotSchema = z.object({
   @param {object} payload - The payload for the allotment slot
 */
 
-export async function createAllotmentSlot(hostelId: string, payload: z.infer<typeof slotSchema>) {
+export async function createAllotmentSlot(
+  hostelId: string,
+  payload: z.infer<typeof slotSchema>
+) {
   // verify payload
   const validatedPayload = slotSchema.safeParse(payload);
   if (validatedPayload.success === false) {
@@ -95,10 +116,9 @@ export async function createAllotmentSlot(hostelId: string, payload: z.infer<typ
     return {
       error: true,
       message: "Hostel Not Found",
-      data: null
-    }
+      data: null,
+    };
   }
-
 
   const payloadData = validatedPayload.data;
 
@@ -110,9 +130,8 @@ export async function createAllotmentSlot(hostelId: string, payload: z.infer<typ
   return {
     error: false,
     message: "Slot created successfully",
-    data: null
-  }
-
+    data: null,
+  };
 }
 
 // create Allotment Slots for an hostel
@@ -125,8 +144,8 @@ export async function distributeSlots(hostelId: string) {
       return {
         error: true,
         message: "Hostel Not Found",
-        data: null
-      }
+        data: null,
+      };
     }
     // create slot batches of `SLOT_CAPACITY` students
     const slots = [];
@@ -143,7 +162,7 @@ export async function distributeSlots(hostelId: string) {
     const currentTimeInMinutes = currentHour * 60 + currentMinute;
     const slotDurationInMinutes = SLOT_DURATION + SLOT_TIME_GAP;
     let slotStartTime = currentTimeInMinutes;
-    for await(const slot of slots) {
+    for await (const slot of slots) {
       const slotEndTime = slotStartTime + SLOT_DURATION;
       const startTime = new Date(currentTime);
       startTime.setMinutes(slotStartTime);
@@ -167,23 +186,17 @@ export async function distributeSlots(hostelId: string) {
     return {
       error: false,
       message: "Slots created successfully",
-      data: allotmentSlots
-    }
-
-
-
-
+      data: allotmentSlots,
+    };
   } catch (error) {
     console.log(error);
     return {
       error: true,
       message: "Internal Server Error",
-      data: null
-    }
+      data: null,
+    };
   }
-
 }
-
 
 // add rooms for the hostel
 
@@ -198,7 +211,10 @@ const hostelRoomSchema = z.object({
 
 const roomsSchema = z.array(hostelRoomSchema);
 
-export async function addHostelRooms(hostelId: string, rooms: z.infer<typeof roomsSchema>) {
+export async function addHostelRooms(
+  hostelId: string,
+  rooms: z.infer<typeof roomsSchema>
+) {
   // verify payload
   const validatedPayload = roomsSchema.safeParse(rooms);
   if (validatedPayload.success === false) {
@@ -209,7 +225,7 @@ export async function addHostelRooms(hostelId: string, rooms: z.infer<typeof roo
     };
   }
   const validatedRooms = validatedPayload.data;
-  try{
+  try {
     await dbConnect();
     // check if hostel exists
     const hostel = await HostelModel.findById(hostelId);
@@ -217,8 +233,8 @@ export async function addHostelRooms(hostelId: string, rooms: z.infer<typeof roo
       return {
         error: true,
         message: "Hostel Not Found",
-        data: null
-      }
+        data: null,
+      };
     }
 
     const newRooms = await HostelRoomModel.insertMany(validatedRooms);
@@ -226,17 +242,46 @@ export async function addHostelRooms(hostelId: string, rooms: z.infer<typeof roo
     return {
       error: false,
       message: "Rooms added successfully",
-      data: null
-    }
-
-  }catch (error) {
+      data: null,
+    };
+  } catch (error) {
     console.log(error);
     return {
       error: true,
       message: "Internal Server Error",
-      data: null
-    }
+      data: null,
+    };
   }
 }
 
-
+export async function getHostelRooms(hostelId: string): Promise<{
+  error: boolean;
+  message: string;
+  data: HostelRoomJson[];
+}> {
+  try {
+    await dbConnect();
+    // check if hostel exists
+    const hostel = await HostelModel.findById(hostelId);
+    if (!hostel) {
+      return {
+        error: true,
+        message: "Hostel Not Found",
+        data: [],
+      };
+    }
+    const rooms = await HostelRoomModel.find({ hostel: hostelId });
+    return {
+      error: false,
+      message: "Rooms fetched successfully",
+      data: JSON.parse(JSON.stringify(rooms)),
+    };
+  } catch (error) {
+    console.log(error);
+    return {
+      error: true,
+      message: "Internal Server Error",
+      data: [],
+    };
+  }
+}

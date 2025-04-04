@@ -18,25 +18,31 @@ export async function GET(request: NextRequest) {
       return new NextResponse(message, { status: 400 });
     }
     const hostelId = new Types.ObjectId(hostel._id); // Ensure ObjectId type
-    const outPasses = JSON.parse(JSON.stringify(await OutPassModel.find({ hostel: hostelId })
-      .populate("hostel")
-      .populate("student")
-      .sort({ createdAt: -1 })
-      .skip(skip)
-      .limit(limit)
-      .lean())) as OutPassType[];
+    const outPasses = JSON.parse(
+      JSON.stringify(
+        await OutPassModel.find({ hostel: hostelId })
+          .populate("hostel")
+          .populate("student")
+          .sort({ createdAt: -1 })
+          .skip(skip)
+          .limit(limit)
+          .lean()
+      )
+    ) as OutPassType[];
 
     // Total count for pagination
     const totalCount = await OutPassModel.countDocuments({ hostel: hostelId });
 
     // Group outpass by status
-    const groupedOutPasses= new Map<string, OutPassType[]>();
+    const groupedOutPasses = new Map<string, OutPassType[]>();
     for (const outPass of outPasses) {
-        if (!groupedOutPasses.has(outPass.status)) {
-            groupedOutPasses.set(outPass.status, []);
-        }
-        const outPassesForStatus = groupedOutPasses.get(outPass.status) as OutPassType[];
-        groupedOutPasses.set(outPass.status, [...outPassesForStatus, outPass]);
+      if (!groupedOutPasses.has(outPass.status)) {
+        groupedOutPasses.set(outPass.status, []);
+      }
+      const outPassesForStatus = groupedOutPasses.get(
+        outPass.status
+      ) as OutPassType[];
+      groupedOutPasses.set(outPass.status, [...outPassesForStatus, outPass]);
     }
     // `Object.groupBy` not supported in serverless functions
     // const groupedOutPasses = Object.groupBy(outPasses, (outpass) => outpass.status);
@@ -46,7 +52,7 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil(totalCount / limit),
         currentPage: page,
         totalCount,
-        groupedOutPasses:Object.fromEntries(groupedOutPasses),
+        groupedOutPasses: Object.fromEntries(groupedOutPasses),
       },
       { status: 200 }
     );

@@ -64,6 +64,7 @@ The on-campus Health Centre provides basic medical facilities to students, facul
 NIT Hamirpur comprises 13 academic departments and a Centre for Energy Studies, each dedicated to fostering excellence in education and research.
 
 - **Engineering Departments:**
+
   - Computer Science and Engineering
   - Civil Engineering
   - Chemical Engineering
@@ -73,11 +74,13 @@ NIT Hamirpur comprises 13 academic departments and a Centre for Energy Studies, 
   - Material Sciences & Engineering
 
 - **Science Departments:**
+
   - Chemistry
   - Mathematics & Scientific Computing
   - Physics & Photonic Science
 
 - **Other Departments:**
+
   - Architecture
   - Humanities & Social Sciences
   - Management Studies
@@ -90,10 +93,12 @@ NIT Hamirpur comprises 13 academic departments and a Centre for Energy Studies, 
 NIT Hamirpur offers a diverse array of programs:
 
 - **Undergraduate Programs:**
+
   - Bachelor of Technology (B.Tech) in various engineering disciplines
   - Bachelor of Architecture (B.Arch)
 
 - **Postgraduate Programs:**
+
   - Master of Technology (M.Tech)
   - Master of Architecture (M.Arch)
   - Master of Science (M.Sc)
@@ -107,6 +112,7 @@ NIT Hamirpur offers a diverse array of programs:
 - **Undergraduate Admissions:** Admission to B.Tech and B.Arch programs is based on performance in the Joint Entrance Examination (JEE) Main, followed by centralized counseling through the Joint Seat Allocation Authority (JoSAA).
 
 - **Postgraduate Admissions:**
+
   - M.Tech and M.Arch admissions require valid GATE scores and participation in the Centralized Counseling for M.Tech/M.Arch (CCMT).
   - M.Sc admissions are based on IIT JAM scores and centralized counseling via the Centralized Counseling for M.Sc (CCMN).
   - MBA admissions consider scores from CAT/MAT/GMAT/CMAT, followed by group discussions and personal interviews.

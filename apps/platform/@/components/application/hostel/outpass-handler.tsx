@@ -203,7 +203,10 @@ export default function OutpassVerifier() {
               <span className="font-bold">Actual Out Time</span>
               <span className="font-medium text-left">
                 {currentOutpass?.actualOutTime
-                  ? format(new Date(currentOutpass.actualOutTime || ""), "dd/MM/yyyy hh:mm a")
+                  ? format(
+                      new Date(currentOutpass.actualOutTime || ""),
+                      "dd/MM/yyyy hh:mm a"
+                    )
                   : "Not exited yet"}
               </span>
             </div>
@@ -212,7 +215,10 @@ export default function OutpassVerifier() {
               <span className="font-bold">Actual In Time</span>
               <span className="font-medium text-left">
                 {currentOutpass?.actualInTime
-                  ? format(new Date(currentOutpass.actualInTime || ""), "dd/MM/yyyy hh:mm a")
+                  ? format(
+                      new Date(currentOutpass.actualInTime || ""),
+                      "dd/MM/yyyy hh:mm a"
+                    )
                   : "Not entered yet"}
               </span>
             </div>
@@ -241,21 +247,27 @@ export default function OutpassVerifier() {
               variant={currentOutpass?.actualInTime ? "glass" : "default_light"}
               effect="shineHover"
             >
-              {updating ? <>
-                <LoaderCircle className="animate-spin" />
-                Allowing {currentOutpass?.actualInTime ? "Exit" : "Entry"}
-              </>:<>
-              {currentOutpass?.actualInTime
-                ? "Already Processed"
-                : currentOutpass?.actualOutTime
-                  ? "Allow Entry"
-                  : "Allow Exit"}
-              {currentOutpass?.actualInTime
-                ? <CircleCheckBig />
-                : currentOutpass?.actualOutTime
-                  ? <LogIn/>
-                  : <LogOut/>}
-              </>}
+              {updating ? (
+                <>
+                  <LoaderCircle className="animate-spin" />
+                  Allowing {currentOutpass?.actualInTime ? "Exit" : "Entry"}
+                </>
+              ) : (
+                <>
+                  {currentOutpass?.actualInTime
+                    ? "Already Processed"
+                    : currentOutpass?.actualOutTime
+                      ? "Allow Entry"
+                      : "Allow Exit"}
+                  {currentOutpass?.actualInTime ? (
+                    <CircleCheckBig />
+                  ) : currentOutpass?.actualOutTime ? (
+                    <LogIn />
+                  ) : (
+                    <LogOut />
+                  )}
+                </>
+              )}
             </Button>
           </div>
         </div>

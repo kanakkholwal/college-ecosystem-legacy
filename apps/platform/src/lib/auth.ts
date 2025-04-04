@@ -248,12 +248,10 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     const hostelStudent = await getHostelStudent({
       rollNo: username,
       email: email,
-      gender:response.data?.gender,
+      gender: response.data?.gender,
       name: response.data.name,
       cgpi: response.data.semesters.at(-1)?.cgpi || 0,
-    })
-    
-     
+    });
 
     return {
       other_roles: [ROLES.STUDENT],
@@ -290,7 +288,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       email,
       username,
       gender: "not_specified",
-      hostelId:null,
+      hostelId: null,
     };
   }
   console.log("Other:Staff");
@@ -302,7 +300,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     emailVerified: true,
     username,
     gender: "not_specified",
-    hostelId:null,
+    hostelId: null,
   };
 }
 

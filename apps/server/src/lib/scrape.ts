@@ -80,7 +80,7 @@ const parseResult = (
     branch: string;
     batch: number;
     programme: string;
-  },
+  }
 ): Promise<rawResultType> => {
   if (result === null) {
     console.log("Invalid Roll No");
@@ -142,9 +142,7 @@ const parseResult = (
   );
   result_tables.forEach((table, index) => {
     table.querySelectorAll("td").forEach((td, i, array) => {
-      student.semesters[index].semester = `0${index + 1}`.slice(
-        -2
-      );
+      student.semesters[index].semester = `0${index + 1}`.slice(-2);
       student.semesters[index].sgpi = array[1].innerText
         .trim()
         .split("=")[1] as unknown as number;
@@ -170,14 +168,12 @@ const parseResult = (
   return Promise.resolve(student);
 };
 
-
-
 export async function scrapeResult(rollNo: string): Promise<{
   message: string;
   data: rawResultType | null;
   error?: string | null;
 }> {
-  const data = await getInfoFromRollNo(rollNo,false);
+  const data = await getInfoFromRollNo(rollNo, false);
 
   console.log("Roll No: %s", rollNo);
   try {
@@ -197,8 +193,8 @@ export async function scrapeResult(rollNo: string): Promise<{
     });
     console.log("parsed");
     // if student is dual degree then we need to fetch the other result
-    if(student.programme === "Dual Degree"){
-      const data = await getInfoFromRollNo(rollNo,true)
+    if (student.programme === "Dual Degree") {
+      const data = await getInfoFromRollNo(rollNo, true);
       const [result, msg] = await fetchData(data.url, rollNo, data.headers);
       if (result === null) {
         return Promise.resolve({
@@ -211,11 +207,12 @@ export async function scrapeResult(rollNo: string): Promise<{
         rollNo,
         ...data,
       });
-      student.semesters = student.semesters.concat(student_dual.semesters.map((semester)=> ({
-        ...semester,
-        semester: `${semester.semester} (masters)`
-      })))
-
+      student.semesters = student.semesters.concat(
+        student_dual.semesters.map((semester) => ({
+          ...semester,
+          semester: `${semester.semester} (masters)`,
+        }))
+      );
     }
 
     return Promise.resolve({
@@ -232,77 +229,98 @@ export async function scrapeResult(rollNo: string): Promise<{
   }
 }
 
+const headerMap = new Map<
+  string | number,
+  {
+    url: string;
+    Referer: string;
+    CSRFToken: string;
+    RequestVerificationToken: string;
+  }
+>([
+  [
+    20,
+    {
+      url: "http://results.nith.ac.in/scheme20/studentresult/result.asp",
+      Referer: "http://results.nith.ac.in/scheme20/studentresult/index.asp",
+      CSRFToken: "{782F96DF-5115-4492-8CB2-06104ECFF0CA}",
+      RequestVerificationToken: "094D0BF7-EE18-E102-8CBF-23C329B32E1C",
+    },
+  ],
+  [
+    21,
+    {
+      url: "http://results.nith.ac.in/scheme21/studentresult/result.asp",
+      Referer: "http://results.nith.ac.in/scheme21/studentresult/index.asp",
+      CSRFToken: "{D5D50B24-2DDE-4C35-9F41-10426C59EEA7}",
+      RequestVerificationToken: "7BA3D112-507E-5379-EE25-9539F0DE9076",
+    },
+  ],
+  [
+    22,
+    {
+      url: "http://results.nith.ac.in/scheme22/studentresult/result.asp",
+      Referer: "http://results.nith.ac.in/scheme22/studentresult/index.asp",
+      CSRFToken: "{AF6DB03B-F6EC-475E-B331-6C9DE3846923}",
+      RequestVerificationToken: "DA92D62F-BF6E-B268-4E04-F419F5EA6233",
+    },
+  ],
+  [
+    23,
+    {
+      url: "http://results.nith.ac.in/scheme23/studentresult/result.asp",
+      Referer: "http://results.nith.ac.in/scheme23/studentresult/index.asp",
+      CSRFToken: "{F1E16363-FEDA-48AF-88E9-8A186425C213}",
+      RequestVerificationToken: "4FFEE8F3-14C9-27C4-B370-598406BF99C1",
+    },
+  ],
+  [
+    24,
+    {
+      url: "http://results.nith.ac.in/scheme24/studentresult/result.asp",
+      Referer: "http://results.nith.ac.in/scheme24/studentresult/index.asp",
+      CSRFToken: "{0696D16E-58AD-472B-890E-6537BE62A5EA}",
+      RequestVerificationToken: "F797B72F-DC73-D06D-6B19-012ED5EBA98B",
+    },
+  ],
+  [
+    "21_dual",
+    {
+      url: "http://results.nith.ac.in/dualdegree21/studentresult/result.asp",
+      Referer: "http://results.nith.ac.in/dualdegree21/studentresult/index.asp",
+      CSRFToken: "{BC8FDC16-3133-429F-8FD7-CAC7026512F1}",
+      RequestVerificationToken: "13FD6203-F8C9-FBC3-877F-3D7480CF2325",
+    },
+  ],
+]);
 
-const headerMap= new Map<string|number,{
-  url: string;
-  Referer: string;
-  CSRFToken: string;
-  RequestVerificationToken: string;
-}>([
-  [20,{
-    url: "http://results.nith.ac.in/scheme20/studentresult/result.asp",
-    Referer: "http://results.nith.ac.in/scheme20/studentresult/index.asp",
-    CSRFToken: "{782F96DF-5115-4492-8CB2-06104ECFF0CA}",
-    RequestVerificationToken: "094D0BF7-EE18-E102-8CBF-23C329B32E1C",
-  }],
-  [21,{
-    url: "http://results.nith.ac.in/scheme21/studentresult/result.asp",
-    Referer: "http://results.nith.ac.in/scheme21/studentresult/index.asp",
-    CSRFToken: "{D5D50B24-2DDE-4C35-9F41-10426C59EEA7}",
-    RequestVerificationToken: "7BA3D112-507E-5379-EE25-9539F0DE9076",
-  }],
-  [22,{
-    url: "http://results.nith.ac.in/scheme22/studentresult/result.asp",
-    Referer: "http://results.nith.ac.in/scheme22/studentresult/index.asp",
-    CSRFToken: "{AF6DB03B-F6EC-475E-B331-6C9DE3846923}",
-    RequestVerificationToken: "DA92D62F-BF6E-B268-4E04-F419F5EA6233",
-  }],
-  [23,{
-    url: "http://results.nith.ac.in/scheme23/studentresult/result.asp",
-    Referer: "http://results.nith.ac.in/scheme23/studentresult/index.asp",
-    CSRFToken: "{F1E16363-FEDA-48AF-88E9-8A186425C213}",
-    RequestVerificationToken: "4FFEE8F3-14C9-27C4-B370-598406BF99C1",
-  }],
-  [24,{
-    url: "http://results.nith.ac.in/scheme24/studentresult/result.asp",
-    Referer: "http://results.nith.ac.in/scheme24/studentresult/index.asp",
-    CSRFToken: "{0696D16E-58AD-472B-890E-6537BE62A5EA}",
-    RequestVerificationToken: "F797B72F-DC73-D06D-6B19-012ED5EBA98B",
-  }],
-  ["21_dual",{
-    url: "http://results.nith.ac.in/dualdegree21/studentresult/result.asp",
-    Referer: "http://results.nith.ac.in/dualdegree21/studentresult/index.asp",
-    CSRFToken: "{BC8FDC16-3133-429F-8FD7-CAC7026512F1}",
-    RequestVerificationToken: "13FD6203-F8C9-FBC3-877F-3D7480CF2325",
-  }],
-
-
-])
-
-export async function getInfoFromRollNo(rollNo: string,dualDegree=false) {
+export async function getInfoFromRollNo(rollNo: string, dualDegree = false) {
   // split the roll no into 3 parts starting two characters then 3 characters and then 3 characters
   const matches = [
     Number.parseInt(rollNo.toLowerCase().substring(0, 2)), // 20
     rollNo.toLowerCase().substring(2, 5), // dec,bec,bar
     rollNo.toLowerCase().substring(5, 8), // 001
   ] as const;
-  const [batchCode, programmeCode,] = matches;
-  const isDualDegree = PROGRAMME_KEYS["Dual Degree"].includes(programmeCode) && dualDegree;
+  const [batchCode, programmeCode] = matches;
+  const isDualDegree =
+    PROGRAMME_KEYS["Dual Degree"].includes(programmeCode) && dualDegree;
   const isMasters = PROGRAMME_KEYS["M.Tech"].includes(programmeCode);
   const batchCodeKey = isDualDegree ? `${batchCode}_dual` : batchCode;
-  const programmeScheme = isDualDegree ? "dualdegree" : isMasters ? "mtech" : "scheme";
+  const programmeScheme = isDualDegree
+    ? "dualdegree"
+    : isMasters
+      ? "mtech"
+      : "scheme";
 
   //  check if we have header for the batch
   if (!headerMap.has(batchCodeKey)) {
-    
     if (batchCode >= 20) {
       // New batches
       if (CACHE.has(batchCodeKey + programmeCode)) {
         const data = CACHE.get(batchCodeKey + programmeCode);
         headerMap.set(batchCodeKey, JSON.parse(data || ""));
       } else if (!headerMap.has(batchCode)) {
-
-        headerMap.set(batchCodeKey,{
+        headerMap.set(batchCodeKey, {
           url: `http://results.nith.ac.in/${programmeScheme}${batchCode}/studentresult/result.asp`,
           Referer: `http://results.nith.ac.in/${programmeScheme}${batchCode}/studentresult/index.asp`,
           CSRFToken: `{${Math.random().toString(36).substring(2, 36)}}`,
@@ -322,15 +340,12 @@ export async function getInfoFromRollNo(rollNo: string,dualDegree=false) {
           document
             .querySelector('input[name="CSRFToken"]')
             ?.getAttribute("value") || "";
-            header.RequestVerificationToken =
+        header.RequestVerificationToken =
           document
             .querySelector('input[name="RequestVerificationToken"]')
             ?.getAttribute("value") || "";
         headerMap.set(batchCodeKey, header);
-        CACHE.set(
-          batchCodeKey + programmeCode,
-          JSON.stringify(header)
-        );
+        CACHE.set(batchCodeKey + programmeCode, JSON.stringify(header));
       }
     }
   }
@@ -349,8 +364,7 @@ export async function getInfoFromRollNo(rollNo: string,dualDegree=false) {
     headers: {
       Referer: header.Referer,
       CSRFToken: header.CSRFToken,
-      RequestVerificationToken:
-      header.RequestVerificationToken,
+      RequestVerificationToken: header.RequestVerificationToken,
     },
     programme: determineProgramme(rollNo),
   };
@@ -385,8 +399,7 @@ export function determineDepartment(RollNo: string) {
   }
 }
 export function determineProgramme(rollNo: string) {
-
-  const  programmeCode= rollNo.toLowerCase().substring(2, 5)
+  const programmeCode = rollNo.toLowerCase().substring(2, 5);
   let programme = Object.keys(PROGRAMME_KEYS)[0];
 
   for (const [key, value] of Object.entries(PROGRAMME_KEYS)) {

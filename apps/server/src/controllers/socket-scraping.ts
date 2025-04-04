@@ -517,7 +517,7 @@ async function getListOfRollNos(list_type: listType): Promise<Set<string>> {
       break;
     case LIST_TYPE.DUAL_DEGREE:
       // has less than 8 semesters
-      query = { programme:"Dual Degree" };
+      query = { programme: "Dual Degree" };
       break;
     case LIST_TYPE.ALL:
       query = {};

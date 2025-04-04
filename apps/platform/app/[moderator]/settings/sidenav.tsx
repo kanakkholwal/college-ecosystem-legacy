@@ -1,20 +1,20 @@
-"use client"
+"use client";
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
-    href: string
-    title: string
-  }[]
+    href: string;
+    title: string;
+  }[];
 }
 
 export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <nav
@@ -24,18 +24,17 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       )}
       {...props}
     >
-      {items.map((item) => (<Button
-        key={item.href}
-        variant={pathname.includes(item.href) ? "default_light" : "ghost"}
-        effect="shineHover"
-        className="justify-start"
-        asChild>
-        <Link
-          href={item.href}
+      {items.map((item) => (
+        <Button
+          key={item.href}
+          variant={pathname.includes(item.href) ? "default_light" : "ghost"}
+          effect="shineHover"
+          className="justify-start"
+          asChild
         >
-          {item.title}
-        </Link>
-      </Button>))}
+          <Link href={item.href}>{item.title}</Link>
+        </Button>
+      ))}
     </nav>
-  )
+  );
 }

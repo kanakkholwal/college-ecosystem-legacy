@@ -4,7 +4,7 @@ import EmptyArea from "@/components/common/empty-area";
 import { Separator } from "@/components/ui/separator";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { format } from "date-fns";
-import { ArrowRight} from 'lucide-react';
+import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
@@ -26,7 +26,6 @@ export default async function HostelPage(props: PageProps) {
 
   return (
     <div className="space-y-5">
-
       <ConditionalRender condition={!!hosteler?.banned}>
         <EmptyArea
           icons={[LuBuilding]}
@@ -34,7 +33,6 @@ export default async function HostelPage(props: PageProps) {
           description={`${hosteler?.bannedReason} till ${hosteler?.bannedTill ? format(new Date(hosteler.bannedTill), "dd/MM/yyyy HH:mm:ss") : "N/A"}`}
         />
       </ConditionalRender>
-
 
       <ConditionalRender condition={!hosteler?.banned}>
         <ConditionalRender condition={outPasses.length > 0}>
@@ -47,19 +45,19 @@ export default async function HostelPage(props: PageProps) {
             description="No outpass have been requested yet"
             actionProps={{
               asChild: true,
-              children:<Link href="outpass/request">
-                Request Outpass <ArrowRight/>
-              </Link>,
-              effect:"underline",
-              variant:"link"
+              children: (
+                <Link href="outpass/request">
+                  Request Outpass <ArrowRight />
+                </Link>
+              ),
+              effect: "underline",
+              variant: "link",
             }}
           />
         </ConditionalRender>
       </ConditionalRender>
 
-
       <ConditionalRender condition={outPasses.length > 0}>
-
         <Separator />
         <OutpassList outPasses={outPasses} />
       </ConditionalRender>

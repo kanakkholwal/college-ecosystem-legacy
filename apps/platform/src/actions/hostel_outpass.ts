@@ -5,7 +5,11 @@ import { getHostelByUser } from "~/actions/hostel";
 import { REASONS, requestOutPassSchema } from "~/constants/outpass";
 // import { getSession } from "~/lib/auth-server";
 import dbConnect from "~/lib/dbConnect";
-import { HostelStudentModel, OutPassModel, type OutPassType } from "~/models/hostel_n_outpass";
+import {
+  HostelStudentModel,
+  OutPassModel,
+  type OutPassType,
+} from "~/models/hostel_n_outpass";
 
 /*
     OutPass Actions
@@ -42,10 +46,15 @@ export async function createOutPass(
     // }
     await dbConnect();
 
-    if(data.roomNumber !== hosteler.roomNumber && data.roomNumber !== "UNKNOWN"){
-      await HostelStudentModel.updateOne({_id: hosteler._id}, {roomNumber: data.roomNumber});
+    if (
+      data.roomNumber !== hosteler.roomNumber &&
+      data.roomNumber !== "UNKNOWN"
+    ) {
+      await HostelStudentModel.updateOne(
+        { _id: hosteler._id },
+        { roomNumber: data.roomNumber }
+      );
     }
-    
 
     // if reason is outing or market then validity should be the end of the day of expectedInTime
     const validity = new Date();
@@ -144,7 +153,6 @@ export async function getOutPassById(id: string): Promise<OutPassType | null> {
   }
 }
 
-
 export async function allowEntryExit(
   id: string,
   action_type: "entry" | "exit"
@@ -222,8 +230,7 @@ export async function approveRejectOutPass(
       return Promise.resolve("Outpass rejected successfully");
     }
     return Promise.reject("Invalid action type");
-  }
-  catch (err) {
+  } catch (err) {
     console.error(err);
     return Promise.reject(err?.toString() || "Something went wrong");
   }

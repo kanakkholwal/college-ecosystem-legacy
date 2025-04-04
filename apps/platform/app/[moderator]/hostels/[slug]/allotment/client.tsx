@@ -1,10 +1,7 @@
 "use client";
 
-
-import * as React from "react"
-import type { DropdownMenuCheckboxItemProps } from "@radix-ui/react-dropdown-menu"
-
-import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -12,67 +9,176 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+} from "@/components/ui/dropdown-menu";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Edit, Lock, Unlock } from "lucide-react";
 import toast from "react-hot-toast";
-import { updateAllotmentProcess,distributeSlots } from "~/actions/allotment-process";
+import {
+  distributeSlots,
+  updateAllotmentProcess,
+} from "~/actions/allotment-process";
+import type { HostelRoomJson } from "~/models/allotment";
 
-const statusSchema = ["open", "closed", "paused", "waiting","completed"] as const;
-export type StatusType = typeof statusSchema[number]
+const statusSchema = [
+  "open",
+  "closed",
+  "paused",
+  "waiting",
+  "completed",
+] as const;
+export type StatusType = (typeof statusSchema)[number];
 
-export function ChangeAllotmentProcessStatusButton({currentStatus,hostelId}: {currentStatus: string,hostelId: string}) {
-
-    
-
+export function ChangeAllotmentProcessStatusButton({
+  currentStatus,
+  hostelId,
+}: {
+  currentStatus: string;
+  hostelId: string;
+}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" size="sm">
-            Change Status
+          Change Status
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>Status</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {statusSchema.map((status:StatusType) => {
-            return (
-                <DropdownMenuCheckboxItem
-                key={status}
-                checked={currentStatus === status}
-                onCheckedChange={(checked) => {
-                    toast.promise(updateAllotmentProcess(hostelId, { status ,hostelId}), {
-                        loading: "Updating status...",
-                        success: `Status updated to ${status}`,
-                        error: `Error updating status to ${status}`,
-                    })
-                }}
-
-                >
-                {status}
-                </DropdownMenuCheckboxItem>
-            )
+        {statusSchema.map((status: StatusType) => {
+          return (
+            <DropdownMenuCheckboxItem
+              key={status}
+              checked={currentStatus === status}
+              onCheckedChange={(checked) => {
+                toast.promise(
+                  updateAllotmentProcess(hostelId, { status, hostelId }),
+                  {
+                    loading: "Updating status...",
+                    success: `Status updated to ${status}`,
+                    error: `Error updating status to ${status}`,
+                  }
+                );
+              }}
+            >
+              {status}
+            </DropdownMenuCheckboxItem>
+          );
         })}
-        
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
 
-
-export function DistributeSlotsButton({hostelId}: {hostelId: string}) {
-
-    return (<Button 
-        size="sm"
-        variant="outline"
-        onClick={() => {
-          toast.promise(distributeSlots(hostelId), {
-            loading: "Distributing slots...",
-            success: "Slots distributed successfully",
-            error: "Error distributing slots",
-          })
-          
-        }}
-
+export function DistributeSlotsButton({ hostelId }: { hostelId: string }) {
+  return (
+    <Button
+      size="sm"
+      variant="outline"
+      onClick={() => {
+        toast.promise(distributeSlots(hostelId), {
+          loading: "Distributing slots...",
+          success: "Slots distributed successfully",
+          error: "Error distributing slots",
+        });
+      }}
     >
-        Create Allotment Slots
-    </Button>)
+      Create Allotment Slots
+    </Button>
+  );
+}
+
+interface RoomsTableProps {
+  rooms: HostelRoomJson[];
+}
+
+const getStatus = (
+  occupied_seats: HostelRoomJson["occupied_seats"],
+  capacity: HostelRoomJson["capacity"]
+): [string, string] => {
+  if (occupied_seats === 0) {
+    return ["bg-green-500", "Vacant"];
+  }
+  if (occupied_seats < capacity) {
+    return ["bg-yellow-500", "Partially Occupied"];
+  }
+  if (occupied_seats === capacity) {
+    return ["bg-red-500", "Fully Occupied"];
+  }
+  return ["bg-gray-500", "Unknown"];
+};
+
+function onLockToggle(roomId: string) {}
+
+function onEdit(room: HostelRoomJson) {}
+export function RoomsTable({ rooms }: RoomsTableProps) {
+  return (
+    <div className="rounded-md border">
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Room No.</TableHead>
+            <TableHead>Capacity</TableHead>
+            <TableHead>Occupied</TableHead>
+            <TableHead>Status</TableHead>
+            <TableHead>Lock Status</TableHead>
+            <TableHead>Actions</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rooms.map((room) => (
+            <TableRow key={room._id}>
+              <TableCell className="font-medium">{room.roomNumber}</TableCell>
+              <TableCell>{room.capacity}</TableCell>
+              <TableCell>{room.occupied_seats}</TableCell>
+              <TableCell>{room.capacity}</TableCell>
+              <TableCell>
+                <Badge
+                  className={getStatus(room.occupied_seats, room.capacity)[0]}
+                >
+                  {getStatus(room.occupied_seats, room.capacity)[1]}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <Badge variant={room.isLocked ? "destructive" : "outline"}>
+                  {room.isLocked ? "Locked" : "Unlocked"}
+                </Badge>
+              </TableCell>
+              <TableCell>
+                <div className="flex space-x-2">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-8 w-8 p-0"
+                    onClick={() => onLockToggle(room._id)}
+                  >
+                    {room.isLocked ? (
+                      <Unlock className="h-4 w-4" />
+                    ) : (
+                      <Lock className="h-4 w-4" />
+                    )}
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    className="h-8 w-8 p-0"
+                    onClick={() => onEdit(room)}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                </div>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </div>
+  );
 }

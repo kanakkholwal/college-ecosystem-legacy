@@ -61,7 +61,7 @@ interface ErrorBoundaryWithSuspenseProps {
 
 export const ErrorBoundaryWithSuspense: React.FC<
   ErrorBoundaryWithSuspenseProps
-> = ({ children, fallback, loadingFallback,callback }) => {
+> = ({ children, fallback, loadingFallback, callback }) => {
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {

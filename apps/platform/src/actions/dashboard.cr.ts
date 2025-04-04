@@ -30,8 +30,7 @@ export async function getInfo(): Promise<{
   });
 }
 
-
-export async function getCrInfo(){
+export async function getCrInfo() {
   const session = await getSession();
 
   if (!session?.user.other_roles.includes("cr")) {
@@ -40,6 +39,4 @@ export async function getCrInfo(){
 
   await dbConnect();
   const studentInfo = await getStudentInfo(session?.user.username);
-
 }
-

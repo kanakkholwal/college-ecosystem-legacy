@@ -48,21 +48,23 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 
   // CORS logic for browser requests
   if (
-    (process.env.NODE_ENV === 'production' && CORS_ORIGINS.some(o => origin.endsWith(o))) ||
-    (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost:'))
+    (process.env.NODE_ENV === "production" &&
+      CORS_ORIGINS.some((o) => origin.endsWith(o))) ||
+    (process.env.NODE_ENV !== "production" &&
+      origin.startsWith("http://localhost:"))
   ) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type,X-IDENTITY-KEY');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    if (req.method === 'OPTIONS') {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type,X-IDENTITY-KEY");
+    res.header("Access-Control-Allow-Credentials", "true");
+    if (req.method === "OPTIONS") {
       res.sendStatus(200); // Preflight request
       return;
     }
     next();
     return; // Explicitly end processing here
-  } 
-   if (identityKey === SERVER_IDENTITY) {
+  }
+  if (identityKey === SERVER_IDENTITY) {
     next();
     return; // Explicitly end processing here
   }
@@ -79,7 +81,7 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 app.use("/api", httpRoutes);
 
 // Error handling middleware
- 
+
 app.use(
   (
     err: Error,

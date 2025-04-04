@@ -26,8 +26,6 @@ export function RouterCard({
   disabled,
   preserveParams,
 }: RouterCardProps) {
-  
-
   return (
     <ParamsPreserverLink
       href={href}

@@ -18,11 +18,16 @@ export default async function ModeratorDashboard(props: Props) {
     <div className="w-full space-y-6 my-5">
       <section id="welcome-header" className="w-full">
         <div className="@2xl:w-1/2">
-          <Heading level={3} className="text-base md:text-lg font-bold text-gray-800">
+          <Heading
+            level={3}
+            className="text-base md:text-lg font-bold text-gray-800"
+          >
             Hi, {session?.user?.name}
           </Heading>
           <Paragraph className="!mt-0 text-slate-600">
-            Welcome to the {changeCase(params.moderator.replaceAll("_"," "),"title")} dashboard.
+            Welcome to the{" "}
+            {changeCase(params.moderator.replaceAll("_", " "), "title")}{" "}
+            dashboard.
           </Paragraph>
         </div>
       </section>

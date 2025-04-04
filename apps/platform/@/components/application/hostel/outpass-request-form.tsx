@@ -205,9 +205,7 @@ export default function RequestOutPassForm<T>({
           {form.formState.errors.root?.message}
         </p>
         <div className="flex flex-wrap gap-2">
-          <Button type="submit">
-            Request Outpass
-          </Button>
+          <Button type="submit">Request Outpass</Button>
           <Button
             type="reset"
             variant="destructive_light"

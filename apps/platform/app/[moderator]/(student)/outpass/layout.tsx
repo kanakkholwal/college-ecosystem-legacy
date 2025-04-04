@@ -6,15 +6,10 @@ import type { PropsWithChildren } from "react";
 import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
 
-
-
 export default async function HostelPageLayout(props: {
   children: React.ReactNode;
 }) {
-
-  const { success, message, hostel, hosteler } = await getHostelByUser(
-    
-  );
+  const { success, message, hostel, hosteler } = await getHostelByUser();
 
   if (!success || !hostel || !hosteler) {
     return (
@@ -29,7 +24,7 @@ export default async function HostelPageLayout(props: {
   return (
     <div className="space-y-5">
       <HostelDetailsForNonAdmins hostel={hostel} />
-      <Separator className="bg-gray-300"/>
+      <Separator className="bg-gray-300" />
       <ConditionalRender condition={hosteler?.banned}>
         <EmptyArea
           icons={[LuBuilding]}

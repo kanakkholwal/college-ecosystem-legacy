@@ -13,7 +13,10 @@ import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { cn } from "@/lib/utils";
 import { ChartBar } from "lucide-react";
 import type { ViewBox } from "recharts/types/util/types";
-import { updateAttendanceRecord, deleteAttendanceRecord} from "~/actions/record.personal";
+import {
+  updateAttendanceRecord,
+  deleteAttendanceRecord,
+} from "~/actions/record.personal";
 import type { PersonalAttendanceWithRecords } from "~/db/schema/attendance_record";
 import UpdateAttendanceRecord from "./update-record";
 

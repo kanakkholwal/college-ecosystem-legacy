@@ -24,15 +24,15 @@ export default async function CRDashboard() {
   ];
   return (
     <ResponsiveContainer>
-        {quick_links.map((link, i) => (
-          <RouterCard
-            key={link.href}
-            {...link}
-            style={{
-              animationDelay: `${i * 500}ms`,
-            }}
-          />
-        ))}
+      {quick_links.map((link, i) => (
+        <RouterCard
+          key={link.href}
+          {...link}
+          style={{
+            animationDelay: `${i * 500}ms`,
+          }}
+        />
+      ))}
     </ResponsiveContainer>
   );
 }

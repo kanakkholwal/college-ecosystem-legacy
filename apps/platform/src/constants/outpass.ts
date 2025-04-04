@@ -8,7 +8,11 @@ export const REASONS = [
   "other",
 ] as const;
 export const OUTPASS_STATUS = [
-  "pending" , "approved" , "rejected" , "in_use" , "processed"
+  "pending",
+  "approved",
+  "rejected",
+  "in_use",
+  "processed",
 ] as const;
 
 export const requestOutPassSchema = z
@@ -83,7 +87,7 @@ export const requestOutPassSchema = z
     {
       message:
         "For market or outing, expectedOutTime can't be more than 6 PM and expectedInTime can't be more than 8 PM",
-      path: [ "expectedInTime"],
+      path: ["expectedInTime"],
     }
   )
   .refine(
@@ -102,7 +106,7 @@ export const requestOutPassSchema = z
     {
       message: "For market or outing, expected in time should be same day",
       path: ["expectedInTime"],
-    },
+    }
   );
 
 export const CONSTANTS = {

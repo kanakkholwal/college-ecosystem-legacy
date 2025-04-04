@@ -17,7 +17,7 @@ export default async function UpdateUserPage({ params }: PageProps) {
     return notFound();
   }
 
-  const {data} = await getHostels()
+  const { data } = await getHostels();
 
   return (
     <div className="space-y-6 my-5">
@@ -35,7 +35,7 @@ export default async function UpdateUserPage({ params }: PageProps) {
           },
           {
             title: "Update User",
-            content: <UserUpdate currentUser={user} hostels={data}/>,
+            content: <UserUpdate currentUser={user} hostels={data} />,
             id: "user_update",
           },
         ]}

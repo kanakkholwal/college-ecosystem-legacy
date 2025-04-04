@@ -17,8 +17,8 @@ const PROMO = {
   showTill: "2022-01-19T19:00:00",
   getConditionByUser: (user: Session["user"]) =>
     user?.other_roles.includes(ROLES.STUDENT) &&
-    user?.gender === "not_specified" && 
-    new Date() < new Date(PROMO.showTill)
+    user?.gender === "not_specified" &&
+    new Date() < new Date(PROMO.showTill),
 };
 
 export default async function Dashboard() {

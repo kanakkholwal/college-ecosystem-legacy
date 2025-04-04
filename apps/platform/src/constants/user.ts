@@ -16,9 +16,7 @@ export const ROLES = [
   "guard",
 ] as const;
 
-export const genderSchema = z.enum([
-  "male", "female", "not_specified"
-]);
+export const genderSchema = z.enum(["male", "female", "not_specified"]);
 
 export const emailSchema = z
   .string()
@@ -27,4 +25,4 @@ export const emailSchema = z
   .max(100, { message: "Email cannot exceed 100 characters" })
   .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
     message: `Email must end with @${ORG_DOMAIN}`,
-  })
+  });

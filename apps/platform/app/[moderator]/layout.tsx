@@ -119,7 +119,8 @@ function checkAuthorization(
     // const destination = session.user.other_roles.includes("student")
     //   ? "/"
     //   : session.user.other_roles[0] || "/";
-    const destination = session.user.other_roles?.length > 0 ? session.user.other_roles[0] : "/";
+    const destination =
+      session.user.other_roles?.length > 0 ? session.user.other_roles[0] : "/";
     return {
       redirect: { destination },
       authorized: false,

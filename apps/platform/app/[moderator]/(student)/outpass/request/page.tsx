@@ -2,7 +2,7 @@ import RequestOutPassForm from "@/components/application/hostel/outpass-request-
 import EmptyArea from "@/components/common/empty-area";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/typography";
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LuBuilding } from "react-icons/lu";
@@ -38,15 +38,13 @@ export default async function RequestOutPassPage(props: PageProps) {
 
   return (
     <div className="space-y-3 my-2">
-        <Button variant="link" size="sm" effect="hoverUnderline" asChild>
-          <Link href="/student/outpass">
-            <ArrowLeft />
-            Go Back
-          </Link>
-        </Button>
-      <Heading level={4}>
-        Request an Outpass
-      </Heading>
+      <Button variant="link" size="sm" effect="hoverUnderline" asChild>
+        <Link href="/student/outpass">
+          <ArrowLeft />
+          Go Back
+        </Link>
+      </Button>
+      <Heading level={4}>Request an Outpass</Heading>
       <RequestOutPassForm student={hosteler} onSubmit={createOutPass} />
     </div>
   );

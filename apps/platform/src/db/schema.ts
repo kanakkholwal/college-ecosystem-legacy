@@ -21,7 +21,6 @@ export {
 } from "./schema/course";
 export { rooms, roomUsageHistory } from "./schema/room";
 
-
 // export {
 //   students,
 //   allotmentSlots,

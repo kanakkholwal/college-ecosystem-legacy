@@ -27,8 +27,7 @@ export interface RawHostelType {
 export interface HostelType extends RawHostelType {
   _id: string;
 }
-export interface HostelTypeWithStudents
-  extends RawHostelType {
+export interface HostelTypeWithStudents extends RawHostelType {
   _id: string;
   // students: IHostelStudentType[];
 }
@@ -61,7 +60,6 @@ const HostelSchema = new Schema(
       email: { type: String, required: true },
       userId: { type: String, default: null },
     },
-
   },
   { timestamps: true }
 );
@@ -118,12 +116,12 @@ export interface rawOutPassType {
   student: string;
   roomNumber: string;
   address: string;
-  reason: typeof REASONS[number];
+  reason: (typeof REASONS)[number];
   expectedOutTime: Date;
   expectedInTime: Date;
   actualOutTime: Date | null;
   actualInTime: Date | null;
-  status: typeof OUTPASS_STATUS[number];
+  status: (typeof OUTPASS_STATUS)[number];
   validTill: Date;
   createdAt?: Date;
   updatedAt?: Date;
@@ -194,8 +192,8 @@ HostelStudentSchema.index({ rollNumber: 1 }, { unique: true });
 
 // 🟢 Pre-save hook: Ensure gender consistency with hostel
 HostelStudentSchema.pre("save", async function (next) {
-  if(this.hostelId === null) return next();
-  
+  if (this.hostelId === null) return next();
+
   const hostel = await HostelModel.findById(this.hostelId);
   if (!hostel) {
     return next(new Error("Hostel does not exist"));
@@ -230,7 +228,7 @@ async function updateCorrespondingUserId(student: IHostelStudentType) {
 }
 
 // Pre hook for insertMany
-HostelStudentSchema.pre("insertMany", async  (next, docs) =>{
+HostelStudentSchema.pre("insertMany", async (next, docs) => {
   try {
     for await (const student of docs) {
       // Fetch userId from PostgreSQL based on student's email
@@ -254,7 +252,7 @@ HostelStudentSchema.pre("save", async function (next) {
     next(error as CallbackError);
   }
 });
-HostelStudentSchema.pre("save", async (next) =>{
+HostelStudentSchema.pre("save", async (next) => {
   const student = this as unknown as IHostelStudentType;
 
   try {
@@ -267,10 +265,8 @@ HostelStudentSchema.pre("save", async (next) =>{
   }
 });
 
-
 // 🔴 Post-save hook: Auto-update ResultModel gender if missing
 HostelStudentSchema.post("save", async (doc) => {
-
   await ResultModel.updateOne(
     { rollNo: doc.rollNumber, gender: "not_specified" },
     { $set: { gender: doc.gender } }

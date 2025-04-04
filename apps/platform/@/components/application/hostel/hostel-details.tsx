@@ -49,7 +49,6 @@ export async function HostelDetail({ hostel }: { hostel: HostelType }) {
             </li>
           ))}
         </ul>
-
       </div>
     </div>
   );

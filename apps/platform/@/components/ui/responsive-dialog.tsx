@@ -100,7 +100,16 @@ const ResponsiveDialog = React.memo(
           </DrawerContent>
         </Drawer>
       );
-    }, [isDesktop, open, onOpenChange, btnProps, className, title, description, children]);
+    }, [
+      isDesktop,
+      open,
+      onOpenChange,
+      btnProps,
+      className,
+      title,
+      description,
+      children,
+    ]);
 
     return dialog;
   },

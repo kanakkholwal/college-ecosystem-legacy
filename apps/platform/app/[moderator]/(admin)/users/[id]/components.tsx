@@ -48,9 +48,7 @@ import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
 import { ROLES, emailSchema, genderSchema } from "~/constants/user";
 import type { users } from "~/db/schema";
 import { authClient } from "~/lib/auth-client";
-import type {
-  HostelType
-} from "~/models/hostel_n_outpass";
+import type { HostelType } from "~/models/hostel_n_outpass";
 type UserType = InferSelectModel<typeof users>;
 
 interface Props {
@@ -65,9 +63,10 @@ const formSchema = z.object({
   other_emails: z.array(emailSchema).optional(),
 });
 
-export function UserUpdate({ currentUser,hostels }: Props & { hostels: HostelType[] }) {
-
-  
+export function UserUpdate({
+  currentUser,
+  hostels,
+}: Props & { hostels: HostelType[] }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -149,10 +148,7 @@ export function UserUpdate({ currentUser,hostels }: Props & { hostels: HostelTyp
                       <MultiSelectorList>
                         {ROLES.map((role) => {
                           return (
-                            <MultiSelectorItem
-                              key={role}
-                              value={role}
-                            >
+                            <MultiSelectorItem key={role} value={role}>
                               {role.replace("_", " ")}
                             </MultiSelectorItem>
                           );
@@ -190,7 +186,6 @@ export function UserUpdate({ currentUser,hostels }: Props & { hostels: HostelTyp
                             <MultiSelectorItem
                               key={in_charge.slug}
                               value={in_charge.email}
-                            
                             >
                               {in_charge.email}
                             </MultiSelectorItem>
