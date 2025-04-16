@@ -1,12 +1,12 @@
 import type { NextFunction, Request, Response } from "express";
 import express from "express";
-import rateLimit from "express-rate-limit";
+// import rateLimit from "express-rate-limit";
 import httpRoutes from "./routes/httpRoutes";
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-});
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 100, // limit each IP to 100 requests per windowMs
+// });
 const app = express();
 
 // Middleware
@@ -22,9 +22,9 @@ app.get("/", (req, res) => {
   });
 });
 const CORS_ORIGINS = ["https://nith.eu.org", "https://app.nith.eu.org"];
-const isOriginAllowed = (origin: string): boolean => {
-  return CORS_ORIGINS.includes(origin);
-};
+// const isOriginAllowed = (origin: string): boolean => {
+//   return CORS_ORIGINS.includes(origin);
+// };
 
 const SERVER_IDENTITY = process.env.SERVER_IDENTITY;
 if (!SERVER_IDENTITY) throw new Error("SERVER_IDENTITY is required in ENV");
