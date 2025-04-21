@@ -149,6 +149,6 @@ export const config = {
      * - favicon.ico (favicon file)
      * - manifest.manifest (manifest file)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|manifest.webmanifest|.next/static).*)",
   ],
 };

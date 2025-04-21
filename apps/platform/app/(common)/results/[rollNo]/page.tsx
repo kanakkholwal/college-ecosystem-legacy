@@ -171,22 +171,22 @@ export default async function ResultsPage(props: Props) {
 
               {result.semesters?.map((semester: Semester) => {
                 return <AccordionItem value={semester.semester.toString()} key={semester.semester} className="bg-card p-3 rounded-lg">
-                  <AccordionTrigger className="space-y-1 no-underline hover:no-underline items-center">
-                    <h4 className="text-base font-semibold leading-none pl-4"> Semester {semester.semester}</h4>
-                    <div className="flex items-center space-x-4 text-sm text-muted-foreground ml-auto mr-2">
+                  <AccordionTrigger className="space-y-1 no-underline hover:no-underline items-center justify-between flex-wrap align-middle gap-3">
+                    <h4 className="text-base font-semibold leading-none align-middle"> Semester {semester.semester}</h4>
+                    <div className="flex items-center flex-wrap gap-2 text-sm text-muted-foreground align-middle mr-4">
                       <div>CGPI : {semester.cgpi}</div>
-                      <Separator orientation="vertical" />
+                      <Separator orientation="vertical" className="h-5" />
                       <div>SGPI : {semester.sgpi}</div>
-                      <Separator orientation="vertical" />
+                      <Separator orientation="vertical" className="h-5"/>
                       <div>{semester.courses.length} Courses</div>
-                      <Separator orientation="vertical" />
+                      <Separator orientation="vertical"className="h-5" />
                       <div>
                         Sem/Total Credit : {semester.sgpi_total}/ {semester.cgpi_total}
                       </div>
                     </div>
 
                   </AccordionTrigger>
-                  <AccordionContent>
+                  <AccordionContent className="ms-6 mr-4">
                     <Separator className="my-4" />
                     {semester.courses?.map((course: Course, index) => {
                       return (

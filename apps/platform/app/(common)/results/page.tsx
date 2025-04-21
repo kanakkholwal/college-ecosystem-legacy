@@ -45,7 +45,7 @@ export default async function ResultPage(props: {
   const { branches, programmes, batches } = await getCachedLabels(new_cache);
 
   return (
-    <>
+    <div className="px-6 md:px-12 xl:px-6">
       <section
         id="hero"
         className="z-10 w-full max-w-6xl mx-auto  relative flex flex-col items-center justify-center  py-24 max-h-80 text-center"
@@ -89,7 +89,7 @@ export default async function ResultPage(props: {
           />
         }
         loadingFallback={
-          <div className="mx-auto max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4">
+          <div className="mx-auto max-w-7xl w-full grid gap-4 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4">
             {[...Array(6)].map((_, i) => {
               return <SkeletonCard key={i.toString()} />;
             })}
@@ -127,6 +127,6 @@ export default async function ResultPage(props: {
           />
         </ConditionalRender>
       </ErrorBoundaryWithSuspense>
-    </>
+    </div>
   );
 }
