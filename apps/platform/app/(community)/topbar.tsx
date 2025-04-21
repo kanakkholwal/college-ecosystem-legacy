@@ -37,25 +37,27 @@ export type topNavLinkType = {
 };
 
 export default function TopNavPanel() {
-    const  pathname  = usePathname();
+    const pathname = usePathname();
 
     return (
         <nav className="bg-card rounded-lg border-b border-border max-w-4xl w-full my-10 mx-auto flex items-center justify-between snap-x snap-mandatory overflow-x-auto overflow-y-hidden scrollbar-0 scrollbar-thumb-muted/0 scrollbar-track-transparent">
-            {topName_links.map((link) => (
-                <Link key={link.href} href={link.href} 
-                className={cn(
-                    "inline-flex items-center justify-center gap-2 whitespace-nowrap p-4 font-medium text-muted-foreground transition-all capitalize flex-1",
-                    pathname === link.href ? 
-                    "border-b border-primary text-primary bg-card/50" 
-                    : 
-                    "text-muted-foreground",
-                )}
-                data-active={pathname === link.href ? "true" : "false"}
+            {topName_links.map((link) => {
+                const active = pathname.includes(link.href) && link.href !== "/";
+
+                return (<Link key={link.href} href={link.href}
+                    className={cn(
+                        "inline-flex items-center justify-center gap-2 whitespace-nowrap p-4 font-medium text-muted-foreground transition-all capitalize flex-1",
+                        active ?
+                            "border-b border-primary text-primary bg-card/50"
+                            :
+                            "text-muted-foreground",
+                    )}
+                    data-active={active ? "true" : "false"}
                 >
                     <link.Icon />
                     {link.title}
-                </Link>
-            ))}
+                </Link>)
+            })}
         </nav>
     );
 }

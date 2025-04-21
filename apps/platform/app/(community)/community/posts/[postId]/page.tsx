@@ -77,7 +77,7 @@ export default async function CommunityPost(props: Props) {
                   </span>
                 </p>
                 <p className="text-xs font-semibold">
-                  by @{typeof post.author !== "string" && post.author.rollNo}
+                  by @{typeof post.author !== "string" && post.author.username}
                 </p>
               </div>
             </div>

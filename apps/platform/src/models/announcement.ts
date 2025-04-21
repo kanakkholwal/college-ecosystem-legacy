@@ -29,7 +29,11 @@ export type AnnouncementTypeWithId = RawAnnouncementType & {
   _id: string;
   createdAt: Date;
   updatedAt: Date;
-  createdBy: string;
+  createdBy: {
+    id: string;
+    name: string;
+    username: string;
+  };
 };
 
 interface IAnnouncement extends Document {
@@ -37,7 +41,11 @@ interface IAnnouncement extends Document {
   content: string;
   relatedFor: (typeof RELATED_FOR_TYPES)[number];
   expiresAt: Date;
-  createdBy: string;
+  createdBy: {
+    id: string;
+    name: string;
+    username: string;
+  };
   updatedAt: Date;
   createdAt: Date;
 }
@@ -52,7 +60,7 @@ const announcementSchema = new Schema<IAnnouncement>(
       default: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
       index: { expires: "0s" },
     },
-    createdBy: { type: String, required: true },
+    createdBy: { type: { id: String, name: String, username: String }, required: true },
   },
   {
     timestamps: true,

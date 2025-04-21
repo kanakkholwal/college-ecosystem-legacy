@@ -7,7 +7,9 @@ import { GrAnnounce } from "react-icons/gr";
 import { getAnnouncements } from "src/lib/announcement/actions";
 import AnnouncementsList from "./list";
 
+import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
+import { RELATED_FOR_TYPES } from "~/models/announcement";
 
 export const metadata: Metadata = {
   title: `Announcements | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
@@ -20,25 +22,44 @@ export default async function AnnouncementsPage() {
   console.log(announcements);
 
   return (
-    <>
-      <div className="bg-white/20 backdrop-blur-lg mt-5 rounded-lg p-4 @container/polls">
-        <div className="w-full flex justify-between items-center whitespace-nowrap gap-2 mb-10">
+    <div className="max-w-6xl mx-auto w-full px-4 py-10 flex gap-5 flex-col md:flex-row relative">
+      <main className="flex flex-col gap-5 w-full md:max-w-3/4">
+        <div className="w-full flex justify-between items-center gap-2 mb-10 bg-card p-4 rounded-lg border-b">
           <h3 className="text-xl font-semibold">Announcements</h3>
-          <Button variant="default_light" size="sm" asChild>
-            <Link href="/announcements/create">Create Announcement</Link>
+          <Button variant="link" size="sm" asChild>
+            <Link href="/announcements/create">
+              Create Announcement
+              <ArrowRight />
+            </Link>
           </Button>
         </div>
-        {announcements.length === 0 && (
-          <EmptyArea
-            icons={[GrAnnounce]}
-            title="No announcements"
-            description="There are no announcements at the moment."
-          />
-        )}
-        <Suspense fallback={<div>Loading...</div>}>
-          <AnnouncementsList announcements={announcements} />
-        </Suspense>
-      </div>
-    </>
+        <div className="grid grid-cols-1 gap-4 columns-1 snap-y snap-mandatory p-4">
+          {announcements.length === 0 && (
+            <EmptyArea
+              icons={[GrAnnounce]}
+              title="No announcements"
+              description="There are no announcements at the moment."
+            />
+          )}
+          <Suspense fallback={<div>Loading...</div>}>
+            <AnnouncementsList announcements={announcements} />
+          </Suspense>
+
+        </div>
+      </main>
+      <aside className="space-y-5 p-4 rounded-lg bg-card border md:max-w-1/4 h-fit md:sticky md:top-24">
+
+        <h3 className="text-base font-medium">
+          <GrAnnounce className="inline-block size-4 mr-2" />
+          Announcement Categories
+        </h3>
+        {RELATED_FOR_TYPES.map((category) => (
+          <div key={category} className="category-item">
+            {category}
+          </div>
+        ))}
+      </aside>
+
+    </div>
   );
 }
