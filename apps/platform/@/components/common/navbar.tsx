@@ -25,7 +25,7 @@ export default function Navbar({ user }: NavbarProps) {
         >
           <Link
             href="/"
-            className="relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary lg:text-xl whitespace-nowrap"
+            className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:from-secondary hover:to-primary lg:text-xl whitespace-nowrap"
           >
             {process.env.NEXT_PUBLIC_WEBSITE_NAME}
           </Link>

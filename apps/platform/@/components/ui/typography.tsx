@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { cva } from "class-variance-authority";
 
 // headings
-const headingVariants = cva("font-semibold tracking-tight text-gray-700", {
+const headingVariants = cva("font-semibold tracking-tight", {
   variants: {
     level: {
       1: "text-4xl font-extrabold lg:text-5xl",
@@ -38,7 +38,7 @@ export const Heading: React.FC<HeadingProps> = ({
 
 // paragraphs
 const paragraphVariants = cva(
-  "leading-7 [&:not(:first-child)]:mt-6 text-gray-700",
+  "leading-7 [&:not(:first-child)]:mt-6 text-muted-foreground",
   {
     variants: {},
     defaultVariants: {},
