@@ -72,24 +72,24 @@ export default async function DashboardLayout({
       <AppSidebar user={session.user} moderator={moderator} />
       <SidebarInset className="flex flex-col flex-1 w-full relative z-0">
         <Navbar user={session.user} />
-        <div
+        {/* <div
           aria-hidden="true"
           className="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20 -z-[1]"
         >
           <div className="blur-[106px] h-56 bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700" />
           <div className="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
-        </div>
+        </div> */}
 
         <main className="content p-4 md:p-6 z-2 @container space-y-10 min-h-screen h-full">
           {children}
         </main>
-        <div
+        {/* <div
           aria-hidden="true"
           className="absolute bottom-0 right-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20 -z-[1]"
         >
           <div className="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
           <div className="blur-[106px] h-56 bg-gradient-to-br from-primary to-purple-400 dark:from-blue-700" />
-        </div>
+        </div> */}
         {process.env.NODE_ENV !== "production" && (
           <div className="fixed bottom-0 right-0 p-2 text-xs text-gray-500 dark:text-slate-400">
             v0.0.1({process.env.NODE_ENV})

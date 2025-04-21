@@ -40,7 +40,7 @@ export default function Sidebar() {
   return (
     <aside
       className={cn(
-        "hidden lg:flex flex-col items-start w-64 h-full rounded-lg p-4 bg-card backdrop-blur-3xl border-r border-border",
+        "hidden lg:flex flex-col items-start w-64 h-full rounded-lg p-4 bg-sidebar backdrop-blur-3xl border-r border-border",
         "lg:sticky lg:top-24 lg:left-0 lg:bottom-auto lg:translate-x-0 transition-all"
       )}
     >
@@ -97,14 +97,14 @@ function SideLink({ link, style }: SideLinkProps) {
       href={link.href}
       className={cn(
         "group rounded-lg w-full flex justify-start items-center gap-2 px-5 py-2 animate-in popup  transition-colors ",
-        "border border-transparent backdrop-blur-2xl bg-white/10 hover:bg-primary/10 hover:shadow hover:border-primary/5 text-gray-700 hover:text-primary"
+        "border border-transparent backdrop-blur-2xl hover:bg-primary/10 hover:shadow hover:border-primary/5 text-muted-foreground hover:text-primary"
       )}
       target={link.external ? "_blank" : "_self"}
       rel={link.external ? "noopener noreferrer" : undefined}
       style={style}
     >
       <link.Icon className="w-5 h-5" />
-      <span className="text-sm font-semibold whitespace-nowrap">
+      <span className="text-sm font-medium whitespace-nowrap">
         {link.title}
       </span>
       <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none ml-auto">
