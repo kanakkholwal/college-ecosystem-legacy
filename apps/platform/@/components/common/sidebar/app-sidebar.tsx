@@ -51,7 +51,7 @@ export function AppSidebar({ user, moderator, ...props }: SidebarProps) {
   return (
     <Sidebar
       collapsible="icon"
-      className="bg-white/20 backdrop-blur-3xl border-r border-gray-300/30"
+      className="backdrop-blur-3xl border-r border-border"
       {...props}
     >
       <SidebarHeader>

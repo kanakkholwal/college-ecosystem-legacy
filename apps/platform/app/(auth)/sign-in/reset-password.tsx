@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { CardDescription, CardTitle } from "@/components/ui/card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -70,12 +70,15 @@ export default function ResetPassword() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center w-full space-y-4">
-      <CardTitle>Reset Your Password</CardTitle>
-      <CardDescription>
-        Enter and confirm your new password below
-      </CardDescription>
-      <div className={cn("grid gap-6 w-full text-left py-4")}>
+    <>
+      <CardHeader className="text-center">
+
+        <CardTitle>Reset Your Password</CardTitle>
+        <CardDescription>
+          Enter and confirm your new password below
+        </CardDescription>
+      </CardHeader>
+      <CardContent className={cn("grid gap-6 w-full text-left py-4")}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
             <FormField
@@ -127,7 +130,7 @@ export default function ResetPassword() {
             </Button>
           </form>
         </Form>
-      </div>
-    </main>
+      </CardContent>
+    </>
   );
 }

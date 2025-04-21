@@ -1,14 +1,8 @@
 import {
   Button,
-  Column,
-  Heading,
   Hr,
-  Img,
-  Link,
   Preview,
-  Row,
-  Section,
-  Text,
+  Text
 } from "@react-email/components";
 import { z } from "zod";
 
@@ -41,7 +35,7 @@ export function WelcomeVerifyEmail({ payload }: { payload: Payload }) {
       >
         Verify Email
       </Button>
-      <Hr className="border-gray-200 my-6" />
+      <Hr className="border-border my-6" />
       <Text className="text-gray-600 text-sm">
         If you didn't create an account, you can safely ignore this email.
       </Text>

@@ -1,11 +1,11 @@
 "use server";
 import type { ResultTypeWithId } from "~/models/result";
 
-import dbConnect from "~/lib/dbConnect";
-import redis from "~/lib/redis";
-import ResultModel from "~/models/result";
 import { z } from "zod";
+import dbConnect from "~/lib/dbConnect";
+// import redis from "~/lib/redis";
 import { serverFetch } from "~/lib/server-fetch";
+import ResultModel from "~/models/result";
 
 /*
 /*  For Public Search
@@ -31,7 +31,7 @@ export async function getResults(
     const resultsPerPage = 32;
     const skip = currentPage * resultsPerPage - resultsPerPage;
 
-    // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+    // biome-ignore lint/suspicious/noExplicitAny: legacy query compatibility
     const filterQuery: any = {
       $or: [
         { rollNo: { $regex: query, $options: "i" } },
@@ -39,7 +39,6 @@ export async function getResults(
       ],
     };
 
-    // Apply filters if provided and not equal to "all"
     if (filter.branch && filter.branch !== "all") {
       filterQuery.branch = filter.branch;
     }
@@ -52,20 +51,28 @@ export async function getResults(
       filterQuery.batch = filter.batch;
     }
 
-    // Check cached results
-    const cacheKey = `results_${query}_${currentPage}${filter ? `_${JSON.stringify(filter)}` : ""}`;
+    const cacheKey = `results_${query}_${currentPage}${
+      filter ? `_${JSON.stringify(filter)}` : ""
+    }`;
+
     let cachedResults: getResultsReturnType | null = null;
-    try {
-      if (!new_cache) {
-        const cachedData = await redis.get(cacheKey);
-        if (cachedData) {
-          cachedResults = JSON.parse(cachedData) as getResultsReturnType;
-        }
-      } else {
-        await redis.del(cacheKey);
+
+    // Try Redis GET
+    if (!new_cache) {
+      try {
+        // const cachedData = await redis.get(cacheKey);
+        // if (cachedData) {
+        //   cachedResults = JSON.parse(cachedData) as getResultsReturnType;
+        // }
+      } catch (redisGetErr) {
+        console.error("Redis GET error:", redisGetErr);
       }
-    } catch (redisError) {
-      console.error("Redis connection error:", redisError);
+    } else {
+      try {
+        // await redis.del(cacheKey);
+      } catch (redisDelErr) {
+        console.error("Redis DEL error:", redisDelErr);
+      }
     }
 
     if (cachedResults) {
@@ -74,7 +81,7 @@ export async function getResults(
 
     const results = await ResultModel.find({
       ...filterQuery,
-      $expr: { $gt: [{ $size: "$semesters" }, 0] }, // Add the condition here
+      $expr: { $gt: [{ $size: "$semesters" }, 0] },
     })
       .sort({ "rank.college": "asc" })
       .skip(skip)
@@ -87,8 +94,17 @@ export async function getResults(
 
     const response = { results, totalPages };
 
-    // Cache the query results for 1 week
-    await redis.set(cacheKey, JSON.stringify(response), "EX", 60 * 60 * 24 * 7);
+    // Try Redis SET
+    try {
+      // await redis.set(
+      //   cacheKey,
+      //   JSON.stringify(response),
+      //   "EX",
+      //   60 * 60 * 24 * 7 // 1 week
+      // );
+    } catch (redisSetErr) {
+      console.error("Redis SET error:", redisSetErr);
+    }
 
     return response;
   } catch (error) {
@@ -103,24 +119,28 @@ type CachedLabels = {
   programmes: string[];
 };
 
-export async function getCachedLabels(
-  new_cache?: boolean
-): Promise<CachedLabels> {
+export async function getCachedLabels(new_cache?: boolean): Promise<CachedLabels> {
   const cacheKey = "cached_labels";
   let cachedLabels: CachedLabels | null = null;
+
   try {
-    try {
-      if (!new_cache) {
-        const cachedData = await redis.get(cacheKey);
-        if (cachedData) {
-          cachedLabels = JSON.parse(cachedData) as CachedLabels;
-        }
-      } else {
-        await redis.del(cacheKey);
+    if (!new_cache) {
+      try {
+        // const cachedData = await redis.get(cacheKey);
+        // if (cachedData) {
+        //   cachedLabels = JSON.parse(cachedData) as CachedLabels;
+        // }
+      } catch (redisGetErr) {
+        console.error("Redis GET error:", redisGetErr);
       }
-    } catch (redisError) {
-      console.error("Redis connection error:", redisError);
+    } else {
+      try {
+        // await redis.del(cacheKey);
+      } catch (redisDelErr) {
+        console.error("Redis DEL error:", redisDelErr);
+      }
     }
+
     if (!cachedLabels) {
       await dbConnect();
       const branches = await ResultModel.distinct("branch");
@@ -129,18 +149,22 @@ export async function getCachedLabels(
 
       cachedLabels = { branches, batches, programmes };
 
-      // Cache labels for 6 months
-      await redis.set(
-        cacheKey,
-        JSON.stringify(cachedLabels),
-        "EX",
-        60 * 60 * 24 * 30 * 6
-      );
+      try {
+        // await redis.set(
+        //   cacheKey,
+        //   JSON.stringify(cachedLabels),
+        //   "EX",
+        //   60 * 60 * 24 * 30 * 6 // 6 months
+        // );
+      } catch (redisSetErr) {
+        console.error("Redis SET error:", redisSetErr);
+      }
     }
   } catch (error) {
     console.error("Error fetching cached labels:", error);
     return { branches: [], batches: [], programmes: [] };
   }
+
   return cachedLabels || { branches: [], batches: [], programmes: [] };
 }
 

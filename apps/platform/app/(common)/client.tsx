@@ -15,7 +15,7 @@ export function HeroSection({ user }: HeroSection) {
   return (
     <section
       id="hero"
-      className="z-10 w-full max-w-7xl max-h-96 relative flex justify-center lg:justify-around items-center gap-10 py-24 px-4 rounded-lg text-center lg:text-left"
+      className="z-10 bg-accent w-full max-w-7xl max-h-96 relative flex justify-center lg:justify-around items-center gap-10 py-24 px-4 rounded-lg text-center lg:text-left"
       suppressHydrationWarning={true}
     >
       <motion.div
@@ -28,10 +28,10 @@ export function HeroSection({ user }: HeroSection) {
         }}
         className="relative flex flex-col gap-4 items-center justify-center px-4 z-50"
       >
-        <h2 className="text-xl md:text-2xl lg:text-4xl font-bold text-center whitespace-nowrap text-neutral-900">
+        <h2 className="text-3xl font-semibold text-center whitespace-nowrap">
           {getGreeting()} <span className="text-primary">{user?.name}</span>
         </h2>
-        <h5 className="font-medium text-base md:text-lg text-gray-700">
+        <p className="mb-8 text-lg text-muted-foreground">
           Welcome to the College Ecosystem
           {/* <svg
           className="hello__svg h-10"
@@ -51,7 +51,7 @@ export function HeroSection({ user }: HeroSection) {
             }}
           />
         </svg> */}
-        </h5>
+        </p>
         {user?.other_roles.includes("student") && (
           <Alert variant="info" className="mt-4" data-aos="fade-right">
             <RocketIcon className="h-4 w-4" />
