@@ -12,7 +12,7 @@ interface OutpassDetailsProps {
 }
 
 const classNames = {
-  item: "flex items-center justify-between p-4 mb-3 bg-white border border-gray-200 rounded-lg shadow-sm last:mb-0 relative",
+  item: "flex items-center justify-between p-4 mb-3 bg-white border border-border rounded-lg shadow-sm last:mb-0 relative",
   details: "flex flex-col",
   studentInfo: "font-medium text-gray-800",
   outpassInfo: "text-sm text-gray-600",

@@ -3,11 +3,11 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { Info, Pause, Play, Wifi, WifiOff, X } from "lucide-react";
 
@@ -181,7 +181,7 @@ export default function ScrapeResultPage() {
           )}
         </AlertDescription>
       </Alert>
-      <section className="p-6 border border-gray-200 rounded-lg bg-slate-100 shadow space-y-5">
+      <section className="p-6 border border-border rounded-lg bg-slate-100 shadow space-y-5">
         <div
           aria-label="header"
           className="text-lg font-semibold border-b pb-5"
@@ -336,7 +336,7 @@ export default function ScrapeResultPage() {
         </div>
       </section>
 
-      <section className="p-6 border border-gray-200 rounded-lg bg-slate-100 shadow">
+      <section className="p-6 border border-border rounded-lg bg-slate-100 shadow">
         <div
           aria-label="header"
           className="text-lg font-semibold border-b pb-5 mb-5 flex w-full justify-between gap-4"

@@ -2,11 +2,10 @@
 
 import { authClient } from "src/lib/auth-client";
 
-import { CardDescription, CardTitle } from "@/components/ui/card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 
-import { useState } from "react";
-import { GENDER } from "~/constants";
 import { Button } from "@/components/ui/button";
+import { useState } from "react";
 import { BiLockOpenAlt } from "react-icons/bi";
 import { LuMail } from "react-icons/lu";
 
@@ -29,8 +28,8 @@ import { AiOutlineLoading } from "react-icons/ai";
 import { FcGoogle } from "react-icons/fc";
 import { getDepartmentName } from "src/constants/departments";
 import * as z from "zod";
-import { ORG_DOMAIN } from "~/project.config";
 import { emailSchema } from "~/constants/user";
+import { ORG_DOMAIN } from "~/project.config";
 
 const FormSchema = z.object({
   email: emailSchema,
@@ -94,12 +93,13 @@ export default function SignUpForm() {
 
   return (
     <>
-      <main className="flex flex-col items-center justify-center w-full p-4 space-y-4">
-        <CardTitle>Sign Up</CardTitle>
-        <CardDescription className="mt-2 mb-5">
+      <CardHeader className="text-center">
+        <CardTitle className="text-xl">Sign Up</CardTitle>
+        <CardDescription>
           Create a new account for platform access.
         </CardDescription>
-        <div className={cn("grid gap-6 w-full text-left py-4")}>
+      </CardHeader>
+      <CardContent  className={cn("grid gap-6 w-full text-left p-4")}>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
               <FormField
@@ -180,7 +180,7 @@ export default function SignUpForm() {
                   </FormItem>
                 )}
               />
-              <p className="text-left mt-2 text-xs font-medium text-gray-600">
+              <p className="text-left mt-2 text-[8px] italic font-medium text-gray-600">
                 You must use your NITH email to sign up.(you{"'"}ll get a
                 verification link in your email if your email isn{"'"}t in the
                 database)
@@ -234,8 +234,7 @@ export default function SignUpForm() {
               {isLoading ? "Signing in..." : "Sign Up with Google"}
             </Button>
           </div>
-        </div>
-      </main>
+      </CardContent>
     </>
   );
 }

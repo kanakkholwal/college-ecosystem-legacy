@@ -19,7 +19,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
   return (
     <nav
       className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
+        "flex gap-1 space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
         className
       )}
       {...props}
@@ -27,7 +27,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       {items.map((item) => (
         <Button
           key={item.href}
-          variant={pathname.includes(item.href) ? "default_light" : "ghost"}
+          variant={pathname.includes(item.href) ? "default_light" : "outline"}
           effect="shineHover"
           className="justify-start"
           asChild

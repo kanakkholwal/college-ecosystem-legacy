@@ -24,7 +24,7 @@ const classNames = {
   rootContainer:
     "relative w-full max-w-[720px] mx-auto flex items-center justify-center",
   root: cn(
-    "aspect-square mx-auto rounded-lg border border-gray-200 shadow-md bg-white",
+    "aspect-square mx-auto rounded-lg border border-border shadow-md bg-white",
     "w-full h-auto p-3",
     "@2xl:h-[700px] @2xl:w-[720px] @2xl:p-5"
   ),

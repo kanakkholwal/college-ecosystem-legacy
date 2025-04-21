@@ -3,7 +3,7 @@
 import { authClient } from "src/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
-import { CardDescription, CardTitle } from "@/components/ui/card";
+import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { useState } from "react";
 import { BiLockOpenAlt } from "react-icons/bi";
 import { FcGoogle } from "react-icons/fc";
@@ -94,14 +94,16 @@ export default function SignInForm() {
 
   return (
     <>
-      <main className="flex flex-col items-center justify-start w-full space-y-4">
-        <CardTitle>Sign In</CardTitle>
-        <CardDescription className="mt-2 mb-5">
+      <CardHeader className="text-center">
+        <CardTitle className="text-xl">Welcome back</CardTitle>
+        <CardDescription>
           Log in for a seamless experience.
         </CardDescription>
-        <div className={cn("grid gap-6 w-full text-left py-4")}>
+      </CardHeader>
+      <CardContent  className={cn("grid gap-6 w-full text-left p-4 ")}>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
+          
               <FormField
                 control={form.control}
                 name="email"
@@ -213,8 +215,7 @@ export default function SignInForm() {
               {isLoading ? "Signing in..." : "Sign in with Google"}
             </Button>
           </div>
-        </div>
-      </main>
+      </CardContent>
     </>
   );
 }

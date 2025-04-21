@@ -1,4 +1,4 @@
-import { Users } from "lucide-react";
+import { Settings, Users } from "lucide-react";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuBookA, LuBuilding, LuGithub, LuSchool } from "react-icons/lu";
@@ -291,6 +291,24 @@ export const sidebar_links: rawLinkType[] = [
       },
     ],
   },
+  {
+    title: "Settings",
+    icon: Settings,
+    path: "/settings",
+    allowed_roles:["*"],
+    items:[
+      {
+        title:"Account",
+        path:"/account",
+        allowed_roles:["*"]
+      },
+      {
+        title:"Appearance",
+        path:"/appearance",
+        allowed_roles:["*"]
+      },
+    ]
+  }
 ];
 
 interface SocialLink {
@@ -355,3 +373,24 @@ const checkRoleAccess = (userRole: string, allowedRoles: string[]): boolean => {
     (negRole) => userRole === negRole.slice(1) // Remove "!" prefix for comparison
   );
 };
+
+
+
+export const SUPPORT_LINKS = [
+  {
+    href: "https://github.com/kanakkholwal/college-ecosystem",
+    title: "Contribute to this project",
+  },
+  {
+    href: "https://github.com/kanakkholwal/college-ecosystem/issues",
+    title: "Report an issue",
+  },
+  {
+    href: "https://forms.gle/u2ptK12iRVdn5oXF7",
+    title: "Give a feedback",
+  },
+  {
+    href: "https://forms.gle/v8Angn9VCbt9oVko7",
+    title: "Suggest a feature",
+  },
+];

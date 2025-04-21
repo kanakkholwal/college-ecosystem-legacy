@@ -29,6 +29,7 @@ export default function Paginate({ totalPages }: { totalPages: number }) {
         <PaginationItem>
           <PaginationPrevious
             aria-disabled={currentPage <= 1}
+            size="sm"
             href={currentPage <= 1 ? "#" : createPageURL(currentPage - 1)}
           />
         </PaginationItem>
@@ -48,6 +49,7 @@ export default function Paginate({ totalPages }: { totalPages: number }) {
                 <PaginationLink
                   href={createPageURL(pageNumber)}
                   isActive={pageNumber === currentPage}
+                  size="icon_sm"
                 >
                   {pageNumber}
                 </PaginationLink>
@@ -68,6 +70,7 @@ export default function Paginate({ totalPages }: { totalPages: number }) {
         <PaginationItem>
           <PaginationNext
             aria-disabled={currentPage >= totalPages}
+            size="sm"
             href={
               currentPage >= totalPages ? "#" : createPageURL(currentPage + 1)
             }

@@ -9,14 +9,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import {
-  MultiSelector,
-  MultiSelectorContent,
-  MultiSelectorInput,
-  MultiSelectorItem,
-  MultiSelectorList,
-  MultiSelectorTrigger,
-} from "@/components/ui/multi-select";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,7 +16,6 @@ import toast from "react-hot-toast";
 import * as z from "zod";
 import { updateUser } from "~/actions/dashboard.admin";
 import { emailSchema } from "~/constants";
-import { ROLES } from "~/constants/user";
 import type { Session } from "~/lib/auth-client";
 
 interface Props {
@@ -100,45 +91,7 @@ export function AccountForm({ currentUser }: Props) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="other_emails"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Roles</FormLabel>
-                <FormControl>
-                  <MultiSelector
-                    values={field.value}
-                    onValuesChange={field.onChange}
-                    loop
-                    className="max-w-xs"
-                  >
-                    <MultiSelectorTrigger>
-                      <MultiSelectorInput placeholder="Select Roles" />
-                    </MultiSelectorTrigger>
-                    <MultiSelectorContent>
-                      <MultiSelectorList>
-                        {ROLES.map((role) => {
-                          return (
-                            <MultiSelectorItem
-                              key={role}
-                              value={role}
-                              className="capitalize"
-                            >
-                              {role.replace("_", " ")}
-                            </MultiSelectorItem>
-                          );
-                        })}
-                      </MultiSelectorList>
-                    </MultiSelectorContent>
-                  </MultiSelector>
-                </FormControl>
-
-                <FormDescription />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+      
 
           <Button type="submit" disabled={form.formState.isSubmitting}>
             Submit

@@ -40,7 +40,7 @@ export default function Sidebar() {
   return (
     <aside
       className={cn(
-        "hidden lg:flex flex-col items-start w-64 h-full rounded-lg p-4 bg-white/20 backdrop-blur-3xl border-r border-gray-300/30",
+        "hidden lg:flex flex-col items-start w-64 h-full rounded-lg p-4 bg-card backdrop-blur-3xl border-r border-border",
         "lg:sticky lg:top-24 lg:left-0 lg:bottom-auto lg:translate-x-0 transition-all"
       )}
     >

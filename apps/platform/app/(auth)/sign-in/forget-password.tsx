@@ -2,7 +2,7 @@
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { CardDescription, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -80,12 +80,15 @@ export default function ForgotPassword() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center w-full space-y-4">
+    <>
       <ConditionalRender condition={isSubmitted}>
-        <CardTitle>Check your email</CardTitle>
-        <CardDescription>
-          We&apos;ve sent a password reset link to your email.
-        </CardDescription>
+        <CardHeader className="text-center">
+
+          <CardTitle>Check your email</CardTitle>
+          <CardDescription>
+            We&apos;ve sent a password reset link to your email.
+          </CardDescription>
+        </CardHeader>
         <Alert variant="success" className="w-full">
           <CheckCircle2 className="h-4 w-4" />
           <AlertDescription>
@@ -94,11 +97,14 @@ export default function ForgotPassword() {
         </Alert>
       </ConditionalRender>
       <ConditionalRender condition={!isSubmitted}>
+      <CardHeader className="text-center">
+
         <CardTitle>Forgot your password?</CardTitle>
         <CardDescription>
           Enter your email to reset your password
         </CardDescription>
-        <div className={cn("grid gap-6 w-full text-left py-4")}>
+        </CardHeader>
+        <div className={cn("grid gap-6 w-full text-left p-4")}>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
               <FormField
@@ -141,6 +147,6 @@ export default function ForgotPassword() {
           </Form>
         </div>
       </ConditionalRender>
-    </main>
+    </>
   );
 }

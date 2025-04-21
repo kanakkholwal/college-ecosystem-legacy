@@ -50,7 +50,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
       btnProps={{
         size: "icon",
         rounded: "full",
-        variant: "glass",
+        variant: "outline",
         children: (
           <Avatar className="size-8 rounded-full">
             <AvatarImage
@@ -71,7 +71,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
       }}
     >
       <div className="flex gap-4 mx-auto">
-        <Avatar className="size-16 rounded-full bg-gray-200">
+        <Avatar className="size-16 rounded-full bg-muted">
           <AvatarImage
             src={user.image as string}
             alt={user.username}
@@ -80,10 +80,10 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col justify-center items-start">
-          <h4 className="text-gray-700 font-bold tracking-wide text-lg">
+          <h4 className="text-muted-foreground font-bold tracking-wide text-lg">
             {user.name}
           </h4>
-          <p className="text-gray-500 font-medium text-base">{user.email}</p>
+          <p className="text-muted-foreground font-medium text-base">{user.email}</p>
           <p>
             <span className="rounded-md px-2 py-1 text-xs font-medium capitalize bg-primary/30 text-primary whitespace-nowrap">
               {user.department}
@@ -97,7 +97,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           <Link
             key={link.href}
             href={link?.href || ""}
-            className="rounded-md h-8 p-3 inline-flex justify-start gap-2 items-center text-sm font-medium capitalize border bg-gray-200 text-gray-700 hover:border-primary hover:text-primary whitespace-nowrap"
+            className="rounded-md h-8 p-3 inline-flex justify-start gap-2 items-center text-sm font-medium capitalize border bg-muted text-muted-foreground hover:border-primary hover:text-primary whitespace-nowrap"
           >
             {link.Icon && <link.Icon className="h-3 w-3 inline-block" />}
             <span className="truncate">{link.title}</span>
@@ -111,7 +111,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           <Link
             key={link.href}
             href={link?.href || ""}
-            className="rounded-md px-3 py-1 text-xs font-medium capitalize bg-gray-200 text-gray-500 hover:text-gray-700 whitespace-nowrap"
+            className="rounded-md px-3 py-1 text-xs font-medium capitalize bg-muted text-muted-foreground hover:text-primary whitespace-nowrap"
           >
             {link.title}
           </Link>
@@ -125,7 +125,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
                 href={link.href}
                 target="_blank"
                 key={link.href}
-                className="hover:text-primary hover:-translate-y-1 ease-in duration-300 flex justify-center items-center h-16 icon "
+                className="hover:text-primary hover:-translate-y-1 ease-in duration-300 flex justify-center items-center h-16 icon"
               >
                 <link.icon className="w-5 h-5" />
               </Link>

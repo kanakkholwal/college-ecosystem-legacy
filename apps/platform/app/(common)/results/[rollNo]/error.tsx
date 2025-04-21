@@ -18,7 +18,7 @@ export default function ErrorBoundary({
     console.error(error);
   }, [error]);
   return (
-    <div className="flex items-center justify-center w-full h-full space-y-10 flex-col">
+    <div className="flex items-center justify-center w-full h-full space-y-10 flex-col max-w-5xl mx-auto">
       <ErrorBanner />
       <Alert>
         <Terminal className="h-4 w-4" />
