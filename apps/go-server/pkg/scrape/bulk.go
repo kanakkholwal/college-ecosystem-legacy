@@ -17,7 +17,7 @@ func ScrapeInBulk(ctx context.Context, rollNumbers []string, concurrency int, de
 	rolls := make(chan string)
 	results := make(chan ScrapeResult)
 	collected := make([]ScrapeResult, 0, len(rollNumbers))
-
+	println("Scraping in bulk...", len(rollNumbers), "roll numbers")
 	ticker := time.NewTicker(delay)
 	defer ticker.Stop()
 
@@ -29,6 +29,8 @@ func ScrapeInBulk(ctx context.Context, rollNumbers []string, concurrency int, de
 				case <-ticker.C:
 					data, err := GetResultByRollNumber(roll)
 					res := ScrapeResult{RollNumber: roll}
+
+					println("Scraping roll number:", roll)
 					if err != nil {
 						res.Error = err.Error()
 					} else {
@@ -67,6 +69,7 @@ func ScrapeInBulk(ctx context.Context, rollNumbers []string, concurrency int, de
 			return collected
 		}
 	}
+	println("Scraping completed", len(collected), "results collected")
 
 	return collected
 }

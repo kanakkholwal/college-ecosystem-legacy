@@ -32,6 +32,21 @@ var thresholdForProgramme = map[string]int{
 	"B.Arch":      60,
 }
 
+// var thresholdForBranch = map[string]int{
+// 	"bar": 60,
+// 	"bce": 120,
+// 	"bme": 120,
+// 	"bms": 70,
+// 	"bma": 50,
+// 	"bph": 50,
+// 	"bee": 120,
+// 	"bec": 120,
+// 	"bcs": 120,
+// 	"bch": 50,
+// 	"dec": 30,
+// 	"dcs": 30,
+// }
+
 func GenRollNumbers(batchYear int) []string {
 	if batchYear < 2020 {
 		return []string{}
@@ -65,6 +80,36 @@ func GenRollNumbersForAll() []string {
 	}
 	return []string{}
 
+}
+func GenRollNumbersForClass(branch string, programme string) []string {
+	branch = strings.ToLower(branch)
+	programme = strings.Title(strings.ToLower(programme)) // Ensure it matches map keys like "B.Tech"
+
+	if branch == "" || programme == "" {
+		return []string{}
+	}
+	if _, ok := BranchCodesToNames[branch]; !ok {
+		return []string{}
+	}
+	progCodes, ok := programmeKeys[programme]
+	if !ok {
+		return []string{}
+	}
+
+	rollNumbers := GenRollNumbers(time.Now().Year())
+	matching := []string{}
+
+	// check each generated rollNumber for matching programme + branch code
+	for _, roll := range rollNumbers {
+		for _, code := range progCodes {
+			if strings.Contains(roll, code) && strings.Contains(roll, branch) {
+				matching = append(matching, roll)
+				break
+			}
+		}
+	}
+
+	return matching
 }
 
 func GetUrlForRollNumber(rollNumber string) string {
