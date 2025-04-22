@@ -190,7 +190,7 @@ func getResultHtml(rollNumber string) (io.ReadCloser, error) {
 		return nil, err
 	}
 	postReq.Header.Set("DNT", "1")
-	postReq.Header.Set("Content-Type", " application/x-www-form-urlencoded")
+	postReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	postReq.AddCookie(formPageResponse.Cookies()[0])
 	resp, err := httpClient.Do(postReq)
 	if err != nil {
