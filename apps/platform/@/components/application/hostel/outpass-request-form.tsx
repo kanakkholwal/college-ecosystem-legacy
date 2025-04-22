@@ -39,8 +39,10 @@ export default function RequestOutPassForm<T>({
       roomNumber: student.roomNumber || "",
       reason: undefined,
       address: "",
-      expectedOutTime: "",
-      expectedInTime: "",
+      // expectedOutTime 10 mins from now
+      expectedOutTime: new Date(Date.now() + 10 * 60 * 1000).toISOString(),
+      // expectedInTime 2 hours from now
+      expectedInTime: new Date(Date.now() + 2 * 60 * 60 * 1000).toISOString(),
     },
   });
   const handleSubmit = async (data: z.infer<typeof requestOutPassSchema>) => {
@@ -153,7 +155,7 @@ export default function RequestOutPassForm<T>({
                 <FormLabel>Address</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Address"
+                    placeholder="Address where you are going"
                     type="text"
                     autoCapitalize="none"
                     autoComplete="name"
@@ -161,7 +163,6 @@ export default function RequestOutPassForm<T>({
                     {...field}
                   />
                 </FormControl>
-                <FormDescription>Address where you are going</FormDescription>
                 <FormMessage />
               </FormItem>
             )}

@@ -360,6 +360,7 @@ export async function getHostelByUser(
       // userId: session.user.id,
     })
       .populate("hostelId", "_id name slug gender")
+      .select("+name")
       .lean()) as HostelStudentType | null;
     if (hostelerStudent) {
       // Check if user is a student of the hostel

@@ -39,10 +39,10 @@ const classNames = {
   field: "flex justify-between @2xl:flex-nowrap flex-wrap",
   label: "font-semibold",
   value: "text-right",
-  note: "mt-6 @2xl:text-sm text-gray-600 italic text-xs",
+  note: "mt-6 text-muted-foreground italic text-xs",
   footer: "flex justify-between",
   qr_code: "mt-6 flex-0",
-  signature: "mt-6 @2xl:text-sm text-gray-800 font-bold text-right text-xs",
+  signature: "mt-6 text-gray-800 font-semibold text-right text-xs",
   signature_value:
     "mt-3 @2xl:text-sm text-gray-700 font-bold italic text-right text-xs",
 };

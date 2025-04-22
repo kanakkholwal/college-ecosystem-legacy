@@ -11,7 +11,7 @@ const toggleVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-gray-200 text-gray-500",
+        default: "bg-accent hover:bg-accent/80",
         outline:
           "border border-input bg-transparent hover:bg-accent hover:text-accent-foreground",
       },
@@ -43,3 +43,4 @@ const Toggle = React.forwardRef<
 Toggle.displayName = TogglePrimitive.Root.displayName;
 
 export { Toggle, toggleVariants };
+

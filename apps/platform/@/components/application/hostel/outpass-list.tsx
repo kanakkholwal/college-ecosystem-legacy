@@ -14,7 +14,7 @@ const classNames = {
 export default function OutpassList({ outPasses }: OutpassListProps) {
   return (
     <>
-      <Heading level={4} className="text-gray-800">
+      <Heading level={4}>
         Last {outPasses.length} OutPass
       </Heading>
       <div className={classNames.container}>

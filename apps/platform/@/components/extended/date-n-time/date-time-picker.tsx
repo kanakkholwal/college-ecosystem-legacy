@@ -81,7 +81,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
           />
           <div className="flex flex-col sm:flex-row sm:h-[300px] divide-y sm:divide-y-0 sm:divide-x">
             <ScrollArea className="w-64 sm:w-auto">
-              <div className="flex sm:flex-col p-2">
+              <div className="flex sm:flex-col p-2 gap-1">
                 {Array.from({ length: 12 }, (_, i) => i + 1)
                   .reverse()
                   .map((hour) => (
@@ -92,7 +92,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
                         field.value &&
                         new Date(field.value).getHours() % 12 === hour % 12
                           ? "default_light"
-                          : "ghost"
+                          : "outline"
                       }
                       className="sm:w-full shrink-0 aspect-square"
                       onClick={() => handleTimeChange("hour", hour.toString())}
@@ -104,7 +104,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
               <ScrollBar orientation="horizontal" className="sm:hidden" />
             </ScrollArea>
             <ScrollArea className="w-64 sm:w-auto">
-              <div className="flex sm:flex-col p-2">
+              <div className="flex sm:flex-col p-2 gap-1">
                 {Array.from({ length: 12 }, (_, i) => i * 5).map((minute) => (
                   <Button
                     key={minute}
@@ -113,7 +113,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
                       field.value &&
                       new Date(field.value).getMinutes() === minute
                         ? "default_light"
-                        : "ghost"
+                        : "outline"
                     }
                     className="sm:w-full shrink-0 aspect-square"
                     onClick={() =>
@@ -128,7 +128,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
             </ScrollArea>
             <ScrollArea className="">
               <div className="flex sm:flex-col p-2 gap-2">
-                {["AM", "PM"].map((am_pm) => (
+                {["AM", "PM"].map((am_pm:string) => (
                   <Button
                     key={am_pm}
                     size="icon_sm"
@@ -139,7 +139,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
                         (am_pm === "PM" &&
                           new Date(field.value).getHours() >= 12))
                         ? "default_light"
-                        : "secondary"
+                        : "outline"
                     }
                     className="sm:w-full shrink-0 aspect-square"
                     onClick={() => handleTimeChange("am_pm", am_pm)}

@@ -38,7 +38,7 @@ export default async function RequestOutPassPage(props: PageProps) {
 
   return (
     <div className="space-y-3 my-2">
-      <Button variant="link" size="sm" effect="hoverUnderline" asChild>
+      <Button variant="outline" size="sm" effect="shineHover" asChild>
         <Link href="/student/outpass">
           <ArrowLeft />
           Go Back

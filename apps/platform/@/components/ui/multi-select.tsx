@@ -233,7 +233,7 @@ const MultiSelectorTrigger = forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex flex-wrap gap-1 rounded-lg bg-background p-1 py-2 ring-1 ring-muted border-gray-400",
+        "flex flex-wrap gap-1 rounded-lg bg-background p-1 py-2 ring-1 ring-muted ml-2",
         {
           "ring-1 focus-within:ring-ring": activeIndex === -1,
         },
@@ -245,10 +245,10 @@ const MultiSelectorTrigger = forwardRef<
         <Badge
           key={item}
           className={cn(
-            "flex items-center gap-1 rounded-xl px-1",
+            "rounded-xl px-1.5",
             activeIndex === index && "ring-2 ring-muted-foreground "
           )}
-          variant={"secondary"}
+          variant={"outline"}
         >
           <span className="text-xs">{item}</span>
           <button
@@ -259,7 +259,7 @@ const MultiSelectorTrigger = forwardRef<
             onClick={() => onValueChange(item)}
           >
             <span className="sr-only">Remove {item} option</span>
-            <RemoveIcon className="h-4 w-4 hover:stroke-destructive" />
+            <RemoveIcon className="size-3 hover:stroke-destructive" />
           </button>
         </Badge>
       ))}
@@ -386,5 +386,6 @@ export {
   MultiSelectorInput,
   MultiSelectorItem,
   MultiSelectorList,
-  MultiSelectorTrigger,
+  MultiSelectorTrigger
 };
+

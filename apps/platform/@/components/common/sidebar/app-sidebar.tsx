@@ -15,6 +15,7 @@ import {
 import type { Session } from "~/lib/auth-client";
 
 import { sidebar_links } from "@/constants/links";
+import { ThemeSwitcher } from "../theme-switcher";
 
 const getSideNavLinks = (role: string) => {
   return sidebar_links
@@ -51,7 +52,7 @@ export function AppSidebar({ user, moderator, ...props }: SidebarProps) {
   return (
     <Sidebar
       collapsible="icon"
-      className="backdrop-blur-3xl border-r border-border"
+      className="border-r border-border"
       {...props}
     >
       <SidebarHeader>
@@ -61,6 +62,9 @@ export function AppSidebar({ user, moderator, ...props }: SidebarProps) {
         <NavMain items={links} />
       </SidebarContent>
       <SidebarFooter>
+        <div className="flex justify-center gap-2 items-center px-3">
+          <ThemeSwitcher />
+        </div>
         <NavUser user={user} />
       </SidebarFooter>
       <SidebarRail />

@@ -3,11 +3,10 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -54,12 +53,11 @@ export default function CreateAttendanceRecord() {
               <FormLabel>Subject Code</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="subjectCode"
+                  placeholder="Enter the subject code."
                   {...field}
                   disabled={form.formState.isSubmitting}
                 />
               </FormControl>
-              <FormDescription>Enter the subject code.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -72,12 +70,11 @@ export default function CreateAttendanceRecord() {
               <FormLabel>Subject Name</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="subjectName"
+                  placeholder="Enter the subject name."
                   {...field}
                   disabled={form.formState.isSubmitting}
                 />
               </FormControl>
-              <FormDescription>Enter the subject name.</FormDescription>
               <FormMessage />
             </FormItem>
           )}

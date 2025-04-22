@@ -173,7 +173,7 @@ export function DataTableColumnHeader<TData, TValue>({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="ghost"
+            variant="outline"
             size="sm"
             className="-ml-3 h-8 data-[state=open]:bg-accent"
           >
@@ -257,7 +257,7 @@ export function DataTableToolbar<TData>({
         />
         {isFiltered && (
           <Button
-            variant="ghost"
+            variant="outline"
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >

@@ -14,7 +14,7 @@ export async function GET(request: Request) {
             return NextResponse.json({ message: "No room id provided" }, { status: 400 });
         }
 
-        const room = await HostelRoomModel.findById(roomId).populate('student', 'name rollNumber email');
+        const room = await HostelRoomModel.findById(roomId).populate('hostStudent', 'name rollNumber email');
 
         if (!room) {
             return NextResponse.json({ message: "Room not found" }, { status: 404 });

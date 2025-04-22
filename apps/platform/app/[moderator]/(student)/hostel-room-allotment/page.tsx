@@ -73,7 +73,6 @@ export default async function HostelRoomAllotmentPage() {
         loadingFallback={
           <SkeletonCardArea
             className="mx-auto"
-            skeletonClassName="bg-gray-200"
           />
         }
       >
@@ -118,14 +117,15 @@ export default async function HostelRoomAllotmentPage() {
           />}
 
           <div>
-            <h2 className="text-2xl font-bold">Hostel Room Allotment</h2>
-            <p className="text-gray-500">
+            <h2 className="text-lg font-semibold">Hostel Room Allotment</h2>
+            <p className="text-sm text-muted-foreground">
               Select a room to view details and allotment options.
             </p>
           </div>
           <ResponsiveContainer className="mx-auto">
             {hostelRoomsResponse?.data?.map((room) => {
-              const joinable = (hostJoinedRoom ? !(hostJoinedRoom._id === room._id):false) || room.occupied_seats < room.capacity && !room.isLocked;
+              const joinable = !hostJoinedRoom || (room.occupied_seats < room.capacity && !room.isLocked);
+
               return (
                 <RoomCard
                   key={room._id}
@@ -152,14 +152,14 @@ type RoomCardProps = {
 
 function RoomCard({ room,joinable,hostId }: RoomCardProps) {
   return (
-    <div className="bg-white rounded-lg shadow-md p-4 space-y-3 hover:shadow-lg border hover:border-primary transition-shadow duration-300">
+    <div className="bg-card rounded-lg shadow-md p-4 space-y-3 hover:shadow-lg border hover:border-primary transition-shadow duration-300">
       <div>
         <h6 className="text-base font-semibold mb-2">
           {room.roomNumber}
-          {room.isLocked ? <Lock className="text-red-500 inline-block size-5 ml-2" /> : <Unlock className="text-green-500 inline-block size-5 ml-2" />}
+          {room.isLocked ? <Lock className="text-red-500 inline-block size-4 ml-2" /> : <Unlock className="text-green-500 inline-block size-4 ml-2" />}
           </h6>
-        <p className="text-gray-500 text-sm">
-          {room.capacity} Seater | <span className="text-gray-500 font-bold inline-block">
+        <p className="text-sm text-muted-foreground">
+          {room.capacity} Seater | <span className="text-muted-foreground font-bold inline-block">
             {room.occupied_seats}/ {room.capacity}
           </span> 
           </p>
@@ -169,14 +169,14 @@ function RoomCard({ room,joinable,hostId }: RoomCardProps) {
           return (
             <MdOutlineChair
               key={`room.${index.toString()}`}
-              className={cn(`text-gray-500 font-bold inline-block ${(index + 1) <= room.occupied_seats ? "text-green-500" : "text-gray-500"}`)}
+              className={cn(`text-muted-foreground font-bold inline-block ${(index + 1) <= room.occupied_seats ? "text-green-500" : "text-muted-foreground"}`)}
             />
           );
         })}
         
       </div>
       <div className="">
-      {(room.occupied_seats >= room.capacity ) ? <>
+      {(room.occupied_seats >= room.capacity )  && !room.isLocked ? <>
         <span className="text-sm text-red-500">Room is full</span>
       </> : <ViewRoomButton room={room} joinable={joinable} hostId={hostId}/>}
     </div>
