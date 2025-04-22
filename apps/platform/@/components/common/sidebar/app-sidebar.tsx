@@ -62,7 +62,7 @@ export function AppSidebar({ user, moderator, ...props }: SidebarProps) {
         <NavMain items={links} />
       </SidebarContent>
       <SidebarFooter>
-        <div className="flex justify-center gap-2 items-center px-3">
+        <div className="flex justify-center gap-2 items-center px-3 overflow-hidden">
           <ThemeSwitcher />
         </div>
         <NavUser user={user} />

@@ -1,6 +1,6 @@
 {
-  "id": "79a1cd35-9f38-4471-8261-4e4c8600fc7a",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "3fd44681-fda6-49c8-8284-32ce7b06ab5f",
+  "prevId": "79a1cd35-9f38-4471-8261-4e4c8600fc7a",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -981,13 +981,6 @@
           "primaryKey": false,
           "notNull": false,
           "default": "'not_specified'"
-        },
-        "department": {
-          "name": "department",
-          "type": "department_name_enum",
-          "typeSchema": "public",
-          "primaryKey": false,
-          "notNull": true
         }
       },
       "indexes": {},
@@ -1064,23 +1057,6 @@
     }
   },
   "enums": {
-    "public.department_name_enum": {
-      "name": "department_name_enum",
-      "schema": "public",
-      "values": [
-        "Staff",
-        "Computer Science and Engineering",
-        "Electronics and Communication Engineering",
-        "Electrical Engineering",
-        "Mechanical Engineering",
-        "Civil Engineering",
-        "Chemical Engineering",
-        "Materials Science and Engineering",
-        "Mathematics & Scientific Computing",
-        "Architecture",
-        "Engineering Physics"
-      ]
-    },
     "public.user_gender_enum": {
       "name": "user_gender_enum",
       "schema": "public",

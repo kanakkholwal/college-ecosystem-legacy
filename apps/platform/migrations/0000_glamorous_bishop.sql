@@ -17,16 +17,6 @@ CREATE TABLE "accounts" (
 	"updatedAt" timestamp NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "allotment_slots" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"slot_number" integer NOT NULL,
-	"start_time" timestamp NOT NULL,
-	"end_time" timestamp NOT NULL,
-	"is_active" boolean DEFAULT false,
-	"allotment_date" timestamp NOT NULL,
-	"hostel_id" text NOT NULL
-);
---> statement-breakpoint
 CREATE TABLE "books_and_references" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"course_id" uuid,
@@ -80,16 +70,6 @@ CREATE TABLE "courses" (
 	CONSTRAINT "courses_code_unique" UNIQUE("code")
 );
 --> statement-breakpoint
-CREATE TABLE "hostel_rooms" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"room_number" integer NOT NULL,
-	"seater" integer NOT NULL,
-	"occupied_seats" integer DEFAULT 0,
-	"host_roll_no" text,
-	"is_locked" boolean DEFAULT false,
-	"hostel_id" text NOT NULL
-);
---> statement-breakpoint
 CREATE TABLE "personal_attendance" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" text NOT NULL,
@@ -113,16 +93,6 @@ CREATE TABLE "previous_papers" (
 	"year" integer NOT NULL,
 	"exam" varchar(10) NOT NULL,
 	"link" text NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "room_members" (
-	"student_roll_no" text,
-	"room_id" text,
-	"joined_at" timestamp DEFAULT now(),
-	"hosted_id" text,
-	"hostel_id" text NOT NULL,
-	"last_updated" timestamp DEFAULT now(),
-	CONSTRAINT "room_members_student_roll_no_room_id_pk" PRIMARY KEY("student_roll_no","room_id")
 );
 --> statement-breakpoint
 CREATE TABLE "room_usage_history" (
@@ -155,18 +125,6 @@ CREATE TABLE "sessions" (
 	"userAgent" text,
 	"userId" text NOT NULL,
 	CONSTRAINT "sessions_token_unique" UNIQUE("token")
-);
---> statement-breakpoint
-CREATE TABLE "students" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"roll_no" text NOT NULL,
-	"name" text NOT NULL,
-	"batch" integer NOT NULL,
-	"current_cgpi" numeric(4, 2) NOT NULL,
-	"alloted_room_id" text,
-	"allotment_slot_id" text,
-	"hostel_id" text NOT NULL,
-	CONSTRAINT "students_roll_no_unique" UNIQUE("roll_no")
 );
 --> statement-breakpoint
 CREATE TABLE "users" (
@@ -202,16 +160,10 @@ ALTER TABLE "books_and_references" ADD CONSTRAINT "books_and_references_course_i
 ALTER TABLE "calender_sem_event_participants" ADD CONSTRAINT "calender_sem_event_participants_event_id_calender_sem_events_id_fk" FOREIGN KEY ("event_id") REFERENCES "public"."calender_sem_events"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "calender_sem_event_tags" ADD CONSTRAINT "calender_sem_event_tags_event_id_calender_sem_events_id_fk" FOREIGN KEY ("event_id") REFERENCES "public"."calender_sem_events"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "chapters" ADD CONSTRAINT "chapters_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "hostel_rooms" ADD CONSTRAINT "hostel_rooms_host_roll_no_students_roll_no_fk" FOREIGN KEY ("host_roll_no") REFERENCES "public"."students"("roll_no") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "personal_attendance" ADD CONSTRAINT "personal_attendance_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "personal_attendance_records" ADD CONSTRAINT "personal_attendance_records_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "personal_attendance_records" ADD CONSTRAINT "personal_attendance_records_record_id_personal_attendance_id_fk" FOREIGN KEY ("record_id") REFERENCES "public"."personal_attendance"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "previous_papers" ADD CONSTRAINT "previous_papers_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "room_members" ADD CONSTRAINT "room_members_student_roll_no_students_roll_no_fk" FOREIGN KEY ("student_roll_no") REFERENCES "public"."students"("roll_no") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "room_members" ADD CONSTRAINT "room_members_room_id_hostel_rooms_id_fk" FOREIGN KEY ("room_id") REFERENCES "public"."hostel_rooms"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "room_members" ADD CONSTRAINT "room_members_hosted_id_students_roll_no_fk" FOREIGN KEY ("hosted_id") REFERENCES "public"."students"("roll_no") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "room_usage_history" ADD CONSTRAINT "room_usage_history_room_id_rooms_id_fk" FOREIGN KEY ("room_id") REFERENCES "public"."rooms"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "room_usage_history" ADD CONSTRAINT "room_usage_history_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "sessions" ADD CONSTRAINT "sessions_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "students" ADD CONSTRAINT "students_alloted_room_id_hostel_rooms_id_fk" FOREIGN KEY ("alloted_room_id") REFERENCES "public"."hostel_rooms"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "students" ADD CONSTRAINT "students_allotment_slot_id_allotment_slots_id_fk" FOREIGN KEY ("allotment_slot_id") REFERENCES "public"."allotment_slots"("id") ON DELETE no action ON UPDATE no action;
+ALTER TABLE "sessions" ADD CONSTRAINT "sessions_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;
