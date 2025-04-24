@@ -91,7 +91,7 @@ export function Consumer({ children }: { children: React.ReactNode }) {
           <img
             height={20}
             width={80}
-            src="https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
+            src="http://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
             alt="Visitor counter"
             className="inline-block font-inherit h-4"
             loading="lazy"
