@@ -11,8 +11,10 @@ on:
       
   workflow_dispatch:
 
-concurrency: ${{ github.workflow }}-${{ github.ref }}
-
+concurrency:
+  group:  ${{ github.workflow }}-${{ github.ref }}-deploy
+  cancel-in-progress: true
+  
 jobs:
   # lint:
   #   uses: ./.github/workflows/lint-project.yml

@@ -1,15 +1,22 @@
-name: 🧹 Lint
+name: 🧹 Lint project
 
 on:
   push:
     branches:
-      - main
-      - staging
+      - '**'
+      # pull_request_target:
+      #   branches:
+      #     - '**'
+
   pull_request:
     branches:
       - main
       - staging
   workflow_call:
+
+concurrency:
+  group:  ${{ github.workflow }}-${{ github.ref }}-lint
+  cancel-in-progress: true
 
 jobs:
   lint-and-format:

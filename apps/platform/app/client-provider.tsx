@@ -51,7 +51,7 @@ export function Consumer({ children }: { children: React.ReactNode }) {
     } catch (error) {
       setIsLoaded(false);
     }
-  }, []);
+  }, [isGlassTheme]);
   return (
     <QueryClientProvider client={queryClient}>
       {isGlassTheme ? isLoaded ? (

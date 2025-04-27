@@ -28,10 +28,8 @@ const nextConfig = {
             },
         ],
     },
-    experimental: {
-        forceSwcTransforms: true,
-    },
-  
+    // forceSwcTransforms: true,
+
 }
 
 export default withSerwist(nextConfig);
