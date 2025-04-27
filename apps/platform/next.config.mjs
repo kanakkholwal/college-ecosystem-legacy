@@ -28,6 +28,9 @@ const nextConfig = {
             },
         ],
     },
+    experimental: {
+        forceSwcTransforms: true,
+    }
     // forceSwcTransforms: true,
 
 }
