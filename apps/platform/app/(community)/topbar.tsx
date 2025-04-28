@@ -48,7 +48,7 @@ export default function TopNavPanel() {
                     className={cn(
                         "inline-flex items-center justify-center gap-2 whitespace-nowrap p-4 font-medium text-muted-foreground transition-all capitalize flex-1",
                         active ?
-                            "border-b border-primary text-primary bg-card/50"
+                            "border-b border-primary text-primary bg-primary/5"
                             :
                             "text-muted-foreground",
                     )}

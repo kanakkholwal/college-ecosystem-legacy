@@ -130,7 +130,9 @@ export async function middleware(request: NextRequest) {
   // const nextTargetRoute = request.nextUrl.searchParams.get("next");
   // if (nextTargetRoute) {
   //   const targetUrl= decodeURIComponent(nextTargetRoute);
-  //   if (targetUrl) {
+    // const nextRedirect = request.nextUrl.searchParams.get("redirect");
+
+  //   if (targetUrl && (nextRedirect && nextRedirect !== "false")) {
   //     const targetUrlObj = new URL(targetUrl);
   //     return NextResponse.redirect(targetUrlObj);
   //   }

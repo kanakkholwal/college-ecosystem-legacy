@@ -28,21 +28,22 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { nanoid } from "nanoid";
 
 export const rawPollSchema = z.object({
-  question: z.string(),
+  question: z.string().min(3, "A question is required."),
   description: z.string().optional(),
   options: z
     .array(
       z.object({
-        id: z.string(),
-        value: z.string(),
+        id: z.string().default(() => nanoid()),
+        value: z.string().min(1, "Option cannot be empty."),
       })
     )
     .min(2, "At least two options are required.")
     .default(() => [
-      { id: String(Date.now()), value: "" },
-      { id: String(Date.now() + 1), value: "" },
+      { id: nanoid(), value: "" },
+      { id: nanoid(), value: "" },
     ]),
   multipleChoice: z.boolean().default(false),
   votes: z.array(z.string()).default([]),

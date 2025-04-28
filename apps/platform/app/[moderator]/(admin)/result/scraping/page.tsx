@@ -3,11 +3,11 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Info, Pause, Play, Wifi, WifiOff, X } from "lucide-react";
 
@@ -181,7 +181,7 @@ export default function ScrapeResultPage() {
           )}
         </AlertDescription>
       </Alert>
-      <section className="p-6 border border-border rounded-lg bg-slate-100 shadow space-y-5">
+      <section className="p-6 border border-border rounded-lg shadow space-y-5">
         <div
           aria-label="header"
           className="text-lg font-semibold border-b pb-5"
@@ -204,7 +204,7 @@ export default function ScrapeResultPage() {
         {taskData?.taskId ? (
           <DisplayTask task={taskData} />
         ) : (
-          <div className="grid grid-cols-1 gap-2 bg-white p-3 rounded-md shadow">
+          <div className="grid grid-cols-1 gap-2 bg-card p-3 rounded-md shadow">
             <div className="flex gap-4">
               <h5 className="text-sm font-semibold">#No Task Running</h5>
             </div>
@@ -336,7 +336,7 @@ export default function ScrapeResultPage() {
         </div>
       </section>
 
-      <section className="p-6 border border-border rounded-lg bg-slate-100 shadow">
+      <section className="p-6 border border-border rounded-lg shadow">
         <div
           aria-label="header"
           className="text-lg font-semibold border-b pb-5 mb-5 flex w-full justify-between gap-4"
@@ -402,11 +402,11 @@ function DisplayTask({
   actionFunction?: (id: string, type: string) => void;
 }) {
   return (
-    <div className="grid grid-cols-1 gap-2 bg-white p-3 rounded-md shadow">
+    <div className="grid grid-cols-1 gap-2 bg-card p-3 rounded-md shadow">
       <div className="flex gap-4">
-        <Button size="sm" variant="ghost" className="text-sm lowercase">
+        <span className="text-xs lowercase font-medium">
           #{task.taskId.toLowerCase()}
-        </Button>
+        </span>
         {actionFunction &&
           task.status !== TASK_STATUS.CANCELLED &&
           task.status !== TASK_STATUS.COMPLETED && (

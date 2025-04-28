@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 
-import withSerwistInit from '@serwist/next';
+import withSerWistInit from '@serwist/next';
 
-const withSerwist = withSerwistInit({
+const withSerWist = withSerWistInit({
     cacheOnNavigation: true,
     swSrc: "app/sw.ts",
     swDest: "public/sw.js",
@@ -35,4 +35,4 @@ const nextConfig = {
 
 }
 
-export default withSerwist(nextConfig);
+export default withSerWist(nextConfig);

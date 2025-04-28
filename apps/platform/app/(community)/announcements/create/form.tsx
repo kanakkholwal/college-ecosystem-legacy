@@ -34,9 +34,9 @@ import toast from "react-hot-toast";
 import { VscSend } from "react-icons/vsc";
 import { createAnnouncement } from "src/lib/announcement/actions";
 import {
-  rawAnnouncementSchema,
   RELATED_FOR_TYPES,
-} from "src/models/announcement";
+  rawAnnouncementSchema,
+} from "~/models/announcement";
 import type { z } from "zod";
 
 export default function CreateAnnouncement() {
@@ -75,7 +75,6 @@ export default function CreateAnnouncement() {
                 <Input
                   placeholder="A short title for the announcement."
                   {...field}
-                  disabled={form.formState.isSubmitting}
                 />
               </FormControl>
               
@@ -178,7 +177,11 @@ export default function CreateAnnouncement() {
         />
         </div>
         <Button type="submit" className="ml-4" disabled={form.formState.isSubmitting}>
-          Publish Announcement
+          {form.formState.isSubmitting ? (
+            <span className="animate-pulse">Publishing...</span>
+          ) : (
+            <span>Publish Announcement</span>
+          )}
           <VscSend />
         </Button>
       </form>

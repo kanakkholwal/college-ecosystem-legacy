@@ -10,7 +10,7 @@ import {
 } from "~/constants/allotment-process";
 import { emailSchema } from "~/constants/user";
 import dbConnect from "~/lib/dbConnect";
-import { redis } from "~/lib/redis";
+import redis from "~/lib/redis";
 import { AllotmentSlotModel, type HostelRoomJson, HostelRoomModel, RoomMemberModel } from "~/models/allotment";
 import { HostelModel, HostelStudentModel } from "~/models/hostel_n_outpass";
 
