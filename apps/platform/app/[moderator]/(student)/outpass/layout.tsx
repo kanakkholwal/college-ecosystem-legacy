@@ -2,7 +2,6 @@ import { HostelDetailsForNonAdmins } from "@/components/application/hostel/hoste
 import EmptyArea from "@/components/common/empty-area";
 import { Separator } from "@/components/ui/separator";
 import ConditionalRender from "@/components/utils/conditional-render";
-import type { PropsWithChildren } from "react";
 import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
 
@@ -24,7 +23,7 @@ export default async function HostelPageLayout(props: {
   return (
     <div className="space-y-5">
       <HostelDetailsForNonAdmins hostel={hostel} />
-      <Separator className="bg-gray-300" />
+      <Separator  />
       <ConditionalRender condition={hosteler?.banned}>
         <EmptyArea
           icons={[LuBuilding]}

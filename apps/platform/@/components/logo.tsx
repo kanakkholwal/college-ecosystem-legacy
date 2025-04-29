@@ -11,7 +11,11 @@ export function AppLogo({ className }: { className?: string }) {
       <h1 className="text-2xl md:text-7xl font-bold text-center relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary whitespace-nowrap">
         NITH
       </h1>
+<<<<<<< HEAD
       <h2 className="text-md md:text-xl font-semibold capitalize text-center">
+=======
+      <h2 className="text-md md:text-xl font-semibold capitalize text-muted-foreground text-center">
+>>>>>>> go-server
         {process.env.NEXT_PUBLIC_WEBSITE_NAME}
       </h2>
     </div>

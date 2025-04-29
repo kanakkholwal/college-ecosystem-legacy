@@ -6,7 +6,7 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full gap-2 px-2.5 py-0.5  capitalize whitespace-nowrap font-semibold transition-colors",
+  "inline-flex items-center rounded-full gap-1 px-2 py-0.5  capitalize whitespace-nowrap font-semibold transition-colors",
   {
     variants: {
       variant: {
@@ -50,8 +50,9 @@ const badgeVariants = cva(
         glass:
           "backdrop-blur-lg bg-white/30 dark:bg-slate-800/15 backdrop-blur-xl border-white/10 dark:border-white/5 dark:text-white shadow",
         secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        outline: "text-foreground",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+        outline:
+          "border border-input bg-background shadow-sm hover:bg-accent",
       },
       size: {
         sm: "px-2 py-0.5 text-xs font-regular",
@@ -68,7 +69,7 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
+  VariantProps<typeof badgeVariants> { }
 
 function Badge({ className, variant, size, ...props }: BadgeProps) {
   return (
@@ -80,3 +81,4 @@ function Badge({ className, variant, size, ...props }: BadgeProps) {
 }
 
 export { Badge, badgeVariants };
+

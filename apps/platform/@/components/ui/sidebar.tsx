@@ -181,7 +181,7 @@ const Sidebar = React.forwardRef<
       return (
         <div
           className={cn(
-            "flex h-full w-[--sidebar-width] flex-col text-sidebar-foreground bg-card backdrop-blur-3xl border-r border-border",
+            "flex h-full w-[--sidebar-width] flex-col text-sidebar-foreground bg-card border-r border-border",
             className
           )}
           ref={ref}
@@ -198,7 +198,7 @@ const Sidebar = React.forwardRef<
           <SheetContent
             data-sidebar="sidebar"
             data-mobile="true"
-            className="w-[--sidebar-width] p-0 text-sidebar-foreground [&>button]:hidden bg-white/20 backdrop-blur-3xl border-r border-gray-300/30"
+            className="w-[--sidebar-width] p-0 text-sidebar-foreground [&>button]:hidden bg-card border-r"
             style={
               {
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -215,7 +215,7 @@ const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        className="group peer hidden md:block text-sidebar-foreground bg-sidebar "
+        className="group peer hidden md:block text-sidebar-foreground bg-sidebar"
         data-state={state}
         data-collapsible={state === "collapsed" ? collapsible : ""}
         data-variant={variant}

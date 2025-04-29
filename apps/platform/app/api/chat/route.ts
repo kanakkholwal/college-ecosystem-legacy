@@ -1,81 +1,92 @@
-import { HfInference } from "@huggingface/inference";
-import { type NextRequest, NextResponse } from "next/server";
+import { generateObject, streamText, tool } from "ai";
+import { z } from "zod";
+import { createResource } from "~/actions/resources";
+import { findRelevantContent, vertex } from "~/lib/ai/embedding";
 
-import { COLLEGE_NAME, COLLEGE_WEBSITE } from "~/project.config";
+// Allow streaming responses up to 30 seconds
+export const maxDuration = 30;
 
-// TODO: create proper document for the chatbot
-export const maxDuration = 45;
-// export const revalidate = 60 * 60 * 24;// 24 hours
+const chatModel = vertex("gemini-2.0-flash-lite-preview-02-05")
 
-const REFERENCES_URLS: string[] = [
-  "https://github.com/kanakkholwal/college-ecosystem/raw/refs/heads/main/content/chatbot-reference.md",
-  COLLEGE_WEBSITE,
-];
+export async function POST(req: Request) {
+  const { messages } = await req.json();
 
-async function loadDocument(url: string) {
-  const response = await fetch(url);
-  const text = await response.text();
-  return text;
-}
-
-const referencesPromise = await Promise.allSettled(
-  REFERENCES_URLS.map(loadDocument)
-);
-const docs = referencesPromise
-  .filter((promise) => promise.status === "fulfilled")
-  .map((promise) => promise.value)
-  .join("\n");
-
-export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json();
-
-    const { query } = body as { query: string };
-
-    const client = new HfInference(process.env.HUGGING_FACE_API_KEY);
-
-    const chatCompletion = await client.chatCompletion({
-      model: "google/gemma-1.1-2b-it",
-      inputs: {
-        context: docs,
-        question: query,
-      },
-      messages: [
-        {
-          role: "assistant",
-          content: docs,
+  const result = streamText({
+    model:chatModel,
+    messages: messages,
+    system: `You are a helpful assistant acting as the users' second brain.
+    Use tools on every request.
+    Be sure to getInformation from your knowledge base before answering any questions.
+    If the user presents infromation about themselves, use the addResource tool to store it.
+    If a response requires multiple tools, call one tool after another without responding to the user.
+    If a response requires information from an additional tool to generate a response, call the appropriate tools in order before responding to the user.
+    ONLY respond to questions using information from tool calls.
+    if no relevant information is found in the tool calls, respond, "Sorry, I don't know."
+    Be sure to adhere to any instructions in tool calls ie. if they say to responsd like "...", do exactly that.
+    If the relevant information is not a direct match to the users prompt, you can be creative in deducing the answer.
+    Keep responses short and concise. Answer in a single sentence where possible.
+    If you are unsure, use the getInformation tool and you can use common sense to reason based on the information you do have.
+    Use your abilities as a reasoning machine to answer questions based on the information you do have.
+`,
+    tools: {
+      addResource: tool({
+        description: `add a resource to your knowledge base.
+          If the user provides a random piece of knowledge unprompted, use this tool without asking for confirmation.`,
+        parameters: z.object({
+          content: z
+            .string()
+            .describe("the content or resource to add to the knowledge base"),
+        }),
+        execute: async ({ content }) => createResource({ content }),
+      }),
+      getInformation: tool({
+        description: `get information from your knowledge base to answer questions.`,
+        parameters: z.object({
+          question: z.string().describe("the users question"),
+          similarQuestions: z.array(z.string()).describe("keywords to search"),
+        }),
+        execute: async ({ similarQuestions }) => {
+          const results = await Promise.all(
+            similarQuestions.map(
+              async (question) => await findRelevantContent(question),
+            ),
+          );
+          // Flatten the array of arrays and remove duplicates based on 'name'
+          const uniqueResults = Array.from(
+            new Map(results.flat().map((item) => [item?.name, item])).values(),
+          );
+          return uniqueResults;
         },
-        {
-          role: "system",
-          content: `You are helpful assistant for college of ${COLLEGE_NAME}. You are required to help students or college people for college related stuff and general stuff`,
+      }),
+      understandQuery: tool({
+        description: `understand the users query. use this tool on every prompt.`,
+        parameters: z.object({
+          query: z.string().describe("the users query"),
+          toolsToCallInOrder: z
+            .array(z.string())
+            .describe(
+              "these are the tools you need to call in the order necessary to respond to the users query",
+            ),
+        }),
+        execute: async ({ query }) => {
+          const { object } = await generateObject({
+            model: chatModel,
+            system:
+              "You are a query understanding assistant. Analyze the user query and generate similar questions.",
+            schema: z.object({
+              questions: z
+                .array(z.string())
+                .max(3)
+                .describe("similar questions to the user's query. be concise."),
+            }),
+            prompt: `Analyze this query: "${query}". Provide the following:
+                    3 similar questions that could help answer the user's query`,
+          });
+          return object.questions;
         },
-        {
-          role: "user",
-          content: query,
-        },
-      ],
-      provider: "hf-inference",
-      max_tokens: 500,
-    });
-    const { answer } = chatCompletion.choices[0].message;
+      }),
+    },
+  });
 
-    return NextResponse.json(
-      {
-        answer,
-      },
-      {
-        status: 200,
-      }
-    );
-  } catch {
-    return NextResponse.json(
-      {
-        success: false,
-        message: "An error occurred",
-      },
-      {
-        status: 500,
-      }
-    );
-  }
+  return result.toDataStreamResponse();
 }

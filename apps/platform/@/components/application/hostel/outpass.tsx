@@ -3,6 +3,7 @@
 import { OutpassActionFooter } from "@/components/application/hostel/outpass-actions";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
+import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import type { OutPassType } from "~/models/hostel_n_outpass";
 
@@ -12,10 +13,10 @@ interface OutpassDetailsProps {
 }
 
 const classNames = {
-  item: "flex items-center justify-between p-4 mb-3 bg-white border border-border rounded-lg shadow-sm last:mb-0 relative",
+  item: "flex items-center justify-between p-4 mb-3 bg-card border border-border rounded-lg shadow-sm last:mb-0 relative",
   details: "flex flex-col",
-  studentInfo: "font-medium text-gray-800",
-  outpassInfo: "text-sm text-gray-600",
+  studentInfo: "font-medium",
+  outpassInfo: "text-sm text-muted-foreground",
 };
 
 export function OutpassDetails({
@@ -47,7 +48,7 @@ export function OutpassDetails({
             {outpass.status}
           </Badge>
         </span>
-        <span className={classNames.outpassInfo}>
+        <span className={cn(classNames.outpassInfo,"mt-1 text-xs")}>
           {format(
             new Date(outpass.expectedOutTime || ""),
             "dd/MM/yyyy hh:mm a"
@@ -59,9 +60,9 @@ export function OutpassDetails({
           <OutpassActionFooter outpassId={outpass?._id} />
         )}
       </div>
-      <div className="absolute right-2 top-2 left-auto bg-transparent">
+      {actionEnabled && (<div className="absolute right-2 top-2 left-auto bg-transparent">
         <Checkbox checked={outpass.status === "approved"} />
-      </div>
+      </div>)}
     </div>
   );
 }

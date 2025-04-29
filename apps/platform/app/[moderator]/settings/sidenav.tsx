@@ -28,8 +28,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
         <Button
           key={item.href}
           variant={pathname.includes(item.href) ? "default_light" : "outline"}
-          effect="shineHover"
-          className="justify-start"
+          className="justify-start border-0"
           asChild
         >
           <Link href={item.href}>{item.title}</Link>

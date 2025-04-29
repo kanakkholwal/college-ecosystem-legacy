@@ -47,9 +47,9 @@ export default function ThemeToggle() {
   return (
     <div className="bg-tertiary relative flex w-full scroll-m-4 flex-col rounded-lg border">
       <div className="flex flex-wrap items-center justify-between gap-3 px-3 pt-3">
-        <div className="font-medium text-base text-primary">Theme</div>
+        <div className="font-medium text-base">Theme</div>
       </div>
-      <p className="font-normal text-sm text-secondary mt-0.5 px-3 lg:max-w-2xl">
+      <p className="font-normal text-sm text-muted-foreground mt-0.5 px-3 lg:max-w-2xl">
         Choose your interface color theme
       </p>
       <div className="bg-quaternary my-3 h-px w-full" />

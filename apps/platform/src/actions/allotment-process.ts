@@ -186,7 +186,7 @@ export async function distributeSlots(hostelId: string) {
     return {
       error: false,
       message: "Slots created successfully",
-      data: allotmentSlots,
+      data: JSON.parse(JSON.stringify(allotmentSlots)),
     };
   } catch (error) {
     console.log(error);
@@ -213,7 +213,7 @@ export async function getUpcomingSlots(hostelId: string) {
     return {
       error: false,
       message: "Slots fetched successfully",
-      data: upcomingSlots,
+      data: JSON.parse(JSON.stringify(upcomingSlots)),
     };
 
   } catch (err) {
@@ -405,7 +405,8 @@ export async function addRoomMembers(roomId: string, hostId: string, members: z.
     return {
       error: false,
       message: "Members added successfully",
-      data: roomMembers,
+      data: JSON.parse(JSON.stringify(roomMembers)),
+
     }
 
 
@@ -552,7 +553,8 @@ export async function lockToggleRoom(roomId: string) {
       return {
         error: false,
         message: "Room Lock Status Updated",
-        data: room,
+        data: JSON.parse(JSON.stringify(room)),
+
       }
     }
     catch (err) {

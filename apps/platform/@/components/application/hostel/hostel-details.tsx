@@ -59,7 +59,7 @@ export function HostelDetailsForNonAdmins({ hostel }: { hostel: HostelType }) {
     <div className="space-y-5 my-2">
       <div className="w-full">
         <div className="@2xl:w-1/2">
-          <Heading level={3} className="font-bold text-gray-800">
+          <Heading level={3} className="font-bold">
             {hostel.name}
           </Heading>
           <Paragraph className="capitalize !mt-0">
@@ -69,7 +69,7 @@ export function HostelDetailsForNonAdmins({ hostel }: { hostel: HostelType }) {
         </div>
       </div>
       <div className="w-full">
-        <Heading level={6} className="text-gray-800">
+        <Heading level={6} >
           InCharges
         </Heading>
         <ul className="list-disc list-inside">

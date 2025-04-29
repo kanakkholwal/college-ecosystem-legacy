@@ -146,7 +146,7 @@ export function RoomsTable({ rooms }: RoomsTableProps) {
   return (
     <div className="my-10">
       <Table className="relative rounded-md border">
-        <TableHeader className="sticky top-0 z-10 bg-white">
+        <TableHeader className="sticky top-0 z-10 bg-card">
           <TableRow>
             <TableHead>Room No.</TableHead>
             <TableHead>Filled (Occupied/Capacity)</TableHead>

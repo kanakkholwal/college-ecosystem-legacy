@@ -40,6 +40,17 @@ const envVariables = z.object({
   NEXT_PUBLIC_FIREBASE_APP_ID: z.string(),
   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string(),
   NEXT_PUBLIC_FIREBASE_DB_URL: z.string(),
+
+
+  GOOGLE_VERTEX_PROJECT: z.string(),
+  GOOGLE_VERTEX_LOCATION: z.string(),
+  GOOGLE_CLIENT_EMAIL: z.string(),
+  GOOGLE_CLIENT_SECRET: z.string(),
+  GOOGLE_CLIENT_ID: z.string(),
+  GOOGLE_PRIVATE_KEY: z.string(),
+  GOOGLE_AUTH_TOKEN: z.string(),
+  GOOGLE_APPLICATION_CREDENTIALS: z.string().url(),
+
 });
 
 envVariables.parse(process.env);
