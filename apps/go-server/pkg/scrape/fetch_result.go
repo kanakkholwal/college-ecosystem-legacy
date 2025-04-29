@@ -11,6 +11,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -32,12 +33,19 @@ const (
 func (f ResultFetchProcessError) Error() string {
 	switch {
 	case errors.Is(f, RollNumberDoesNotExist):
-		return fmt.Sprintf("Roll number doesn't exist") // corrected grammar
+		return "Roll number doesn't exist" // corrected grammar
 	case errors.Is(f, InvalidHtml):
 		return "Html received is invalid"
 	default:
-		return fmt.Sprintf("Unknown error")
+		return "Unknown error"
 	}
+}
+
+var tokenCache sync.Map
+
+type cachedTokens struct {
+	CSRFToken string
+	VerToken  string
 }
 
 // ParseResultHtml depends on the current html structure of official result website
@@ -161,41 +169,58 @@ func getResultHtml(rollNumber string) (io.ReadCloser, error) {
 	}
 	path := utils.GetUrlForRollNumber(rollNumber)
 
-	//get tokens
-	formPageResponse, err := httpClient.Get(path)
-	if err != nil {
-		return nil, err
+	var csrfToken, verToken string
+	if val, ok := tokenCache.Load(path); ok {
+		tokens := val.(cachedTokens)
+		csrfToken = tokens.CSRFToken
+		verToken = tokens.VerToken
+	} else {
+		// fetch tokens if not cached
+		formPageResponse, err := httpClient.Get(path)
+		if err != nil {
+			return nil, err
+		}
+		defer formPageResponse.Body.Close()
+
+		formPageDoc, err := goquery.NewDocumentFromReader(formPageResponse.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		var ok bool
+		csrfToken, ok = formPageDoc.Find("[name=CSRFToken]").Attr("value")
+		if !ok {
+			return nil, fmt.Errorf("CSRFToken not found")
+		}
+		verToken, ok = formPageDoc.Find("[name=RequestVerificationToken]").Attr("value")
+		if !ok {
+			return nil, fmt.Errorf("RequestVerificationToken not found")
+		}
+
+		tokenCache.Store(path, cachedTokens{CSRFToken: csrfToken, VerToken: verToken})
 	}
-	formPageDoc, err := goquery.NewDocumentFromReader(formPageResponse.Body)
-	if err != nil {
-		return nil, err
-	}
-	csrfToken, exists := formPageDoc.Find("[name=CSRFToken]").Attr("value")
-	if !exists {
-		return nil, fmt.Errorf("CSRFToken not found")
-	}
-	verToken, exists := formPageDoc.Find("[name=RequestVerificationToken]").Attr("value")
-	if !exists {
-		return nil, fmt.Errorf("RequestVerificationToken not found")
-	}
-	//get result html
+
 	data := url.Values{
 		"RollNumber":               {rollNumber},
 		"CSRFToken":                {csrfToken},
 		"RequestVerificationToken": {verToken},
 		"B1":                       {"Submit"},
 	}
+
 	postReq, err := http.NewRequest(http.MethodPost, path, strings.NewReader(data.Encode()))
 	if err != nil {
 		return nil, err
 	}
 	postReq.Header.Set("DNT", "1")
 	postReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	postReq.AddCookie(formPageResponse.Cookies()[0])
+
+	// this assumes at least one cookie was set during GET
+	// if not using the GET, you may have to separately fetch cookies if required
 	resp, err := httpClient.Do(postReq)
 	if err != nil {
 		return nil, err
 	}
+
 	return resp.Body, nil
 }
 

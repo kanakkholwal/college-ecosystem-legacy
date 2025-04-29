@@ -13,6 +13,12 @@ var programmeKeys = map[string][]string{
 	"M.Tech":      {"mce", "mme", "mms", "mma", "mph", "mee", "mec", "mcs", "mch"},
 }
 
+var schemeKeys = map[string]string{
+	"B.Tech":      "scheme",
+	"Dual Degree": "dualdegree",
+	"M.Tech":      "mtech",
+}
+
 var BranchCodesToNames = map[string]string{
 	"ar": "Architecture",
 	"ce": "Civil Engineering",
@@ -113,8 +119,20 @@ func GenRollNumbersForClass(branch string, programme string) []string {
 }
 
 func GetUrlForRollNumber(rollNumber string) string {
-	scheme := rollNumber[:2]
-	return fmt.Sprintf("http://results.nith.ac.in/scheme%s/studentresult/result.asp", scheme)
+	year := rollNumber[:2]
+	schema := "scheme"
+
+	// identify the scheme based on the roll number using programmeKeys and schemeKeys
+	for programme, codes := range programmeKeys {
+		for _, code := range codes {
+			if strings.Contains(rollNumber, code) {
+				schema = schemeKeys[programme]
+				break
+			}
+		}
+	}
+
+	return fmt.Sprintf("http://results.nith.ac.in/%s%s/studentresult/result.asp", schema, year) // Use schema in the URL
 }
 
 func DetermineDepartment(rollNo string) string {
@@ -147,12 +165,6 @@ func DetermineDepartment(rollNo string) string {
 
 func DetermineProgramme(rollNo string) string {
 	programmeCode := strings.ToLower(rollNo[2:5])
-	programmeKeys := map[string][]string{
-		"Dual Degree": {"dcs", "dec"},
-		"B.Tech":      {"bce", "bme", "bms", "bma", "bph", "bee", "bec", "bcs", "bch"},
-		"B.Arch":      {"bar"},
-		"M.Tech":      {"mce", "mme", "mms", "mma", "mph", "mee", "mec", "mcs", "mch"},
-	}
 
 	for programme, codes := range programmeKeys {
 		for _, code := range codes {
