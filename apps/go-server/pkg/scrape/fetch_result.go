@@ -11,10 +11,7 @@ import (
 	"net/url"
 	"strconv"
 	"strings"
-<<<<<<< HEAD
 	"sync"
-=======
->>>>>>> go-server
 	"sync/atomic"
 	"time"
 
@@ -36,7 +33,6 @@ const (
 func (f ResultFetchProcessError) Error() string {
 	switch {
 	case errors.Is(f, RollNumberDoesNotExist):
-<<<<<<< HEAD
 		return "Roll number doesn't exist" // corrected grammar
 	case errors.Is(f, InvalidHtml):
 		return "Html received is invalid"
@@ -52,16 +48,6 @@ type cachedTokens struct {
 	VerToken  string
 }
 
-=======
-		return fmt.Sprintf("Roll number doesn't exist") // corrected grammar
-	case errors.Is(f, InvalidHtml):
-		return "Html received is invalid"
-	default:
-		return fmt.Sprintf("Unknown error")
-	}
-}
-
->>>>>>> go-server
 // ParseResultHtml depends on the current html structure of official result website
 // - table 0 => last update title table
 // - table 1 => row 0 => rollNo, name, fathersName
@@ -181,9 +167,8 @@ func getResultHtml(rollNumber string) (io.ReadCloser, error) {
 	httpClient := &http.Client{
 		Jar: cookieJar,
 	}
-	path := utils.GetUrlForRollNumber(rollNumber)
+	path := utils.GetUrlForRollNumber(rollNumber, false)
 
-<<<<<<< HEAD
 	var csrfToken, verToken string
 	if val, ok := tokenCache.Load(path); ok {
 		tokens := val.(cachedTokens)
@@ -215,57 +200,25 @@ func getResultHtml(rollNumber string) (io.ReadCloser, error) {
 		tokenCache.Store(path, cachedTokens{CSRFToken: csrfToken, VerToken: verToken})
 	}
 
-=======
-	//get tokens
-	formPageResponse, err := httpClient.Get(path)
-	if err != nil {
-		return nil, err
-	}
-	formPageDoc, err := goquery.NewDocumentFromReader(formPageResponse.Body)
-	if err != nil {
-		return nil, err
-	}
-	csrfToken, exists := formPageDoc.Find("[name=CSRFToken]").Attr("value")
-	if !exists {
-		return nil, fmt.Errorf("CSRFToken not found")
-	}
-	verToken, exists := formPageDoc.Find("[name=RequestVerificationToken]").Attr("value")
-	if !exists {
-		return nil, fmt.Errorf("RequestVerificationToken not found")
-	}
-	//get result html
->>>>>>> go-server
 	data := url.Values{
 		"RollNumber":               {rollNumber},
 		"CSRFToken":                {csrfToken},
 		"RequestVerificationToken": {verToken},
 		"B1":                       {"Submit"},
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> go-server
 	postReq, err := http.NewRequest(http.MethodPost, path, strings.NewReader(data.Encode()))
 	if err != nil {
 		return nil, err
 	}
 	postReq.Header.Set("DNT", "1")
 	postReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-<<<<<<< HEAD
 
 	// this assumes at least one cookie was set during GET
 	// if not using the GET, you may have to separately fetch cookies if required
-=======
-	postReq.AddCookie(formPageResponse.Cookies()[0])
->>>>>>> go-server
 	resp, err := httpClient.Do(postReq)
 	if err != nil {
 		return nil, err
 	}
-<<<<<<< HEAD
-
-=======
->>>>>>> go-server
 	return resp.Body, nil
 }
 
