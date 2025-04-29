@@ -118,7 +118,7 @@ func GenRollNumbersForClass(branch string, programme string) []string {
 	return matching
 }
 
-func GetUrlForRollNumber(rollNumber string) string {
+func GetUrlForRollNumber(rollNumber string, dualDegree bool) string {
 	year := rollNumber[:2]
 	schema := "scheme"
 
@@ -130,6 +130,9 @@ func GetUrlForRollNumber(rollNumber string) string {
 				break
 			}
 		}
+	}
+	if dualDegree {
+		schema = schemeKeys["Dual Degree"]
 	}
 
 	return fmt.Sprintf("http://results.nith.ac.in/%s%s/studentresult/result.asp", schema, year) // Use schema in the URL
