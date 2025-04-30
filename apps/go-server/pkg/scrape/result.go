@@ -1,303 +1,361 @@
 package scrape
 
 import (
-	"context"
+	"errors"
 	"fmt"
-
 	"io"
+	"log"
+	"math/rand"
 	"net/http"
-
-	urlpkg "net/url"
+	"net/http/cookiejar"
+	"net/url"
+	"strconv"
 	"strings"
+	"sync"
+	"sync/atomic"
+	"time"
+
+	resultTypes "github.com/kanakkholwal/go-server/types"
+	"github.com/kanakkholwal/go-server/utils"
+
+	"context"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
-type Semester struct {
-	Semester  string
-	SGPI      float64
-	SGPITotal float64
-	CGPI      float64
-	CGPITotal float64
-	Courses   []Course
-}
+type ResultFetchProcessError int
 
-type Course struct {
-	Name string
-	Code string
-	CGPI float64
-}
+const (
+	_                                              = iota
+	RollNumberDoesNotExist ResultFetchProcessError = iota + 1
+	InvalidHtml
+	UnknownParsingError
+)
 
-type RawResult struct {
-	Name      string
-	RollNo    string
-	Branch    string
-	Batch     int
-	Programme string
-	Semesters []Semester
-	Gender    string
-}
-
-type HeaderInfo struct {
-	URL                      string
-	Referer                  string
-	CSRFToken                string
-	RequestVerificationToken string
-}
-
-var headerMap = map[string]HeaderInfo{
-	"20": {
-		URL:                      "http://results.nith.ac.in/scheme20/studentresult/result.asp",
-		Referer:                  "http://results.nith.ac.in/scheme20/studentresult/index.asp",
-		CSRFToken:                "{782F96DF-5115-4492-8CB2-06104ECFF0CA}",
-		RequestVerificationToken: "094D0BF7-EE18-E102-8CBF-23C329B32E1C",
-	},
-	"21": {
-		URL:                      "http://results.nith.ac.in/scheme2021/studentresult/result.asp",
-		Referer:                  "http://results.nith.ac.in/scheme2021/studentresult/index.asp",
-		CSRFToken:                "{4CFC8412-697D-4F3E-9A36-74947F9E04BB}",
-		RequestVerificationToken: "AA2E4F5C-48DC-49D6-A9CE-9DDE703F6AD4",
-	},
-	"21_dual": {
-		URL:                      "http://results.nith.ac.in/dualdegree21/studentresult/result.asp",
-		Referer:                  "http://results.nith.ac.in/dualdegree21/studentresult/index.asp",
-		CSRFToken:                "{BC8FDC16-3133-429F-8FD7-CAC7026512F1}",
-		RequestVerificationToken: "13FD6203-F8C9-FBC3-877F-3D7480CF2325",
-	},
-	"22": {
-		URL:                      "http://results.nith.ac.in/scheme2022/studentresult/result.asp",
-		Referer:                  "http://results.nith.ac.in/scheme2022/studentresult/index.asp",
-		CSRFToken:                "{D9C7E347-A5E4-4E52-96FB-7DBB2492D3D5}",
-		RequestVerificationToken: "E3449E57-AB26-4125-BD1E-1D94F2A5A4D8",
-	},
-	"23": {
-		URL:                      "http://results.nith.ac.in/scheme23/studentresult/result.asp",
-		Referer:                  "http://results.nith.ac.in/scheme23/studentresult/index.asp",
-		CSRFToken:                "{F1E16363-FEDA-48AF-88E9-8A186425C213}",
-		RequestVerificationToken: "4FFEE8F3-14C9-27C4-B370-598406BF99C1",
-	},
-	"24": {
-		URL:                      "http://results.nith.ac.in/scheme24/studentresult/result.asp",
-		Referer:                  "http://results.nith.ac.in/scheme24/studentresult/index.asp",
-		CSRFToken:                "{0696D16E-58AD-472B-890E-6537BE62A5EA}",
-		RequestVerificationToken: "F797B72F-DC73-D06D-6B19-012ED5EBA98B",
-	},
-}
-
-func fetchData(url, rollNo string, headers map[string]string) (string, error) {
-	data := urlpkg.Values{}
-	data.Set("RollNumber", rollNo)
-	data.Set("CSRFToken", headers["CSRFToken"])
-	data.Set("RequestVerificationToken", headers["RequestVerificationToken"])
-	data.Set("B1", "Submit")
-
-	req, err := http.NewRequest("POST", url, strings.NewReader(data.Encode()))
-	if err != nil {
-		return "", err
-	}
-
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-	req.Header.Set("Referer", headers["Referer"])
-	// Add other necessary headers as needed
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
-	if err != nil {
-		return "", err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("invalid roll number")
-	}
-
-	bodyBytes, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return "", err
-	}
-
-	return string(bodyBytes), nil
-}
-
-type Subject struct {
-	Code   string `json:"code"`
-	Name   string `json:"name"`
-	Grade  string `json:"grade"`
-	Credit string `json:"credit"`
-}
-
-// SemesterResult holds the result of a semester.
-type SemesterResult struct {
-	Semester   string    `json:"semester"`
-	Cgpi       string    `json:"cgpi"`
-	Sgpi       string    `json:"sgpi"`
-	TotalCreds string    `json:"totalCredits"`
-	Courses    []Subject `json:"courses"`
-}
-
-// scrapeResult parses the result HTML and extracts all semester data.
-func scrapeResult(ctx context.Context, html string) ([]SemesterResult, error) {
-	doc, err := goquery.NewDocumentFromReader(strings.NewReader(html))
-	if err != nil {
-		return nil, fmt.Errorf("failed to parse HTML: %w", err)
-	}
-
-	var results []SemesterResult
-
-	doc.Find("table.MsoNormalTable").Each(func(i int, s *goquery.Selection) {
-		// Skip unrelated tables
-		if s.Find("tr").Length() < 3 {
-			return
-		}
-
-		text := s.Text()
-		if !strings.Contains(text, "Subject Code") {
-			return
-		}
-
-		// Get semester title
-		semesterHeader := s.PrevAllFiltered("p").First().Text()
-		semesterHeader = strings.TrimSpace(semesterHeader)
-
-		// Initialize semester result
-		semester := SemesterResult{
-			Semester: semesterHeader,
-			Courses:  []Subject{},
-		}
-
-		// Parse courses from table rows (skip header)
-		s.Find("tr").Each(func(i int, tr *goquery.Selection) {
-			if i == 0 {
-				return
-			}
-			tds := tr.Find("td")
-			if tds.Length() < 4 {
-				return
-			}
-			course := Subject{
-				Code:   strings.TrimSpace(tds.Eq(0).Text()),
-				Name:   strings.TrimSpace(tds.Eq(1).Text()),
-				Grade:  strings.TrimSpace(tds.Eq(2).Text()),
-				Credit: strings.TrimSpace(tds.Eq(3).Text()),
-			}
-			semester.Courses = append(semester.Courses, course)
-		})
-
-		// Find SGPI, CGPI, and total credits in sibling paragraphs
-		siblings := s.NextUntil("table")
-		siblings.Each(func(_ int, p *goquery.Selection) {
-			text := strings.TrimSpace(p.Text())
-			if strings.Contains(text, "SGPI") {
-				fmt.Sscanf(text, "SGPI : %s CGPI : %s Total Credits Earned : %s", &semester.Sgpi, &semester.Cgpi, &semester.TotalCreds)
-			}
-		})
-
-		results = append(results, semester)
-	})
-
-	if len(results) == 0 {
-		return nil, fmt.Errorf("no results found in HTML")
-	}
-
-	return results, nil
-}
-
-func determineDepartment(rollNo string) string {
-	rollNo = strings.ToLower(rollNo)
+func (f ResultFetchProcessError) Error() string {
 	switch {
-	case strings.Contains(rollNo, "bar"):
-		return "Architecture"
-	case strings.Contains(rollNo, "bce"):
-		return "Civil Engineering"
-	case strings.Contains(rollNo, "bme"):
-		return "Mechanical Engineering"
-	case strings.Contains(rollNo, "bms"):
-		return "Materials Science and Engineering"
-	case strings.Contains(rollNo, "bma"):
-		return "Mathematics and Computing"
-	case strings.Contains(rollNo, "bph"):
-		return "Engineering Physics"
-	case strings.Contains(rollNo, "bee"):
-		return "Electrical Engineering"
-	case strings.Contains(rollNo, "bec"), strings.Contains(rollNo, "dec"):
-		return "Electronics and Communication Engineering"
-	case strings.Contains(rollNo, "bcs"), strings.Contains(rollNo, "dcs"):
-		return "Computer Science and Engineering"
-	case strings.Contains(rollNo, "bch"):
-		return "Chemical Engineering"
+	case errors.Is(f, RollNumberDoesNotExist):
+		return "Roll number doesn't exist" // corrected grammar
+	case errors.Is(f, InvalidHtml):
+		return "Html received is invalid"
 	default:
-		return "Unknown"
+		return "Unknown error"
 	}
 }
 
-func determineProgramme(rollNo string) string {
-	programmeCode := strings.ToLower(rollNo[2:5])
-	programmeKeys := map[string][]string{
-		"Dual Degree": {"dcs", "dec"},
-		"B.Tech":      {"bce", "bme", "bms", "bma", "bph", "bee", "bec", "bcs", "bch"},
-		"B.Arch":      {"bar"},
-		"M.Tech":      {"mce", "mme", "mms", "mma", "mph", "mee", "mec", "mcs", "mch"},
+var tokenCache sync.Map
+
+type cachedTokens struct {
+	CSRFToken string
+	VerToken  string
+}
+
+// ParseResultHtml depends on the current html structure of official result website
+// - table 0 => last update title table
+// - table 1 => row 0 => rollNo, name, fathersName
+// - tables from 2 to end, not including last one have semester data
+// - two table for each semester
+// - first table subjects
+// - second table summary
+// - last table useless
+func ParseResultHtml(body io.ReadCloser) (user *resultTypes.StudentHtmlParsed, parseError error) {
+	resultDoc, err := goquery.NewDocumentFromReader(body)
+	if err != nil {
+		return nil, UnknownParsingError
+	}
+	user = &resultTypes.StudentHtmlParsed{}
+	invalidRoll := resultDoc.Find("h2").FilterFunction(func(index int, selection *goquery.Selection) bool {
+		strings.EqualFold(selection.Text(), "Kindly Check the Roll Number")
+		return true
+	}).Length() > 0
+	if invalidRoll {
+		return nil, RollNumberDoesNotExist
 	}
 
-	for programme, codes := range programmeKeys {
-		for _, code := range codes {
-			if code == programmeCode {
-				return programme
-			}
+	tableFind := resultDoc.Find("table")
+	semesters := (tableFind.Length() - 3) / 2
+	if semesters < 0 || semesters >= tableFind.Length() {
+		return nil, InvalidHtml
+	}
+	user.SemesterResults = make([]resultTypes.SemesterResult, semesters)
+	tableFind.Each(func(tableIndex int, selection *goquery.Selection) {
+		if tableIndex == 0 || tableIndex == tableFind.Length()-1 {
+			//useless table
+			return
 		}
-	}
+		if tableIndex == 1 {
+			//student roll number, name, father's name
+			selection.Find("td").Each(func(cellIndex int, selection *goquery.Selection) {
+				txt := strings.Replace(selection.Text(), "ROLL NUMBER", "", -1)
+				txt = strings.Replace(txt, "STUDENT NAME", "", -1)
+				txt = strings.Replace(txt, "FATHER NAME", "", -1)
+				txt = strings.TrimSpace(txt)
+				switch cellIndex {
+				case 0:
+					user.RollNumber = txt
+				case 1:
+					user.Name = txt
+				case 2:
+					user.FathersName = txt
+				}
+			})
+		} else if tableIndex%2 == 0 {
+			//semester result table: subjects data
+			rowFind := selection.Find("tr")
+			subjectsResult := make([]resultTypes.SubjectResult, rowFind.Length()-2)
+			rowFind.Each(func(rowIndex int, selection *goquery.Selection) {
+				if rowIndex < 2 {
+					return
+				}
+				//each row is a subject after row index 1
+				selection.Find("td").Each(func(cellIndex int, selection *goquery.Selection) {
+					text := strings.TrimSpace(selection.Text())
+					switch cellIndex {
+					case 1:
+						subjectsResult[rowIndex-2].SubjectName = text
+					case 2:
+						subjectsResult[rowIndex-2].SubjectCode = text
+					case 3:
+						{
+							Credit, _ := strconv.Atoi(text)
+							subjectsResult[rowIndex-2].Credit = int64(Credit)
+						}
+					case 4:
+						subjectsResult[rowIndex-2].Grade = text
+					case 5:
+						{
+							points, _ := strconv.Atoi(text)
 
-	return "Unknown"
-}
-
-func GetResult(rollNo string) (RawResult, error) {
-
-	headers, ok := headerMap[rollNo[:2]]
-	if !ok {
-		return RawResult{}, fmt.Errorf("unsupported roll number format")
-	}
-
-	htmlContent, err := fetchData(headers.URL, rollNo, map[string]string{
-		"Referer":                  headers.Referer,
-		"CSRFToken":                headers.CSRFToken,
-		"RequestVerificationToken": headers.RequestVerificationToken,
+							subjectsResult[rowIndex-2].Points = int64(points)
+							subjectsResult[rowIndex-2].CGPI = float64(points) / float64(subjectsResult[rowIndex-2].Credit)
+						}
+					}
+				})
+			})
+			user.SemesterResults[(tableIndex-2)/2].SubjectResults = subjectsResult
+			user.SemesterResults[(tableIndex-2)/2].SemesterNumber = int64((tableIndex-2)/2 + 1)
+		} else {
+			//semester result table: semester overall data
+			selection.Find("tr td").Each(func(cellIndex int, selection *goquery.Selection) {
+				equalCharPosition := strings.Index(selection.Text(), "=")
+				text := strings.TrimSpace(selection.Text()[equalCharPosition+1:])
+				if cellIndex == 1 {
+					user.SemesterResults[(tableIndex-2)/2].SGPI, _ = strconv.ParseFloat(text, 64)
+				} else if cellIndex == 2 {
+					user.SemesterResults[(tableIndex-2)/2].SGPITotal, _ = strconv.ParseInt(text, 64, 0)
+				} else if cellIndex == 3 {
+					user.SemesterResults[(tableIndex-2)/2].CGPI, _ = strconv.ParseFloat(text, 64)
+				} else if cellIndex == 4 {
+					user.SemesterResults[(tableIndex-2)/2].CGPITotal, _ = strconv.ParseInt(text, 64, 0)
+				}
+			})
+		}
 	})
+	if len(user.SemesterResults) <= 0 {
+		return nil, InvalidHtml
+	}
+	user.CGPI = user.SemesterResults[len(user.SemesterResults)-1].CGPI
+	user.Branch = utils.DetermineDepartment(user.RollNumber)
+	// change this after 2099 (ehe)
+	batchYear, _ := strconv.Atoi("20" + user.RollNumber[0:2])
+	user.Batch = batchYear
+	user.Programme = utils.DetermineProgramme(user.RollNumber)
+	if user.Programme == "Unknown" {
+		return nil, fmt.Errorf("unknown programme for roll number %s", user.RollNumber)
+	}
+	return user, nil
+}
+
+func getResultHtml(rollNumber string) (io.ReadCloser, error) {
+	cookieJar, err := cookiejar.New(nil)
 	if err != nil {
-		return RawResult{}, err
+		return nil, err
 	}
-
-	semesters, err := scrapeResult(context.Background(), htmlContent)
-	if err != nil {
-		return RawResult{}, err
+	httpClient := &http.Client{
+		Jar: cookieJar,
 	}
+	path := utils.GetUrlForRollNumber(rollNumber, false)
 
-	resultInfo := RawResult{
-		RollNo:    rollNo,
-		Branch:    determineDepartment(rollNo),
-		Batch:     2020,
-		Programme: determineProgramme(rollNo),
-		Semesters: []Semester{},
-	}
-
-	for _, semesterResult := range semesters {
-		semester := Semester{
-			Semester:  semesterResult.Semester,
-			SGPI:      0, // Assign appropriate values if available
-			SGPITotal: 0,
-			CGPI:      0,
-			CGPITotal: 0,
-			Courses:   []Course{},
+	var csrfToken, verToken string
+	if val, ok := tokenCache.Load(path); ok {
+		tokens := val.(cachedTokens)
+		csrfToken = tokens.CSRFToken
+		verToken = tokens.VerToken
+	} else {
+		// fetch tokens if not cached
+		formPageResponse, err := httpClient.Get(path)
+		if err != nil {
+			return nil, err
 		}
-		for _, subject := range semesterResult.Courses {
-			course := Course{
-				Name: subject.Name,
-				Code: subject.Code,
-				CGPI: 0, // Assign appropriate values if available
+		defer formPageResponse.Body.Close()
+
+		formPageDoc, err := goquery.NewDocumentFromReader(formPageResponse.Body)
+		if err != nil {
+			return nil, err
+		}
+
+		var ok bool
+		csrfToken, ok = formPageDoc.Find("[name=CSRFToken]").Attr("value")
+		if !ok {
+			return nil, fmt.Errorf("CSRFToken not found")
+		}
+		verToken, ok = formPageDoc.Find("[name=RequestVerificationToken]").Attr("value")
+		if !ok {
+			return nil, fmt.Errorf("RequestVerificationToken not found")
+		}
+
+		tokenCache.Store(path, cachedTokens{CSRFToken: csrfToken, VerToken: verToken})
+	}
+
+	data := url.Values{
+		"RollNumber":               {rollNumber},
+		"CSRFToken":                {csrfToken},
+		"RequestVerificationToken": {verToken},
+		"B1":                       {"Submit"},
+	}
+	postReq, err := http.NewRequest(http.MethodPost, path, strings.NewReader(data.Encode()))
+	if err != nil {
+		return nil, err
+	}
+	postReq.Header.Set("DNT", "1")
+	postReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+
+	// this assumes at least one cookie was set during GET
+	// if not using the GET, you may have to separately fetch cookies if required
+	resp, err := httpClient.Do(postReq)
+	if err != nil {
+		return nil, err
+	}
+	return resp.Body, nil
+}
+
+func GetResultByRollNumber(rollNumber string) (*resultTypes.StudentHtmlParsed, error) {
+	resultHtml, err := getResultHtml(rollNumber)
+	if err != nil {
+		return nil, fmt.Errorf("error for rollNumber %s: %w in getResultHtml", rollNumber, err)
+	}
+	student, err := ParseResultHtml(resultHtml)
+	if err == nil && student != nil {
+		return student, nil
+	} else {
+		return nil, fmt.Errorf("error for rollNumber %s: %w\n", rollNumber, err)
+	}
+
+}
+
+func GetResultsFromWeb(forOnlyBatch int) []resultTypes.StudentHtmlParsed {
+	//build an array of roll numbers
+	rollNumbers := utils.GenRollNumbers(forOnlyBatch)
+	println("Total roll numbers to process: ", len(rollNumbers))
+	var doneRollNumbers int32 = 0
+	//build an array of student objects that contain result
+	var students []resultTypes.StudentHtmlParsed
+
+	processNext := func(rollNumber string) (*resultTypes.StudentHtmlParsed, error) {
+		resultHtml, err := getResultHtml(rollNumber)
+		if err != nil {
+			err = fmt.Errorf("error for rollNumber %s: %w in getResultHtml", rollNumber, err)
+			return nil, err
+		}
+		student, err := ParseResultHtml(resultHtml)
+		if err == nil && student != nil {
+			return student, nil
+		} else {
+			err = fmt.Errorf("error for rollNumber %s: %w", rollNumber, err)
+			return nil, err
+		}
+	}
+	const maxRetries = 5
+	var retryNum = 0
+	for _, rollNumber := range rollNumbers {
+		retryNum = 0
+	retryLoop:
+		for retryNum <= maxRetries {
+			var sleepDuration = retryNum + 1 + rand.Intn(2)
+			log.Printf("Next fetch after %d seconds\n", sleepDuration)
+			time.Sleep(time.Second * time.Duration(sleepDuration))
+			student, err := processNext(rollNumber)
+			if student != nil {
+				students = append(students, *student)
+				atomic.AddInt32(&doneRollNumbers, 1)
+				log.Printf("Success for rollNumber %s; Done: %d/%d", rollNumber, doneRollNumbers, len(rollNumbers))
+				break retryLoop
+			} else if errors.Is(err, RollNumberDoesNotExist) {
+				atomic.AddInt32(&doneRollNumbers, 1)
+				log.Printf("Skipping rollNumber %s, invalid roll number; Done: %d/%d", rollNumber, doneRollNumbers, len(rollNumbers))
+				break retryLoop
 			}
-			semester.Courses = append(semester.Courses, course)
+			retryNum += 1
+			log.Printf("Unknown error for roll number %s, will retry: %t", rollNumber, retryNum <= maxRetries)
 		}
-		resultInfo.Semesters = append(resultInfo.Semesters, semester)
+
+	}
+	return students
+}
+
+type ScrapeResult struct {
+	RollNumber string                         `json:"rollNumber"`
+	Data       *resultTypes.StudentHtmlParsed `json:"data,omitempty"`
+	Error      string                         `json:"error,omitempty"`
+}
+
+func ScrapeInBulk(ctx context.Context, rollNumbers []string, concurrency int, delay time.Duration) []ScrapeResult {
+	rolls := make(chan string)
+	results := make(chan ScrapeResult)
+	collected := make([]ScrapeResult, 0, len(rollNumbers))
+	println("Scraping in bulk...", len(rollNumbers), "roll numbers")
+	ticker := time.NewTicker(delay)
+	defer ticker.Stop()
+
+	// Start workers
+	for w := 0; w < concurrency; w++ {
+		go func() {
+			for roll := range rolls {
+				select {
+				case <-ticker.C:
+					data, err := GetResultByRollNumber(roll)
+					res := ScrapeResult{RollNumber: roll}
+
+					println("Scraping roll number:", roll)
+					if err != nil {
+						res.Error = err.Error()
+					} else {
+						res.Data = data
+					}
+					select {
+					case results <- res:
+					case <-ctx.Done():
+						return
+					}
+				case <-ctx.Done():
+					return
+				}
+			}
+		}()
 	}
 
-	return resultInfo, nil
+	// Feed roll numbers
+	go func() {
+		for _, roll := range rollNumbers {
+			select {
+			case rolls <- roll:
+			case <-ctx.Done():
+				break
+			}
+		}
+		close(rolls)
+	}()
+
+	// Collect results
+	for i := 0; i < len(rollNumbers); i++ {
+		select {
+		case res := <-results:
+			collected = append(collected, res)
+		case <-ctx.Done():
+			return collected
+		}
+	}
+	println("Scraping completed", len(collected), "results collected")
+
+	return collected
 }

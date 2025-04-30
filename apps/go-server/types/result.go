@@ -1,4 +1,4 @@
-package resultTypes
+package types
 
 type StudentResult struct {
 	RollNumber      string           `json:"rollNo"`
@@ -11,6 +11,12 @@ type StudentResult struct {
 	Programme       string           `json:"programme"`
 }
 
+type Rank struct {
+	ClassRank   int64 `json:"class"`
+	YearRank    int64 `json:"year"`
+	BranchRank  int64 `json:"branch"`
+	CollegeRank int64 `json:"college"`
+}
 type StudentResultWithRanks struct {
 	RollNumber  string  `json:"rollNo"`
 	Name        string  `json:"name"`
@@ -18,16 +24,17 @@ type StudentResultWithRanks struct {
 	CGPI        float64 `json:"cgpi"`
 	Branch      string  `json:"branch"`
 	Batch       string  `json:"batch"`
-	BranchRank  int64   `json:"branch_rank"`
-	YearRank    int64   `json:"year_rank"`
-	ClassRank   int64   `json:"class_rank"`
+	Programme   string  `json:"programme"`
+	Rank        Rank    `json:"rank"`
 }
 
 type SemesterResult struct {
-	SemesterNumber int64           `json:"semesterNo"`
+	SemesterNumber int64           `json:"semester"`
 	SubjectResults []SubjectResult `json:"courses"`
 	SGPI           float64         `json:"sgpi"`
 	CGPI           float64         `json:"cgpi"`
+	SGPITotal      int64           `json:"sgpi_total"`
+	CGPITotal      int64           `json:"cgpi_total"`
 }
 
 type SubjectResult struct {

@@ -2,41 +2,10 @@ package utils
 
 import (
 	"fmt"
+	constants "github.com/kanakkholwal/go-server/constants"
 	"strings"
 	"time"
 )
-
-var programmeKeys = map[string][]string{
-	"Dual Degree": {"dcs", "dec"},
-	"B.Tech":      {"bce", "bme", "bms", "bma", "bph", "bee", "bec", "bcs", "bch"},
-	"B.Arch":      {"bar"},
-	"M.Tech":      {"mce", "mme", "mms", "mma", "mph", "mee", "mec", "mcs", "mch"},
-}
-
-var schemeKeys = map[string]string{
-	"B.Tech":      "scheme",
-	"Dual Degree": "dualdegree",
-	"M.Tech":      "mtech",
-}
-
-var BranchCodesToNames = map[string]string{
-	"ar": "Architecture",
-	"ce": "Civil Engineering",
-	"me": "Mechanical Engineering",
-	"ms": "Materials Science and Engineering",
-	"ma": "Mathematics and Computing",
-	"ph": "Engineering Physics",
-	"ee": "Electrical Engineering",
-	"ec": "Electronics and Communication Engineering",
-	"cs": "Computer Science and Engineering",
-}
-
-var thresholdForProgramme = map[string]int{
-	"Dual Degree": 30,
-	"B.Tech":      120,
-	"M.Tech":      40,
-	"B.Arch":      60,
-}
 
 // var thresholdForBranch = map[string]int{
 // 	"bar": 60,
@@ -59,8 +28,8 @@ func GenRollNumbers(batchYear int) []string {
 	}
 	var rollNumbers []string
 
-	for programme, codes := range programmeKeys {
-		threshold := thresholdForProgramme[programme]
+	for programme, codes := range constants.ProgrammeKeys {
+		threshold := constants.ThresholdForProgramme[programme]
 		for _, code := range codes {
 			for i := 1; i <= threshold; i++ {
 				// Generate roll number based on the batch year and programme
@@ -94,10 +63,10 @@ func GenRollNumbersForClass(branch string, programme string) []string {
 	if branch == "" || programme == "" {
 		return []string{}
 	}
-	if _, ok := BranchCodesToNames[branch]; !ok {
+	if _, ok := constants.BranchCodesToNames[branch]; !ok {
 		return []string{}
 	}
-	progCodes, ok := programmeKeys[programme]
+	progCodes, ok := constants.ProgrammeKeys[programme]
 	if !ok {
 		return []string{}
 	}
@@ -123,16 +92,16 @@ func GetUrlForRollNumber(rollNumber string, dualDegree bool) string {
 	schema := "scheme"
 
 	// identify the scheme based on the roll number using programmeKeys and schemeKeys
-	for programme, codes := range programmeKeys {
+	for programme, codes := range constants.ProgrammeKeys {
 		for _, code := range codes {
 			if strings.Contains(rollNumber, code) {
-				schema = schemeKeys[programme]
+				schema = constants.SchemeKeys[programme]
 				break
 			}
 		}
 	}
 	if dualDegree {
-		schema = schemeKeys["Dual Degree"]
+		schema = constants.SchemeKeys["Dual Degree"]
 	}
 
 	return fmt.Sprintf("http://results.nith.ac.in/%s%s/studentresult/result.asp", schema, year) // Use schema in the URL
@@ -169,7 +138,7 @@ func DetermineDepartment(rollNo string) string {
 func DetermineProgramme(rollNo string) string {
 	programmeCode := strings.ToLower(rollNo[2:5])
 
-	for programme, codes := range programmeKeys {
+	for programme, codes := range constants.ProgrammeKeys {
 		for _, code := range codes {
 			if code == programmeCode {
 				return programme
