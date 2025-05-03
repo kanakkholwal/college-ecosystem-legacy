@@ -84,7 +84,8 @@
         --destructive: 0 62.8% 30.6%;
         --destructive-foreground: 0deg 0% 92.16%;
         --border: 0, 0%, 14%;
-        --input: 0, 0%, 14%;
+        /* --input: 0, 0%, 14%; */
+        --input:0deg 0% 100% / 5%;
         --ring: 250deg 100% 80%;
 
         --chart-1: 220 70% 50%;

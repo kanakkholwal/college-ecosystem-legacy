@@ -93,14 +93,14 @@ export const quick_links: RouterCardLink[] = [
     description: "Participate in polls.",
     allowed_roles: ["*"],
   },
-  {
-    href: "/chat",
-    title: "Chatbot",
-    description: "Chat with the college chatbot.(Beta)",
-    Icon: Bot,
-    disabled: true,
-    allowed_roles: ["*"],
-  },
+  // {
+  //   href: "/chat",
+  //   title: "Chatbot",
+  //   description: "Chat with the college chatbot.(Beta)",
+  //   Icon: Bot,
+  //   disabled: true,
+  //   allowed_roles: ["*"],
+  // },
 ];
 
 export type rawLinkType = {
