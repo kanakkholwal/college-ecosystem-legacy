@@ -13,7 +13,7 @@ export default function Navbar({ user }: NavbarProps) {
   return (
     <header
       className={cn(
-        "bg-card fixed left-1/2 top-0 z-40 box-content w-full max-w-6xl -translate-x-1/2 border-b border-border transition-colors lg:mt-5 lg:w-[calc(100%-1rem)] lg:rounded-2xl lg:border shadow-sm backdrop-blur-md"
+        "bg-card fixed left-1/2 top-0 z-40 box-content w-full max-w-6xl -translate-x-1/2 border-b border-border transition-colors lg:mt-5 lg:w-[calc(100%-1rem)] lg:rounded-2xl lg:border shadow-sm"
       )}
     >
       <div className="relative md:px-4 z-50">
