@@ -235,3 +235,80 @@ export async function approveRejectOutPass(
     return Promise.reject(err?.toString() || "Something went wrong");
   }
 }
+
+
+export async function getOutPassHistoryForHostel({
+  query,
+  offset,
+  limit = 100,
+  sortBy = "desc"
+}: {
+  query?: string;
+  offset?: number;
+  limit?: number;
+  sortBy?: "asc" | "desc";
+}): Promise<{
+  data: OutPassType[];
+  error: string | null;
+}> {
+  // This function is used to get the outpass history for the hostel
+  try {
+    const { success, message, hostel } = await getHostelByUser();
+    if (!success || !hostel) {
+      return {
+        data: [],
+        error: message,
+      };
+    }
+    await dbConnect();
+    const outPasses = await OutPassModel.find({
+      hostel: hostel._id,
+      ...(query && {
+        $or: [
+          { "student.name": { $regex: query, $options: "i" } },
+          { "student.rollNumber": { $regex: query, $options: "i" } },
+        ],
+      }),
+    })
+      .populate("hostel")
+      .populate("student")
+      .sort({
+        createdAt:
+          sortBy === "asc" ? 1 : -1,
+      })
+      .limit(offset ? offset + limit : limit)
+      .lean();
+    return Promise.resolve({
+      data: JSON.parse(JSON.stringify(outPasses)),
+      error: null,
+    });
+  } catch (err) {
+    console.error(err);
+    return Promise.reject({
+      data: [],
+      error: err?.toString() || "Something went wrong",
+    });
+  
+  }
+}
+
+export async function getOutPassByIdForHosteler(
+  id: string
+): Promise<OutPassType[] | null> {
+  // This function is used to get the outpass by id for the hosteler
+  try {
+    const { success, message, hostel, hosteler } = await getHostelByUser();
+    if (!success || !hosteler || !hostel) {
+      return Promise.reject(message);
+    }
+    await dbConnect();
+    const outPass = await OutPassModel.findById(id)
+      .populate("hostel")
+      .populate("student")
+      .lean();
+    return Promise.resolve(JSON.parse(JSON.stringify(outPass)));
+  } catch (err) {
+    console.error(err);
+    return Promise.reject(err?.toString() || "Something went wrong");
+  }
+}
