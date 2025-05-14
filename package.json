@@ -7,9 +7,13 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,md}\"",
     "dev:server": "cd apps/server && turbo run dev",
-    "build:server": "cd apps/platform && turbo run build",
+    "build:server": "cd apps/server && turbo run build",
     "dev:platform": "cd apps/platform && turbo run dev",
-    "build:platform": "cd apps/platform && turbo run build"
+    "build:platform": "cd apps/platform && turbo run build",
+    "dev:mail": "cd apps/mail-server && turbo run dev",
+    "build:mail": "cd apps/mail-server && turbo run build",
+    "dev:website": "cd apps/website && turbo run dev",
+    "build:website": "cd apps/website && turbo run build",
   },
   "devDependencies": {
     "prettier": "^3.4.2",

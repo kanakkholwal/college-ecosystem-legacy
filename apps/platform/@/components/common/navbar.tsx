@@ -60,7 +60,7 @@ export function SocialBar() {
 }
 
 export function SupportBar() {
-  return <div className="inline-flex flex-wrap items-center empty:hidden gap-2 mx-auto justify-start">
+  return <div className="inline-flex flex-wrap items-center empty:hidden gap-2 mx-auto justify-center md:justify-start">
     {SUPPORT_LINKS.map((link) => {
       return (
         <Link
@@ -68,7 +68,7 @@ export function SupportBar() {
           target="_blank"
           key={link.href}
           className={cn(
-            "inline-flex items-center gap-1 p-2 text-muted-foreground transition-colors hover:text-accent-foreground data-[active=true]:text-primary [&_svg]:size-4 text-xs font-medium",
+            "inline-flex items-center gap-1 p-2 text-muted-foreground transition-colors hover:text-primary data-[active=true]:text-primary [&_svg]:size-4 text-xs font-medium",
           )}
         >
           {link.title}
