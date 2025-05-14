@@ -288,27 +288,42 @@ export async function getOutPassHistoryForHostel({
       data: [],
       error: err?.toString() || "Something went wrong",
     });
-  
+
   }
 }
 
 export async function getOutPassByIdForHosteler(
   id: string
-): Promise<OutPassType[] | null> {
-  // This function is used to get the outpass by id for the hosteler
+): Promise<{
+  data: OutPassType[] | null;
+  error: string | null;
+}> {
   try {
     const { success, message, hostel, hosteler } = await getHostelByUser();
     if (!success || !hosteler || !hostel) {
-      return Promise.reject(message);
+      return Promise.reject({
+        data: null,
+        error: message,
+      });
     }
+
     await dbConnect();
-    const outPass = await OutPassModel.findById(id)
+
+    const outPass = await OutPassModel.find({ student: id })
       .populate("hostel")
       .populate("student")
+      .sort({ createdAt: -1 })
       .lean();
-    return Promise.resolve(JSON.parse(JSON.stringify(outPass)));
+
+    return {
+      data: JSON.parse(JSON.stringify(outPass)),
+      error: null,
+    };
   } catch (err) {
     console.error(err);
-    return Promise.reject(err?.toString() || "Something went wrong");
+    return {
+      data: null,
+      error: err?.toString() || "Something went wrong",
+    };
   }
 }

@@ -14,7 +14,7 @@ import { notFound } from "next/navigation";
 import type { ResultTypeWithId, Semester } from "src/models/result";
 import { getResultByRollNo } from "~/actions/result";
 import { ORG_DOMAIN } from "~/project.config";
-import { Course } from "~/types/result";
+import type { Course } from "~/types/result";
 import { CGPIChart } from "./components/chart";
 
 type Props = {
