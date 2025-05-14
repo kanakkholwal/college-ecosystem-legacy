@@ -75,6 +75,7 @@
     "next13-progressbar": "^1.2.2",
     "node-html-parser": "^7.0.1",
     "pdf-tables-parser": "^1.0.6",
+    "platform": "workspace:^",
     "qrcode.react": "^4.2.0",
     "react": "^19.0.0",
     "react-day-picker": "^9.5.0",
@@ -117,6 +118,5 @@
     "tailwindcss": "^3.4.17",
     "tailwindcss-motion": "^1.0.1",
     "typescript": "^5.7.3"
-  },
-  "packageManager": "pnpm@9.15.4"
+  }
 }
