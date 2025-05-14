@@ -1,48 +1,47 @@
-"use client"
+"use client";
 
-import { DarkTheme, LightTheme, SystemTheme } from "@/components/common/theme"
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { cn } from "@/lib/utils"
-import { motion } from "motion/react"
-import { useTheme } from "next-themes"
-import * as React from "react"
+import { DarkTheme, LightTheme, SystemTheme } from "@/components/common/theme";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { cn } from "@/lib/utils";
+import { motion } from "motion/react";
+import { useTheme } from "next-themes";
+import * as React from "react";
 
-
-type ThemeType = "light" | "dark" | "system"
+type ThemeType = "light" | "dark" | "system";
 
 interface ThemeOption {
-  value: ThemeType
-  label: string
-  icon: React.ComponentType
+  value: ThemeType;
+  label: string;
+  icon: React.ComponentType;
 }
 
 const themes: ThemeOption[] = [
   { value: "light", label: "Light", icon: LightTheme },
   { value: "dark", label: "Dark", icon: DarkTheme },
   { value: "system", label: "System", icon: SystemTheme },
-]
+];
 
 export default function ThemeToggle() {
-  const [mounted, setMounted] = React.useState(false)
-  const { theme, setTheme } = useTheme()
+  const [mounted, setMounted] = React.useState(false);
+  const { theme, setTheme } = useTheme();
   const [systemTheme, setSystemTheme] = React.useState<"dark" | "light">(
-    "light",
-  )
+    "light"
+  );
 
   React.useEffect(() => {
-    setMounted(true)
-    const media = window.matchMedia("(prefers-color-scheme: dark)")
-    setSystemTheme(media.matches ? "dark" : "light")
+    setMounted(true);
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    setSystemTheme(media.matches ? "dark" : "light");
 
     const listener = (e: MediaQueryListEvent) => {
-      setSystemTheme(e.matches ? "dark" : "light")
-    }
+      setSystemTheme(e.matches ? "dark" : "light");
+    };
 
-    media.addEventListener("change", listener)
-    return () => media.removeEventListener("change", listener)
-  }, [])
+    media.addEventListener("change", listener);
+    return () => media.removeEventListener("change", listener);
+  }, []);
 
-  if (!mounted) return null
+  if (!mounted) return null;
 
   return (
     <div className="bg-tertiary relative flex w-full scroll-m-4 flex-col rounded-lg border">
@@ -61,12 +60,12 @@ export default function ThemeToggle() {
             className="grid gap-3 max-sm:space-y-3 sm:grid-cols-3"
           >
             {themes.map((themeOption) => {
-              const Icon = themeOption.icon
-              const isSelected = theme === themeOption.value
-              const isSystem = themeOption.value === "system"
+              const Icon = themeOption.icon;
+              const isSelected = theme === themeOption.value;
+              const isSystem = themeOption.value === "system";
               const currentSystemTheme = isSystem
                 ? systemTheme
-                : themeOption.value
+                : themeOption.value;
 
               return (
                 <div
@@ -78,7 +77,7 @@ export default function ThemeToggle() {
                       "border-blue-500 ring-2 ring-blue-800/60": isSelected,
                       "bg-gray-50": themeOption.value === "light",
                       "bg-secondary": themeOption.value !== "light",
-                    },
+                    }
                   )}
                 >
                   <RadioGroupItem
@@ -110,11 +109,11 @@ export default function ThemeToggle() {
                     </span>
                   </label>
                 </div>
-              )
+              );
             })}
           </RadioGroup>
         </form>
       </div>
     </div>
-  )
+  );
 }

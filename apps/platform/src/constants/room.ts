@@ -6,4 +6,4 @@ export const roomSchema = z.object({
   capacity: z.number().nonnegative().default(0),
   currentStatus: z.enum(["available", "occupied"]),
   lastUpdatedTime: z.date(),
-})
+});

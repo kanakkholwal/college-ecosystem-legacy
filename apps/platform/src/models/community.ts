@@ -56,8 +56,8 @@ const communityPostSchema = new Schema<ICommunityPost>(
     category: { type: String, enum: CATEGORY_TYPES, required: true },
     views: { type: Number, required: true },
     likes: [String],
-    savedBy:  [String],
-    author: { 
+    savedBy: [String],
+    author: {
       id: { type: String, required: true },
       name: { type: String, required: true },
       username: { type: String, required: true },

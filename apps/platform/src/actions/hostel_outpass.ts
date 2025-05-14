@@ -236,12 +236,11 @@ export async function approveRejectOutPass(
   }
 }
 
-
 export async function getOutPassHistoryForHostel({
   query,
   offset,
   limit = 100,
-  sortBy = "desc"
+  sortBy = "desc",
 }: {
   query?: string;
   offset?: number;
@@ -273,8 +272,7 @@ export async function getOutPassHistoryForHostel({
       .populate("hostel")
       .populate("student")
       .sort({
-        createdAt:
-          sortBy === "asc" ? 1 : -1,
+        createdAt: sortBy === "asc" ? 1 : -1,
       })
       .limit(offset ? offset + limit : limit)
       .lean();
@@ -288,13 +286,10 @@ export async function getOutPassHistoryForHostel({
       data: [],
       error: err?.toString() || "Something went wrong",
     });
-
   }
 }
 
-export async function getOutPassByIdForHosteler(
-  id: string
-): Promise<{
+export async function getOutPassByIdForHosteler(id: string): Promise<{
   data: OutPassType[] | null;
   error: string | null;
 }> {

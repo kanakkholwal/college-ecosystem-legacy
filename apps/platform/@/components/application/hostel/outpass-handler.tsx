@@ -25,18 +25,18 @@ import OutpassRender from "./outpass-render";
 
 type responseType =
   | {
-    identifier: "rollNo";
-    history: OutPassType[];
-  }
+      identifier: "rollNo";
+      history: OutPassType[];
+    }
   | {
-    identifier: "id";
-    outpass: OutPassType | null;
-  }
+      identifier: "id";
+      outpass: OutPassType | null;
+    }
   | {
-    identifier: "unknown";
-    message: string;
-    error?: string | unknown;
-  };
+      identifier: "unknown";
+      message: string;
+      error?: string | unknown;
+    };
 
 async function fetchByIdentifier(identifier: string) {
   return await apiFetch<responseType>(
@@ -45,15 +45,18 @@ async function fetchByIdentifier(identifier: string) {
 }
 
 function isActionAllowed(outpass: OutPassType) {
-  const isAllowedFromHostel = outpass.status !== "pending" && outpass.status !== "rejected" && outpass.status !== "processed"
+  const isAllowedFromHostel =
+    outpass.status !== "pending" &&
+    outpass.status !== "rejected" &&
+    outpass.status !== "processed";
   if (isAllowedFromHostel) return true;
 
-  const isExpired = new Date(outpass.validTill).getTime() < new Date().getTime();
+  const isExpired =
+    new Date(outpass.validTill).getTime() < new Date().getTime();
 
-  if (isExpired) return false
+  if (isExpired) return false;
 
-  return true
-
+  return true;
 }
 
 export default function OutpassVerifier() {
@@ -150,7 +153,9 @@ export default function OutpassVerifier() {
 
   return (
     <div className="mx-auto px-4 py-8 space-y-10">
-      <Heading className="text-center" level={2}>Outpass Verifier</Heading>
+      <Heading className="text-center" level={2}>
+        Outpass Verifier
+      </Heading>
       <div className="relative flex items-stretch w-full rounded-full h-auto max-w-2xl mx-auto">
         <div className="absolute top-0 bottom-0 left-0">
           <div className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
@@ -212,31 +217,37 @@ export default function OutpassVerifier() {
         <div className="relative flex items-stretch w-full max-w-2xl mx-auto bg-card border rounded-lg p-6">
           <div className="flex w-full gap-2 justify-start items-stretch text-sm">
             <div className="flex flex-col">
-              <span className="font-semibold text-muted-foreground">Actual Out Time</span>
+              <span className="font-semibold text-muted-foreground">
+                Actual Out Time
+              </span>
               <span className="font-medium text-left">
                 {currentOutpass?.actualOutTime
                   ? format(
-                    new Date(currentOutpass.actualOutTime || ""),
-                    "dd/MM/yyyy hh:mm a"
-                  )
+                      new Date(currentOutpass.actualOutTime || ""),
+                      "dd/MM/yyyy hh:mm a"
+                    )
                   : "Not exited yet"}
               </span>
             </div>
             <Separator orientation="vertical" />
             <div className="flex flex-col">
-              <span className="font-semibold text-muted-foreground">Actual In Time</span>
+              <span className="font-semibold text-muted-foreground">
+                Actual In Time
+              </span>
               <span className="font-medium text-left">
                 {currentOutpass?.actualInTime
                   ? format(
-                    new Date(currentOutpass.actualInTime || ""),
-                    "dd/MM/yyyy hh:mm a"
-                  )
+                      new Date(currentOutpass.actualInTime || ""),
+                      "dd/MM/yyyy hh:mm a"
+                    )
                   : "Not entered yet"}
               </span>
             </div>
             <Separator orientation="vertical" />
             <div className="flex flex-col">
-              <span className="font-semibold text-muted-foreground">Status</span>
+              <span className="font-semibold text-muted-foreground">
+                Status
+              </span>
               <Badge
                 size="sm"
                 variant={
@@ -255,7 +266,10 @@ export default function OutpassVerifier() {
           <div className="flex items-center justify-between my-auto">
             <Button
               onClick={handleEntryExit}
-              disabled={updating || (currentOutpass ? isActionAllowed(currentOutpass) : false)}
+              disabled={
+                updating ||
+                (currentOutpass ? isActionAllowed(currentOutpass) : false)
+              }
               variant={currentOutpass?.actualInTime ? "glass" : "default_light"}
               effect="shineHover"
             >

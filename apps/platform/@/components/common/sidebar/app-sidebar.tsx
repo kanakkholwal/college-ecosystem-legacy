@@ -50,11 +50,7 @@ export function AppSidebar({ user, moderator, ...props }: SidebarProps) {
   const links = getSideNavLinks(moderator);
 
   return (
-    <Sidebar
-      collapsible="icon"
-      className="border-r border-border"
-      {...props}
-    >
+    <Sidebar collapsible="icon" className="border-r border-border" {...props}>
       <SidebarHeader>
         <RoleSwitcher user={user} />
       </SidebarHeader>

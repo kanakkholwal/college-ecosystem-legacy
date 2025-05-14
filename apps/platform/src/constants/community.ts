@@ -24,19 +24,22 @@ export const CATEGORIES = [
     name: "Academics",
     value: "academics",
     image: CATEGORY_IMAGES.academics,
-    description: "Explore academic communities focused on learning and education.",
+    description:
+      "Explore academic communities focused on learning and education.",
   },
   {
     name: "Departmental",
     value: "departmental",
     image: CATEGORY_IMAGES.departmental,
-    description: "Discover departmental communities for specific fields of study.",
+    description:
+      "Discover departmental communities for specific fields of study.",
   },
   {
     name: "Technology",
     value: "technology",
     image: CATEGORY_IMAGES.technology,
-    description: "Join technology communities for tech enthusiasts and professionals.",
+    description:
+      "Join technology communities for tech enthusiasts and professionals.",
   },
   {
     name: "Design",
@@ -48,12 +51,14 @@ export const CATEGORIES = [
     name: "Activities",
     value: "activities",
     image: CATEGORY_IMAGES.activities,
-    description: "Participate in communities focused on various activities and events.",
+    description:
+      "Participate in communities focused on various activities and events.",
   },
   {
     name: "Others",
     value: "others",
     image: CATEGORY_IMAGES.others,
-    description: "Explore other communities that don't fit into the above categories.",
-  }
-]
+    description:
+      "Explore other communities that don't fit into the above categories.",
+  },
+];

@@ -10,7 +10,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -77,7 +77,7 @@ export default function CreateAnnouncement() {
                   {...field}
                 />
               </FormControl>
-              
+
               <FormMessage />
             </FormItem>
           )}
@@ -100,83 +100,88 @@ export default function CreateAnnouncement() {
           )}
         />
         <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
-          
-        <FormField
-          control={form.control}
-          name="relatedFor"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>The type of announcement.</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-                disabled={form.formState.isSubmitting}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a related category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {RELATED_FOR_TYPES.map((type) => {
-                    return (
-                      <SelectItem key={type} value={type}>
-                        {type}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="expiresAt"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>The date at which the announcement will expire.</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
+          <FormField
+            control={form.control}
+            name="relatedFor"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>The type of announcement.</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  disabled={form.formState.isSubmitting}
+                >
                   <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                      disabled={form.formState.isSubmitting}
-                    >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a related category" />
+                    </SelectTrigger>
                   </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date < new Date() ||
-                      date < new Date("1900-01-01") ||
-                      form.formState.isSubmitting
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                  <SelectContent>
+                    {RELATED_FOR_TYPES.map((type) => {
+                      return (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="expiresAt"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>
+                  The date at which the announcement will expire.
+                </FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[240px] pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                        disabled={form.formState.isSubmitting}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date < new Date() ||
+                        date < new Date("1900-01-01") ||
+                        form.formState.isSubmitting
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
-        <Button type="submit" className="ml-4" disabled={form.formState.isSubmitting}>
+        <Button
+          type="submit"
+          className="ml-4"
+          disabled={form.formState.isSubmitting}
+        >
           {form.formState.isSubmitting ? (
             <span className="animate-pulse">Publishing...</span>
           ) : (

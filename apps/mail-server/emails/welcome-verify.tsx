@@ -1,9 +1,4 @@
-import {
-  Button,
-  Hr,
-  Preview,
-  Text
-} from "@react-email/components";
+import { Button, Hr, Preview, Text } from "@react-email/components";
 import { z } from "zod";
 
 const payloadSchema = z.record(

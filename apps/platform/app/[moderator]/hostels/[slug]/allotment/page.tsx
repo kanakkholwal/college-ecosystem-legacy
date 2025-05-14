@@ -13,11 +13,14 @@ import {
   ChangeAllotmentProcessStatusButton,
   DistributeSlotsButton,
   DownloadSlotButton,
-  RoomsTable
+  RoomsTable,
 } from "./client";
 
-import { SLOT_CAPACITY, SLOT_DURATION, SLOT_TIME_GAP } from "~/constants/allotment-process";
-
+import {
+  SLOT_CAPACITY,
+  SLOT_DURATION,
+  SLOT_TIME_GAP,
+} from "~/constants/allotment-process";
 
 export default async function HostelRoomAllotmentPage({
   params,
@@ -76,7 +79,9 @@ export default async function HostelRoomAllotmentPage({
         </StatsCard>
         <StatsCard title="Allotment Slots">
           <p className="text-xs text-muted-foreground">
-            Create slots for allotment process with duration of {SLOT_DURATION}min with gap of {SLOT_TIME_GAP}min and capacity of {SLOT_CAPACITY} students per slot
+            Create slots for allotment process with duration of {SLOT_DURATION}
+            min with gap of {SLOT_TIME_GAP}min and capacity of {SLOT_CAPACITY}{" "}
+            students per slot
           </p>
 
           <DistributeSlotsButton hostelId={hostel._id} />

@@ -10,8 +10,7 @@ const textareaVariants = cva(
     variants: {
       variant: {
         default: "border-input",
-        outline:
-          "border border-solid bg-slate-100 dark:bg-neutral-800",
+        outline: "border border-solid bg-slate-100 dark:bg-neutral-800",
         ghost:
           "border border-solid border-transparent bg-slate-100 dark:bg-slate-900 text-slate-900 dark:text-slate-200 dark:border-slate-700 focus:border-primary/70",
         border: " border-2 focus:border-primary/70 border-solid",
@@ -26,7 +25,7 @@ const textareaVariants = cva(
 );
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-  VariantProps<typeof textareaVariants> { }
+    VariantProps<typeof textareaVariants> {}
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, variant, ...props }, ref) => {
@@ -42,4 +41,3 @@ const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
 Textarea.displayName = "Textarea";
 
 export { Textarea };
-

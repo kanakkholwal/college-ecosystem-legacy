@@ -16,7 +16,7 @@ const TABS = [
   // ["verify-email", <VerifyEmail key="verify-email" />]
 ] as [string, React.ReactNode][];
 
-const hidden_tabs = ["forget-password","reset-password"]
+const hidden_tabs = ["forget-password", "reset-password"];
 
 interface Props {
   searchParams: Promise<{
@@ -38,8 +38,7 @@ export default async function SignInPage({ searchParams }: Props) {
     )
       return false;
 
-    if (hidden_tabs.includes(key) && !hidden_tabs.includes(tab))
-      return false;
+    if (hidden_tabs.includes(key) && !hidden_tabs.includes(tab)) return false;
 
     return true;
   }).map(([key, Component]) => {
@@ -49,30 +48,41 @@ export default async function SignInPage({ searchParams }: Props) {
       content: Component,
     };
   });
-  const defaultTab = (tabs.findIndex((elem) => elem.id === tab) > -1
-    ? tabs.findIndex((elem) => elem.id === tab)
-    : tabs[0].id) as string
+  const defaultTab = (
+    tabs.findIndex((elem) => elem.id === tab) > -1
+      ? tabs.findIndex((elem) => elem.id === tab)
+      : tabs[0].id
+  ) as string;
 
   return (
     <div className="flex flex-col gap-6">
-
-      <Card
-      >
+      <Card>
         <Tabs defaultValue={defaultTab} className="mb-6 pt-6">
-          {!hidden_tabs.includes(tab) && (<TabsList className="flex justify-around gap-4 flex-wrap mx-4 h-auto">
-            {tabs.map((tab) => {
-              return <TabsTrigger value={tab.id} key={tab.id} className="capitalize w-full flex-1 rounded-lg">{tab.title}</TabsTrigger>
-            })}
-          </TabsList>)}
+          {!hidden_tabs.includes(tab) && (
+            <TabsList className="flex justify-around gap-4 flex-wrap mx-4 h-auto">
+              {tabs.map((tab) => {
+                return (
+                  <TabsTrigger
+                    value={tab.id}
+                    key={tab.id}
+                    className="capitalize w-full flex-1 rounded-lg"
+                  >
+                    {tab.title}
+                  </TabsTrigger>
+                );
+              })}
+            </TabsList>
+          )}
           <div className="px-4 border-0 pb-6">
             {tabs.map((tab) => {
-              return <TabsContent value={tab.id} key={tab.id}>{tab.content}</TabsContent>
+              return (
+                <TabsContent value={tab.id} key={tab.id}>
+                  {tab.content}
+                </TabsContent>
+              );
             })}
-
           </div>
-
         </Tabs>
-
       </Card>
     </div>
   );

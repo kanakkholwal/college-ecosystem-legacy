@@ -91,7 +91,6 @@ export function AccountForm({ currentUser }: Props) {
               </FormItem>
             )}
           />
-      
 
           <Button type="submit" disabled={form.formState.isSubmitting}>
             Submit

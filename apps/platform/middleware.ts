@@ -130,11 +130,11 @@ export async function middleware(request: NextRequest) {
   const nextTargetRoute = request.nextUrl.searchParams.get("next");
   // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page
   if (nextTargetRoute) {
-    const targetUrl= decodeURIComponent(nextTargetRoute);
+    const targetUrl = decodeURIComponent(nextTargetRoute);
     // console.log("targetUrl", targetUrl);
     const nextRedirect = request.nextUrl.searchParams.get("redirect");
 
-    if (targetUrl && (nextRedirect !== "false")) {
+    if (targetUrl && nextRedirect !== "false") {
       const targetUrlObj = new URL(targetUrl);
       return NextResponse.redirect(targetUrlObj);
     }

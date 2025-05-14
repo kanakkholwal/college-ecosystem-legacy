@@ -14,11 +14,13 @@ export interface IHostelRoom extends Document, RawHostelRoomType {
 }
 export interface HostelRoomJson extends RawHostelRoomType {
   hostel: string;
-  hostStudent?: string | {
-    name:string,
-    rollNumber:string,
-    email:string,
-  }
+  hostStudent?:
+    | string
+    | {
+        name: string;
+        rollNumber: string;
+        email: string;
+      };
   _id: string;
 }
 

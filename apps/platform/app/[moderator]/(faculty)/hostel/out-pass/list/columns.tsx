@@ -4,10 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
-import type {
-  OutPassType
-} from "~/models/hostel_n_outpass";
-
+import type { OutPassType } from "~/models/hostel_n_outpass";
 
 export const columns: ColumnDef<OutPassType>[] = [
   {
@@ -56,7 +53,9 @@ export const columns: ColumnDef<OutPassType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium">{row.original.student.rollNumber}</div>
+        <div className="text-left font-medium">
+          {row.original.student.rollNumber}
+        </div>
       );
     },
     enableSorting: true,
@@ -70,9 +69,7 @@ export const columns: ColumnDef<OutPassType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium">
-          {row.original.roomNumber}
-        </div>
+        <div className="text-left font-medium">{row.original.roomNumber}</div>
       );
     },
     enableSorting: true,
@@ -99,11 +96,7 @@ export const columns: ColumnDef<OutPassType>[] = [
       <DataTableColumnHeader column={column} title="Status" />
     ),
     cell: ({ row }) => {
-      return (
-        <div className="text-left font-medium">
-          {row.original.status}
-        </div>
-      );
+      return <div className="text-left font-medium">{row.original.status}</div>;
     },
     enableSorting: false,
     enableHiding: true,
@@ -139,7 +132,9 @@ export const columns: ColumnDef<OutPassType>[] = [
       return (
         <div className="text-left font-medium">
           <Button variant="link" asChild>
-            <Link href={`list/${row.original.student._id}`}>View all outpass</Link>
+            <Link href={`list/${row.original.student._id}`}>
+              View all outpass
+            </Link>
           </Button>
         </div>
       );

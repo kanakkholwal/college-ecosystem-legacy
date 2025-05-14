@@ -9,7 +9,6 @@ interface NavbarProps {
 }
 
 export default function Navbar({ user }: NavbarProps) {
-
   return (
     <header
       className={cn(
@@ -38,43 +37,45 @@ export default function Navbar({ user }: NavbarProps) {
   );
 }
 
-
 export function SocialBar() {
-  return <div className="inline-flex flex-row items-center empty:hidden gap-3 mx-auto">
-    {socials.map((link) => {
-      return (
-        <Link
-          href={link.href}
-          target="_blank"
-          key={link.href}
-          className={cn(
-            "inline-flex items-center justify-center rounded-md text-sm font-medium  disabled:pointer-events-none disabled:opacity-50  p-1.5 [&_svg]:size-5 text-muted-foreground md:[&_svg]:size-4.5",
-            "hover:bg-accent hover:text-primary hover:-translate-y-1 ease-in transition-all duration-300 flex justify-center items-center size-10 icon ")}
-        >
-          <link.icon />
-        </Link>
-      );
-    })}
-
-  </div>
+  return (
+    <div className="inline-flex flex-row items-center empty:hidden gap-3 mx-auto">
+      {socials.map((link) => {
+        return (
+          <Link
+            href={link.href}
+            target="_blank"
+            key={link.href}
+            className={cn(
+              "inline-flex items-center justify-center rounded-md text-sm font-medium  disabled:pointer-events-none disabled:opacity-50  p-1.5 [&_svg]:size-5 text-muted-foreground md:[&_svg]:size-4.5",
+              "hover:bg-accent hover:text-primary hover:-translate-y-1 ease-in transition-all duration-300 flex justify-center items-center size-10 icon "
+            )}
+          >
+            <link.icon />
+          </Link>
+        );
+      })}
+    </div>
+  );
 }
 
 export function SupportBar() {
-  return <div className="inline-flex flex-wrap items-center empty:hidden gap-2 mx-auto justify-center md:justify-start">
-    {SUPPORT_LINKS.map((link) => {
-      return (
-        <Link
-          href={link.href}
-          target="_blank"
-          key={link.href}
-          className={cn(
-            "inline-flex items-center gap-1 p-2 text-muted-foreground transition-colors hover:text-primary data-[active=true]:text-primary [&_svg]:size-4 text-xs font-medium",
-          )}
-        >
-          {link.title}
-        </Link>
-      );
-    })}
-
-  </div>
+  return (
+    <div className="inline-flex flex-wrap items-center empty:hidden gap-2 mx-auto justify-center md:justify-start">
+      {SUPPORT_LINKS.map((link) => {
+        return (
+          <Link
+            href={link.href}
+            target="_blank"
+            key={link.href}
+            className={cn(
+              "inline-flex items-center gap-1 p-2 text-muted-foreground transition-colors hover:text-primary data-[active=true]:text-primary [&_svg]:size-4 text-xs font-medium"
+            )}
+          >
+            {link.title}
+          </Link>
+        );
+      })}
+    </div>
+  );
 }

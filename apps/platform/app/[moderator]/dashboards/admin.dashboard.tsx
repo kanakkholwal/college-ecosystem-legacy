@@ -9,7 +9,7 @@ import {
   getUsersByDepartment,
   getUsersByGender,
   getUsersByRole,
-  users_CountAndGrowth
+  users_CountAndGrowth,
 } from "~/actions/dashboard.admin";
 import { getDepartmentCode } from "~/constants/departments";
 
@@ -165,8 +165,6 @@ export default async function AdminDashboard() {
         <div className="@4xl:w-1/3 p-3">
           <Heading level={4}>Actions</Heading>
           <Separator className="mb-4 mt-2" />
-       
-                
         </div>
       </div>
     </div>

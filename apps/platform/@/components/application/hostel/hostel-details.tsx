@@ -69,9 +69,7 @@ export function HostelDetailsForNonAdmins({ hostel }: { hostel: HostelType }) {
         </div>
       </div>
       <div className="w-full">
-        <Heading level={6} >
-          InCharges
-        </Heading>
+        <Heading level={6}>InCharges</Heading>
         <ul className="list-disc list-inside">
           {hostel.administrators.map((admin) => (
             <li key={admin.email}>

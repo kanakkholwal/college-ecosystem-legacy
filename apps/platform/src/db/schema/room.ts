@@ -25,7 +25,8 @@ export const rooms = pgTable("rooms", {
   id: uuid("id").defaultRandom().primaryKey(),
   roomNumber: text("room_number").notNull().unique(),
   roomType: varchar("room_type", { length: 20 }) // "classroom", "conference", etc.
-    .notNull().default("classroom"),
+    .notNull()
+    .default("classroom"),
   currentStatus: varchar("current_status", { length: 10 }) // "available", "occupied"
     .notNull()
     .default("available"),

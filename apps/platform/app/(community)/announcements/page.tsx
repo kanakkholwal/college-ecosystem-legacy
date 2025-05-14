@@ -44,11 +44,9 @@ export default async function AnnouncementsPage() {
           <Suspense fallback={<div>Loading...</div>}>
             <AnnouncementsList announcements={announcements} />
           </Suspense>
-
         </div>
       </main>
       <aside className="space-y-5 p-4 rounded-lg bg-card border md:max-w-1/4 h-fit md:sticky md:top-24">
-
         <h3 className="text-base font-medium">
           <GrAnnounce className="inline-block size-4 mr-2" />
           Announcement Categories
@@ -59,7 +57,6 @@ export default async function AnnouncementsPage() {
           </div>
         ))}
       </aside>
-
     </div>
   );
 }

@@ -8,14 +8,13 @@ import { LuBuilding } from "react-icons/lu";
 import { getHostels } from "~/actions/hostel";
 
 import { getSession } from "~/lib/auth-server";
-import {
-  CreateHostelForm,
-  ImportFromSiteButton,
-} from "./client";
+import { CreateHostelForm, ImportFromSiteButton } from "./client";
 
-export default async function ChiefWardenPage({params}:{
+export default async function ChiefWardenPage({
+  params,
+}: {
   params: Promise<{
-    moderator: string
+    moderator: string;
   }>;
 }) {
   const { moderator } = await params;
@@ -23,8 +22,6 @@ export default async function ChiefWardenPage({params}:{
   console.log(response);
   const { success, data: hostels } = response;
   const session = await getSession();
-
-  
 
   return (
     <div className="space-y-5 my-2">
@@ -67,22 +64,30 @@ export default async function ChiefWardenPage({params}:{
         <ConditionalRender condition={hostels.length > 0}>
           <div className="grid grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4 gap-4">
             {hostels.map((hostel) => {
-              const allowedEmails = hostel.administrators.map((elem) => elem.email).concat([hostel.warden.email]);
-              const isUserAllowed = 
-              session?.user?.email && allowedEmails.includes(session.user.email) ||
-              allowedEmails.findIndex((email) => session?.user?.other_emails?.find((elem:string) => elem === email))
-              || session?.user.role === "admin";
+              const allowedEmails = hostel.administrators
+                .map((elem) => elem.email)
+                .concat([hostel.warden.email]);
+              const isUserAllowed =
+                (session?.user?.email &&
+                  allowedEmails.includes(session.user.email)) ||
+                allowedEmails.findIndex((email) =>
+                  session?.user?.other_emails?.find(
+                    (elem: string) => elem === email
+                  )
+                ) ||
+                session?.user.role === "admin";
 
-
-              return  <RouterCard
-                key={hostel.slug}
-                title={hostel.name}
-                description={hostel.slug}
-                href={`/${moderator}/hostels/${hostel.slug}`}
-                Icon={LuBuilding}
-                disabled={!isUserAllowed}
-              />
-})}
+              return (
+                <RouterCard
+                  key={hostel.slug}
+                  title={hostel.name}
+                  description={hostel.slug}
+                  href={`/${moderator}/hostels/${hostel.slug}`}
+                  Icon={LuBuilding}
+                  disabled={!isUserAllowed}
+                />
+              );
+            })}
           </div>
         </ConditionalRender>
         <ConditionalRender condition={hostels.length === 0}>

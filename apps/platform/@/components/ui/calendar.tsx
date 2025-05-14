@@ -63,7 +63,7 @@ function Calendar({
         // days
         day: cn(
           btnRawClassName,
-          "h-8 w-8 p-0 font-normal aria-selected:opacity-100 aria-selected:border-primary/50 hover:bg-accent dark:hover:bg-background",
+          "h-8 w-8 p-0 font-normal aria-selected:opacity-100 aria-selected:border-primary/50 hover:bg-accent dark:hover:bg-background"
         ),
         outside:
           "day-outside text-gray-500 hover:bg-transparent aria-selected:text-primary/50 aria-selected:text-primary/90",
@@ -98,4 +98,3 @@ function Calendar({
 Calendar.displayName = "Calendar";
 
 export { Calendar };
-

@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 
 export const LightTheme = () => {
   return (
@@ -118,8 +118,8 @@ export const LightTheme = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};
 export const SystemTheme = () => {
   return (
     <svg
@@ -397,9 +397,8 @@ export const SystemTheme = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
-
+  );
+};
 
 export const DarkTheme = () => {
   return (
@@ -510,5 +509,5 @@ export const DarkTheme = () => {
         </clipPath>
       </defs>
     </svg>
-  )
-}
+  );
+};

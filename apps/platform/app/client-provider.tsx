@@ -32,11 +32,11 @@ const queryClient = new QueryClient({
 
 export function Consumer({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState<boolean>(true);
-  const { theme } = useTheme()
-  const isGlassTheme = glass_themes.find((elem) => elem === theme)
+  const { theme } = useTheme();
+  const isGlassTheme = glass_themes.find((elem) => elem === theme);
 
   useEffect(() => {
-    if (!isGlassTheme) return
+    if (!isGlassTheme) return;
     // Aos.init({
     //   duration: 1000,
     //   once: true,
@@ -54,22 +54,29 @@ export function Consumer({ children }: { children: React.ReactNode }) {
   }, [isGlassTheme]);
   return (
     <QueryClientProvider client={queryClient}>
-      {isGlassTheme ? isLoaded ? (
-        <canvas
-          id="gradient-canvas"
-          data-transition-in
-          className="fixed inset-0 -z-[1]"
-        />
-      ) : (
-        <Image
-          width={1920}
-          height={1280}
-          src={fallbackImg}
-          className="fixed inset-0 -z-[1]"
-          alt="Fallback"
-        />
+      {isGlassTheme ? (
+        isLoaded ? (
+          <canvas
+            id="gradient-canvas"
+            data-transition-in
+            className="fixed inset-0 -z-[1]"
+          />
+        ) : (
+          <Image
+            width={1920}
+            height={1280}
+            src={fallbackImg}
+            className="fixed inset-0 -z-[1]"
+            alt="Fallback"
+          />
+        )
       ) : null}
-      <div className={cn("min-h-screen w-full h-full", !isGlassTheme ? "bg-background" : "glass")}>
+      <div
+        className={cn(
+          "min-h-screen w-full h-full",
+          !isGlassTheme ? "bg-background" : "glass"
+        )}
+      >
         {children}
       </div>
       <Next13ProgressBar
@@ -102,11 +109,19 @@ export function Consumer({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function Provider({ children, ...props }: { children: React.ReactNode }) {
-
-  return <NextThemesProvider themes={all_themes as unknown as string[]} defaultTheme="light" {...props}>
-    <Consumer>
-      {children}
-    </Consumer>
-  </NextThemesProvider>;
+export function Provider({
+  children,
+  ...props
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <NextThemesProvider
+      themes={all_themes as unknown as string[]}
+      defaultTheme="light"
+      {...props}
+    >
+      <Consumer>{children}</Consumer>
+    </NextThemesProvider>
+  );
 }

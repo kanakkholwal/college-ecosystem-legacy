@@ -12,8 +12,7 @@ const toggleVariants = cva(
     variants: {
       variant: {
         default: "bg-card hover:bg-card/80",
-        outline:
-          "bg-transparent hover:bg-accent hover:text-accent-foreground",
+        outline: "bg-transparent hover:bg-accent hover:text-accent-foreground",
       },
       size: {
         default: "h-10 px-3 min-w-10",
@@ -43,4 +42,3 @@ const Toggle = React.forwardRef<
 Toggle.displayName = TogglePrimitive.Root.displayName;
 
 export { Toggle, toggleVariants };
-

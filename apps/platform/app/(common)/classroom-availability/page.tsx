@@ -38,12 +38,9 @@ export default async function RoomsPage(props: Props) {
         className="z-10 w-full max-w-6xl mx-auto  relative flex flex-col items-center justify-center  py-24 max-h-80 text-center"
       >
         <h2 className="text-3xl font-semibold text-center whitespace-nowrap">
-
           Rooms <span className="text-primary">Search</span>
         </h2>
-        <p
-          className="mt-4 mb-8 text-lg text-muted-foreground">
-
+        <p className="mt-4 mb-8 text-lg text-muted-foreground">
           Search for rooms based on their availability and type.
         </p>
         <div

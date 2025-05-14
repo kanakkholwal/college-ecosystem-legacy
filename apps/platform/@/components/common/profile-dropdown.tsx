@@ -83,7 +83,9 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           <h4 className="text-muted-foreground font-bold tracking-wide text-lg">
             {user.name}
           </h4>
-          <p className="text-muted-foreground font-medium text-base">{user.email}</p>
+          <p className="text-muted-foreground font-medium text-base">
+            {user.email}
+          </p>
           <p>
             <span className="rounded-md px-2 py-1 text-xs font-medium capitalize bg-primary/30 text-primary whitespace-nowrap">
               {user.department}

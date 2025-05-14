@@ -55,10 +55,7 @@ export default async function CoursesPage(props: {
         >
           Syllabus <span className="text-primary">Search</span>
         </h2>
-        <p
-          className="mt-4 text-muted-foreground"
-          data-aos="zoom-in"
-        >
+        <p className="mt-4 text-muted-foreground" data-aos="zoom-in">
           Search for syllabus of any course in NITH
         </p>
         <div

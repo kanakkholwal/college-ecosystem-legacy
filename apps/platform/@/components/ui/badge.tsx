@@ -51,8 +51,7 @@ const badgeVariants = cva(
           "backdrop-blur-lg bg-white/30 dark:bg-slate-800/15 backdrop-blur-xl border-white/10 dark:border-white/5 dark:text-white shadow",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/90",
-        outline:
-          "border border-input bg-background shadow-sm hover:bg-accent",
+        outline: "border border-input bg-background shadow-sm hover:bg-accent",
       },
       size: {
         sm: "px-2 py-0.5 text-xs font-regular",
@@ -69,7 +68,7 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-  VariantProps<typeof badgeVariants> { }
+    VariantProps<typeof badgeVariants> {}
 
 function Badge({ className, variant, size, ...props }: BadgeProps) {
   return (
@@ -81,4 +80,3 @@ function Badge({ className, variant, size, ...props }: BadgeProps) {
 }
 
 export { Badge, badgeVariants };
-

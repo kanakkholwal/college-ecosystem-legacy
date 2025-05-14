@@ -41,7 +41,6 @@ export default function CreateRoomForm({
     updatedAt: Date | null;
   }>;
 }) {
-
   const form = useForm<RoomType>({
     resolver: zodResolver(roomSchema),
     defaultValues: {
@@ -53,22 +52,20 @@ export default function CreateRoomForm({
     },
   });
   const handleSubmit = async (data: RoomType) => {
-    toast.promise(
-      onSubmit(data),
-      {
-        loading: "Saving...",
-        success: (data: { roomNumber: string | number }) =>
-          `Room ${data.roomNumber} created successfully`,
-        error: "Could not create room",
-      }
-    );
-  }
+    toast.promise(onSubmit(data), {
+      loading: "Saving...",
+      success: (data: { roomNumber: string | number }) =>
+        `Room ${data.roomNumber} created successfully`,
+      error: "Could not create room",
+    });
+  };
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-6 my-5 p-4 bg-card grid gap-4 w-full grid-cols-1 md:grid-cols-2">
-
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-6 my-5 p-4 bg-card grid gap-4 w-full grid-cols-1 md:grid-cols-2"
+      >
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <FormField
             control={form.control}
@@ -99,7 +96,9 @@ export default function CreateRoomForm({
               <FormItem>
                 <FormLabel>Room Type</FormLabel>
                 <Select
-                  onValueChange={(value) => field.onChange(value.trim().toUpperCase())}
+                  onValueChange={(value) =>
+                    field.onChange(value.trim().toUpperCase())
+                  }
                   defaultValue={field.value}
                 >
                   <FormControl>
@@ -108,13 +107,15 @@ export default function CreateRoomForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {["classroom", "conference", "office", "lab"].map((_type) => {
-                      return (
-                        <SelectItem key={_type} value={_type}>
-                          {_type}
-                        </SelectItem>
-                      );
-                    })}
+                    {["classroom", "conference", "office", "lab"].map(
+                      (_type) => {
+                        return (
+                          <SelectItem key={_type} value={_type}>
+                            {_type}
+                          </SelectItem>
+                        );
+                      }
+                    )}
                   </SelectContent>
                 </Select>
                 <FormDescription />
@@ -148,10 +149,7 @@ export default function CreateRoomForm({
         </div>
 
         <CardFooter>
-          <Button
-            type="submit"
-            className="mx-auto"
-          >
+          <Button type="submit" className="mx-auto">
             Create Room <Plus className="inline-block ml-2" size={16} />
           </Button>
         </CardFooter>

@@ -11,7 +11,7 @@ import {
   getAllotmentProcess,
   getHostRoom,
   getHostelRooms,
-  getUpcomingSlots
+  getUpcomingSlots,
 } from "~/actions/allotment-process";
 import { getHostelByUser } from "~/actions/hostel";
 
@@ -20,7 +20,6 @@ import { ViewRoomButton } from "./client";
 
 import { ResponsiveContainer } from "@/components/common/container";
 
-
 export default async function HostelRoomAllotmentPage() {
   // const session = await getSession();
   const hostelResponse = await getHostelByUser();
@@ -28,25 +27,27 @@ export default async function HostelRoomAllotmentPage() {
   console.log(hostelResponse);
 
   if (!hostelResponse.success || !hostelResponse.hostel) {
-    return <div className="w-full">
-      <EmptyArea
-        title={hostelResponse.message}
-        description="Please contact the admin to assign you a hostel."
-      />
-
-    </div>;
+    return (
+      <div className="w-full">
+        <EmptyArea
+          title={hostelResponse.message}
+          description="Please contact the admin to assign you a hostel."
+        />
+      </div>
+    );
   }
-  const { hostel,hosteler } = hostelResponse;
+  const { hostel, hosteler } = hostelResponse;
   const allotmentProcess = await getAllotmentProcess(hostel._id);
-  const {data} = await getHostRoom(hosteler?._id as string);
+  const { data } = await getHostRoom(hosteler?._id as string);
 
-
-  let hostelRoomsResponse: Awaited<ReturnType<typeof getHostelRooms>> | null = null;
-  let upcomingSlotsResponse: Awaited<ReturnType<typeof getUpcomingSlots>> | null = null;
+  let hostelRoomsResponse: Awaited<ReturnType<typeof getHostelRooms>> | null =
+    null;
+  let upcomingSlotsResponse: Awaited<
+    ReturnType<typeof getUpcomingSlots>
+  > | null = null;
 
   if (allotmentProcess?.status === "open") {
     hostelRoomsResponse = await getHostelRooms(hostel._id);
-
 
     if (hostelRoomsResponse?.error) {
       console.log(hostelRoomsResponse.message);
@@ -59,25 +60,14 @@ export default async function HostelRoomAllotmentPage() {
   }
 
   const hostJoinedRoom = data?.room;
-  console.log(hostJoinedRoom)
-
-
-
-
+  console.log(hostJoinedRoom);
 
   return (
     <div className="space-y-5 my-2">
       <ErrorBoundaryWithSuspense
-
         fallback={<ErrorBanner />}
-        loadingFallback={
-          <SkeletonCardArea
-            className="mx-auto"
-          />
-        }
+        loadingFallback={<SkeletonCardArea className="mx-auto" />}
       >
-
-
         <ConditionalRender condition={allotmentProcess?.status === "closed"}>
           <EmptyArea
             title="Allotment Process Closed"
@@ -107,14 +97,18 @@ export default async function HostelRoomAllotmentPage() {
         </ConditionalRender>
 
         <ConditionalRender condition={allotmentProcess?.status === "open"}>
-          {upcomingSlotsResponse?.error && <EmptyArea
-            title="Something went while fetching slots"
-            description={upcomingSlotsResponse?.message}
-          />}
-          {hostelRoomsResponse?.error && <EmptyArea
-            title="Something went while fetching rooms"
-            description={hostelRoomsResponse?.message}
-          />}
+          {upcomingSlotsResponse?.error && (
+            <EmptyArea
+              title="Something went while fetching slots"
+              description={upcomingSlotsResponse?.message}
+            />
+          )}
+          {hostelRoomsResponse?.error && (
+            <EmptyArea
+              title="Something went while fetching rooms"
+              description={hostelRoomsResponse?.message}
+            />
+          )}
 
           <div>
             <h2 className="text-lg font-semibold">Hostel Room Allotment</h2>
@@ -124,7 +118,9 @@ export default async function HostelRoomAllotmentPage() {
           </div>
           <ResponsiveContainer className="mx-auto">
             {hostelRoomsResponse?.data?.map((room) => {
-              const joinable = !hostJoinedRoom || (room.occupied_seats < room.capacity && !room.isLocked);
+              const joinable =
+                !hostJoinedRoom ||
+                (room.occupied_seats < room.capacity && !room.isLocked);
 
               return (
                 <RoomCard
@@ -137,49 +133,57 @@ export default async function HostelRoomAllotmentPage() {
             })}
           </ResponsiveContainer>
         </ConditionalRender>
-
-
       </ErrorBoundaryWithSuspense>
     </div>
   );
 }
 
 type RoomCardProps = {
-  room: HostelRoomJson,
-  joinable: boolean
-  hostId: string
+  room: HostelRoomJson;
+  joinable: boolean;
+  hostId: string;
 };
 
-function RoomCard({ room,joinable,hostId }: RoomCardProps) {
+function RoomCard({ room, joinable, hostId }: RoomCardProps) {
   return (
     <div className="bg-card rounded-lg shadow-md p-4 space-y-3 hover:shadow-lg border hover:border-primary transition-shadow duration-300">
       <div>
         <h6 className="text-base font-semibold mb-2">
           {room.roomNumber}
-          {room.isLocked ? <Lock className="text-red-500 inline-block size-4 ml-2" /> : <Unlock className="text-green-500 inline-block size-4 ml-2" />}
-          </h6>
+          {room.isLocked ? (
+            <Lock className="text-red-500 inline-block size-4 ml-2" />
+          ) : (
+            <Unlock className="text-green-500 inline-block size-4 ml-2" />
+          )}
+        </h6>
         <p className="text-sm text-muted-foreground">
-          {room.capacity} Seater | <span className="text-muted-foreground font-bold inline-block">
+          {room.capacity} Seater |{" "}
+          <span className="text-muted-foreground font-bold inline-block">
             {room.occupied_seats}/ {room.capacity}
-          </span> 
-          </p>
+          </span>
+        </p>
       </div>
       <div className="flex flex-row items-center gap-2">
         {Array.from({ length: room.capacity }).map((_, index) => {
           return (
             <MdOutlineChair
               key={`room.${index.toString()}`}
-              className={cn(`text-muted-foreground font-bold inline-block ${(index + 1) <= room.occupied_seats ? "text-green-500" : "text-muted-foreground"}`)}
+              className={cn(
+                `text-muted-foreground font-bold inline-block ${index + 1 <= room.occupied_seats ? "text-green-500" : "text-muted-foreground"}`
+              )}
             />
           );
         })}
-        
       </div>
       <div className="">
-      {(room.occupied_seats >= room.capacity )  && !room.isLocked ? <>
-        <span className="text-sm text-red-500">Room is full</span>
-      </> : <ViewRoomButton room={room} joinable={joinable} hostId={hostId}/>}
-    </div>
+        {room.occupied_seats >= room.capacity && !room.isLocked ? (
+          <>
+            <span className="text-sm text-red-500">Room is full</span>
+          </>
+        ) : (
+          <ViewRoomButton room={room} joinable={joinable} hostId={hostId} />
+        )}
+      </div>
     </div>
   );
 }

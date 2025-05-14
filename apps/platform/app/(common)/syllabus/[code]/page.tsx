@@ -57,7 +57,6 @@ export default async function CoursePage(props: Props) {
 
   return (
     <div className="max-w-6xl mx-auto px-6 md:px-12 xl:px-6">
-
       <section
         id="hero"
         className="z-10 w-full max-w-7xl relative flex flex-col gap-5 py-10 px-4 rounded-lg text-center lg:text-left"
@@ -74,22 +73,16 @@ export default async function CoursePage(props: Props) {
           {course.code}
         </h5>
         <div className="w-full flex flex-wrap items-center gap-4 text-sm mx-auto md:ml-0">
-              <span
-                className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}
-              >
-                {course.department}
-              </span>
-              <span
-                className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}
-              >
-                {course.type}
-              </span>
-              <span
-                className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}
-              >
-                {course.credits} Credits
-              </span>
-            </div>
+          <span className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}>
+            {course.department}
+          </span>
+          <span className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}>
+            {course.type}
+          </span>
+          <span className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}>
+            {course.credits} Credits
+          </span>
+        </div>
         <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6" />
       </section>
       <div className="max-w-6xl mx-auto p-4 md:px-12 xl:px-6">
@@ -108,7 +101,9 @@ export default async function CoursePage(props: Props) {
                   <Card key={chapter.title}>
                     <CardHeader className="flex-row gap-2 items-center px-5 py-4">
                       <div className="flex-auto">
-                        <CardTitle className="font-medium text-lg">{chapter.title}</CardTitle>
+                        <CardTitle className="font-medium text-lg">
+                          {chapter.title}
+                        </CardTitle>
                         <CardDescription className="text-muted-foreground">
                           {chapter.topics.length} Topics
                         </CardDescription>
@@ -133,20 +128,20 @@ export default async function CoursePage(props: Props) {
                 {booksAndReferences.map((ref) => {
                   const iconsSrc = IconMap.has(
                     ref.type as
-                    | "book"
-                    | "reference"
-                    | "drive"
-                    | "youtube"
-                    | "others"
-                  )
-                    ? IconMap.get(
-                      ref.type as
                       | "book"
                       | "reference"
                       | "drive"
                       | "youtube"
                       | "others"
-                    )
+                  )
+                    ? IconMap.get(
+                        ref.type as
+                          | "book"
+                          | "reference"
+                          | "drive"
+                          | "youtube"
+                          | "others"
+                      )
                     : OthersPng;
                   return (
                     <Card key={ref.link}>

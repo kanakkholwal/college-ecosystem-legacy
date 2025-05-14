@@ -21,8 +21,8 @@ type Props = {
   course: CourseSelect;
   className?: string;
   authorized_role?:
-  | Session["user"]["role"]
-  | Session["user"]["other_roles"][number];
+    | Session["user"]["role"]
+    | Session["user"]["other_roles"][number];
   style?: React.CSSProperties;
 };
 
@@ -38,12 +38,10 @@ export default function CourseCard({
       style={style}
     >
       <CardHeader className="px-3 py-4">
-
         <CardTitle className="text-base">{course.name}</CardTitle>
         <CardDescription className="text-sm font-medium">
           {course.code}
         </CardDescription>
-
       </CardHeader>
       <CardContent className="flex justify-around items-stretch gap-3 text-center p-3">
         <div>
@@ -80,9 +78,7 @@ export default function CourseCard({
           effect="gooeyRight"
           asChild
         >
-          <Link href={`/syllabus/${course.code}`} >
-            View Course
-          </Link>
+          <Link href={`/syllabus/${course.code}`}>View Course</Link>
         </Button>
       </CardFooter>
     </Card>

@@ -233,12 +233,12 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
 export async function getHostel(slug: string): Promise<{
   success: boolean;
   hostel:
-  | (HostelType & {
-    students: {
-      count: number;
-    };
-  })
-  | null;
+    | (HostelType & {
+        students: {
+          count: number;
+        };
+      })
+    | null;
   error?: object;
 }> {
   try {
@@ -333,7 +333,6 @@ export async function getHostelByUser(
         inCharge: true,
       });
     }
-
 
     const hostel = await HostelModel.findOne({
       $or: [

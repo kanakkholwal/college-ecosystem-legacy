@@ -132,7 +132,7 @@ export const sidebar_links: rawLinkType[] = [
         title: "Create User",
         path: "/new",
         allowed_roles: [ROLES.ADMIN],
-      }
+      },
     ],
   },
   {
@@ -170,10 +170,7 @@ export const sidebar_links: rawLinkType[] = [
     title: "Courses",
     icon: LuBookA,
     path: "/courses",
-    allowed_roles: [
-      ROLES.ADMIN,
-
-    ],
+    allowed_roles: [ROLES.ADMIN],
   },
   {
     title: "Schedules",
@@ -204,7 +201,13 @@ export const sidebar_links: rawLinkType[] = [
     title: "All Hostels",
     icon: LuBuilding,
     path: "/hostels",
-    allowed_roles: [ROLES.CHIEF_WARDEN, ROLES.ADMIN,ROLES.ASSISTANT_WARDEN,ROLES.WARDEN,ROLES.MMCA],
+    allowed_roles: [
+      ROLES.CHIEF_WARDEN,
+      ROLES.ADMIN,
+      ROLES.ASSISTANT_WARDEN,
+      ROLES.WARDEN,
+      ROLES.MMCA,
+    ],
     items: [],
   },
   {
@@ -268,20 +271,20 @@ export const sidebar_links: rawLinkType[] = [
     title: "Settings",
     icon: Settings,
     path: "/settings",
-    allowed_roles:["*"],
-    items:[
+    allowed_roles: ["*"],
+    items: [
       {
-        title:"Account",
-        path:"/account",
-        allowed_roles:["*"]
+        title: "Account",
+        path: "/account",
+        allowed_roles: ["*"],
       },
       {
-        title:"Appearance",
-        path:"/appearance",
-        allowed_roles:["*"]
+        title: "Appearance",
+        path: "/appearance",
+        allowed_roles: ["*"],
       },
-    ]
-  }
+    ],
+  },
 ];
 
 interface SocialLink {
@@ -346,8 +349,6 @@ const checkRoleAccess = (userRole: string, allowedRoles: string[]): boolean => {
     (negRole) => userRole === negRole.slice(1) // Remove "!" prefix for comparison
   );
 };
-
-
 
 export const SUPPORT_LINKS = [
   {

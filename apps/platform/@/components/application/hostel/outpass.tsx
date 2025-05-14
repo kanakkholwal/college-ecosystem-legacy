@@ -48,7 +48,7 @@ export function OutpassDetails({
             {outpass.status}
           </Badge>
         </span>
-        <span className={cn(classNames.outpassInfo,"mt-1 text-xs")}>
+        <span className={cn(classNames.outpassInfo, "mt-1 text-xs")}>
           {format(
             new Date(outpass.expectedOutTime || ""),
             "dd/MM/yyyy hh:mm a"
@@ -60,9 +60,11 @@ export function OutpassDetails({
           <OutpassActionFooter outpassId={outpass?._id} />
         )}
       </div>
-      {actionEnabled && (<div className="absolute right-2 top-2 left-auto bg-transparent">
-        <Checkbox checked={outpass.status === "approved"} />
-      </div>)}
+      {actionEnabled && (
+        <div className="absolute right-2 top-2 left-auto bg-transparent">
+          <Checkbox checked={outpass.status === "approved"} />
+        </div>
+      )}
     </div>
   );
 }

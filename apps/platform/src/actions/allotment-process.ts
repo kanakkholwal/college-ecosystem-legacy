@@ -11,7 +11,12 @@ import {
 import { emailSchema } from "~/constants/user";
 import dbConnect from "~/lib/dbConnect";
 import redis from "~/lib/redis";
-import { AllotmentSlotModel, type HostelRoomJson, HostelRoomModel, RoomMemberModel } from "~/models/allotment";
+import {
+  AllotmentSlotModel,
+  type HostelRoomJson,
+  HostelRoomModel,
+  RoomMemberModel,
+} from "~/models/allotment";
 import { HostelModel, HostelStudentModel } from "~/models/hostel_n_outpass";
 
 const allotmentProcessSchema = z.object({
@@ -208,14 +213,13 @@ export async function getUpcomingSlots(hostelId: string) {
       startingTime: { $gte: new Date() },
     }).sort({
       startingTime: 1,
-    })
+    });
     // console.log(upcomingSlots)
     return {
       error: false,
       message: "Slots fetched successfully",
       data: JSON.parse(JSON.stringify(upcomingSlots)),
     };
-
   } catch (err) {
     console.log(err);
     return {
@@ -301,22 +305,33 @@ export async function getHostelRooms(hostelId: string): Promise<{
 
     const rooms = await HostelRoomModel.aggregate([
       {
-        $match: { hostel: new mongoose.Types.ObjectId(hostelId) } // Ensure hostelId is an ObjectId
+        $match: { hostel: new mongoose.Types.ObjectId(hostelId) }, // Ensure hostelId is an ObjectId
       },
       {
         $addFields: {
           numericRoomNumber: {
             $toInt: {
               $arrayElemAt: [
-                { $split: [{ $replaceAll: { input: "$roomNumber", find: "G-", replacement: "" } }, "-"] },
-                0
-              ]
-            }
-          }
-        }
+                {
+                  $split: [
+                    {
+                      $replaceAll: {
+                        input: "$roomNumber",
+                        find: "G-",
+                        replacement: "",
+                      },
+                    },
+                    "-",
+                  ],
+                },
+                0,
+              ],
+            },
+          },
+        },
       },
       { $sort: { numericRoomNumber: 1 } }, // Sort numerically in descending order
-      { $project: { numericRoomNumber: 0 } } // Exclude extracted field from output
+      { $project: { numericRoomNumber: 0 } }, // Exclude extracted field from output
     ]);
 
     // console.log(rooms)
@@ -338,8 +353,11 @@ export async function getHostelRooms(hostelId: string): Promise<{
 
 // add members to room
 
-
-export async function addRoomMembers(roomId: string, hostId: string, members: z.infer<typeof emailSchema>[]) {
+export async function addRoomMembers(
+  roomId: string,
+  hostId: string,
+  members: z.infer<typeof emailSchema>[]
+) {
   try {
     await dbConnect();
     // check if room exists
@@ -359,7 +377,9 @@ export async function addRoomMembers(roomId: string, hostId: string, members: z.
         data: null,
       };
     }
-    const uniqueMembers = [...new Set(members.map((member) => member.toLowerCase()))];
+    const uniqueMembers = [
+      ...new Set(members.map((member) => member.toLowerCase())),
+    ];
 
     if (room.occupied_seats + uniqueMembers.length > room.capacity) {
       return {
@@ -369,18 +389,25 @@ export async function addRoomMembers(roomId: string, hostId: string, members: z.
       };
     }
     // check if the members are also HostelStudents
-    const hostelStudentsPromise = await Promise.allSettled(uniqueMembers.map(async (member) => {
-      const hostelStudent = await RoomMemberModel.findOne({
-        email: member,
+    const hostelStudentsPromise = await Promise.allSettled(
+      uniqueMembers.map(async (member) => {
+        const hostelStudent = await RoomMemberModel.findOne({
+          email: member,
+        });
+        if (!hostelStudent) {
+          return null;
+        }
+        return hostelStudent.email;
       })
-      if (!hostelStudent) {
-        return null;
-      }
-      return hostelStudent.email;
-    }));
-    const invalidMembers = hostelStudentsPromise.filter((member) => member.status === "rejected" || member.value === null)
+    );
+    const invalidMembers = hostelStudentsPromise.filter(
+      (member) => member.status === "rejected" || member.value === null
+    );
 
-    const validMembers = hostelStudentsPromise.filter((member) => member.status === "fulfilled" && member.value !== null)
+    const validMembers = hostelStudentsPromise
+      .filter(
+        (member) => member.status === "fulfilled" && member.value !== null
+      )
       .map((member) => "value" in member && (member?.value as string));
 
     const roomMembers = await RoomMemberModel.insertMany(
@@ -406,10 +433,7 @@ export async function addRoomMembers(roomId: string, hostId: string, members: z.
       error: false,
       message: "Members added successfully",
       data: JSON.parse(JSON.stringify(roomMembers)),
-
-    }
-
-
+    };
   } catch (err) {
     console.log(err);
     return {
@@ -457,7 +481,7 @@ export async function joinRoom(roomId: string, joinerId: string) {
 
     const hostStudent = await HostelStudentModel.findById(room.hostStudent);
     if (!hostStudent) {
-      //  if room has not hostStudent 
+      //  if room has not hostStudent
       room.hostStudent = joinerStudent._id;
       room.occupied_seats += 1;
       await room.save();
@@ -465,8 +489,8 @@ export async function joinRoom(roomId: string, joinerId: string) {
         student: joinerStudent._id,
         room: roomId,
         hostel: room.hostel,
-      })
-      
+      });
+
       return {
         error: false,
         message: "Room Joined Successfully",
@@ -474,7 +498,7 @@ export async function joinRoom(roomId: string, joinerId: string) {
       };
     }
 
-    //  if room has hostStudent 
+    //  if room has hostStudent
 
     if (room.hostStudent.toString() === joinerId) {
       return {
@@ -492,7 +516,7 @@ export async function joinRoom(roomId: string, joinerId: string) {
       await RoomMemberModel.findOneAndUpdate(
         { student: hostStudent._id, room: roomId },
         { student: joinerStudent._id }
-      )
+      );
     }
 
     await room.save();
@@ -501,7 +525,6 @@ export async function joinRoom(roomId: string, joinerId: string) {
       {
         hostelId: room.hostel,
         startingTime: { $gte: new Date() },
-
       },
       { $pull: { allotedFor: { $in: [joinerStudent.email] } } }
     );
@@ -514,16 +537,11 @@ export async function joinRoom(roomId: string, joinerId: string) {
       { $push: { allotedFor: { $in: [hostStudent.email] } } }
     );
 
-
     return {
       error: false,
       message: "Room Joined Successfully",
       data: null,
-    }
-
-
-
-
+    };
   } catch (err) {
     console.log(err);
     return {
@@ -534,68 +552,60 @@ export async function joinRoom(roomId: string, joinerId: string) {
   }
 }
 
-
 export async function lockToggleRoom(roomId: string) {
-
-    try {
-      await dbConnect();
-      // check if room exists
-      const room = await HostelRoomModel.findById(roomId);
-      if (!room) {
-        return {
-          error: true,
-          message: "Room Not Found",
-          data: null,
-        };
-      }
-      room.isLocked = !room.isLocked;
-      await room.save();
-      return {
-        error: false,
-        message: "Room Lock Status Updated",
-        data: JSON.parse(JSON.stringify(room)),
-
-      }
-    }
-    catch (err) {
-      console.log(err);
+  try {
+    await dbConnect();
+    // check if room exists
+    const room = await HostelRoomModel.findById(roomId);
+    if (!room) {
       return {
         error: true,
-        message: "Internal Server Error",
+        message: "Room Not Found",
         data: null,
       };
     }
+    room.isLocked = !room.isLocked;
+    await room.save();
+    return {
+      error: false,
+      message: "Room Lock Status Updated",
+      data: JSON.parse(JSON.stringify(room)),
+    };
+  } catch (err) {
+    console.log(err);
+    return {
+      error: true,
+      message: "Internal Server Error",
+      data: null,
+    };
+  }
 }
-
 
 export async function getHostRoom(hostId: string) {
+  await dbConnect();
+  // check if room exists
+  const room = await HostelRoomModel.findOne({ hostStudent: hostId });
+  if (!room) {
+    return {
+      error: true,
+      message: "Room Not Found",
+      data: {
+        room: null,
+        member: null,
+      },
+    };
+  }
+  const roomMember = await RoomMemberModel.find({
+    room: room._id,
+    student: hostId,
+  });
 
-      await dbConnect();
-      // check if room exists
-      const room = await HostelRoomModel.findOne({ hostStudent: hostId});
-      if (!room) {
-        return {
-          error: true,
-          message: "Room Not Found",
-          data: {
-            room:null,
-            member:null
-          }
-        };
-      }
-      const roomMember = await RoomMemberModel.find({
-        room: room._id,
-        student:hostId
-      });
-
-      return {
-        error: false,
-        message: "Room Fetched Successfully",
-        data: {
-          room:JSON.parse(JSON.stringify(room)),
-          member:JSON.parse(JSON.stringify(roomMember)),
-        }
-      }
-    
+  return {
+    error: false,
+    message: "Room Fetched Successfully",
+    data: {
+      room: JSON.parse(JSON.stringify(room)),
+      member: JSON.parse(JSON.stringify(roomMember)),
+    },
+  };
 }
-  

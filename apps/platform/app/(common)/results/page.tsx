@@ -51,15 +51,13 @@ export default async function ResultPage(props: {
         className="z-10 w-full max-w-6xl mx-auto  relative flex flex-col items-center justify-center  py-24 max-h-80 text-center"
       >
         <h2 className="text-3xl font-semibold text-center whitespace-nowrap">
-
           NITH{" "}
           <span className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent dark:from-primaryLight dark:to-secondaryLight md:px-2">
             Result
           </span>
           Portal
         </h2>
-        <p
-          className="mt-4 mb-8 text-lg text-muted-foreground">
+        <p className="mt-4 mb-8 text-lg text-muted-foreground">
           NITH Portal is a platform for students of NITH to get all the
           resources at one place.
         </p>

@@ -83,7 +83,6 @@ export default function ForgotPassword() {
     <>
       <ConditionalRender condition={isSubmitted}>
         <CardHeader className="text-center">
-
           <CardTitle>Check your email</CardTitle>
           <CardDescription>
             We&apos;ve sent a password reset link to your email.
@@ -97,12 +96,11 @@ export default function ForgotPassword() {
         </Alert>
       </ConditionalRender>
       <ConditionalRender condition={!isSubmitted}>
-      <CardHeader className="text-center">
-
-        <CardTitle>Forgot your password?</CardTitle>
-        <CardDescription>
-          Enter your email to reset your password
-        </CardDescription>
+        <CardHeader className="text-center">
+          <CardTitle>Forgot your password?</CardTitle>
+          <CardDescription>
+            Enter your email to reset your password
+          </CardDescription>
         </CardHeader>
         <div className={cn("grid gap-6 w-full text-left p-4")}>
           <Form {...form}>

@@ -128,7 +128,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
             </ScrollArea>
             <ScrollArea className="">
               <div className="flex sm:flex-col p-2 gap-2">
-                {["AM", "PM"].map((am_pm:string) => (
+                {["AM", "PM"].map((am_pm: string) => (
                   <Button
                     key={am_pm}
                     size="icon_sm"

@@ -6,7 +6,7 @@ interface AttendanceAnalyticsProps {
   records: PersonalAttendanceWithRecords[];
 }
 
-const   AttendanceAnalytics: React.FC<AttendanceAnalyticsProps> = ({
+const AttendanceAnalytics: React.FC<AttendanceAnalyticsProps> = ({
   records,
 }) => {
   const totalClasses = records.reduce(

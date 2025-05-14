@@ -1,10 +1,10 @@
 import type { Config } from "tailwindcss";
 
 const config = {
-  darkMode: ['variant', [
-    '[data-theme="dark"] &',
-    '[data-theme="glass_dark"] &',
-  ]],
+  darkMode: [
+    "variant",
+    ['[data-theme="dark"] &', '[data-theme="glass_dark"] &'],
+  ],
   content: [
     "./components/**/*.{ts,tsx}",
     "./app/**/*.{ts,tsx}",
@@ -120,7 +120,8 @@ const config = {
         "border-beam": "border-beam calc(var(--duration)*1s) infinite linear",
       },
       boxShadow: {
-        button: '0px -1px 0px 0px hsla(0, 0%, 100%, 0.04), 0px 0px 0px 1px hsla(0, 0%, 100%, 0.12), 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 2px 0px rgba(0, 0, 0, 0.04), 0px 6px 3px 0px rgba(0, 0, 0, 0.04)',
+        button:
+          "0px -1px 0px 0px hsla(0, 0%, 100%, 0.04), 0px 0px 0px 1px hsla(0, 0%, 100%, 0.12), 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 2px 0px rgba(0, 0, 0, 0.04), 0px 6px 3px 0px rgba(0, 0, 0, 0.04)",
       },
       extend: {
         fontFamily: {

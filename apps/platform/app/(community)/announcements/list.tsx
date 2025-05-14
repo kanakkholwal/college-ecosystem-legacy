@@ -19,21 +19,28 @@ export default function AnnouncementsList({
             <div>
               <h3 className="text-lg font-medium">{announcement.title}</h3>
               <p className="text-sm text-muted-foreground">
-                Posted  <span >
+                Posted{" "}
+                <span>
                   {formatDistanceToNow(new Date(announcement.createdAt), {
                     addSuffix: true,
                   })}
-                </span> in 
-                <Link href={`/announcements/c/${announcement.relatedFor}`} className="text-primary hover:underline">
+                </span>{" "}
+                in
+                <Link
+                  href={`/announcements/c/${announcement.relatedFor}`}
+                  className="text-primary hover:underline"
+                >
                   {` ${announcement.relatedFor}`}
                 </Link>
                 {` by `}
-                <Link href={`/u/${announcement.createdBy.username}`} className="text-primary hover:underline">
+                <Link
+                  href={`/u/${announcement.createdBy.username}`}
+                  className="text-primary hover:underline"
+                >
                   {` ${announcement.createdBy.name}`}
                 </Link>
                 {` (${announcement.createdBy.username})`}
               </p>
-
             </div>
             <MarkdownView>{announcement.content}</MarkdownView>
           </div>

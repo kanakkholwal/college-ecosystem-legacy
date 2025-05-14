@@ -19,8 +19,7 @@ export default async function DashboardLayout({
   const { moderator } = await params;
 
   if (
-      NOT_ALLOWED_ROLES.includes(moderator as (typeof NOT_ALLOWED_ROLES)[number])
-    
+    NOT_ALLOWED_ROLES.includes(moderator as (typeof NOT_ALLOWED_ROLES)[number])
   ) {
     return <Page403 />;
   }

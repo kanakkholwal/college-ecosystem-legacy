@@ -15,7 +15,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
 type searchParamsType = {
- query?: string;
+  query?: string;
   offset?: number;
   limit?: number;
   sortBy?: "desc" | "asc";
@@ -50,9 +50,7 @@ export default function SearchBar() {
     setOffset(Number.parseInt(searchParams.get("offset") || "0", 0));
     setLimit(Number.parseInt(searchParams.get("limit") || "100", 100));
 
-    setSortBy(
-      (searchParams.get("sortBy") as "desc" | "asc") || "desc"
-    );
+    setSortBy((searchParams.get("sortBy") as "desc" | "asc") || "desc");
   }, [searchParams]);
 
   const updateParams = () => {
@@ -104,9 +102,10 @@ export default function SearchBar() {
           "transition-all delay-150 duration-300 overflow-hidden w-full"
         )}
       >
-
         <div>
-          <p className="text-muted-foreground font-medium text-sm mb-1">Search Field</p>
+          <p className="text-muted-foreground font-medium text-sm mb-1">
+            Search Field
+          </p>
 
           {/* Sorting Options */}
           <div className="flex items-center space-x-4">
@@ -129,13 +128,13 @@ export default function SearchBar() {
                 })}
               </SelectContent>
             </Select>
-
-
           </div>
         </div>
         <Separator orientation="vertical" />
         <div>
-          <p className="text-muted-foreground font-medium text-sm mb-1">Limit & Offset</p>
+          <p className="text-muted-foreground font-medium text-sm mb-1">
+            Limit & Offset
+          </p>
           <div className="flex items-center space-x-4">
             <Input
               type="number"

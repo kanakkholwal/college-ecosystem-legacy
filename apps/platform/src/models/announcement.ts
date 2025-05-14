@@ -60,7 +60,10 @@ const announcementSchema = new Schema<IAnnouncement>(
       default: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
       index: { expires: "0s" },
     },
-    createdBy: { type: { id: String, name: String, username: String }, required: true },
+    createdBy: {
+      type: { id: String, name: String, username: String },
+      required: true,
+    },
   },
   {
     timestamps: true,

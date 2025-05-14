@@ -64,10 +64,7 @@ export default function RoomCard({ room, user, ...props }: Props) {
   };
 
   return (
-    <Card
-      className="hover:shadow-lg animate-in popup @container/0"
-      {...props}
-    >
+    <Card className="hover:shadow-lg animate-in popup @container/0" {...props}>
       <CardHeader className="p-4">
         <div className="flex flex-wrap w-full justify-between">
           <div className="flex justify-center items-center size-12 rounded-full bg-muted font-bold text-lg shrink-0">
@@ -102,32 +99,36 @@ export default function RoomCard({ room, user, ...props }: Props) {
         </CardDescription>
       </CardHeader>
       <CardContent className="flex w-full flex-wrap justify-around items-start gap-2 p-4 ">
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-xs font-medium  text-muted-foreground">Capacity</span>
-            <Badge className="uppercase" variant="default_light" size="sm">
-              {room.capacity}
-            </Badge>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-xs font-medium  text-muted-foreground">Room Type</span>
-            <Badge className="uppercase" variant="ghost" size="sm">
-              {room.roomType}
-            </Badge>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-xs font-medium  text-muted-foreground">
-              Current Status
-            </span>
-            <Badge
-              className="uppercase"
-              size="sm"
-              variant={
-                room.currentStatus === "available" ? "success" : "destructive"
-              }
-            >
-              {room.currentStatus}
-            </Badge>
-          </div>
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-xs font-medium  text-muted-foreground">
+            Capacity
+          </span>
+          <Badge className="uppercase" variant="default_light" size="sm">
+            {room.capacity}
+          </Badge>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-xs font-medium  text-muted-foreground">
+            Room Type
+          </span>
+          <Badge className="uppercase" variant="ghost" size="sm">
+            {room.roomType}
+          </Badge>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-xs font-medium  text-muted-foreground">
+            Current Status
+          </span>
+          <Badge
+            className="uppercase"
+            size="sm"
+            variant={
+              room.currentStatus === "available" ? "success" : "destructive"
+            }
+          >
+            {room.currentStatus}
+          </Badge>
+        </div>
       </CardContent>
     </Card>
   );

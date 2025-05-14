@@ -33,7 +33,7 @@ const pollSchema = new mongoose.Schema(
     votes: [
       {
         option: { type: String, required: true },
-        userId: { type:String },
+        userId: { type: String },
       },
     ],
     closesAt: {

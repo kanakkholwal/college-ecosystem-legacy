@@ -14,9 +14,7 @@ const classNames = {
 export default function OutpassList({ outPasses }: OutpassListProps) {
   return (
     <>
-      <Heading level={4}>
-        Last {outPasses.length} OutPass
-      </Heading>
+      <Heading level={4}>Last {outPasses.length} OutPass</Heading>
       <div className={classNames.container}>
         {outPasses.map((outpass) => (
           <OutpassDetails key={outpass._id} outpass={outpass} />

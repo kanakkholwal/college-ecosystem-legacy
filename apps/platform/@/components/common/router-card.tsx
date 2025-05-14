@@ -46,18 +46,18 @@ export function RouterCard({
         <div className="flex-auto">
           <h5 className="not-prose mb-1 text-sm font-medium">{title}</h5>
           {disabled ? (
-            <p className="text-xs text-muted-foreground prose-no-margin">(Maintenance)</p>
+            <p className="text-xs text-muted-foreground prose-no-margin">
+              (Maintenance)
+            </p>
           ) : null}
         </div>
       </div>
-      <p className="max-w-[30ch] text-xs text-muted-foreground prose-no-margin">{description}</p>
+      <p className="max-w-[30ch] text-xs text-muted-foreground prose-no-margin">
+        {description}
+      </p>
       <p className="text-xs whitespace-nowrap font-semibold text-primary/80 transition-all group-hover:text-primary group-hover:translate-x-1 motion-reduce:transform-none  [&_svg]:size-4 [&_svg]:ml-1 [&_svg]:inline-block">
         Go to {title}
-        {external ? (
-          <ArrowUpRight  />
-        ) : (
-          <ArrowRight  />
-        )}
+        {external ? <ArrowUpRight /> : <ArrowRight />}
       </p>
     </ParamsPreserverLink>
   );

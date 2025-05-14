@@ -23,7 +23,7 @@ export default async function HostelPageLayout(props: {
   return (
     <div className="space-y-5">
       <HostelDetailsForNonAdmins hostel={hostel} />
-      <Separator  />
+      <Separator />
       <ConditionalRender condition={hosteler?.banned}>
         <EmptyArea
           icons={[LuBuilding]}

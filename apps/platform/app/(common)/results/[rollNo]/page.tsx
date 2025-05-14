@@ -148,7 +148,6 @@ export default async function ResultsPage(props: Props) {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </section>
@@ -165,53 +164,63 @@ export default async function ResultsPage(props: Props) {
             </TabsList>
           </div>
           <TabsContent value="table">
-
-
-            <Accordion type="single" collapsible className="w-full relative grid gap-4">
-
+            <Accordion
+              type="single"
+              collapsible
+              className="w-full relative grid gap-4"
+            >
               {result.semesters?.map((semester: Semester) => {
-                return <AccordionItem value={semester.semester.toString()} key={semester.semester} className="bg-card p-3 rounded-lg">
-                  <AccordionTrigger className="space-y-1 no-underline hover:no-underline items-center justify-between flex-wrap align-middle gap-3">
-                    <h4 className="text-base font-semibold leading-none align-middle"> Semester {semester.semester}</h4>
-                    <div className="flex items-center flex-wrap gap-2 text-sm text-muted-foreground align-middle mr-4">
-                      <div>CGPI : {semester.cgpi}</div>
-                      <Separator orientation="vertical" className="h-5" />
-                      <div>SGPI : {semester.sgpi}</div>
-                      <Separator orientation="vertical" className="h-5"/>
-                      <div>{semester.courses.length} Courses</div>
-                      <Separator orientation="vertical"className="h-5" />
-                      <div>
-                        Sem/Total Credit : {semester.sgpi_total}/ {semester.cgpi_total}
-                      </div>
-                    </div>
-
-                  </AccordionTrigger>
-                  <AccordionContent className="ms-6 mr-4">
-                    <Separator className="my-4" />
-                    {semester.courses?.map((course: Course, index) => {
-                      return (
-                        <div
-                          className="flex justify-between items-center py-2 gap-2 border-b border-border last:border-b-0"
-                          key={course.code}
-                        >
-                          <div className="flex items-start flex-col">
-                            <h4 className="text-sm tracking-wide font-semibold">
-                              {course.name.replaceAll("&amp;", "&")}
-                            </h4>
-                            <p className="text-xs text-muted-foreground">{course.code}</p>
-                          </div>
-                          <div className="text-primary text-sm bg-primary/20 dark:bg-primary/10 p-3 rounded-full h-6 w-6 flex justify-center items-center">
-                            {course.cgpi}
-                          </div>
+                return (
+                  <AccordionItem
+                    value={semester.semester.toString()}
+                    key={semester.semester}
+                    className="bg-card p-3 rounded-lg"
+                  >
+                    <AccordionTrigger className="space-y-1 no-underline hover:no-underline items-center justify-between flex-wrap align-middle gap-3">
+                      <h4 className="text-base font-semibold leading-none align-middle">
+                        {" "}
+                        Semester {semester.semester}
+                      </h4>
+                      <div className="flex items-center flex-wrap gap-2 text-sm text-muted-foreground align-middle mr-4">
+                        <div>CGPI : {semester.cgpi}</div>
+                        <Separator orientation="vertical" className="h-5" />
+                        <div>SGPI : {semester.sgpi}</div>
+                        <Separator orientation="vertical" className="h-5" />
+                        <div>{semester.courses.length} Courses</div>
+                        <Separator orientation="vertical" className="h-5" />
+                        <div>
+                          Sem/Total Credit : {semester.sgpi_total}/{" "}
+                          {semester.cgpi_total}
                         </div>
-                      );
-                    })}
-                  </AccordionContent>
-
-                </AccordionItem>;
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="ms-6 mr-4">
+                      <Separator className="my-4" />
+                      {semester.courses?.map((course: Course, index) => {
+                        return (
+                          <div
+                            className="flex justify-between items-center py-2 gap-2 border-b border-border last:border-b-0"
+                            key={course.code}
+                          >
+                            <div className="flex items-start flex-col">
+                              <h4 className="text-sm tracking-wide font-semibold">
+                                {course.name.replaceAll("&amp;", "&")}
+                              </h4>
+                              <p className="text-xs text-muted-foreground">
+                                {course.code}
+                              </p>
+                            </div>
+                            <div className="text-primary text-sm bg-primary/20 dark:bg-primary/10 p-3 rounded-full h-6 w-6 flex justify-center items-center">
+                              {course.cgpi}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </AccordionContent>
+                  </AccordionItem>
+                );
               })}
             </Accordion>
-
           </TabsContent>
           <TabsContent value="graph">
             <div className="max-w-4xl mx-auto my-5 w-full p-4 rounded-xl bg-accent">

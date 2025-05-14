@@ -1,7 +1,12 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -72,7 +77,6 @@ export default function ResetPassword() {
   return (
     <>
       <CardHeader className="text-center">
-
         <CardTitle>Reset Your Password</CardTitle>
         <CardDescription>
           Enter and confirm your new password below

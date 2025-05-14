@@ -119,7 +119,9 @@ type CachedLabels = {
   programmes: string[];
 };
 
-export async function getCachedLabels(new_cache?: boolean): Promise<CachedLabels> {
+export async function getCachedLabels(
+  new_cache?: boolean
+): Promise<CachedLabels> {
   const cacheKey = "cached_labels";
   let cachedLabels: CachedLabels | null = null;
 
@@ -150,15 +152,15 @@ export async function getCachedLabels(new_cache?: boolean): Promise<CachedLabels
       cachedLabels = { branches, batches, programmes };
 
       // try {
-        // await redis.set(
-        //   cacheKey,
-        //   JSON.stringify(cachedLabels),
-        //   "EX",
-        //   60 * 60 * 24 * 30 * 6 // 6 months
-        // );
-    //   } catch (redisSetErr) {
-    //     console.error("Redis SET error:", redisSetErr);
-    //   }
+      // await redis.set(
+      //   cacheKey,
+      //   JSON.stringify(cachedLabels),
+      //   "EX",
+      //   60 * 60 * 24 * 30 * 6 // 6 months
+      // );
+      //   } catch (redisSetErr) {
+      //     console.error("Redis SET error:", redisSetErr);
+      //   }
     }
   } catch (error) {
     console.error("Error fetching cached labels:", error);

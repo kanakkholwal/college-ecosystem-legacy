@@ -2,7 +2,12 @@
 
 import { authClient } from "src/lib/auth-client";
 
-import { CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -99,141 +104,139 @@ export default function SignUpForm() {
           Create a new account for platform access.
         </CardDescription>
       </CardHeader>
-      <CardContent  className={cn("grid gap-6 w-full text-left p-4")}>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="relative group">
-                      <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
-                        <LuMail className="w-4 h-4" />
-                      </FormLabel>
-                      <FormControl className="relative">
-                        <Input
-                          placeholder="Your Name"
-                          type="text"
-                          autoCapitalize="none"
-                          autoComplete="name"
-                          disabled={isLoading}
-                          autoCorrect="off"
-                          className="pl-10 pr-5"
-                          {...field}
-                        />
-                      </FormControl>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="relative group">
-                      <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
-                        <LuMail className="w-4 h-4" />
-                      </FormLabel>
-                      <FormControl className="relative">
-                        <Input
-                          placeholder={`Email (e.g. user@${ORG_DOMAIN})`}
-                          type="email"
-                          autoCapitalize="none"
-                          autoComplete="email"
-                          disabled={isLoading}
-                          autoCorrect="off"
-                          className="pl-10 pr-5"
-                          {...field}
-                        />
-                      </FormControl>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <div className="relative group">
-                      <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
-                        <BiLockOpenAlt className="w-4 h-4" />
-                      </FormLabel>
-                      <FormControl>
-                        <Input
-                          placeholder="*********"
-                          type="password"
-                          autoCapitalize="none"
-                          autoComplete="password"
-                          autoCorrect="off"
-                          disabled={isLoading}
-                          className="pl-10 pr-5 !mt-0"
-                          {...field}
-                        />
-                      </FormControl>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <p className="text-left mt-2 text-[8px] italic font-medium text-gray-600">
-                You must use your NITH email to sign up.(you{"'"}ll get a
-                verification link in your email if your email isn{"'"}t in the
-                database)
-              </p>
-
-              <Button
-                disabled={isLoading}
-                type="submit"
-                className="mt-2 tracking-wide"
-                variant="default"
-                rounded="full"
-              >
-                {isLoading && (
-                  <AiOutlineLoading className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                Sign Up with Email
-              </Button>
-            </form>
-          </Form>
-          <div className="relative z-0">
-            <div className="absolute inset-0 flex items-center">
-              <span className="w-full border-t border-t-primary/10" />
-            </div>
-            <div className="relative flex justify-center text-xs uppercase z-10">
-              <span className="px-2 text-muted-foreground">
-                Or continue with
-              </span>
-            </div>
-          </div>
-          <div className="grid  grid-cols-1">
-            <Button
-              variant="light"
-              type="button"
-              disabled={isLoading}
-              width="full"
-              rounded="full"
-              onClick={async () => {
-                setIsLoading(true);
-                await authClient.signIn.social({
-                  provider: "google",
-                  callbackURL: redirect,
-                });
-                setIsLoading(false);
-              }}
-            >
-              {isLoading ? (
-                <AiOutlineLoading className="h-6 w-6 animate-spin" />
-              ) : (
-                <FcGoogle className=" h-6 w-6" />
+      <CardContent className={cn("grid gap-6 w-full text-left p-4")}>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="relative group">
+                    <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
+                      <LuMail className="w-4 h-4" />
+                    </FormLabel>
+                    <FormControl className="relative">
+                      <Input
+                        placeholder="Your Name"
+                        type="text"
+                        autoCapitalize="none"
+                        autoComplete="name"
+                        disabled={isLoading}
+                        autoCorrect="off"
+                        className="pl-10 pr-5"
+                        {...field}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
               )}
-              {isLoading ? "Signing in..." : "Sign Up with Google"}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="relative group">
+                    <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
+                      <LuMail className="w-4 h-4" />
+                    </FormLabel>
+                    <FormControl className="relative">
+                      <Input
+                        placeholder={`Email (e.g. user@${ORG_DOMAIN})`}
+                        type="email"
+                        autoCapitalize="none"
+                        autoComplete="email"
+                        disabled={isLoading}
+                        autoCorrect="off"
+                        className="pl-10 pr-5"
+                        {...field}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="relative group">
+                    <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
+                      <BiLockOpenAlt className="w-4 h-4" />
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="*********"
+                        type="password"
+                        autoCapitalize="none"
+                        autoComplete="password"
+                        autoCorrect="off"
+                        disabled={isLoading}
+                        className="pl-10 pr-5 !mt-0"
+                        {...field}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <p className="text-left mt-2 text-[8px] italic font-medium text-gray-600">
+              You must use your NITH email to sign up.(you{"'"}ll get a
+              verification link in your email if your email isn{"'"}t in the
+              database)
+            </p>
+
+            <Button
+              disabled={isLoading}
+              type="submit"
+              className="mt-2 tracking-wide"
+              variant="default"
+              rounded="full"
+            >
+              {isLoading && (
+                <AiOutlineLoading className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              Sign Up with Email
             </Button>
+          </form>
+        </Form>
+        <div className="relative z-0">
+          <div className="absolute inset-0 flex items-center">
+            <span className="w-full border-t border-t-primary/10" />
           </div>
+          <div className="relative flex justify-center text-xs uppercase z-10">
+            <span className="px-2 text-muted-foreground">Or continue with</span>
+          </div>
+        </div>
+        <div className="grid  grid-cols-1">
+          <Button
+            variant="light"
+            type="button"
+            disabled={isLoading}
+            width="full"
+            rounded="full"
+            onClick={async () => {
+              setIsLoading(true);
+              await authClient.signIn.social({
+                provider: "google",
+                callbackURL: redirect,
+              });
+              setIsLoading(false);
+            }}
+          >
+            {isLoading ? (
+              <AiOutlineLoading className="h-6 w-6 animate-spin" />
+            ) : (
+              <FcGoogle className=" h-6 w-6" />
+            )}
+            {isLoading ? "Signing in..." : "Sign Up with Google"}
+          </Button>
+        </div>
       </CardContent>
     </>
   );

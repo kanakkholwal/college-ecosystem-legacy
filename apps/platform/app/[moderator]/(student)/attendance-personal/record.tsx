@@ -174,7 +174,9 @@ export default function AttendanceRecord({
           <div className="flex flex-col items-center text-center flex-1 my-auto">
             <CircleSlash className="w-8 h-8  mb-2" />
             <p className="text-sm font-medium">No attendance records found</p>
-            <p className="text-xs text-muted-foreground">Add your first record to start tracking.</p>
+            <p className="text-xs text-muted-foreground">
+              Add your first record to start tracking.
+            </p>
           </div>
         )}
       </div>

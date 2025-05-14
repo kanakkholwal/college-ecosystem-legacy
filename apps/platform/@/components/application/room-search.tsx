@@ -98,7 +98,9 @@ export default function SearchBox() {
         )}
       >
         <div>
-          <h6 className="font-medium text-xs text-muted-foreground">Filter by</h6>
+          <h6 className="font-medium text-xs text-muted-foreground">
+            Filter by
+          </h6>
         </div>
         <div className="flex flex-wrap gap-2">
           {["all", "available", "occupied"].map((status) => (

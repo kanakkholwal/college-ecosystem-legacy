@@ -144,7 +144,9 @@ export default function SearchBar() {
         )}
       >
         <div>
-          <p className="text-muted-foreground font-medium text-sm mb-1">Search Field</p>
+          <p className="text-muted-foreground font-medium text-sm mb-1">
+            Search Field
+          </p>
           <div className="flex items-center space-x-4">
             {/* Search Field */}
             <Select
@@ -192,7 +194,9 @@ export default function SearchBar() {
         </div>
         <Separator orientation="vertical" />
         <div>
-          <p className="text-muted-foreground font-medium text-sm mb-1">Search Field</p>
+          <p className="text-muted-foreground font-medium text-sm mb-1">
+            Search Field
+          </p>
 
           {/* Sorting Options */}
           <div className="flex items-center space-x-4">
@@ -242,7 +246,9 @@ export default function SearchBar() {
         </div>
         <Separator orientation="vertical" />
         <div>
-          <p className="text-muted-foreground font-medium text-sm mb-1">Limit & Offset</p>
+          <p className="text-muted-foreground font-medium text-sm mb-1">
+            Limit & Offset
+          </p>
           <div className="flex items-center space-x-4">
             <Input
               type="number"

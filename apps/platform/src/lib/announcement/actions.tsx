@@ -20,7 +20,7 @@ export async function createAnnouncement(
     const announcement = new Announcement({
       ...announcementData,
       createdBy: {
-        id:session.user.id,
+        id: session.user.id,
         name: session.user.name,
         username: session.user.username,
       },

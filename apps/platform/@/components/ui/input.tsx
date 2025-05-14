@@ -10,8 +10,7 @@ const inputVariants = cva(
     variants: {
       variant: {
         default: "border border-input focus:border-primary border-solid",
-        outline:
-          "border border-solid bg-slate-100 dark:bg-neutral-800",
+        outline: "border border-solid bg-slate-100 dark:bg-neutral-800",
         ghost:
           "border border-solid border-transparent bg-gray-200/40 dark:bg-gray-800 text-gray-900 dark:text-gray-200 dark:border-gray-700  focus:border-primary/70 dark:focus:border-primary/70",
         border: "border-2 focus:border-primary/70 border-solid",
@@ -53,4 +52,3 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 Input.displayName = "Input";
 
 export { Input };
-

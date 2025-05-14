@@ -48,9 +48,7 @@ export function TabsTransitionPanel({
             value={item.id}
             key={item.id}
             data-state={activeIndex === index ? "on" : "off"}
-            className={cn(
-              classNames?.tabTrigger
-            )}
+            className={cn(classNames?.tabTrigger)}
           >
             {item.title}
           </ToggleGroupItem>
