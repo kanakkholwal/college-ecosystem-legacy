@@ -133,7 +133,7 @@ func ParseResultHtml(body io.ReadCloser) (user *resultTypes.StudentHtmlParsed, p
 				})
 			})
 			user.SemesterResults[(tableIndex-2)/2].SubjectResults = subjectsResult
-			user.SemesterResults[(tableIndex-2)/2].SemesterNumber = int64((tableIndex-2)/2 + 1)
+			user.SemesterResults[(tableIndex-2)/2].SemesterNumber = strings.TrimSpace(fmt.Sprintf("%d", (tableIndex-2)/2+1))
 		} else {
 			//semester result table: semester overall data
 			selection.Find("tr td").Each(func(cellIndex int, selection *goquery.Selection) {
@@ -166,7 +166,7 @@ func ParseResultHtml(body io.ReadCloser) (user *resultTypes.StudentHtmlParsed, p
 	return user, nil
 }
 
-func getResultHtml(rollNumber string) (io.ReadCloser, error) {
+func getResultHtml(rollNumber string, path string) (io.ReadCloser, error) {
 	cookieJar, err := cookiejar.New(nil)
 	if err != nil {
 		return nil, err
@@ -174,7 +174,6 @@ func getResultHtml(rollNumber string) (io.ReadCloser, error) {
 	httpClient := &http.Client{
 		Jar: cookieJar,
 	}
-	path := utils.GetUrlForRollNumber(rollNumber, false)
 
 	var csrfToken, verToken string
 	if val, ok := tokenCache.Load(path); ok {
@@ -230,16 +229,51 @@ func getResultHtml(rollNumber string) (io.ReadCloser, error) {
 }
 
 func GetResultByRollNumber(rollNumber string) (*resultTypes.StudentHtmlParsed, error) {
-	resultHtml, err := getResultHtml(rollNumber)
-	if err != nil {
-		return nil, fmt.Errorf("error for rollNumber %s: %w in getResultHtml", rollNumber, err)
+	paths := utils.GetUrlForRollNumber(rollNumber, false)
+	if len(paths) == 0 {
+		return nil, fmt.Errorf("invalid roll number %s | No result path found", rollNumber)
 	}
-	student, err := ParseResultHtml(resultHtml)
-	if err == nil && student != nil {
-		return student, nil
-	} else {
-		return nil, fmt.Errorf("error for rollNumber %s: %w\n", rollNumber, err)
+	var student *resultTypes.StudentHtmlParsed
+
+	for idx, path := range paths {
+		log.Printf("Fetching result for roll number %s from %s\n", rollNumber, path)
+		// fetch the result html
+		resultHtml, err := getResultHtml(rollNumber, path)
+		if err != nil {
+			return nil, fmt.Errorf("error for rollNumber %s: %w in getResultHtml", rollNumber, err)
+		}
+		if idx == 0 {
+			// first path is the one we want
+			student, err = ParseResultHtml(resultHtml)
+			if err != nil {
+				if errors.Is(err, RollNumberDoesNotExist) {
+					return nil, fmt.Errorf("error for rollNumber %s: %w", rollNumber, err)
+				}
+				return nil, fmt.Errorf("error for rollNumber %s: %w", rollNumber, err)
+			}
+		} else {
+
+			excess_student, err := ParseResultHtml(resultHtml)
+			if err == nil && excess_student != nil {
+				log.Printf("error for rollNumber %s: %v\n", rollNumber, err)
+			}
+
+			for i := range excess_student.SemesterResults {
+				excess_student.SemesterResults[i].SemesterNumber = fmt.Sprintf("Masters Sem 0%d", i+1)
+			}
+			student.SemesterResults = append(student.SemesterResults, excess_student.SemesterResults...)
+
+			if student.CGPI < excess_student.CGPI {
+				student.CGPI = excess_student.CGPI
+			}
+			if err != nil {
+				// for other paths, we just log the error
+				log.Printf("error for rollNumber %s: %v\n", rollNumber, err)
+
+			}
+		}
 	}
+	return student, nil
 
 }
 
@@ -252,7 +286,7 @@ func GetResultsFromWeb(forOnlyBatch int) []resultTypes.StudentHtmlParsed {
 	var students []resultTypes.StudentHtmlParsed
 
 	processNext := func(rollNumber string) (*resultTypes.StudentHtmlParsed, error) {
-		resultHtml, err := getResultHtml(rollNumber)
+		resultHtml, err := getResultHtml(rollNumber, utils.GetUrlForRollNumber(rollNumber, false)[0])
 		if err != nil {
 			err = fmt.Errorf("error for rollNumber %s: %w in getResultHtml", rollNumber, err)
 			return nil, err

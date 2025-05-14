@@ -1,16 +1,16 @@
 package constants
 
 var ProgrammeKeys = map[string][]string{
-	"Dual Degree": {"dcs", "dec"},
 	"B.Tech":      {"bce", "bme", "bms", "bma", "bph", "bee", "bec", "bcs", "bch"},
 	"B.Arch":      {"bar"},
+	"Dual Degree": {"dcs", "dec"},
 	"M.Tech":      {"mce", "mme", "mms", "mma", "mph", "mee", "mec", "mcs", "mch"},
 }
 
 var SchemeKeys = map[string]string{
 	"B.Tech":      "scheme",
-	"Dual Degree": "dualdegree",
 	"M.Tech":      "mtech",
+	"Dual Degree": "dualdegree",
 }
 
 var BranchCodesToNames = map[string]string{
@@ -26,10 +26,10 @@ var BranchCodesToNames = map[string]string{
 }
 
 var ThresholdForProgramme = map[string]int{
-	"Dual Degree": 30,
 	"B.Tech":      120,
-	"M.Tech":      40,
 	"B.Arch":      60,
+	"M.Tech":      40,
+	"Dual Degree": 30,
 }
 
 type HeaderInfo struct {

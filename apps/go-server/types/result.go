@@ -29,7 +29,7 @@ type StudentResultWithRanks struct {
 }
 
 type SemesterResult struct {
-	SemesterNumber int64           `json:"semester"`
+	SemesterNumber string          `json:"semester"`
 	SubjectResults []SubjectResult `json:"courses"`
 	SGPI           float64         `json:"sgpi"`
 	CGPI           float64         `json:"cgpi"`

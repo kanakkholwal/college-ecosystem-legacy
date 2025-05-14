@@ -2,9 +2,10 @@ package utils
 
 import (
 	"fmt"
-	constants "github.com/kanakkholwal/go-server/constants"
 	"strings"
 	"time"
+
+	constants "github.com/kanakkholwal/go-server/constants"
 )
 
 // var thresholdForBranch = map[string]int{
@@ -87,24 +88,38 @@ func GenRollNumbersForClass(branch string, programme string) []string {
 	return matching
 }
 
-func GetUrlForRollNumber(rollNumber string, dualDegree bool) string {
+func GetUrlForRollNumber(rollNumber string, dualDegree bool) []string {
 	year := rollNumber[:2]
 	schema := "scheme"
+
+	urls := []string{}
+
+	isDualDegree := false
+	// Check if the roll number is for a dual degree | Explicitly check for combined results of both programmes
+	// Check if the roll number contains "dec" or "dcs" for dual degree
+	if strings.Contains(rollNumber, "dec") || strings.Contains(rollNumber, "dcs") {
+		isDualDegree = true
+	}
+	// Check if the roll number is valid
 
 	// identify the scheme based on the roll number using programmeKeys and schemeKeys
 	for programme, codes := range constants.ProgrammeKeys {
 		for _, code := range codes {
-			if strings.Contains(rollNumber, code) {
+			if strings.Contains(rollNumber, code) && !isDualDegree {
 				schema = constants.SchemeKeys[programme]
 				break
 			}
 		}
 	}
-	if dualDegree {
+	urls = append(urls, fmt.Sprintf("http://results.nith.ac.in/%s%s/studentresult/result.asp", schema, year))
+	// Check if the roll number is for a dual degree
+	if isDualDegree || dualDegree {
+		// If the roll number is for a dual degree, append the dual degree URL
 		schema = constants.SchemeKeys["Dual Degree"]
+		urls = append(urls, fmt.Sprintf("http://results.nith.ac.in/%s%s/studentresult/result.asp", schema, year))
 	}
 
-	return fmt.Sprintf("http://results.nith.ac.in/%s%s/studentresult/result.asp", schema, year) // Use schema in the URL
+	return urls
 }
 
 func DetermineDepartment(rollNo string) string {
