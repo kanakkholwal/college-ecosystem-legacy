@@ -48,6 +48,8 @@ export default function Paginate({ totalPages }: { totalPages: number }) {
                 <PaginationLink
                   href={createPageURL(pageNumber)}
                   isActive={pageNumber === currentPage}
+                  size="icon_sm"
+
                 >
                   {pageNumber}
                 </PaginationLink>

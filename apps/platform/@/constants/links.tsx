@@ -7,12 +7,11 @@ import { RiTwitterXFill } from "react-icons/ri";
 import type { Session } from "~/lib/auth-client";
 // import { TbServer2 } from "react-icons/tb";
 
-import { GrStorage } from "react-icons/gr";
 import { IoCalendarOutline } from "react-icons/io5";
 import { TbDashboard } from "react-icons/tb";
 import { ROLES } from "~/constants";
 
-import { AudioLines, Bot, CalendarRange } from "lucide-react";
+import { AudioLines, CalendarRange } from "lucide-react";
 import { BiSpreadsheet } from "react-icons/bi";
 import { GrAnnounce, GrSchedules } from "react-icons/gr";
 import { MdOutlinePoll } from "react-icons/md";
@@ -133,12 +132,7 @@ export const sidebar_links: rawLinkType[] = [
         title: "Create User",
         path: "/new",
         allowed_roles: [ROLES.ADMIN],
-      },
-      {
-        title: "Fix User",
-        path: "/fix",
-        allowed_roles: [ROLES.ADMIN],
-      },
+      }
     ],
   },
   {
@@ -159,12 +153,7 @@ export const sidebar_links: rawLinkType[] = [
       },
     ],
   },
-  {
-    title: "Storage",
-    icon: GrStorage,
-    path: "/storage",
-    allowed_roles: [ROLES.ADMIN],
-  },
+
   {
     title: "Academic Calender",
     icon: IoCalendarOutline,
@@ -182,24 +171,8 @@ export const sidebar_links: rawLinkType[] = [
     icon: LuBookA,
     path: "/courses",
     allowed_roles: [
-      ROLES.STUDENT,
-      ROLES.CR,
-      ROLES.FACULTY,
-      ROLES.HOD,
       ROLES.ADMIN,
-    ],
-    items: [
-      {
-        title: "Import from PDF",
-        path: "/import",
-        allowed_roles: [
-          ROLES.STUDENT,
-          ROLES.CR,
-          ROLES.FACULTY,
-          ROLES.HOD,
-          ROLES.ADMIN,
-        ],
-      },
+
     ],
   },
   {

@@ -5,7 +5,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata, ResolvingMetadata } from "next";
 import { Suspense } from "react";
 import { getCourses } from "~/actions/course";
-import { changeCase } from "~/utils/string";
 
 type Props = {
   params: Promise<{
@@ -25,7 +24,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   return {
-    title: `Courses | ${changeCase(params.moderator, "title")} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+    title: `Courses | ${(await parent).title}`,
     description:
       "Search for courses based on their name, code, department, and type.",
   };
@@ -51,9 +50,9 @@ export default async function CoursesPage(props: Props) {
     <>
       <div className="relative mb-28" id="home">
         <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
-          <div className="relative pt-36 ml-auto">
+          <div className="relative pt-24 ml-auto">
             <div className="lg:w-3/4 text-center mx-auto">
-              <h1 className="text-2xl lg:text-4xl font-bold text-neutral-900 dark:text-neutral-100 whitespace-nowrap">
+              <h1 className="text-2xl lg:text-4xl font-bold whitespace-nowrap">
                 Courses <span className="text-primary">Search</span>
               </h1>
 

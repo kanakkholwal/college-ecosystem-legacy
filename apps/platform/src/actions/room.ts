@@ -2,6 +2,8 @@
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { and, desc, eq, like, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import type { z } from "zod";
+import { roomSchema } from "~/constants/room";
 import { db } from "~/db/connect";
 import { roomUsageHistory, rooms, users } from "~/db/schema";
 
@@ -157,10 +159,19 @@ export async function listAllRoomsWithHistory(filters?: {
 
 // Function to create a new room
 export async function createRoom(
-  roomData: RoomInsert,
+  roomData: z.infer<typeof roomSchema>,
   initialUsageHistory?: UsageHistoryInsert
 ): Promise<RoomSelect> {
   "use server";
+  // Validate room data
+  const response = roomSchema.safeParse(roomData);
+  if (!response.success) {
+    throw new Error(
+      `Invalid room data: ${response.error.errors.map((issue) => issue.message).join(", ")}`
+    );
+  }
+
+  // Insert new room into the database
   const [newRoom] = await db.insert(rooms).values(roomData).returning();
 
   if (!newRoom) {

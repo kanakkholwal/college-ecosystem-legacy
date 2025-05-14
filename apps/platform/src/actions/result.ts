@@ -55,29 +55,29 @@ export async function getResults(
       filter ? `_${JSON.stringify(filter)}` : ""
     }`;
 
-    let cachedResults: getResultsReturnType | null = null;
+    // let cachedResults: getResultsReturnType | null = null;
 
-    // Try Redis GET
-    if (!new_cache) {
-      try {
-        // const cachedData = await redis.get(cacheKey);
-        // if (cachedData) {
-        //   cachedResults = JSON.parse(cachedData) as getResultsReturnType;
-        // }
-      } catch (redisGetErr) {
-        console.error("Redis GET error:", redisGetErr);
-      }
-    } else {
-      try {
-        // await redis.del(cacheKey);
-      } catch (redisDelErr) {
-        console.error("Redis DEL error:", redisDelErr);
-      }
-    }
+    // // Try Redis GET
+    // if (!new_cache) {
+    //   try {
+    //     // const cachedData = await redis.get(cacheKey);
+    //     // if (cachedData) {
+    //     //   cachedResults = JSON.parse(cachedData) as getResultsReturnType;
+    //     // }
+    //   } catch (redisGetErr) {
+    //     console.error("Redis GET error:", redisGetErr);
+    //   }
+    // } else {
+    //   try {
+    //     // await redis.del(cacheKey);
+    //   } catch (redisDelErr) {
+    //     console.error("Redis DEL error:", redisDelErr);
+    //   }
+    // }
 
-    if (cachedResults) {
-      return cachedResults;
-    }
+    // if (cachedResults) {
+    //   return cachedResults;
+    // }
 
     const results = await ResultModel.find({
       ...filterQuery,
@@ -95,16 +95,16 @@ export async function getResults(
     const response = { results, totalPages };
 
     // Try Redis SET
-    try {
-      // await redis.set(
-      //   cacheKey,
-      //   JSON.stringify(response),
-      //   "EX",
-      //   60 * 60 * 24 * 7 // 1 week
-      // );
-    } catch (redisSetErr) {
-      console.error("Redis SET error:", redisSetErr);
-    }
+    // try {
+    //   // await redis.set(
+    //   //   cacheKey,
+    //   //   JSON.stringify(response),
+    //   //   "EX",
+    //   //   60 * 60 * 24 * 7 // 1 week
+    //   // );
+    // } catch (redisSetErr) {
+    //   console.error("Redis SET error:", redisSetErr);
+    // }
 
     return response;
   } catch (error) {
@@ -124,22 +124,22 @@ export async function getCachedLabels(new_cache?: boolean): Promise<CachedLabels
   let cachedLabels: CachedLabels | null = null;
 
   try {
-    if (!new_cache) {
-      try {
-        // const cachedData = await redis.get(cacheKey);
-        // if (cachedData) {
-        //   cachedLabels = JSON.parse(cachedData) as CachedLabels;
-        // }
-      } catch (redisGetErr) {
-        console.error("Redis GET error:", redisGetErr);
-      }
-    } else {
-      try {
-        // await redis.del(cacheKey);
-      } catch (redisDelErr) {
-        console.error("Redis DEL error:", redisDelErr);
-      }
-    }
+    // if (!new_cache) {
+    //   try {
+    //     // const cachedData = await redis.get(cacheKey);
+    //     // if (cachedData) {
+    //     //   cachedLabels = JSON.parse(cachedData) as CachedLabels;
+    //     // }
+    //   } catch (redisGetErr) {
+    //     console.error("Redis GET error:", redisGetErr);
+    //   }
+    // } else {
+    //   try {
+    //     // await redis.del(cacheKey);
+    //   } catch (redisDelErr) {
+    //     console.error("Redis DEL error:", redisDelErr);
+    //   }
+    // }
 
     if (!cachedLabels) {
       await dbConnect();
@@ -149,16 +149,16 @@ export async function getCachedLabels(new_cache?: boolean): Promise<CachedLabels
 
       cachedLabels = { branches, batches, programmes };
 
-      try {
+      // try {
         // await redis.set(
         //   cacheKey,
         //   JSON.stringify(cachedLabels),
         //   "EX",
         //   60 * 60 * 24 * 30 * 6 // 6 months
         // );
-      } catch (redisSetErr) {
-        console.error("Redis SET error:", redisSetErr);
-      }
+    //   } catch (redisSetErr) {
+    //     console.error("Redis SET error:", redisSetErr);
+    //   }
     }
   } catch (error) {
     console.error("Error fetching cached labels:", error);

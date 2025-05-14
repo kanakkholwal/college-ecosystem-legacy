@@ -83,11 +83,12 @@ export default function CreateNewUser() {
   };
 
   return (
-    <>
+    <div className="w-full">
+      <h1 className="text-xl font-semibold">Create New User</h1>
       <Form {...form}>
         <form
           onSubmit={form.handleSubmit(handleSubmit)}
-          className="space-y-6 my-5 p-2"
+          className="space-y-6 my-5 p-4 bg-card"
         >
           <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
             <FormField
@@ -268,6 +269,6 @@ export default function CreateNewUser() {
           </Button>
         </form>
       </Form>
-    </>
+    </div>
   );
 }

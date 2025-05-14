@@ -52,33 +52,43 @@ export default function SearchBox() {
     <div className="w-full grid gap-4">
       <div className="relative flex items-stretch w-full rounded-full h-auto">
         <div className="absolute top-0 bottom-0 left-0">
-          <button
+          <Button
             type="button"
+            aria-label="Filter"
+            title="Filter"
             onClick={() => setOpen(!open)}
-            className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max"
+            variant="glass"
+            rounded="full"
+            size="lg"
+            className="border border-border"
+            // className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max"
           >
-            <span className="relative text-base font-semibold text-primary dark:text-white">
+            <span className="relative text-base font-semibold text-primary">
               <IoMdOptions className="w-5 h-5" />
             </span>
-          </button>
+          </Button>
         </div>
         <Input
           placeholder="Search by room Number"
-          className="w-full rounded-full px-20 border border-border h-12 "
+          className="w-full rounded-full px-20 h-12 bg-card"
           defaultValue={searchParams.get("query")?.toString() || ""}
           onChange={(e) => {
             handleSearch(e.target.value);
           }}
         />
         <div className="absolute top-0 bottom-0 right-0">
-          <button
+          <Button
             type="button"
-            className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:bg-primary before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 sm:w-max"
+            aria-label="Search"
+            title="Search"
+            variant="default"
+            rounded="full"
+            size="lg"
           >
-            <span className="relative text-base font-semibold text-white">
+            <span className="relative text-base font-semibold">
               <Search className="w-5 h-5" />
             </span>
-          </button>
+          </Button>
         </div>
       </div>
       <div

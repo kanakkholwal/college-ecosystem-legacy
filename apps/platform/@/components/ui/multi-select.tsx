@@ -233,7 +233,7 @@ const MultiSelectorTrigger = forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex flex-wrap gap-1 rounded-lg bg-background p-1 py-2 ring-1 ring-muted ml-2",
+        "flex flex-wrap gap-1 rounded-lg bg-card p-1 py-2 ring-1 ring-muted ml-2",
         {
           "ring-1 focus-within:ring-ring": activeIndex === -1,
         },
@@ -245,12 +245,12 @@ const MultiSelectorTrigger = forwardRef<
         <Badge
           key={item}
           className={cn(
-            "rounded-xl px-1.5",
+            "rounded-xl px-1.5 py-1",
             activeIndex === index && "ring-2 ring-muted-foreground "
           )}
           variant={"outline"}
         >
-          <span className="text-xs">{item}</span>
+          <span className="text-[10px]">{item}</span>
           <button
             aria-label={`Remove ${item} option`}
             aria-roledescription="button to remove option"
@@ -328,7 +328,7 @@ const MultiSelectorList = forwardRef<
     <CommandList
       ref={ref}
       className={cn(
-        "scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground dark:scrollbar-thumb-muted scrollbar-thumb-rounded-lg absolute top-0 z-10 flex w-full flex-col gap-2 rounded-md border border-muted bg-background p-2 shadow-md transition-colors",
+        "scrollbar-thin scrollbar-track-transparent scrollbar-thumb-muted-foreground dark:scrollbar-thumb-muted scrollbar-thumb-rounded-lg absolute top-0 z-10 flex w-full flex-col gap-2 rounded-md border border-muted bg-popover p-2 shadow-md transition-colors",
         className
       )}
     >
@@ -365,9 +365,9 @@ const MultiSelectorItem = forwardRef<
         setInputValue("");
       }}
       className={cn(
-        "flex cursor-pointer justify-between rounded-md px-2 py-1 transition-colors ",
+        "flex cursor-pointer justify-between rounded-md px-2 py-1 transition-colors",
         className,
-        isIncluded && "cursor-default opacity-50",
+        isIncluded && "font-medium",
         props.disabled && "cursor-not-allowed opacity-50"
       )}
       onMouseDown={mousePreventDefault}

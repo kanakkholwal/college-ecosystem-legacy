@@ -54,24 +54,24 @@ export default async function RoomsPage(props: Props) {
     <>
       <div>
         <h1 className="text-2xl font-bold mb-4">Rooms Overview</h1>
-        <p className="text-xs text-medium font-semibold text-gray-600">
+        <p className="text-xs text-medium font-semibold text-muted-foreground">
           As of {new Date().toLocaleString()}
         </p>
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="bg-white/20 backdrop-blur-lg p-4 rounded-lg shadow-md">
+        <div className="bg-card border p-4 rounded-lg">
           <h4 className="text-lg font-bold">Total Rooms</h4>
           <h3 className="text-primary font-bold tracking-wide text-3xl mt-4">
             {totalRooms}
           </h3>
         </div>
-        <div className="bg-white/20 backdrop-blur-lg p-4 rounded-lg shadow-md">
+        <div className="bg-card border p-4 rounded-lg">
           <h4 className="text-lg font-bold">Available Rooms</h4>
           <h3 className="text-primary font-bold tracking-wide text-3xl mt-4">
             {totalAvailableRooms}
           </h3>
         </div>
-        <div className="bg-white/20 backdrop-blur-lg p-4 rounded-lg shadow-md">
+        <div className="bg-card border p-4 rounded-lg">
           <h4 className="text-lg font-bold">Occupied Rooms</h4>
           <h3 className="text-primary font-bold tracking-wide text-3xl mt-4">
             {totalOccupiedRooms}
