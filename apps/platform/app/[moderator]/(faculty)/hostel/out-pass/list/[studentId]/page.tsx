@@ -6,7 +6,6 @@ import {
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
-import { Separator } from "@radix-ui/react-separator";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 
@@ -64,7 +63,6 @@ export default async function UpdateUserPage({ params }: PageProps) {
                 </Badge>
               </AccordionTrigger>
               <AccordionContent className="ms-6 mr-4">
-                <Separator />
 
                 <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
                   <div>
