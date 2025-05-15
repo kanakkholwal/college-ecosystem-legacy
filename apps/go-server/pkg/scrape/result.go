@@ -337,20 +337,22 @@ func ScrapeInBulk(ctx context.Context, rollNumbers []string, concurrency int, de
 	rolls := make(chan string)
 	results := make(chan ScrapeResult)
 	collected := make([]ScrapeResult, 0, len(rollNumbers))
-	println("Scraping in bulk...", len(rollNumbers), "roll numbers")
+	total := len(rollNumbers)
+	fmt.Println("Scraping in bulk...", total, "roll numbers")
 	ticker := time.NewTicker(delay)
 	defer ticker.Stop()
 
+	var mu sync.Mutex
+	progress := 0
+
 	// Start workers
-	for w := 0; w < concurrency; w++ {
+	for range concurrency {
 		go func() {
 			for roll := range rolls {
 				select {
 				case <-ticker.C:
 					data, err := GetResultByRollNumber(roll)
 					res := ScrapeResult{RollNumber: roll}
-
-					println("Scraping roll number:", roll)
 					if err != nil {
 						res.Error = err.Error()
 					} else {
@@ -374,22 +376,26 @@ func ScrapeInBulk(ctx context.Context, rollNumbers []string, concurrency int, de
 			select {
 			case rolls <- roll:
 			case <-ctx.Done():
-				break
+				return
 			}
 		}
 		close(rolls)
 	}()
 
-	// Collect results
-	for i := 0; i < len(rollNumbers); i++ {
+	// Collect results and update progress
+	for range total {
 		select {
 		case res := <-results:
+			mu.Lock()
+			progress++
+			fmt.Printf("\rProgress: %d/%d (%f) \n", progress, total, float64(progress)/float64(total)*100)
+			mu.Unlock()
 			collected = append(collected, res)
 		case <-ctx.Done():
 			return collected
 		}
 	}
-	println("Scraping completed", len(collected), "results collected")
 
+	fmt.Printf("\nScraping completed: %d results collected\n", len(collected))
 	return collected
 }

@@ -64,8 +64,8 @@ func RegisterRoutes(router fiber.Router) {
 	})
 
 	// scrape all batch roll numbers
-	router.Get("/scrape-batch", func(c *fiber.Ctx) error {
-		batchYear := c.Query("batch")
+	router.Post("/scrape-batch", func(c *fiber.Ctx) error {
+		batchYear := c.Query("batchYear")
 		if batchYear == "" {
 			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "batchYear query parameter is required"})
 		}
