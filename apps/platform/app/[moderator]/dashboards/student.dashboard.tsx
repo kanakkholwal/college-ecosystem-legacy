@@ -2,7 +2,6 @@ import { RouterCard } from "@/components/common/router-card";
 import { quick_links } from "@/constants/links";
 
 export default async function StudentDashboard() {
-
   return (
     <div className="w-full mx-auto space-y-5">
       <section
