@@ -1,4 +1,5 @@
 import { type RequestHandler, Router } from "express";
+import { resultScrapingSSEHandler } from "~/controllers/sse-scraping";
 import {
   getDepartments,
   getDepartmentsList,
@@ -59,5 +60,9 @@ router.post("/results/:rollNo", getResultByRollNoFromSite);
 router.get("/results/:rollNo/get", getResult);
 router.post("/results/:rollNo/add", addResult);
 router.post("/results/:rollNo/update", updateResult);
+
+
+// Endpoint to get result by rollNo scraped from the website
+router.post("/results/scrape",resultScrapingSSEHandler as unknown as RequestHandler);
 
 export default router;
