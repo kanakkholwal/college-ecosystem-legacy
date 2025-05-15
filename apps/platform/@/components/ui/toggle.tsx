@@ -12,6 +12,8 @@ const toggleVariants = cva(
     variants: {
       variant: {
         default: "bg-card hover:bg-card/80",
+        destructive:
+          "bg-destructive text-destructive-foreground hover:bg-destructive/90",
         outline: "bg-transparent hover:bg-accent hover:text-accent-foreground",
       },
       size: {

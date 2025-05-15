@@ -1,12 +1,7 @@
 import { RouterCard } from "@/components/common/router-card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { quick_links } from "@/constants/links";
-import { RocketIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
-import { getSession } from "~/lib/auth-server";
 
 export default async function StudentDashboard() {
-  const session = await getSession();
 
   return (
     <div className="w-full mx-auto space-y-5">

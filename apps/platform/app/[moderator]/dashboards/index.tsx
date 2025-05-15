@@ -12,6 +12,9 @@ import CRDashboard from "./cr.dashboard";
 import GuardDashboard from "./guard.dashboard";
 import StudentDashboard from "./student.dashboard";
 import WardenDashboard from "./warden.dashboard";
+// import type { JSX } from "react";
+
+// type DashboardTemplateType = Promise<JSX.Element> | JSX.Element;
 
 const dashboard_templates = new Map([
   ["admin", AdminDashboard],

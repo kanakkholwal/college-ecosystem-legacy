@@ -5,13 +5,12 @@ import { CardDescription, CardTitle } from "@/components/ui/card";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { cn } from "@/lib/utils";
 import { CheckCircle2, LoaderCircle } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { authClient } from "src/lib/auth-client";
 import * as z from "zod";
 import { ORG_DOMAIN } from "~/project.config";
-import { redirect } from "next/navigation";
 
 const FormSchema = z.object({
   email: z
@@ -46,7 +45,7 @@ export default function VerifyEmail() {
         })
         .then((res) => {
           if (res.error) {
-            toast.error(res.error);
+            toast.error(res.error.message);
             setError(
               res?.error?.message ??
                 "An error occurred while verifying your email."
