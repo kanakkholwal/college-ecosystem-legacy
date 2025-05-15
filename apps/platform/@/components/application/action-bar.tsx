@@ -6,21 +6,22 @@ import { LoaderCircle } from "lucide-react";
 import React from "react";
 import toast from "react-hot-toast";
 
-interface ActionBarProps<T> {
+interface ActionBarProps {
   className?: string;
   title: string;
   description?: React.ReactNode;
   btnProps: React.ComponentProps<typeof Button>;
-  action: () => Promise<T>;
+  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
+  action: () => Promise<any>;
 }
 
-export function ActionBar<T>({
+export function ActionBar({
   className,
   title,
   description,
   btnProps,
   action,
-}: ActionBarProps<T>) {
+}: ActionBarProps) {
   const [loading, setLoading] = React.useState(false);
 
   const handleAction = async () => {
