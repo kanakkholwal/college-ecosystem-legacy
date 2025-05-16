@@ -22,6 +22,10 @@ type DateTimePickerType = z.infer<typeof DateTimePickerSchema>;
 interface DateTimePickerProps {
   value: DateTimePickerType;
   onChange: (value: DateTimePickerType) => void;
+  className?: string;
+  disabled?: boolean;
+  placeholder?: string;
+  btnProps?: React.ComponentProps<typeof Button>;
   // schema?:typeof  z.Schema;
 }
 
@@ -58,10 +62,13 @@ export function DateTimePicker(field: DateTimePickerProps) {
       <PopoverTrigger asChild>
         <Button
           variant={"outline"}
+          disabled={field.disabled}
           className={cn(
             "w-full pl-3 text-left font-normal",
-            !field.value && "text-muted-foreground"
+            !field.value && "text-muted-foreground",
+            field.className 
           )}
+          {...field.btnProps}
         >
           {field.value ? (
             format(field.value, "MM/dd/yyyy hh:mm aa")
