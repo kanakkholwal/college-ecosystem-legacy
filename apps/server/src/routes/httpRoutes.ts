@@ -63,6 +63,6 @@ router.post("/results/:rollNo/update", updateResult);
 
 
 // Endpoint to get result by rollNo scraped from the website
-router.post("/results/scrape",resultScrapingSSEHandler as unknown as RequestHandler);
+router.get("/results/scrape-sse",resultScrapingSSEHandler as unknown as RequestHandler);
 
 export default router;

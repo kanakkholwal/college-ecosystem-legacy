@@ -2,6 +2,7 @@
 import { Button } from "@/components/ui/button";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { ref, remove } from "firebase/database";
+import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { database } from "src/lib/firebase";
@@ -38,8 +39,9 @@ export default function DeletePoll({ pollId }: { pollId: PollType["_id"] }) {
       description="Are you sure you want to delete this poll?"
       btnProps={{
         variant: "destructive_light",
-        children: "Delete Poll",
-        size: "sm",
+        children: <Trash2 />,
+        size: "icon_sm",
+        className:"absolute right-4 top-4",
       }}
     >
       <Button

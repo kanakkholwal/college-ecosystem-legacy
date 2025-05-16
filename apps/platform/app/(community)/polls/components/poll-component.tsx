@@ -1,9 +1,10 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { ArrowRight, Clock } from "lucide-react";
 import Link from "next/link";
-import type { PollType } from "src/models/poll";
+import { BiUpvote } from "react-icons/bi";
 import type { Session } from "src/lib/auth-client";
+import type { PollType } from "src/models/poll";
 import DeletePoll from "./delete-poll";
 import { ClosingBadge } from "./poll-timer";
 
@@ -17,20 +18,26 @@ export default function PollComponent({
   const closesAlready = new Date(poll.closesAt) < new Date();
 
   return (
-    <div className="bg-white/10 p-4 rounded-lg mt-2 flex flex-col justify-between items-stretch gap-3 border border-gray-50/40 hover:shadow-sm">
-      <div className="flex justify-between items-center gap-3 w-full">
-        <h3 className="text-lg font-semibold">{poll.question}</h3>
+    <div className="bg-card p-4 rounded-lg mt-2 flex flex-col justify-between items-stretch gap-3 border hover:shadow-sm relative">
+      <div>
+        <h3 className="text-lg font-semibold text-card-foreground">{poll.question}</h3>
+        <p className="text-sm text-muted-foreground">{poll.description}</p>
       </div>
-      <p className="text-sm">{poll.description}</p>
       <PollRender poll={poll} />
       <div className="w-full flex items-center gap-2">
-        <ClosingBadge poll={poll} />
-        <Badge variant="info_light">{poll.votes.length} votes</Badge>
+        <span className="rounded-md bg-muted text-muted-foreground px-2 py-1 text-xs inline-flex items-center">
+          <BiUpvote className="mr-1 inline-block size-4" />
+          {poll.votes.length} votes
+        </span>
+        <span className="rounded-md bg-muted text-muted-foreground px-2 py-1 text-xs inline-flex items-center">
+          <Clock className="mr-1 inline-block size-3" />
+          <ClosingBadge poll={poll} />
+        </span>
       </div>
       <div className="w-full flex items-center justify-end gap-2">
         {user?.id === poll.createdBy && <DeletePoll pollId={poll._id} />}
         {!closesAlready && (
-          <Button variant="link" size="sm" asChild>
+          <Button variant="default_light" size="sm" effect="shineHover" asChild>
             <Link href={`/polls/${poll._id}`}>
               Vote
               <ArrowRight />
@@ -48,14 +55,14 @@ export function PollRender({ poll }: { poll: PollType }) {
         {poll.options.map((option, index) => (
           <div
             key={option.concat(index.toString())}
-            className="group w-full flex items-center rounded-sm bg-white/20"
+            className="group w-full flex items-center rounded-sm bg-secondary/5 h-8"
           >
             <div
               className="flex items-center rounded transition-all bg-opacity-40 h-8 bg-primary/20"
               style={{ width: `${parseVotes(poll.votes, option).percent}%` }}
             >
               <div className="absolute left-2 pr-4 flex max-w-full">
-                <p className="whitespace-nowrap truncate text-sm font-semibold text-gray-700">
+                <p className={cn("whitespace-nowrap truncate text-sm font-medium ", parseVotes(poll.votes, option).percent > 0 ? "text-primary" : "text-muted-foreground")}>
                   {option}
                 </p>
               </div>

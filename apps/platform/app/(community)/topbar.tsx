@@ -40,7 +40,7 @@ export default function TopNavPanel() {
   const pathname = usePathname();
 
   return (
-    <nav className="bg-card rounded-lg border-b border-border max-w-4xl w-full my-10 mx-auto flex items-center justify-between snap-x snap-mandatory overflow-x-auto overflow-y-hidden scrollbar-0 scrollbar-thumb-muted/0 scrollbar-track-transparent">
+    <nav className="bg-card rounded-lg border-b border-border max-w-4xl w-full my-10 mx-auto flex items-center justify-between snap-x snap-mandatory overflow-x-auto overflow-y-hidden scrollbar-0 scrollbar-thumb-muted/0 scrollbar-track-transparent no-scrollbar">
       {topName_links.map((link) => {
         const active = pathname.includes(link.href) && link.href !== "/";
 

@@ -22,7 +22,7 @@ export default async function CommunityLayout({
     <div className="min-h-svh h-full w-full @container/community py-20 max-w-7xl mx-auto px-3">
       <Navbar user={session.user} />
       <TopNavPanel />
-      <main className="flex-1 @container flex-col items-center justify-start space-y-4">
+      <main className="flex-1 @container flex-col items-center justify-start space-y-4 mx-auto">
         {children}
       </main>
       <Footer />

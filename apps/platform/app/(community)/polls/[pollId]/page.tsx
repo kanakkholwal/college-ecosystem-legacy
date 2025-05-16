@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Clock, Info } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getSession } from "src/lib/auth-server";
@@ -9,6 +9,7 @@ import { PollRender } from "../components/poll-component";
 import Polling from "./polling";
 
 import type { Metadata } from "next";
+import { ClosingBadge } from "../components/poll-timer";
 
 export async function generateMetadata({
   params,
@@ -51,24 +52,34 @@ export default async function Dashboard({ params }: Props) {
   const closesAlready = new Date(poll.closesAt) < new Date();
 
   return (
-    <>
-      <Button className="my-5" variant="default_light" size="sm" asChild>
-        <Link href="/polls">
-          <ArrowLeft />
-          Back to Polls
-        </Link>
-      </Button>
-      <div className="w-full flex flex-col justify-start whitespace-nowrap gap-2 bg-white/20 backdrop-blur-lg rounded-lg p-6">
-        <h3 className="text-xl font-semibold">{poll.question}</h3>
-        <p>{poll.description}</p>
-        <p className="space-x-3">
-          <Badge variant="info_light">
+    <div className="max-w-6xl mx-auto w-full grid justify-start items-start gap-4 grid-cols-1">
+      <div>
+        <Button variant="link" size="sm" asChild>
+          <Link href="/polls">
+            <ArrowLeft />
+            Back to Polls
+          </Link>
+        </Button>
+
+      </div>
+      <div className="w-full flex flex-col justify-start whitespace-nowrap gap-2 bg-card border rounded-lg p-6">
+        <div>
+          <h3 className="text-lg font-semibold">{poll.question}</h3>
+          <p className="text-sm text-muted-foreground">{poll.description}</p>
+        </div>
+        <div className="space-x-3">
+          <span className="rounded-md bg-muted text-muted-foreground px-2 py-1 text-xs inline-flex items-center">
+            <Info className="mr-1 inline-block size-3" />
             {poll.multipleChoice ? "Multiple choice" : "Single choice"}
-          </Badge>
+          </span>
+          <span className="rounded-md bg-muted text-muted-foreground px-2 py-1 text-xs inline-flex items-center">
+            <Clock className="mr-1 inline-block size-3" />
+            <ClosingBadge poll={poll} />
+          </span>
           {closesAlready && (
             <Badge variant="destructive_light">Poll closed</Badge>
           )}
-        </p>
+        </div>
         {closesAlready ? (
           <PollRender poll={poll} />
         ) : (
@@ -81,6 +92,6 @@ export default async function Dashboard({ params }: Props) {
           )
         )}
       </div>
-    </>
+    </div>
   );
 }

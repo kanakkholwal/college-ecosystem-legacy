@@ -42,7 +42,10 @@ type taskDataType = {
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 // helper
-const sendEvent = (res: Response, event: string, data: taskDataType | string) => {
+const sendEvent = (res: Response, event: string, data: {
+  data: taskDataType | null,
+  error?: string | null,
+}) => {
   res.write(`event: ${event}\n`);
   res.write(`data: ${JSON.stringify(data)}\n\n`);
 };
@@ -51,37 +54,43 @@ const BATCH_SIZE = 10; // Number of roll numbers to process in each batch
 
 
 export async function resultScrapingSSEHandler(req: Request, res: Response) {
-    const list_type = req.query.list_type as string || LIST_TYPE.BACKLOG;
-    const task_resume_id = req.query.task_resume_id as string | undefined;
-    
-    if (Object.values(LIST_TYPE).indexOf(list_type) === -1) {
-        return res.status(400).send("Invalid list type");
-    }
+  const list_type = req.query.list_type as string || LIST_TYPE.BACKLOG;
+  const task_resume_id = req.query.task_resume_id as string | undefined;
 
-    res.set({
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        "Connection": "keep-alive",
-    });
-    res.flushHeaders();
-    try {
+  if (Object.values(LIST_TYPE).indexOf(list_type) === -1) {
+    return res.status(400).send("Invalid list type");
+  }
 
-        // res.setHeader("Access-Control-Allow-Origin", "*");
-        await dbConnect();
-            const roll_list = await getListOfRollNos(list_type); // should return Set<string>
+  res.set({
+    "Content-Type": "text/event-stream",
+    "Cache-Control": "no-cache",
+    "Connection": "keep-alive",
+  });
+  res.flushHeaders();
+  try {
+
+    // res.setHeader("Access-Control-Allow-Origin", "*");
+    await dbConnect();
+    const roll_list = await getListOfRollNos(list_type); // should return Set<string>
     if (!roll_list || roll_list.size === 0) {
-      sendEvent(res, "error", "No roll numbers to process.");
+      sendEvent(res, "error", {
+        data: null,
+        error: "No roll numbers found for the selected list type.",
+      });
       res.end();
       return;
     }
-    
+
     let taskId: string;
     let taskData: taskDataType;
 
     if (task_resume_id) {
       const task = await ResultScrapingLog.findOne({ taskId: task_resume_id });
       if (!task) {
-        sendEvent(res, "error", "Task not found.");
+        sendEvent(res, "error", {
+          data: null,
+          error: "Task not found.",
+        });
         res.end();
         return;
       }
@@ -116,7 +125,10 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
       await ResultScrapingLog.create(taskData);
     }
 
-    sendEvent(res, "task_status", taskData);
+    sendEvent(res, "task_status", {
+      data: taskData,
+      error: null,
+    });
 
     const rollArray = Array.from(roll_list);
     for (let i = 0; i < rollArray.length; i += BATCH_SIZE) {
@@ -152,14 +164,32 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
         }
       );
 
-      sendEvent(res, "task_status", taskData);
+      sendEvent(res, "task_status", {
+        data: taskData,
+        error: null,
+      });
       await sleep(2000);
+      req.on('close', async () => {
+        console.log('Client disconnected');
+        taskData.status = TASK_STATUS.CANCELLED;
+        taskData.endTime = Date.now();
+        await ResultScrapingLog.updateOne(
+          { taskId },
+          {
+            $set: {
+              endTime: taskData.endTime,
+              status: TASK_STATUS.CANCELLED,
+            },
+          }
+        );
+        res.end();
+      });
     }
 
     taskData.status = TASK_STATUS.COMPLETED;
     taskData.endTime = Date.now();
 
-await ResultScrapingLog.updateOne(
+    await ResultScrapingLog.updateOne(
       { taskId },
       {
         $set: {
@@ -169,13 +199,17 @@ await ResultScrapingLog.updateOne(
       }
     );
 
-    sendEvent(res, "task_status", taskData);
+    sendEvent(res, "task_status", {
+      data: taskData,
+      error: null,
+    });
+    res.write("event: task_completed\n");
     res.end();
 
-    } catch (error) {
-        console.error("Error in SSE handler:", error);
-        res.status(500).send("Internal Server Error");
-    }
+  } catch (error) {
+    console.error("Error in SSE handler:", error);
+    res.status(500).send("Internal Server Error");
+  }
 }
 async function getListOfRollNos(list_type: listType): Promise<Set<string>> {
   let query = {};

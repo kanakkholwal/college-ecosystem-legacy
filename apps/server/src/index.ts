@@ -67,7 +67,11 @@ for (const socket_server in socketServers) {
   io.on("connection", handler(io));
 }
 
+const isDev = process.env.NODE_ENV !== "production";
+
 // Start the server
 server.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on port ${PORT}`);
+  if (isDev) {
+    console.log(`Running in development mode at http://localhost:${PORT}`);
+  }
 });

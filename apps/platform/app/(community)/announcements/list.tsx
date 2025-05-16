@@ -27,12 +27,12 @@ export default function AnnouncementsList({
                 </span>{" "}
                 in
                 <Link
-                  href={`/announcements/c/${announcement.relatedFor}`}
+                  href={`/announcements?c=${announcement.relatedFor}`}
                   className="text-primary hover:underline"
                 >
                   {` ${announcement.relatedFor}`}
                 </Link>
-                {` by `}
+                {" by "}
                 <Link
                   href={`/u/${announcement.createdBy.username}`}
                   className="text-primary hover:underline"

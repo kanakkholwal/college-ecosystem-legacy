@@ -273,6 +273,40 @@ export async function getHostel(slug: string): Promise<{
   }
 }
 
+
+export async function getHostelById(
+  id: string
+): Promise<{
+  success: boolean;
+  hostel: HostelType | null;
+  error?: object | null;
+}> {
+  try {
+    await dbConnect();
+    const hostel = JSON.parse(
+      JSON.stringify(await HostelModel
+        .findById(id)
+        .lean())
+    ) as HostelType | null;
+    if (!hostel) {
+      return Promise.resolve({ success: false, hostel: null ,error: null});
+    }
+   
+    return Promise.resolve({
+      success: true,
+      hostel: JSON.parse(
+        JSON.stringify(hostel)
+      ),
+      error: null,
+    });
+  } catch (err) {
+    return Promise.reject({
+      success: false,
+      hostel: null,
+      error: JSON.parse(JSON.stringify(err)),
+    });
+  }
+}
 interface getHostelByUserType {
   success: boolean;
   message: string;

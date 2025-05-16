@@ -182,7 +182,7 @@ function PollForm({ className }: { className?: string }) {
                   name={`options.${index}`}
                   render={({ field }) => (
                     <FormItem className="flex flex-row space-x-3 space-y-0">
-                      <FormLabel className="bg-slate-200 rounded-md p-3 inline-flex justify-center items-center mb-0">
+                      <FormLabel className="bg-muted aspect-square rounded-md p-3 inline-flex justify-center items-center mb-0">
                         {index + 1}
                       </FormLabel>
                       <FormControl>
@@ -197,6 +197,7 @@ function PollForm({ className }: { className?: string }) {
                         type="button"
                         size="icon"
                         variant="default_light"
+                        disabled={fields.length <= 2}
                         onClick={() => remove(index)}
                       >
                         -

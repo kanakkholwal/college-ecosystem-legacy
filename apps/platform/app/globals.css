@@ -152,11 +152,13 @@ html::-webkit-scrollbar {
 }
 
 html::-webkit-scrollbar-track {
-    background-color: #fafafa;
+    /* background-color: #fafafa; */
+    @apply bg-slate-100 dark:bg-slate-800;
 }
 
 html::-webkit-scrollbar-thumb {
-    background-color: #ccc;
+    /* background-color: #ccc; */
+    @apply bg-slate-400 dark:bg-slate-700;
 }
 
 html::-webkit-scrollbar-thumb:hover {
@@ -172,7 +174,10 @@ html::-webkit-scrollbar-thumb:hover {
         @apply bg-background text-foreground;
     }
 }
-
+.no-scrollbar {
+  @apply [scrollbar-width:none] [&::-webkit-scrollbar]:hidden;
+  
+}
 body {
     font-weight: 400;
     font-size: 16px;

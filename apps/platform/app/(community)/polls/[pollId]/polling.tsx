@@ -80,17 +80,17 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
         const { count, percent } = parseVotes(voteData, option);
 
         return (
-          // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-          <div key={`${option}-${index}`} className="relative bg-white/20">
+          <div key={`${option}-${index.toString()}`} className="relative bg-secondary/5 rounded-lg">
             <div
-              className="z-[-1] h-full bg-primary/20 rounded-lg absolute top-0 bottom-0 left-0 right-auto transition-all bg-opacity-40 dark:bg-dark-primary/20"
+              // className="z-[-1] h-full bg-primary/20 rounded-lg absolute top-0 bottom-0 left-0 right-auto transition-all bg-opacity-40 dark:bg-dark-primary/20"
+              className="flex items-center rounded transition-all bg-opacity-40 h-full bg-primary/20 absolute inset-0"
               style={{ width: `${percent}%` }}
             />
             <div className="grid gap-2  p-4 w-full h-full">
-              <h3 className="text-xl font-semibold">{option}</h3>
+              <h3 className="text-lg font-semibold">{option}</h3>
               <div className="flex justify-between items-center">
-                <p className="text-sm font-semibold">{percent.toFixed(2)}%</p>
-                <p className="text-sm font-semibold text-primary">
+                <p className="text-sm font-medium text-muted-foreground">{percent.toFixed(2)}%</p>
+                <p className="text-sm font-medium text-primary">
                   {count} votes
                 </p>
               </div>

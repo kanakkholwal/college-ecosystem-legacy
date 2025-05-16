@@ -6,12 +6,12 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full gap-1 px-2 py-0.5  capitalize whitespace-nowrap font-semibold transition-colors",
+  "inline-flex items-center rounded-lg gap-1 px-2 py-0.5 whitespace-nowrap font-medium transition-colors",
   {
     variants: {
       variant: {
         default:
-          "border-primary bg-primary text-primary-foreground hover:bg-primary/80",
+          "bg-muted text-muted-foreground",
         default_light:
           "border-primary/10 bg-primary/10 text-primary hover:bg-primary/20 dark:backdrop-blur",
         success_light: "bg-green-500/10 text-green-500 hover:bg-green-500/20",

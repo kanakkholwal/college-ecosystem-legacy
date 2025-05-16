@@ -27,7 +27,7 @@ export default async function PollsPage() {
   ]);
 
   return (
-    <Tabs defaultValue="opened" className="w-full">
+    <Tabs defaultValue="opened" className="w-full grid gap-4">
       <TabsList className="max-w-5xl mx-auto w-full">
         <TabsTrigger value="opened" className="text-md w-full">
           Open Polls
@@ -39,7 +39,7 @@ export default async function PollsPage() {
           By You
         </TabsTrigger>
       </TabsList>
-      <div className="mt-5 rounded-lg p-4 @container/polls">
+      <div className="mt-5 rounded-lg p-4 @container/polls max-w-6xl mx-auto w-full">
         <TabsContent value="opened">
           <div className="w-full flex justify-between items-center whitespace-nowrap gap-2">
             <h3 className="text-xl font-semibold">Open polls</h3>

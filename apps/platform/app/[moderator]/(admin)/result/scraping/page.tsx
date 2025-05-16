@@ -9,21 +9,19 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Info, Pause, Play, Wifi, WifiOff, X } from "lucide-react";
+import { LoaderCircle } from "lucide-react";
 
-import { useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { useCallback, useState } from "react";
 
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import ConditionalRender from "@/components/utils/conditional-render";
+import { format } from "date-fns";
+import { useSearchParams } from "next/navigation";
+import toast from "react-hot-toast";
 
 const BASE_SERVER_URL = process.env.NEXT_PUBLIC_BASE_SERVER_URL;
 
-const socket = io(BASE_SERVER_URL, {
-  path: "/ws/results-scraping",
-  withCredentials: true,
-  transports: ["websocket"], // or ['websocket', 'polling']
-  // autoConnect: false,
-});
+
 
 const EVENTS = {
   TASK_STATUS: "task_status",
@@ -72,14 +70,22 @@ type taskDataType = {
   list_type: listType;
   taskId: string;
 };
+
+
+const sseEndpoint = new URL(`${BASE_SERVER_URL}/api/results/scrape-sse`);
+
+
 export default function ScrapeResultPage() {
-  const [connected, setConnected] = useState(socket.connected);
-  const [transportName, setTransportName] = useState(
-    socket.io.engine.transport.name
-  );
+  const searchParams = useSearchParams();
+  const taskId = searchParams.get("taskId");
+  const taskType = searchParams.get("list_type");
+
   const [listType, setListType] = useState<
     (typeof LIST_TYPE)[keyof typeof LIST_TYPE]
   >(LIST_TYPE.BACKLOG);
+
+  const [streaming, setStreaming] = useState(false);
+
   const [error, setError] = useState<string | null>(null);
   const [taskList, setTaskList] = useState<taskDataType[]>([]);
 
@@ -100,241 +106,180 @@ export default function ScrapeResultPage() {
     taskId: "",
   });
 
-  const handleAction = (id: string, type: string) => {
-    console.log("action:", id, type);
-    setError(null);
-    const acceptableActions: string[] = [
-      EVENTS.TASK_PAUSED_RESUME,
-      EVENTS.TASK_CANCEL,
-      EVENTS.TASK_RETRY_FAILED,
-    ];
-    if (acceptableActions.includes(type)) {
-      socket.emit(type, id);
-    }
-  };
 
-  useEffect(() => {
-    socket.on("connect", () => {
-      console.log("connected");
-      setConnected(true);
-      setTransportName(socket.io.engine.transport.name);
+  const startScraping = (taskType: string, taskId: string) => {
+    if (taskId) {
+      sseEndpoint.searchParams.append("task_resume_id", taskId);
+    }
+    if (!taskType) {
+      toast.error("Please select a list type");
+      return;
+    }
+    sseEndpoint.searchParams.append("list_type", taskType);
+    const eventSource = new EventSource(sseEndpoint.toString(), {
+      withCredentials: true,
     });
-    socket.on("disconnect", () => {
-      console.log("disconnected");
-      setConnected(false);
-      setTaskData({
-        ...taskData,
-        status: TASK_STATUS.IDLE,
-      });
-    });
-    socket.on("reconnect", () => {
-      console.log("reconnected");
-      setConnected(true);
-      setTransportName(socket.io.engine.transport.name);
-    });
-    socket.on("task_error", (message) => {
-      console.log("task_error:", message);
-      setError(message);
-    });
-    socket.on("task_list", (message) => {
-      console.log("---task_list---");
-      console.log(message);
-      setTaskList(message);
-      console.log("---task_list---");
-    });
-    socket.on("task_paused_resume", (message) => {
-      console.log("task_paused_resume:", message);
-      socket.emit(EVENTS.TASK_START, message);
-    });
-    socket.on(EVENTS.TASK_STATUS, (message) => {
-      console.log(EVENTS.TASK_STATUS);
-      console.table(message);
-      setTaskData({
-        ...message,
-      });
-    });
+    eventSource.onopen = () => {
+      console.log("SSE connection opened");
+      setStreaming(true);
+    };
+    eventSource.onmessage = (event) => {
+      setStreaming(true);
+      console.log("SSE data", event);
+
+      const data = JSON.parse(event.data);
+      if (data.event === "task_list") {
+        setTaskList(data.data);
+      } else if (data.event === "task_status") {
+        setTaskData(data.data);
+      } else if (data.event === "error") {
+        setError(data.error);
+        toast.error(data.error);
+        setStreaming(false);
+      }
+    };
+    eventSource.onerror = (error) => {
+      console.error("SSE error:", error);
+      setError("An error occurred while processing the request.");
+      setStreaming(false);
+      eventSource.close();
+    };
 
     return () => {
-      socket.off("connect");
-      socket.off("disconnect");
-      socket.off("reconnect");
-      socket.off(EVENTS.TASK_STATUS);
-      socket.off("task_error");
-      socket.off("task_list");
+      eventSource.close();
     };
-  }, [taskData]);
+  };
+
+  const handleAction = useCallback((taskId: string, action: string) => {
+    if (!taskId) return;
+
+    if (!action) return;
+    sseEndpoint.searchParams.append("taskId", taskId);
+    sseEndpoint.searchParams.append("action", action);
+
+    const eventSource = new EventSource(sseEndpoint.toString(), {
+      withCredentials: true,
+    });
+    eventSource.onopen = () => {
+      console.log("SSE connection opened");
+    };
+    eventSource.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      console.log("SSE data", event);
+      if (data.event === "task_list") {
+        setTaskList(data.data);
+      } else if (data.event === "task_status") {
+        setTaskData(data.data.data);
+      } else if (data.event === "error") {
+        setError(data.error);
+        toast.error(data.error);
+        setStreaming(false);
+      }
+    };
+    eventSource.onerror = (error) => {
+      console.error("SSE error:", error);
+      setError("An error occurred while processing the request.");
+    };
+    return () => {
+      setStreaming(false);
+      eventSource.close();
+    };
+
+  }, []);
+
 
   return (
     <>
-      <Alert suppressHydrationWarning={true}>
-        {connected ? (
-          <Wifi className="size-6 !text-green-500" />
-        ) : (
-          <WifiOff className="size-6 !text-red-500" />
-        )}
-        <AlertTitle>Connection ({transportName})</AlertTitle>
-        <AlertDescription className="flex items-center space-x-2">
-          {connected ? (
-            <Badge variant="success">Connected</Badge>
-          ) : (
-            <Badge variant="destructive">Disconnected</Badge>
-          )}
-        </AlertDescription>
-      </Alert>
-      <section className="p-6 border border-border rounded-lg shadow space-y-5">
-        <div
-          aria-label="header"
-          className="text-lg font-semibold border-b pb-5"
-        >
-          Scraping Result{" "}
-          <Badge variant="info" className="ml-2">
-            {taskData.status}
-          </Badge>
+      <section className="p-6 border border-border rounded-lg shadow space-y-4 bg-card">
+        <div>
+          <h3 className="text-lg font-semibold">
+            Scrape Result
+          </h3>
         </div>
-        {error && (
-          <p className="text-red-500 p-2 border border-red-500 bg-red-100 rounded-md text-sm">
-            {error}
-            <X
-              className="size-4 !text-red-500 ml-auto inline-block cursor-pointer"
-              role="button"
-              onClick={() => setError(null)}
-            />
-          </p>
-        )}
-        {taskData?.taskId ? (
-          <DisplayTask task={taskData} />
-        ) : (
-          <div className="grid grid-cols-1 gap-2 bg-card p-3 rounded-md shadow">
-            <div className="flex gap-4">
-              <h5 className="text-sm font-semibold">#No Task Running</h5>
-            </div>
-          </div>
-        )}
 
         <div
           aria-label="footer"
-          className="flex items-center space-x-2 pt-5 border-t"
+          className="flex items-center space-x-2"
         >
-          {taskData.taskId && (
-            <Button
-              size="sm"
-              variant="default_light"
-              onClick={() => {
-                if (!taskData.taskId) return;
-                socket.emit(EVENTS.TASK_STATUS, taskData.taskId);
-                console.log("task status requested");
-              }}
-            >
-              <Info />
-              Task Status
-            </Button>
-          )}
-          <ConditionalRender condition={taskData.status === TASK_STATUS.IDLE}>
-            <Select
-              value={listType}
-              onValueChange={(value) =>
-                setListType(value as (typeof LIST_TYPE)[keyof typeof LIST_TYPE])
-              }
-            >
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="List Type" />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(LIST_TYPE).map(([key, value]) => {
-                  return (
-                    <SelectItem key={key} value={value}>
-                      {key}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
 
-            <Button
-              size="sm"
-              onClick={() => {
-                console.log("start scraping", listType);
-                socket.emit(EVENTS.TASK_START, listType);
-              }}
-            >
-              Start new Scraping Task
-            </Button>
-          </ConditionalRender>
-          <ConditionalRender
-            condition={taskData.status === TASK_STATUS.SCRAPING}
+          <Select
+            value={listType}
+            onValueChange={(value) =>
+              setListType(value as (typeof LIST_TYPE)[keyof typeof LIST_TYPE])
+            }
           >
-            <Button
-              size="sm"
-              variant="default_light"
-              onClick={() => {
-                socket?.emit(EVENTS.TASK_PAUSE, taskData.taskId);
-                console.log("pause scraping", listType);
-              }}
-            >
-              <Pause />
-              Pause Scraping
-            </Button>
-            <Button
-              size="sm"
-              variant="destructive_light"
-              onClick={() => {
-                socket?.emit(EVENTS.TASK_CANCEL, taskData.taskId);
-                console.log("cancel scraping", listType);
-              }}
-            >
-              <X />
-              Cancel Scraping
-            </Button>
-          </ConditionalRender>
-          <ConditionalRender condition={taskData.status === TASK_STATUS.PAUSED}>
-            <Button
-              size="sm"
-              onClick={() => {
-                socket?.emit(EVENTS.TASK_START, listType);
-                console.log("resume scraping", listType);
-              }}
-            >
-              <Play />
-              Start Scraping
-            </Button>
-          </ConditionalRender>
-          <ConditionalRender condition={taskData.status === TASK_STATUS.FAILED}>
-            <Button
-              size="sm"
-              onClick={() => {
-                socket?.emit(EVENTS.TASK_START, listType);
-                console.log("retry scraping", listType);
-              }}
-            >
-              Retry Scraping
-            </Button>
-            <Button
-              size="sm"
-              variant="destructive_light"
-              onClick={() => {
-                socket?.emit(EVENTS.TASK_CANCEL, listType);
-                console.log("cancel scraping", listType);
-              }}
-            >
-              <X />
-              Cancel Scraping
-            </Button>
-          </ConditionalRender>
-          <ConditionalRender
-            condition={taskData.status === TASK_STATUS.COMPLETED}
+            <SelectTrigger className="w-[180px]">
+              <SelectValue placeholder="List Type" />
+            </SelectTrigger>
+            <SelectContent>
+              {Object.entries(LIST_TYPE).map(([key, value]) => {
+                return (
+                  <SelectItem key={key} value={value}>
+                    {key}
+                  </SelectItem>
+                );
+              })}
+            </SelectContent>
+          </Select>
+
+          <Button
+            size="sm"
+            onClick={() => {
+              console.log("start scraping", listType);
+              startScraping(listType, taskId || "");
+            }}
           >
-            <Button
-              size="sm"
-              onClick={() => {
-                socket?.emit(EVENTS.TASK_START, listType);
-                console.log("start scraping", listType);
-              }}
-            >
-              Start Scraping
-            </Button>
-          </ConditionalRender>
+            Start new Scraping Task
+          </Button>
         </div>
+        <ConditionalRender condition={streaming}>
+          <Alert variant="info" className="w-full">
+            <LoaderCircle className="h-4 w-4 animate-spin mr-2 text-primary" />
+            <AlertTitle>Scraping in progress</AlertTitle>
+            <AlertDescription>
+              Scraping is in progress. Please wait for it to complete.
+            </AlertDescription>
+          </Alert>
+        </ConditionalRender>
       </section>
+
+      <Card id="task-status">
+        <CardHeader>
+          <CardTitle>
+            Task Status ({taskData.taskId}){" "}
+            {taskData.status && (
+              <Badge variant="info" className="ml-2">
+                {taskData.status}
+              </Badge>
+            )}
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="grid grid-cols-6 gap-4">
+          <div>
+            <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">
+              Processable
+            </div>
+            <div className="text-center p-2">
+              <Badge variant="info">{taskData.processable}</Badge>
+            </div>
+          </div>
+
+        </CardContent>
+        <CardFooter>
+          {format(
+            new Date(taskData.startTime),
+            "dd/MM/yyyy HH:mm:ss"
+          )}
+          {taskData.endTime && (
+            <span className="ml-2">
+              {` - ${format(
+                new Date(taskData.endTime),
+                "dd/MM/yyyy HH:mm:ss"
+              )}`}
+            </span>
+          )}
+        </CardFooter>
+      </Card>
 
       <section className="p-6 border border-border rounded-lg shadow">
         <div
@@ -349,29 +294,7 @@ export default function ScrapeResultPage() {
               </Badge>
             )}
           </div>
-          <div className="flex gap-2">
-            <Button
-              size="sm"
-              disabled={!connected}
-              onClick={() => {
-                socket.emit("task_list");
-                console.log("task list requested");
-              }}
-            >
-              Refresh
-            </Button>
-            <Button
-              size="sm"
-              disabled={!connected}
-              variant="destructive_light"
-              onClick={() => {
-                socket.emit(EVENTS.TASK_DELETE_CANCELLED);
-                console.log("task delete cancelled requested");
-              }}
-            >
-              Delete Cancelled
-            </Button>
-          </div>
+
         </div>
         {taskList.length === 0 && (
           <div className="grid grid-cols-1 gap-2 bg-primary/10 text-primary text-center p-3 rounded-md shadow">
