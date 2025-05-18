@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:20.12.2-alpine AS builder
+FROM node:22-alpine AS builder
 
 # Set working directory
 WORKDIR /node-server
@@ -12,7 +12,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production
-FROM node:20.12.2-alpine
+FROM node:22-alpine
 
 # Set working directory
 WORKDIR /node-server
@@ -42,3 +42,8 @@ USER appuser
 
 # Command to run the application
 CMD ["npm", "run", "start"]
+
+# Build command
+#  docker build --tag college-ecosystem-server:latest .
+# Run command
+#  docker run -p 8080:8080 college-ecosystem-server:latest

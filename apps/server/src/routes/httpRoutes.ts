@@ -1,5 +1,5 @@
 import { type RequestHandler, Router } from "express";
-import { resultScrapingSSEHandler } from "~/controllers/sse-scraping";
+import { resultScrapingSSEHandler } from "../controllers/sse-scraping";
 import {
   getDepartments,
   getDepartmentsList,
