@@ -20,7 +20,6 @@ WORKDIR /node-server
 
 # Copy only necessary files for production
 COPY package*.json ./
-COPY --from=builder /node-server/node_modules ./node_modules
 COPY --from=builder /node-server/dist ./dist
 
 # Set environment to production
