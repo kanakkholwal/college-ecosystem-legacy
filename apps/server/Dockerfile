@@ -6,8 +6,7 @@ WORKDIR /node-server
 
 # Install dependencies first for caching
 COPY package*.json ./
-RUN npm install
-
+RUN npm install && npm cache clean --force
 # Copy source files and build TypeScript
 COPY . .
 RUN npm run build
