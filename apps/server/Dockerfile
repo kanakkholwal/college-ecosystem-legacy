@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:22-alpine AS builder
+FROM node:24-alpine AS builder
 
 # Set working directory
 WORKDIR /node-server
@@ -12,13 +12,14 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Production
-FROM node:22-alpine
+FROM node:24-alpine
 
 # Set working directory
 WORKDIR /node-server
 
 # Copy only necessary files for production
 COPY package*.json ./
+COPY --from=builder /node-server/node_modules ./node_modules
 COPY --from=builder /node-server/dist ./dist
 
 # Set environment to production

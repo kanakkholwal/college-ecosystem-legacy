@@ -1,5 +1,5 @@
 # ----------- Build Stage -----------
-FROM golang:1.22-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
 
@@ -26,10 +26,12 @@ WORKDIR /app
 RUN apk add --no-cache ca-certificates
 
 # Copy built binary from builder
-COPY --from=builder /app/go-server .
+COPY --from=builder /app/server .
 
 # Expose the port Fiber is running on
-EXPOSE 3000
+EXPOSE 8080
 
 # Run the server binary
-CMD ["./server"]
+# CMD ["./server"]
+ENTRYPOINT ["./server"]
+# ----------- End of Dockerfile -----------

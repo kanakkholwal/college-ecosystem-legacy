@@ -31,5 +31,5 @@ func main() {
 
 	routes.RegisterRoutes(app.Group("/api"))
 
-	log.Fatal(app.Listen(":8080"))
+	log.Fatal(app.Listen("0.0.0.0:8080"))
 }

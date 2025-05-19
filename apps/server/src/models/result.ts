@@ -87,6 +87,6 @@ const ResultSchema: Schema = new Schema(
 );
 
 const ResultModel =
-  mongoose.models.Result || mongoose.model<IResultType>("Result", ResultSchema);
+  mongoose.models?.Result || mongoose.model<IResultType>("Result", ResultSchema);
 
 export default ResultModel;
