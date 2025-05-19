@@ -22,7 +22,7 @@ import toast from "react-hot-toast";
 import { LuMail } from "react-icons/lu";
 import { authClient } from "src/lib/auth-client";
 import * as z from "zod";
-import { ORG_DOMAIN } from "~/project.config";
+import { orgConfig } from "~/project.config";
 
 const FormSchema = z.object({
   email: z
@@ -30,8 +30,8 @@ const FormSchema = z.object({
     .email({ message: "Invalid email format" })
     .min(5, { message: "Email must be at least 5 characters long" })
     .max(100, { message: "Email cannot exceed 100 characters" })
-    .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
-      message: `Email must end with @${ORG_DOMAIN}`,
+    .refine((val) => val.endsWith(orgConfig.mailSuffix), {
+      message: `Email must end with ${orgConfig.mailSuffix}`,
     }),
 });
 
@@ -116,7 +116,7 @@ export default function ForgotPassword() {
                       </FormLabel>
                       <FormControl className="relative">
                         <Input
-                          placeholder={`Email (e.g. user@${ORG_DOMAIN})`}
+                          placeholder={`Email (e.g. user${orgConfig.mailSuffix})`}
                           type="email"
                           autoCapitalize="none"
                           autoComplete="email"

@@ -13,7 +13,7 @@ import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiOutlineDownload } from "react-icons/hi";
 import type { OutPassType } from "~/models/hostel_n_outpass";
-import { COLLEGE_NAME } from "~/project.config";
+import { orgConfig } from "~/project.config";
 
 interface OutpassRenderProps {
   outpass: OutPassType;
@@ -131,7 +131,7 @@ export default function OutpassRender({
         <div className={classNames.rootContainer}>
           <div ref={outpassRef} className={classNames.root}>
             <header className={classNames.header}>
-              <h1 className={classNames.header_clg_title}>{COLLEGE_NAME}</h1>
+              <h1 className={classNames.header_clg_title}>{orgConfig.name}</h1>
               <h2 className={classNames.header_hostel_title}>
                 Office of {outpass.hostel.name}
               </h2>

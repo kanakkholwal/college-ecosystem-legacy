@@ -15,11 +15,11 @@ const nextConfig = {
     reactStrictMode: true,
     crossOrigin: 'anonymous',
     // output: "standalone",
-    logging: {
+    logging: (process.env.NODE_ENV !== "production" ? false :({
         fetches: {
             fullUrl: false
         }
-    },
+    })),
     images: {
         remotePatterns: [
             {

@@ -13,7 +13,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ResultTypeWithId, Semester } from "src/models/result";
 import { getResultByRollNo } from "~/actions/result";
-import { ORG_DOMAIN } from "~/project.config";
+import { orgConfig } from "~/project.config";
 import type { Course } from "~/types/result";
 import { CGPIChart } from "./components/chart";
 
@@ -77,7 +77,7 @@ export default async function ResultsPage(props: Props) {
             <h5 className="text-lg ml-4 font-semibold text-muted-foreground uppercase">
               {result.rollNo}
               <Link
-                href={`mailto:${result.rollNo}@${ORG_DOMAIN}`}
+                href={`mailto:${result.rollNo}${orgConfig.mailSuffix}`}
                 className="inline-block text-primary hover:text-primaryLight ease-in duration-300 align-middle ml-2 -mt-1"
                 title={"Contact via mail"}
               >

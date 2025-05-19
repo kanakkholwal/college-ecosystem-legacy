@@ -5,7 +5,7 @@ import { LoaderCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import type { OutPassType } from "~/models/hostel_n_outpass";
-import { ORG_DOMAIN } from "~/project.config";
+import { orgConfig } from "~/project.config";
 import { columns } from "./outpass-request_columns";
 
 interface PageProps {
@@ -55,7 +55,7 @@ export default function DisplayOutPasses(props: PageProps) {
           | "contains"
           | "starts_with"
           | "ends_with") || "ends_with",
-      searchValue: searchParams.get("searchValue") || `@${ORG_DOMAIN}`,
+      searchValue: searchParams.get("searchValue") || orgConfig.mailSuffix,
       offset: Number.parseInt(searchParams.get("offset") || "0", 0),
       limit: Number.parseInt(searchParams.get("limit") || "50", 50),
       sortBy: searchParams.get("sortBy") || "createdAt",

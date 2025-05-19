@@ -186,7 +186,7 @@ export const auth = betterAuth({
   // advanced: {
   //   crossSubDomainCookies: {
   //     enabled: process.env.NODE_ENV === "production",
-  //     domain: process.env.NODE_ENV === "production" ? ORG_DOMAIN : undefined,
+  //     domain: process.env.NODE_ENV === "production" ? orgConfig.domain : undefined,
   //   },
   // },
   plugins: [

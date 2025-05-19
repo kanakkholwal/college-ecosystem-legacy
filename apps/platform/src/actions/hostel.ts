@@ -24,7 +24,7 @@ import {
   type IHostelType,
 } from "~/models/hostel_n_outpass";
 import ResultModel from "~/models/result";
-import { ORG_DOMAIN } from "~/project.config";
+import { orgConfig } from "~/project.config";
 
 const allowedRolesForHostel = [
   ROLES.ADMIN,
@@ -542,7 +542,7 @@ export async function importStudentsWithCgpi(
             document: {
               rollNumber: student.rollNo,
               name: student.name,
-              email: `${student.rollNo}@${ORG_DOMAIN}`,
+              email: `${student.rollNo}@${orgConfig.domain}`,
               hostelId,
               gender: hostel.gender,
               roomNumber: "UNKNOWN",

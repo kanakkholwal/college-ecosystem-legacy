@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { orgConfig } from "~/project.config";
 
 export const ROLES = {
   ADMIN: "admin",
@@ -28,11 +29,10 @@ export const GENDER = {
   NOT_SPECIFIED: "not_specified",
 };
 
-import { ORG_DOMAIN } from "~/project.config";
 
 export const emailSchema = z
   .string()
   .email()
-  .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
-    message: `Email must end with @${ORG_DOMAIN}`,
+  .refine((val) => val.endsWith(`@${orgConfig.domain}`), {
+    message: `Email must end with @${orgConfig.domain}`,
   });
