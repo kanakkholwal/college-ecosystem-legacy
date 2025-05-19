@@ -1,8 +1,9 @@
-@import 'tailwindcss';
+@import "tailwindcss";
+
 @import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
-@plugin "tailwindcss-motion";
 
+@source "../app";
 
 
 /* add this to copy the configuration settings from your project */
@@ -14,11 +15,12 @@
 
 
 
-:root,[data-theme="light"],
+:root,
+[data-theme="light"],
 [data-theme="glass_light"] {
     --background: hsl(0deg 0% 96.08%);
     --foreground: hsl(0deg 0% 9.8%);
-    --card: hsl(0 0% 100%);
+    --card: hsl(0, 0%, 100%);
     --card-foreground: hsl(0deg 0% 9.8%);
     --popover: hsl(0 0% 100%);
     --popover-foreground: hsl(0deg 0% 9.8%);
@@ -45,6 +47,9 @@
     --chart-info: hsl(188.74deg 94.5% 42.75%);
     --chart-4: hsl(43 74% 66%);
     --chart-5: hsl(27 87% 67%);
+
+    --sidebar: oklch(0.985 0 0);
+
     --sidebar-background: hsl(0 0% 98%);
     --sidebar-foreground: hsl(240 5.3% 26.1%);
     --sidebar-primary: hsl(240 5.9% 10%);
@@ -82,8 +87,8 @@
     --primary-foreground: hsl(0deg 0% 92.16%);
     --secondary: hsl(217deg 61% 51%);
     --secondary-foreground: hsl(0deg 0% 92.16%);
+
     --warning: hsl(37deg, 87%, 41%);
-    --secondary-foreground: hsl(0deg 0% 92.16%);
     --muted: hsl(0deg 0.01% 12.16%);
     --muted-foreground: hsl(217.9 10.6% 64.9%);
 
@@ -101,6 +106,8 @@
     --chart-3: hsl(30 80% 55%);
     --chart-4: hsl(280 65% 60%);
     --chart-5: hsl(340 75% 55%);
+
+    --sidebar: oklch(0.205 0 0);
     --sidebar-background: var(--card);
     --sidebar-foreground: var(--card-foreground);
     --sidebar-primary: var(--primary);
@@ -173,7 +180,7 @@
     --font-sans: 'Inter', 'Helvetica', 'Arial', sans-serif;
 
 
-    --shadow-button:0px -1px 0px 0px hsla(0, 0%, 100%, 0.04), 0px 0px 0px 1px hsla(0, 0%, 100%, 0.12), 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 2px 0px rgba(0, 0, 0, 0.04), 0px 6px 3px 0px rgba(0, 0, 0, 0.04);
+    --shadow-button: 0px -1px 0px 0px hsla(0, 0%, 100%, 0.04), 0px 0px 0px 1px hsla(0, 0%, 100%, 0.12), 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 2px 0px rgba(0, 0, 0, 0.04), 0px 6px 3px 0px rgba(0, 0, 0, 0.04);
 
     --animate-accordion-down: accordion-down 0.2s ease-out;
     --animate-accordion-up: accordion-up 0.2s ease-out;
@@ -182,7 +189,7 @@
     --animate-border-beam: border-beam calc(var(--duration)*1s) infinite linear;
     --animate-collapsible-down: collapsible-down 0.2s ease-out;
     --animate-collapsible-up: collapsible-up 0.2s ease-out;
-    
+
 
     @keyframes accordion-down {
         0% {
@@ -193,6 +200,7 @@
             height: var(--radix-accordion-content-height);
         }
     }
+
     @keyframes accordion-up {
         0% {
             height: var(--radix-accordion-content-height);
@@ -222,12 +230,14 @@
             opacity: 0;
         }
     }
-    @keyframes border-beam{
+
+    @keyframes border-beam {
         100% {
             offset-distance: 100%;
         }
     }
-    @keyframes collapsible-down{
+
+    @keyframes collapsible-down {
         0% {
             height: 0;
             opacity: 0;
@@ -239,7 +249,7 @@
         }
     }
 
-    @keyframes collapsible-up{
+    @keyframes collapsible-up {
         0% {
             height: var(--radix-collapsible-content-height);
             opacity: 1;
@@ -266,8 +276,16 @@
         box-sizing: border-box;
     }
 
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-gray-200, currentColor);
+    }
+
     * {
-        @apply border-border outline-ring/50;
+        @apply border-border;
     }
 
     html {

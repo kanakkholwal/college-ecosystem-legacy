@@ -47,8 +47,8 @@ export function SocialBar() {
             target="_blank"
             key={link.href}
             className={cn(
-              "inline-flex items-center justify-center rounded-md text-sm font-medium  disabled:pointer-events-none disabled:opacity-50  p-1.5 [&_svg]:size-5 text-muted-foreground md:[&_svg]:size-4.5",
-              "hover:bg-accent hover:text-primary hover:-translate-y-1 ease-in transition-all duration-300 flex justify-center items-center size-10 icon "
+              "inline-flex items-center justify-center rounded-md text-sm font-medium disabled:pointer-events-none disabled:opacity-50 p-1.5 [&_svg]:size-5 size-8 icon text-muted-foreground md:[&_svg]:size-4.5",
+              "hover:bg-accent hover:text-primary hover:-translate-y-1 ease-in transition-all duration-300 flex justify-center items-center"
             )}
           >
             <link.icon />
