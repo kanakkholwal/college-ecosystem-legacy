@@ -11,7 +11,7 @@ import { MdOutlineChair } from "react-icons/md";
 import { addRoomMembers, joinRoom } from "~/actions/allotment-process";
 import { isValidRollNumber } from "~/constants/departments";
 import type { HostelRoomJson } from "~/models/allotment";
-import { ORG_DOMAIN } from "~/project.config";
+import { orgConfig } from "~/project.config";
 
 const fetchRoomDetails = async (roomId: string) => {
   const response = await fetch(`/api/hostel/room-members?roomId=${roomId}`, {
@@ -194,7 +194,7 @@ export function ViewRoomButton({
                             rollNumber !== "" && isValidRollNumber(rollNumber)
                         );
                       const members = rollNumbers.map(
-                        (rollNumber) => `${rollNumber.trim()}@${ORG_DOMAIN}`
+                        (rollNumber) => `${rollNumber.trim()}${orgConfig.mailSuffix}`
                       );
                       setLoading(true);
                       toast

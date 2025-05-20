@@ -1,12 +1,12 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
+import { appConfig, orgConfig } from "~/project.config";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
     id: "college-platform",
-    name: "College Platform for NITH",
-    short_name: "College Platform",
-    description:
-      "All-in-One Student Hub: Results, Resources, Attendance & More",
+    name: appConfig.name,
+    short_name: orgConfig.shortName,
+    description: appConfig.description,
     icons: [
       {
         src: "./favicon-16x16.png",
@@ -34,6 +34,6 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: "/",
     scope: ".",
     display: "standalone",
-    orientation: "natural",
+    orientation: "portrait-primary",
   };
 }

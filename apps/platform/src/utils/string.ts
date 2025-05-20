@@ -19,18 +19,20 @@ export function changeCase(
       return str.toLowerCase();
     case "title":
       return str
+        .replaceAll("_", " ")
+        .replaceAll("-", " ")
         .split(" ")
         .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
         .join(" ");
     case "sentence":
       return str.charAt(0).toUpperCase() + str.slice(1);
-    case "camel_to_title": { 
+    case "camel_to_title": {
       // Convert camelCase to Title Case
       // Example: "helloWorld" -> "Hello World"
       const result = str.replace(/([A-Z])/g, " $1");
       return result.charAt(0).toUpperCase() + result.slice(1);
     }
-    
+
     default:
       return str;
   }

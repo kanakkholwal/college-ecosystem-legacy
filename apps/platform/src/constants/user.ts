@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ORG_DOMAIN } from "~/project.config";
+import { orgConfig } from "~/project.config";
 
 export const ROLES = [
   "student",
@@ -23,6 +23,6 @@ export const emailSchema = z
   .email({ message: "Invalid email format" })
   .min(5, { message: "Email must be at least 5 characters long" })
   .max(100, { message: "Email cannot exceed 100 characters" })
-  .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
-    message: `Email must end with @${ORG_DOMAIN}`,
+  .refine((val) => val.endsWith(`@${orgConfig.domain}`), {
+    message: `Email must end with @${orgConfig.domain}`,
   });

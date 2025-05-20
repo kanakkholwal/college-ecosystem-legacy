@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { authClient } from "src/lib/auth-client";
 import * as z from "zod";
-import { ORG_DOMAIN } from "~/project.config";
+import { orgConfig } from "~/project.config";
 
 const FormSchema = z.object({
   email: z
@@ -18,8 +18,8 @@ const FormSchema = z.object({
     .email({ message: "Invalid email format" })
     .min(5, { message: "Email must be at least 5 characters long" })
     .max(100, { message: "Email cannot exceed 100 characters" })
-    .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
-      message: `Email must end with @${ORG_DOMAIN}`,
+    .refine((val) => val.endsWith(orgConfig.mailSuffix), {
+      message: `Email must end with ${orgConfig.mailSuffix}`,
     }),
 });
 

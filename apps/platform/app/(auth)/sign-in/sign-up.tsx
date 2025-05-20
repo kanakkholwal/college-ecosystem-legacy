@@ -34,7 +34,7 @@ import { FcGoogle } from "react-icons/fc";
 import { getDepartmentName } from "src/constants/departments";
 import * as z from "zod";
 import { emailSchema } from "~/constants/user";
-import { ORG_DOMAIN } from "~/project.config";
+import { orgConfig } from "~/project.config";
 
 const FormSchema = z.object({
   email: emailSchema,
@@ -144,7 +144,7 @@ export default function SignUpForm() {
                     </FormLabel>
                     <FormControl className="relative">
                       <Input
-                        placeholder={`Email (e.g. user@${ORG_DOMAIN})`}
+                        placeholder={`Email (e.g. user${orgConfig.mailSuffix})`}
                         type="email"
                         autoCapitalize="none"
                         autoComplete="email"
