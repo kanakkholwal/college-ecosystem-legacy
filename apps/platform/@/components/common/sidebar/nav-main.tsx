@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/sidebar";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams,usePathname } from "next/navigation";
+import { useSearchParams, usePathname } from "next/navigation";
 
 export function NavMain({
   items,
@@ -36,7 +36,7 @@ export function NavMain({
   }[];
 }) {
   const searchParams = useSearchParams();
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <SidebarGroup>

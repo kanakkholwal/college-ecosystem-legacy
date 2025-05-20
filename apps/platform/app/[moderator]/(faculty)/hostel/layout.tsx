@@ -4,13 +4,14 @@ import { Separator } from "@/components/ui/separator";
 import { LuBuilding } from "react-icons/lu";
 import { getHostelByUser } from "~/actions/hostel";
 
-
-
 interface LayoutProps {
-  children: React.ReactNode
- }
+  children: React.ReactNode;
+}
 
-export default async function HostelPageLayout({ children, ...props }:LayoutProps) {
+export default async function HostelPageLayout({
+  children,
+  ...props
+}: LayoutProps) {
   // const searchParams = await props.searchParams;
   // TODO: FIX slug layout props issue
   const { success, message, hostel, hosteler } = await getHostelByUser();

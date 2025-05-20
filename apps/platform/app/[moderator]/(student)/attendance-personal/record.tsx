@@ -13,7 +13,10 @@ import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { cn } from "@/lib/utils";
 import { ChartBar } from "lucide-react";
 import type { ViewBox } from "recharts/types/util/types";
-import { updateAttendanceRecord, deleteAttendanceRecord} from "~/actions/record.personal";
+import {
+  deleteAttendanceRecord,
+  updateAttendanceRecord,
+} from "~/actions/record.personal";
 import type { PersonalAttendanceWithRecords } from "~/db/schema/attendance_record";
 import UpdateAttendanceRecord from "./update-record";
 
@@ -63,7 +66,7 @@ export default function AttendanceRecord({
   return (
     <div
       className={cn(
-        "flex flex-wrap p-4 gap-4 rounded-lg border hover:border/30 transition-shadow shadow-sm relative",
+        "flex flex-wrap p-4 gap-4 rounded-lg bg-card border hover:border/30 transition-shadow shadow-sm relative",
         className
       )}
       style={style}
@@ -71,10 +74,10 @@ export default function AttendanceRecord({
       {/* Header */}
       <div className="grid justify-between items-start mr-auto">
         <div>
-          <h4 className="text-sm font-semibold text-gray-900 dark:text-white">
+          <h4 className="text-sm font-semibold">
             {record.subjectName.replaceAll("&amp;", "&")}
           </h4>
-          <p className="text-xs text-gray-600">{record.subjectCode}</p>
+          <p className="text-xs text-muted-foreground">{record.subjectCode}</p>
         </div>
 
         {/* Status */}
@@ -83,7 +86,7 @@ export default function AttendanceRecord({
             Attendance: {presentClasses}/{totalClasses} ({attendancePercentage}
             %)
           </p>
-          <p className="text-sm text-gray-700">{attendanceStatus}</p>
+          <p className="text-sm text-muted-foreground">{attendanceStatus}</p>
           <UpdateAttendanceRecord
             updateAttendanceRecord={updateAttendanceRecord.bind(
               null,
@@ -168,10 +171,12 @@ export default function AttendanceRecord({
         )}
         {/* Empty State */}
         {totalClasses === 0 && (
-          <div className="flex flex-col items-center text-center text-gray-600 flex-1 my-auto">
-            <CircleSlash className="w-8 h-8 text-gray-400 mb-2" />
+          <div className="flex flex-col items-center text-center flex-1 my-auto">
+            <CircleSlash className="w-8 h-8  mb-2" />
             <p className="text-sm font-medium">No attendance records found</p>
-            <p className="text-xs">Add your first record to start tracking.</p>
+            <p className="text-xs text-muted-foreground">
+              Add your first record to start tracking.
+            </p>
           </div>
         )}
       </div>
@@ -221,7 +226,7 @@ function renderPieLabel(
         y={cy}
         textAnchor="middle"
         dominantBaseline="middle"
-        className="text-lg font-semibold"
+        className="text-lg font-semibold text-primary-foreground"
       >
         {totalClasses}
       </text>
@@ -230,7 +235,7 @@ function renderPieLabel(
         y={cy + 20}
         textAnchor="middle"
         dominantBaseline="middle"
-        className="text-xs text-gray-500"
+        className="text-xs text-muted-foreground"
       >
         Total Classes
       </text>

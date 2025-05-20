@@ -28,19 +28,19 @@ const AttendanceAnalytics: React.FC<AttendanceAnalyticsProps> = ({
         Attendance Analytics ({records.length} Subjects)
       </h4>
       <div className="grid grid-cols-1 @sm/attendance:grid-cols-2 gap-4">
-        <div className="p-4 bg-white rounded-md shadow">
+        <div className="p-4 bg-card rounded-md shadow">
           <h5 className="text-sm font-medium">Total Classes</h5>
           <p className="text-xl font-semibold">{totalClasses}</p>
         </div>
-        <div className="p-4 bg-white rounded-md shadow">
+        <div className="p-4 bg-card rounded-md shadow">
           <h5 className="text-sm font-medium">Classes Attended</h5>
           <p className="text-xl font-semibold">{presentClasses}</p>
         </div>
-        <div className="p-4 bg-white rounded-md shadow">
+        <div className="p-4 bg-card rounded-md shadow">
           <h5 className="text-sm font-medium">Classes Missed</h5>
           <p className="text-xl font-semibold">{absentClasses}</p>
         </div>
-        <div className="p-4 bg-white rounded-md shadow">
+        <div className="p-4 bg-card rounded-md shadow">
           <h5 className="text-sm font-medium whitespace-nowrap">
             Attendance Percentage
           </h5>

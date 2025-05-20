@@ -43,8 +43,6 @@ export const metadata: Metadata = {
   manifest: "./manifest.json",
 };
 
-export const dynamic = "force-dynamic";
-
 export default function RootLayout({
   children,
 }: {
@@ -54,10 +52,7 @@ export default function RootLayout({
     <html lang="en">
       <head />
       <body
-        className={
-          font.className +
-          " min-h-screen selection:bg-primary/10 selection:text-primary dark:bg-gray-900"
-        }
+        className={`${font.className} min-h-screen selection:bg-primary/10 selection:text-primary dark:bg-gray-900`}
       >
         <Provider>{children}</Provider>
         <GoogleAnalytics gaId="G-SC4TQQ5PCW" />

@@ -1,12 +1,12 @@
 import EmptyArea from "@/components/common/empty-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getSession } from "src/lib/auth-server";
+import { getSession } from "~/lib/auth-server";
 import {
   getClosedPolls,
   getOpenPolls,
   getPollsCreatedByLoggedInUser,
-} from "src/lib/poll/actions";
-import type { PollType } from "src/models/poll";
+} from "~/lib/poll/actions";
+import type { PollType } from "~/models/poll";
 import CreatePoll from "./components/create-poll";
 import PollComponent from "./components/poll-component";
 
@@ -27,8 +27,8 @@ export default async function PollsPage() {
   ]);
 
   return (
-    <Tabs defaultValue="opened" className="w-full">
-      <TabsList className="w-full h-14 px-2 gap-2">
+    <Tabs defaultValue="opened" className="w-full grid gap-4">
+      <TabsList className="max-w-5xl mx-auto w-full">
         <TabsTrigger value="opened" className="text-md w-full">
           Open Polls
         </TabsTrigger>
@@ -39,7 +39,7 @@ export default async function PollsPage() {
           By You
         </TabsTrigger>
       </TabsList>
-      <div className="bg-white/20 backdrop-blur-lg mt-5 rounded-lg p-4 @container/polls">
+      <div className="mt-5 rounded-lg p-4 @container/polls max-w-6xl mx-auto w-full">
         <TabsContent value="opened">
           <div className="w-full flex justify-between items-center whitespace-nowrap gap-2">
             <h3 className="text-xl font-semibold">Open polls</h3>

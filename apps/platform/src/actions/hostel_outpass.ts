@@ -5,7 +5,11 @@ import { getHostelByUser } from "~/actions/hostel";
 import { REASONS, requestOutPassSchema } from "~/constants/outpass";
 // import { getSession } from "~/lib/auth-server";
 import dbConnect from "~/lib/dbConnect";
-import { HostelStudentModel, OutPassModel, type OutPassType } from "~/models/hostel_n_outpass";
+import {
+  HostelStudentModel,
+  OutPassModel,
+  type OutPassType,
+} from "~/models/hostel_n_outpass";
 
 /*
     OutPass Actions
@@ -42,10 +46,15 @@ export async function createOutPass(
     // }
     await dbConnect();
 
-    if(data.roomNumber !== hosteler.roomNumber && data.roomNumber !== "UNKNOWN"){
-      await HostelStudentModel.updateOne({_id: hosteler._id}, {roomNumber: data.roomNumber});
+    if (
+      data.roomNumber !== hosteler.roomNumber &&
+      data.roomNumber !== "UNKNOWN"
+    ) {
+      await HostelStudentModel.updateOne(
+        { _id: hosteler._id },
+        { roomNumber: data.roomNumber }
+      );
     }
-    
 
     // if reason is outing or market then validity should be the end of the day of expectedInTime
     const validity = new Date();
@@ -144,7 +153,6 @@ export async function getOutPassById(id: string): Promise<OutPassType | null> {
   }
 }
 
-
 export async function allowEntryExit(
   id: string,
   action_type: "entry" | "exit"
@@ -222,9 +230,95 @@ export async function approveRejectOutPass(
       return Promise.resolve("Outpass rejected successfully");
     }
     return Promise.reject("Invalid action type");
-  }
-  catch (err) {
+  } catch (err) {
     console.error(err);
     return Promise.reject(err?.toString() || "Something went wrong");
+  }
+}
+
+export async function getOutPassHistoryForHostel({
+  query,
+  offset,
+  limit = 100,
+  sortBy = "desc",
+}: {
+  query?: string;
+  offset?: number;
+  limit?: number;
+  sortBy?: "asc" | "desc";
+}): Promise<{
+  data: OutPassType[];
+  error: string | null;
+}> {
+  // This function is used to get the outpass history for the hostel
+  try {
+    const { success, message, hostel } = await getHostelByUser();
+    if (!success || !hostel) {
+      return {
+        data: [],
+        error: message,
+      };
+    }
+    await dbConnect();
+    const outPasses = await OutPassModel.find({
+      hostel: hostel._id,
+      ...(query && {
+        $or: [
+          { "student.name": { $regex: query, $options: "i" } },
+          { "student.rollNumber": { $regex: query, $options: "i" } },
+        ],
+      }),
+    })
+      .populate("hostel")
+      .populate("student")
+      .sort({
+        createdAt: sortBy === "asc" ? 1 : -1,
+      })
+      .limit(offset ? offset + limit : limit)
+      .lean();
+    return Promise.resolve({
+      data: JSON.parse(JSON.stringify(outPasses)),
+      error: null,
+    });
+  } catch (err) {
+    console.error(err);
+    return Promise.reject({
+      data: [],
+      error: err?.toString() || "Something went wrong",
+    });
+  }
+}
+
+export async function getOutPassByIdForHosteler(id: string): Promise<{
+  data: OutPassType[] | null;
+  error: string | null;
+}> {
+  try {
+    const { success, message, hostel, hosteler } = await getHostelByUser();
+    if (!success || !hosteler || !hostel) {
+      return Promise.reject({
+        data: null,
+        error: message,
+      });
+    }
+
+    await dbConnect();
+
+    const outPass = await OutPassModel.find({ student: id })
+      .populate("hostel")
+      .populate("student")
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return {
+      data: JSON.parse(JSON.stringify(outPass)),
+      error: null,
+    };
+  } catch (err) {
+    console.error(err);
+    return {
+      data: null,
+      error: err?.toString() || "Something went wrong",
+    };
   }
 }

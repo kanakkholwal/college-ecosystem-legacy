@@ -1,8 +1,16 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { CardContent, CardFooter } from "@/components/ui/card";
+import { CardFooter } from "@/components/ui/card";
+import {
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -10,133 +18,142 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { InferInsertModel } from "drizzle-orm";
-import { useState } from "react";
-import type { rooms } from "~/db/schema";
-
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Plus } from "lucide-react";
+import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import type { z } from "zod";
+import { roomSchema } from "~/constants/room";
 
-type RoomType = InferInsertModel<typeof rooms>;
+type RoomType = z.infer<typeof roomSchema>;
 
 export default function CreateRoomForm({
   onSubmit,
 }: {
-  onSubmit: (room: RoomType) => Promise<RoomType>;
+  onSubmit: (room: RoomType) => Promise<{
+    roomNumber: string;
+    roomType: string;
+    capacity: number | null;
+    currentStatus: string;
+    lastUpdatedTime: Date | null;
+    id: string;
+    createdAt: Date | null;
+    updatedAt: Date | null;
+  }>;
 }) {
-  const [state, setState] = useState<RoomType>({
-    roomNumber: "",
-    roomType: "",
-    capacity: 0,
-    currentStatus: "occupied",
-    lastUpdatedTime: new Date(),
-    createdAt: new Date(),
+  const form = useForm<RoomType>({
+    resolver: zodResolver(roomSchema),
+    defaultValues: {
+      roomNumber: "",
+      roomType: "classroom",
+      capacity: 0,
+      currentStatus: "occupied",
+      lastUpdatedTime: new Date(),
+    },
   });
-  const { roomNumber, roomType, capacity, currentStatus } = state;
+  const handleSubmit = async (data: RoomType) => {
+    toast.promise(onSubmit(data), {
+      loading: "Saving...",
+      success: (data: { roomNumber: string | number }) =>
+        `Room ${data.roomNumber} created successfully`,
+      error: "Could not create room",
+    });
+  };
 
   return (
-    <>
-      <CardContent className="grid gap-4 w-full grid-cols-1 md:grid-cols-2">
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="roomNumber">Room Number</Label>
-          <Input
-            id="roomNumber"
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(handleSubmit)}
+        className="space-y-6 my-5 p-4 bg-card grid gap-4 w-full grid-cols-1 md:grid-cols-2"
+      >
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <FormField
+            control={form.control}
             name="roomNumber"
-            placeholder="Room Name"
-            variant="fluid"
-            value={roomNumber}
-            onChange={(e) => {
-              setState({
-                ...state,
-                roomNumber: e.target.value.toUpperCase(),
-              });
-            }}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Room Number</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Room Number"
+                    type="text"
+                    autoCapitalize="none"
+                    autoComplete="name"
+                    autoCorrect="off"
+                    {...field}
+                    disabled={form.formState.isSubmitting}
+                  />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
           />
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="roomType">Room Type</Label>
-          <Select
+          <FormField
+            control={form.control}
             name="roomType"
-            value={roomType}
-            onValueChange={(value) => {
-              setState({
-                ...state,
-                roomType: value,
-              });
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Type" className="capitalize" />
-            </SelectTrigger>
-            <SelectContent>
-              {["classroom", "conference", "office", "lab"].map((type) => (
-                <SelectItem value={type} key={type} className="capitalize">
-                  {type}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="capacity">Capacity</Label>
-          <Input
-            id="capacity"
-            name="capacity"
-            placeholder="Capacity"
-            variant="fluid"
-            type="number"
-            value={capacity || ""}
-            onChange={(e) => {
-              setState({
-                ...state,
-                capacity: Number.parseInt(e.target.value),
-              });
-            }}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Room Type</FormLabel>
+                <Select
+                  onValueChange={(value) =>
+                    field.onChange(value.trim().toUpperCase())
+                  }
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a room type" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {["classroom", "conference", "office", "lab"].map(
+                      (_type) => {
+                        return (
+                          <SelectItem key={_type} value={_type}>
+                            {_type}
+                          </SelectItem>
+                        );
+                      }
+                    )}
+                  </SelectContent>
+                </Select>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
           />
         </div>
-        <div className="flex flex-col gap-2">
-          <Label htmlFor="currentStatus">Current Status</Label>
-
-          <Select
-            name="currentStatus"
-            value={currentStatus}
-            onValueChange={(value: "available" | "occupied") => {
-              setState({
-                ...state,
-                currentStatus: value,
-              });
-            }}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Select Status" className="capitalize" />
-            </SelectTrigger>
-            <SelectContent>
-              {["available", "occupied"].map((status) => (
-                <SelectItem value={status} key={status} className="capitalize">
-                  {status}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="capacity"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Capacity</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="Capacity"
+                    type="number"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    {...field}
+                    disabled={form.formState.isSubmitting}
+                  />
+                </FormControl>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
         </div>
-      </CardContent>
-      <CardFooter>
-        <Button
-          type="submit"
-          className="mx-auto"
-          onClick={(e) => {
-            e.preventDefault();
-            toast.promise(onSubmit(state), {
-              loading: "Saving...",
-              success: (data: { roomNumber: string | number }) =>
-                `Room ${data.roomNumber} created successfully`,
-              error: "Could not create room",
-            });
-          }}
-        >
-          Create Room <Plus className="inline-block ml-2" size={16} />
-        </Button>
-      </CardFooter>
-    </>
+
+        <CardFooter>
+          <Button type="submit" className="mx-auto">
+            Create Room <Plus className="inline-block ml-2" size={16} />
+          </Button>
+        </CardFooter>
+      </form>
+    </Form>
   );
 }

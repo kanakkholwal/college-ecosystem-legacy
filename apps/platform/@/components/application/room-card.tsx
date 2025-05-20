@@ -64,21 +64,17 @@ export default function RoomCard({ room, user, ...props }: Props) {
   };
 
   return (
-    <Card
-      variant="glass"
-      className="hover:shadow-lg animate-in popup"
-      {...props}
-    >
-      <CardHeader>
+    <Card className="hover:shadow-lg animate-in popup @container/0" {...props}>
+      <CardHeader className="p-4">
         <div className="flex flex-wrap w-full justify-between">
-          <div className="flex justify-center items-center w-14 h-14 rounded-full bg-white/50 font-bold text-lg shrink-0">
+          <div className="flex justify-center items-center size-12 rounded-full bg-muted font-bold text-lg shrink-0">
             {room.roomNumber}
           </div>
           {authorized && (
             <div className="inline-flex flex-col items-end text-left ml-auto">
               <Label
                 htmlFor="switch"
-                className="text-xs text-gray-700 font-semibold"
+                className="text-xs text-muted-foreground font-semibold"
               >
                 {room.currentStatus === "available" ? "Occupy" : "Release"}
               </Label>
@@ -92,7 +88,7 @@ export default function RoomCard({ room, user, ...props }: Props) {
           )}
         </div>
         <CardDescription
-          className="font-semibold text-xs text-gray-700 p-2 bg-white/30 rounded"
+          className="font-medium text-[10px] text-muted-foreground"
           suppressHydrationWarning={true}
         >
           Last updated:{" "}
@@ -102,34 +98,36 @@ export default function RoomCard({ room, user, ...props }: Props) {
           {room.latestUsageHistory ? ` by ${room.latestUsageHistory.name}` : ""}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <div className="flex w-full flex-row justify-around items-start file:flex-wrap gap-2">
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-xs font-medium text-gray-700">Capacity</span>
-            <Badge className="uppercase" variant="default_light" size="sm">
-              {room.capacity}
-            </Badge>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-xs font-medium text-gray-700">Room Type</span>
-            <Badge className="uppercase" variant="ghost" size="sm">
-              {room.roomType}
-            </Badge>
-          </div>
-          <div className="flex flex-col items-center gap-1">
-            <span className="text-xs font-medium text-gray-700">
-              Current Status
-            </span>
-            <Badge
-              className="uppercase"
-              size="sm"
-              variant={
-                room.currentStatus === "available" ? "success" : "destructive"
-              }
-            >
-              {room.currentStatus}
-            </Badge>
-          </div>
+      <CardContent className="flex w-full flex-wrap justify-around items-start gap-2 p-4 ">
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-xs font-medium  text-muted-foreground">
+            Capacity
+          </span>
+          <Badge className="uppercase" variant="default_light" size="sm">
+            {room.capacity}
+          </Badge>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-xs font-medium  text-muted-foreground">
+            Room Type
+          </span>
+          <Badge className="uppercase" variant="ghost" size="sm">
+            {room.roomType}
+          </Badge>
+        </div>
+        <div className="flex flex-col items-center gap-1">
+          <span className="text-xs font-medium  text-muted-foreground">
+            Current Status
+          </span>
+          <Badge
+            className="uppercase"
+            size="sm"
+            variant={
+              room.currentStatus === "available" ? "success" : "destructive"
+            }
+          >
+            {room.currentStatus}
+          </Badge>
         </div>
       </CardContent>
     </Card>

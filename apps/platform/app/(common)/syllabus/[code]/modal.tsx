@@ -130,7 +130,7 @@ export function AddPrevsModal({
                   <FormLabel>Link</FormLabel>
                   <FormControl>
                     <Input
-                      variant="fluid"
+                      variant="outline"
                       type="url"
                       placeholder="Enter Link"
                       required
@@ -244,7 +244,7 @@ export function AddRefsModal({
                   <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
-                      variant="fluid"
+                      variant="outline"
                       type="text"
                       placeholder="Enter Name of the resource"
                       required
@@ -267,7 +267,7 @@ export function AddRefsModal({
                   <FormLabel>Link</FormLabel>
                   <FormControl>
                     <Input
-                      variant="fluid"
+                      variant="outline"
                       type="url"
                       placeholder="Enter Link"
                       required

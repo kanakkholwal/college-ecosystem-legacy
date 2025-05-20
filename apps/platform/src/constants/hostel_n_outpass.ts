@@ -1,11 +1,11 @@
 import { z } from "zod";
-import { ORG_DOMAIN } from "~/project.config";
+import { orgConfig } from "~/project.config";
 
 export const emailSchema = z
   .string()
   .email()
-  .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
-    message: `Email must end with @${ORG_DOMAIN}`,
+  .refine((val) => val.endsWith(`@${orgConfig.domain}`), {
+    message: `Email must end with @${orgConfig.domain}`,
   });
 
 export const createHostelSchema = z.object({
@@ -61,7 +61,7 @@ export const createHostelStudentSchema = z.object({
   bannedReason: z.string().nullable(),
 });
 
-export const CHIEF_WARDEN_MAIL = `cw@${ORG_DOMAIN}`;
+export const CHIEF_WARDEN_MAIL = `cw@${orgConfig.domain}`;
 
 export const IN_CHARGES_EMAILS = [
   {

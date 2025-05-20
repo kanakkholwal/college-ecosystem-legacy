@@ -4,9 +4,11 @@
 // import Aos from "aos";
 // import "aos/dist/aos.css";
 // import type { ThemeProviderProps } from "next-themes";
-// import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Toaster } from "@/components/ui/toaster";
+import { all_themes, glass_themes } from "@/constants/theme";
+import { cn } from "@/lib/utils";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider as NextThemesProvider, useTheme } from "next-themes";
 import Image from "next/image";
 import { Next13ProgressBar } from "next13-progressbar";
 import type React from "react";
@@ -28,10 +30,13 @@ const queryClient = new QueryClient({
   },
 });
 
-export function Provider({ children }: { children: React.ReactNode }) {
+export function Consumer({ children }: { children: React.ReactNode }) {
   const [isLoaded, setIsLoaded] = useState<boolean>(true);
+  const { theme } = useTheme();
+  const isGlassTheme = glass_themes.find((elem) => elem === theme);
 
   useEffect(() => {
+    if (!isGlassTheme) return;
     // Aos.init({
     //   duration: 1000,
     //   once: true,
@@ -46,25 +51,34 @@ export function Provider({ children }: { children: React.ReactNode }) {
     } catch (error) {
       setIsLoaded(false);
     }
-  }, []);
+  }, [isGlassTheme]);
   return (
     <QueryClientProvider client={queryClient}>
-      {isLoaded ? (
-        <canvas
-          id="gradient-canvas"
-          data-transition-in
-          className="fixed inset-0 -z-[1]"
-        />
-      ) : (
-        <Image
-          width={1920}
-          height={1280}
-          src={fallbackImg}
-          className="fixed inset-0 -z-[1]"
-          alt="Fallback"
-        />
-      )}
-      {children}
+      {isGlassTheme ? (
+        isLoaded ? (
+          <canvas
+            id="gradient-canvas"
+            data-transition-in
+            className="fixed inset-0 -z-[1]"
+          />
+        ) : (
+          <Image
+            width={1920}
+            height={1280}
+            src={fallbackImg}
+            className="fixed inset-0 -z-[1]"
+            alt="Fallback"
+          />
+        )
+      ) : null}
+      <div
+        className={cn(
+          "min-h-screen w-full h-full",
+          !isGlassTheme ? "bg-background" : "glass"
+        )}
+      >
+        {children}
+      </div>
       <Next13ProgressBar
         height="4px"
         color="hsl(var(--primary))"
@@ -84,7 +98,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
           <img
             height={20}
             width={80}
-            src="https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
+            src="http://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
             alt="Visitor counter"
             className="inline-block font-inherit h-4"
             loading="lazy"
@@ -92,5 +106,23 @@ export function Provider({ children }: { children: React.ReactNode }) {
         </span>
       </div>
     </QueryClientProvider>
+  );
+}
+
+export function Provider({
+  children,
+  ...props
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <NextThemesProvider
+      themes={all_themes as unknown as string[]}
+      defaultTheme="light"
+      
+      {...props}
+    >
+      <Consumer>{children}</Consumer>
+    </NextThemesProvider>
   );
 }

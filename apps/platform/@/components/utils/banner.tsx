@@ -43,13 +43,16 @@ export function BannerPanel({
           {description}
         </div>
         <div className="min-w-24">
-          {actionComponent ? actionComponent :
+          {actionComponent ? (
+            actionComponent
+          ) : (
             <Button
               size="sm"
               variant="outline"
               {...btnProps}
               className={cn("min-w-24", btnProps?.className)}
-            />}
+            />
+          )}
         </div>
       </div>
       <BorderBeam />

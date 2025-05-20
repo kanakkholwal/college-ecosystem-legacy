@@ -1,5 +1,5 @@
-import fs from "fs";
-import path from "path";
+import fs from "node:fs";
+import path from "node:path";
 import dbConnect from "../apps/platform/src/lib/dbConnect"; // Adjust the path to your dbConnect file
 import Result from "../apps/platform/src/lib/models/result"; // Adjust the path to your Result model
 

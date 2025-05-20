@@ -1,15 +1,21 @@
 import { GoBackButton } from "@/components/common/go-back";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Mail } from "lucide-react";
+import { ArrowDownUp, Mail } from "lucide-react";
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ResultTypeWithId, Semester } from "src/models/result";
 import { getResultByRollNo } from "~/actions/result";
-import { CgpiCard, RankCard, SemCard } from "./components/card";
+import { orgConfig } from "~/project.config";
+import type { Course } from "~/types/result";
 import { CGPIChart } from "./components/chart";
-import { ORG_DOMAIN } from "~/project.config";
-
-import type { Metadata, ResolvingMetadata } from "next";
 
 type Props = {
   params: Promise<{ rollNo: string }>;
@@ -42,33 +48,43 @@ export default async function ResultsPage(props: Props) {
     return notFound();
   }
 
+  const maxCgpi = result.semesters?.reduce(
+    (prev, curr) => Math.max(prev, curr.cgpi),
+    0
+  );
+  const minCgpi = result.semesters?.reduce(
+    (prev, curr) => Math.min(prev, curr.cgpi),
+    10
+  );
+  const cgpi = result.semesters?.at(-1)?.cgpi ?? 0;
+
   return (
-    <>
-      <div>
-        <GoBackButton />
-      </div>
+    <div className="max-w-6xl mx-auto px-6 md:px-12 xl:px-6 ">
       <section
         id="hero"
-        className="z-10 w-full max-w-6xl relative flex flex-col items-center justify-center  py-24 text-center"
+        className="z-10 w-full max-w-7xl relative flex flex-col gap-5 py-10 px-4 rounded-lg text-center lg:text-left"
       >
-        <div className="lg:w-3/4 text-center mx-auto mt-10">
-          <h1 className="text-gray-900 dark:text-white font-bold text-5xl md:text-6xl xl:text-7xl">
-            <span className="relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent  md:px-2">
-              {result.name}
-            </span>
-          </h1>
-          <h5 className="mt-8 text-xl font-semibold text-gray-700 dark:text-gray-300 text-center mx-auto uppercase">
-            {result.rollNo}
-            <Link
-              href={`mailto:${result.rollNo}@${ORG_DOMAIN}`}
-              className="inline-block text-primary hover:text-primaryLight ease-in duration-300 align-middle ml-2 -mt-1"
-              title={"Contact via mail"}
-            >
-              <Mail className="w-5 h-5" />
-            </Link>
-          </h5>
-          <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
-            <div className="w-full flex flex-wrap items-center gap-4 text-sm mx-auto justify-center">
+        <div>
+          <GoBackButton size="sm" />
+        </div>
+        <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
+          <div className="flex flex-col gap-4">
+            <h1 className="font-bold text-3xl lg:text-5xl">
+              <span className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent  md:px-2">
+                {result.name}
+              </span>
+            </h1>
+            <h5 className="text-lg ml-4 font-semibold text-muted-foreground uppercase">
+              {result.rollNo}
+              <Link
+                href={`mailto:${result.rollNo}${orgConfig.mailSuffix}`}
+                className="inline-block text-primary hover:text-primaryLight ease-in duration-300 align-middle ml-2 -mt-1"
+                title={"Contact via mail"}
+              >
+                <Mail className="w-5 h-5" />
+              </Link>
+            </h5>
+            <div className="w-full flex flex-wrap items-center gap-4 text-sm mx-auto md:ml-0">
               <span
                 className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}
               >
@@ -86,14 +102,57 @@ export default async function ResultsPage(props: Props) {
               </span>
             </div>
           </div>
+          <div className="flex flex-col gap-4">
+            <div className="p-4 bg-card rounded-lg space-y-4">
+              <h4 className="text-base font-medium">
+                <ArrowDownUp className="inline-block size-5 mr-2" />
+                Performance Analysis
+              </h4>
+              <div className="grid grid-cols-3 gap-3 text-center px-3">
+                <div>
+                  <p className="text-xs  text-muted-foreground">Max. CGPI</p>
+                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                    {maxCgpi}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs  text-muted-foreground">Cgpi</p>
+                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                    {cgpi}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs  text-muted-foreground">Min. Cgpi</p>
+                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                    {minCgpi}
+                  </p>
+                </div>
+
+                <div>
+                  <p className="text-xs  text-muted-foreground">Batch Rank</p>
+                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                    {result.rank.batch}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs  text-muted-foreground">Branch Rank</p>
+                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                    {result.rank.branch}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs  text-muted-foreground">Class Rank</p>
+                  <p className="text-base font-bold text-gray-900 dark:text-white">
+                    {result.rank.class}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
-      <div className="max-w-6xl mx-auto px-6 md:px-12 xl:px-6 grid gap-4 grid-cols-1 sm:grid-cols-2">
-        <RankCard result={result} />
-        <CgpiCard result={result} />
-      </div>
       <div>
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mx-auto mt-24 mb-10">
+        <h2 className="text-3xl font-bold text-center mx-auto my-10">
           Semester Wise Results
         </h2>
 
@@ -105,20 +164,72 @@ export default async function ResultsPage(props: Props) {
             </TabsList>
           </div>
           <TabsContent value="table">
-            <div className="max-w-7xl w-full xl:px-6 grid gap-4 grid-cols-1 @lg:grid-cols-2 @4xl:grid-cols-3">
+            <Accordion
+              type="single"
+              collapsible
+              className="w-full relative grid gap-4"
+            >
               {result.semesters?.map((semester: Semester) => {
-                return <SemCard key={semester.semester} semester={semester} />;
+                return (
+                  <AccordionItem
+                    value={semester.semester.toString()}
+                    key={semester.semester}
+                    className="bg-card p-3 rounded-lg"
+                  >
+                    <AccordionTrigger className="space-y-1 no-underline hover:no-underline items-center justify-between flex-wrap align-middle gap-3">
+                      <h4 className="text-base font-semibold leading-none align-middle">
+                        {" "}
+                        Semester {semester.semester}
+                      </h4>
+                      <div className="flex items-center flex-wrap gap-2 text-sm text-muted-foreground align-middle mr-4">
+                        <div>CGPI : {semester.cgpi}</div>
+                        <Separator orientation="vertical" className="h-5" />
+                        <div>SGPI : {semester.sgpi}</div>
+                        <Separator orientation="vertical" className="h-5" />
+                        <div>{semester.courses.length} Courses</div>
+                        <Separator orientation="vertical" className="h-5" />
+                        <div>
+                          Sem/Total Credit : {semester.sgpi_total}/{" "}
+                          {semester.cgpi_total}
+                        </div>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="ms-6 mr-4">
+                      <Separator className="my-4" />
+                      {semester.courses?.map((course: Course, index) => {
+                        return (
+                          <div
+                            className="flex justify-between items-center py-2 gap-2 border-b border-border last:border-b-0"
+                            key={course.code}
+                          >
+                            <div className="flex items-start flex-col">
+                              <h4 className="text-sm tracking-wide font-semibold">
+                                {course.name.replaceAll("&amp;", "&")}
+                              </h4>
+                              <p className="text-xs text-muted-foreground">
+                                {course.code}
+                              </p>
+                            </div>
+                            <div className="text-primary text-sm bg-primary/20 dark:bg-primary/10 p-3 rounded-full h-6 w-6 flex justify-center items-center">
+                              {course.cgpi}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </AccordionContent>
+                  </AccordionItem>
+                );
               })}
-            </div>
+            </Accordion>
           </TabsContent>
           <TabsContent value="graph">
-            <div className="max-w-6xl mx-auto my-5 w-full p-4 rounded-xl bg-white/50">
+            <div className="max-w-4xl mx-auto my-5 w-full p-4 rounded-xl bg-accent">
               <CGPIChart semesters={result.semesters} />
             </div>
           </TabsContent>
         </Tabs>
       </div>
-    </>
+    </div>
   );
 }
 

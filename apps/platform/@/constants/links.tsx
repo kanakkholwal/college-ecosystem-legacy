@@ -1,4 +1,4 @@
-import { Users } from "lucide-react";
+import { Settings, Users } from "lucide-react";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuBookA, LuBuilding, LuGithub, LuSchool } from "react-icons/lu";
@@ -7,12 +7,11 @@ import { RiTwitterXFill } from "react-icons/ri";
 import type { Session } from "~/lib/auth-client";
 // import { TbServer2 } from "react-icons/tb";
 
-import { GrStorage } from "react-icons/gr";
 import { IoCalendarOutline } from "react-icons/io5";
 import { TbDashboard } from "react-icons/tb";
 import { ROLES } from "~/constants";
 
-import { AudioLines, Bot, CalendarRange } from "lucide-react";
+import { AudioLines, CalendarRange } from "lucide-react";
 import { BiSpreadsheet } from "react-icons/bi";
 import { GrAnnounce, GrSchedules } from "react-icons/gr";
 import { MdOutlinePoll } from "react-icons/md";
@@ -93,14 +92,14 @@ export const quick_links: RouterCardLink[] = [
     description: "Participate in polls.",
     allowed_roles: ["*"],
   },
-  {
-    href: "/chat",
-    title: "Chatbot",
-    description: "Chat with the college chatbot.(Beta)",
-    Icon: Bot,
-    disabled: true,
-    allowed_roles: ["*"],
-  },
+  // {
+  //   href: "/chat",
+  //   title: "Chatbot",
+  //   description: "Chat with the college chatbot.(Beta)",
+  //   Icon: Bot,
+  //   disabled: true,
+  //   allowed_roles: ["*"],
+  // },
 ];
 
 export type rawLinkType = {
@@ -134,11 +133,6 @@ export const sidebar_links: rawLinkType[] = [
         path: "/new",
         allowed_roles: [ROLES.ADMIN],
       },
-      {
-        title: "Fix User",
-        path: "/fix",
-        allowed_roles: [ROLES.ADMIN],
-      },
     ],
   },
   {
@@ -159,12 +153,7 @@ export const sidebar_links: rawLinkType[] = [
       },
     ],
   },
-  {
-    title: "Storage",
-    icon: GrStorage,
-    path: "/storage",
-    allowed_roles: [ROLES.ADMIN],
-  },
+
   {
     title: "Academic Calender",
     icon: IoCalendarOutline,
@@ -181,26 +170,7 @@ export const sidebar_links: rawLinkType[] = [
     title: "Courses",
     icon: LuBookA,
     path: "/courses",
-    allowed_roles: [
-      ROLES.STUDENT,
-      ROLES.CR,
-      ROLES.FACULTY,
-      ROLES.HOD,
-      ROLES.ADMIN,
-    ],
-    items: [
-      {
-        title: "Import from PDF",
-        path: "/import",
-        allowed_roles: [
-          ROLES.STUDENT,
-          ROLES.CR,
-          ROLES.FACULTY,
-          ROLES.HOD,
-          ROLES.ADMIN,
-        ],
-      },
-    ],
+    allowed_roles: [ROLES.ADMIN],
   },
   {
     title: "Schedules",
@@ -228,10 +198,16 @@ export const sidebar_links: rawLinkType[] = [
     ],
   },
   {
-    title: "Hostels",
+    title: "All Hostels",
     icon: LuBuilding,
     path: "/hostels",
-    allowed_roles: [ROLES.CHIEF_WARDEN, ROLES.ADMIN],
+    allowed_roles: [
+      ROLES.CHIEF_WARDEN,
+      ROLES.ADMIN,
+      ROLES.ASSISTANT_WARDEN,
+      ROLES.WARDEN,
+      ROLES.MMCA,
+    ],
     items: [],
   },
   {
@@ -288,6 +264,24 @@ export const sidebar_links: rawLinkType[] = [
           ROLES.MMCA,
           ROLES.ADMIN,
         ],
+      },
+    ],
+  },
+  {
+    title: "Settings",
+    icon: Settings,
+    path: "/settings",
+    allowed_roles: ["*"],
+    items: [
+      {
+        title: "Account",
+        path: "/account",
+        allowed_roles: ["*"],
+      },
+      {
+        title: "Appearance",
+        path: "/appearance",
+        allowed_roles: ["*"],
       },
     ],
   },
@@ -355,3 +349,22 @@ const checkRoleAccess = (userRole: string, allowedRoles: string[]): boolean => {
     (negRole) => userRole === negRole.slice(1) // Remove "!" prefix for comparison
   );
 };
+
+export const SUPPORT_LINKS = [
+  {
+    href: "https://github.com/kanakkholwal/college-ecosystem",
+    title: "Contribute to this project",
+  },
+  {
+    href: "https://github.com/kanakkholwal/college-ecosystem/issues",
+    title: "Report an issue",
+  },
+  {
+    href: "https://forms.gle/u2ptK12iRVdn5oXF7",
+    title: "Give a feedback",
+  },
+  {
+    href: "https://forms.gle/v8Angn9VCbt9oVko7",
+    title: "Suggest a feature",
+  },
+];

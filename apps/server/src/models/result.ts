@@ -56,7 +56,7 @@ const SemesterSchema: Schema = new Schema({
   sgpi: { type: Number, required: true },
   cgpi: { type: Number, required: true },
   courses: { type: [CourseSchema], required: true },
-  semester: { type: Number, required: true },
+  semester: { type: Number || String, required: true },
   sgpi_total: { type: Number, required: true },
   cgpi_total: { type: Number, required: true },
 });
@@ -87,6 +87,6 @@ const ResultSchema: Schema = new Schema(
 );
 
 const ResultModel =
-  mongoose.models.Result || mongoose.model<IResultType>("Result", ResultSchema);
+  mongoose.models?.Result || mongoose.model<IResultType>("Result", ResultSchema);
 
 export default ResultModel;

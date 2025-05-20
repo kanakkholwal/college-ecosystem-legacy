@@ -42,12 +42,13 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
-import { ROLES } from "~/constants/user";
 import * as z from "zod";
 import { updateUser } from "~/actions/dashboard.admin";
+import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
+import { ROLES, emailSchema, genderSchema } from "~/constants/user";
 import type { users } from "~/db/schema";
 import { authClient } from "~/lib/auth-client";
-
+import type { HostelType } from "~/models/hostel_n_outpass";
 type UserType = InferSelectModel<typeof users>;
 
 interface Props {
@@ -55,18 +56,25 @@ interface Props {
 }
 
 const formSchema = z.object({
-  gender: z.enum(["male", "female", "not_specified"]),
+  gender: genderSchema,
   department: z.string(),
   other_roles: z.array(z.string()),
+  hostelId: z.string().default("not_specified"),
+  other_emails: z.array(emailSchema).optional(),
 });
 
-export function UserUpdate({ currentUser }: Props) {
+export function UserUpdate({
+  currentUser,
+  hostels,
+}: Props & { hostels: HostelType[] }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       department: currentUser.department,
       other_roles: currentUser.other_roles,
       gender: currentUser.gender,
+      hostelId: currentUser.hostelId || "not_specified",
+      other_emails: currentUser.other_emails || [],
     },
   });
 
@@ -140,12 +148,46 @@ export function UserUpdate({ currentUser }: Props) {
                       <MultiSelectorList>
                         {ROLES.map((role) => {
                           return (
-                            <MultiSelectorItem
-                              key={role}
-                              value={role}
-                              className="capitalize"
-                            >
+                            <MultiSelectorItem key={role} value={role}>
                               {role.replace("_", " ")}
+                            </MultiSelectorItem>
+                          );
+                        })}
+                      </MultiSelectorList>
+                    </MultiSelectorContent>
+                  </MultiSelector>
+                </FormControl>
+
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="other_emails"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Other Emails</FormLabel>
+                <FormControl>
+                  <MultiSelector
+                    values={(field.value || []) as string[]}
+                    onValuesChange={field.onChange}
+                    loop
+                    className="max-w-xs"
+                  >
+                    <MultiSelectorTrigger>
+                      <MultiSelectorInput placeholder="Select emails" />
+                    </MultiSelectorTrigger>
+                    <MultiSelectorContent>
+                      <MultiSelectorList>
+                        {IN_CHARGES_EMAILS.map((in_charge) => {
+                          return (
+                            <MultiSelectorItem
+                              key={in_charge.slug}
+                              value={in_charge.email}
+                            >
+                              {in_charge.email}
                             </MultiSelectorItem>
                           );
                         })}
@@ -179,6 +221,37 @@ export function UserUpdate({ currentUser }: Props) {
                       return (
                         <SelectItem key={dept.name} value={dept.name}>
                           {dept.name}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+                <FormDescription />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="hostelId"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Hostel</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value || "not_specified"}
+                  disabled={hostels.length === 0}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a hostel" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {hostels.map((hostel) => {
+                      return (
+                        <SelectItem key={hostel._id} value={hostel._id}>
+                          {hostel.name}
                         </SelectItem>
                       );
                     })}

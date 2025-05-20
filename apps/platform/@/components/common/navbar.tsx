@@ -1,9 +1,8 @@
-"use client";
-import { BorderBeam } from "@/components/animation/border-beam";
 import ProfileDropdown from "@/components/common/profile-dropdown";
+import { SUPPORT_LINKS, socials } from "@/constants/links";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import type { Session } from "~/lib/auth-client";
+import type { Session } from "~/lib/auth";
 
 interface NavbarProps {
   user: Session["user"];
@@ -11,31 +10,72 @@ interface NavbarProps {
 
 export default function Navbar({ user }: NavbarProps) {
   return (
-    <div
+    <header
       className={cn(
-        "sticky marker:md:static left-0 top-0 md:top-5 md:mt-5 z-50 inset-inline-0 mx-auto w-full max-w-[720px] md:rounded-full md:overflow-hidden",
-        "backdrop-blur-2xl md:bg-white/20 md:border md:border-gray-300 bg-gradient-to-b from-primary/5"
+        "bg-card fixed left-1/2 top-0 z-40 box-content w-full max-w-6xl -translate-x-1/2 border-b border-border transition-colors lg:mt-5 lg:w-[calc(100%-1rem)] lg:rounded-2xl lg:border shadow-sm"
       )}
     >
       <div className="relative md:px-4 z-50">
         <nav
           className={cn(
-            "mx-auto w-full p-4 lg:py-2",
+            "flex h-14 w-full flex-row items-center p-4 lg:h-12",
             "flex items-center justify-between font-bold text-xl"
           )}
         >
           <Link
             href="/"
-            className="relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary lg:text-xl whitespace-nowrap"
+            className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:from-secondary hover:to-primary lg:text-xl whitespace-nowrap"
           >
             {process.env.NEXT_PUBLIC_WEBSITE_NAME}
           </Link>
-          <div className="ml-auto">
+          <div className="ml-auto flex gap-2 items-center">
             <ProfileDropdown user={user} />
           </div>
         </nav>
       </div>
-      <BorderBeam className="z-1 md:rounded-full" />
+    </header>
+  );
+}
+
+export function SocialBar() {
+  return (
+    <div className="inline-flex flex-row items-center empty:hidden gap-3 mx-auto">
+      {socials.map((link) => {
+        return (
+          <Link
+            href={link.href}
+            target="_blank"
+            key={link.href}
+            className={cn(
+              "inline-flex items-center justify-center rounded-md text-sm font-medium disabled:pointer-events-none disabled:opacity-50 p-1.5 [&_svg]:size-5 size-8 icon text-muted-foreground md:[&_svg]:size-4.5",
+              "hover:bg-accent hover:text-primary hover:-translate-y-1 ease-in transition-all duration-300 flex justify-center items-center"
+            )}
+          >
+            <link.icon />
+          </Link>
+        );
+      })}
+    </div>
+  );
+}
+
+export function SupportBar() {
+  return (
+    <div className="inline-flex flex-wrap items-center empty:hidden gap-2 mx-auto justify-center md:justify-start">
+      {SUPPORT_LINKS.map((link) => {
+        return (
+          <Link
+            href={link.href}
+            target="_blank"
+            key={link.href}
+            className={cn(
+              "inline-flex items-center gap-1 p-2 text-muted-foreground transition-colors hover:text-primary data-[active=true]:text-primary [&_svg]:size-4 text-xs font-medium"
+            )}
+          >
+            {link.title}
+          </Link>
+        );
+      })}
     </div>
   );
 }

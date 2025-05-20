@@ -5,13 +5,12 @@ import { CardDescription, CardTitle } from "@/components/ui/card";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { cn } from "@/lib/utils";
 import { CheckCircle2, LoaderCircle } from "lucide-react";
-import { useSearchParams } from "next/navigation";
+import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { authClient } from "src/lib/auth-client";
 import * as z from "zod";
-import { ORG_DOMAIN } from "~/project.config";
-import { redirect } from "next/navigation";
+import { orgConfig } from "~/project.config";
 
 const FormSchema = z.object({
   email: z
@@ -19,8 +18,8 @@ const FormSchema = z.object({
     .email({ message: "Invalid email format" })
     .min(5, { message: "Email must be at least 5 characters long" })
     .max(100, { message: "Email cannot exceed 100 characters" })
-    .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
-      message: `Email must end with @${ORG_DOMAIN}`,
+    .refine((val) => val.endsWith(orgConfig.mailSuffix), {
+      message: `Email must end with ${orgConfig.mailSuffix}`,
     }),
 });
 
@@ -46,7 +45,10 @@ export default function VerifyEmail() {
         })
         .then((res) => {
           if (res.error) {
-            toast.error(res.error);
+            toast.error(
+              res.error?.message ??
+                "An error occurred while verifying your email."
+            );
             setError(
               res?.error?.message ??
                 "An error occurred while verifying your email."

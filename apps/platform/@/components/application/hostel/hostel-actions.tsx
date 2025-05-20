@@ -20,7 +20,7 @@ import * as z from "zod";
 import { updateHostel } from "~/actions/hostel";
 import { isValidRollNumber } from "~/constants/departments";
 import { emailSchema, updateHostelSchema } from "~/constants/hostel_n_outpass";
-import { ORG_DOMAIN } from "~/project.config";
+import { orgConfig } from "~/project.config";
 
 export function UpdateHostelForm() {
   const form = useForm<z.infer<typeof updateHostelSchema>>({
@@ -147,7 +147,7 @@ export function UpdateStudentsForm({
             return emailMatch[1].toLowerCase().trim();
           }
           return isValidRollNumber(entry)
-            ? entry.concat(`@${ORG_DOMAIN}`).toLowerCase().trim()
+            ? entry.concat(orgConfig.mailSuffix).toLowerCase().trim()
             : entry.toLowerCase().trim();
         })
         .filter((email) => emailSchema.safeParse(email).success); // Validate emails

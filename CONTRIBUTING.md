@@ -102,6 +102,9 @@ cd college-ecosystem
 yarn install
 # or
 npm install
+# or
+pnpm install --no-frozen-lockfile --prod=false
+
 ```
 
 This command installs dependencies for all projects defined in the apps directory.
@@ -149,6 +152,7 @@ npm run --workspace=[app-name] build
 turbo build --filter=[app-name]
 # e.g.
 turbo build --filter=platform
+
 
 ```
 

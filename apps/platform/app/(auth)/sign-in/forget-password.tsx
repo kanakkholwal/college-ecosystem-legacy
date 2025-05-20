@@ -2,7 +2,7 @@
 
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { CardDescription, CardTitle } from "@/components/ui/card";
+import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Form,
   FormControl,
@@ -22,7 +22,7 @@ import toast from "react-hot-toast";
 import { LuMail } from "react-icons/lu";
 import { authClient } from "src/lib/auth-client";
 import * as z from "zod";
-import { ORG_DOMAIN } from "~/project.config";
+import { orgConfig } from "~/project.config";
 
 const FormSchema = z.object({
   email: z
@@ -30,8 +30,8 @@ const FormSchema = z.object({
     .email({ message: "Invalid email format" })
     .min(5, { message: "Email must be at least 5 characters long" })
     .max(100, { message: "Email cannot exceed 100 characters" })
-    .refine((val) => val.endsWith(`@${ORG_DOMAIN}`), {
-      message: `Email must end with @${ORG_DOMAIN}`,
+    .refine((val) => val.endsWith(orgConfig.mailSuffix), {
+      message: `Email must end with ${orgConfig.mailSuffix}`,
     }),
 });
 
@@ -80,12 +80,14 @@ export default function ForgotPassword() {
   }
 
   return (
-    <main className="flex flex-col items-center justify-center w-full space-y-4">
+    <>
       <ConditionalRender condition={isSubmitted}>
-        <CardTitle>Check your email</CardTitle>
-        <CardDescription>
-          We&apos;ve sent a password reset link to your email.
-        </CardDescription>
+        <CardHeader className="text-center">
+          <CardTitle>Check your email</CardTitle>
+          <CardDescription>
+            We&apos;ve sent a password reset link to your email.
+          </CardDescription>
+        </CardHeader>
         <Alert variant="success" className="w-full">
           <CheckCircle2 className="h-4 w-4" />
           <AlertDescription>
@@ -94,11 +96,13 @@ export default function ForgotPassword() {
         </Alert>
       </ConditionalRender>
       <ConditionalRender condition={!isSubmitted}>
-        <CardTitle>Forgot your password?</CardTitle>
-        <CardDescription>
-          Enter your email to reset your password
-        </CardDescription>
-        <div className={cn("grid gap-6 w-full text-left py-4")}>
+        <CardHeader className="text-center">
+          <CardTitle>Forgot your password?</CardTitle>
+          <CardDescription>
+            Enter your email to reset your password
+          </CardDescription>
+        </CardHeader>
+        <div className={cn("grid gap-6 w-full text-left p-4")}>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
               <FormField
@@ -112,7 +116,7 @@ export default function ForgotPassword() {
                       </FormLabel>
                       <FormControl className="relative">
                         <Input
-                          placeholder={`Email (e.g. user@${ORG_DOMAIN})`}
+                          placeholder={`Email (e.g. user${orgConfig.mailSuffix})`}
                           type="email"
                           autoCapitalize="none"
                           autoComplete="email"
@@ -141,6 +145,6 @@ export default function ForgotPassword() {
           </Form>
         </div>
       </ConditionalRender>
-    </main>
+    </>
   );
 }

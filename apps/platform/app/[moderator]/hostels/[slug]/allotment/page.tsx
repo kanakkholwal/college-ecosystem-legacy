@@ -1,107 +1,108 @@
-// import { UpdateStudentsForm } from "@/components/application/hostel/hostel-actions";
-// import {
-//     Accordion,
-//     AccordionContent,
-//     AccordionItem,
-//     AccordionTrigger,
-// } from "@/components/ui/accordion";
+import { StatsCard } from "@/components/application/stats-card";
+import { ResponsiveContainer } from "@/components/common/container";
 import EmptyArea from "@/components/common/empty-area";
+import { Badge } from "@/components/ui/badge";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { LuBuilding } from "react-icons/lu";
+import {
+  getAllotmentProcess,
+  getHostelRooms,
+} from "~/actions/allotment-process";
 import { getHostel } from "~/actions/hostel";
+import {
+  ChangeAllotmentProcessStatusButton,
+  DistributeSlotsButton,
+  DownloadSlotButton,
+  RoomsTable,
+} from "./client";
 
-export default async function HostelPage({
-    params,
+import {
+  SLOT_CAPACITY,
+  SLOT_DURATION,
+  SLOT_TIME_GAP,
+} from "~/constants/allotment-process";
+
+export default async function HostelRoomAllotmentPage({
+  params,
 }: {
-    params: Promise<{
-        slug: string;
-    }>;
+  params: Promise<{
+    slug: string;
+  }>;
 }) {
-    const slug = (await params).slug;
-    const response = await getHostel(slug);
-    console.log(response);
-    const { success, hostel } = response;
+  const slug = (await params).slug;
+  const response = await getHostel(slug);
+  // console.log(response);
+  const { success, hostel } = response;
 
-    if (!success || !hostel) {
-        return (
-            <EmptyArea
-                icons={[LuBuilding]}
-                title="No Hostel Found"
-                description={`Hostel with slug ${slug} not found`}
-            />
-        );
-    }
-
+  if (!success || !hostel) {
     return (
-        <div className="space-y-5 my-2">
-            <div className="flex justify-between w-full">
-                <div className="w-1/2">
-                    <Heading level={4}>{hostel.name}</Heading>
-                    <Paragraph className="capitalize !mt-0">
-                        {hostel.gender} Hostel
-                    </Paragraph>
-                </div>
-            </div>
-            <div className="grid grid-cols-1 gap-3">
-                <div>
-                    <Heading level={5}>Warden</Heading>
-                    <Paragraph className="!mt-0">
-                        {hostel.warden.name} ({hostel.warden.email})
-                    </Paragraph>
-                </div>
-                <div>
-                    <Heading level={5}>
-                        Admin / MMCA ({hostel.administrators.length})
-                    </Heading>
-                    <ul className="list-disc list-inside">
-                        {hostel.administrators.map((admin) => (
-                            <li key={admin.email}>
-                                {admin.name} - {admin.email}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-                {/* <div>
-                    <Accordion type="single" collapsible>
-                        <AccordionItem value="update-hostel">
-                            <AccordionTrigger>
-                                <Heading level={5}>Update Hostel</Heading>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <ErrorBoundary
-                                    fallback={
-                                        <p className="text-red-500">Failed to load students</p>
-                                    }
-                                >
-                                    <UpdateStudentsForm
-                                        slug={slug}
-                                        student_emails={hostel.students.map(
-                                            (student) => student.email
-                                        )}
-                                    />
-                                </ErrorBoundary>
-                            </AccordionContent>
-                        </AccordionItem>
-                        <AccordionItem value="existing-students">
-                            <AccordionTrigger>
-                                <Heading level={5}>
-                                    Hosteler Students ({hostel.students.length})
-                                </Heading>
-                            </AccordionTrigger>
-                            <AccordionContent>
-                                <div className="grid w-full mx-auto @5xl:max-w-6xl grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 text-left gap-4">
-                                    {hostel.students.map((student) => (
-                                        <div key={student.email}>
-                                            <Heading level={6}>{student.name}</Heading>
-                                            <Paragraph>{student.email}</Paragraph>
-                                        </div>
-                                    ))}
-                                </div>
-                            </AccordionContent>
-                        </AccordionItem>
-                    </Accordion>
-                </div> */}
-            </div>
-        </div>
+      <EmptyArea
+        icons={[LuBuilding]}
+        title="No Hostel Found"
+        description={`Hostel with slug ${slug} not found`}
+      />
     );
+  }
+
+  const allotmentProcess = await getAllotmentProcess(hostel._id);
+
+  const hostelRoomsResponse = await getHostelRooms(hostel._id);
+  if (hostelRoomsResponse.error) {
+    console.log(hostelRoomsResponse.message);
+  }
+
+  return (
+    <div className="space-y-5 my-2">
+      <div className="flex justify-between w-full">
+        <div className="w-1/2">
+          <Heading level={4}>{hostel.name}</Heading>
+          <Paragraph className="capitalize !mt-0">
+            {hostel.gender} Hostel
+          </Paragraph>
+        </div>
+      </div>
+
+      <ResponsiveContainer>
+        <StatsCard title="Allotment Process">
+          <p className="text-xs text-muted-foreground">
+            Allotment process is{" "}
+            <Badge variant="link" size="sm" className="capitalize">
+              {allotmentProcess?.status}
+            </Badge>{" "}
+            for this hostel
+          </p>
+
+          <ChangeAllotmentProcessStatusButton
+            currentStatus={allotmentProcess?.status}
+            hostelId={hostel._id}
+          />
+        </StatsCard>
+        <StatsCard title="Allotment Slots">
+          <p className="text-xs text-muted-foreground">
+            Create slots for allotment process with duration of {SLOT_DURATION}
+            min with gap of {SLOT_TIME_GAP}min and capacity of {SLOT_CAPACITY}{" "}
+            students per slot
+          </p>
+
+          <DistributeSlotsButton hostelId={hostel._id} />
+          <DownloadSlotButton hostelId={hostel._id} />
+        </StatsCard>
+      </ResponsiveContainer>
+
+      <div className="w-full ">
+        <Heading level={4} className="mb-2">
+          Manual Check
+        </Heading>
+        <Paragraph className="text-muted-foreground">
+          Allotment process is
+          <Badge variant="info" className="capitalize">
+            {allotmentProcess?.status}
+          </Badge>{" "}
+          for this hostel
+        </Paragraph>
+
+        <RoomsTable rooms={hostelRoomsResponse.data} />
+      </div>
+    </div>
+  );
 }

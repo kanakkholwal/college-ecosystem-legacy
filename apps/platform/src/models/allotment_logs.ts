@@ -11,12 +11,18 @@ interface AllotmentLog extends Document {
 
 const AllotmentLogSchema = new Schema<AllotmentLog>({
   student_id: { type: String, required: true },
-  action: { type: String, enum: ["JOIN_REQUEST", "JOIN_ACCEPTED", "JOIN_REJECTED", "ROOM_LOCKED"], required: true },
+  action: {
+    type: String,
+    enum: ["JOIN_REQUEST", "JOIN_ACCEPTED", "JOIN_REJECTED", "ROOM_LOCKED"],
+    required: true,
+  },
   room_id: { type: String, required: true },
   timestamp: { type: Date, default: Date.now },
   details: { type: String },
 });
 
 // Export AllotmentLog Model
-const AllotmentLogModel = mongoose.model<AllotmentLog>("AllotmentLog", AllotmentLogSchema);
+const AllotmentLogModel =
+  mongoose.models?.AllotmentLog ||
+  mongoose.model<AllotmentLog>("AllotmentLog", AllotmentLogSchema);
 export default AllotmentLogModel;

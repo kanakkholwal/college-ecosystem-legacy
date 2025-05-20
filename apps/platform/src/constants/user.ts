@@ -1,3 +1,6 @@
+import { z } from "zod";
+import { orgConfig } from "~/project.config";
+
 export const ROLES = [
   "student",
   "faculty",
@@ -12,3 +15,14 @@ export const ROLES = [
   "chief_warden",
   "guard",
 ] as const;
+
+export const genderSchema = z.enum(["male", "female", "not_specified"]);
+
+export const emailSchema = z
+  .string()
+  .email({ message: "Invalid email format" })
+  .min(5, { message: "Email must be at least 5 characters long" })
+  .max(100, { message: "Email cannot exceed 100 characters" })
+  .refine((val) => val.endsWith(`@${orgConfig.domain}`), {
+    message: `Email must end with @${orgConfig.domain}`,
+  });

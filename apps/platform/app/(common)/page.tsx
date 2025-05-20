@@ -3,11 +3,11 @@ import { BannerPanel } from "@/components/utils/banner";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { getLinksByRole, quick_links } from "@/constants/links";
 // import Link from "next/link";
+import { redirect } from "next/navigation";
 import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { HeroSection } from "./client";
-import { redirect } from "next/navigation";
 
 const PROMO = {
   title: "Update your Gender",
@@ -17,8 +17,8 @@ const PROMO = {
   showTill: "2022-01-19T19:00:00",
   getConditionByUser: (user: Session["user"]) =>
     user?.other_roles.includes(ROLES.STUDENT) &&
-    user?.gender === "not_specified" && 
-    new Date() < new Date(PROMO.showTill)
+    user?.gender === "not_specified" &&
+    new Date() < new Date(PROMO.showTill),
 };
 
 export default async function Dashboard() {
@@ -32,7 +32,7 @@ export default async function Dashboard() {
     return redirect(`/${ROLES.GUARD}`);
   }
   return (
-    <>
+    <div className="flex w-full flex-1 flex-col gap-6 px-4 md:px-6 pt-8 md:pt-12 xl:px-12 xl:mx-auto max-w-6xl max-sm:pb-16">
       <ConditionalRender condition={PROMO.getConditionByUser(session?.user)}>
         <BannerPanel
           title={PROMO.title}
@@ -49,7 +49,7 @@ export default async function Dashboard() {
         className="z-10 w-full max-w-6xl mx-auto relative space-y-4 text-left"
       >
         <h2
-          className="text-lg md:text-2xl lg:text-4xl font-bold whitespace-nowrap text-neutral-900 dark:text-neutral-100"
+          className="text-xl font-semibold whitespace-nowrap "
           data-aos="fade-right"
           data-aos-duration="500"
         >
@@ -68,6 +68,6 @@ export default async function Dashboard() {
           ))}
         </div>
       </section>
-    </>
+    </div>
   );
 }

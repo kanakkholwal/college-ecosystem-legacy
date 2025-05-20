@@ -1,8 +1,8 @@
 /** @type {import('next').NextConfig} */
 
-import withSerwistInit from '@serwist/next';
+import withSerWistInit from '@serwist/next';
 
-const withSerwist = withSerwistInit({
+const withSerWist = withSerWistInit({
     cacheOnNavigation: true,
     swSrc: "app/sw.ts",
     swDest: "public/sw.js",
@@ -15,23 +15,28 @@ const nextConfig = {
     reactStrictMode: true,
     crossOrigin: 'anonymous',
     // output: "standalone",
-    logging: {
+    logging: (process.env.NODE_ENV !== "production" ? false :({
         fetches: {
             fullUrl: false
         }
-    },
+    })),
     images: {
         remotePatterns: [
             {
                 protocol: 'https',
                 hostname: "**",
             },
+            {
+                protocol: 'https',
+                hostname: "api.dicebear.com",
+            },
         ],
     },
     experimental: {
         forceSwcTransforms: true,
-    },
-  
+    }
+    // forceSwcTransforms: true,
+
 }
 
-export default withSerwist(nextConfig);
+export default withSerWist(nextConfig);

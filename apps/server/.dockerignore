@@ -1,5 +1,7 @@
 # Dependency directories
 node_modules
+logs
+.git
 
 # Build output
 dist

@@ -3,7 +3,7 @@
 import { format } from "date-fns";
 import mongoose from "mongoose";
 import { revalidatePath } from "next/cache";
-import type { z } from "zod";
+import { z } from "zod";
 import { ROLES } from "~/constants";
 import {
   createHostelSchema,
@@ -11,20 +11,20 @@ import {
   updateHostelSchema,
   updateHostelStudentSchema,
 } from "~/constants/hostel_n_outpass";
+import { genderSchema } from "~/constants/user";
 import { getSession } from "~/lib/auth-server";
 import dbConnect from "~/lib/dbConnect";
 import serverApis from "~/lib/server-apis";
 import {
   HostelModel,
+  type HostelStudentJson,
   HostelStudentModel,
   type HostelStudentType,
   type HostelType,
-  type HostelTypeWithStudents,
   type IHostelType,
 } from "~/models/hostel_n_outpass";
 import ResultModel from "~/models/result";
-import { ORG_DOMAIN } from "~/project.config";
-
+import { orgConfig } from "~/project.config";
 
 const allowedRolesForHostel = [
   ROLES.ADMIN,
@@ -232,32 +232,37 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
 
 export async function getHostel(slug: string): Promise<{
   success: boolean;
-  hostel: HostelType & {
-    students:{
-      count:number
-    }
-  } | null;
+  hostel:
+    | (HostelType & {
+        students: {
+          count: number;
+        };
+      })
+    | null;
   error?: object;
 }> {
   try {
     await dbConnect();
-    const hostel = await HostelModel.findOne({ slug })
-      .lean();
+    const hostel = JSON.parse(
+      JSON.stringify(await HostelModel.findOne({ slug }))
+    ) as HostelType | null;
     if (!hostel) {
       return Promise.resolve({ success: false, hostel: null });
     }
     const hostelStudents = await HostelStudentModel.countDocuments({
-      hostelId: hostel._id,
+      hostelId: hostel?._id,
     });
 
     return Promise.resolve({
       success: true,
-      hostel: JSON.parse(JSON.stringify({
-        ...hostel,
-        students: {
-          count: hostelStudents,
-        },
-      })),
+      hostel: JSON.parse(
+        JSON.stringify({
+          ...hostel,
+          students: {
+            count: hostelStudents,
+          },
+        })
+      ),
     });
   } catch (err) {
     return Promise.reject({
@@ -268,6 +273,40 @@ export async function getHostel(slug: string): Promise<{
   }
 }
 
+
+export async function getHostelById(
+  id: string
+): Promise<{
+  success: boolean;
+  hostel: HostelType | null;
+  error?: object | null;
+}> {
+  try {
+    await dbConnect();
+    const hostel = JSON.parse(
+      JSON.stringify(await HostelModel
+        .findById(id)
+        .lean())
+    ) as HostelType | null;
+    if (!hostel) {
+      return Promise.resolve({ success: false, hostel: null ,error: null});
+    }
+   
+    return Promise.resolve({
+      success: true,
+      hostel: JSON.parse(
+        JSON.stringify(hostel)
+      ),
+      error: null,
+    });
+  } catch (err) {
+    return Promise.reject({
+      success: false,
+      hostel: null,
+      error: JSON.parse(JSON.stringify(err)),
+    });
+  }
+}
 interface getHostelByUserType {
   success: boolean;
   message: string;
@@ -309,6 +348,7 @@ export async function getHostelByUser(
     await dbConnect();
     // (special) : if user is admin
     if (session.user.role === ROLES.ADMIN && slug) {
+      console.log("if user is admin and slug is present");
       const hostel = await HostelModel.findOne({ slug }).lean();
       if (!hostel) {
         return Promise.resolve({
@@ -328,12 +368,32 @@ export async function getHostelByUser(
       });
     }
 
+    const hostel = await HostelModel.findOne({
+      $or: [
+        { _id: new mongoose.Types.ObjectId(session?.user?.hostelId as string) },
+        { "warden.email": session.user.email as string },
+        { "warden.email": { $in: session.user?.other_emails || [] } },
+        { "administrators.email": session.user.email as string },
+        { "administrators.email": { $in: session.user?.other_emails || [] } },
+      ],
+    }).lean();
+    if (!hostel) {
+      console.log("Hostel not found");
+      return Promise.resolve({
+        success: false,
+        hostel: null,
+        message: "Hostel not found",
+        hosteler: null,
+        inCharge: false,
+      });
+    }
     // Check if user is a student
     const hostelerStudent = (await HostelStudentModel.findOne({
       email: session.user.email,
-      userId: session.user.id,
+      // userId: session.user.id,
     })
       .populate("hostelId", "_id name slug gender")
+      .select("+name")
       .lean()) as HostelStudentType | null;
     if (hostelerStudent) {
       // Check if user is a student of the hostel
@@ -350,14 +410,14 @@ export async function getHostelByUser(
         });
       }
 
-      if(hostelerStudent.banned){
+      if (hostelerStudent.banned) {
         return Promise.resolve({
           success: false,
           hostel: JSON.parse(JSON.stringify(hostel)),
           message: `User is banned from accessing hostel features till ${hostelerStudent.bannedTill ? format(new Date(hostelerStudent.bannedTill), "dd/MM/yyyy HH:mm:ss") : "unknown"}`,
           hosteler: JSON.parse(JSON.stringify(hostelerStudent)),
           inCharge: false,
-        })
+        });
       }
 
       return Promise.resolve({
@@ -368,24 +428,7 @@ export async function getHostelByUser(
         inCharge: false,
       });
     }
-    // Check if user is a warden or administrator
-    const hostel = await HostelModel.findOne({
-      $or: [
-        { "warden.email": session.user.email as string },
-        { "warden.email": { $in: session.user?.other_emails || [] } },
-        { "administrators.email": session.user.email as string },
-        { "administrators.email": { $in: session.user?.other_emails || [] } },
-      ],
-    }).lean();
-    if (!hostel) {
-      return Promise.resolve({
-        success: false,
-        hostel: null,
-        message: "Hostel not found",
-        hosteler: null,
-        inCharge: false,
-      });
-    }
+
     return Promise.resolve({
       success: true,
       hostel: JSON.parse(JSON.stringify(hostel)),
@@ -403,7 +446,7 @@ export async function getHostelByUser(
 
 export async function getHostels(): Promise<{
   success: boolean;
-  data: IHostelType[];
+  data: HostelType[];
 }> {
   try {
     await dbConnect();
@@ -449,22 +492,24 @@ export async function importHostelsFromSite() {
   }
 }
 
-type  importStudentsPayload = Array<{
+type importStudentsPayload = Array<{
   rollNo: string;
   name: string;
   cgpi: number;
-}>
+}>;
 
-export async function importStudentsWithCgpi(hostelId:string,payload:importStudentsPayload):Promise<string>{
-    try{
-      await dbConnect();
+export async function importStudentsWithCgpi(
+  hostelId: string,
+  payload: importStudentsPayload
+): Promise<string> {
+  try {
+    await dbConnect();
     const hostel = await HostelModel.findById(hostelId);
-    if (!hostel) return Promise.reject("Hostel Not Found")
+    if (!hostel) return Promise.reject("Hostel Not Found");
 
     const rollNumbers = payload.map((student) => student.rollNo);
     const bulkOps = [];
     const resultUpdates = [];
-
 
     const existingStudents = await HostelStudentModel.find({
       rollNo: { $in: rollNumbers },
@@ -473,39 +518,42 @@ export async function importStudentsWithCgpi(hostelId:string,payload:importStude
       rollNo: { $in: rollNumbers },
     }).lean();
     for await (const student of payload) {
-      const existingStudent = existingStudents.find((s) => s.rollNo === student.rollNo);
+      const existingStudent = existingStudents.find(
+        (s) => s.rollNo === student.rollNo
+      );
       const result = results.find((r) => r.rollNo === student.rollNo);
 
-      if(existingStudent){
+      if (existingStudent) {
         bulkOps.push({
           updateOne: {
             filter: { rollNo: student.rollNo },
             update: {
-              $set: { hostelId, 
+              $set: {
+                hostelId,
                 cgpi: student?.cgpi || 0,
-                gender: hostel.gender },
+                gender: hostel.gender,
+              },
             },
           },
         });
-      }else{
+      } else {
         bulkOps.push({
           insertOne: {
             document: {
               rollNumber: student.rollNo,
               name: student.name,
-              email:`${student.rollNo}@${ORG_DOMAIN}`,
+              email: `${student.rollNo}@${orgConfig.domain}`,
               hostelId,
               gender: hostel.gender,
               roomNumber: "UNKNOWN",
               position: "none",
-              cgpi:student?.cgpi || 0
+              cgpi: student?.cgpi || 0,
             },
           },
-        })
+        });
       }
-      
-      
-      if(result?.gender === "not_specified"){
+
+      if (result?.gender === "not_specified") {
         resultUpdates.push({
           updateOne: {
             filter: { rollNo: student.rollNo },
@@ -513,19 +561,74 @@ export async function importStudentsWithCgpi(hostelId:string,payload:importStude
           },
         });
       }
-
     }
 
     if (bulkOps.length) await HostelStudentModel.bulkWrite(bulkOps);
     if (resultUpdates.length) await ResultModel.bulkWrite(resultUpdates);
 
-    return Promise.resolve("Imported successfully")
+    return Promise.resolve("Imported successfully");
+  } catch (err) {
+    console.log("Failed to import students", err);
+    return Promise.reject("Failed to import students");
+  }
+}
 
-    
+export async function getStudentsByHostelId(
+  hostelId: string
+): Promise<HostelStudentJson[]> {
+  try {
+    await dbConnect();
+    const students = await HostelStudentModel.find({ hostelId })
+      .sort({ createdAt: -1 })
+      .lean();
+    return Promise.resolve(JSON.parse(JSON.stringify(students)));
+  } catch (err) {
+    console.log("Failed to fetch students", err);
+    return Promise.reject("Failed to fetch students");
+  }
+}
 
-    }catch(err){
-        console.log("Failed to import students",err);
-        return Promise.reject("Failed to import students");
+const getHostelStudentSchema = z.object({
+  name: z.string(),
+  email: z.string().email(),
+  rollNo: z.string(),
+  gender: genderSchema,
+  cgpi: z.number(),
+});
+
+export async function getHostelStudent(
+  payload: z.infer<typeof getHostelStudentSchema>
+): Promise<HostelStudentJson> {
+  const response = getHostelStudentSchema.safeParse(payload);
+  if (!response.success) {
+    return Promise.reject("Invalid schema has passed");
+  }
+  const data = response.data;
+
+  try {
+    //
+    await dbConnect();
+    const hostelStudent = await HostelStudentModel.findOne({
+      email: data.email,
+    }).lean();
+
+    if (!hostelStudent) {
+      const hostel = new HostelStudentModel({
+        name: data.name,
+        email: data.email,
+        rollNumber: data.rollNo,
+        position: "none",
+        roomNumber: "UNKNOWN",
+        gender: data.gender,
+        cgpi: data.cgpi,
+        hostelId: null,
+      });
+      await hostel.save();
+      return Promise.resolve(JSON.parse(JSON.stringify(hostel)));
     }
-
+    return Promise.resolve(JSON.parse(JSON.stringify(hostelStudent)));
+  } catch (err) {
+    console.log("Failed to fetch student", err);
+    return Promise.reject("Failed to fetch student");
+  }
 }

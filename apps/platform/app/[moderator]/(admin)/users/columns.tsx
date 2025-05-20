@@ -51,20 +51,6 @@ export const columns: ColumnDef<UserType>[] = [
     enableHiding: true,
   },
   {
-    id: "username",
-    accessorKey: "username",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="UserName" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="text-left font-medium">@{row.getValue("username")}</div>
-      );
-    },
-    enableSorting: true,
-    enableHiding: true,
-  },
-  {
     id: "email",
     accessorKey: "email",
     header: ({ column }) => (

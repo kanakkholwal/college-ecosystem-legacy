@@ -1,5 +1,4 @@
 "use client";
-import { Badge } from "@/components/ui/badge";
 import { formatDuration, intervalToDuration } from "date-fns";
 import { useEffect, useState } from "react";
 import type { PollType } from "src/models/poll";
@@ -28,9 +27,6 @@ export const ClosingBadge = ({ poll }: { poll: PollType }) => {
     return () => clearInterval(intervalId); // Cleanup the interval on component unmount
   }, [poll.closesAt]);
 
-  return (
-    <Badge size="sm" variant="warning_light" className="mr-auto">
-      {remainingTime === "Closed" ? "Closed" : `Closing in: ${remainingTime}`}
-    </Badge>
-  );
+  return remainingTime === "Closed" ? "Closed" : `Closing in: ${remainingTime}`;
+
 };

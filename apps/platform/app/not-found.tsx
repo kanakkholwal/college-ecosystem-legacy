@@ -12,10 +12,8 @@ export const metadata: Metadata = {
 export default function NotFound() {
   return (
     <div className="flex flex-col justify-center items-center p-4 w-full h-full gap-4 py-36">
-      <h2 className="text-5xl font-bold text-slate-900 dark:text-gray-100 text-center">
-        Sorry, Page Not Found!
-      </h2>
-      <p className="text-md  text-gray-700 dark:text-gray-400 mt-5 text-center">
+      <h2 className="text-5xl font-bold text-center">Sorry, Page Not Found!</h2>
+      <p className="text-md text-muted-foreground mt-5 text-center">
         Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve
         mistyped the URL? Be sure to check your spelling.
       </p>

@@ -1,13 +1,12 @@
 "use client";
-import NexoMdxEditor from "nexo-mdx";
 import MarkdownView from "@/components/common/markdown/view";
+import NexoMdxEditor from "nexo-mdx";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -35,9 +34,9 @@ import toast from "react-hot-toast";
 import { VscSend } from "react-icons/vsc";
 import { createAnnouncement } from "src/lib/announcement/actions";
 import {
-  rawAnnouncementSchema,
   RELATED_FOR_TYPES,
-} from "src/models/announcement";
+  rawAnnouncementSchema,
+} from "~/models/announcement";
 import type { z } from "zod";
 
 export default function CreateAnnouncement() {
@@ -65,7 +64,7 @@ export default function CreateAnnouncement() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pb-10">
         <FormField
           control={form.control}
           name="title"
@@ -74,14 +73,11 @@ export default function CreateAnnouncement() {
               <FormLabel>Title</FormLabel>
               <FormControl>
                 <Input
-                  placeholder="title"
+                  placeholder="A short title for the announcement."
                   {...field}
-                  disabled={form.formState.isSubmitting}
                 />
               </FormControl>
-              <FormDescription>
-                A short title for the announcement.
-              </FormDescription>
+
               <FormMessage />
             </FormItem>
           )}
@@ -91,7 +87,7 @@ export default function CreateAnnouncement() {
           name="content"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Content</FormLabel>
+              <FormLabel>The content of the announcement.</FormLabel>
               <FormControl>
                 <NexoMdxEditor
                   {...field}
@@ -99,93 +95,98 @@ export default function CreateAnnouncement() {
                   renderHtml={(md) => <MarkdownView>{md}</MarkdownView>}
                 />
               </FormControl>
-              <FormDescription>
-                The content of the announcement.
-              </FormDescription>
               <FormMessage />
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="relatedFor"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Related For</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-                disabled={form.formState.isSubmitting}
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select a related category" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  {RELATED_FOR_TYPES.map((type) => {
-                    return (
-                      <SelectItem key={type} value={type}>
-                        {type}
-                      </SelectItem>
-                    );
-                  })}
-                </SelectContent>
-              </Select>
-              <FormDescription>The type of announcement.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="expiresAt"
-          render={({ field }) => (
-            <FormItem className="flex flex-col">
-              <FormLabel>Expires At</FormLabel>
-              <Popover>
-                <PopoverTrigger asChild>
+        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+          <FormField
+            control={form.control}
+            name="relatedFor"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>The type of announcement.</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  disabled={form.formState.isSubmitting}
+                >
                   <FormControl>
-                    <Button
-                      variant={"outline"}
-                      className={cn(
-                        "w-[240px] pl-3 text-left font-normal",
-                        !field.value && "text-muted-foreground"
-                      )}
-                      disabled={form.formState.isSubmitting}
-                    >
-                      {field.value ? (
-                        format(field.value, "PPP")
-                      ) : (
-                        <span>Pick a date</span>
-                      )}
-                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                    </Button>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select a related category" />
+                    </SelectTrigger>
                   </FormControl>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    mode="single"
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    disabled={(date) =>
-                      date < new Date() ||
-                      date < new Date("1900-01-01") ||
-                      form.formState.isSubmitting
-                    }
-                    initialFocus
-                  />
-                </PopoverContent>
-              </Popover>
-              <FormDescription>
-                The date at which the announcement will expire.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
+                  <SelectContent>
+                    {RELATED_FOR_TYPES.map((type) => {
+                      return (
+                        <SelectItem key={type} value={type}>
+                          {type}
+                        </SelectItem>
+                      );
+                    })}
+                  </SelectContent>
+                </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="expiresAt"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel>
+                  The date at which the announcement will expire.
+                </FormLabel>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-[240px] pl-3 text-left font-normal",
+                          !field.value && "text-muted-foreground"
+                        )}
+                        disabled={form.formState.isSubmitting}
+                      >
+                        {field.value ? (
+                          format(field.value, "PPP")
+                        ) : (
+                          <span>Pick a date</span>
+                        )}
+                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <Calendar
+                      mode="single"
+                      selected={field.value}
+                      onSelect={field.onChange}
+                      disabled={(date) =>
+                        date < new Date() ||
+                        date < new Date("1900-01-01") ||
+                        form.formState.isSubmitting
+                      }
+                      initialFocus
+                    />
+                  </PopoverContent>
+                </Popover>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </div>
+        <Button
+          type="submit"
+          className="ml-4"
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? (
+            <span className="animate-pulse">Publishing...</span>
+          ) : (
+            <span>Publish Announcement</span>
           )}
-        />
-        <Button type="submit" width="full">
-          Submit
           <VscSend />
         </Button>
       </form>

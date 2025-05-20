@@ -128,7 +128,7 @@ export const EditTimetableDialog: React.FC = () => {
               id="event-title"
               value={newEvent.title}
               className="col-span-3"
-              variant="fluid"
+              variant="outline"
               onChange={(e) => handleEventChange("title", e.target.value)}
             />
           </div>

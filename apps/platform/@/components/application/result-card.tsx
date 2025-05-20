@@ -17,37 +17,36 @@ export function ResultCard({
 }: { result: ResultTypeWithId } & React.ComponentProps<typeof Card>) {
   return (
     <Card
-      variant="glass"
       className="hover:shadow-lg animate-in popup flex flex-col items-stretch justify-between "
       {...props}
     >
       <CardHeader className="flex-row gap-2 items-center px-3 py-4">
-        <div className="flex justify-center items-center w-14 h-14 rounded-full bg-white/50 font-bold text-lg shrink-0">
+        <div className="flex justify-center items-center size-10 rounded-full bg-muted font-bold text-lg shrink-0">
           {result.rank.college}
         </div>
         <div className="flex-auto">
-          <CardTitle className="text-xl">{result.name}</CardTitle>
-          <CardDescription className="font-semibold text-gray-700">
+          <CardTitle className="text-base">{result.name}</CardTitle>
+          <CardDescription className="text-sm font-medium">
             {result.rollNo}
           </CardDescription>
         </div>
       </CardHeader>
       <CardContent className="flex justify-around items-stretch gap-3 text-center px-3">
         <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Batch</p>
-          <p className="text-xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xs text-muted-foreground">Batch</p>
+          <p className="text-base font-bold text-gray-900 dark:text-white">
             {result.rank.batch}
           </p>
         </div>
         <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Branch</p>
-          <p className="text-xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xs text-muted-foreground">Branch</p>
+          <p className="text-base font-bold text-gray-900 dark:text-white">
             {result.rank.branch}
           </p>
         </div>
         <div>
-          <p className="text-sm text-gray-500 dark:text-gray-400">Class</p>
-          <p className="text-xl font-bold text-gray-900 dark:text-white">
+          <p className="text-xs text-muted-foreground">Class</p>
+          <p className="text-base font-bold text-gray-900 dark:text-white">
             {result.rank.class}
           </p>
         </div>

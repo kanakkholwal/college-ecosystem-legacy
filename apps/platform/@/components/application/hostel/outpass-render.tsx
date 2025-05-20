@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import BarCode from "barcode-react";
-import { format } from 'date-fns';
+import { format } from "date-fns";
 import { toPng } from "html-to-image";
 import { ArrowRight, LoaderCircle } from "lucide-react";
 import Link from "next/link";
@@ -13,7 +13,7 @@ import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiOutlineDownload } from "react-icons/hi";
 import type { OutPassType } from "~/models/hostel_n_outpass";
-import { COLLEGE_NAME } from "~/project.config";
+import { orgConfig } from "~/project.config";
 
 interface OutpassRenderProps {
   outpass: OutPassType;
@@ -21,17 +21,16 @@ interface OutpassRenderProps {
 }
 
 const classNames = {
-  rootContainer: "relative w-full max-w-[720px] mx-auto flex items-center justify-center",
+  rootContainer:
+    "relative w-full max-w-[720px] mx-auto flex items-center justify-center",
   root: cn(
-    "aspect-square mx-auto rounded-lg border border-gray-200 shadow-md bg-white",
+    "aspect-square mx-auto rounded-lg border border-border shadow-md bg-white",
     "w-full h-auto p-3",
-    "@2xl:h-[700px] @2xl:w-[720px] @2xl:p-5",
+    "@2xl:h-[700px] @2xl:w-[720px] @2xl:p-5"
   ),
   header: "text-center mb-4",
-  header_clg_title:
-    "@2xl:text-xl font-semibold text-gray-600 @2xl:text-lg",
-  header_hostel_title:
-    "@2xl:text-2xl font-bold text-gray-800 :text-base",
+  header_clg_title: "@2xl:text-xl font-semibold text-gray-600 @2xl:text-lg",
+  header_hostel_title: "@2xl:text-2xl font-bold text-gray-800 :text-base",
   meta_container: "mt-4 flex justify-between items-center text-sm",
   meta_item: "flex flex-col text-gray-700",
   meta_label: "font-bold",
@@ -40,11 +39,10 @@ const classNames = {
   field: "flex justify-between @2xl:flex-nowrap flex-wrap",
   label: "font-semibold",
   value: "text-right",
-  note: "mt-6 @2xl:text-sm text-gray-600 italic text-xs",
+  note: "mt-6 text-muted-foreground italic text-xs",
   footer: "flex justify-between",
   qr_code: "mt-6 flex-0",
-  signature:
-    "mt-6 @2xl:text-sm text-gray-800 font-bold text-right text-xs",
+  signature: "mt-6 text-gray-800 font-semibold text-right text-xs",
   signature_value:
     "mt-3 @2xl:text-sm text-gray-700 font-bold italic text-right text-xs",
 };
@@ -75,7 +73,6 @@ export default function OutpassRender({
           },
         });
 
-
         const link = document.createElement("a");
         link.href = dataUrl;
         link.download = `Outpass_${outpass.student.rollNumber}.png`;
@@ -92,7 +89,6 @@ export default function OutpassRender({
     }
   };
 
-
   return (
     <>
       {!viewOnly && (
@@ -101,16 +97,26 @@ export default function OutpassRender({
           <div className="flex gap-2 justify-end items-center flex-wrap">
             <Button
               type="button"
-              variant={outpass.status === "pending" ? "warning_light" : ("default_light")}
+              variant={
+                outpass.status === "pending" ? "warning_light" : "default_light"
+              }
               effect="shineHover"
               size="sm"
               onClick={handleDownload}
               disabled={isDownloading || outpass.status === "pending"}
             >
-              {outpass.status === "pending" ? "Download not allowed yet" : <>
-                {isDownloading ? <LoaderCircle className="animate-spin" /> : "Download"}
-                {!isDownloading ? <HiOutlineDownload /> : "Downloading..."}
-              </>}
+              {outpass.status === "pending" ? (
+                "Download not allowed yet"
+              ) : (
+                <>
+                  {isDownloading ? (
+                    <LoaderCircle className="animate-spin" />
+                  ) : (
+                    "Download"
+                  )}
+                  {!isDownloading ? <HiOutlineDownload /> : "Downloading..."}
+                </>
+              )}
             </Button>
             <Button variant="link" effect="hoverUnderline" size="sm" asChild>
               <Link href="outpass/request">
@@ -125,7 +131,7 @@ export default function OutpassRender({
         <div className={classNames.rootContainer}>
           <div ref={outpassRef} className={classNames.root}>
             <header className={classNames.header}>
-              <h1 className={classNames.header_clg_title}>{COLLEGE_NAME}</h1>
+              <h1 className={classNames.header_clg_title}>{orgConfig.name}</h1>
               <h2 className={classNames.header_hostel_title}>
                 Office of {outpass.hostel.name}
               </h2>
@@ -146,8 +152,11 @@ export default function OutpassRender({
                     variant={
                       outpass.status === "approved"
                         ? "success_light"
-                        : (outpass.status === "rejected" || outpass.status === "processed")
-                          ? "destructive_light" : outpass.status === "pending" ? "warning_light"
+                        : outpass.status === "rejected" ||
+                            outpass.status === "processed"
+                          ? "destructive_light"
+                          : outpass.status === "pending"
+                            ? "warning_light"
                             : "default_light"
                     }
                   >
@@ -179,13 +188,19 @@ export default function OutpassRender({
               <div className={classNames.field}>
                 <span className={classNames.label}>Expected Out Time:</span>
                 <span className={classNames.value}>
-                  {format(new Date(outpass.expectedOutTime || ""), "dd/MM/yyyy hh:mm a")}
+                  {format(
+                    new Date(outpass.expectedOutTime || ""),
+                    "dd/MM/yyyy hh:mm a"
+                  )}
                 </span>
               </div>
               <div className={classNames.field}>
                 <span className={classNames.label}>Expected In Time:</span>
                 <span className={classNames.value}>
-                  {format(new Date(outpass.expectedInTime || ""), "dd/MM/yyyy hh:mm a")}
+                  {format(
+                    new Date(outpass.expectedInTime || ""),
+                    "dd/MM/yyyy hh:mm a"
+                  )}
                 </span>
               </div>
               <div className={classNames.field}>
@@ -205,20 +220,24 @@ export default function OutpassRender({
               <p className="mt-4">
                 For Office Use Only: This outpass is valid until{" "}
                 <strong>
-                  {format(new Date(
-                    outpass.validTill ||
+                  {format(
                     new Date(
-                      new Date().getFullYear(),
-                      new Date().getMonth(),
-                      new Date().getDate(),
-                      23,
-                      59,
-                      59,
-                      999
-                    )
-                  ), "dd/MM/yyyy hh:mm a")}
+                      outpass.validTill ||
+                        new Date(
+                          new Date().getFullYear(),
+                          new Date().getMonth(),
+                          new Date().getDate(),
+                          23,
+                          59,
+                          59,
+                          999
+                        )
+                    ),
+                    "dd/MM/yyyy hh:mm a"
+                  )}
                 </strong>
-                {new Date(outpass.validTill || "").getTime() < new Date().getTime() && (
+                {new Date(outpass.validTill || "").getTime() <
+                  new Date().getTime() && (
                   <span className="text-red-500 italic"> (Expired)</span>
                 )}
               </p>
@@ -233,7 +252,11 @@ export default function OutpassRender({
                   title={outpass.student.rollNumber}
                   className="size-20"
                 /> */}
-                <BarCode value={outpass._id} className="max-w-xs" height={100}/>
+                <BarCode
+                  value={outpass._id}
+                  className="max-w-xs"
+                  height={100}
+                />
               </div>
               <div className={classNames.signature}>
                 <p className={classNames.signature}>Signature of Student</p>

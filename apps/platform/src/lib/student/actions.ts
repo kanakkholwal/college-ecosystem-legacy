@@ -33,6 +33,7 @@ export async function getStudentInfo(rollNo: string): Promise<studentInfoType> {
     roles: ["student"],
   });
 }
+
 function getYear(semesters: Semester[], programme: string): number {
   switch (semesters.length) {
     case 0:

@@ -6,12 +6,12 @@ import type * as React from "react";
 import { cn } from "@/lib/utils";
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-full gap-2 px-2.5 py-0.5  capitalize whitespace-nowrap font-semibold transition-colors",
+  "inline-flex items-center rounded-lg gap-1 px-2 py-0.5 whitespace-nowrap font-medium transition-colors",
   {
     variants: {
       variant: {
         default:
-          "border-primary bg-primary text-primary-foreground hover:bg-primary/80",
+          "bg-muted text-muted-foreground",
         default_light:
           "border-primary/10 bg-primary/10 text-primary hover:bg-primary/20 dark:backdrop-blur",
         success_light: "bg-green-500/10 text-green-500 hover:bg-green-500/20",
@@ -50,8 +50,8 @@ const badgeVariants = cva(
         glass:
           "backdrop-blur-lg bg-white/30 dark:bg-slate-800/15 backdrop-blur-xl border-white/10 dark:border-white/5 dark:text-white shadow",
         secondary:
-          "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        outline: "text-foreground",
+          "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+        outline: "border border-input bg-background shadow-sm hover:bg-accent",
       },
       size: {
         sm: "px-2 py-0.5 text-xs font-regular",

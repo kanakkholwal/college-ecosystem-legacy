@@ -1,12 +1,12 @@
 import type { NextFunction, Request, Response } from "express";
 import express from "express";
-import rateLimit from "express-rate-limit";
+// import rateLimit from "express-rate-limit";
 import httpRoutes from "./routes/httpRoutes";
 
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
-});
+// const limiter = rateLimit({
+//   windowMs: 15 * 60 * 1000, // 15 minutes
+//   max: 100, // limit each IP to 100 requests per windowMs
+// });
 const app = express();
 
 // Middleware
@@ -22,9 +22,9 @@ app.get("/", (req, res) => {
   });
 });
 const CORS_ORIGINS = ["https://nith.eu.org", "https://app.nith.eu.org"];
-const isOriginAllowed = (origin: string): boolean => {
-  return CORS_ORIGINS.includes(origin);
-};
+// const isOriginAllowed = (origin: string): boolean => {
+//   return CORS_ORIGINS.includes(origin);
+// };
 
 const SERVER_IDENTITY = process.env.SERVER_IDENTITY;
 if (!SERVER_IDENTITY) throw new Error("SERVER_IDENTITY is required in ENV");
@@ -48,21 +48,19 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 
   // CORS logic for browser requests
   if (
-    (process.env.NODE_ENV === 'production' && CORS_ORIGINS.some(o => origin.endsWith(o))) ||
-    (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost:'))
+    (process.env.NODE_ENV === "production" &&
+      CORS_ORIGINS.some((o) => origin.endsWith(o))) ||
+    (process.env.NODE_ENV !== "production" &&
+      origin.startsWith("http://localhost:"))
   ) {
-    res.header('Access-Control-Allow-Origin', origin);
-    res.header('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
-    res.header('Access-Control-Allow-Headers', 'Content-Type,X-IDENTITY-KEY');
-    res.header('Access-Control-Allow-Credentials', 'true');
-    if (req.method === 'OPTIONS') {
+    res.header("Access-Control-Allow-Origin", origin);
+    res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type,X-IDENTITY-KEY");
+    res.header("Access-Control-Allow-Credentials", "true");
+    if (req.method === "OPTIONS") {
       res.sendStatus(200); // Preflight request
       return;
     }
-    next();
-    return; // Explicitly end processing here
-  } 
-   if (identityKey === SERVER_IDENTITY) {
     next();
     return; // Explicitly end processing here
   }
@@ -79,7 +77,7 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 app.use("/api", httpRoutes);
 
 // Error handling middleware
- 
+
 app.use(
   (
     err: Error,

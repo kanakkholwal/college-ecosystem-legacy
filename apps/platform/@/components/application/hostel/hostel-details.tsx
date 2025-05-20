@@ -49,14 +49,6 @@ export async function HostelDetail({ hostel }: { hostel: HostelType }) {
             </li>
           ))}
         </ul>
-        <Heading level={5} className="text-gray-800">
-          Hosteler Students ({hostel.students.length})
-          {isWarden && (
-            <Button variant="link" size="sm">
-              Update Students
-            </Button>
-          )}
-        </Heading>
       </div>
     </div>
   );
@@ -67,7 +59,7 @@ export function HostelDetailsForNonAdmins({ hostel }: { hostel: HostelType }) {
     <div className="space-y-5 my-2">
       <div className="w-full">
         <div className="@2xl:w-1/2">
-          <Heading level={3} className="font-bold text-gray-800">
+          <Heading level={3} className="font-bold">
             {hostel.name}
           </Heading>
           <Paragraph className="capitalize !mt-0">
@@ -77,9 +69,7 @@ export function HostelDetailsForNonAdmins({ hostel }: { hostel: HostelType }) {
         </div>
       </div>
       <div className="w-full">
-        <Heading level={6} className="text-gray-800">
-          InCharges
-        </Heading>
+        <Heading level={6}>InCharges</Heading>
         <ul className="list-disc list-inside">
           {hostel.administrators.map((admin) => (
             <li key={admin.email}>

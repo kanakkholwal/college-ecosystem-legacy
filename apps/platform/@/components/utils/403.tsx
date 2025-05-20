@@ -1,11 +1,9 @@
 export default function Page403() {
   return (
     <div className="flex h-full relative overflow-hidden min-h-screen">
-      <div className="flex flex-col justify-center items-center p-4 w-full h-full gap-4 m-auto">
-        <h2 className="text-5xl font-bold text-slate-900  text-center">
-          No permission!
-        </h2>
-        <p className="text-md  text-gray-700 mt-5 text-center">
+      <div className="flex flex-col justify-center items-center p-4 w-full h-full gap-4 m-auto max-w-6xl">
+        <h2 className="text-5xl font-bold text-center">No permission!</h2>
+        <p className="text-md  text-muted-foreground mt-5 text-center">
           The page you{`'`}re trying access has restricted access.{"\n"}
           Please refer to your system administrator
         </p>

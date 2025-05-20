@@ -9,11 +9,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
-import { Search } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Search, SlidersHorizontal } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { SlidersHorizontal } from 'lucide-react';
-import { cn } from "@/lib/utils";
 
 type searchParamsType = {
   searchField?: "email" | "name" | undefined;
@@ -54,7 +53,7 @@ export default function SearchBar() {
     searchParamsType["sortDirection"]
   >(
     (searchParams.get("sortDirection") as searchParamsType["sortDirection"]) ||
-    "desc"
+      "desc"
   );
 
   const [offset, setOffset] = useState<searchParamsType["offset"]>(
@@ -71,7 +70,7 @@ export default function SearchBar() {
   useEffect(() => {
     setSearchField(
       (searchParams.get("searchField") as searchParamsType["filterField"]) ||
-      "name"
+        "name"
     );
     setSearchOperator(
       (searchParams.get(
@@ -137,11 +136,17 @@ export default function SearchBar() {
         </Button>
       </div>
 
-      <div className={cn("flex items-end flex-wrap gap-2 text-sm text-gray-600",
-        open ? "h-16" : "h-0",
-        "transition-all delay-150 duration-300 overflow-hidden w-full")}>
+      <div
+        className={cn(
+          "flex items-end flex-wrap gap-2 text-sm text-muted-foreground",
+          open ? "h-16" : "h-0",
+          "transition-all delay-150 duration-300 overflow-hidden w-full"
+        )}
+      >
         <div>
-          <p className="text-gray-600 font-semibold text-sm">Search Field</p>
+          <p className="text-muted-foreground font-medium text-sm mb-1">
+            Search Field
+          </p>
           <div className="flex items-center space-x-4">
             {/* Search Field */}
             <Select
@@ -189,7 +194,9 @@ export default function SearchBar() {
         </div>
         <Separator orientation="vertical" />
         <div>
-          <p className="text-gray-600 font-semibold text-sm">Search Field</p>
+          <p className="text-muted-foreground font-medium text-sm mb-1">
+            Search Field
+          </p>
 
           {/* Sorting Options */}
           <div className="flex items-center space-x-4">
@@ -239,7 +246,9 @@ export default function SearchBar() {
         </div>
         <Separator orientation="vertical" />
         <div>
-          <p className="text-gray-600 font-semibold text-sm">Limit & Offset</p>
+          <p className="text-muted-foreground font-medium text-sm mb-1">
+            Limit & Offset
+          </p>
           <div className="flex items-center space-x-4">
             <Input
               type="number"

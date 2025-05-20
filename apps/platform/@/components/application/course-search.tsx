@@ -78,7 +78,7 @@ export default function SearchBox({ departments, types }: Props) {
             }}
           >
             <div className="mb-4">
-              <p className="text-sm font-semibold text-slate-600 mb-2">
+              <p className="text-sm font-semibold text-text-muted-foreground mb-2">
                 By Departments
                 {searchParams.get("department")?.toString() && (
                   <Button
@@ -101,7 +101,7 @@ export default function SearchBox({ departments, types }: Props) {
                     variant={
                       searchParams.get("branch")?.toString() === "all"
                         ? "default_light"
-                        : "slate"
+                        : "outline"
                     }
                     className="text-xs !h-8 capitalize"
                     onClick={() => {
@@ -114,7 +114,7 @@ export default function SearchBox({ departments, types }: Props) {
               </div>
             </div>
             <div className="mb-4">
-              <p className="text-sm font-semibold text-slate-600 mb-2">
+              <p className="text-sm font-semibold text-muted-foreground mb-2">
                 By Course Types
                 {searchParams.get("type")?.toString() && (
                   <Button
@@ -136,7 +136,7 @@ export default function SearchBox({ departments, types }: Props) {
                     variant={
                       searchParams.get("type")?.toString() === type
                         ? "default_light"
-                        : "slate"
+                        : "outline"
                     }
                     size="sm"
                     className="text-xs !h-8 capitalize"

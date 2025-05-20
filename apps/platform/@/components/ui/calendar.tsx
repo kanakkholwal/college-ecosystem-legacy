@@ -28,11 +28,11 @@ function Calendar({
 
         //  (single mode)
         button_previous: cn(
-          "size-6 bg-slate-200 hover:bg-primary/30 rounded-lg inline-flex justify-center items-center cursor-pointer hover:[&>svg]:text-primary",
+          "size-6 bg-background rounded-lg inline-flex justify-center items-center cursor-pointer hover:[&>svg]:text-primary",
           "absolute top-1 left-3 z-10"
         ),
         button_next: cn(
-          "size-6 bg-slate-200 hover:bg-primary/30 rounded-lg inline-flex justify-center items-center cursor-pointer hover:[&>svg]:text-primary",
+          "size-6 bg-background rounded-lg inline-flex justify-center items-center cursor-pointer hover:[&>svg]:text-primary",
           "absolute top-1 right-3 z-10"
         ),
 
@@ -63,16 +63,16 @@ function Calendar({
         // days
         day: cn(
           btnRawClassName,
-          "h-8 w-8 p-0 font-normal aria-selected:opacity-100 aria-selected:border-primary/50 hover:bg-slate-200"
+          "h-8 w-8 p-0 font-normal aria-selected:opacity-100 aria-selected:border-primary/50 hover:bg-accent dark:hover:bg-background"
         ),
         outside:
           "day-outside text-gray-500 hover:bg-transparent aria-selected:text-primary/50 aria-selected:text-primary/90",
         disabled: "text-gray-400 opacity-80",
         day_hidden: "invisible",
         today:
-          "text-primary border !border-primary/50 font-semibold hover:text-primary !hover:border-primary/50",
+          "text-primary border border-transparent font-semibold hover:text-primary hover:border-primary/50",
         selected:
-          "!bg-primary/30 text-primary !hover:text-primary !hover:bg-primary/30",
+          "!bg-primary/10 text-primary !hover:text-primary !hover:bg-primary/20",
         focused: "shadow-md",
         range_end: "range_end border border-primary/50 rounded-r-md",
         range_start: "range_end border border-primary/50 rounded-l-md",

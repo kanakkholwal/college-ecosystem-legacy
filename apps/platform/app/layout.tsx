@@ -2,21 +2,26 @@ import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
+import { appConfig } from "~/project.config";
 import { Provider } from "./client-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "College Platform",
-  description: "All-in-One Student Hub: Results, Resources, Attendance & More",
-  applicationName: "College Platform",
-  authors: [{ name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" }],
-  creator: "Kanak Kholwal",
+  title: {
+    default: appConfig.name,
+    template: `%s - ${appConfig.name}`,
+  },
+  description: appConfig.description,
+  applicationName: appConfig.name,
+  authors: appConfig.authors,
+  creator: appConfig.creator,
+  keywords: appConfig.keywords,
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
-  metadataBase: new URL("https://app.nith.eu.org"),
+  metadataBase: new URL(appConfig.url),
   robots: {
     index: false,
     follow: true,
@@ -31,9 +36,37 @@ export const metadata: Metadata = {
     },
   },
   manifest: "/manifest.json",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: appConfig.url,
+    title: appConfig.name,
+    description: appConfig.description,
+    siteName: appConfig.name,
+    images: [
+      {
+        url: "https://v4.shadcn.com/opengraph-image.png",
+        width: 1200,
+        height: 630,
+        alt: appConfig.name,
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: appConfig.name,
+    description: appConfig.description,
+    images: ["https://github.com/kanakkholwal.png"],
+    creator: "@kanakkholwal",
+  },
+  icons: {
+    icon: "/favicon.ico",
+    shortcut: "/favicon-16x16.png",
+    apple: "/apple-touch-icon.png",
+
+  },
 };
 
-export const dynamic = "force-dynamic";
 
 const fontSans = FontSans({
   subsets: ["latin"],

@@ -1,9 +1,9 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { getSession } from "src/lib/auth-server";
-import dbConnect from "src/lib/dbConnect";
-import Poll, { PollType, RawPollType } from "src/models/poll";
+import { getSession } from "~/lib/auth-server";
+import dbConnect from "~/lib/dbConnect";
+import Poll, { type PollType, type RawPollType } from "~/models/poll";
 
 export async function createPoll(pollData: RawPollType) {
   const session = await getSession();
@@ -18,7 +18,7 @@ export async function createPoll(pollData: RawPollType) {
       createdBy: session.user.id,
     });
     await poll.save();
-    revalidatePath(`/polls`);
+    revalidatePath("/polls");
     return Promise.resolve("Poll created successfully");
   } catch (err) {
     console.error(err);
@@ -103,7 +103,7 @@ export async function updateVotes(
     }
     poll.votes = voteData;
     await poll.save();
-    revalidatePath(`/polls`);
+    revalidatePath("/polls");
     return Promise.resolve(JSON.parse(JSON.stringify(poll)));
   } catch (err) {
     console.error(err);
@@ -114,7 +114,7 @@ export async function deletePoll(pollId: string): Promise<void> {
   try {
     await dbConnect();
     await Poll.findByIdAndDelete(pollId);
-    revalidatePath(`/polls`);
+    revalidatePath("/polls");
     return Promise.resolve();
   } catch (err) {
     console.error(err);

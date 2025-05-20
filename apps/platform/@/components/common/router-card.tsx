@@ -26,14 +26,13 @@ export function RouterCard({
   disabled,
   preserveParams,
 }: RouterCardProps) {
-  
-
   return (
     <ParamsPreserverLink
       href={href}
       preserveParams={preserveParams}
       className={cn(
-        "group rounded-lg flex flex-col justify-between gap-3 border border-gray-50/30 px-5 py-4 animate-in popup transition-colors backdrop-blur-2xl hover:bg-white/10 hover:shadow hover:border-primary/5",
+        "@max-lg:col-span-full bg-card block border p-4 rounded-lg shadow-md text-fd-card-foreground transition-colors",
+        "group flex flex-col justify-between gap-2 animate-in popup transition-colors backdrop-blur-2xl shadow-sm",
         disabled ? "pointer-events-none cursor-not-allowed" : ""
       )}
       target={external ? "_blank" : "_self"}
@@ -41,24 +40,24 @@ export function RouterCard({
       style={style}
     >
       <div className="flex w-full flex-row gap-2 items-center justify-center">
-        <div className="flex justify-center items-center size-10 rounded-full bg-white/50 font-bold text-lg shrink-0">
-          <Icon className="size-6 text-primary inline-block" />
+        <div className="flex justify-center items-center size-10 rounded-full bg-muted font-bold text-lg shrink-0">
+          <Icon className="size-5 text-primary inline-block" />
         </div>
         <div className="flex-auto">
-          <h5 className="text-base font-semibold">{title}</h5>
+          <h5 className="not-prose mb-1 text-sm font-medium">{title}</h5>
           {disabled ? (
-            <p className="text-sm font-semibold text-gray-700">(Maintenance)</p>
+            <p className="text-xs text-muted-foreground prose-no-margin">
+              (Maintenance)
+            </p>
           ) : null}
         </div>
       </div>
-      <p className="max-w-[30ch] text-sm opacity-80">{description}</p>
-      <p className="text-sm whitespace-nowrap font-semibold text-primary/80 transition-all group-hover:text-primary group-hover:translate-x-1 motion-reduce:transform-none">
+      <p className="max-w-[30ch] text-xs text-muted-foreground prose-no-margin">
+        {description}
+      </p>
+      <p className="text-xs whitespace-nowrap font-semibold text-primary/80 transition-all group-hover:text-primary group-hover:translate-x-1 motion-reduce:transform-none  [&_svg]:size-4 [&_svg]:ml-1 [&_svg]:inline-block">
         Go to {title}
-        {external ? (
-          <ArrowUpRight className="w-4 h-4 ml-1 inline-block" />
-        ) : (
-          <ArrowRight className="w-4 h-4 ml-1 inline-block" />
-        )}
+        {external ? <ArrowUpRight /> : <ArrowRight />}
       </p>
     </ParamsPreserverLink>
   );
