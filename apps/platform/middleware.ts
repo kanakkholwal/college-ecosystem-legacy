@@ -5,11 +5,11 @@ import type { Session } from "~/lib/auth";
 
 const SIGN_IN_PATH = "/sign-in";
 
-const authorized_pathsMap = new Map([
+const roleBasedRoutes = new Map([
   ["/admin", ["admin"]],
   ["/faculty", ["faculty"]],
-  ["/cr", ["faculty"]],
-  ["/student", ["faculty"]],
+  ["/cr", ["cr"]],
+  ["/student", ["student"]],
   ["/guard", ["guard"]],
 ]);
 
@@ -21,6 +21,7 @@ function isAuthorized(roles: string[], allowedRoles: string[]) {
 
 export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
+  // if the request is for the sign-in page, allow it to pass through
   const { data: session } = await betterFetch<Session>(
     "/api/auth/get-session",
     {
@@ -51,8 +52,8 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
     // if the user is already authenticated
-    const allows_roles = authorized_pathsMap.get(request.nextUrl.pathname);
-    if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
+    const allows_roles = roleBasedRoutes.get(request.nextUrl.pathname);
+    if (roleBasedRoutes.has(request.nextUrl.pathname) && allows_roles) {
       if (
         !isAuthorized(
           [...session.user.other_roles, session.user.role],
@@ -68,8 +69,8 @@ export async function middleware(request: NextRequest) {
     if (!session) {
       return NextResponse.redirect(new URL(SIGN_IN_PATH, request.url));
     }
-    const allows_roles = authorized_pathsMap.get(request.nextUrl.pathname);
-    if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
+    const allows_roles = roleBasedRoutes.get(request.nextUrl.pathname);
+    if (roleBasedRoutes.has(request.nextUrl.pathname) && allows_roles) {
       if (
         !isAuthorized(
           [...session.user.other_roles, session.user.role],
@@ -104,11 +105,19 @@ export async function middleware(request: NextRequest) {
         },
         {
           status: 403,
+          // headers:{
+          //   "Un-Authorized-Redirect": "true",
+          //   "Un-Authorized-Redirect-Path": SIGN_IN_PATH,
+          //   "Un-Authorized-Redirect-Next": request.nextUrl.href,
+          //   "Un-Authorized-Redirect-Method": request.method,
+          //   "Un-Authorized-Redirect-max-tries": "5",
+          //   "Un-Authorized-Redirect-tries": "1",
+          // }
         }
       );
     }
-    const allows_roles = authorized_pathsMap.get(request.nextUrl.pathname);
-    if (authorized_pathsMap.has(request.nextUrl.pathname) && allows_roles) {
+    const allows_roles = roleBasedRoutes.get(request.nextUrl.pathname);
+    if (roleBasedRoutes.has(request.nextUrl.pathname) && allows_roles) {
       if (
         !isAuthorized(
           [...session.user.other_roles, session.user.role],

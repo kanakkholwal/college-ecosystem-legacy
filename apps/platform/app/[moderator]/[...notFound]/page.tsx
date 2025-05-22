@@ -1,5 +1,6 @@
 import EmptyArea from "@/components/common/empty-area";
-import { FileText, Files, Link } from "lucide-react";
+import { FileText, Files, Link as LinkIcon } from "lucide-react";
+import Link from "next/link";
 
 export const metadata = {
   title: "Not Found",
@@ -23,13 +24,13 @@ export default async function NotFoundFallbackPage({ params }: Props) {
         description={
           <>
             The page{" "}
-            <span className="font-bold text-primary p-1 bg-primary/20 rounded-md">
+            <Link href={`/${moderator}/${notFound.join("/")}`} className="font-bold text-primary p-1 bg-primary/10 rounded-md hover:underline">
               {moderator}/{notFound.join("/")}
-            </span>{" "}
+            </Link>{" "}
             was not found.
           </>
         }
-        icons={[FileText, Link, Files]}
+        icons={[FileText, LinkIcon, Files]}
       />
     </div>
   );
