@@ -100,7 +100,6 @@
     --destructive-foreground: hsl(0deg 0% 92.16%);
     --border: hsl(0, 0%, 14%);
     --input: hsl(0, 0%, 14%);
-    /* --input: 0, 0%, 14%; */
     --ring: hsl(250deg 100% 80%);
 
     --chart-1: hsl(220 70% 50%);
