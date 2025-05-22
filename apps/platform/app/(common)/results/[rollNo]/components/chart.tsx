@@ -1,10 +1,10 @@
 "use client";
 import {
+  type ChartConfig,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
-  type ChartConfig,
 } from "@/components/ui/chart";
 import { Skeleton } from "@/components/ui/skeleton";
 import type React from "react";
@@ -38,11 +38,11 @@ export const CGPIChart: React.FC<CGPIChartProps> = ({ semesters }) => {
   const chartConfig = {
     sgpi: {
       label: "SGPI",
-      color: "hsl(var(--primary))",
+      color: "var(--primary)",
     },
     cgpi: {
       label: "CGPI",
-      color: "hsl(var(--primary) / 0.5)",
+      color: "var(--secondary)",
     },
   } as ChartConfig;
 
@@ -51,10 +51,11 @@ export const CGPIChart: React.FC<CGPIChartProps> = ({ semesters }) => {
       <Suspense fallback={<CGPIChartLoader />}>
         <ChartContainer
           config={chartConfig}
-          className="w-full aspect-video relative z-10"
+          className="w-full aspect-video relative z-10 bg-card shadow-sm p-4 rounded-lg"
+          title="SGPI and CGPI for each semester"
         >
           <BarChart data={chartData}>
-            <CartesianGrid vertical={false} />
+            <CartesianGrid vertical={true} />
             <XAxis dataKey="semester" />
             <YAxis />
             <ChartTooltip content={<ChartTooltipContent />} />
