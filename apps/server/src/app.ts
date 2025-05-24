@@ -1,32 +1,40 @@
 import type { NextFunction, Request, Response } from "express";
 import express from "express";
-// import rateLimit from "express-rate-limit";
+import { config } from "./config";
 import httpRoutes from "./routes/httpRoutes";
 
+
+// import {rateLimit} from "express-rate-limit";
 // const limiter = rateLimit({
 //   windowMs: 15 * 60 * 1000, // 15 minutes
 //   max: 100, // limit each IP to 100 requests per windowMs
+//   statusCode: 429, // HTTP status code to send when the limit is reached
+//   message: {
+//     error: true,
+//     data: null,
+//     message: "Too many requests, please try again later.",
+//   },
 // });
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-// app.use(limiter);
+// app.use(limiter); // Apply rate limiting middleware
 
 // Default route
 app.get("/", (req, res) => {
   res.json({
-    message: "Welcome to the server!",
-    status: "healthy",
+    error:null,
+    data:null,
+    message: "Welcome to NITH API",
   });
 });
-const CORS_ORIGINS = ["https://nith.eu.org", "https://app.nith.eu.org"];
 // const isOriginAllowed = (origin: string): boolean => {
 //   return CORS_ORIGINS.includes(origin);
 // };
 
-const SERVER_IDENTITY = process.env.SERVER_IDENTITY;
+const SERVER_IDENTITY = config.SERVER_IDENTITY;
 if (!SERVER_IDENTITY) throw new Error("SERVER_IDENTITY is required in ENV");
 
 // Middleware to handle custom CORS logic
@@ -49,13 +57,13 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
   // CORS logic for browser requests
   if (
     (process.env.NODE_ENV === "production" &&
-      CORS_ORIGINS.some((o) => origin.endsWith(o))) ||
+      config.corsOrigins.some((o) => origin.endsWith(o))) ||
     (process.env.NODE_ENV !== "production" &&
       origin.startsWith("http://localhost:"))
   ) {
     res.header("Access-Control-Allow-Origin", origin);
-    res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type,X-IDENTITY-KEY");
+    res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS,DELETE,PUT");
+    res.header("Access-Control-Allow-Headers", "Content-Type,X-IDENTITY-KEY,Origin");
     res.header("Access-Control-Allow-Credentials", "true");
     if (req.method === "OPTIONS") {
       res.sendStatus(200); // Preflight request
@@ -88,8 +96,9 @@ app.use(
   ) => {
     console.error(err.stack);
     res.status(500).json({
-      message: "Something went wrong!",
-      error: err.message,
+      error: err,
+      data: null,
+      message: err.message || "Something went wrong!",
     });
   }
 );

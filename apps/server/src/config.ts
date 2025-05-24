@@ -1,0 +1,23 @@
+
+// This file contains the configuration for the server.
+// It includes the server identity, port, database URL, Redis URL, and CORS settings.
+
+export const config = {
+    // The identity key for the server
+    SERVER_IDENTITY: process.env.SERVER_IDENTITY || "nith-server",
+    
+    // The port on which the server will run
+    PORT: Number.parseInt(process.env.PORT || "") || 8080,
+
+    // The URL of the database
+    DB_URL: process.env.MONGODB_URI || "mongodb://localhost:27017/nith",
+    // The URL of the Redis server
+    REDIS_URL: process.env.REDIS_URL || "redis://localhost:6379",
+
+
+    corsOrigins: ["https://nith.eu.org", "https://app.nith.eu.org"],
+    corsEnabled: process.env.CORS_ENABLED === "true",
+    isDev : process.env.NODE_ENV !== "production",
+} as const;
+
+export type Config = typeof config;
