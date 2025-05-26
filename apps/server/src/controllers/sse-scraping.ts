@@ -168,7 +168,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
         data: taskData,
         error: null,
       });
-      await sleep(2000);
+      await sleep(1000);
       req.on('close', async () => {
         console.log('Client disconnected');
         taskData.status = TASK_STATUS.CANCELLED;
@@ -182,6 +182,12 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
             },
           }
         );
+        sendEvent(res, "task_status", {
+          data: taskData,
+          error: null,
+        });
+        res.write("event: task_cancelled\n");
+        res.write("data: null\n");
         res.end();
       });
     }

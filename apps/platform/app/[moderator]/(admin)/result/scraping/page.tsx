@@ -11,9 +11,10 @@ import {
 } from "@/components/ui/select";
 import { LoaderCircle } from "lucide-react";
 
-import { useCallback, useState } from "react";
+import { useEffect, useState } from "react";
 
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import EmptyArea from "@/components/common/empty-area";
+import { Separator } from "@/components/ui/separator";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { format } from "date-fns";
 import { useSearchParams } from "next/navigation";
@@ -79,6 +80,7 @@ export default function ScrapeResultPage() {
   const searchParams = useSearchParams();
   const taskId = searchParams.get("taskId");
   const taskType = searchParams.get("list_type");
+  const action = searchParams.get("action");
 
   const [listType, setListType] = useState<
     (typeof LIST_TYPE)[keyof typeof LIST_TYPE]
@@ -88,6 +90,7 @@ export default function ScrapeResultPage() {
 
   const [error, setError] = useState<string | null>(null);
   const [taskList, setTaskList] = useState<taskDataType[]>([]);
+  const [taskAction, setTaskAction] = useState<string | null>(action || null);
 
   const [taskData, setTaskData] = useState<taskDataType>({
     processable: 0,
@@ -149,13 +152,19 @@ export default function ScrapeResultPage() {
       eventSource.close();
     };
   };
+  const handleAction = (id: string, type: string) => {
+    console.log("Action triggered", id, type);
+    setTaskAction(type);
+    sseEndpoint.searchParams.append("taskId", id);
+    sseEndpoint.searchParams.append("action", type);
+    startScraping(listType, id);
 
-  const handleAction = useCallback((taskId: string, action: string) => {
-    if (!taskId) return;
+  }
+  useEffect(() => {
+    if (!taskId || !taskAction) return;
 
-    if (!action) return;
     sseEndpoint.searchParams.append("taskId", taskId);
-    sseEndpoint.searchParams.append("action", action);
+    sseEndpoint.searchParams.append("action", taskAction);
 
     const eventSource = new EventSource(sseEndpoint.toString(), {
       withCredentials: true,
@@ -185,7 +194,7 @@ export default function ScrapeResultPage() {
       eventSource.close();
     };
 
-  }, []);
+  }, [taskId, taskAction]);
 
 
   return (
@@ -241,50 +250,56 @@ export default function ScrapeResultPage() {
             </AlertDescription>
           </Alert>
         </ConditionalRender>
+        <ConditionalRender condition={!!error}>
+          <Alert variant="destructive" className="w-full">
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        </ConditionalRender>
+        <ConditionalRender condition={!streaming && !error}>
+          <Alert variant="default" className="w-full">
+            <AlertTitle>Idle</AlertTitle>
+            <AlertDescription>
+              No scraping task is currently running.
+            </AlertDescription>
+          </Alert>
+        </ConditionalRender>
+        <ConditionalRender condition={taskData.taskId !== ""}>
+          <Alert variant="default" className="w-full" id="task-status">
+            <AlertTitle>
+              Task ID: {taskData.taskId}
+              <Separator orientation="vertical" className="mx-2" />
+              {taskData.status && (
+                <span className="text-sm font-medium">
+                  {taskData.status}
+                </span>
+              )}
+            </AlertTitle>
+            <AlertDescription>
+
+            </AlertDescription>
+            {format(
+              new Date(taskData.startTime),
+              "dd/MM/yyyy HH:mm:ss"
+            )}
+            {taskData.endTime && (
+              <span className="ml-2">
+                {` - ${format(
+                  new Date(taskData.endTime),
+                  "dd/MM/yyyy HH:mm:ss"
+                )}`}
+              </span>
+            )}
+          </Alert>
+        </ConditionalRender>
+
       </section>
 
-      <Card id="task-status">
-        <CardHeader>
-          <CardTitle>
-            Task Status ({taskData.taskId}){" "}
-            {taskData.status && (
-              <Badge variant="info" className="ml-2">
-                {taskData.status}
-              </Badge>
-            )}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-6 gap-4">
-          <div>
-            <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">
-              Processable
-            </div>
-            <div className="text-center p-2">
-              <Badge variant="info">{taskData.processable}</Badge>
-            </div>
-          </div>
 
-        </CardContent>
-        <CardFooter>
-          {format(
-            new Date(taskData.startTime),
-            "dd/MM/yyyy HH:mm:ss"
-          )}
-          {taskData.endTime && (
-            <span className="ml-2">
-              {` - ${format(
-                new Date(taskData.endTime),
-                "dd/MM/yyyy HH:mm:ss"
-              )}`}
-            </span>
-          )}
-        </CardFooter>
-      </Card>
-
-      <section className="p-6 border border-border rounded-lg shadow">
+      <section className="p-4 border border-border rounded-lg shadow bg-card space-y-4">
         <div
           aria-label="header"
-          className="text-lg font-semibold border-b pb-5 mb-5 flex w-full justify-between gap-4"
+          className="text-base font-medium"
         >
           <div>
             Task List{" "}
@@ -297,11 +312,10 @@ export default function ScrapeResultPage() {
 
         </div>
         {taskList.length === 0 && (
-          <div className="grid grid-cols-1 gap-2 bg-primary/10 text-primary text-center p-3 rounded-md shadow">
-            <div className="flex gap-4">
-              <h5 className="text-sm font-semibold">No Task Found</h5>
-            </div>
-          </div>
+          <EmptyArea
+            title="No tasks found"
+            description="There are no tasks available at the moment."
+          />
         )}
         {taskList.map((task) => {
           return (
