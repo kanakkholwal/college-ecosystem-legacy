@@ -1,5 +1,6 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -10,9 +11,10 @@ import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import type { InferSelectModel } from "drizzle-orm";
+import { Trash2 } from "lucide-react";
 import type React from "react";
 import toast from "react-hot-toast";
-import { updateRoom } from "~/actions/room";
+import { deleteRoom, updateRoom } from "~/actions/room";
 import type { roomUsageHistory, rooms } from "~/db/schema/room";
 import type { Session } from "~/lib/auth-client";
 
@@ -38,8 +40,8 @@ interface Props extends React.ComponentProps<typeof Card> {
 export default function RoomCard({ room, user, ...props }: Props) {
   const authorized = user
     ? user?.role === "admin" ||
-      user.other_roles?.includes("cr") ||
-      user.other_roles?.includes("faculty")
+    user.other_roles?.includes("cr") ||
+    user.other_roles?.includes("faculty")
     : false;
 
   const handleSwitch = (value: boolean) => {
@@ -64,12 +66,28 @@ export default function RoomCard({ room, user, ...props }: Props) {
   };
 
   return (
-    <Card className="hover:shadow-lg animate-in popup @container/0" {...props}>
+    <Card className="hover:shadow-lg animate-in popup @container/0 relative" {...props}>
+      {user?.role === "admin" && (<div className="absolute -top-2 -right-2 z-10">
+        <Button size="icon_sm" variant="destructive_light" onClick={() => {
+          if (!(user && authorized)) return;
+          toast.promise(
+            deleteRoom(room.id),
+            {
+              loading: `Deleting ${room.roomNumber}...`,
+              success: `Room ${room.roomNumber} deleted successfully!`,
+              error: `Failed to delete ${room.roomNumber}!`,
+            }
+          );
+        }}>
+          <Trash2 />
+        </Button>
+      </div>)}
       <CardHeader className="p-4">
-        <div className="flex flex-wrap w-full justify-between">
-          <div className="flex justify-center items-center size-12 rounded-full bg-muted font-bold text-lg shrink-0">
+        <div className="flex flex-wrap w-full justify-between gap-2 items-center">
+          <div className="flex justify-center items-center h-10 p-4 rounded-full bg-muted font-semibold text-lg shrink-0">
             {room.roomNumber}
           </div>
+  
           {authorized && (
             <div className="inline-flex flex-col items-end text-left ml-auto">
               <Label
@@ -98,12 +116,12 @@ export default function RoomCard({ room, user, ...props }: Props) {
           {room.latestUsageHistory ? ` by ${room.latestUsageHistory.name}` : ""}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex w-full flex-wrap justify-around items-start gap-2 p-4 ">
+      <CardContent className="flex w-full flex-wrap justify-around items-start gap-2 p-4 px-2">
         <div className="flex flex-col items-center gap-1">
           <span className="text-xs font-medium  text-muted-foreground">
             Capacity
           </span>
-          <Badge className="uppercase" variant="default_light" size="sm">
+          <Badge size="sm">
             {room.capacity}
           </Badge>
         </div>
@@ -111,7 +129,7 @@ export default function RoomCard({ room, user, ...props }: Props) {
           <span className="text-xs font-medium  text-muted-foreground">
             Room Type
           </span>
-          <Badge className="uppercase" variant="ghost" size="sm">
+          <Badge size="sm">
             {room.roomType}
           </Badge>
         </div>
@@ -120,7 +138,6 @@ export default function RoomCard({ room, user, ...props }: Props) {
             Current Status
           </span>
           <Badge
-            className="uppercase"
             size="sm"
             variant={
               room.currentStatus === "available" ? "success" : "destructive"

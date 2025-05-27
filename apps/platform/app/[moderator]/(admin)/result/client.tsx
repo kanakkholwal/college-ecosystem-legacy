@@ -1,10 +1,10 @@
 "use client";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
@@ -18,9 +18,9 @@ import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import toast from "react-hot-toast";
 import serverApis from "~/lib/server-apis/client";
 import type {
-    ResultType,
-    rawResultSchemaType,
-    rollNoSchemaType,
+  ResultType,
+  rawResultSchemaType,
+  rollNoSchemaType,
 } from "~/lib/server-apis/types";
 import { changeCase } from "~/utils/string";
 
@@ -163,6 +163,63 @@ export function GetResultDiv() {
           <ResultCard result={result} />
         </ResponsiveDialog>
       )}
+    </div>
+  );
+}
+
+
+export function DeleteResultDiv() {
+  const [rollNo, setRollNo] = useState<string>("");
+  const [loading, setLoading] = useState<boolean>(false);
+  
+  const handleDeleteResult = async () => {
+    if (!rollNoSchema.safeParse(rollNo).success) {
+      toast.error("Invalid Roll No");
+      return;
+    }
+    setLoading(true);
+    try {
+      const { data: response } =
+        await serverApis.results.deleteResultByRollNo(rollNo);
+      if (response?.error || !response?.data) {
+        toast.error(response?.message || "Failed to delete result by Roll No");
+        return;
+      }
+      toast.success(`${response.data.deletedCount} result(s) deleted successfully`);
+      setRollNo(""); // Clear the input after successful deletion
+    } catch (error) {
+      console.log("Error deleting result:", error);
+      toast.error("An unexpected error occurred while deleting the result.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="w-full flex flex-col gap-4 @3xl:p-3">
+      <div>
+        <Label className="text-xs">Enter Roll No to Delete Result</Label>
+        <Input
+          type="text"
+          placeholder="Enter Roll No"
+          className="w-full max-w-xs"
+          value={rollNo}
+          onChange={(e) => setRollNo(e.target.value)}
+          custom-size="sm"
+          disabled={loading}
+          aria-label="Roll No"
+        />
+      </div>
+      <Button
+        size="sm"
+        variant="destructive_light"
+        disabled={!rollNo || loading}
+        onClick={handleDeleteResult}
+        aria-label="Delete Result"
+      >
+        {loading ? "Deleting..." : "Delete Result"}
+      </Button>
+      
     </div>
   );
 }

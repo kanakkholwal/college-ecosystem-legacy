@@ -1,4 +1,5 @@
 "use client";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,7 +17,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import readXlsxFile from "read-excel-file";
 import z from "zod";
-import serverApis from "~/lib/server-apis/server";
+import serverApis from "~/lib/server-apis/client";
 
 const freshersDataSchema = z.object({
   name: z.string(),
@@ -64,7 +65,7 @@ export default function ImportNewStudents() {
       const parsed_data = sanitized_data.map((data) => ({
         name: data[requiredKeys.name],
         rollNo: data[requiredKeys.rollNo],
-        gender: data[requiredKeys.gender].toLowerCase().trim() as
+        gender: data[requiredKeys.gender]?.toLowerCase()?.trim() as
           | "male"
           | "female"
           | "not_specified",
@@ -76,7 +77,17 @@ export default function ImportNewStudents() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 p-4 px-2 md:p-6 @container/local">
+      <div>
+
+        <h3 className="text-base md:text-lg font-bold">
+          Import New Students
+        </h3>
+        <p className="text-sm text-muted-foreground">
+          Use this form to import new students from an Excel file. Ensure that the
+          file contains the required columns: Name, Roll No., and gender.
+        </p>
+      </div>
       <div className="grid w-full max-w-sm items-center gap-1.5">
         <Label htmlFor="excel">
           Import Excel file (Only .xlsx files are supported)
@@ -124,8 +135,16 @@ export default function ImportNewStudents() {
         </div>
       </div>
       <div className="grid w-full max-w-sm items-center gap-1.5">
-        <Label>Imported Data</Label>
-        <span className="text-sm">{data !== null ? data.length : 0} rows</span>
+        <div>
+          <p className="text-sm text-muted-foreground">
+            Imported Data
+            <Badge size="sm">{data !== null ? data.length : 0} rows</Badge>
+            from 
+            <Badge size="sm">
+              {tableData !== null ? tableData.row_cells.length : 0} rows
+            </Badge>
+          </p>
+        </div>
         <Button
           onClick={async () => {
             if (data === null) return;
@@ -159,7 +178,7 @@ export default function ImportNewStudents() {
                 // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 <TableRow key={row.length + index}>
                   {row.map((cell) => {
-                    return <TableCell key={cell}>{cell}</TableCell>;
+                    return <TableCell key={cell} className="whitespace-nowrap">{cell}</TableCell>;
                   })}
                 </TableRow>
               );

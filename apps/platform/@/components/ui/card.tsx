@@ -3,16 +3,16 @@
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { cva, type VariantProps } from "class-variance-authority";
+import { type VariantProps, cva } from "class-variance-authority";
 
 const cardVariants = cva(
-  "rounded-lg border text-card-foreground shadow-sm backdrop-blur-sm",
+  "rounded-lg border text-card-foreground shadow-sm",
   {
     variants: {
       variant: {
         default: "bg-card",
         glass:
-          "bg-slate-50/15 dark:bg-slate-800/15 backdrop-blur-xl border-slate-500/10 dark:border-border/70",
+          "backdrop-blur-sm bg-slate-50/15 dark:bg-slate-800/15 backdrop-blur-xl border-slate-500/10 dark:border-border/70",
       },
     },
     defaultVariants: {
@@ -100,5 +100,6 @@ export {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 };
+

@@ -7,6 +7,7 @@ import { BadgePlus } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import { changeCase } from "~/utils/string";
 
+import { ResponsiveContainer } from "@/components/common/container";
 import { getRoomsInfo, listAllRoomsWithHistory } from "~/actions/room";
 import { getSession } from "~/lib/auth-server";
 
@@ -51,29 +52,27 @@ export default async function RoomsPage(props: Props) {
   const session = await getSession();
 
   return (
-    <>
+    <div className="w-full space-y-6">
       <div>
-        <h1 className="text-2xl font-bold mb-4">Rooms Overview</h1>
-        <p className="text-xs text-medium font-semibold text-muted-foreground">
-          As of {new Date().toLocaleString()}
-        </p>
+        <h3 className="text-lg font-semibold">Rooms Overview</h3>
+        
       </div>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 @md:grid-cols-2 @lg:grid-cols-3 @xl:grid-cols-4 px-4">
         <div className="bg-card border p-4 rounded-lg">
-          <h4 className="text-lg font-bold">Total Rooms</h4>
-          <h3 className="text-primary font-bold tracking-wide text-3xl mt-4">
+          <h4 className="text-lg font-semibold">Total Rooms</h4>
+          <h3 className="text-primary font-semibold tracking-wide text-3xl mt-4">
             {totalRooms}
           </h3>
         </div>
         <div className="bg-card border p-4 rounded-lg">
-          <h4 className="text-lg font-bold">Available Rooms</h4>
-          <h3 className="text-primary font-bold tracking-wide text-3xl mt-4">
+          <h4 className="text-lg font-semibold">Available Rooms</h4>
+          <h3 className="text-primary font-semibold tracking-wide text-3xl mt-4">
             {totalAvailableRooms}
           </h3>
         </div>
         <div className="bg-card border p-4 rounded-lg">
-          <h4 className="text-lg font-bold">Occupied Rooms</h4>
-          <h3 className="text-primary font-bold tracking-wide text-3xl mt-4">
+          <h4 className="text-lg font-semibold">Occupied Rooms</h4>
+          <h3 className="text-primary font-semibold tracking-wide text-3xl mt-4">
             {totalOccupiedRooms}
           </h3>
         </div>
@@ -89,7 +88,7 @@ export default async function RoomsPage(props: Props) {
           <SearchBox />
         </div>
       </div>
-      <div className="mb-32 max-w-[144rem] grid lg:mb-0 lg:w-full mx-auto grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-3 @6xl:grid-cols-4 text-left gap-4">
+      <ResponsiveContainer className="mb-32 max-w-[144rem] @md:grid-cols-1 @lg:grid-cols-2  @3xl:grid-cols-4 @7xl:grid-cols-5">
         <ErrorBoundaryWithSuspense
           key="Rooms"
           fallback={
@@ -107,7 +106,7 @@ export default async function RoomsPage(props: Props) {
             return <RoomCard key={room.id} room={room} user={session?.user} />;
           })}
         </ErrorBoundaryWithSuspense>
-      </div>
-    </>
+      </ResponsiveContainer>
+    </div>
   );
 }

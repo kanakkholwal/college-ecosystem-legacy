@@ -23,7 +23,7 @@ import { Plus } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type { z } from "zod";
-import { roomSchema } from "~/constants/room";
+import { roomSchema,roomTypes } from "~/constants/room";
 
 type RoomType = z.infer<typeof roomSchema>;
 
@@ -107,15 +107,13 @@ export default function CreateRoomForm({
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {["classroom", "conference", "office", "lab"].map(
-                      (_type) => {
-                        return (
-                          <SelectItem key={_type} value={_type}>
-                            {_type}
-                          </SelectItem>
-                        );
-                      }
-                    )}
+                    {roomTypes.map((_type) => {
+                      return (
+                        <SelectItem key={_type} value={_type}>
+                          {_type}
+                        </SelectItem>
+                      );
+                    })}
                   </SelectContent>
                 </Select>
                 <FormDescription />

@@ -12,14 +12,14 @@ const badgeVariants = cva(
       variant: {
         default: "bg-muted text-muted-foreground",
         default_light:
-          "border-primary/10 bg-primary/10 text-primary hover:bg-primary/20 dark:backdrop-blur",
-        success_light: "bg-green-500/10 text-green-500 hover:bg-green-500/20",
+          "border-primary/5 bg-primary/5 text-primary hover:bg-primary/20 dark:backdrop-blur",
+        success_light: "bg-green-500/5 text-green-500 hover:bg-green-500/20",
         warning_light:
-          "bg-yellow-500/10 text-yellow-500 hover:bg-yellow-500/20",
-        info_light: "bg-sky-500/10 text-sky-500 hover:bg-sky-500/20",
+          "bg-yellow-500/5 text-yellow-500 hover:bg-yellow-500/20",
+        info_light: "bg-sky-500/5 text-sky-500 hover:bg-sky-500/20",
         info: "bg-sky-100 hover:bg-sky-200 text-sky-600 dark:bg-sky-700 dark:text-sky-200 dark:hover:bg-sky-800 dark:hover:text-sky-200",
         destructive_light:
-          "bg-red-500/10 text-red-500 hover:bg-red-500/20 dark:bg-red-500/20 dark:text-red-500 hover:dark:bg-red-500/10 hover:dark:text-red-500",
+          "bg-red-500/5 text-red-500 hover:bg-red-500/20 dark:bg-red-500/20 dark:text-red-500 hover:dark:bg-red-500/5 hover:dark:text-red-500",
         ghost:
           "bg-white hover:bg-white hover:text-accent-foreground  dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white",
         slate:
@@ -47,7 +47,7 @@ const badgeVariants = cva(
         gradient_purple:
           "text-white bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 hover:bg-gradient-to-br",
         glass:
-          "backdrop-blur-lg bg-white/30 dark:bg-slate-800/15 backdrop-blur-xl border-white/10 dark:border-white/5 dark:text-white shadow",
+          "backdrop-blur-lg bg-white/30 dark:bg-slate-800/15 backdrop-blur-xl border-white/5 dark:border-white/5 dark:text-white shadow",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/90",
         outline: "border border-input bg-background shadow-sm hover:bg-accent",

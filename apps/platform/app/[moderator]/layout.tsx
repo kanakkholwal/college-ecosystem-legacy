@@ -80,13 +80,13 @@ export default async function DashboardLayout({
           <div className="blur-[106px] h-32 bg-gradient-to-r from-cyan-400 to-sky-300 dark:to-indigo-600" />
         </div> */}
 
-        <main className="content p-4 px-2 md:p-6 z-2 @container space-y-10 min-h-screen h-full">
+        <main className="content  p-4 px-2 md:p-6 z-2 @container space-y-10 min-h-screen h-full">
           {children}
         </main>
 
         {process.env.NODE_ENV !== "production" && (
-          <div className="fixed bottom-0 right-0 p-2 text-xs text-gray-500 dark:text-slate-400">
-            v0.0.1({process.env.NODE_ENV})
+          <div className="fixed bottom-0 right-auto left-auto mx-auto p-2 text-xs text-muted-foreground">
+            <span className="font-semibold">Environment:</span>{" "}{process.env.NODE_ENV}
           </div>
         )}
       </SidebarInset>

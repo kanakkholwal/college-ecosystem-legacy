@@ -6,6 +6,7 @@ import type { z } from "zod";
 import { roomSchema } from "~/constants/room";
 import { db } from "~/db/connect";
 import { roomUsageHistory, rooms, users } from "~/db/schema";
+import { getSession } from "~/lib/auth-server";
 
 // Define types for rooms and usage history
 type RoomSelect = InferSelectModel<typeof rooms>;
@@ -218,6 +219,10 @@ export async function updateRoom(
 
 // Function to delete a room and its usage history
 export async function deleteRoom(roomId: string): Promise<RoomSelect> {
+  const session = await getSession();
+  if (!session || !session.user || session.user.role !== "admin") {
+    throw new Error("Unauthorized: Only admins can delete rooms");
+  }
   const [deletedRoom] = await db
     .delete(rooms)
     .where(eq(rooms.id, roomId))
@@ -229,6 +234,10 @@ export async function deleteRoom(roomId: string): Promise<RoomSelect> {
 
   // Delete usage history associated with the room
   await db.delete(roomUsageHistory).where(eq(roomUsageHistory.roomId, roomId));
+    revalidatePath("/classroom-availability", "page");
+    revalidatePath("/admin/rooms", "page");
+    revalidatePath("/cr/rooms", "page");
+    revalidatePath("/faculty/rooms", "page");
 
   return deletedRoom;
 }

@@ -3,7 +3,7 @@ import { ActionBar } from "@/components/application/action-bar";
 import { StatsCard } from "@/components/application/stats-card";
 import { NotepadText } from "lucide-react";
 import { assignBranchChange, assignRank, getBasicInfo } from "./actions";
-import { GetResultDiv } from "./client";
+import { DeleteResultDiv, GetResultDiv } from "./client";
 
 export default async function AdminResultPage() {
   const { counts, asOf } = await getBasicInfo();
@@ -13,7 +13,7 @@ export default async function AdminResultPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         <StatsCard
           title="Total Results"
-          Icon={<NotepadText className="h-4 w-4 text-muted-foreground" />}
+          Icon={<NotepadText className="size-4 text-muted-foreground" />}
         >
           <NumberTicker
             value={counts.results}
@@ -24,7 +24,7 @@ export default async function AdminResultPage() {
 
         <StatsCard
           title="Assign Rank"
-          Icon={<NotepadText className="h-4 w-4 text-muted-foreground" />}
+          Icon={<NotepadText className="size-4 text-muted-foreground" />}
         >
           <ActionBar
             description="This will assign ranks to all students based on their CGPI."
@@ -39,7 +39,7 @@ export default async function AdminResultPage() {
 
         <StatsCard
           title="Fix Branch Change"
-          Icon={<NotepadText className="h-4 w-4 text-muted-foreground" />}
+          Icon={<NotepadText className="size-4 text-muted-foreground" />}
         >
           <ActionBar
             description="This will fix the branch change for all students who have changed their branch."
@@ -54,9 +54,15 @@ export default async function AdminResultPage() {
 
         <StatsCard
           title="Get Result"
-          Icon={<NotepadText className="h-4 w-4 text-muted-foreground" />}
+          Icon={<NotepadText className="size-4 text-muted-foreground" />}
         >
           <GetResultDiv />
+        </StatsCard>
+        <StatsCard
+          title="Get Result"
+          Icon={<NotepadText className="size-4 text-muted-foreground" />}
+        >
+          <DeleteResultDiv />
         </StatsCard>
       </div>
     </>
