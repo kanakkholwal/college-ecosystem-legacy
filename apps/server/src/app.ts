@@ -21,6 +21,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // app.use(limiter); // Apply rate limiting middleware
+app.set('trust proxy', true); // to get correct IP behind proxy
 
 // Default route
 app.get("/", (req, res) => {

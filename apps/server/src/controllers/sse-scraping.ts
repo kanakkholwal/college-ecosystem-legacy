@@ -11,6 +11,7 @@ const LIST_TYPE = {
   NEW_SEMESTER: "new_semester",
   DUAL_DEGREE: "dual_degree",
 }
+type listType = typeof LIST_TYPE[keyof typeof LIST_TYPE];
 
 export const EVENTS = {
   TASK_STATUS: "task_status",
@@ -25,14 +26,16 @@ export const EVENTS = {
   TASK_RETRY_FAILED: "task_retry_failed",
 
 } as const;
-type listType = typeof LIST_TYPE[keyof typeof LIST_TYPE];
+
+const BATCH_SIZE = 10; // Number of roll numbers to process in each batch
+
+
+
 const TASK_STATUS = {
-  QUEUED: "queued",
   SCRAPING: "scraping",
   COMPLETED: "completed",
   FAILED: "failed",
   CANCELLED: "cancelled",
-  PAUSED: "paused",
 } as const;
 
 type taskDataType = {
@@ -66,13 +69,32 @@ const sendEvent = (res: Response, event: string, data: {
   res.write(`data: ${JSON.stringify(data)}\n\n`);
 };
 
-const BATCH_SIZE = 10; // Number of roll numbers to process in each batch
+const activeSSEConnections = new Map<string, Response>(); // Map<IP, Response>
+
+const checkAndRegisterSSE = (ip: string, res: Response): boolean => {
+  if (activeSSEConnections.has(ip)) {
+    console.log(`Rejected: IP ${ip} already has an active SSE connection.`);
+    return false;
+  }
+
+  activeSSEConnections.set(ip, res);
+  console.log(`Registered SSE connection for IP ${ip}`);
+
+  // Cleanup on disconnect
+  res.on('close', () => {
+    activeSSEConnections.delete(ip);
+    console.log(`SSE connection closed by IP ${ip}`);
+  });
+
+  return true;
+};
 
 
 export async function resultScrapingSSEHandler(req: Request, res: Response) {
   const list_type = req.query.list_type as string || LIST_TYPE.BACKLOG;
   const actionType = req.query.action as string | undefined;
   const task_resume_id = req.query.task_resume_id as string | undefined;
+  const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
 
   if (!actionType || Object.values(EVENTS).indexOf(actionType as typeof EVENTS[keyof typeof EVENTS]) === -1) {
@@ -111,6 +133,13 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
       });
     }
 
+    console.log("ip", ip)
+    if (!ip) {
+      return res.status(400).send("IP address not found");
+    }
+    if (!checkAndRegisterSSE(ip as string, res)) {
+    return res.status(429).end('SSE already active from this IP');
+  }
 
     let taskId = `result_scraping:${list_type}:${Date.now()}`;
     let taskData: taskDataType = {
@@ -122,7 +151,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
       data: [],
       startTime: Date.now(),
       endTime: null,
-      status: TASK_STATUS.QUEUED,
+      status: TASK_STATUS.SCRAPING,
       successfulRollNos: [],
       failedRollNos: [],
       skippedRollNos: [],
@@ -167,6 +196,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
           error: "No roll numbers found for the selected list type.",
         });
       }
+      taskData.processable = roll_list.size; // set processable count based on roll numbers
 
 
       const task = await ResultScrapingLog.create(taskData);

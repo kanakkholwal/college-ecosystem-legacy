@@ -121,7 +121,7 @@ export default function ScrapeResultPage() {
       withCredentials: true,
     });
     console.log(eventSourceRef.current);
-    
+
     eventSourceRef.current.onopen = () => {
       console.log("SSE connection opened");
     };
@@ -148,19 +148,27 @@ export default function ScrapeResultPage() {
       console.log("Task completed data:", data);
       toast.success("Scraping task completed successfully.");
       setStreaming(false);
+      eventSourceRef.current?.close(); // ✅ explicitly close the SSE connection
     });
+
     eventSourceRef.current.addEventListener('error', (event) => {
       console.log("SSE error:", event);
-      const {data} = JSON.parse(JSON.stringify(event));
+      const { data } = JSON.parse(JSON.stringify(event));
       console.log("SSE error data:", data);
       setError(data?.error || "An error occurred while processing the request.");
       toast.error(data?.error || "An error occurred while processing the request.");
       setStreaming(false);
+      eventSourceRef.current?.close(); // ✅ explicitly close the SSE connection
     });
 
     return () => {
       setStreaming(false);
+      eventSourceRef.current?.removeEventListener('task_status', () => {});
+      eventSourceRef.current?.removeEventListener('task_list', () => {});
+      eventSourceRef.current?.removeEventListener('task_completed', () => {});
+      eventSourceRef.current?.removeEventListener('error', () => {});
       eventSourceRef.current?.close();
+      eventSourceRef.current = null;
       console.log("SSE connection closed");
     };
   };
@@ -197,7 +205,7 @@ export default function ScrapeResultPage() {
 
         <div
           aria-label="footer"
-          className="flex items-center space-x-2"
+          className="flex items-center flex-wrap gap-2"
         >
 
           <Select
@@ -226,9 +234,19 @@ export default function ScrapeResultPage() {
               console.log("start scraping", listType);
               handleStartScraping();
             }}
+            disabled={streaming}
           >
-            Start new Scraping Task
+            {streaming ? " (Running)" : "Start new Scraping Task"}
           </Button>
+          {streaming && (<Button
+            size="sm"
+            variant="warning_light"
+            onClick={() => {
+              eventSourceRef.current?.close();
+            }}
+          >
+            Cancel Scraping
+          </Button>)}
         </div>
         <ConditionalRender condition={streaming}>
           <Alert variant="info" className="w-full">
@@ -263,20 +281,20 @@ export default function ScrapeResultPage() {
             </AlertTitle>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-2 pb-4">
               <div className="flex items-center flex-col">
-                <Label className="text-sm">Processable:</Label>
-                <NumberTicker className="ml-2 text-sm text-stone-500" value={taskData.processable} />
+                <Label className="text-sm">Processable</Label>
+                <NumberTicker className="ml-2 text-sm font-medium text-stone-500" value={taskData.processable} />
               </div>
               <div className="flex items-center flex-col">
-                <Label className="text-sm">Processed:</Label>
-                <NumberTicker className="ml-2 text-sm text-blue-500" value={taskData.processed} />
+                <Label className="text-sm">Processed</Label>
+                <NumberTicker className="ml-2 text-sm font-medium text-blue-500" value={taskData.processed} />
               </div>
               <div className="flex items-center flex-col">
-                <Label className="text-sm">Success:</Label>
-                <NumberTicker className="ml-2 text-sm text-green-500" value={taskData.success}/>
+                <Label className="text-sm">Success</Label>
+                <NumberTicker className="ml-2 text-sm font-medium text-green-500" value={taskData.success} />
               </div>
               <div className="flex items-center flex-col">
-                <Label className="text-sm">Failed:</Label>
-                <NumberTicker className="ml-2 text-sm text-red-500" value={taskData.failed}/>
+                <Label className="text-sm">Failed</Label>
+                <NumberTicker className="ml-2 text-sm font-medium text-red-500" value={taskData.failed} />
               </div>
 
 
@@ -423,8 +441,7 @@ function DisplayTask({
           {formatRelative(new Date(task?.startTime), new Date())}
           {task.endTime && (
             <span className="ml-2">
-              {`- ${formatDistanceToNow(new Date(task.endTime)
-              )}`}
+              {`- ${formatDistanceToNow(new Date(task.endTime))} ago`}
             </span>
           )}
         </TableCell>
@@ -453,7 +470,7 @@ function DisplayTask({
           <div className="flex gap-2 ml-auto">
             {actionFunction &&
 
-              task.status !== TASK_STATUS.COMPLETED  && task.processed < task.processable && (
+              task.status !== TASK_STATUS.COMPLETED && task.processed < task.processable && (
                 <Button
                   size="sm"
                   variant="default_light"
@@ -465,7 +482,7 @@ function DisplayTask({
                 </Button>
 
               )}
-            {actionFunction && task.status === TASK_STATUS.COMPLETED  && (
+            {actionFunction && task.status === TASK_STATUS.COMPLETED && (
               <Button
                 size="sm"
                 variant="default_light"
