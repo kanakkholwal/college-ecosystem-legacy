@@ -3,10 +3,10 @@
 import { authClient } from "src/lib/auth-client";
 
 import {
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 
 import { Button } from "@/components/ui/button";
@@ -15,12 +15,12 @@ import { BiLockOpenAlt } from "react-icons/bi";
 import { LuMail } from "react-icons/lu";
 
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";

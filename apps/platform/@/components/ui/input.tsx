@@ -24,6 +24,12 @@ const inputVariants = cva(
         full: "rounded-full",
         none: "rounded-none",
       },
+      "aria-size":{
+        sm: "h-8 text-xs",
+        md: "h-10 text-sm",
+        lg: "h-12 text-base",
+        xl: "h-14 text-lg",
+      }
     },
     defaultVariants: {
       variant: "default",
@@ -42,7 +48,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     return (
       <input
         type={type}
-        className={cn(inputVariants({ variant, className, rounded }))}
+        className={cn(inputVariants({ variant, className, rounded, "aria-size": props["aria-size"] }))}
         ref={ref}
         {...props}
       />
@@ -52,3 +58,4 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 Input.displayName = "Input";
 
 export { Input };
+

@@ -16,7 +16,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import readXlsxFile from "read-excel-file";
 import z from "zod";
-import serverApis from "~/lib/server-apis";
+import serverApis from "~/lib/server-apis/server";
 
 const freshersDataSchema = z.object({
   name: z.string(),

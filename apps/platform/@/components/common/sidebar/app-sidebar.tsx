@@ -5,14 +5,14 @@ import type * as React from "react";
 import { NavMain } from "@/components/common/sidebar/nav-main";
 import { NavUser } from "@/components/common/sidebar/nav-user";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarRail,
 } from "@/components/ui/sidebar";
 import type { Session } from "~/lib/auth-client";
 

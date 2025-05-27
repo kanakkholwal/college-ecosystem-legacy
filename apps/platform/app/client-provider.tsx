@@ -81,7 +81,7 @@ export function Consumer({ children }: { children: React.ReactNode }) {
       </div>
       <Next13ProgressBar
         height="4px"
-        color="hsl(var(--primary))"
+        color="var(--primary)"
         options={{ showSpinner: true, trickle: true }}
         showOnShallow={true}
       />

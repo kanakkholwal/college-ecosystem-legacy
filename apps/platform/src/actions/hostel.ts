@@ -14,7 +14,7 @@ import {
 import { genderSchema } from "~/constants/user";
 import { getSession } from "~/lib/auth-server";
 import dbConnect from "~/lib/dbConnect";
-import serverApis from "~/lib/server-apis";
+import serverApis from "~/lib/server-apis/server";
 import {
   HostelModel,
   type HostelStudentJson,

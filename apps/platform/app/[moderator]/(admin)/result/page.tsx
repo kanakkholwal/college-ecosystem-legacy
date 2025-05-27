@@ -1,7 +1,9 @@
+import { NumberTicker } from "@/components/animation/number-ticker";
 import { ActionBar } from "@/components/application/action-bar";
 import { StatsCard } from "@/components/application/stats-card";
 import { NotepadText } from "lucide-react";
-import { assignBranchChange, getBasicInfo, assignRank } from "./actions";
+import { assignBranchChange, assignRank, getBasicInfo } from "./actions";
+import { GetResultDiv } from "./client";
 
 export default async function AdminResultPage() {
   const { counts, asOf } = await getBasicInfo();
@@ -13,8 +15,11 @@ export default async function AdminResultPage() {
           title="Total Results"
           Icon={<NotepadText className="h-4 w-4 text-muted-foreground" />}
         >
-          <h4 className="text-3xl font-bold text-primary">{counts.results}</h4>
-          <p className="text-xs text-muted-foreground">{`As of ${asOf}`}</p>
+          <NumberTicker
+            value={counts.results}
+            className="text-3xl font-bold text-primary"
+          />
+          <p className="text-xs text-muted-foreground">As of {asOf}</p>
         </StatsCard>
 
         <StatsCard
@@ -22,7 +27,7 @@ export default async function AdminResultPage() {
           Icon={<NotepadText className="h-4 w-4 text-muted-foreground" />}
         >
           <ActionBar
-            title="Assign Rank"
+            description="This will assign ranks to all students based on their CGPI."
             btnProps={{
               variant: "default_light",
               size: "sm",
@@ -37,7 +42,7 @@ export default async function AdminResultPage() {
           Icon={<NotepadText className="h-4 w-4 text-muted-foreground" />}
         >
           <ActionBar
-            title="Fix Branch Change"
+            description="This will fix the branch change for all students who have changed their branch."
             btnProps={{
               variant: "default_light",
               size: "sm",
@@ -45,6 +50,16 @@ export default async function AdminResultPage() {
             }}
             action={assignBranchChange}
           />
+        </StatsCard>
+
+
+
+
+        <StatsCard
+          title="Get Result"
+          Icon={<NotepadText className="h-4 w-4 text-muted-foreground" />}
+        >
+          <GetResultDiv />
         </StatsCard>
       </div>
     </>

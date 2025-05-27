@@ -1,3 +1,4 @@
+import { NumberTicker } from "@/components/animation/number-ticker";
 import { StatsCard } from "@/components/application/stats-card";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/typography";
@@ -53,21 +54,19 @@ export default async function AdminDashboard() {
                 </svg>
               }
             >
-              <h4 className="text-3xl font-bold text-primary">
-                {totalUsers}
-                <span className="text-sm text-muted-foreground">
-                  /{userTrend * growth}
-                </span>
-              </h4>
+              <NumberTicker
+                value={totalUsers}
+                className="text-3xl font-bold text-primary"
+              />
+
               <p className="text-xs text-muted-foreground">
                 <span
-                  className={`${
-                    userTrend === 1
+                  className={`${userTrend === 1
                       ? "text-green-500"
                       : userTrend === -1
                         ? "text-red-500"
                         : "text-primary/80"
-                  } text-base`}
+                    } text-base`}
                 >
                   {userTrend === 1 ? (
                     <TrendingUp className="inline-block mr-2 size-4" />

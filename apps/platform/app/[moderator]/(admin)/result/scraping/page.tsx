@@ -90,6 +90,19 @@ export default function ScrapeResultPage() {
 
   }
 
+  const closeConnection = () => {
+    if (eventSourceRef.current) {
+      setStreaming(false);
+
+      eventSourceRef.current?.removeEventListener('task_status', () => { });
+      eventSourceRef.current?.removeEventListener('task_list', () => { });
+      eventSourceRef.current?.removeEventListener('task_completed', () => { });
+      eventSourceRef.current?.removeEventListener('error', () => { });
+      eventSourceRef.current?.close();
+      eventSourceRef.current = null;
+      console.log("SSE connection closed");
+    }
+  }
   const handleStartScraping = (payload?: {
     listType: (typeof LIST_TYPE)[keyof typeof LIST_TYPE],
     actionType: string,
@@ -172,14 +185,7 @@ export default function ScrapeResultPage() {
     });
 
     return () => {
-      setStreaming(false);
-      eventSourceRef.current?.removeEventListener('task_status', () => { });
-      eventSourceRef.current?.removeEventListener('task_list', () => { });
-      eventSourceRef.current?.removeEventListener('task_completed', () => { });
-      eventSourceRef.current?.removeEventListener('error', () => { });
-      eventSourceRef.current?.close();
-      eventSourceRef.current = null;
-      console.log("SSE connection closed");
+      closeConnection()
     };
   };
 
@@ -224,7 +230,7 @@ export default function ScrapeResultPage() {
               setListType(value as (typeof LIST_TYPE)[keyof typeof LIST_TYPE])
             }
           >
-            <SelectTrigger data-size="sm" className="w-[180px]">
+            <SelectTrigger aria-size="sm" className="w-[180px]">
               <SelectValue placeholder="List Type" />
             </SelectTrigger>
             <SelectContent>
@@ -252,7 +258,7 @@ export default function ScrapeResultPage() {
             size="sm"
             variant="warning_light"
             onClick={() => {
-              eventSourceRef.current?.close();
+              closeConnection();
             }}
           >
             Cancel Scraping

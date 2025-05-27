@@ -1,6 +1,5 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Heading } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
 import { LoaderCircle } from "lucide-react";
 import React from "react";
@@ -8,7 +7,7 @@ import toast from "react-hot-toast";
 
 interface ActionBarProps {
   className?: string;
-  title: string;
+  title?: string;
   description?: React.ReactNode;
   btnProps: React.ComponentProps<typeof Button>;
   // biome-ignore lint/suspicious/noExplicitAny: <explanation>
@@ -45,25 +44,21 @@ export function ActionBar({
   };
 
   return (
-    <div
-      className={cn("flex justify-between items-center w-full p-1", className)}
-    >
-      <div className="grid grid-cols-1">
-        <Heading level={6}>{title}</Heading>
+    <div className={cn("grid grid-cols-1 gap-1.5 justify-items-end", className)}>
+      <h5 className="text-base font-medium">{title}</h5>
+      <p className="text-sm text-muted-foreground">
         {description}
-      </div>
-      <div className="flex items-center gap-2">
-        <Button {...btnProps} disabled={loading} onClick={handleAction}>
-          {loading ? (
-            <>
-              <LoaderCircle className="animate-spin" size={24} />
-              Taking action...
-            </>
-          ) : (
-            btnProps.children
-          )}
-        </Button>
-      </div>
+      </p>
+      <Button {...btnProps} disabled={loading} onClick={handleAction}>
+        {loading ? (
+          <>
+            <LoaderCircle className="animate-spin" size={24} />
+            Taking action...
+          </>
+        ) : (
+          btnProps.children
+        )}
+      </Button>
     </div>
   );
 }

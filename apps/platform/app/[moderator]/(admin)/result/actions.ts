@@ -2,7 +2,7 @@
 
 import dbConnect from "src/lib/dbConnect";
 import ResultModel from "src/models/result";
-import serverApis from "~/lib/server-apis";
+import serverApis from "~/lib/server-apis/server";
 
 export async function getBasicInfo() {
   try {
