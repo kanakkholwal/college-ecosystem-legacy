@@ -36,3 +36,9 @@ export const serverFetch = createFetch({
     Origin: process.env.NEXT_PUBLIC_BASE_URL,
   },
 });
+
+export const authHeaders = {
+  "Content-Type": "application/json",
+  "X-IDENTITY-KEY": SERVER_IDENTITY,
+  Origin: process.env.NEXT_PUBLIC_BASE_URL,
+};

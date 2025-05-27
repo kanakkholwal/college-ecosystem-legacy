@@ -28,16 +28,18 @@ import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { formatDistanceToNow } from 'date-fns/formatDistanceToNow';
 import { formatRelative } from 'date-fns/formatRelative';
+import { EventSource } from 'eventsource';
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { scrapingApi } from "./utils";
-const BASE_SERVER_URL = process.env.NEXT_PUBLIC_BASE_SERVER_URL;
 
 
 import { NumberTicker } from "@/components/animation/number-ticker";
+import { authHeaders } from "~/lib/client-fetch";
 import type { taskDataType } from "./types";
 import { EVENTS, LIST_TYPE, TASK_STATUS } from "./types";
 
+const BASE_SERVER_URL = process.env.NEXT_PUBLIC_BASE_SERVER_URL;
 
 const sseEndpoint = new URL(`${BASE_SERVER_URL}/api/results/scrape-sse`);
 
@@ -119,6 +121,14 @@ export default function ScrapeResultPage() {
 
     eventSourceRef.current = new EventSource(sseEndpoint.toString(), {
       withCredentials: true,
+      fetch: (input, init) =>
+        fetch(input, {
+          ...init,
+          headers: {
+            ...init.headers,
+            ...authHeaders
+          },
+        }),
     });
     console.log(eventSourceRef.current);
 
@@ -163,10 +173,10 @@ export default function ScrapeResultPage() {
 
     return () => {
       setStreaming(false);
-      eventSourceRef.current?.removeEventListener('task_status', () => {});
-      eventSourceRef.current?.removeEventListener('task_list', () => {});
-      eventSourceRef.current?.removeEventListener('task_completed', () => {});
-      eventSourceRef.current?.removeEventListener('error', () => {});
+      eventSourceRef.current?.removeEventListener('task_status', () => { });
+      eventSourceRef.current?.removeEventListener('task_list', () => { });
+      eventSourceRef.current?.removeEventListener('task_completed', () => { });
+      eventSourceRef.current?.removeEventListener('error', () => { });
       eventSourceRef.current?.close();
       eventSourceRef.current = null;
       console.log("SSE connection closed");

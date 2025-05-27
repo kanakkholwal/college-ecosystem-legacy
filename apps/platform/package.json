@@ -58,6 +58,7 @@
     "date-fns": "^4.1.0",
     "drizzle-orm": "^0.38.4",
     "drizzle-zod": "^0.7.1",
+    "eventsource": "^4.0.0",
     "firebase": "^11.2.0",
     "firebase-admin": "^13.0.2",
     "html-to-image": "^1.11.11",
