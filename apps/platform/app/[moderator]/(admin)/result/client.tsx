@@ -1,10 +1,10 @@
 "use client";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
@@ -18,9 +18,9 @@ import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import toast from "react-hot-toast";
 import serverApis from "~/lib/server-apis/client";
 import type {
-  ResultType,
-  rawResultSchemaType,
-  rollNoSchemaType,
+    ResultType,
+    rawResultSchemaType,
+    rollNoSchemaType,
 } from "~/lib/server-apis/types";
 import { changeCase } from "~/utils/string";
 
@@ -112,7 +112,7 @@ export function GetResultDiv() {
           placeholder="Enter Roll No"
           className="w-full max-w-xs"
           value={rollNo}
-          aria-size="sm"
+          custom-size="sm"
           onChange={(e) => setRollNo(e.target.value)}
           disabled={loading}
           aria-label="Roll No"
@@ -125,7 +125,7 @@ export function GetResultDiv() {
           disabled={loading}
           aria-label="Select Method"
         >
-          <SelectTrigger aria-size="sm">
+          <SelectTrigger custom-size="sm">
             <SelectValue placeholder="Method" />
           </SelectTrigger>
           <SelectContent>

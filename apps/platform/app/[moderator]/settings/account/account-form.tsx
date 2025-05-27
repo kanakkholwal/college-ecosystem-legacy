@@ -9,6 +9,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -50,6 +51,8 @@ export function AccountForm({ currentUser }: Props) {
     );
   };
 
+  const isOnlyStudent = currentUser.other_roles.length === 1 && currentUser.other_roles.includes("student");
+
   return (
     <>
       <Form {...form}>
@@ -86,12 +89,41 @@ export function AccountForm({ currentUser }: Props) {
                   </ToggleGroup>
                 </FormControl>
 
-                <FormDescription />
+                <FormDescription >
+                  {currentUser.gender === "not_specified"
+                    ? "You can set your gender here."
+                    : "You cannot change your gender."}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
+          {
+            currentUser.role === "admin" || !isOnlyStudent &&
 
+            (<FormField
+              control={form.control}
+              name="other_emails"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Other Emails</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="text"
+                      placeholder="Enter other emails separated by commas"
+                      value={field.value.join(", ")}
+                      onChange={(e) =>
+                        field.onChange(e.target.value.split(",").map((email) => email.trim()))
+                      }
+                    />
+                  </FormControl>
+                  <FormDescription>
+                    You can add multiple emails separated by commas.
+                  </FormDescription>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />)}
           <Button type="submit" disabled={form.formState.isSubmitting}>
             Submit
           </Button>

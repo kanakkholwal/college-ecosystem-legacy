@@ -55,6 +55,11 @@ export type Department = {
  **  APIs Payload types
  */
 
+
+ export type deleteResponseType = {
+  acknowledged: boolean;
+  deletedCount: number;
+ }
 export type ApiResponse<T> = {
   error: boolean;
   message: string;
@@ -86,6 +91,10 @@ export type APITypes = {
     addResultByRollNo: {
       payload: z.infer<typeof rollNoSchema>;
       response: ResultType;
+    };
+    deleteResultByRollNo: {
+      payload: z.infer<typeof rollNoSchema>;
+      response: deleteResponseType;
     };
     updateResultByRollNo: {
       payload: [z.infer<typeof rollNoSchema>, Partial<rawResultSchemaType>];

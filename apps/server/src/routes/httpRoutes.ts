@@ -1,5 +1,4 @@
 import { type RequestHandler, Router } from "express";
-import { resultScrapingSSEHandler } from "../controllers/sse-scraping";
 import {
   getDepartments,
   getDepartmentsList,
@@ -14,11 +13,13 @@ import {
   addResult,
   assignBranchChangeToResults,
   assignRankToResults,
+  deleteResult,
   getResult,
   getResultByRollNoFromSite,
   importFreshers,
   updateResult,
 } from "../controllers/http-result";
+import { resultScrapingSSEHandler } from "../controllers/sse-scraping";
 
 const router = Router();
 
@@ -60,6 +61,7 @@ router.post("/results/:rollNo", getResultByRollNoFromSite);
 router.get("/results/:rollNo/get", getResult);
 router.post("/results/:rollNo/add", addResult);
 router.post("/results/:rollNo/update", updateResult);
+router.delete("/results/:rollNo/delete", deleteResult);
 
 
 // Endpoint to get result by rollNo scraped from the website

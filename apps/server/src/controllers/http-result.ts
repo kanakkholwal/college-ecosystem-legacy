@@ -136,6 +136,26 @@ export const updateResult = async (req: Request, res: Response) => {
     return;
   }
 };
+export const deleteResult = async (req: Request, res: Response) => {
+  const rollNo = req.params.rollNo;
+  await dbConnect();
+
+  const resultData = await ResultModel.deleteOne({ rollNo: rollNo });
+  if (resultData.deletedCount === 0) {
+    res.status(404).json({
+      message: "Result not found",
+      error: true,
+      data: null,
+    });
+    return;
+  }
+  res.status(200).json({
+    data: resultData,
+    message: "Result deleted successfully",
+    error: false,
+  });
+  return;
+};
 
 export const assignRankToResults = async (req: Request, res: Response) => {
   try {

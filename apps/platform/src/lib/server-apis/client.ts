@@ -52,6 +52,16 @@ const results = {
       params: { rollNo: payload },
     });
   },
+  deleteResultByRollNo: async (
+    payload: APITypes["results"]["deleteResultByRollNo"]["payload"]
+  ) => {
+    return await serverFetch<
+      ApiResponse<APITypes["results"]["deleteResultByRollNo"]["response"]>
+    >("/api/results/:rollNo/delete", {
+      method: "DELETE",
+      params: { rollNo: payload },
+    });
+  },
   addResultByRollNo: async (
     payload: APITypes["results"]["addResultByRollNo"]["payload"]
   ) => {

@@ -227,7 +227,7 @@ export default function ScrapeResultPage() {
               setListType(value as (typeof LIST_TYPE)[keyof typeof LIST_TYPE])
             }
           >
-            <SelectTrigger aria-size="sm" className="w-[180px]">
+            <SelectTrigger custom-size="sm" className="w-[180px]">
               <SelectValue placeholder="List Type" />
             </SelectTrigger>
             <SelectContent>
