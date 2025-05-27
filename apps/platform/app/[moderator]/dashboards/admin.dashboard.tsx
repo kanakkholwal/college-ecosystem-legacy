@@ -61,12 +61,13 @@ export default async function AdminDashboard() {
 
               <p className="text-xs text-muted-foreground">
                 <span
-                  className={`${userTrend === 1
+                  className={`${
+                    userTrend === 1
                       ? "text-green-500"
                       : userTrend === -1
                         ? "text-red-500"
                         : "text-primary/80"
-                    } text-base`}
+                  } text-base`}
                 >
                   {userTrend === 1 ? (
                     <TrendingUp className="inline-block mr-2 size-4" />

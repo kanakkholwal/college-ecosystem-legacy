@@ -273,10 +273,7 @@ export async function getHostel(slug: string): Promise<{
   }
 }
 
-
-export async function getHostelById(
-  id: string
-): Promise<{
+export async function getHostelById(id: string): Promise<{
   success: boolean;
   hostel: HostelType | null;
   error?: object | null;
@@ -284,19 +281,15 @@ export async function getHostelById(
   try {
     await dbConnect();
     const hostel = JSON.parse(
-      JSON.stringify(await HostelModel
-        .findById(id)
-        .lean())
+      JSON.stringify(await HostelModel.findById(id).lean())
     ) as HostelType | null;
     if (!hostel) {
-      return Promise.resolve({ success: false, hostel: null ,error: null});
+      return Promise.resolve({ success: false, hostel: null, error: null });
     }
-   
+
     return Promise.resolve({
       success: true,
-      hostel: JSON.parse(
-        JSON.stringify(hostel)
-      ),
+      hostel: JSON.parse(JSON.stringify(hostel)),
       error: null,
     });
   } catch (err) {

@@ -194,7 +194,8 @@ export function ViewRoomButton({
                             rollNumber !== "" && isValidRollNumber(rollNumber)
                         );
                       const members = rollNumbers.map(
-                        (rollNumber) => `${rollNumber.trim()}${orgConfig.mailSuffix}`
+                        (rollNumber) =>
+                          `${rollNumber.trim()}${orgConfig.mailSuffix}`
                       );
                       setLoading(true);
                       toast

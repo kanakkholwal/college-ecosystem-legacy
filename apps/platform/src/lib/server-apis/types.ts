@@ -1,6 +1,10 @@
 import type { z } from "zod";
 
-import type { RawResultType, freshersDataSchema, rollNoSchema } from "~/types/result";
+import type {
+  RawResultType,
+  freshersDataSchema,
+  rollNoSchema,
+} from "~/types/result";
 /*
  **  APIs schemas
  */
@@ -77,18 +81,15 @@ export type APITypes = {
     };
     getResultByRollNo: {
       payload: z.infer<typeof rollNoSchema>;
-      response: ResultType
+      response: ResultType;
     };
     addResultByRollNo: {
       payload: z.infer<typeof rollNoSchema>;
-      response: ResultType
+      response: ResultType;
     };
     updateResultByRollNo: {
-      payload: [
-        z.infer<typeof rollNoSchema>,
-        Partial<rawResultSchemaType>,
-      ];
-      response: ResultType
+      payload: [z.infer<typeof rollNoSchema>, Partial<rawResultSchemaType>];
+      response: ResultType;
     };
   };
   hostels: {
@@ -125,4 +126,3 @@ export type APITypes = {
     };
   };
 };
-

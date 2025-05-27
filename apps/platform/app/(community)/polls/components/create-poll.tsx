@@ -40,7 +40,8 @@ export const rawPollSchema = z.object({
     ]),
   multipleChoice: z.boolean().default(false),
   votes: z.array(z.string()).default([]),
-  closesAt: z.string()
+  closesAt: z
+    .string()
     .datetime({
       message: "Invalid date and time format.",
     })
@@ -168,7 +169,9 @@ function PollForm({ className }: { className?: string }) {
                   Add Option
                 </Button>
               </div>
-              <FormDescription className="text-xs">Add the options for the poll</FormDescription>
+              <FormDescription className="text-xs">
+                Add the options for the poll
+              </FormDescription>
               {fields.map((field, index) => (
                 <FormField
                   key={field.id}
@@ -217,7 +220,7 @@ function PollForm({ className }: { className?: string }) {
                 onChange={field.onChange}
                 disabled={form.formState.isSubmitting}
               />
-              
+
               <FormMessage />
             </FormItem>
           )}

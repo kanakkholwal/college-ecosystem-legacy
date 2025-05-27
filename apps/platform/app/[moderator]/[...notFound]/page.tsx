@@ -24,7 +24,10 @@ export default async function NotFoundFallbackPage({ params }: Props) {
         description={
           <>
             The page{" "}
-            <Link href={`/${moderator}/${notFound.join("/")}`} className="font-bold text-primary p-1 bg-primary/10 rounded-md hover:underline">
+            <Link
+              href={`/${moderator}/${notFound.join("/")}`}
+              className="font-bold text-primary p-1 bg-primary/10 rounded-md hover:underline"
+            >
               {moderator}/{notFound.join("/")}
             </Link>{" "}
             was not found.

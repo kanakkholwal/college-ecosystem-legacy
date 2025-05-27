@@ -1,6 +1,5 @@
-
 import { serverFetch } from "~/lib/server-fetch";
-import type { APITypes,ApiResponse ,FunctionaryType} from "./types";
+import type { APITypes, ApiResponse, FunctionaryType } from "./types";
 
 /*
  **  Result APIs

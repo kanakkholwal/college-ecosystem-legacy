@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-
 export const rawResultSchema = z.object({
   name: z.string(),
   rollNo: z.string(),

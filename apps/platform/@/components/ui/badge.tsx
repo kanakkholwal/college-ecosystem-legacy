@@ -10,8 +10,7 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default:
-          "bg-muted text-muted-foreground",
+        default: "bg-muted text-muted-foreground",
         default_light:
           "border-primary/10 bg-primary/10 text-primary hover:bg-primary/20 dark:backdrop-blur",
         success_light: "bg-green-500/10 text-green-500 hover:bg-green-500/20",

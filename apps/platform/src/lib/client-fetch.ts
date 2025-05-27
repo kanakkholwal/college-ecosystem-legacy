@@ -21,9 +21,6 @@ export const apiFetch = createFetch({
   },
 });
 
-
-
-
 /**
  *  a fetch instance to communicate with the server with the necessary headers
  */

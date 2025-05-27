@@ -13,7 +13,9 @@ export function StatsCard({ title, children, Icon }: StatsCardProps) {
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         {Icon}
       </CardHeader>
-      <CardContent className="space-y-2 @2xl:p-4 @2xl:pt-0">{children}</CardContent>
+      <CardContent className="space-y-2 @2xl:p-4 @2xl:pt-0">
+        {children}
+      </CardContent>
     </Card>
   );
 }

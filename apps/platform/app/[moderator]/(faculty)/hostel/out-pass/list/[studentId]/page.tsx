@@ -63,7 +63,6 @@ export default async function UpdateUserPage({ params }: PageProps) {
                 </Badge>
               </AccordionTrigger>
               <AccordionContent className="ms-6 mr-4">
-
                 <div className="grid grid-cols-2 gap-4 text-sm text-muted-foreground">
                   <div>
                     <p className="font-medium">Hostel:</p>

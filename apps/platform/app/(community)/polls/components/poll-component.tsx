@@ -20,7 +20,9 @@ export default function PollComponent({
   return (
     <div className="bg-card p-4 rounded-lg mt-2 flex flex-col justify-between items-stretch gap-3 border hover:shadow-sm relative">
       <div>
-        <h3 className="text-lg font-semibold text-card-foreground">{poll.question}</h3>
+        <h3 className="text-lg font-semibold text-card-foreground">
+          {poll.question}
+        </h3>
         <p className="text-sm text-muted-foreground">{poll.description}</p>
       </div>
       <PollRender poll={poll} />
@@ -62,7 +64,14 @@ export function PollRender({ poll }: { poll: PollType }) {
               style={{ width: `${parseVotes(poll.votes, option).percent}%` }}
             >
               <div className="absolute left-2 pr-4 flex max-w-full">
-                <p className={cn("whitespace-nowrap truncate text-sm font-medium ", parseVotes(poll.votes, option).percent > 0 ? "text-primary" : "text-muted-foreground")}>
+                <p
+                  className={cn(
+                    "whitespace-nowrap truncate text-sm font-medium ",
+                    parseVotes(poll.votes, option).percent > 0
+                      ? "text-primary"
+                      : "text-muted-foreground"
+                  )}
+                >
                   {option}
                 </p>
               </div>

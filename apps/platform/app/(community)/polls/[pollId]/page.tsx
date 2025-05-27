@@ -60,7 +60,6 @@ export default async function Dashboard({ params }: Props) {
             Back to Polls
           </Link>
         </Button>
-
       </div>
       <div className="w-full flex flex-col justify-start whitespace-nowrap gap-2 bg-card border rounded-lg p-6">
         <div>

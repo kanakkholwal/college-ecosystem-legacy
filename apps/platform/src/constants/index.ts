@@ -29,7 +29,6 @@ export const GENDER = {
   NOT_SPECIFIED: "not_specified",
 };
 
-
 export const emailSchema = z
   .string()
   .email()

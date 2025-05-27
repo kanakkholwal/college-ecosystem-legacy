@@ -20,13 +20,17 @@ export default async function PublicUserPage({ params }: UserPageProps) {
           <CardContent className="flex flex-col @2xl:flex-row w-full max-w-4xl p-6 gap-4">
             <div className="flex-shrink-0">
               <Avatar className="size-40 bg-secondary/5">
-                <AvatarFallback className="text-7xl">{username.charAt(0).toUpperCase()}</AvatarFallback>
+                <AvatarFallback className="text-7xl">
+                  {username.charAt(0).toUpperCase()}
+                </AvatarFallback>
               </Avatar>
             </div>
             <div className="flex flex-col justify-center items-start ml-4">
               <CardTitle>
                 <div className="text-2xl font-bold">{username}</div>
-                <div className="text-sm text-muted-foreground">User not found</div>
+                <div className="text-sm text-muted-foreground">
+                  User not found
+                </div>
               </CardTitle>
             </div>
           </CardContent>
@@ -35,11 +39,11 @@ export default async function PublicUserPage({ params }: UserPageProps) {
     );
   }
 
-  if(user.hostelId && user.hostelId !== "not_specified") {
+  if (user.hostelId && user.hostelId !== "not_specified") {
     const res = await getHostelById(user.hostelId);
-    if(res.success && res.hostel) {
+    if (res.success && res.hostel) {
       user.hostelId = res.hostel?.name;
-    }else {
+    } else {
       console.error("Error fetching hostel data:", res.error);
     }
   }
@@ -49,12 +53,19 @@ export default async function PublicUserPage({ params }: UserPageProps) {
       <Card className="w-full max-w-4xl">
         <CardContent className="flex flex-col @2xl:flex-row w-full p-6 gap-4 @container/0">
           <div className="flex-shrink-0">
-
             <Avatar className="size-40 bg-secondary/5">
-              <AvatarImage src={user.image ? user.image : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`} alt={user.name} />
-              <AvatarFallback className="text-3xl">{username.charAt(0).toUpperCase()}</AvatarFallback>
+              <AvatarImage
+                src={
+                  user.image
+                    ? user.image
+                    : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`
+                }
+                alt={user.name}
+              />
+              <AvatarFallback className="text-3xl">
+                {username.charAt(0).toUpperCase()}
+              </AvatarFallback>
             </Avatar>
-
           </div>
           <div className="flex flex-col justify-start items-start @container/0 flex-auto">
             <CardTitle>
@@ -64,37 +75,40 @@ export default async function PublicUserPage({ params }: UserPageProps) {
               </div>
             </CardTitle>
             <div className="grid gap-1 grid-cols-2 @2xl/0:grid-cols-3 text-sm text-muted-foreground my-4">
-              <p>
-                Department
-              </p>
+              <p>Department</p>
               <p className="col-span-2 text-card-foreground font-medium">
-                {user.department ? changeCase(user.department.replace("_", " "), "title") : "N/A"}
+                {user.department
+                  ? changeCase(user.department.replace("_", " "), "title")
+                  : "N/A"}
               </p>
-              <p>
-                Roles
-              </p>
+              <p>Roles</p>
               <p className="col-span-2 text-card-foreground font-medium">
-                {user.other_roles.length > 0 ? user.other_roles.map((role) => changeCase(role.replace("_", " "), "title")).join(", ") : "N/A"}
+                {user.other_roles.length > 0
+                  ? user.other_roles
+                      .map((role) =>
+                        changeCase(role.replace("_", " "), "title")
+                      )
+                      .join(", ")
+                  : "N/A"}
               </p>
-              {user.gender !== "not_specified" && (<>
-                <p>
-                  Gender
-                </p>
-                <p className="col-span-2 text-card-foreground font-medium">
-                  {changeCase(user.gender.replace("_", " "), "title")}
-                </p>
-              </>)}
-              {user.hostelId && (<>
-                <p>
-                  Hostel
-                </p>
-                <p className="col-span-2 text-card-foreground font-medium">
-                  {changeCase(user.hostelId.replace("_", " "), "title")}
-                </p>
-              </>)}
+              {user.gender !== "not_specified" && (
+                <>
+                  <p>Gender</p>
+                  <p className="col-span-2 text-card-foreground font-medium">
+                    {changeCase(user.gender.replace("_", " "), "title")}
+                  </p>
+                </>
+              )}
+              {user.hostelId && (
+                <>
+                  <p>Hostel</p>
+                  <p className="col-span-2 text-card-foreground font-medium">
+                    {changeCase(user.hostelId.replace("_", " "), "title")}
+                  </p>
+                </>
+              )}
             </div>
           </div>
-
         </CardContent>
       </Card>
     </div>

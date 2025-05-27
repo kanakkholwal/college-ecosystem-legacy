@@ -66,7 +66,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
           className={cn(
             "w-full pl-3 text-left font-normal",
             !field.value && "text-muted-foreground",
-            field.className 
+            field.className
           )}
           {...field.btnProps}
         >

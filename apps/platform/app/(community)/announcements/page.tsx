@@ -54,7 +54,8 @@ export default async function AnnouncementsPage() {
         </div>
         <div className="grid grid-cols-1 gap-1">
           {RELATED_FOR_TYPES.map((category) => (
-            <Link key={category}
+            <Link
+              key={category}
               className="px-4 py-1 rounded-md border-l border-border text-sm text-muted-foreground font-medium hover:text-primary hover:pl-2 hover:bg-primary/5 hover:border-primary transition-all"
               href={`/announcements?c=${category}`}
               shallow={true}

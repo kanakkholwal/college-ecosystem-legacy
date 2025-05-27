@@ -26,13 +26,12 @@ import EmptyArea from "@/components/common/empty-area";
 import { Label } from "@/components/ui/label";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import ConditionalRender from "@/components/utils/conditional-render";
-import { formatDistanceToNow } from 'date-fns/formatDistanceToNow';
-import { formatRelative } from 'date-fns/formatRelative';
-import { EventSource } from 'eventsource';
+import { formatDistanceToNow } from "date-fns/formatDistanceToNow";
+import { formatRelative } from "date-fns/formatRelative";
+import { EventSource } from "eventsource";
 import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { scrapingApi } from "./utils";
-
 
 import { NumberTicker } from "@/components/animation/number-ticker";
 import { authHeaders } from "~/lib/client-fetch";
@@ -42,7 +41,6 @@ import { EVENTS, LIST_TYPE, TASK_STATUS } from "./types";
 const BASE_SERVER_URL = process.env.NEXT_PUBLIC_BASE_SERVER_URL;
 
 const sseEndpoint = new URL(`${BASE_SERVER_URL}/api/results/scrape-sse`);
-
 
 export default function ScrapeResultPage() {
   const searchParams = useSearchParams();
@@ -77,7 +75,6 @@ export default function ScrapeResultPage() {
     _id: "",
   });
 
-
   const handleAction = (id: string, type: string) => {
     const [_1, listType, ...rest] = id.split(":");
     console.log("Action triggered", id, type);
@@ -87,27 +84,30 @@ export default function ScrapeResultPage() {
       actionType: type,
       task_resume_id: id,
     });
-
-  }
+  };
 
   const closeConnection = () => {
     if (eventSourceRef.current) {
       setStreaming(false);
 
-      eventSourceRef.current?.removeEventListener('task_status', () => { });
-      eventSourceRef.current?.removeEventListener('task_list', () => { });
-      eventSourceRef.current?.removeEventListener('task_completed', () => { });
-      eventSourceRef.current?.removeEventListener('error', () => { });
+      eventSourceRef.current?.removeEventListener("task_status", () => {});
+      eventSourceRef.current?.removeEventListener("task_list", () => {});
+      eventSourceRef.current?.removeEventListener("task_completed", () => {});
+      eventSourceRef.current?.removeEventListener("error", () => {});
       eventSourceRef.current?.close();
       eventSourceRef.current = null;
       console.log("SSE connection closed");
     }
-  }
-  const handleStartScraping = (payload?: {
-    listType: (typeof LIST_TYPE)[keyof typeof LIST_TYPE],
-    actionType: string,
-    task_resume_id: string,
-  } | undefined) => {
+  };
+  const handleStartScraping = (
+    payload?:
+      | {
+          listType: (typeof LIST_TYPE)[keyof typeof LIST_TYPE];
+          actionType: string;
+          task_resume_id: string;
+        }
+      | undefined
+  ) => {
     if (eventSourceRef.current) {
       eventSourceRef.current.close();
     }
@@ -139,7 +139,7 @@ export default function ScrapeResultPage() {
           ...init,
           headers: {
             ...init.headers,
-            ...authHeaders
+            ...authHeaders,
           },
         }),
     });
@@ -149,23 +149,22 @@ export default function ScrapeResultPage() {
       console.log("SSE connection opened");
     };
 
-
     // In startScraping function:
-    eventSourceRef.current.addEventListener('task_status', (event) => {
+    eventSourceRef.current.addEventListener("task_status", (event) => {
       console.log("Received task status update");
       const data = JSON.parse(event.data);
       console.log("Task status data:", data);
       setTaskData(data.data);
     });
 
-    eventSourceRef.current.addEventListener('task_list', (event) => {
+    eventSourceRef.current.addEventListener("task_list", (event) => {
       console.log("Received task list update");
       const data = JSON.parse(event.data);
       console.log("Task list data:", data);
       setTaskList(data.data);
     });
 
-    eventSourceRef.current.addEventListener('task_completed', (event) => {
+    eventSourceRef.current.addEventListener("task_completed", (event) => {
       console.log("Received task completed update");
       const data = JSON.parse(event.data);
       console.log("Task completed data:", data);
@@ -174,23 +173,28 @@ export default function ScrapeResultPage() {
       eventSourceRef.current?.close(); // ✅ explicitly close the SSE connection
     });
 
-    eventSourceRef.current.addEventListener('error', (event) => {
+    eventSourceRef.current.addEventListener("error", (event) => {
       console.log("SSE error:", event);
       const { data } = JSON.parse(JSON.stringify(event));
       console.log("SSE error data:", data);
-      setError(data?.error || "An error occurred while processing the request.");
-      toast.error(data?.error || "An error occurred while processing the request.");
+      setError(
+        data?.error || "An error occurred while processing the request."
+      );
+      toast.error(
+        data?.error || "An error occurred while processing the request."
+      );
       setStreaming(false);
       eventSourceRef.current?.close(); // ✅ explicitly close the SSE connection
     });
 
     return () => {
-      closeConnection()
+      closeConnection();
     };
   };
 
   useEffect(() => {
-    scrapingApi.getTaskList()
+    scrapingApi
+      .getTaskList()
       .then(({ data: response }) => {
         if (!response || response.error) {
           console.log("Error fetching task list", response);
@@ -209,21 +213,14 @@ export default function ScrapeResultPage() {
     };
   }, []);
 
-
   return (
     <>
       <section className="p-6 border border-border rounded-lg shadow space-y-4 bg-card">
         <div>
-          <h3 className="text-lg font-semibold">
-            Scrape Result
-          </h3>
+          <h3 className="text-lg font-semibold">Scrape Result</h3>
         </div>
 
-        <div
-          aria-label="footer"
-          className="flex items-center flex-wrap gap-2"
-        >
-
+        <div aria-label="footer" className="flex items-center flex-wrap gap-2">
           <Select
             value={listType}
             onValueChange={(value) =>
@@ -254,15 +251,17 @@ export default function ScrapeResultPage() {
           >
             {streaming ? " (Running)" : "Start new Scraping Task"}
           </Button>
-          {streaming && (<Button
-            size="sm"
-            variant="warning_light"
-            onClick={() => {
-              closeConnection();
-            }}
-          >
-            Cancel Scraping
-          </Button>)}
+          {streaming && (
+            <Button
+              size="sm"
+              variant="warning_light"
+              onClick={() => {
+                closeConnection();
+              }}
+            >
+              Cancel Scraping
+            </Button>
+          )}
         </div>
         <ConditionalRender condition={streaming}>
           <Alert variant="info" className="w-full">
@@ -293,48 +292,47 @@ export default function ScrapeResultPage() {
               <span className="text-card-foreground text-sm font-medium">
                 ID: {taskData._id}
               </span>
-
             </AlertTitle>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-2 pb-4">
               <div className="flex items-center flex-col">
                 <Label className="text-sm">Processable</Label>
-                <NumberTicker className="ml-2 text-sm font-medium text-stone-500" value={taskData.processable} />
+                <NumberTicker
+                  className="ml-2 text-sm font-medium text-stone-500"
+                  value={taskData.processable}
+                />
               </div>
               <div className="flex items-center flex-col">
                 <Label className="text-sm">Processed</Label>
-                <NumberTicker className="ml-2 text-sm font-medium text-blue-500" value={taskData.processed} />
+                <NumberTicker
+                  className="ml-2 text-sm font-medium text-blue-500"
+                  value={taskData.processed}
+                />
               </div>
               <div className="flex items-center flex-col">
                 <Label className="text-sm">Success</Label>
-                <NumberTicker className="ml-2 text-sm font-medium text-green-500" value={taskData.success} />
+                <NumberTicker
+                  className="ml-2 text-sm font-medium text-green-500"
+                  value={taskData.success}
+                />
               </div>
               <div className="flex items-center flex-col">
                 <Label className="text-sm">Failed</Label>
-                <NumberTicker className="ml-2 text-sm font-medium text-red-500" value={taskData.failed} />
+                <NumberTicker
+                  className="ml-2 text-sm font-medium text-red-500"
+                  value={taskData.failed}
+                />
               </div>
-
-
             </div>
             <p className="text-sm text-muted-foreground space-x-1.5 space-y-1.5">
-
-              <Badge size="sm">
-                {taskData.skipped} skipped
-              </Badge>
-              {taskData.status && (
-                <Badge size="sm">
-                  {taskData.status}
-                </Badge>
-              )}
-              <Badge size="sm">
-                {taskData.list_type}
-              </Badge>
+              <Badge size="sm">{taskData.skipped} skipped</Badge>
+              {taskData.status && <Badge size="sm">{taskData.status}</Badge>}
+              <Badge size="sm">{taskData.list_type}</Badge>
               <Badge size="sm">
                 {formatRelative(new Date(taskData?.startTime), new Date())}
               </Badge>
               {taskData?.endTime && (
                 <Badge size="sm">
-                  {`- ${formatDistanceToNow(new Date(taskData.endTime)
-                  )}`}
+                  {`- ${formatDistanceToNow(new Date(taskData.endTime))}`}
                 </Badge>
               )}
               <ResponsiveDialog
@@ -346,23 +344,16 @@ export default function ScrapeResultPage() {
                 title="Failed Roll Numbers"
                 description="This task has failed to process some roll numbers. Please review the details below."
               >
-                <Label>
-                  Failed Roll Numbers
-                </Label>
+                <Label>Failed Roll Numbers</Label>
                 <FailedRollNumbers task={taskData} />
               </ResponsiveDialog>
             </p>
           </Alert>
         </ConditionalRender>
-
       </section>
 
-
       <section className="p-4 border border-border rounded-lg shadow bg-card space-y-4">
-        <div
-          aria-label="header"
-          className="text-base font-medium"
-        >
+        <div aria-label="header" className="text-base font-medium">
           <div>
             Task List{" "}
             {taskList.length > 0 && (
@@ -376,7 +367,8 @@ export default function ScrapeResultPage() {
               className="ml-2"
               disabled={taskList.length === 0}
               onClick={() => {
-                scrapingApi.clearAllTasks()
+                scrapingApi
+                  .clearAllTasks()
                   .then(({ data: response }) => {
                     setTaskList([]);
                     toast.success("All tasks cleared successfully.");
@@ -384,11 +376,11 @@ export default function ScrapeResultPage() {
                   .catch((error) => {
                     toast.error(error.message);
                   });
-              }}>
+              }}
+            >
               Clear All Tasks
             </Button>
           </div>
-
         </div>
         <ConditionalRender condition={taskList.length === 0}>
           <EmptyArea
@@ -420,16 +412,17 @@ export default function ScrapeResultPage() {
                     task={task}
                     key={task.startTime}
                     actionFunction={handleAction}
-                    deleteTask={(updatedTask) => setTaskList((prev) =>
-                      prev.filter((t) => t._id !== updatedTask._id)
-                    )}
+                    deleteTask={(updatedTask) =>
+                      setTaskList((prev) =>
+                        prev.filter((t) => t._id !== updatedTask._id)
+                      )
+                    }
                   />
                 );
               })}
             </TableBody>
           </Table>
         </ConditionalRender>
-
       </section>
     </>
   );
@@ -471,22 +464,20 @@ function DisplayTask({
             btnProps={{
               variant: "outline",
               size: "sm",
-              children: "View Failed"
+              children: "View Failed",
             }}
             title="Failed Roll Numbers"
             description="Details of the task including roll numbers and their statuses."
           >
-            <Label>
-              Failed Roll Numbers
-            </Label>
+            <Label>Failed Roll Numbers</Label>
             <FailedRollNumbers task={task} />
           </ResponsiveDialog>
         </TableCell>
         <TableCell className="text-right">
           <div className="flex gap-2 ml-auto">
             {actionFunction &&
-
-              task.status !== TASK_STATUS.COMPLETED && task.processed < task.processable && (
+              task.status !== TASK_STATUS.COMPLETED &&
+              task.processed < task.processable && (
                 <Button
                   size="sm"
                   variant="default_light"
@@ -496,7 +487,6 @@ function DisplayTask({
                 >
                   Resume
                 </Button>
-
               )}
             {actionFunction && task.status === TASK_STATUS.COMPLETED && (
               <Button
@@ -513,7 +503,8 @@ function DisplayTask({
               size="sm"
               variant="destructive_light"
               onClick={() => {
-                scrapingApi.deleteTask(task._id)
+                scrapingApi
+                  .deleteTask(task._id)
                   .then(() => {
                     toast.success("Task deleted successfully.");
                     deleteTask?.(task);
@@ -528,29 +519,17 @@ function DisplayTask({
           </div>
         </TableCell>
       </TableRow>
-
-
-
     </>
   );
 }
 
-
-function FailedRollNumbers({
-  task,
-}: {
-  task: taskDataType;
-}) {
+function FailedRollNumbers({ task }: { task: taskDataType }) {
   return (
     <div className="flex gap-2 flex-wrap">
       {task.failedRollNos.map((item, index) => {
         if (index > 10) return null;
         return (
-          <Badge
-            key={item}
-            size="sm"
-            variant="destructive"
-          >
+          <Badge key={item} size="sm" variant="destructive">
             {item}
           </Badge>
         );

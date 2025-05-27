@@ -5,14 +5,14 @@ import type * as React from "react";
 import { NavMain } from "@/components/common/sidebar/nav-main";
 import { NavUser } from "@/components/common/sidebar/nav-user";
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    SidebarRail,
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 import type { Session } from "~/lib/auth-client";
 
@@ -63,7 +63,6 @@ export function AppSidebar({ user, moderator, ...props }: SidebarProps) {
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
               <Link href={`/${moderator}`}>
-
                 {/* <div>
                 <ArrowUpCircleIcon className="h-5 w-5" />
                 <span className="text-base font-semibold">Acme Inc.</span>

@@ -28,5 +28,4 @@ export const ClosingBadge = ({ poll }: { poll: PollType }) => {
   }, [poll.closesAt]);
 
   return remainingTime === "Closed" ? "Closed" : `Closing in: ${remainingTime}`;
-
 };

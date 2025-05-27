@@ -41,7 +41,7 @@ export default function DeletePoll({ pollId }: { pollId: PollType["_id"] }) {
         variant: "destructive_light",
         children: <Trash2 />,
         size: "icon_sm",
-        className:"absolute right-4 top-4",
+        className: "absolute right-4 top-4",
       }}
     >
       <Button

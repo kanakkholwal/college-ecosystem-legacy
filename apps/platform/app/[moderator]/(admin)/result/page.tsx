@@ -52,9 +52,6 @@ export default async function AdminResultPage() {
           />
         </StatsCard>
 
-
-
-
         <StatsCard
           title="Get Result"
           Icon={<NotepadText className="h-4 w-4 text-muted-foreground" />}

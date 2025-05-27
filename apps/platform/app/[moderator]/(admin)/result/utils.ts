@@ -1,6 +1,3 @@
 import { serverFetch } from "~/lib/client-fetch";
 
-
-export const resultApis = {
-    
-} as const;
+export const resultApis = {} as const;

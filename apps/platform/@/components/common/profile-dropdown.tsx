@@ -22,19 +22,19 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
     ...[
       user.other_roles.includes("student")
         ? {
-          Icon: UserRound,
-          href: `/results/${user.username}`,
-          title: "Your Result",
-        }
+            Icon: UserRound,
+            href: `/results/${user.username}`,
+            title: "Your Result",
+          }
         : null,
     ],
     ...[
       user.role === "admin"
         ? {
-          Icon: UserRound,
-          href: "/admin",
-          title: "Admin Dashboard",
-        }
+            Icon: UserRound,
+            href: "/admin",
+            title: "Admin Dashboard",
+          }
         : null,
     ],
     ...user.other_roles.map((role) => ({
@@ -58,14 +58,18 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
               alt={user.username}
               width={32}
               height={32}
-              src={user.image ? user.image : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`}
-            // src={
-            //   user.image
-            //     ? (user.image as string)
-            //     : user.gender !== "non_specified"
-            //       ? `/assets/avatars/${user.gender}_user.png`
-            //       : ""
-            // }
+              src={
+                user.image
+                  ? user.image
+                  : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`
+              }
+              // src={
+              //   user.image
+              //     ? (user.image as string)
+              //     : user.gender !== "non_specified"
+              //       ? `/assets/avatars/${user.gender}_user.png`
+              //       : ""
+              // }
             />
             <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
@@ -75,7 +79,11 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
       <div className="flex gap-4 mx-auto">
         <Avatar className="size-16 rounded-full bg-muted">
           <AvatarImage
-            src={user.image ? user.image : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`}
+            src={
+              user.image
+                ? user.image
+                : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`
+            }
             alt={user.username}
             className="size-16"
           />
@@ -104,7 +112,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
             className="rounded-md h-8 px-3 py-2 inline-flex justify-start gap-2 items-center text-sm font-medium capitalize border bg-muted text-muted-foreground hover:border-primary hover:text-primary whitespace-nowrap"
           >
             {link.Icon && <link.Icon className="size-3 inline-block" />}
-            <span className="truncate">{changeCase(link.title,"title")}</span>
+            <span className="truncate">{changeCase(link.title, "title")}</span>
           </Link>
         ))}
       </div>

@@ -70,7 +70,6 @@ export function AccountForm({ currentUser }: Props) {
                     }
                     className="justify-start"
                     type="single"
-                    
                     disabled={currentUser.gender === "not_specified"}
                   >
                     {["male", "female", "not_specified"].map((item) => (
@@ -79,7 +78,6 @@ export function AccountForm({ currentUser }: Props) {
                         key={item}
                         size="sm"
                         className="capitalize"
-
                         disabled={currentUser.gender !== "not_specified"}
                       >
                         {item.replace("_", " ")}
