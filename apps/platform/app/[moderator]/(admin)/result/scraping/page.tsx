@@ -11,66 +11,32 @@ import {
 } from "@/components/ui/select";
 import { LoaderCircle } from "lucide-react";
 
-import { useEffect, useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { useEffect, useRef, useState } from "react";
 
 import EmptyArea from "@/components/common/empty-area";
-import { Separator } from "@/components/ui/separator";
+import { Label } from "@/components/ui/label";
+import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import ConditionalRender from "@/components/utils/conditional-render";
-import { format } from "date-fns";
-import { useSearchParams } from "next/navigation";
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow';
+import { formatRelative } from 'date-fns/formatRelative';
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
-
+import { scrapingApi } from "./utils";
 const BASE_SERVER_URL = process.env.NEXT_PUBLIC_BASE_SERVER_URL;
 
 
-
-const EVENTS = {
-  TASK_STATUS: "task_status",
-  TASK_START: "task_start",
-  TASK_CANCEL: "task_cancel",
-  TASK_PAUSE: "task_pause",
-  TASK_PAUSED_RESUME: "task_paused_resume",
-  TASK_DELETE_CANCELLED: "task_delete_cancelled",
-  TASK_RESUME_LAST: "task_resume_last",
-  TASK_RETRY_FAILED: "task_retry_failed",
-} as const;
-
-const TASK_STATUS = {
-  IDLE: "idle",
-  QUEUED: "queued",
-  SCRAPING: "scraping",
-  COMPLETED: "completed",
-  FAILED: "failed",
-  CANCELLED: "cancelled",
-  PAUSED: "paused",
-} as const;
-
-const LIST_TYPE = {
-  ALL: "all",
-  BACKLOG: "has_backlog",
-  NEW_SEMESTER: "new_semester",
-} as const;
-type listType = (typeof LIST_TYPE)[keyof typeof LIST_TYPE];
-
-type taskDataType = {
-  processable: number;
-  processed: number;
-  failed: number;
-  success: number;
-  skipped: number;
-  data: {
-    roll_no: string;
-    status: (typeof TASK_STATUS)[keyof typeof TASK_STATUS];
-  }[];
-  startTime: number;
-  endTime: number | null;
-  status: (typeof TASK_STATUS)[keyof typeof TASK_STATUS];
-  successfulRollNos: string[];
-  failedRollNos: string[];
-  skippedRollNos: string[];
-  list_type: listType;
-  taskId: string;
-};
+import { NumberTicker } from "@/components/animation/number-ticker";
+import type { taskDataType } from "./types";
+import { EVENTS, LIST_TYPE, TASK_STATUS } from "./types";
 
 
 const sseEndpoint = new URL(`${BASE_SERVER_URL}/api/results/scrape-sse`);
@@ -78,9 +44,9 @@ const sseEndpoint = new URL(`${BASE_SERVER_URL}/api/results/scrape-sse`);
 
 export default function ScrapeResultPage() {
   const searchParams = useSearchParams();
-  const taskId = searchParams.get("taskId");
-  const taskType = searchParams.get("list_type");
-  const action = searchParams.get("action");
+  const router = useRouter();
+  const task_resume_id = searchParams.get("task_resume_id");
+  const eventSourceRef = useRef<EventSource | null>(null);
 
   const [listType, setListType] = useState<
     (typeof LIST_TYPE)[keyof typeof LIST_TYPE]
@@ -90,7 +56,6 @@ export default function ScrapeResultPage() {
 
   const [error, setError] = useState<string | null>(null);
   const [taskList, setTaskList] = useState<taskDataType[]>([]);
-  const [taskAction, setTaskAction] = useState<string | null>(action || null);
 
   const [taskData, setTaskData] = useState<taskDataType>({
     processable: 0,
@@ -107,94 +72,118 @@ export default function ScrapeResultPage() {
     skippedRollNos: [],
     list_type: listType,
     taskId: "",
+    _id: "",
   });
 
 
-  const startScraping = (taskType: string, taskId: string) => {
-    if (taskId) {
-      sseEndpoint.searchParams.append("task_resume_id", taskId);
-    }
-    if (!taskType) {
-      toast.error("Please select a list type");
-      return;
-    }
-    sseEndpoint.searchParams.append("list_type", taskType);
-    const eventSource = new EventSource(sseEndpoint.toString(), {
-      withCredentials: true,
-    });
-    eventSource.onopen = () => {
-      console.log("SSE connection opened");
-      setStreaming(true);
-    };
-    eventSource.onmessage = (event) => {
-      setStreaming(true);
-      console.log("SSE data", event);
-
-      const data = JSON.parse(event.data);
-      if (data.event === "task_list") {
-        setTaskList(data.data);
-      } else if (data.event === "task_status") {
-        setTaskData(data.data);
-      } else if (data.event === "error") {
-        setError(data.error);
-        toast.error(data.error);
-        setStreaming(false);
-      }
-    };
-    eventSource.onerror = (error) => {
-      console.error("SSE error:", error);
-      setError("An error occurred while processing the request.");
-      setStreaming(false);
-      eventSource.close();
-    };
-
-    return () => {
-      eventSource.close();
-    };
-  };
   const handleAction = (id: string, type: string) => {
+    const [_1, listType, ...rest] = id.split(":");
     console.log("Action triggered", id, type);
-    setTaskAction(type);
-    sseEndpoint.searchParams.append("taskId", id);
-    sseEndpoint.searchParams.append("action", type);
-    startScraping(listType, id);
+
+    handleStartScraping({
+      listType: listType as (typeof LIST_TYPE)[keyof typeof LIST_TYPE],
+      actionType: type,
+      task_resume_id: id,
+    });
 
   }
-  useEffect(() => {
-    if (!taskId || !taskAction) return;
 
-    sseEndpoint.searchParams.append("taskId", taskId);
-    sseEndpoint.searchParams.append("action", taskAction);
+  const handleStartScraping = (payload?: {
+    listType: (typeof LIST_TYPE)[keyof typeof LIST_TYPE],
+    actionType: string,
+    task_resume_id: string,
+  } | undefined) => {
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+    }
+    console.log("payload:", payload);
+    setError(null);
 
-    const eventSource = new EventSource(sseEndpoint.toString(), {
+    if (payload) {
+      setListType(payload.listType);
+      sseEndpoint.searchParams.set("list_type", payload.listType);
+      sseEndpoint.searchParams.set("action", payload.actionType);
+      if (payload.task_resume_id) {
+        sseEndpoint.searchParams.set("task_resume_id", payload.task_resume_id);
+      }
+      console.log("Using provided payload:", payload);
+    } else {
+      sseEndpoint.searchParams.set("list_type", listType);
+      sseEndpoint.searchParams.delete("task_resume_id");
+      sseEndpoint.searchParams.set("action", EVENTS.STREAM_SCRAPING);
+      console.log("No payload provided, using default listType:", listType);
+    }
+    router.push(`?${sseEndpoint.searchParams.toString()}`);
+
+    setStreaming(true);
+
+    eventSourceRef.current = new EventSource(sseEndpoint.toString(), {
       withCredentials: true,
     });
-    eventSource.onopen = () => {
+    console.log(eventSourceRef.current);
+    
+    eventSourceRef.current.onopen = () => {
       console.log("SSE connection opened");
     };
-    eventSource.onmessage = (event) => {
+
+
+    // In startScraping function:
+    eventSourceRef.current.addEventListener('task_status', (event) => {
+      console.log("Received task status update");
       const data = JSON.parse(event.data);
-      console.log("SSE data", event);
-      if (data.event === "task_list") {
-        setTaskList(data.data);
-      } else if (data.event === "task_status") {
-        setTaskData(data.data.data);
-      } else if (data.event === "error") {
-        setError(data.error);
-        toast.error(data.error);
-        setStreaming(false);
-      }
-    };
-    eventSource.onerror = (error) => {
-      console.error("SSE error:", error);
-      setError("An error occurred while processing the request.");
-    };
+      console.log("Task status data:", data);
+      setTaskData(data.data);
+    });
+
+    eventSourceRef.current.addEventListener('task_list', (event) => {
+      console.log("Received task list update");
+      const data = JSON.parse(event.data);
+      console.log("Task list data:", data);
+      setTaskList(data.data);
+    });
+
+    eventSourceRef.current.addEventListener('task_completed', (event) => {
+      console.log("Received task completed update");
+      const data = JSON.parse(event.data);
+      console.log("Task completed data:", data);
+      toast.success("Scraping task completed successfully.");
+      setStreaming(false);
+    });
+    eventSourceRef.current.addEventListener('error', (event) => {
+      console.log("SSE error:", event);
+      const {data} = JSON.parse(JSON.stringify(event));
+      console.log("SSE error data:", data);
+      setError(data?.error || "An error occurred while processing the request.");
+      toast.error(data?.error || "An error occurred while processing the request.");
+      setStreaming(false);
+    });
+
     return () => {
       setStreaming(false);
-      eventSource.close();
+      eventSourceRef.current?.close();
+      console.log("SSE connection closed");
     };
+  };
 
-  }, [taskId, taskAction]);
+  useEffect(() => {
+    scrapingApi.getTaskList()
+      .then(({ data: response }) => {
+        if (!response || response.error) {
+          console.log("Error fetching task list", response);
+          return;
+        }
+        console.log("Fetched task list", response);
+        setTaskList(response.data || []);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+    return () => {
+      // Cleanup on component unmount
+      eventSourceRef.current?.close();
+      setStreaming(false);
+    };
+  }, []);
 
 
   return (
@@ -217,7 +206,7 @@ export default function ScrapeResultPage() {
               setListType(value as (typeof LIST_TYPE)[keyof typeof LIST_TYPE])
             }
           >
-            <SelectTrigger className="w-[180px]">
+            <SelectTrigger data-size="sm" className="w-[180px]">
               <SelectValue placeholder="List Type" />
             </SelectTrigger>
             <SelectContent>
@@ -235,7 +224,7 @@ export default function ScrapeResultPage() {
             size="sm"
             onClick={() => {
               console.log("start scraping", listType);
-              startScraping(listType, taskId || "");
+              handleStartScraping();
             }}
           >
             Start new Scraping Task
@@ -264,32 +253,71 @@ export default function ScrapeResultPage() {
             </AlertDescription>
           </Alert>
         </ConditionalRender>
-        <ConditionalRender condition={taskData.taskId !== ""}>
+        <ConditionalRender condition={taskData._id !== ""}>
           <Alert variant="default" className="w-full" id="task-status">
-            <AlertTitle>
-              Task ID: {taskData.taskId}
-              <Separator orientation="vertical" className="mx-2" />
-              {taskData.status && (
-                <span className="text-sm font-medium">
-                  {taskData.status}
-                </span>
-              )}
-            </AlertTitle>
-            <AlertDescription>
-
-            </AlertDescription>
-            {format(
-              new Date(taskData.startTime),
-              "dd/MM/yyyy HH:mm:ss"
-            )}
-            {taskData.endTime && (
-              <span className="ml-2">
-                {` - ${format(
-                  new Date(taskData.endTime),
-                  "dd/MM/yyyy HH:mm:ss"
-                )}`}
+            <AlertTitle className="flex items-center flex-wrap gap-1.5 whitespace-pre-wrap">
+              <span className="text-card-foreground text-sm font-medium">
+                ID: {taskData._id}
               </span>
-            )}
+
+            </AlertTitle>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 py-2 pb-4">
+              <div className="flex items-center flex-col">
+                <Label className="text-sm">Processable:</Label>
+                <NumberTicker className="ml-2 text-sm text-stone-500" value={taskData.processable} />
+              </div>
+              <div className="flex items-center flex-col">
+                <Label className="text-sm">Processed:</Label>
+                <NumberTicker className="ml-2 text-sm text-blue-500" value={taskData.processed} />
+              </div>
+              <div className="flex items-center flex-col">
+                <Label className="text-sm">Success:</Label>
+                <NumberTicker className="ml-2 text-sm text-green-500" value={taskData.success}/>
+              </div>
+              <div className="flex items-center flex-col">
+                <Label className="text-sm">Failed:</Label>
+                <NumberTicker className="ml-2 text-sm text-red-500" value={taskData.failed}/>
+              </div>
+
+
+            </div>
+            <p className="text-sm text-muted-foreground space-x-1.5 space-y-1.5">
+
+              <Badge size="sm">
+                {taskData.skipped} skipped
+              </Badge>
+              {taskData.status && (
+                <Badge size="sm">
+                  {taskData.status}
+                </Badge>
+              )}
+              <Badge size="sm">
+                {taskData.list_type}
+              </Badge>
+              <Badge size="sm">
+                {formatRelative(new Date(taskData?.startTime), new Date())}
+              </Badge>
+              {taskData?.endTime && (
+                <Badge size="sm">
+                  {`- ${formatDistanceToNow(new Date(taskData.endTime)
+                  )}`}
+                </Badge>
+              )}
+              <ResponsiveDialog
+                btnProps={{
+                  variant: "link",
+                  size: "sm",
+                  children: "View Failed",
+                }}
+                title="Failed Roll Numbers"
+                description="This task has failed to process some roll numbers. Please review the details below."
+              >
+                <Label>
+                  Failed Roll Numbers
+                </Label>
+                <FailedRollNumbers task={taskData} />
+              </ResponsiveDialog>
+            </p>
           </Alert>
         </ConditionalRender>
 
@@ -304,28 +332,70 @@ export default function ScrapeResultPage() {
           <div>
             Task List{" "}
             {taskList.length > 0 && (
-              <Badge variant="info" className="ml-2">
+              <Badge variant="default_light" size="sm" className="ml-2">
                 {taskList.length}
               </Badge>
             )}
+            <Button
+              variant="destructive_light"
+              size="sm"
+              className="ml-2"
+              disabled={taskList.length === 0}
+              onClick={() => {
+                scrapingApi.clearAllTasks()
+                  .then(({ data: response }) => {
+                    setTaskList([]);
+                    toast.success("All tasks cleared successfully.");
+                  })
+                  .catch((error) => {
+                    toast.error(error.message);
+                  });
+              }}>
+              Clear All Tasks
+            </Button>
           </div>
 
         </div>
-        {taskList.length === 0 && (
+        <ConditionalRender condition={taskList.length === 0}>
           <EmptyArea
             title="No tasks found"
-            description="There are no tasks available at the moment."
+            description="There are no tasks available. Please start a new scraping task."
           />
-        )}
-        {taskList.map((task) => {
-          return (
-            <DisplayTask
-              task={task}
-              key={task.startTime}
-              actionFunction={handleAction}
-            />
-          );
-        })}
+        </ConditionalRender>
+        <ConditionalRender condition={taskList.length > 0}>
+          <Table>
+            <TableCaption>A list of your recent tasks.</TableCaption>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Task ID</TableHead>
+                <TableHead>Category</TableHead>
+                <TableHead>Start - End Time</TableHead>
+                <TableHead>Processable</TableHead>
+                <TableHead>Processed</TableHead>
+                <TableHead>Failed</TableHead>
+                <TableHead>Success</TableHead>
+                <TableHead>Skipped</TableHead>
+                <TableHead>Details</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {taskList.map((task) => {
+                return (
+                  <DisplayTask
+                    task={task}
+                    key={task.startTime}
+                    actionFunction={handleAction}
+                    deleteTask={(updatedTask) => setTaskList((prev) =>
+                      prev.filter((t) => t._id !== updatedTask._id)
+                    )}
+                  />
+                );
+              })}
+            </TableBody>
+          </Table>
+        </ConditionalRender>
+
       </section>
     </>
   );
@@ -334,111 +404,129 @@ export default function ScrapeResultPage() {
 function DisplayTask({
   task,
   actionFunction,
+  deleteTask,
 }: {
   task: taskDataType;
   actionFunction?: (id: string, type: string) => void;
+  deleteTask?: (updatedTask: taskDataType) => void;
 }) {
+  const [_1, listType, _2, timestamp] = task.taskId.split(":");
   return (
-    <div className="grid grid-cols-1 gap-2 bg-card p-3 rounded-md shadow">
-      <div className="flex gap-4">
-        <span className="text-xs lowercase font-medium">
-          #{task.taskId.toLowerCase()}
-        </span>
-        {actionFunction &&
-          task.status !== TASK_STATUS.CANCELLED &&
-          task.status !== TASK_STATUS.COMPLETED && (
-            <div className="flex gap-2 ml-auto">
+    <>
+      <TableRow>
+        <TableCell className="font-medium whitespace-nowrap">
+          {timestamp || task._id}
+        </TableCell>
+        <TableCell>{listType}</TableCell>
+
+        <TableCell className="whitespace-nowrap">
+          {formatRelative(new Date(task?.startTime), new Date())}
+          {task.endTime && (
+            <span className="ml-2">
+              {`- ${formatDistanceToNow(new Date(task.endTime)
+              )}`}
+            </span>
+          )}
+        </TableCell>
+        <TableCell>{task.processable}</TableCell>
+        <TableCell>{task.processed}</TableCell>
+        <TableCell>{task.failed}</TableCell>
+        <TableCell>{task.success}</TableCell>
+        <TableCell>{task.skipped}</TableCell>
+        <TableCell>
+          <ResponsiveDialog
+            btnProps={{
+              variant: "outline",
+              size: "sm",
+              children: "View Failed"
+            }}
+            title="Failed Roll Numbers"
+            description="Details of the task including roll numbers and their statuses."
+          >
+            <Label>
+              Failed Roll Numbers
+            </Label>
+            <FailedRollNumbers task={task} />
+          </ResponsiveDialog>
+        </TableCell>
+        <TableCell className="text-right">
+          <div className="flex gap-2 ml-auto">
+            {actionFunction &&
+
+              task.status !== TASK_STATUS.COMPLETED  && task.processed < task.processable && (
+                <Button
+                  size="sm"
+                  variant="default_light"
+                  onClick={() =>
+                    actionFunction(task._id, EVENTS.TASK_PAUSED_RESUME)
+                  }
+                >
+                  Resume
+                </Button>
+
+              )}
+            {actionFunction && task.status === TASK_STATUS.COMPLETED  && (
               <Button
                 size="sm"
                 variant="default_light"
                 onClick={() =>
-                  actionFunction(task.taskId, EVENTS.TASK_PAUSED_RESUME)
+                  actionFunction(task._id, EVENTS.TASK_RETRY_FAILED)
                 }
               >
-                Resume
+                Retry failed
               </Button>
-              <Button
-                size="sm"
-                variant="destructive_light"
-                onClick={() => actionFunction(task.taskId, EVENTS.TASK_CANCEL)}
-              >
-                Cancel
-              </Button>
-            </div>
-          )}
-        {actionFunction && task.status === TASK_STATUS.COMPLETED && (
-          <div className="flex gap-2 ml-auto">
+            )}
             <Button
               size="sm"
-              variant="default_light"
-              onClick={() =>
-                actionFunction(task.taskId, EVENTS.TASK_RETRY_FAILED)
-              }
+              variant="destructive_light"
+              onClick={() => {
+                scrapingApi.deleteTask(task._id)
+                  .then(() => {
+                    toast.success("Task deleted successfully.");
+                    deleteTask?.(task);
+                  })
+                  .catch((error) => {
+                    toast.error(error.message);
+                  });
+              }}
             >
-              Retry failed
+              Delete
             </Button>
           </div>
-        )}
-      </div>
-      <div className="grid grid-cols-6 border rounded-md p-2">
-        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">
-          Status
-        </div>
-        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">
-          Processable
-        </div>
-        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">
-          Processed
-        </div>
-        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">
-          Failed
-        </div>
-        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">
-          Success
-        </div>
-        <div className="whitespace-nowrap font-semibold text-base border-b p-2 text-center text-gray-800">
-          Skipped
-        </div>
-        <div className="text-center p-2">
-          <Badge variant="info">{task.status}</Badge>
-        </div>
-        <div className="text-center p-2">
-          <Badge variant="info">{task.processable}</Badge>
-        </div>
-        <div className="text-center p-2">
-          <Badge variant="info">{task.processed}</Badge>
-        </div>
-        <div className="text-center p-2">
-          <Badge variant="info">{task.failed}</Badge>
-        </div>
-        <div className="text-center p-2">
-          <Badge variant="info">{task.success}</Badge>
-        </div>
-        <div className="text-center p-2">
-          <Badge variant="info">{task.skipped}</Badge>
-        </div>
-      </div>
-      <div className="flex gap-2 flex-wrap">
-        {task.data
-          .sort((a, b) => {
-            if (a.status === TASK_STATUS.FAILED) return 1;
-            if (b.status === TASK_STATUS.FAILED) return -1;
-            return 0;
-          })
-          .map((item, index) => {
-            if (index > 10) return null;
-            return (
-              <Badge
-                key={item.roll_no}
-                variant={
-                  item.status === TASK_STATUS.FAILED ? "destructive" : "success"
-                }
-              >
-                {item.roll_no} - {item.status}
-              </Badge>
-            );
-          })}
-      </div>
+        </TableCell>
+      </TableRow>
+
+
+
+    </>
+  );
+}
+
+
+function FailedRollNumbers({
+  task,
+}: {
+  task: taskDataType;
+}) {
+  return (
+    <div className="flex gap-2 flex-wrap">
+      {task.failedRollNos.map((item, index) => {
+        if (index > 10) return null;
+        return (
+          <Badge
+            key={item}
+            size="sm"
+            variant="destructive"
+          >
+            {item}
+          </Badge>
+        );
+      })}
+      {task.failedRollNos.length > 10 && (
+        <Badge size="sm" variant="destructive">
+          +{task.failedRollNos.length - 10} more
+        </Badge>
+      )}
     </div>
   );
 }

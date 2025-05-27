@@ -9,7 +9,7 @@ export interface IResultScrapingLog extends Document {
   skipped: number;
   data: {
     roll_no: string;
-    branch: string;
+    reason: string;
   }[];
   status: string;
   successfulRollNos: string[];
@@ -26,7 +26,10 @@ const ResultScrapingLogSchema = new Schema({
   failed: { type: Number, required: true, default: 0 },
   success: { type: Number, required: true, default: 0 },
   skipped: { type: Number, required: true, default: 0 },
-  data: { type: Array, required: true, default: [] },
+  data: { type: [{
+    roll_no: { type: String, required: true },
+    reason: { type: String, required: true },
+  }], default: [] },
   status: { type: String, required: true },
   successfulRollNos: { type: [String], required: true, default: [] },
   failedRollNos: { type: [String], required: true, default: [] },

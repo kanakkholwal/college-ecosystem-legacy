@@ -24,9 +24,9 @@
     --card-foreground: hsl(0deg 0% 9.8%);
     --popover: hsl(0 0% 100%);
     --popover-foreground: hsl(0deg 0% 9.8%);
-    --primary: hsl(262.1 83.3% 57.8%);
+    --primary: hsla(262.1 83.3% 57.8%);
     --primary-foreground: hsl(0deg 0% 92.16%);
-    --secondary: hsl(217deg 61% 51%);
+    --secondary: hsla(217deg 61% 51%);
     --secondary-foreground: hsl(0deg 0% 92.16%);
 
     --muted: hsl(210deg 40% 98.04%);
@@ -42,13 +42,13 @@
     --radius: 0.5rem;
 
 
-    --chart-primary: hsl(238.73deg 83.53% 66.67%);
-    --chart-danger: hsl(349.72deg 89.16% 60.2%);
-    --chart-success: hsl(160.12deg 84.08% 39.41%);
-    --chart-warning: hsl(16.79deg 86.55% 56.27%);
+    --chart-1: hsl(238.73deg 83.53% 66.67%);
+    --chart-2: hsl(349.72deg 89.16% 60.2%);
+    --chart-3: hsl(16.79deg 86.55% 56.27%);
+    --chart-4: hsl(160.12deg 84.08% 39.41%);
     --chart-info: hsl(188.74deg 94.5% 42.75%);
-    --chart-4: hsl(43 74% 66%);
-    --chart-5: hsl(27 87% 67%);
+    --chart-5: hsl(43 74% 66%);
+    --chart-6: hsl(27 87% 67%);
 
     --sidebar: oklch(0.985 0 0);
 

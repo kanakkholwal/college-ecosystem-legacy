@@ -38,11 +38,11 @@ export const CGPIChart: React.FC<CGPIChartProps> = ({ semesters }) => {
   const chartConfig = {
     sgpi: {
       label: "SGPI",
-      color: "var(--primary)",
+      color: "var(--chart-1)",
     },
     cgpi: {
       label: "CGPI",
-      color: "var(--secondary)",
+      color: "var(--chart-2)",
     },
   } as ChartConfig;
 
@@ -58,7 +58,7 @@ export const CGPIChart: React.FC<CGPIChartProps> = ({ semesters }) => {
             <CartesianGrid vertical={true} />
             <XAxis dataKey="semester" />
             <YAxis />
-            <ChartTooltip content={<ChartTooltipContent />} />
+            <ChartTooltip content={<ChartTooltipContent  />} />
             <ChartLegend content={<ChartLegendContent />} />
             <Bar dataKey="sgpi" fill={chartConfig.sgpi.color} radius={4} />
             <Bar dataKey="cgpi" fill={chartConfig.cgpi.color} radius={4} />

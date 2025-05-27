@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowDownUp, Mail } from "lucide-react";
@@ -59,18 +60,18 @@ export default async function ResultsPage(props: Props) {
   const cgpi = result.semesters?.at(-1)?.cgpi ?? 0;
 
   return (
-    <div className="max-w-6xl mx-auto px-6 md:px-12 xl:px-6 ">
+    <div className="max-w-6xl mx-auto px-4 md:px-12 xl:px-6">
       <section
         id="hero"
         className="z-10 w-full max-w-7xl relative flex flex-col gap-5 py-10 px-4 rounded-lg text-center lg:text-left"
       >
-        <div>
-          <GoBackButton size="sm" />
+        <div className="mr-auto">
+          <GoBackButton size="sm"/>
         </div>
         <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
           <div className="flex flex-col gap-4">
             <h1 className="font-bold text-3xl lg:text-5xl">
-              <span className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent  md:px-2">
+              <span className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent md:px-2">
                 {result.name}
               </span>
             </h1>
@@ -85,21 +86,9 @@ export default async function ResultsPage(props: Props) {
               </Link>
             </h5>
             <div className="w-full flex flex-wrap items-center gap-4 text-sm mx-auto md:ml-0">
-              <span
-                className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}
-              >
-                {getYear(result)}
-              </span>
-              <span
-                className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}
-              >
-                {result.branch}
-              </span>
-              <span
-                className={"bg-primary/10 text-primary py-1.5 px-3 rounded-md"}
-              >
-                {result.programme}
-              </span>
+              <Badge variant="default_light">{getYear(result)}</Badge>
+              <Badge variant="default_light">{result.branch}</Badge>
+              <Badge variant="default_light">{result.programme}</Badge>
             </div>
           </div>
           <div className="flex flex-col gap-4">
