@@ -15,8 +15,8 @@ interface OutpassDetailsProps {
 const classNames = {
   item: "flex items-center justify-between p-4 mb-3 bg-card border border-border rounded-lg shadow-sm last:mb-0 relative",
   details: "flex flex-col",
-  studentInfo: "font-medium",
-  outpassInfo: "text-sm text-muted-foreground",
+  studentInfo: "font-medium text-sm",
+  outpassInfo: "text-xs text-muted-foreground",
 };
 
 export function OutpassDetails({
@@ -28,7 +28,7 @@ export function OutpassDetails({
       {/* Outpass Details */}
       <div className={classNames.details}>
         <span className={classNames.studentInfo}>
-          {outpass.student.name} | {outpass.student.rollNumber}
+          {outpass.student?.name} | {outpass.student?.rollNumber}
         </span>
         <span className={classNames.outpassInfo}>
           {outpass.hostel.name} | Room No: {outpass.roomNumber}

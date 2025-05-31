@@ -39,7 +39,7 @@ export async function generateMetadata(
   const { moderator } = await params;
 
   return {
-    title: `${changeCase(moderator, "title")} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+    title: `${changeCase(moderator, "title")} Dashboard`,
     description: `Dashboard for ${moderator}`,
   };
 }

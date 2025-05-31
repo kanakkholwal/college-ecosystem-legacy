@@ -2,7 +2,6 @@ import { Settings, Users } from "lucide-react";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuBookA, LuBuilding, LuGithub, LuSchool } from "react-icons/lu";
-import { PiStudentFill } from "react-icons/pi";
 import { RiTwitterXFill } from "react-icons/ri";
 import type { Session } from "~/lib/auth-client";
 // import { TbServer2 } from "react-icons/tb";
@@ -155,9 +154,9 @@ export const sidebar_links: rawLinkType[] = [
   },
 
   {
-    title: "Academic Calender",
+    title: "Academic Events",
     icon: IoCalendarOutline,
-    path: "/academic-calender",
+    path: "/events",
     allowed_roles: [ROLES.ADMIN],
   },
   // {
@@ -198,7 +197,7 @@ export const sidebar_links: rawLinkType[] = [
     ],
   },
   {
-    title: "All Hostels",
+    title: "Hostels",
     icon: LuBuilding,
     path: "/hostels",
     allowed_roles: [
@@ -210,63 +209,63 @@ export const sidebar_links: rawLinkType[] = [
     ],
     items: [],
   },
-  {
-    title: "Hostel",
-    icon: LuBuilding,
-    path: "/hostel",
-    preserveParams: true,
-    allowed_roles: [
-      ROLES.ADMIN,
-      ROLES.WARDEN,
-      ROLES.ASSISTANT_WARDEN,
-      ROLES.MMCA,
-    ],
-    items: [
-      {
-        title: "Out Pass",
-        path: "/out-pass/list",
-        allowed_roles: [
-          ROLES.ADMIN,
-          ROLES.WARDEN,
-          ROLES.ASSISTANT_WARDEN,
-          ROLES.MMCA,
-        ],
-      },
-      {
-        title: "Out Pass Requests",
-        path: "/out-pass/requests",
-        allowed_roles: [
-          ROLES.ADMIN,
-          ROLES.WARDEN,
-          ROLES.ASSISTANT_WARDEN,
-          ROLES.MMCA,
-        ],
-      },
-    ],
-  },
-  {
-    title: "Hosteler Students",
-    icon: PiStudentFill,
-    path: "/hostel/students",
-    allowed_roles: [
-      ROLES.WARDEN,
-      ROLES.ASSISTANT_WARDEN,
-      ROLES.MMCA,
-      ROLES.ADMIN,
-    ],
-    items: [
-      {
-        title: "Add Hostelers Student",
-        path: "/add",
-        allowed_roles: [
-          ROLES.WARDEN,
-          ROLES.ASSISTANT_WARDEN,
-          ROLES.MMCA,
-          ROLES.ADMIN,
-        ],
-      },
-    ],
-  },
+  // {
+  //   title: "Hostel",
+  //   icon: LuBuilding,
+  //   path: "/hostel",
+  //   preserveParams: true,
+  //   allowed_roles: [
+  //     ROLES.ADMIN,
+  //     ROLES.WARDEN,
+  //     ROLES.ASSISTANT_WARDEN,
+  //     ROLES.MMCA,
+  //   ],
+  //   items: [
+  //     {
+  //       title: "Out Pass",
+  //       path: "/out-pass/list",
+  //       allowed_roles: [
+  //         ROLES.ADMIN,
+  //         ROLES.WARDEN,
+  //         ROLES.ASSISTANT_WARDEN,
+  //         ROLES.MMCA,
+  //       ],
+  //     },
+  //     {
+  //       title: "Out Pass Requests",
+  //       path: "/out-pass/requests",
+  //       allowed_roles: [
+  //         ROLES.ADMIN,
+  //         ROLES.WARDEN,
+  //         ROLES.ASSISTANT_WARDEN,
+  //         ROLES.MMCA,
+  //       ],
+  //     },
+  //   ],
+  // },
+  // {
+  //   title: "Hosteler Students",
+  //   icon: PiStudentFill,
+  //   path: "/hostel/students",
+  //   allowed_roles: [
+  //     ROLES.WARDEN,
+  //     ROLES.ASSISTANT_WARDEN,
+  //     ROLES.MMCA,
+  //     ROLES.ADMIN,
+  //   ],
+  //   items: [
+  //     {
+  //       title: "Add Hostelers Student",
+  //       path: "/add",
+  //       allowed_roles: [
+  //         ROLES.WARDEN,
+  //         ROLES.ASSISTANT_WARDEN,
+  //         ROLES.MMCA,
+  //         ROLES.ADMIN,
+  //       ],
+  //     },
+  //   ],
+  // },
   {
     title: "Settings",
     icon: Settings,

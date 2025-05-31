@@ -67,7 +67,7 @@ const renderEventDetails = (event: MyEvent) => (
   </div>
 );
 
-export default function AcademicCalenderPage(props: Props) {
+export default function ManageEventsPage(props: Props) {
   // const params = await props.params;
   // const searchParams = await props.searchParams;
 

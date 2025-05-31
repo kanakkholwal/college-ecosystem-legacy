@@ -2,7 +2,7 @@ import ParamsPreserverLink from "@/components/utils/link-preserve-params";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 
-export type RouterCardLink = {
+type RouterCardLink = {
   href: string;
   title: string;
   description: string;
@@ -12,11 +12,11 @@ export type RouterCardLink = {
   preserveParams?: boolean;
 };
 
-export interface RouterCardProps extends RouterCardLink {
+interface RouterCardProps extends RouterCardLink {
   style?: React.CSSProperties;
 }
 
-export function RouterCard({
+function RouterCard({
   href,
   title,
   description,
@@ -62,3 +62,8 @@ export function RouterCard({
     </ParamsPreserverLink>
   );
 }
+
+RouterCard.displayName = "RouterCard";
+
+
+export { RouterCard, type RouterCardLink, type RouterCardProps };

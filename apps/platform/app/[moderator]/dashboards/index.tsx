@@ -41,7 +41,7 @@ export function DashboardTemplate({ user_role }: { user_role: string }) {
                   see here?)
                 </AlertTitle>
                 <AlertDescription>
-                  <p>
+                  <p className="text-sm text-muted-foreground">
                     We are changing the way you interact with the platform and
                     adding new features.
                   </p>
@@ -49,7 +49,7 @@ export function DashboardTemplate({ user_role }: { user_role: string }) {
                     href="https://forms.gle/v8Angn9VCbt9oVko7"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="underline mx-1"
+                    className="hover:underline text-primary text-sm"
                   >
                     Suggest a feature here
                   </Link>{" "}

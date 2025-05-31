@@ -118,7 +118,7 @@ export function Provider({
   return (
     <NextThemesProvider
       themes={all_themes as unknown as string[]}
-      defaultTheme="light"
+      defaultTheme="system"
       {...props}
     >
       <Consumer>{children}</Consumer>

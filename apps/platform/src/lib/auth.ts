@@ -11,18 +11,18 @@ import {
 } from "~/constants/departments";
 import { db } from "~/db/connect";
 import { accounts, sessions, users, verifications } from "~/db/schema";
+import { appConfig } from "~/project.config";
 import type { ResultType } from "~/types/result";
 import { mailFetch, serverFetch } from "./server-fetch";
 
-const ALLOWED_ROLES = [ROLES.STUDENT, ROLES.FACULTY, ROLES.STAFF];
-
+// const ALLOWED_ROLES = [ROLES.STUDENT, ROLES.FACULTY, ROLES.STAFF];
 // const VERIFY_EMAIL_PATH_PREFIX = "/sign-in?tab=verify-email&token=";
 const VERIFY_EMAIL_PATH_PREFIX = "/verify-email?token=";
 
 const baseUrl = process.env.BASE_URL || process.env.VERCEL_URL;
 
 export const auth = betterAuth({
-  appName: "College Platform",
+  appName: appConfig.name,
   baseURL: baseUrl,
   database: drizzleAdapter(db, {
     provider: "pg",
@@ -51,6 +51,7 @@ export const auth = betterAuth({
       },
     },
   },
+
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
