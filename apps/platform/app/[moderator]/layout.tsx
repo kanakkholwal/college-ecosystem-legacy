@@ -86,7 +86,8 @@ export default async function DashboardLayout({
 
         {process.env.NODE_ENV !== "production" && (
           <div className="fixed bottom-0 right-auto left-auto mx-auto p-2 text-xs text-muted-foreground">
-            <span className="font-semibold">Environment:</span>{" "}{process.env.NODE_ENV}
+            <span className="font-semibold">Environment:</span>{" "}
+            {process.env.NODE_ENV}
           </div>
         )}
       </SidebarInset>

@@ -1,4 +1,3 @@
-
 import { FullScreenCalendar } from "@/components/ui/calendar-full";
 import type { Metadata } from "next";
 
@@ -15,8 +14,6 @@ export const metadata: Metadata = {
   title: "Academic Calender",
   description: "Check the academic calender here.",
 };
-
-
 
 // Sample data: an array of { day: Date, events: MyEvent[] }
 const sampleData = [
@@ -50,7 +47,6 @@ const sampleData = [
   },
 ];
 
-
 export default function AcademicCalenderPage(props: Props) {
   // const params = await props.params;
   // const searchParams = await props.searchParams;
@@ -65,9 +61,7 @@ export default function AcademicCalenderPage(props: Props) {
         Check the academic calendar here. This is a sample calendar with events
         for demonstration purposes.
       </p>
-      <FullScreenCalendar
-        data={sampleData}
-      />
+      <FullScreenCalendar data={sampleData} />
     </div>
   );
 }

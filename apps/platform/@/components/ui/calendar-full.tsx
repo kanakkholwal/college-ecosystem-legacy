@@ -74,10 +74,12 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
   renderEventDetails = DefaultRenderEvent,
   onNewEvent,
   ...props
-}: FullScreenCalendarProps<EventType >) {
+}: FullScreenCalendarProps<EventType>) {
   const today = startOfToday();
   const [selectedDay, setSelectedDay] = React.useState(today);
-  const [currentMonth, setCurrentMonth] = React.useState(format(today, "MMM-yyyy"));
+  const [currentMonth, setCurrentMonth] = React.useState(
+    format(today, "MMM-yyyy")
+  );
   const firstDayCurrentMonth = parse(currentMonth, "MMM-yyyy", new Date());
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -105,7 +107,9 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
     (day: Date) => {
       const cell = data.find((cell) => isSameDay(cell.day, day));
       if (!cell) return [];
-      return [...cell.events].sort((a, b) => new Date(a.time).getTime() - new Date(b.time).getTime());
+      return [...cell.events].sort(
+        (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()
+      );
     },
     [data]
   );
@@ -164,13 +168,16 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
               <ChevronRightIcon size={16} strokeWidth={2} aria-hidden="true" />
             </Button>
           </div>
-          {onNewEvent && (<><Separator orientation="vertical" className="h-6 block" />
+          {onNewEvent && (
+            <>
+              <Separator orientation="vertical" className="h-6 block" />
 
-          <Button size="sm" onClick={() => onNewEvent && onNewEvent()}>
-            <PlusCircleIcon size={16} strokeWidth={2} aria-hidden="true" />
-            <span>New Event</span>
-          </Button></>)}
-
+              <Button size="sm" onClick={() => onNewEvent && onNewEvent()}>
+                <PlusCircleIcon size={16} strokeWidth={2} aria-hidden="true" />
+                <span>New Event</span>
+              </Button>
+            </>
+          )}
         </div>
       </div>
 
@@ -205,7 +212,8 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                         !isToday(day) &&
                         !isSameMonth(day, firstDayCurrentMonth) &&
                         "text-muted-foreground",
-                      (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
+                      (isEqual(day, selectedDay) || isToday(day)) &&
+                        "font-semibold",
                       "flex h-14 flex-col border-b border-r px-3 py-2 hover:bg-muted focus:z-10"
                     )}
                   >
@@ -213,8 +221,12 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                       dateTime={format(day, "yyyy-MM-dd")}
                       className={cn(
                         "ml-auto flex size-6 items-center justify-center rounded-full",
-                        isEqual(day, selectedDay) && isToday(day) && "bg-primary text-primary-foreground",
-                        isEqual(day, selectedDay) && !isToday(day) && "bg-primary text-primary-foreground"
+                        isEqual(day, selectedDay) &&
+                          isToday(day) &&
+                          "bg-primary text-primary-foreground",
+                        isEqual(day, selectedDay) &&
+                          !isToday(day) &&
+                          "bg-primary text-primary-foreground"
                       )}
                     >
                       {format(day, "d")}
@@ -223,7 +235,10 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                       <div>
                         <div className="-mx-0.5 mt-auto flex flex-wrap-reverse">
                           {eventsForDay(day).map((event, idx) => (
-                            <span key={event.id + idx} className="mx-0.5 mt-1 size-1.5 rounded-full bg-muted-foreground"/>
+                            <span
+                              key={event.id + idx}
+                              className="mx-0.5 mt-1 size-1.5 rounded-full bg-muted-foreground"
+                            />
                           ))}
                         </div>
                       </div>
@@ -251,7 +266,8 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                       <button
                         type="button"
                         className={cn(
-                          isEqual(day, selectedDay) && "text-primary-foreground",
+                          isEqual(day, selectedDay) &&
+                            "text-primary-foreground",
                           !isEqual(day, selectedDay) &&
                             !isToday(day) &&
                             isSameMonth(day, firstDayCurrentMonth) &&
@@ -260,26 +276,35 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                             !isToday(day) &&
                             !isSameMonth(day, firstDayCurrentMonth) &&
                             "text-muted-foreground",
-                          isEqual(day, selectedDay) && isToday(day) && "border-none bg-primary",
-                          isEqual(day, selectedDay) && !isToday(day) && "bg-border/50 text-foreground",
-                          (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
+                          isEqual(day, selectedDay) &&
+                            isToday(day) &&
+                            "border-none bg-primary",
+                          isEqual(day, selectedDay) &&
+                            !isToday(day) &&
+                            "bg-border/50 text-foreground",
+                          (isEqual(day, selectedDay) || isToday(day)) &&
+                            "font-semibold",
                           "flex h-7 w-7 items-center justify-center rounded-full text-xs hover:border"
                         )}
                       >
-                        <time dateTime={format(day, "yyyy-MM-dd")}>{format(day, "d")}</time>
+                        <time dateTime={format(day, "yyyy-MM-dd")}>
+                          {format(day, "d")}
+                        </time>
                       </button>
                     </header>
                     <div className="flex-1 p-2.5">
                       {eventsForDay(day).length > 0 && (
                         <div className="space-y-1.5">
-                          {eventsForDay(day).slice(0, 1).map((event, idx) => (
-                            <div
-                              key={event.id + idx}
-                              className="rounded bg-muted p-1 h-5 text-xs leading-none font-medium text-foreground truncate whitespace-nowrap"
-                            >
+                          {eventsForDay(day)
+                            .slice(0, 1)
+                            .map((event, idx) => (
+                              <div
+                                key={event.id + idx}
+                                className="rounded bg-muted p-1 h-5 text-xs leading-none font-medium text-foreground truncate whitespace-nowrap"
+                              >
                                 {event.title}
-                            </div>
-                          ))}
+                              </div>
+                            ))}
                           {eventsForDay(day).length > 1 && (
                             <div className="text-xs text-muted-foreground">
                               + {eventsForDay(day).length - 1} more
@@ -309,7 +334,8 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                       !isToday(day) &&
                       !isSameMonth(day, firstDayCurrentMonth) &&
                       "text-muted-foreground",
-                    (isEqual(day, selectedDay) || isToday(day)) && "font-semibold",
+                    (isEqual(day, selectedDay) || isToday(day)) &&
+                      "font-semibold",
                     "flex h-14 flex-col border-b border-r px-3 py-2 hover:bg-muted focus:z-10"
                   )}
                 >
@@ -317,8 +343,12 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                     dateTime={format(day, "yyyy-MM-dd")}
                     className={cn(
                       "ml-auto flex size-6 items-center justify-center rounded-full",
-                      isEqual(day, selectedDay) && isToday(day) && "bg-primary text-primary-foreground",
-                      isEqual(day, selectedDay) && !isToday(day) && "bg-primary text-primary-foreground"
+                      isEqual(day, selectedDay) &&
+                        isToday(day) &&
+                        "bg-primary text-primary-foreground",
+                      isEqual(day, selectedDay) &&
+                        !isToday(day) &&
+                        "bg-primary text-primary-foreground"
                     )}
                   >
                     {format(day, "d")}
@@ -326,7 +356,10 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                   {eventsForDay(day).length > 0 && (
                     <div className="-mx-0.5 mt-auto flex flex-wrap-reverse">
                       {eventsForDay(day).map((event, idx) => (
-                        <span key={event.id + idx} className="mx-0.5 mt-1 size-1.5 rounded-full text-xs bg-muted-foreground"/>
+                        <span
+                          key={event.id + idx}
+                          className="mx-0.5 mt-1 size-1.5 rounded-full text-xs bg-muted-foreground"
+                        />
                       ))}
                     </div>
                   )}

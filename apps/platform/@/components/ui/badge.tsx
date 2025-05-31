@@ -14,8 +14,7 @@ const badgeVariants = cva(
         default_light:
           "border-primary/5 bg-primary/5 text-primary hover:bg-primary/20 dark:backdrop-blur",
         success_light: "bg-green-500/5 text-green-500 hover:bg-green-500/20",
-        warning_light:
-          "bg-yellow-500/5 text-yellow-500 hover:bg-yellow-500/20",
+        warning_light: "bg-yellow-500/5 text-yellow-500 hover:bg-yellow-500/20",
         info_light: "bg-sky-500/5 text-sky-500 hover:bg-sky-500/20",
         info: "bg-sky-100 hover:bg-sky-200 text-sky-600 dark:bg-sky-700 dark:text-sky-200 dark:hover:bg-sky-800 dark:hover:text-sky-200",
         destructive_light:

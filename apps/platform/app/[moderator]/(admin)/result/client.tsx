@@ -167,11 +167,10 @@ export function GetResultDiv() {
   );
 }
 
-
 export function DeleteResultDiv() {
   const [rollNo, setRollNo] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
-  
+
   const handleDeleteResult = async () => {
     if (!rollNoSchema.safeParse(rollNo).success) {
       toast.error("Invalid Roll No");
@@ -185,7 +184,9 @@ export function DeleteResultDiv() {
         toast.error(response?.message || "Failed to delete result by Roll No");
         return;
       }
-      toast.success(`${response.data.deletedCount} result(s) deleted successfully`);
+      toast.success(
+        `${response.data.deletedCount} result(s) deleted successfully`
+      );
       setRollNo(""); // Clear the input after successful deletion
     } catch (error) {
       console.log("Error deleting result:", error);
@@ -219,7 +220,6 @@ export function DeleteResultDiv() {
       >
         {loading ? "Deleting..." : "Delete Result"}
       </Button>
-      
     </div>
   );
 }

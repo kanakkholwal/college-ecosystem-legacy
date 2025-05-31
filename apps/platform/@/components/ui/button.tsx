@@ -82,7 +82,8 @@ const buttonVariants = cva(
           "bg-red-600/10 text-red-600 hover:bg-red-600/20 dark:bg-red-600/5 dark:text-red-600 hover:dark:bg-red-600/10 hover:dark:text-red-600",
         destructive:
           "bg-red-100 hover:bg-red-200 text-red-700	dark:bg-red-700 dark:text-red-200 dark:hover:bg-red-800 dark:hover:text-red-200",
-        outline: "border border-border bg-background shadow-sm hover:bg-accent dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white",
+        outline:
+          "border border-border bg-background shadow-sm hover:bg-accent dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white",
         ghost:
           "bg-slate-100/20 hover:bg-slate-100/80 backdrop-blur-md hover:text-accent-foreground dark:bg-accent dark:text-white dark:hover:bg-accent/80 dark:hover:text-white",
         success:
@@ -178,7 +179,7 @@ interface IconRefProps {
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-  VariantProps<typeof buttonVariants> {
+    VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
   asChild?: boolean;
 }

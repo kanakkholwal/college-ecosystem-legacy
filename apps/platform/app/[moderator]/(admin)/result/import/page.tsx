@@ -79,13 +79,10 @@ export default function ImportNewStudents() {
   return (
     <div className="space-y-6 p-4 px-2 md:p-6 @container/local">
       <div>
-
-        <h3 className="text-base md:text-lg font-bold">
-          Import New Students
-        </h3>
+        <h3 className="text-base md:text-lg font-bold">Import New Students</h3>
         <p className="text-sm text-muted-foreground">
-          Use this form to import new students from an Excel file. Ensure that the
-          file contains the required columns: Name, Roll No., and gender.
+          Use this form to import new students from an Excel file. Ensure that
+          the file contains the required columns: Name, Roll No., and gender.
         </p>
       </div>
       <div className="grid w-full max-w-sm items-center gap-1.5">
@@ -139,7 +136,7 @@ export default function ImportNewStudents() {
           <p className="text-sm text-muted-foreground">
             Imported Data
             <Badge size="sm">{data !== null ? data.length : 0} rows</Badge>
-            from 
+            from
             <Badge size="sm">
               {tableData !== null ? tableData.row_cells.length : 0} rows
             </Badge>
@@ -178,7 +175,11 @@ export default function ImportNewStudents() {
                 // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                 <TableRow key={row.length + index}>
                   {row.map((cell) => {
-                    return <TableCell key={cell} className="whitespace-nowrap">{cell}</TableCell>;
+                    return (
+                      <TableCell key={cell} className="whitespace-nowrap">
+                        {cell}
+                      </TableCell>
+                    );
                   })}
                 </TableRow>
               );

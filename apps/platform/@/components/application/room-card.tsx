@@ -40,8 +40,8 @@ interface Props extends React.ComponentProps<typeof Card> {
 export default function RoomCard({ room, user, ...props }: Props) {
   const authorized = user
     ? user?.role === "admin" ||
-    user.other_roles?.includes("cr") ||
-    user.other_roles?.includes("faculty")
+      user.other_roles?.includes("cr") ||
+      user.other_roles?.includes("faculty")
     : false;
 
   const handleSwitch = (value: boolean) => {
@@ -66,28 +66,34 @@ export default function RoomCard({ room, user, ...props }: Props) {
   };
 
   return (
-    <Card className="hover:shadow-lg animate-in popup @container/0 relative" {...props}>
-      {user?.role === "admin" && (<div className="absolute -top-2 -right-2 z-10">
-        <Button size="icon_sm" variant="destructive_light" onClick={() => {
-          if (!(user && authorized)) return;
-          toast.promise(
-            deleteRoom(room.id),
-            {
-              loading: `Deleting ${room.roomNumber}...`,
-              success: `Room ${room.roomNumber} deleted successfully!`,
-              error: `Failed to delete ${room.roomNumber}!`,
-            }
-          );
-        }}>
-          <Trash2 />
-        </Button>
-      </div>)}
+    <Card
+      className="hover:shadow-lg animate-in popup @container/0 relative"
+      {...props}
+    >
+      {user?.role === "admin" && (
+        <div className="absolute -top-2 -right-2 z-10">
+          <Button
+            size="icon_sm"
+            variant="destructive_light"
+            onClick={() => {
+              if (!(user && authorized)) return;
+              toast.promise(deleteRoom(room.id), {
+                loading: `Deleting ${room.roomNumber}...`,
+                success: `Room ${room.roomNumber} deleted successfully!`,
+                error: `Failed to delete ${room.roomNumber}!`,
+              });
+            }}
+          >
+            <Trash2 />
+          </Button>
+        </div>
+      )}
       <CardHeader className="p-4">
         <div className="flex flex-wrap w-full justify-between gap-2 items-center">
           <div className="flex justify-center items-center h-10 p-4 rounded-full bg-muted font-semibold text-lg shrink-0">
             {room.roomNumber}
           </div>
-  
+
           {authorized && (
             <div className="inline-flex flex-col items-end text-left ml-auto">
               <Label
@@ -121,17 +127,13 @@ export default function RoomCard({ room, user, ...props }: Props) {
           <span className="text-xs font-medium  text-muted-foreground">
             Capacity
           </span>
-          <Badge size="sm">
-            {room.capacity}
-          </Badge>
+          <Badge size="sm">{room.capacity}</Badge>
         </div>
         <div className="flex flex-col items-center gap-1">
           <span className="text-xs font-medium  text-muted-foreground">
             Room Type
           </span>
-          <Badge size="sm">
-            {room.roomType}
-          </Badge>
+          <Badge size="sm">{room.roomType}</Badge>
         </div>
         <div className="flex flex-col items-center gap-1">
           <span className="text-xs font-medium  text-muted-foreground">

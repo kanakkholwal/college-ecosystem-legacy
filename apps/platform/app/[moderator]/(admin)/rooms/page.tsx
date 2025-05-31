@@ -55,7 +55,6 @@ export default async function RoomsPage(props: Props) {
     <div className="w-full space-y-6">
       <div>
         <h3 className="text-lg font-semibold">Rooms Overview</h3>
-        
       </div>
       <div className="grid grid-cols-1 gap-4 @md:grid-cols-2 @lg:grid-cols-3 @xl:grid-cols-4 px-4">
         <div className="bg-card border p-4 rounded-lg">

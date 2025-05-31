@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { FullScreenCalendar } from "@/components/ui/calendar-full";
 import { format } from "date-fns";
@@ -66,7 +66,6 @@ const renderEventDetails = (event: MyEvent) => (
     <p className="text-xs text-muted-foreground mt-1">{event.description}</p>
   </div>
 );
-
 
 export default function AcademicCalenderPage(props: Props) {
   // const params = await props.params;

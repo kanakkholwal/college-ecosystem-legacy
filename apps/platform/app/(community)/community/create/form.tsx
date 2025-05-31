@@ -142,10 +142,10 @@ export default function CreateCommunityPost() {
                 <FormLabel>Sub Category</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  value={
-                    field.value || searchParams.get("subCategory") || ""
+                  value={field.value || searchParams.get("subCategory") || ""}
+                  defaultValue={
+                    field?.value || searchParams.get("subCategory") || ""
                   }
-                  defaultValue={field?.value || searchParams.get("subCategory") || ""}
                   disabled={form.formState.isSubmitting}
                 >
                   <FormControl>

@@ -23,19 +23,19 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
     ...[
       user.other_roles.includes("student")
         ? {
-          Icon: UserRound,
-          href: `/results/${user.username}`,
-          title: "Your Result",
-        }
+            Icon: UserRound,
+            href: `/results/${user.username}`,
+            title: "Your Result",
+          }
         : null,
     ],
     ...[
       user.role === "admin"
         ? {
-          Icon: UserRound,
-          href: "/admin",
-          title: "Admin Dashboard",
-        }
+            Icon: UserRound,
+            href: "/admin",
+            title: "Admin Dashboard",
+          }
         : null,
     ],
     ...user.other_roles.map((role) => ({
@@ -64,13 +64,13 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
                   ? user.image
                   : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`
               }
-            // src={
-            //   user.image
-            //     ? (user.image as string)
-            //     : user.gender !== "non_specified"
-            //       ? `/assets/avatars/${user.gender}_user.png`
-            //       : ""
-            // }
+              // src={
+              //   user.image
+              //     ? (user.image as string)
+              //     : user.gender !== "non_specified"
+              //       ? `/assets/avatars/${user.gender}_user.png`
+              //       : ""
+              // }
             />
             <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
@@ -91,16 +91,12 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col justify-center items-start">
-          <h4 className="font-semibold tracking-wide text-base">
-            {user.name}
-          </h4>
+          <h4 className="font-semibold tracking-wide text-base">{user.name}</h4>
           <p className="text-muted-foreground font-medium text-sm">
             {user.email}
           </p>
           <p>
-            <Badge size="sm">
-              {user.department}
-            </Badge>
+            <Badge size="sm">{user.department}</Badge>
           </p>
         </div>
       </div>
@@ -121,7 +117,9 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
 
       <div className="flex flex-row gap-1 flex-wrap">
         {SUPPORT_LINKS.map((link) => (
-          <Link key={link.href} href={link?.href || ""}
+          <Link
+            key={link.href}
+            href={link?.href || ""}
             className="rounded-md px-3 py-1 text-xs font-medium capitalize bg-muted text-muted-foreground hover:text-primary hover:shadow whitespace-nowrap"
           >
             {link.title}

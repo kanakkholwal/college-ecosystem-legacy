@@ -71,7 +71,6 @@ export default async function CategoryPage(props: Props) {
             >
               <span>Create Post</span>
             </Link>
-
           </Button>
         </div>
       </div>

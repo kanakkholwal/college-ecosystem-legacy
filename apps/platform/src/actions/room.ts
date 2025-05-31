@@ -234,10 +234,10 @@ export async function deleteRoom(roomId: string): Promise<RoomSelect> {
 
   // Delete usage history associated with the room
   await db.delete(roomUsageHistory).where(eq(roomUsageHistory.roomId, roomId));
-    revalidatePath("/classroom-availability", "page");
-    revalidatePath("/admin/rooms", "page");
-    revalidatePath("/cr/rooms", "page");
-    revalidatePath("/faculty/rooms", "page");
+  revalidatePath("/classroom-availability", "page");
+  revalidatePath("/admin/rooms", "page");
+  revalidatePath("/cr/rooms", "page");
+  revalidatePath("/faculty/rooms", "page");
 
   return deletedRoom;
 }

@@ -55,11 +55,10 @@ export type Department = {
  **  APIs Payload types
  */
 
-
- export type deleteResponseType = {
+export type deleteResponseType = {
   acknowledged: boolean;
   deletedCount: number;
- }
+};
 export type ApiResponse<T> = {
   error: boolean;
   message: string;
