@@ -31,7 +31,7 @@ export default function Navbar({ user }: NavbarProps) {
           <ProfileDropdown user={user} />
         </div>
       </div>
-      <div className="w-full max-w-(--max-app-width) mx-auto justify-start flex gap-2 items-center px-4">
+      <div className="w-full max-w-(--max-app-width) mx-auto justify-start flex gap-2 items-center px-4 overflow-hidden">
         {navLinks.map((navLink) => {
           return <Button key={navLink.href} variant="ghost" size="sm" asChild>
             <Link href={navLink.href}>
