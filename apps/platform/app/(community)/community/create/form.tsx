@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
 import NexoMdxEditor from "nexo-mdx";
+import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "src/constants/community";
@@ -28,6 +29,7 @@ import { rawCommunityPostSchema } from "src/models/community";
 import type { z } from "zod";
 
 export default function CreateCommunityPost() {
+  const searchParams = useSearchParams();
   const form = useForm<z.infer<typeof rawCommunityPostSchema>>({
     resolver: zodResolver(rawCommunityPostSchema),
     defaultValues: {
@@ -108,7 +110,7 @@ export default function CreateCommunityPost() {
               <FormLabel>Category</FormLabel>
               <Select
                 onValueChange={field.onChange}
-                defaultValue={field.value}
+                value={field.value || searchParams.get("category") || ""}
                 disabled={form.formState.isSubmitting}
               >
                 <FormControl>
@@ -140,7 +142,10 @@ export default function CreateCommunityPost() {
                 <FormLabel>Sub Category</FormLabel>
                 <Select
                   onValueChange={field.onChange}
-                  defaultValue={field?.value || undefined}
+                  value={
+                    field.value || searchParams.get("subCategory") || ""
+                  }
+                  defaultValue={field?.value || searchParams.get("subCategory") || ""}
                   disabled={form.formState.isSubmitting}
                 >
                   <FormControl>

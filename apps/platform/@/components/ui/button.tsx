@@ -72,6 +72,8 @@ const buttonVariants = cva(
         default: "bg-primary dark:bg-primary text-white hover:bg-primary/90",
         default_light:
           "bg-primary/10 text-primary hover:bg-primary/20 dark:bg-primary/10 dark:text-primary hover:dark:bg-primary/5 hover:dark:text-primary",
+        secondary:
+          "bg-secondary text-secondary-foreground hover:bg-secondary/90",
         success_light:
           "bg-green-600/10 text-green-600 hover:bg-green-600/20 dark:bg-green-600/20 dark:text-green-600 hover:dark:bg-green-600/10 hover:dark:text-green-600",
         warning_light:
@@ -80,11 +82,9 @@ const buttonVariants = cva(
           "bg-red-600/10 text-red-600 hover:bg-red-600/20 dark:bg-red-600/5 dark:text-red-600 hover:dark:bg-red-600/10 hover:dark:text-red-600",
         destructive:
           "bg-red-100 hover:bg-red-200 text-red-700	dark:bg-red-700 dark:text-red-200 dark:hover:bg-red-800 dark:hover:text-red-200",
-        outline: "border border-border bg-background shadow-sm hover:bg-accent",
-        secondary:
-          "bg-secondary text-secondary-foreground hover:bg-secondary/90",
+        outline: "border border-border bg-background shadow-sm hover:bg-accent dark:bg-neutral-800 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white",
         ghost:
-          "bg-slate-100/20 hover:bg-slate-100/80 backdrop-blur-md border border-gray-100/80 hover:text-accent-foreground dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white",
+          "bg-slate-100/20 hover:bg-slate-100/80 backdrop-blur-md hover:text-accent-foreground dark:bg-accent dark:text-white dark:hover:bg-accent/80 dark:hover:text-white",
         success:
           "bg-green-100 text-green-700 hover:bg-green-200 hover:text-green-700",
         slate:
@@ -178,7 +178,7 @@ interface IconRefProps {
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
   asChild?: boolean;
 }

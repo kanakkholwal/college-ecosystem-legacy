@@ -64,11 +64,11 @@ export const quick_links: RouterCardLink[] = [
     allowed_roles: ["*"],
   },
   {
-    href: "/misc/calender",
-    title: "Academic Calender",
+    href: "/academic-calendar",
+    title: "Academic Calendar",
     description: "Check the academic calender here.",
     Icon: CalendarRange,
-    disabled: true,
+    disabled: false,
     allowed_roles: ["*"],
   },
   {

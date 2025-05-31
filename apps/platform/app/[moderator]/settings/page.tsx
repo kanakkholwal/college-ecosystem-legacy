@@ -32,7 +32,7 @@ const list = [
 
 export default async function SettingsPage() {
   return (
-    <ResponsiveContainer className="p-4">
+    <ResponsiveContainer className="p-4 @3xl:grid-cols-3  @5xl:grid-cols-3">
       {list.map((link, index) => {
         return (
           <Link

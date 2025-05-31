@@ -27,7 +27,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       {items.map((item) => (
         <Button
           key={item.href}
-          variant={pathname.includes(item.href) ? "default_light" : "outline"}
+          variant={pathname.includes(item.href) ? "default_light" : "ghost"}
           className="justify-start border-0"
           asChild
         >

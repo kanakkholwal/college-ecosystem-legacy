@@ -1,6 +1,8 @@
+"use client"
 
 import { FullScreenCalendar } from "@/components/ui/calendar-full";
-import type { Metadata } from "next";
+import { format } from "date-fns";
+// import type { Metadata } from "next";
 
 type Props = {
   params: Promise<{
@@ -11,12 +13,16 @@ type Props = {
   }>;
 };
 
-export const metadata: Metadata = {
-  title: "Academic Calender",
-  description: "Check the academic calender here.",
-};
-
-
+// export const metadata: Metadata = {
+//   title: "Academic Calender",
+//   description: "Check the academic calender here.",
+// };
+interface MyEvent {
+  id: string;
+  title: string;
+  time: string; // ISO string or "HH:mm" format
+  description: string;
+}
 
 // Sample data: an array of { day: Date, events: MyEvent[] }
 const sampleData = [
@@ -50,6 +56,17 @@ const sampleData = [
   },
 ];
 
+// Renderer for full event details in the side panel
+const renderEventDetails = (event: MyEvent) => (
+  <div>
+    <h3 className="text-sm font-medium">{event.title}</h3>
+    <p className="text-xs text-muted-foreground">
+      {format(new Date(event.time), "hh:mm a")}
+    </p>
+    <p className="text-xs text-muted-foreground mt-1">{event.description}</p>
+  </div>
+);
+
 
 export default function AcademicCalenderPage(props: Props) {
   // const params = await props.params;
@@ -59,15 +76,11 @@ export default function AcademicCalenderPage(props: Props) {
   // const session = await getSession();
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 className="text-xl font-bold mb-2">Academic Calender</h1>
-      <p className="text-sm text-muted-foreground mb-4">
-        Check the academic calendar here. This is a sample calendar with events
-        for demonstration purposes.
-      </p>
+    <>
       <FullScreenCalendar
         data={sampleData}
+        renderEventDetails={renderEventDetails}
       />
-    </div>
+    </>
   );
 }

@@ -8,8 +8,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Session } from "~/lib/auth-client";
 import { authClient } from "~/lib/auth-client";
-import { Separator } from "../ui/separator";
 import { changeCase } from "~/utils/string";
+import { Badge } from "../ui/badge";
+import { Separator } from "../ui/separator";
 
 interface ProfileDropdownProps {
   user: Session["user"];
@@ -22,19 +23,19 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
     ...[
       user.other_roles.includes("student")
         ? {
-            Icon: UserRound,
-            href: `/results/${user.username}`,
-            title: "Your Result",
-          }
+          Icon: UserRound,
+          href: `/results/${user.username}`,
+          title: "Your Result",
+        }
         : null,
     ],
     ...[
       user.role === "admin"
         ? {
-            Icon: UserRound,
-            href: "/admin",
-            title: "Admin Dashboard",
-          }
+          Icon: UserRound,
+          href: "/admin",
+          title: "Admin Dashboard",
+        }
         : null,
     ],
     ...user.other_roles.map((role) => ({
@@ -63,13 +64,13 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
                   ? user.image
                   : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`
               }
-              // src={
-              //   user.image
-              //     ? (user.image as string)
-              //     : user.gender !== "non_specified"
-              //       ? `/assets/avatars/${user.gender}_user.png`
-              //       : ""
-              // }
+            // src={
+            //   user.image
+            //     ? (user.image as string)
+            //     : user.gender !== "non_specified"
+            //       ? `/assets/avatars/${user.gender}_user.png`
+            //       : ""
+            // }
             />
             <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
@@ -77,7 +78,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
       }}
     >
       <div className="flex gap-4 mx-auto">
-        <Avatar className="size-16 rounded-full bg-muted">
+        <Avatar className="size-16 rounded-full bg-muted border">
           <AvatarImage
             src={
               user.image
@@ -90,16 +91,16 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col justify-center items-start">
-          <h4 className="text-muted-foreground font-bold tracking-wide text-lg">
+          <h4 className="font-semibold tracking-wide text-base">
             {user.name}
           </h4>
-          <p className="text-muted-foreground font-medium text-base">
+          <p className="text-muted-foreground font-medium text-sm">
             {user.email}
           </p>
           <p>
-            <span className="rounded-md px-2 py-1 text-xs font-medium capitalize bg-primary/30 text-primary whitespace-nowrap">
+            <Badge size="sm">
               {user.department}
-            </span>
+            </Badge>
           </p>
         </div>
       </div>
@@ -109,7 +110,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           <Link
             key={link.href}
             href={link?.href || ""}
-            className="rounded-md h-8 px-3 py-2 inline-flex justify-start gap-2 items-center text-sm font-medium capitalize border bg-muted text-muted-foreground hover:border-primary hover:text-primary whitespace-nowrap"
+            className="rounded-md h-8 px-3 py-2 inline-flex justify-start gap-2 items-center text-xs font-medium capitalize border bg-muted text-muted-foreground hover:border-primary hover:text-primary whitespace-nowrap"
           >
             {link.Icon && <link.Icon className="size-3 inline-block" />}
             <span className="truncate">{changeCase(link.title, "title")}</span>
@@ -118,12 +119,10 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
       </div>
       <Separator className="my-2" />
 
-      <div className="flex flex-row gap-2 flex-wrap">
+      <div className="flex flex-row gap-1 flex-wrap">
         {SUPPORT_LINKS.map((link) => (
-          <Link
-            key={link.href}
-            href={link?.href || ""}
-            className="rounded-md px-3 py-1 text-xs font-medium capitalize bg-muted text-muted-foreground hover:text-primary whitespace-nowrap"
+          <Link key={link.href} href={link?.href || ""}
+            className="rounded-md px-3 py-1 text-xs font-medium capitalize bg-muted text-muted-foreground hover:text-primary hover:shadow whitespace-nowrap"
           >
             {link.title}
           </Link>
@@ -145,14 +144,14 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           })}
         </div>
         <div className="flex gap-2">
-          <Button variant="default_light" size="sm" asChild>
+          <Button variant="outline" size="sm" asChild>
             <Link href="/">
               <Home />
               Go to Home
             </Link>
           </Button>
           <Button
-            variant="default_light"
+            variant="ghost"
             size="sm"
             onClick={async () => {
               await authClient.signOut({

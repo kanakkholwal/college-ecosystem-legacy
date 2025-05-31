@@ -3,7 +3,7 @@
 @import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
 
-@source "../app";
+/* @source "../app"; */
 
 
 /* add this to copy the configuration settings from your project */
@@ -31,7 +31,7 @@
 
     --muted: hsl(210deg 40% 98.04%);
     --muted-foreground: hsl(220 8.9% 46.1%);
-    
+
     --accent: hsl(0deg 0% 96.08%);
     --accent-foreground: hsl(220.9 39.3% 11%);
     --destructive: hsl(0 84.2% 60.2%);
@@ -289,31 +289,49 @@
         @apply border-border;
     }
 
-    html {
-        scroll-behavior: smooth;
-    }
-
     html::-webkit-scrollbar {
-        width: 10px;
+        width: 8px;
+        height: 8px;
     }
 
     html::-webkit-scrollbar-track {
-        background-color: #fafafa;
-        /* @apply bg-slate-100 dark:bg-slate-800; */
+        background: hsl(var(--muted));
+        border-radius: 0.5rem;
     }
 
     html::-webkit-scrollbar-thumb {
-        background-color: #ccc;
-        /* @apply bg-slate-400 dark:bg-slate-700; */
+        background: linear-gradient(135deg,
+                hsl(var(--primary) / 0.6),
+                hsl(var(--secondary) / 0.8));
+        border-radius: 0.5rem;
+        border: 2px solid hsl(var(--background));
+        transition: all 0.2s ease-in-out;
     }
 
     html::-webkit-scrollbar-thumb:hover {
-        background-color: #b3b3b3;
+        background: linear-gradient(135deg,
+                hsl(var(--primary) / 0.8),
+                hsl(var(--secondary) / 1));
+        transform: scale(1.1);
     }
 
-    body {
-        @apply bg-background text-foreground;
+    html::-webkit-scrollbar-thumb:active {
+        background: linear-gradient(135deg,
+                hsl(var(--primary)),
+                hsl(var(--secondary)));
     }
+
+    html::-webkit-scrollbar-corner {
+        background: hsl(var(--background));
+    }
+
+    /* Firefox scrollbar support */
+    html {
+        scroll-behavior: smooth;
+        scrollbar-width: thin;
+        scrollbar-color: hsl(var(--primary) / 0.6) hsl(var(--muted));
+    }
+
 
     button:not(:disabled),
     [role="button"]:not(:disabled),
@@ -363,6 +381,7 @@ body {
     overflow-x: hidden;
     position: relative;
     font-family: var(--font-sans, 'Inter', 'Helvetica', 'Arial', sans-serif);
+    @apply bg-background text-foreground;
 
 }
 

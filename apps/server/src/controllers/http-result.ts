@@ -142,7 +142,7 @@ export const deleteResult = async (req: Request, res: Response) => {
 
   const resultData = await ResultModel.deleteOne({ rollNo: rollNo });
   if (resultData.deletedCount === 0) {
-    res.status(404).json({
+    res.status(200).json({
       message: "Result not found",
       error: true,
       data: null,

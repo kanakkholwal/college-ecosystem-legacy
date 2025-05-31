@@ -16,8 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { getDay, getDaysInMonth, isSameDay } from "date-fns";
-import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check, ChevronLeftIcon, ChevronRightIcon, ChevronsUpDown } from "lucide-react";
 import { type ReactNode, createContext, useContext, useState } from "react";
 import { create } from "zustand";
 import { devtools } from "zustand/middleware";
@@ -132,7 +131,7 @@ const Combobox = ({
       <PopoverContent className="w-40 p-0">
         <Command
           filter={(value, search) => {
-            const label = data.find((item) => item.value === value)?.label;
+            const label = data?.find((item) => item.value === value)?.label;
 
             return label?.toLowerCase().includes(search.toLowerCase()) ? 1 : 0;
           }}
