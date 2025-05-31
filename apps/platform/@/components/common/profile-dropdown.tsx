@@ -1,16 +1,17 @@
 "use client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
-import { socials } from "@/constants/links";
+import { Separator } from "@/components/ui/separator";
+import { socials, SUPPORT_LINKS } from "@/constants/links";
 import { Home, LogOut, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Session } from "~/lib/auth-client";
 import { authClient } from "~/lib/auth-client";
 import { changeCase } from "~/utils/string";
-import { Badge } from "../ui/badge";
-import { Separator } from "../ui/separator";
+
 
 interface ProfileDropdownProps {
   user: Session["user"];
@@ -170,21 +171,3 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
   );
 }
 
-const SUPPORT_LINKS = [
-  {
-    href: "https://github.com/kanakkholwal/college-ecosystem",
-    title: "Contribute to this project",
-  },
-  {
-    href: "https://github.com/kanakkholwal/college-ecosystem/issues",
-    title: "Report an issue",
-  },
-  {
-    href: "https://forms.gle/u2ptK12iRVdn5oXF7",
-    title: "Give a feedback",
-  },
-  {
-    href: "https://forms.gle/v8Angn9VCbt9oVko7",
-    title: "Suggest a feature",
-  },
-];

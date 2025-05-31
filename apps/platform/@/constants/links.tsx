@@ -14,6 +14,7 @@ import { AudioLines, CalendarRange } from "lucide-react";
 import { BiSpreadsheet } from "react-icons/bi";
 import { GrAnnounce, GrSchedules } from "react-icons/gr";
 import { MdOutlinePoll } from "react-icons/md";
+import { appConfig } from "~/project.config";
 
 export type AllowedRoleType =
   | Session["user"]["role"]
@@ -351,11 +352,11 @@ const checkRoleAccess = (userRole: string, allowedRoles: string[]): boolean => {
 
 export const SUPPORT_LINKS = [
   {
-    href: "https://github.com/kanakkholwal/college-ecosystem",
+    href: appConfig.githubRepo,
     title: "Contribute to this project",
   },
   {
-    href: "https://github.com/kanakkholwal/college-ecosystem/issues",
+    href: appConfig.githubRepo + "/issues",
     title: "Report an issue",
   },
   {

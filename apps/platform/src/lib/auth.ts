@@ -102,9 +102,9 @@ export const auth = betterAuth({
           body: JSON.stringify({
             template_key: "welcome_verify",
             targets: [user.email],
-            subject: "Welcome to College Platform",
+            subject: `Welcome to ${appConfig.name}`,
             payload: {
-              platform_name: "College Platform",
+              platform_name: appConfig.name,
               name: user.name,
               email: user.email,
               verification_url: verification_url,

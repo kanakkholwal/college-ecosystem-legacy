@@ -5,6 +5,7 @@ import { RocketIcon } from "@radix-ui/react-icons";
 import { motion } from "motion/react";
 import Link from "next/link";
 import type { Session } from "~/lib/auth";
+import { appConfig } from "~/project.config";
 // import "./greetings.css";
 
 interface HeroSection {
@@ -32,17 +33,17 @@ export function HeroSection({ user }: HeroSection) {
           {getGreeting()} <span className="text-primary">{user?.name}</span>
         </h2>
         <p className="mb-8 text-lg text-muted-foreground">
-          Welcome to the College Ecosystem
+          Welcome to the {appConfig.name} 
         </p>
         {user?.other_roles.includes("student") && (
           <Alert variant="info" className="mt-4" data-aos="fade-right">
             <RocketIcon className="h-4 w-4" />
-            <AlertTitle>Join the College Ecosystem Project!</AlertTitle>
+            <AlertTitle>Join the {appConfig.name} Project!</AlertTitle>
             <AlertDescription>
               We are looking for contributors to help us build the platform.
               Check out the
               <Link
-                href="https://github.com/kanakkholwal/college-ecosystem/blob/main/CONTRIBUTING.md"
+                href={`${appConfig.githubRepo}/blob/main/CONTRIBUTING.md`}
                 className="underline mx-1"
               >
                 Contribute

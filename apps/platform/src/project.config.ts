@@ -16,6 +16,7 @@ export const appConfig = {
     { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" },
     { name: "NITH", url: "https://nith.ac.in" },
   ],
+  githubRepo: "https://github.com/kanakkholwal/college-ecosystem",
 };
 
 export const orgConfig = {

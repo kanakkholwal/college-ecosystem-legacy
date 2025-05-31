@@ -2,10 +2,7 @@ import EmptyArea from "@/components/common/empty-area";
 import { FileText, Files, Link as LinkIcon } from "lucide-react";
 import Link from "next/link";
 
-export const metadata = {
-  title: "Not Found",
-  description: "The page was not found",
-};
+
 
 interface Props {
   params: Promise<{
