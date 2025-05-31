@@ -382,6 +382,7 @@ body {
     position: relative;
     font-family: var(--font-sans, 'Inter', 'Helvetica', 'Arial', sans-serif);
     @apply bg-background text-foreground;
+    --max-app-width: 1280px;
 
 }
 

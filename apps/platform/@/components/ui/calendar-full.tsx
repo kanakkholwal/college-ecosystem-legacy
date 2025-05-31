@@ -40,6 +40,7 @@ interface CalendarCell<EventType extends BaseEvent> {
 }
 
 interface FullScreenCalendarProps<EventType extends BaseEvent> {
+  className?: string;
   data: CalendarCell<EventType>[];
   // renderEventMarker: (event: EventType) => React.ReactNode;
   renderEventDetails?: (event: EventType) => React.ReactNode;
@@ -70,6 +71,7 @@ function DefaultRenderEvent<EventType extends BaseEvent>(event: EventType) {
 
 export function FullScreenCalendar<EventType extends BaseEvent>({
   data,
+  className,
   // renderEventMarker,
   renderEventDetails = DefaultRenderEvent,
   onNewEvent,
@@ -115,7 +117,7 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
   );
 
   return (
-    <div className="flex flex-1 flex-col">
+    <div className={cn("flex flex-1 flex-col", className)}>
       <div className="flex flex-col space-y-4 p-4 md:flex-row md:items-center md:justify-between md:space-y-0 lg:flex-none">
         <div className="flex flex-auto">
           <div className="flex items-center gap-4">
@@ -140,11 +142,11 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
         </div>
 
         <div className="flex items-center gap-4 md:gap-6">
-          <div className="inline-flex w-full -space-x-px rounded-lg shadow-sm shadow-black/5 md:w-auto rtl:space-x-reverse">
+          <div className="inline-flex w-full -space-x-px border divide-x rounded-lg shadow-sm shadow-black/5 md:w-auto rtl:space-x-reverse">
             <Button
               onClick={previousMonth}
               className="rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10"
-              variant="outline"
+              variant="ghost"
               size="icon_sm"
               aria-label="Navigate to previous month"
             >
@@ -153,15 +155,15 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
             <Button
               onClick={goToToday}
               className="w-full rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10 md:w-auto"
-              variant="outline"
-              size="icon_sm"
+              variant="ghost"
+              size="sm"
             >
               Today
             </Button>
             <Button
               onClick={nextMonth}
               className="rounded-none shadow-none first:rounded-s-lg last:rounded-e-lg focus-visible:z-10"
-              variant="outline"
+              variant="ghost"
               size="icon_sm"
               aria-label="Navigate to next month"
             >
@@ -182,8 +184,8 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
       </div>
 
       <div className="flex-col flex lg:flex-row gap-2">
-        <div className="lg:flex lg:flex-auto lg:flex-col bg-card rounded-t-lg">
-          <div className="grid grid-cols-7 border text-center text-xs font-semibold leading-6 lg:flex-none bg-background">
+        <div className="lg:flex lg:flex-auto lg:flex-col bg-card rounded-t-lg overflow-hidden">
+          <div className="grid grid-cols-7 border text-center text-xs font-semibold leading-6 lg:flex-none bg-muted dark:bg-background rounded-t-lg">
             <div className="border-r py-2.5">Sun</div>
             <div className="border-r py-2.5">Mon</div>
             <div className="border-r py-2.5">Tue</div>
@@ -205,15 +207,15 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                     className={cn(
                       isEqual(day, selectedDay) && "text-primary-foreground",
                       !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        isSameMonth(day, firstDayCurrentMonth) &&
-                        "text-foreground",
+                      !isToday(day) &&
+                      isSameMonth(day, firstDayCurrentMonth) &&
+                      "text-foreground",
                       !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        !isSameMonth(day, firstDayCurrentMonth) &&
-                        "text-muted-foreground",
+                      !isToday(day) &&
+                      !isSameMonth(day, firstDayCurrentMonth) &&
+                      "text-muted-foreground",
                       (isEqual(day, selectedDay) || isToday(day)) &&
-                        "font-semibold",
+                      "font-semibold",
                       "flex h-14 flex-col border-b border-r px-3 py-2 hover:bg-muted focus:z-10"
                     )}
                   >
@@ -222,11 +224,11 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                       className={cn(
                         "ml-auto flex size-6 items-center justify-center rounded-full",
                         isEqual(day, selectedDay) &&
-                          isToday(day) &&
-                          "bg-primary text-primary-foreground",
+                        isToday(day) &&
+                        "bg-primary text-primary-foreground",
                         isEqual(day, selectedDay) &&
-                          !isToday(day) &&
-                          "bg-primary text-primary-foreground"
+                        !isToday(day) &&
+                        "bg-primary text-primary-foreground"
                       )}
                     >
                       {format(day, "d")}
@@ -255,9 +257,9 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                     className={cn(
                       dayIdx === 0 && colStartClasses[getDay(day)],
                       !isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        !isSameMonth(day, firstDayCurrentMonth) &&
-                        "bg-accent/50 text-muted-foreground",
+                      !isToday(day) &&
+                      !isSameMonth(day, firstDayCurrentMonth) &&
+                      "bg-accent/50 text-muted-foreground",
                       "relative flex flex-col border-b border-r hover:bg-muted focus:z-10",
                       !isEqual(day, selectedDay) && "hover:bg-accent/75"
                     )}
@@ -267,23 +269,23 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                         type="button"
                         className={cn(
                           isEqual(day, selectedDay) &&
-                            "text-primary-foreground",
+                          "text-primary-foreground",
                           !isEqual(day, selectedDay) &&
-                            !isToday(day) &&
-                            isSameMonth(day, firstDayCurrentMonth) &&
-                            "text-foreground",
+                          !isToday(day) &&
+                          isSameMonth(day, firstDayCurrentMonth) &&
+                          "text-foreground",
                           !isEqual(day, selectedDay) &&
-                            !isToday(day) &&
-                            !isSameMonth(day, firstDayCurrentMonth) &&
-                            "text-muted-foreground",
+                          !isToday(day) &&
+                          !isSameMonth(day, firstDayCurrentMonth) &&
+                          "text-muted-foreground",
                           isEqual(day, selectedDay) &&
-                            isToday(day) &&
-                            "border-none bg-primary",
+                          isToday(day) &&
+                          "border-none bg-primary",
                           isEqual(day, selectedDay) &&
-                            !isToday(day) &&
-                            "bg-border/50 text-foreground",
+                          !isToday(day) &&
+                          "bg-border/50 text-foreground",
                           (isEqual(day, selectedDay) || isToday(day)) &&
-                            "font-semibold",
+                          "font-semibold",
                           "flex h-7 w-7 items-center justify-center rounded-full text-xs hover:border"
                         )}
                       >
@@ -327,15 +329,15 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                   className={cn(
                     isEqual(day, selectedDay) && "text-primary-foreground",
                     !isEqual(day, selectedDay) &&
-                      !isToday(day) &&
-                      isSameMonth(day, firstDayCurrentMonth) &&
-                      "text-foreground",
+                    !isToday(day) &&
+                    isSameMonth(day, firstDayCurrentMonth) &&
+                    "text-foreground",
                     !isEqual(day, selectedDay) &&
-                      !isToday(day) &&
-                      !isSameMonth(day, firstDayCurrentMonth) &&
-                      "text-muted-foreground",
+                    !isToday(day) &&
+                    !isSameMonth(day, firstDayCurrentMonth) &&
+                    "text-muted-foreground",
                     (isEqual(day, selectedDay) || isToday(day)) &&
-                      "font-semibold",
+                    "font-semibold",
                     "flex h-14 flex-col border-b border-r px-3 py-2 hover:bg-muted focus:z-10"
                   )}
                 >
@@ -344,11 +346,11 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                     className={cn(
                       "ml-auto flex size-6 items-center justify-center rounded-full",
                       isEqual(day, selectedDay) &&
-                        isToday(day) &&
-                        "bg-primary text-primary-foreground",
+                      isToday(day) &&
+                      "bg-primary text-primary-foreground",
                       isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        "bg-primary text-primary-foreground"
+                      !isToday(day) &&
+                      "bg-primary text-primary-foreground"
                     )}
                   >
                     {format(day, "d")}
@@ -369,7 +371,7 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
           </div>
         </div>
 
-        <div className="items-start justify-start p-3 bg-card border-t lg:w-88 lg:border-l lg:border-t-0 lg:border-b-0 lg:rounded-tr-lg lg:rounded-br-lg">
+        <div className="items-start justify-start p-3 bg-card border lg:w-88 rounded-b-lg lg:rounded-tr-lg lg:rounded-bl-none">
           <div>
             <h2 className="text-base font-semibold text-foreground">
               {format(selectedDay, "MMMM d, yyyy")}

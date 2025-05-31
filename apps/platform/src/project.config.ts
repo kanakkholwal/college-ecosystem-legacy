@@ -2,7 +2,7 @@
 
 // This file contains the configuration for the app and college
 export const appConfig = {
-  name: "College Ecosystem",
+  name: "College Platform",
   // appDomain: "college-ecosystem.vercel.app",
   // url: "https://college-ecosystem.vercel.app",
   appDomain: "nith.eu.org",

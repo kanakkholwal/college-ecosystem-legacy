@@ -1,38 +1,48 @@
 import ProfileDropdown from "@/components/common/profile-dropdown";
-import { SUPPORT_LINKS, socials } from "@/constants/links";
+import { SUPPORT_LINKS, getNavLinks, socials } from "@/constants/links";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import type { Session } from "~/lib/auth";
+import { appConfig } from "~/project.config";
+import { Button } from "../ui/button";
+
 
 interface NavbarProps {
   user: Session["user"];
 }
 
 export default function Navbar({ user }: NavbarProps) {
+  const navLinks = getNavLinks(user);
   return (
     <header
       className={cn(
-        "bg-card fixed left-1/2 top-0 z-40 box-content w-full max-w-6xl -translate-x-1/2 border-b border-border transition-colors lg:mt-5 lg:w-[calc(100%-1rem)] lg:rounded-2xl lg:border shadow-sm"
+        "z-40 w-full pb-2 transition-all",
+        "bg-card border-b",
       )}
     >
-      <div className="relative md:px-4 z-50">
-        <nav
-          className={cn(
-            "flex h-14 w-full flex-row items-center p-4 lg:h-12",
-            "flex items-center justify-between font-bold text-xl"
-          )}
+      <div className="w-full max-w-(--max-app-width) mx-auto flex items-center justify-between px-4 py-2">
+        <Link
+          href="/"
+          className="relative  font-bold text-xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:from-secondary hover:to-primary lg:text-xl whitespace-nowrap"
         >
-          <Link
-            href="/"
-            className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:from-secondary hover:to-primary lg:text-xl whitespace-nowrap"
-          >
-            {process.env.NEXT_PUBLIC_WEBSITE_NAME}
-          </Link>
-          <div className="ml-auto flex gap-2 items-center">
-            <ProfileDropdown user={user} />
-          </div>
-        </nav>
+          {appConfig.name}
+        </Link>
+        <div className="ml-auto flex gap-2 items-center">
+          <ProfileDropdown user={user} />
+        </div>
       </div>
+      <div className="w-full max-w-(--max-app-width) mx-auto justify-start flex gap-2 items-center px-4">
+        {navLinks.map((navLink) => {
+          return <Button key={navLink.href} variant="ghost" size="sm" asChild>
+            <Link href={navLink.href}>
+              {navLink.Icon && <navLink.Icon className="size-4" />}
+              {navLink.title}
+            </Link>
+          </Button>
+        })}
+
+      </div>
+
     </header>
   );
 }

@@ -24,9 +24,9 @@ export default async function Layout({ children }: LayoutProps) {
   }
 
   return (
-    <div className="flex flex-1 flex-col justify-center mx-auto max-w-[1440px] min-h-svh py-14 bg-background dark:bg-background">
+    <div className="flex flex-1 flex-col justify-center min-h-svh bg-background dark:bg-background">
       <Navbar user={session.user} />
-      <div className="flex-1 w-full h-full min-h-screen @container flex-col items-center justify-start space-y-4 my-10">
+      <div className="flex-1 mx-auto max-w-[90rem] w-full h-full min-h-screen @container flex-col items-center justify-start space-y-4 my-10">
         {children}
       </div>
       <Footer />
