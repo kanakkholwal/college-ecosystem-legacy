@@ -22,8 +22,8 @@ Learn more
 
 ## Features
 
-- **Platform**: A Next.js application for the main platform.
-- **Website**: A Next.js application for the college website.
+- [**Platform**](https://app.nith.eu.org): A Next.js application for the main platform.
+- [**Website**](https://nith.eu.org): A Next.js application for the college website.
 - **Server**: An Express server with TypeScript for backend operations.
 - **Modular Architecture**: Scalable and maintainable project structure.
 
