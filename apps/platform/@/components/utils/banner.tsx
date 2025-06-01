@@ -11,6 +11,7 @@ interface BannerActionPropsBase {
   className?: string;
   title: string | React.ReactNode;
   description: string | React.ReactNode;
+  redirectUrl?: string;
   isClosable?: boolean;
   onClose?: () => void;
   icon?: React.ReactNode | null;
@@ -34,6 +35,7 @@ export function BannerPanel({
   title,
   btnProps,
   actionComponent,
+  redirectUrl,
   isClosable = true,
   icon,
   onClose,
@@ -77,7 +79,12 @@ export function BannerPanel({
               variant="outline"
               effect="shineHover"
               {...btnProps}
-              className={cn("min-w-24", btnProps?.className)}
+              onClick={() => {
+                if (redirectUrl) {
+                  window.open(redirectUrl, "_blank");
+                }
+              }}
+              className={cn(btnProps?.className)}
             />
           )}
           {isClosable && (

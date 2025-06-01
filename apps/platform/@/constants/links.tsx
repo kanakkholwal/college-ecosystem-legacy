@@ -376,45 +376,31 @@ type NavLink = {
 }
 
 
-export const getNavLinks = (user: Session["user"]):  NavLink[]  => {
+export const getNavLinks = (user: Session["user"]): NavLink[] => {
   const linksByRole = [user.role, ...(user.other_roles || [])]
-      .map((role) => getLinksByRole(role, quick_links))
-      .flat() // filter out unique links
-      .filter((link, index, self) =>
-        index === self.findIndex((l) => l.href === link.href && l.title === link.title)
-      );
+    .map((role) => getLinksByRole(role, quick_links))
+    .flat() // filter out unique links
+    .filter((link, index, self) =>
+      index === self.findIndex((l) => l.href === link.href && l.title === link.title)
+    );
   // console.log("Links by role:", linksByRole);
 
-//   return {
-//     "Quick Links": linksByRole,
-//     "Sidebar Links": sidebar_links.map((link) => ({
-//       title: link.title,
-//       href: link.path,
-//       description: "",
-//       Icon: link.icon,
-//       items: link.items?.map((item) => ({
-//         title: item.title,
-//         href: item.path,
-//         description: "",
-//       })) || [],
-//     })),
-//   };
-// }
 
-return [
-  // {
-  //   title: "Home",
-  //   href: "/",
-  //   description: "Go to the home page.",
-  //   Icon: House,
-  // },
-  ...linksByRole,
-  {
-    title: "Settings",
-    href: "/settings",
-    description: "Manage your account settings.",
-    Icon: Settings,
-  },
+  return [
+    // {
+    //   title: "Home",
+    //   href: "/",
+    //   description: "Go to the home page.",
+    //   Icon: House,
+    // },
+    ...linksByRole,
+    {
+      title: "Settings",
+      href: user.other_roles[0] + "/settings",
+      description: "Manage your account settings.",
+      Icon: Settings,
+    },
+  ]
 
-]
+
 }

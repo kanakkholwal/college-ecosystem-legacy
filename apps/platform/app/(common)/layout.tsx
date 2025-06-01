@@ -3,15 +3,11 @@ import Navbar from "@/components/common/navbar";
 import { BannerPanel } from "@/components/utils/banner";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { RocketIcon } from "lucide-react";
-import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
+import { appConfig } from "~/project.config";
 
-export const metadata: Metadata = {
-  title: "NITH - College Platform",
-  description: "NITH - College Platform",
-};
 
 export const dynamic = "force-dynamic";
 
@@ -24,6 +20,7 @@ const PROMO = {
     "Please complete your profile. It'll take a moment to fill in your details to enhance your experience.",
   label: "Update Now!",
   showTill: "2022-01-19T19:00:00",
+  getRedirectUrl: (role:string) => appConfig.url +  "/"+role + "/settings/account",
   getConditionByUser: (user: Session["user"]) =>
     // user?.other_roles.includes(ROLES.STUDENT) &&
     user?.gender === "not_specified"
@@ -44,9 +41,11 @@ export default async function Layout({ children }: LayoutProps) {
           icon={<RocketIcon className="size-4 text-muted-foreground" />}
           title={PROMO.title}
           description={PROMO.description}
+          redirectUrl={PROMO.getRedirectUrl(session.user.other_roles[0])}
           btnProps={{
             children: PROMO.label,
             variant: "default_light",
+            
           }}
         />
       </ConditionalRender>
