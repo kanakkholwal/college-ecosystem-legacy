@@ -67,15 +67,15 @@ export default function SearchBox({ branches, batches, programmes }: Props) {
             title="Filter Results"
             description="Filter by branches, batch,Programme"
             btnProps={{
-              variant: "raw",
-              size: "icon",
+              variant: "glass",
+              size: "lg",
+              rounded: "full",
+              className: "border border-border",
               children: (
-                <span className="relative text-base font-semibold text-primary dark:text-white">
-                  <IoMdOptions className="w-5 h-5" />
+                <span className="relative text-base font-semibold text-primary">
+                  <IoMdOptions className="size-5" />
                 </span>
               ),
-              className:
-                "overflow-hidden relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max",
             }}
           >
             <div className="mb-4">

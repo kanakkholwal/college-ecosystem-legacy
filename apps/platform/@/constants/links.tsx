@@ -1,4 +1,4 @@
-import { House, Settings, Users } from "lucide-react";
+import { Settings, Users } from "lucide-react";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuBookA, LuBuilding, LuGithub, LuSchool } from "react-icons/lu";
@@ -383,7 +383,7 @@ export const getNavLinks = (user: Session["user"]):  NavLink[]  => {
       .filter((link, index, self) =>
         index === self.findIndex((l) => l.href === link.href && l.title === link.title)
       );
-  console.log("Links by role:", linksByRole);
+  // console.log("Links by role:", linksByRole);
 
 //   return {
 //     "Quick Links": linksByRole,
@@ -402,12 +402,12 @@ export const getNavLinks = (user: Session["user"]):  NavLink[]  => {
 // }
 
 return [
-  {
-    title: "Home",
-    href: "/",
-    description: "Go to the home page.",
-    Icon: House,
-  },
+  // {
+  //   title: "Home",
+  //   href: "/",
+  //   description: "Go to the home page.",
+  //   Icon: House,
+  // },
   ...linksByRole,
   {
     title: "Settings",

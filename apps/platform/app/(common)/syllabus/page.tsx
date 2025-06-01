@@ -6,6 +6,7 @@ import { getCourses } from "~/actions/course";
 
 import Pagination from "@/components/application/course-pagination";
 import SearchBox from "@/components/application/course-search";
+import { ResponsiveContainer } from "@/components/common/container";
 
 export const metadata: Metadata = {
   title: "Syllabus Search",
@@ -68,7 +69,7 @@ export default async function CoursesPage(props: {
           </Suspense>
         </div>
       </section>
-      <div className="max-w-6xl mx-auto w-full xl:px-6 grid gap-4 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4">
+      <ResponsiveContainer>
         <Suspense
           key="Courses"
           fallback={
@@ -92,7 +93,7 @@ export default async function CoursesPage(props: {
             );
           })}
         </Suspense>
-      </div>
+      </ResponsiveContainer>
 
       <div className="max-w-7xl mx-auto p-4">
         {courses.length > 0 ? <Pagination totalPages={totalPages} /> : null}

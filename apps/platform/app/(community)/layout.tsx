@@ -2,8 +2,6 @@ import Footer from "@/components/common/footer";
 import Navbar from "@/components/common/navbar";
 import { redirect } from "next/navigation";
 import { getSession } from "~/lib/auth-server";
-import TopNavPanel from "./topbar";
-// import { sidenav_links } from "./common/sidebar";
 
 export default async function CommunityLayout({
   children,
@@ -19,10 +17,9 @@ export default async function CommunityLayout({
   if (!isStudent) return redirect(`/${session.user.other_roles[0]}`);
 
   return (
-    <div className="min-h-svh h-full w-full @container/community py-20 max-w-7xl mx-auto px-3">
+    <div className="min-h-svh h-full w-full @container/community">
       <Navbar user={session.user} />
-      <TopNavPanel />
-      <main className="flex-1 @container flex-col items-center justify-start space-y-4 mx-auto">
+      <main className="flex-1 @container flex-col items-center justify-start space-y-4 mx-auto pt-10 pb-16">
         {children}
       </main>
       <Footer />

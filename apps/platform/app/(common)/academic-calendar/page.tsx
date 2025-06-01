@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 // Sample data: an array of { day: Date, events: MyEvent[] }
 const sampleData = [
   {
-    day: new Date(2025, 4, 5), // May 5, 2025
+    day: new Date(2025, 5, 5), // May 5, 2025
     events: [
       {
         id: "1",
@@ -35,7 +35,7 @@ const sampleData = [
     ],
   },
   {
-    day: new Date(2025, 4, 12), // May 12, 2025
+    day: new Date(2025, 5, 12), // May 12, 2025
     events: [
       {
         id: "3",
@@ -55,7 +55,7 @@ export default function AcademicCalenderPage(props: Props) {
   // const session = await getSession();
 
   return (
-    <div className="max-w-6xl mx-auto px-4 pt-10 space-y-6">
+    <div className="max-w-6xl mx-auto px-4 pt-10 space-y-6 pb-5">
       <div className="bg-card p-4 lg:p-5 rounded-lg">
         <h1 className="text-xl font-semibold mb-2">Academic Calender</h1>
         <p className="text-sm text-muted-foreground mb-4 text-pretty">

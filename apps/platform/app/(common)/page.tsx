@@ -1,25 +1,12 @@
 import { RouterCard } from "@/components/common/router-card";
-import { BannerPanel } from "@/components/utils/banner";
-import ConditionalRender from "@/components/utils/conditional-render";
 import { getLinksByRole, quick_links } from "@/constants/links";
-// import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { HeroSection } from "./client";
 
-const PROMO = {
-  title: "Update your Gender",
-  description:
-    "We are updating our records to better serve you for upcoming new features.",
-  label: "Update Now!",
-  showTill: "2022-01-19T19:00:00",
-  getConditionByUser: (user: Session["user"]) =>
-    user?.other_roles.includes(ROLES.STUDENT) &&
-    user?.gender === "not_specified" &&
-    new Date() < new Date(PROMO.showTill),
-};
+
 
 export default async function Dashboard() {
   const session = (await getSession()) as Session;
@@ -32,17 +19,8 @@ export default async function Dashboard() {
     return redirect(`/${ROLES.GUARD}`);
   }
   return (
-    <div className="flex w-full flex-1 flex-col gap-6 px-4 md:px-6 pt-8 md:pt-12 xl:px-12 xl:mx-auto max-w-6xl max-sm:pb-16">
-      <ConditionalRender condition={PROMO.getConditionByUser(session?.user)}>
-        <BannerPanel
-          title={PROMO.title}
-          description={PROMO.description}
-          btnProps={{
-            children: PROMO.label,
-            variant: "default_light",
-          }}
-        />
-      </ConditionalRender>
+    <div className="flex w-full flex-1 flex-col gap-6 px-4 md:px-6 pt-4 md:pt-6 xl:px-12 xl:mx-auto max-w-6xl max-sm:pb-16">
+
       <HeroSection user={session?.user} />
       <section
         id="quick-links"

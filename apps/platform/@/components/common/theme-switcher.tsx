@@ -1,5 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger
+} from "@/components/ui/dropdown-menu";
 import { type themeType } from "@/constants/theme";
 import { cn } from "@/lib/utils";
 import { Monitor, Moon, Sun } from "lucide-react";
@@ -7,23 +13,24 @@ import { motion } from "motion/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
 
+
 const themes = [
   {
     key: "system",
-    icon: Monitor,
-    label: "System theme",
+    Icon: Monitor,
+    label: "System",
   },
   {
     key: "light",
-    icon: Sun,
-    label: "Light theme",
+    Icon: Sun,
+    label: "Light",
   },
   {
     key: "dark",
-    icon: Moon,
-    label: "Dark theme",
+    Icon: Moon,
+    label: "Dark",
   },
-];
+] as const;
 
 export type ThemeSwitcherProps = {
   onChange?: (theme: themeType) => void;
@@ -44,22 +51,66 @@ export const ThemeSwitcher = ({ onChange, className }: ThemeSwitcherProps) => {
   if (!mounted) {
     return null;
   }
+  const CurrentTheme = themes.find((t) => t.key === theme);
 
   return (
     <div
       className={cn(
-        "relative inline-flex h-8 rounded-full bg-background p-1 ring-1 ring-border",
+        "relative ",
         className
       )}
     >
-      {themes.map(({ key, icon: Icon, label }) => {
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline" size="icon_sm" rounded="full">
+            {CurrentTheme ?
+              <CurrentTheme.Icon className="size-4 absolute inset-0 m-auto" />
+              : <Monitor className="size-4" />}
+            <span className="sr-only">Open theme switcher</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" alignOffset={-8} className="max-w-24 space-y-1">
+          {themes.map(({ key, Icon: Icon, label }) => {
+            const isActive = theme === key;
+            return (
+              <Button
+                variant="ghost"
+                size="sm"
+                width="full"
+                key={key}
+                onClick={() => {
+                  setTheme(key as themeType);
+                  onChange?.(key as themeType);
+                }}
+                className={cn(
+                  "justify-start relative text-xs",
+                )}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="activeTheme"
+                    className="absolute inset-0 rounded-full bg-primary/10 dark:bg-primary/20"
+                    transition={{ type: "spring", duration: 0.5 }}
+                  />
+                )}
+                <Icon className="size-4 relative" />
+                <span className="relative">
+                  {label}
+                </span>
+              </Button>
+            );
+          })}
+
+        </DropdownMenuContent>
+      </DropdownMenu>
+      {/* {themes.map(({ key, Icon: Icon, label }) => {
         const isActive = theme === key;
 
         return (
           <button
             type="button"
             key={key}
-            className="relative h-6 w-6 rounded-full"
+            className="relative size-6 rounded-full"
             onClick={() => setTheme(key as themeType)}
             aria-label={label}
           >
@@ -72,13 +123,13 @@ export const ThemeSwitcher = ({ onChange, className }: ThemeSwitcherProps) => {
             )}
             <Icon
               className={cn(
-                "relative m-auto h-4 w-4",
+                "relative m-auto size-4",
                 isActive ? "text-white" : "text-muted-foreground"
               )}
             />
           </button>
         );
-      })}
+      })} */}
     </div>
   );
 };

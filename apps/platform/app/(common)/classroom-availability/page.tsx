@@ -18,7 +18,7 @@ type Props = {
 };
 
 export const metadata: Metadata = {
-  title: `Rooms | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+  title: `Rooms`,
   description: "Search for rooms based on their availability and type.",
 };
 
@@ -35,16 +35,16 @@ export default async function RoomsPage(props: Props) {
     <div className="px-4 md:px-12 xl:px-6 @container">
       <section
         id="hero"
-        className="z-10 w-full max-w-6xl mx-auto  relative flex flex-col items-center justify-center  py-24 max-h-80 text-center"
+        className="z-10 w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center py-24 max-h-80 text-center"
       >
-        <h2 className="text-3xl font-semibold text-center whitespace-nowrap">
+        <h2 className="text-2xl font-semibold text-center whitespace-nowrap">
           Rooms <span className="text-primary">Search</span>
         </h2>
-        <p className="mt-4 mb-8 text-lg text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           Search for rooms based on their availability and type.
         </p>
         <div
-          className="mt-10 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"
+          className="mt-5 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"
           data-aos="fade-up"
           data-aos-anchor-placement="center-bottom"
         >

@@ -3,10 +3,13 @@
 // This file contains the configuration for the app and college
 export const appConfig = {
   name: "College Platform",
-  // appDomain: "college-ecosystem.vercel.app",
-  // url: "https://college-ecosystem.vercel.app",
   appDomain: "nith.eu.org",
   url: "https://app.nith.eu.org",
+  // appDomain: "college-ecosystem.vercel.app",
+  // url: "https://college-ecosystem.vercel.app",
+  // logoSquare: "/logo-square.png",
+  // logo: "/logo.png",
+  // logoDark: "/logo-dark.png",
   description:
     "A platform for students, faculty, and staff to interact and collaborate.",
   keywords:

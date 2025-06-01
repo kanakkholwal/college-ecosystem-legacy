@@ -1,10 +1,13 @@
+"use client";
 import ProfileDropdown from "@/components/common/profile-dropdown";
 import { SUPPORT_LINKS, getNavLinks, socials } from "@/constants/links";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { Session } from "~/lib/auth";
 import { appConfig } from "~/project.config";
-import { Button } from "../ui/button";
+import { NavTabs } from "./nav-tabs";
+import { ThemeSwitcher } from "./theme-switcher";
 
 
 interface NavbarProps {
@@ -13,10 +16,12 @@ interface NavbarProps {
 
 export default function Navbar({ user }: NavbarProps) {
   const navLinks = getNavLinks(user);
+  const pathname = usePathname();
+
   return (
     <header
       className={cn(
-        "z-40 w-full pb-2 transition-all",
+        "z-50 w-full pb-2 transition-all",
         "bg-card border-b",
       )}
     >
@@ -28,19 +33,25 @@ export default function Navbar({ user }: NavbarProps) {
           {appConfig.name}
         </Link>
         <div className="ml-auto flex gap-2 items-center">
+          <ThemeSwitcher />
           <ProfileDropdown user={user} />
         </div>
       </div>
-      <div className="w-full max-w-(--max-app-width) mx-auto justify-start flex gap-2 items-center px-4 overflow-hidden">
-        {navLinks.map((navLink) => {
-          return <Button key={navLink.href} variant="ghost" size="sm" asChild>
-            <Link href={navLink.href}>
-              {navLink.Icon && <navLink.Icon className="size-4" />}
-              {navLink.title}
-            </Link>
-          </Button>
-        })}
+      <div className="w-full max-w-(--max-app-width) mx-auto">
+        <NavTabs
+          navLinks={navLinks.map((link) => ({
+            id: link.href,
+            href: link.href,
+            children: (
+              <>
+                {link.Icon && <link.Icon className="size-4" />}
+                {link.title}
+              </>
+            )
+          }))}
+          className="flex-1 snap-x snap-mandatory overflow-x-auto scrollbar-0 scrollbar-thumb-muted/0 scrollbar-track-transparent no-scrollbar mx-2 lg:mx-4"
 
+        />
       </div>
 
     </header>
