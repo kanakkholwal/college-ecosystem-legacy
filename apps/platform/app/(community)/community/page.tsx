@@ -6,13 +6,18 @@ import { CATEGORIES } from "~/constants/community";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `Communities | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+  title: 'Communities',
   description: "Explore different communities",
 };
 
-export default function CommunitiesPage() {
+export default async function CommunitiesPage(props: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  // const searchParams = await props.searchParams;
+  // const category = searchParams.category || CATEGORIES[0].value;
   return (
     <div className="max-w-5xl mx-auto pb-32">
+
       <div className="ml-4">
         <h2>
           <span className="text-xl font-semibold text-center whitespace-nowrap">
@@ -27,6 +32,7 @@ export default function CommunitiesPage() {
           </p>
         </h2>
       </div>
+
       <div className="grid grid-cols-1 @lg:grid-cols-2 @3xl:grid-cols-3 items-stretch gap-4 w-full p-4">
         {CATEGORIES.map((category) => {
           return (

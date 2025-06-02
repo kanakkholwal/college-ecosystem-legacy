@@ -33,7 +33,7 @@ export async function generateMetadata(
   // read route params
   const { rollNo } = await params;
   return {
-    title: `${rollNo} | Results | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+    title: `${rollNo} | Results`,
     description: `Check the results of ${rollNo}`,
   };
 }

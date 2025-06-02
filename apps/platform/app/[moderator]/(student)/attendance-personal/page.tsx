@@ -9,7 +9,7 @@ import CreateAttendanceRecord from "./create-record";
 import AttendanceRecord from "./record";
 
 export const metadata: Metadata = {
-  title: `Attendance | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+  title: `Attendance`,
   description: "Manage your attendance records here.",
 };
 

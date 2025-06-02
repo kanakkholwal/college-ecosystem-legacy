@@ -15,13 +15,12 @@ import { getAllTimeTables } from "src/lib/time-table/actions";
 
 import ScheduleSearchBox from "@/components/application/schedule-search";
 import { ResponsiveContainer } from "@/components/common/container";
+import { NoteSeparator } from "@/components/common/note-separator";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import type { Metadata } from "next";
-import { NoteSeparator } from "@/components/common/note-seperator";
 
 export const metadata: Metadata = {
-  title: `Timetables | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+  title: "Timetables",
   description: "Check your schedules here.",
 };
 

@@ -24,9 +24,13 @@ const DashboardRoutes = [
   ROLES.STUDENT,
 ];
 
-function isAuthorized(roles: string[], allowedRoles: string[]) {
-  return roles.some((role) => allowedRoles.includes(role));
-}
+
+/**
+ * Check if the user is authorized to access the given route.
+ * @param route_path - The path of the route to check authorization for.
+ * @param session - The session object containing user information.
+ * @returns An object containing authorization status and redirect information.
+ */
 function checkAuthorization(
   route_path: (typeof DashboardRoutes)[number],
   session: Session | null
@@ -94,8 +98,8 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
     // if the user is not authenticated and tries to access a page other than the sign-in page, redirect them to the sign-in page
-    url.searchParams.set("next", request.url);
     url.pathname = SIGN_IN_PATH;
+    url.searchParams.set("next", request.url);
     return NextResponse.redirect(url);
   }
   if (session) {
@@ -110,7 +114,8 @@ export async function middleware(request: NextRequest) {
     }
     // if the user is already authenticated
     // manage the dashboard routes
-    if (request.method === "GET" && DashboardRoutes.includes(request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number])) {
+    if (request.method === "GET" && 
+      DashboardRoutes.includes(request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number])) {
       const authCheck = checkAuthorization(
         request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number],
         session

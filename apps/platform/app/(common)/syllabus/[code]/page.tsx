@@ -38,7 +38,7 @@ export async function generateMetadata(
   if (!data) return notFound();
 
   return {
-    title: `${data.course.name} | ${data.course.code} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+    title: `${data.course.name} | ${data.course.code}`,
     description: `Syllabus of ${data.course.name} (${data.course.code})`,
   };
 }

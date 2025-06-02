@@ -29,7 +29,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   const params = await props.params;
   return {
-    title: `Rooms | ${changeCase(params.moderator, "title")} Dashboard | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+    title: `Rooms | ${changeCase(params.moderator, "title")} Dashboard `,
     description: "Search for rooms based on their availability and type.",
   };
 }

@@ -2,7 +2,7 @@
 
 import { ResponsiveContainer } from "@/components/common/container";
 import EmptyArea from "@/components/common/empty-area";
-import { NoteSeparator } from "@/components/common/note-seperator";
+import { NoteSeparator } from "@/components/common/note-separator";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import { CalendarDays } from "lucide-react";

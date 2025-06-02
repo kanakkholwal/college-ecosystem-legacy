@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 import type { Session } from "~/lib/auth-client";
 import { authClient } from "~/lib/auth-client";
 import { changeCase } from "~/utils/string";
-import { NoteSeparator } from "./note-seperator";
+import { NoteSeparator } from "./note-separator";
 
 
 interface ProfileDropdownProps {

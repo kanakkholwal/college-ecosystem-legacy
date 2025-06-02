@@ -7,15 +7,14 @@ import { BiSpreadsheet } from "react-icons/bi";
 import { getCachedLabels, getResults } from "~/actions/result";
 
 import EmptyArea from "@/components/common/empty-area";
-import { Separator } from "@/components/ui/separator";
+import { NoteSeparator } from "@/components/common/note-separator";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
 import { orgConfig } from "~/project.config";
-import { NoteSeparator } from "@/components/common/note-seperator";
 
 export const metadata: Metadata = {
-  title: `Results | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+  title: `Results`,
   description: "Check your results here.",
 };
 

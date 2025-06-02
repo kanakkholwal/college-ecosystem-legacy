@@ -7,9 +7,8 @@ import { getCourses } from "~/actions/course";
 import Pagination from "@/components/application/course-pagination";
 import SearchBox from "@/components/application/course-search";
 import { ResponsiveContainer } from "@/components/common/container";
-import { Separator } from "@/components/ui/separator";
+import { NoteSeparator } from "@/components/common/note-separator";
 import { orgConfig } from "~/project.config";
-import { NoteSeparator } from "@/components/common/note-seperator";
 
 export const metadata: Metadata = {
   title: "Syllabus Search",

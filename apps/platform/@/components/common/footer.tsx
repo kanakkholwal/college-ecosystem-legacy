@@ -6,7 +6,7 @@ export default function Footer() {
   return (
     <footer
       className={cn(
-        "z-40 w-full transition-all pt-5 pb-8",
+        "z-40 w-full transition-all pt-5 pb-8 mt-auto",
         "bg-card border-b",
       )}
     >

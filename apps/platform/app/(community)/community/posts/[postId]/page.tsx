@@ -26,7 +26,7 @@ export async function generateMetadata(
   if (!post) return notFound();
 
   return {
-    title: `${post.title} | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+    title: `${post.title} `,
     description: post.content.slice(0, 100),
     openGraph: {
       images: [

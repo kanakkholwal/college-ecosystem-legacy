@@ -3,7 +3,7 @@ import CreateCommunityPost from "./form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `Create Community Post | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+  title: `Create Community Post`,
   description: "Create a post in the community",
 };
 

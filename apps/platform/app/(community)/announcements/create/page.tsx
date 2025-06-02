@@ -4,7 +4,7 @@ import CreateAnnouncement from "./form";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `Create Announcement | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+  title: `Create Announcement`,
   description: "Create an announcement here",
 };
 

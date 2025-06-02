@@ -3,7 +3,6 @@ import ProfileDropdown from "@/components/common/profile-dropdown";
 import { SUPPORT_LINKS, getNavLinks, socials } from "@/constants/links";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
 import type { Session } from "~/lib/auth";
 import { appConfig } from "~/project.config";
 import { NavTabs } from "./nav-tabs";
@@ -16,7 +15,7 @@ interface NavbarProps {
 
 export default function Navbar({ user }: NavbarProps) {
   const navLinks = getNavLinks(user);
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
   return (
     <header
@@ -47,10 +46,9 @@ export default function Navbar({ user }: NavbarProps) {
                 {link.Icon && <link.Icon className="size-4" />}
                 {link.title}
               </>
-            )
+            ),
+            items: link.items,
           }))}
-          className="flex-1 snap-x snap-mandatory overflow-x-auto scrollbar-0 scrollbar-thumb-muted/0 scrollbar-track-transparent no-scrollbar mx-2 lg:mx-4"
-
         />
       </div>
 

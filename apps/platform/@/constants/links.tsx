@@ -394,13 +394,32 @@ export const getNavLinks = (user: Session["user"]): NavLink[] => {
     //   Icon: House,
     // },
     ...linksByRole,
-    {
-      title: "Settings",
-      href: user.other_roles[0] + "/settings",
-      description: "Manage your account settings.",
-      Icon: Settings,
-    },
-  ]
+    ...(
+      user.other_roles?.length <= 1
+        ? [
+            {
+              title: "Settings",
+              href: user.other_roles[0] + "/settings",
+              description: "Manage your account settings.",
+              Icon: Settings,
+            },
+          ]
+        : [
+            {
+              title: "Dashboard",
+              href: "/dashboard",
+              description: "Manage your account settings.",
+              Icon: Settings,
+              items: user.other_roles.map((role) => ({
+                title: role.charAt(0).toUpperCase() + role.slice(1) + " Dashboard",
+                href: `/${role}`,
+                description: `Manage your ${role} dashboard.`,
+                Icon: Settings,
+              })),
+            },
+          ]
+    )
+  ];
 
 
 }

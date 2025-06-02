@@ -13,7 +13,8 @@ export const ClosingBadge = ({ poll }: { poll: PollType }) => {
       if (closesAt > now) {
         const duration = intervalToDuration({ start: now, end: closesAt });
         const formattedDuration = formatDuration(duration, {
-          format: ["minutes", "seconds"],
+          format: ["days", "hours", "minutes", "seconds"],
+          delimiter: ", ",
         });
         setRemainingTime(formattedDuration);
       } else {

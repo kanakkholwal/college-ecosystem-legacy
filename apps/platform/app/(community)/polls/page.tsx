@@ -1,5 +1,5 @@
 import EmptyArea from "@/components/common/empty-area";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
 import { getSession } from "~/lib/auth-server";
 import {
   getClosedPolls,
@@ -13,7 +13,7 @@ import PollComponent from "./components/poll-component";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: `Polls | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
+  title: `Polls`,
   description: "Check the latest polls here.",
 };
 
@@ -27,22 +27,19 @@ export default async function PollsPage() {
   ]);
 
   return (
-    <Tabs defaultValue="opened" className="w-full grid gap-4">
-      <TabsList className="max-w-5xl mx-auto w-full">
-        <TabsTrigger value="opened" className="text-md w-full">
-          Open Polls
-        </TabsTrigger>
-        <TabsTrigger value="closed" className="text-md w-full">
-          Closed Polls
-        </TabsTrigger>
-        <TabsTrigger value="by-you" className="text-md w-full">
-          By You
-        </TabsTrigger>
-      </TabsList>
-      <div className="mt-5 rounded-lg p-4 @container/polls max-w-6xl mx-auto w-full">
-        <TabsContent value="opened">
-          <div className="w-full flex justify-between items-center whitespace-nowrap gap-2">
-            <h3 className="text-xl font-semibold">Open polls</h3>
+    <Tabs defaultValue="opened-polls" className="w-full grid gap-4">
+      <VercelTabsList
+        tabs={[
+          { label: "Open Polls", id: "opened-polls" },
+          { label: "Closed Polls", id: "closed-polls" },
+          { label: "Your Polls", id: "your-polls" },
+        ]}
+      />
+
+      <div className="rounded-lg p-4 @container/polls max-w-6xl mx-auto w-full">
+        <TabsContent value="opened-polls">
+          <div>
+            <h3 className="text-xl font-medium">Open Polls</h3>
           </div>
           <div className="grid grid-cols-1 @2xl/polls:grid-cols-2 gap-3">
             {openPolls.map((poll: PollType) => (
@@ -56,9 +53,9 @@ export default async function PollsPage() {
             />
           )}
         </TabsContent>
-        <TabsContent value="closed">
+        <TabsContent value="closed-polls">
           <div className="w-full flex justify-between items-center whitespace-nowrap gap-2">
-            <h3 className="text-xl font-semibold">Closed polls</h3>
+            <h3 className="text-xl font-medium">Closed Polls</h3>
           </div>
           <div className="grid grid-cols-1 @2xl/polls:grid-cols-2 gap-3">
             {closedPolls.map((poll: PollType) => (
@@ -72,9 +69,9 @@ export default async function PollsPage() {
             />
           )}
         </TabsContent>
-        <TabsContent value="by-you">
+        <TabsContent value="your-polls">
           <div className="w-full flex justify-between items-center whitespace-nowrap gap-2">
-            <h3 className="text-xl font-semibold">Polls created by you</h3>
+            <h3 className="text-xl font-medium">Polls created by you</h3>
             <CreatePoll />
           </div>
           <div className="grid grid-cols-1 @2xl/polls:grid-cols-2 gap-3">
