@@ -1,6 +1,9 @@
 import { FullScreenCalendar } from "@/components/ui/calendar-full";
 import { CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
+import { getEvents } from "~/actions/events";
+import { Session } from "~/lib/auth";
+import { getSession } from "~/lib/auth-server";
 
 type Props = {
   params: Promise<{
@@ -18,50 +21,23 @@ export const metadata: Metadata = {
   description: "Check the academic calender here.",
 };
 
-// Sample data: an array of { day: Date, events: MyEvent[] }
-const sampleData = [
-  {
-    day: new Date(2025, 5, 5), // May 5, 2025
-    events: [
-      {
-        id: "1",
-        title: "Team Standup",
-        time: "2025-05-05T09:00:00",
-        description: "Daily sync with engineering team",
-      },
-      {
-        id: "2",
-        title: "Project Kickoff",
-        time: "2025-05-05T14:30:00",
-        description: "Kickoff meeting for the new feature",
-      },
-    ],
-  },
-  {
-    day: new Date(2025, 5, 12), // May 12, 2025
-    events: [
-      {
-        id: "3",
-        title: "Design Review",
-        time: "2025-05-12T11:00:00",
-        description: "Review UI mockups with design team",
-      },
-    ],
-  },
-];
 
-export default function AcademicCalenderPage(props: Props) {
-  // const params = await props.params;
-  // const searchParams = await props.searchParams;
 
-  // const moderator = params.moderator;
+export default async function AcademicCalenderPage(props: Props) {
+
+  const searchParams = await props.searchParams;
+
   // const session = await getSession();
-  // const events = await getEvents({
-  //   moderator,
-  //   query: searchParams.query,
-  //   from: searchParams.from,
-  //   to: searchParams.to,
-  // });
+  const groupedEvents = await getEvents({
+    query: searchParams.query || "",
+    from: searchParams.from ? new Date(searchParams.from) : "",
+    to: searchParams.to ? new Date(searchParams.to) : "",
+  });
+
+  const session = await getSession() as Session;
+  if (session?.user?.role === "admin") {
+    console.log("Events fetched for admin:", groupedEvents);
+  }
 
   return (
     <div className="max-w-6xl mx-auto px-4 pt-10 space-y-6 pb-5">
@@ -78,7 +54,10 @@ export default function AcademicCalenderPage(props: Props) {
         </p>
       </div>
       <div className="bg-card p-4 lg:p-5 rounded-lg">
-        <FullScreenCalendar data={sampleData} />
+        <FullScreenCalendar
+          data={groupedEvents}
+          onNewEventRedirectPath="/admin/events/new"
+        />
       </div>
     </div>
   );

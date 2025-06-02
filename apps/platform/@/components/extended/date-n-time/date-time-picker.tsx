@@ -75,7 +75,7 @@ export function DateTimePicker(field: DateTimePickerProps) {
           ) : (
             <span>MM/DD/YYYY hh:mm aa</span>
           )}
-          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+          <CalendarIcon className="ml-auto focus-within:text-primary" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

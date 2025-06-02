@@ -3,20 +3,126 @@
 import type { rawEventsSchemaType } from "~/constants/events"
 import { rawEventsSchema } from "~/constants/events"
 import dbConnect from "~/lib/dbConnect"
-import {EventModel} from "~/models/events"
+import { EventJSONType, EventModel } from "~/models/events"
 
-export async function createNewEvent(newEvent:rawEventsSchemaType){
-    try{
+export async function createNewEvent(newEvent: rawEventsSchemaType) {
+    try {
         const validatedEvent = rawEventsSchema.safeParse(newEvent)
-        if(!validatedEvent.success) {
+        if (!validatedEvent.success) {
             return Promise.reject(validatedEvent.error.errors[0].message)
         }
         await dbConnect()
         const event = new EventModel(newEvent)
         await event.save()
         return Promise.resolve(JSON.parse(JSON.stringify(event)))
-    }catch(err){
+    } catch (err) {
         console.log(err)
         return Promise.reject(err instanceof Error ? err.message : "Something went wrong")
     }
+}
+
+interface GroupedEvents {
+    day: Date;
+    events: EventJSONType[];
+}
+
+export async function getEvents({
+    query = "",
+    from = new Date(0), // Default to epoch start if no from date is provided
+    to = new Date() // Default to current date if no to date is provided
+}: {
+    query?: string,
+    from?: Date | string,
+    to?: Date | string
+
+}): Promise<GroupedEvents[]> {
+    try {
+        await dbConnect();
+        // Build the aggregation pipeline
+        const pipeline: any[] = [];
+
+        // Match stage for search and time filters
+        const matchStage: any = {};
+
+        // Text search
+        if (query) {
+            matchStage.$or = [
+                { title: { $regex: query, $options: "i" } },
+                { description: { $regex: query, $options: "i" } },
+            ];
+        }
+
+        // Time range filters
+        const timeConditions: any[] = [];
+
+        if (from) {
+            timeConditions.push({ time: { $gte: from } });
+        }
+
+        if (to) {
+            timeConditions.push({ time: { $lte: to } });
+            timeConditions.push({
+                $or: [
+                    { endDate: null },
+                    { endDate: { $exists: false } },
+                    { endDate: { $lte: to } },
+                ],
+            });
+        }
+
+        if (timeConditions.length > 0) {
+            matchStage.$and = timeConditions;
+        }
+
+        if (Object.keys(matchStage).length > 0) {
+            pipeline.push({ $match: matchStage });
+        }
+
+        // Add grouping by day
+        // Add grouping and projection
+        pipeline.push(
+            {
+                $addFields: {
+                    dayStart: {
+                        $dateFromParts: {
+                            year: { $year: "$time" },
+                            month: { $month: "$time" },
+                            day: { $dayOfMonth: "$time" },
+                        },
+                    },
+                },
+            },
+            {
+                $group: {
+                    _id: "$dayStart",
+                    events: {
+                        $push: {
+                            $mergeObjects: [
+                                "$$ROOT",
+                                { id: "$_id" }, // Convert _id to id
+                                { _id: "$$REMOVE" } // Remove the original _id
+                            ]
+                        },
+                    },
+                },
+            },
+            {
+                $project: {
+                    day: "$_id",
+                    events: 1,
+                    _id: 0,
+                },
+            },
+            { $sort: { day: 1 } }
+        );
+
+        // Execute aggregation
+        const result = await EventModel.aggregate<GroupedEvents>(pipeline);
+
+        return Promise.resolve(JSON.parse(JSON.stringify(result)));
+    } catch (err) {
+        console.log(err);
+        return Promise.reject(err instanceof Error ? err.message : "Something went wrong");
+    }
+
 }

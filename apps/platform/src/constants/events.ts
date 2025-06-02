@@ -31,7 +31,7 @@ export const rawEventsSchema = z.object({
     }),
     endDate: z.date().refine(date => new Date(date) > new Date(), {
         message: "End date must be in the future"
-    }),
+    }).optional(), // Optional end date for the event
     eventType: eventTypesEnums, // Type of event (e.g., "meeting", "holiday", etc.)
     location: z.string().optional(), // Optional location for the event
 })

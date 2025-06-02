@@ -36,7 +36,7 @@ export default function CreateNewEvent() {
             description: "",
             links: [],
             time: searchParams.get("time") ? new Date(searchParams.get("time")||""):new Date(),
-            endDate: searchParams.get("endDate") ? new Date(searchParams.get("endDate")||""):new Date(),
+            endDate: searchParams.get("endDate") ? new Date(searchParams.get("endDate")||""):undefined,
             eventType: eventTypes[0],
             location: "",
         },
@@ -181,7 +181,7 @@ export default function CreateNewEvent() {
                                     <FormLabel>End Date / Time</FormLabel>
                                     <FormControl>
                                         <DateTimePicker
-                                            value={field.value.toISOString()}
+                                            value={field.value ? field.value?.toISOString() : ""}
                                             onChange={(date) => field.onChange(new Date(date))}
                                         />
                                     </FormControl>

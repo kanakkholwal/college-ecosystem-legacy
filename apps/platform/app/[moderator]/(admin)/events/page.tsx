@@ -1,79 +1,99 @@
-"use client";
 
-import { FullScreenCalendar } from "@/components/ui/calendar-full";
+
+import { ResponsiveContainer } from "@/components/common/container";
+import EmptyArea from "@/components/common/empty-area";
+import { NoteSeparator } from "@/components/common/note-seperator";
+import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
-import { useRouter } from "next/navigation";
+import { CalendarDays } from "lucide-react";
+import Link from "next/link";
+import { getEvents } from "~/actions/events";
 
 type Props = {
   params: Promise<{
     moderator: string;
   }>;
   searchParams: Promise<{
-    query: string;
+    query?: string;
+    from?: string;
+    to?: string;
   }>;
 };
 
 
-interface MyEvent {
-  id: string;
-  title: string;
-  time: string; // ISO string or "HH:mm" format
-  description: string;
-}
 
-// Sample data: an array of { day: Date, events: MyEvent[] }
-const sampleData = [
-  {
-    day: new Date(2025, 4, 5), // May 5, 2025
-    events: [
-      {
-        id: "1",
-        title: "Team Standup",
-        time: "2025-05-05T09:00:00",
-        description: "Daily sync with engineering team",
-      },
-      {
-        id: "2",
-        title: "Project Kickoff",
-        time: "2025-05-05T14:30:00",
-        description: "Kickoff meeting for the new feature",
-      },
-    ],
-  },
-  {
-    day: new Date(2025, 4, 12), // May 12, 2025
-    events: [
-      {
-        id: "3",
-        title: "Design Review",
-        time: "2025-05-12T11:00:00",
-        description: "Review UI mockups with design team",
-      },
-    ],
-  },
-];
+export default async function ManageEventsPage(props: Props) {
 
-// Renderer for full event details in the side panel
-const renderEventDetails = (event: MyEvent) => (
-  <div>
-    <h3 className="text-sm font-medium">{event.title}</h3>
-    <p className="text-xs text-muted-foreground">
-      {format(new Date(event.time), "hh:mm a")}
-    </p>
-    <p className="text-xs text-muted-foreground mt-1">{event.description}</p>
-  </div>
-);
+  const searchParams = await props.searchParams;
 
-export default function ManageEventsPage(props: Props) {
-  const router = useRouter()
+  // const session = await getSession();
+  const groupedEvents = await getEvents({
+    query: searchParams.query || "",
+    from: searchParams.from ? new Date(searchParams.from) : new Date(),
+    to: searchParams.to ? new Date(searchParams.to) : new Date(new Date().setFullYear(new Date().getFullYear() + 1)),
+  });
+  console.log("Events fetched for admin:", groupedEvents);
 
   return (
     <>
-      <FullScreenCalendar
-        data={sampleData}
-        renderEventDetails={renderEventDetails}
-        onNewEventRedirectPath="/admin/events/new"
-      />
+      <div className="flex flex-wrap justify-between gap-3">
+        <div>
+
+          <h2 className="text-xl font-semibold mb-2">Events</h2>
+          <p className="text-sm text-muted-foreground">
+            Manage your events here. You can add, edit, or delete events as needed.
+          </p>
+        </div>
+        <div>
+          <Button
+            variant="default_light"
+            size="sm"
+            asChild>
+            <Link href="/admin/events/new">
+              <CalendarDays />
+              Add New Event
+            </Link>
+          </Button>
+        </div>
+
+      </div>
+      <div>
+        {groupedEvents.length > 0 ? (
+          <>
+            <h4 className="text-base font-medium">
+              Upcoming Events
+            </h4>
+            <div className="grid grid-cols-1 gap-4">
+            {groupedEvents.map((group, idx) => {
+              return <div key={`day-group-${idx.toString()}`} className="p-2">
+                <NoteSeparator
+                  label={`${format(group.day, "dd MMMM yyyy")}`}
+                  labelClassName="p-2 text-sm font-medium"
+                />
+                <ResponsiveContainer>
+                  {group.events.map((event) => (
+                    <div key={event.id} className="bg-card rounded-lg p-3">
+                      <h3 className="text-base font-medium">{event.title}</h3>
+                      <p className="text-xs text-muted-foreground">
+                        {format(new Date(event.time), "hh:mm a")}
+                      </p>
+                      <p className="text-xs text-muted-foreground">{event.description}</p>
+                    </div>
+                  ))}
+                </ResponsiveContainer>
+              </div>;
+            })}
+            </div>
+          </>
+        ) : (
+          <EmptyArea
+            title="No Events Found"
+            description="There are no events matching your criteria."
+            icons={[CalendarDays]}
+          />
+        )}
+      </div>
+
     </>
   );
 }

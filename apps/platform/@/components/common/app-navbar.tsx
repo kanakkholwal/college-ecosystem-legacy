@@ -5,6 +5,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { titlesMap } from "@/constants/titles";
 import { usePathname } from "next/navigation";
 import type { Session } from "~/lib/auth-client";
+import { ThemeSwitcher } from "./theme-switcher";
 
 export default function Navbar({ user }: { user: Session["user"] }) {
   const pathname = usePathname();
@@ -20,7 +21,8 @@ export default function Navbar({ user }: { user: Session["user"] }) {
           {titlesMap.get(pathname)?.description ?? pathname}
         </p>
       </div>
-      <div className="ml-auto inline-flex gap-1 items-center">
+      <div className="ml-auto inline-flex gap-2 items-center">
+          <ThemeSwitcher />
         <ProfileDropdown user={user} />
       </div>
     </nav>

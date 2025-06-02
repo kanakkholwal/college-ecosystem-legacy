@@ -1,5 +1,9 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
+import { Separator } from "@/components/ui/separator";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { cn } from "@/lib/utils";
 import {
   add,
   eachDayOfInterval,
@@ -20,19 +24,15 @@ import {
   ChevronRightIcon,
   PlusCircleIcon,
 } from "lucide-react";
-import * as React from "react";
-
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
+import * as React from "react";
+import { Badge } from "./badge";
 
 interface BaseEvent {
   id: string;
   title: string;
-  time: string; // ISO string or "HH:mm" format
-  description?: string; // Optional description field
+  time: Date; // ISO string or "HH:mm" format
+  description: string; // Optional description field
 }
 
 interface CalendarCell<EventType extends BaseEvent> {
@@ -314,25 +314,11 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                         </time>
                       </button>
                     </header>
-                    <div className="flex-1 p-2.5">
+                    <div className="flex-1 p-1">
                       {eventsForDay(day).length > 0 && (
-                        <div className="space-y-1.5">
-                          {eventsForDay(day)
-                            .slice(0, 1)
-                            .map((event, idx) => (
-                              <div
-                                key={event.id + idx}
-                                className="rounded bg-muted p-1 h-5 text-xs leading-none font-medium text-foreground truncate whitespace-nowrap"
-                              >
-                                {event.title}
-                              </div>
-                            ))}
-                          {eventsForDay(day).length > 1 && (
-                            <div className="text-xs text-muted-foreground">
-                              + {eventsForDay(day).length - 1} more
-                            </div>
-                          )}
-                        </div>
+                        <Badge size="sm">
+                          {eventsForDay(day).length} event(s)
+                        </Badge>
                       )}
                     </div>
                   </div>
@@ -377,12 +363,17 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                   </time>
                   {eventsForDay(day).length > 0 && (
                     <div className="-mx-0.5 mt-auto flex flex-wrap-reverse">
-                      {eventsForDay(day).map((event, idx) => (
+                      {eventsForDay(day).slice(0, 3).map((event, idx) => (
                         <span
                           key={event.id + idx}
-                          className="mx-0.5 mt-1 size-1.5 rounded-full text-xs bg-muted-foreground"
+                          className="mx-0.5 mt-1 ml-auto size-1 rounded-full text-xs bg-primary/75"
                         />
                       ))}
+                      {/* {eventsForDay(day).length > 3 && (
+                        <span className="mx-0.5 mt-1 ml-auto size-1 rounded-full text-xs bg-muted-foreground">
+                          +{eventsForDay(day).length - 3}
+                        </span>
+                      )} */}
                     </div>
                   )}
                 </button>
