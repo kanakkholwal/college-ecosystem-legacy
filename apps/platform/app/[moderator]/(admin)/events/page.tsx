@@ -78,6 +78,19 @@ export default async function ManageEventsPage(props: Props) {
                         {format(new Date(event.time), "hh:mm a")}
                       </p>
                       <p className="text-xs text-muted-foreground">{event.description}</p>
+                      <p className="text-right mt-1">
+                        <Button
+                          variant="default_light"
+                          size="xs"
+                          asChild
+                        >
+                        <Link
+                          href={`/admin/events/${event.id}`}
+                        >
+                          View Details
+                        </Link>
+                        </Button>
+                      </p>
                     </div>
                   ))}
                 </ResponsiveContainer>

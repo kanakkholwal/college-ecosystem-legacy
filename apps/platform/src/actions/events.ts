@@ -126,3 +126,54 @@ export async function getEvents({
     }
 
 }
+
+export async function getEventById(eventId: string): Promise<EventJSONType | null> {
+    try {
+        await dbConnect();
+        const event = await EventModel.findById(eventId);
+        if (!event) {   
+            return Promise.reject("Event not found");
+        }
+        return Promise.resolve(JSON.parse(JSON.stringify({
+            ...event.toObject(),
+            id: event._id.toString() // Convert _id to id
+        })));
+
+    }catch (err) {
+        console.log(err);
+        return Promise.reject(err instanceof Error ? err.message : "Something went wrong");
+    }
+}
+
+export async function updateEvent(eventId: string, updatedData: rawEventsSchemaType) {
+    try {
+        const validatedEvent = rawEventsSchema.safeParse(updatedData);
+        if (!validatedEvent.success) {
+            return Promise.reject(validatedEvent.error.errors[0].message);
+        }
+        await dbConnect();
+        const result = await EventModel.findByIdAndUpdate(eventId, updatedData, { new: true });
+        if (!result) {
+            return Promise.reject("Event not found or already deleted");
+        }
+        return Promise.resolve(JSON.parse(JSON.stringify(result)));
+    }
+    catch (err) {
+        console.log(err);
+        return Promise.reject(err instanceof Error ? err.message : "Something went wrong");
+    }
+}
+
+export async function deleteEvent(eventId: string) {
+    try {
+        await dbConnect();
+        const result = await EventModel.deleteOne({ _id: eventId });
+        if (result.deletedCount === 0) {
+            return Promise.reject("Event not found or already deleted");
+        }
+        return Promise.resolve("Event deleted successfully");
+    } catch (err) {
+        console.log(err);
+        return Promise.reject(err instanceof Error ? err.message : "Something went wrong");
+    }
+}
