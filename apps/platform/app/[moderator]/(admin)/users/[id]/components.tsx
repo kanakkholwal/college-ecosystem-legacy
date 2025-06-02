@@ -212,7 +212,7 @@ export function UserUpdate({
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="ml-2">
                       <SelectValue placeholder="Select a department" />
                     </SelectTrigger>
                   </FormControl>
@@ -243,7 +243,7 @@ export function UserUpdate({
                   disabled={hostels.length === 0}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="ml-2">
                       <SelectValue placeholder="Select a hostel" />
                     </SelectTrigger>
                   </FormControl>

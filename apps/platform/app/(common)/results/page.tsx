@@ -7,9 +7,12 @@ import { BiSpreadsheet } from "react-icons/bi";
 import { getCachedLabels, getResults } from "~/actions/result";
 
 import EmptyArea from "@/components/common/empty-area";
+import { Separator } from "@/components/ui/separator";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
+import { orgConfig } from "~/project.config";
+import { NoteSeparator } from "@/components/common/note-seperator";
 
 export const metadata: Metadata = {
   title: `Results | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
@@ -51,14 +54,14 @@ export default async function ResultPage(props: {
         className="z-10 w-full max-w-6xl mx-auto  relative flex flex-col items-center justify-center  py-24 max-h-80 text-center"
       >
         <h2 className="text-3xl font-semibold text-center whitespace-nowrap">
-          NITH{" "}
+          {orgConfig.shortName}
           <span className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent dark:from-primaryLight dark:to-secondaryLight md:px-2">
             Result
           </span>
           Portal
         </h2>
         <p className="mt-4 mb-8 text-lg text-muted-foreground">
-          NITH Portal is a platform for students of NITH to get all the
+          {orgConfig.shortName} Portal is a platform for students of {orgConfig.shortName} to get all the
           resources at one place.
         </p>
         <div
@@ -78,6 +81,7 @@ export default async function ResultPage(props: {
           </Suspense>
         </div>
       </section>
+      <NoteSeparator label={`${results.length} Results found`} />
       <ErrorBoundaryWithSuspense
         fallback={
           <EmptyArea

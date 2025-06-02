@@ -1,4 +1,5 @@
 import { FullScreenCalendar } from "@/components/ui/calendar-full";
+import { CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
 
 type Props = {
@@ -6,7 +7,9 @@ type Props = {
     moderator: string;
   }>;
   searchParams: Promise<{
-    query: string;
+    query?: string;
+    from?: string;
+    to?: string;
   }>;
 };
 
@@ -53,11 +56,20 @@ export default function AcademicCalenderPage(props: Props) {
 
   // const moderator = params.moderator;
   // const session = await getSession();
+  // const events = await getEvents({
+  //   moderator,
+  //   query: searchParams.query,
+  //   from: searchParams.from,
+  //   to: searchParams.to,
+  // });
 
   return (
     <div className="max-w-6xl mx-auto px-4 pt-10 space-y-6 pb-5">
       <div className="bg-card p-4 lg:p-5 rounded-lg">
-        <h1 className="text-xl font-semibold mb-2">Academic Calender</h1>
+        <h1 className="text-xl font-semibold mb-2">
+          <CalendarDays className="inline-block size-5 mr-2" />
+          Academic Calender
+        </h1>
         <p className="text-sm text-muted-foreground mb-4 text-pretty">
           Check the events and important dates in the academic calendar.
           This calendar is designed to help students and faculty stay informed

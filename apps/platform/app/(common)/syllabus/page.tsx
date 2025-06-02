@@ -7,6 +7,9 @@ import { getCourses } from "~/actions/course";
 import Pagination from "@/components/application/course-pagination";
 import SearchBox from "@/components/application/course-search";
 import { ResponsiveContainer } from "@/components/common/container";
+import { Separator } from "@/components/ui/separator";
+import { orgConfig } from "~/project.config";
+import { NoteSeparator } from "@/components/common/note-seperator";
 
 export const metadata: Metadata = {
   title: "Syllabus Search",
@@ -57,7 +60,7 @@ export default async function CoursesPage(props: {
           Syllabus <span className="text-primary">Search</span>
         </h2>
         <p className="mt-4 text-muted-foreground" data-aos="zoom-in">
-          Search for syllabus of any course in NITH
+          Search for syllabus of any course in {orgConfig.shortName}
         </p>
         <div
           className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"
@@ -69,6 +72,9 @@ export default async function CoursesPage(props: {
           </Suspense>
         </div>
       </section>
+      <NoteSeparator label={`${courses.length} Courses found`} />
+
+
       <ResponsiveContainer>
         <Suspense
           key="Courses"

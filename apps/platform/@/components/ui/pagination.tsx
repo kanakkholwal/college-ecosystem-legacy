@@ -3,6 +3,7 @@ import * as React from "react";
 
 import { type ButtonProps, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import Link, { LinkProps } from "next/link";
 
 const Pagination = ({ className, ...props }: React.ComponentProps<"nav">) => (
   <nav
@@ -36,7 +37,7 @@ PaginationItem.displayName = "PaginationItem";
 type PaginationLinkProps = {
   isActive?: boolean;
 } & Pick<ButtonProps, "size"> &
-  React.ComponentProps<"a">;
+  React.ComponentProps<"a"> & LinkProps
 
 const PaginationLink = ({
   className,
@@ -44,7 +45,7 @@ const PaginationLink = ({
   size = "icon_sm",
   ...props
 }: PaginationLinkProps) => (
-  <a
+  <Link
     aria-current={isActive ? "page" : undefined}
     className={cn(
       buttonVariants({
@@ -54,6 +55,7 @@ const PaginationLink = ({
       className
     )}
     {...props}
+    href={props.href || "#"}
   />
 );
 PaginationLink.displayName = "PaginationLink";
@@ -112,5 +114,6 @@ export {
   PaginationItem,
   PaginationLink,
   PaginationNext,
-  PaginationPrevious,
+  PaginationPrevious
 };
+

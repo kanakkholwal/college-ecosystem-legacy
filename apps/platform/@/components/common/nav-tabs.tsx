@@ -21,7 +21,7 @@ interface NavTabsProps extends React.HTMLAttributes<HTMLDivElement> {
 const NavTabs = React.forwardRef<HTMLDivElement, NavTabsProps>(
     ({ className, navLinks, activeTab, ...props }, ref) => {
         const pathname = usePathname();
-        const defaultIndex = navLinks.findIndex(link => pathname.startsWith(link.href)) === -1 ? 0 : navLinks.findIndex(link => pathname.startsWith(link.href));
+        const defaultIndex = navLinks.findIndex(link => pathname.startsWith(link.href))
 
         const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
         const [activeIndex, setActiveIndex] = useState<number>(defaultIndex)

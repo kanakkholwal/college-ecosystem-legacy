@@ -1,22 +1,79 @@
 import { betterFetch } from "@better-fetch/fetch";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 
 const SIGN_IN_PATH = "/sign-in";
 
-const roleBasedRoutes = new Map([
-  ["/admin", ["admin"]],
-  ["/faculty", ["faculty"]],
-  ["/cr", ["cr"]],
-  ["/student", ["student"]],
-  ["/guard", ["guard"]],
-]);
+
 
 const UN_PROTECTED_API_ROUTES = ["/api/auth/*"];
+const DashboardRoutes = [
+  ROLES.ADMIN,
+  ROLES.FACULTY,
+  ROLES.CR,
+  ROLES.FACULTY,
+  ROLES.CHIEF_WARDEN,
+  ROLES.WARDEN,
+  ROLES.ASSISTANT_WARDEN,
+  ROLES.MMCA,
+  ROLES.HOD,
+  ROLES.GUARD,
+  ROLES.LIBRARIAN,
+  ROLES.STUDENT,
+];
 
 function isAuthorized(roles: string[], allowedRoles: string[]) {
   return roles.some((role) => allowedRoles.includes(role));
+}
+function checkAuthorization(
+  route_path: (typeof DashboardRoutes)[number],
+  session: Session | null
+) {
+  // 1. No session, redirect to sign-in
+  if (!session) {
+    return {
+      redirect: { destination: "/sign-in" },
+      authorized: false,
+      notFound: false,
+    };
+  }
+
+  // 2. Invalid role
+  if (!DashboardRoutes.includes(route_path)) {
+    console.log("Invalid moderator role:", route_path);
+    // const destination = session.user.other_roles.includes("student")
+    //   ? "/"
+    //   : session.user.other_roles[0] || "/";
+    const destination =
+      session.user.other_roles?.length > 0 ? session.user.other_roles[0] : "/";
+    return {
+      redirect: { destination },
+      authorized: false,
+      notFound: false,
+    };
+  }
+
+  // 4. Authorized check
+  if (
+    session.user.other_roles
+      .map((role) => role.toLowerCase())
+      .includes(route_path.toLowerCase()) ||
+    session.user.role.toLowerCase() === route_path.toLowerCase()
+  ) {
+    return {
+      notFound: false,
+      authorized: true,
+      redirect: null,
+    };
+  }
+
+  return {
+    notFound: true,
+    authorized: false,
+    redirect: null,
+  };
 }
 
 export async function middleware(request: NextRequest) {
@@ -52,44 +109,31 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
     }
     // if the user is already authenticated
-    const allows_roles = roleBasedRoutes.get(request.nextUrl.pathname);
-    if (roleBasedRoutes.has(request.nextUrl.pathname) && allows_roles) {
-      if (
-        !isAuthorized(
-          [...session.user.other_roles, session.user.role],
-          allows_roles
-        )
-      ) {
-        url.pathname = "/unauthorized";
-        return NextResponse.redirect(url);
+    // manage the dashboard routes
+    if (request.method === "GET" && DashboardRoutes.includes(request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number])) {
+      const authCheck = checkAuthorization(
+        request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number],
+        session
+      );
+      if (authCheck.redirect) {
+        return NextResponse.redirect(
+          new URL(authCheck.redirect.destination, request.url)
+        );
       }
+      if (!authCheck.authorized) {
+        return NextResponse.redirect(
+          new URL("/unauthorized?target=" + request.url, request.url)
+        );
+
+      }
+
     }
+
   }
-  if (request.method === "POST") {
+  if (request.method === "POST" || request.nextUrl.pathname.startsWith("/api")) {
     if (!session) {
       return NextResponse.redirect(new URL(SIGN_IN_PATH, request.url));
     }
-    const allows_roles = roleBasedRoutes.get(request.nextUrl.pathname);
-    if (roleBasedRoutes.has(request.nextUrl.pathname) && allows_roles) {
-      if (
-        !isAuthorized(
-          [...session.user.other_roles, session.user.role],
-          allows_roles
-        )
-      ) {
-        return NextResponse.json(
-          {
-            status: "error",
-            message: "You are not authorized to perform this action",
-          },
-          {
-            status: 403,
-          }
-        );
-      }
-    }
-  }
-  if (request.nextUrl.pathname.startsWith("/api")) {
     if (
       UN_PROTECTED_API_ROUTES.some((route) =>
         new RegExp(route.replace(/\*/g, ".*")).test(request.nextUrl.pathname)
@@ -97,33 +141,12 @@ export async function middleware(request: NextRequest) {
     ) {
       return NextResponse.next();
     }
-    if (!session) {
-      return NextResponse.json(
-        {
-          status: "error",
-          message: "You are not authorized to perform this action",
-        },
-        {
-          status: 403,
-          // headers:{
-          //   "Un-Authorized-Redirect": "true",
-          //   "Un-Authorized-Redirect-Path": SIGN_IN_PATH,
-          //   "Un-Authorized-Redirect-Next": request.nextUrl.href,
-          //   "Un-Authorized-Redirect-Method": request.method,
-          //   "Un-Authorized-Redirect-max-tries": "5",
-          //   "Un-Authorized-Redirect-tries": "1",
-          // }
-        }
+    if (DashboardRoutes.includes(request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number])) {
+      const authCheck = checkAuthorization(
+        request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number],
+        session
       );
-    }
-    const allows_roles = roleBasedRoutes.get(request.nextUrl.pathname);
-    if (roleBasedRoutes.has(request.nextUrl.pathname) && allows_roles) {
-      if (
-        !isAuthorized(
-          [...session.user.other_roles, session.user.role],
-          allows_roles
-        )
-      ) {
+      if (authCheck.redirect) {
         return NextResponse.json(
           {
             status: "error",
@@ -131,11 +154,38 @@ export async function middleware(request: NextRequest) {
           },
           {
             status: 403,
+            headers: {
+              "Un-Authorized-Redirect": "true",
+              "Un-Authorized-Redirect-Path": SIGN_IN_PATH,
+              "Un-Authorized-Redirect-Next": request.nextUrl.href,
+              "Un-Authorized-Redirect-Method": request.method,
+              "Un-Authorized-Redirect-max-tries": "5",
+              "Un-Authorized-Redirect-tries": "1",
+            },
           }
-        );
+        )
       }
+      if (!authCheck.authorized) {
+        return NextResponse.json({
+          status: "error",
+          message: "You are not authorized to perform this action",
+        }, {
+          status: 403,
+          headers: {
+            "Un-Authorized-Redirect": "true",
+            "Un-Authorized-Redirect-Path": SIGN_IN_PATH,
+            "Un-Authorized-Redirect-Next": request.nextUrl.href,
+            "Un-Authorized-Redirect-Method": request.method,
+            "Un-Authorized-Redirect-max-tries": "5",
+            "Un-Authorized-Redirect-tries": "1",
+          },
+        })
+
+      }
+
     }
   }
+
   const nextTargetRoute = request.nextUrl.searchParams.get("next");
   // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page
   if (nextTargetRoute) {

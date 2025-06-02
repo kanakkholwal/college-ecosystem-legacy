@@ -25,30 +25,6 @@ CREATE TABLE "books_and_references" (
 	"type" varchar(10) NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "calender_sem_event_participants" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"event_id" uuid NOT NULL,
-	"participant_id" uuid NOT NULL,
-	"role" text
-);
---> statement-breakpoint
-CREATE TABLE "calender_sem_event_tags" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"event_id" uuid NOT NULL,
-	"tag" text NOT NULL
-);
---> statement-breakpoint
-CREATE TABLE "calender_sem_events" (
-	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
-	"name" text NOT NULL,
-	"description" text,
-	"start_date" timestamp NOT NULL,
-	"end_date" timestamp NOT NULL,
-	"all_day" boolean DEFAULT false,
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp DEFAULT now()
-);
---> statement-breakpoint
 CREATE TABLE "chapters" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"title" text NOT NULL,
@@ -68,6 +44,19 @@ CREATE TABLE "courses" (
 	"created_at" timestamp with time zone DEFAULT now(),
 	"updated_at" timestamp with time zone DEFAULT now(),
 	CONSTRAINT "courses_code_unique" UNIQUE("code")
+);
+--> statement-breakpoint
+CREATE TABLE "global_events" (
+	"id" text PRIMARY KEY GENERATED ALWAYS AS (5KTLg_tdiJHpOFgLHt4dZzRyGLSF9b1u) STORED NOT NULL,
+	"name" text NOT NULL,
+	"description" text,
+	"links" text[] DEFAULT '{}',
+	"time" timestamp NOT NULL,
+	"userId" text NOT NULL,
+	"end_date" timestamp NOT NULL,
+	"event_type" text NOT NULL,
+	"location" text,
+	"created_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE "personal_attendance" (
@@ -106,7 +95,7 @@ CREATE TABLE "room_usage_history" (
 CREATE TABLE "rooms" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"room_number" text NOT NULL,
-	"room_type" varchar(20) NOT NULL,
+	"room_type" varchar(20) DEFAULT 'classroom' NOT NULL,
 	"current_status" varchar(10) DEFAULT 'available' NOT NULL,
 	"last_updated_time" timestamp with time zone DEFAULT now(),
 	"capacity" integer,
@@ -157,9 +146,8 @@ CREATE TABLE "verifications" (
 --> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "books_and_references" ADD CONSTRAINT "books_and_references_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "calender_sem_event_participants" ADD CONSTRAINT "calender_sem_event_participants_event_id_calender_sem_events_id_fk" FOREIGN KEY ("event_id") REFERENCES "public"."calender_sem_events"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "calender_sem_event_tags" ADD CONSTRAINT "calender_sem_event_tags_event_id_calender_sem_events_id_fk" FOREIGN KEY ("event_id") REFERENCES "public"."calender_sem_events"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "chapters" ADD CONSTRAINT "chapters_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "global_events" ADD CONSTRAINT "global_events_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "personal_attendance" ADD CONSTRAINT "personal_attendance_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "personal_attendance_records" ADD CONSTRAINT "personal_attendance_records_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "personal_attendance_records" ADD CONSTRAINT "personal_attendance_records_record_id_personal_attendance_id_fk" FOREIGN KEY ("record_id") REFERENCES "public"."personal_attendance"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint

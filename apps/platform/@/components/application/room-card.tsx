@@ -71,7 +71,7 @@ export default function RoomCard({ room, user, ...props }: Props) {
       {...props}
     >
       {user?.role === "admin" && (
-        <div className="absolute -top-2 -right-2 z-10">
+        <div className="absolute -top-2 -left-2 z-10">
           <Button
             size="icon_sm"
             variant="destructive_light"
@@ -122,7 +122,7 @@ export default function RoomCard({ room, user, ...props }: Props) {
           {room.latestUsageHistory ? ` by ${room.latestUsageHistory.name}` : ""}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex w-full flex-wrap justify-around items-start gap-2 p-4 px-2">
+      <CardContent className="flex w-full flex-wrap justify-around items-start gap-2 pb-4 px-2 pt-0">
         <div className="flex flex-col items-center gap-1">
           <span className="text-xs font-medium  text-muted-foreground">
             Capacity

@@ -43,7 +43,7 @@ export const columns: ColumnDef<UserType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium">{row.getValue("name")}</div>
+        <div className="text-left font-medium whitespace-nowrap">{row.getValue("name")}</div>
       );
     },
 
@@ -58,7 +58,7 @@ export const columns: ColumnDef<UserType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium">{row.getValue("email")}</div>
+        <div className="text-left font-medium whitespace-nowrap">{row.getValue("email")}</div>
       );
     },
     enableSorting: true,
@@ -72,7 +72,7 @@ export const columns: ColumnDef<UserType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium">
+        <div className="text-left font-medium whitespace-nowrap">
           <Badge
             variant={
               row.getValue("emailVerified")
@@ -96,7 +96,7 @@ export const columns: ColumnDef<UserType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium">{row.getValue("gender")}</div>
+        <div className="text-left font-medium whitespace-nowrap">{row.getValue("gender")}</div>
       );
     },
     enableSorting: true,
@@ -110,7 +110,7 @@ export const columns: ColumnDef<UserType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium">
+        <div className="text-left font-medium whitespace-nowrap">
           {(row.original as UserType)?.other_roles?.join(", ")}
         </div>
       );
@@ -134,7 +134,7 @@ export const columns: ColumnDef<UserType>[] = [
           day: "numeric",
         }
       );
-      return <div className="text-left font-medium">{formatted}</div>;
+      return <div className="text-left font-medium whitespace-nowrap">{formatted}</div>;
     },
     enableSorting: true,
     enableHiding: true,
@@ -147,7 +147,7 @@ export const columns: ColumnDef<UserType>[] = [
     enableHiding: true,
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium">
+        <div className="text-left font-medium whitespace-nowrap">
           <Button variant="link" asChild>
             <Link href={`/admin/users/${row.original.id}`}>View user</Link>
           </Button>

@@ -36,7 +36,7 @@ export default async function Layout({ children }: LayoutProps) {
   return (
     <div className="flex flex-1 flex-col justify-center min-h-svh bg-background dark:bg-background">
       <Navbar user={session.user} />
-      <ConditionalRender condition={true || PROMO.getConditionByUser(session?.user!)}>
+      <ConditionalRender condition={PROMO.getConditionByUser(session?.user!)}>
         <BannerPanel
           icon={<RocketIcon className="size-4 text-muted-foreground" />}
           title={PROMO.title}

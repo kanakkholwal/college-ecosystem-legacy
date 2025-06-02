@@ -23,12 +23,13 @@ export async function getResults(
     branch?: string;
     programme?: string;
     batch?: number;
+    limit?: number;
   },
   new_cache?: boolean
 ): Promise<getResultsReturnType> {
   try {
     await dbConnect();
-    const resultsPerPage = 32;
+    const resultsPerPage = filter?.limit || 32;
     const skip = currentPage * resultsPerPage - resultsPerPage;
 
     // biome-ignore lint/suspicious/noExplicitAny: legacy query compatibility

@@ -3,14 +3,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
-import { Separator } from "@/components/ui/separator";
 import { socials, SUPPORT_LINKS } from "@/constants/links";
+import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 import { Home, LogOut, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import type { Session } from "~/lib/auth-client";
 import { authClient } from "~/lib/auth-client";
 import { changeCase } from "~/utils/string";
+import { NoteSeparator } from "./note-seperator";
 
 
 interface ProfileDropdownProps {
@@ -22,27 +23,18 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
 
   const links = [
     ...[
-      user.other_roles.includes("student")
-        ? {
-            Icon: UserRound,
-            href: `/results/${user.username}`,
-            title: "Your Result",
-          }
-        : null,
-    ],
-    ...[
       user.role === "admin"
         ? {
-            Icon: UserRound,
-            href: "/admin",
-            title: "Admin Dashboard",
-          }
+          Icon: UserRound,
+          href: "/admin",
+          title: "Admin",
+        }
         : null,
     ],
     ...user.other_roles.map((role) => ({
       Icon: UserRound,
       href: `/${role}`,
-      title: `${role} Dashboard`,
+      title: role
     })),
   ].filter((elem) => elem !== null);
 
@@ -65,13 +57,13 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
                   ? user.image
                   : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`
               }
-              // src={
-              //   user.image
-              //     ? (user.image as string)
-              //     : user.gender !== "non_specified"
-              //       ? `/assets/avatars/${user.gender}_user.png`
-              //       : ""
-              // }
+            // src={
+            //   user.image
+            //     ? (user.image as string)
+            //     : user.gender !== "non_specified"
+            //       ? `/assets/avatars/${user.gender}_user.png`
+            //       : ""
+            // }
             />
             <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
@@ -95,14 +87,18 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           <h4 className="font-semibold tracking-wide text-base">{user.name}</h4>
           <p className="text-muted-foreground font-medium text-sm">
             {user.email}
+            <Link href={`/results/${user.username}`} className="text-primary hover:underline ml-2 text-xs">
+              View Result
+              <ArrowTopRightIcon className="inline-block size-3 ml-1" />
+            </Link>
           </p>
           <p>
             <Badge size="sm">{user.department}</Badge>
           </p>
         </div>
       </div>
-      <Separator className="my-3" />
-      <div className="grid grid-cols-2 gap-2 flex-wrap mx-auto">
+      <NoteSeparator label="Authorized Dashboard(s)" labelClassName="p-0 text-xs" />
+      <div className="grid grid-cols-2 gap-2 w-full">
         {links.map((link) => (
           <Link
             key={link.href}
@@ -114,18 +110,22 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           </Link>
         ))}
       </div>
-      <Separator className="my-2" />
+      <div>
 
-      <div className="flex flex-row gap-1 flex-wrap">
-        {SUPPORT_LINKS.map((link) => (
-          <Link
-            key={link.href}
-            href={link?.href || ""}
-            className="rounded-md px-3 py-1 text-xs font-medium capitalize bg-muted text-muted-foreground hover:text-primary hover:shadow whitespace-nowrap"
-          >
-            {link.title}
-          </Link>
-        ))}
+        <NoteSeparator label="Support" labelClassName="p-0 text-xs" />
+
+        <div className="flex flex-row gap-1 flex-wrap">
+          {SUPPORT_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link?.href || ""}
+              className="rounded-md px-3 py-1 text-xs font-medium capitalize bg-muted text-muted-foreground hover:text-primary hover:shadow whitespace-nowrap"
+            >
+              {link.title}
+              <ArrowTopRightIcon className="inline-block size-3 ml-1" />
+            </Link>
+          ))}
+        </div>
       </div>
       <div className="flex items-center justify-between gap-4 w-full flex-wrap mt-2">
         <div className="flex gap-2">

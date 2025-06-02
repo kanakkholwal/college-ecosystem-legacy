@@ -1,6 +1,9 @@
 import RoomCard from "@/components/application/room-card";
 import SearchBox from "@/components/application/room-search";
+import { ResponsiveContainer } from "@/components/common/container";
 import EmptyArea from "@/components/common/empty-area";
+import { NoteSeparator } from "@/components/common/note-seperator";
+import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import ConditionalRender from "@/components/utils/conditional-render";
 import ErrorBanner from "@/components/utils/error";
@@ -35,7 +38,7 @@ export default async function RoomsPage(props: Props) {
     <div className="px-4 md:px-12 xl:px-6 @container">
       <section
         id="hero"
-        className="z-10 w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center py-24 max-h-80 text-center"
+        className="z-10 w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center py-20 max-h-80 text-center"
       >
         <h2 className="text-2xl font-semibold text-center whitespace-nowrap">
           Rooms <span className="text-primary">Search</span>
@@ -51,15 +54,15 @@ export default async function RoomsPage(props: Props) {
           <SearchBox />
         </div>
       </section>
+      <NoteSeparator label={`${rooms.length} Rooms found`} />
       <ErrorBoundaryWithSuspense
         fallback={<ErrorBanner />}
         loadingFallback={
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          <ResponsiveContainer>
             {[...Array(8)].map((_, i) => (
-              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-              <Skeleton className="w-full h-96" key={i} />
+              <Skeleton className="w-full h-96" key={`skeleton-${i.toString()}`} />
             ))}
-          </div>
+          </ResponsiveContainer>
         }
       >
         <ConditionalRender condition={rooms.length === 0}>
@@ -70,7 +73,7 @@ export default async function RoomsPage(props: Props) {
           />
         </ConditionalRender>
         <ConditionalRender condition={rooms.length > 0}>
-          <div className="mx-auto max-w-7xl w-full xl:px-6 grid gap-3 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4">
+          <ResponsiveContainer >
             {rooms.map((room, i) => {
               return (
                 <RoomCard
@@ -83,7 +86,7 @@ export default async function RoomsPage(props: Props) {
                 />
               );
             })}
-          </div>
+          </ResponsiveContainer>
         </ConditionalRender>
       </ErrorBoundaryWithSuspense>
     </div>

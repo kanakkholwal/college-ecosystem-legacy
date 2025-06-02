@@ -2,7 +2,7 @@
 
 import { FullScreenCalendar } from "@/components/ui/calendar-full";
 import { format } from "date-fns";
-// import type { Metadata } from "next";
+import { useRouter } from "next/navigation";
 
 type Props = {
   params: Promise<{
@@ -13,10 +13,7 @@ type Props = {
   }>;
 };
 
-// export const metadata: Metadata = {
-//   title: "Academic Calender",
-//   description: "Check the academic calender here.",
-// };
+
 interface MyEvent {
   id: string;
   title: string;
@@ -68,17 +65,14 @@ const renderEventDetails = (event: MyEvent) => (
 );
 
 export default function ManageEventsPage(props: Props) {
-  // const params = await props.params;
-  // const searchParams = await props.searchParams;
-
-  // const moderator = params.moderator;
-  // const session = await getSession();
+  const router = useRouter()
 
   return (
     <>
       <FullScreenCalendar
         data={sampleData}
         renderEventDetails={renderEventDetails}
+        onNewEventRedirectPath="/admin/events/new"
       />
     </>
   );

@@ -8,12 +8,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { GrSchedules } from "react-icons/gr";
 import { getDepartmentName } from "src/constants/departments";
 import { getSession } from "src/lib/auth-server";
 import { getAllTimeTables } from "src/lib/time-table/actions";
-import { GrAnnounce, GrSchedules } from "react-icons/gr";
 
+import ScheduleSearchBox from "@/components/application/schedule-search";
+import { ResponsiveContainer } from "@/components/common/container";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
 import type { Metadata } from "next";
+import { NoteSeparator } from "@/components/common/note-seperator";
 
 export const metadata: Metadata = {
   title: `Timetables | ${process.env.NEXT_PUBLIC_WEBSITE_NAME}`,
@@ -28,25 +33,28 @@ export default async function Dashboard() {
     <>
       <section
         id="hero"
-        className="z-10 w-full max-w-6xl relative flex flex-col items-center justify-center  py-24 max-h-80 text-center"
+        className="z-10 w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center pt-20 pb-10 max-h-80 text-center"
       >
-        <h2
-          className="text-xl md:text-2xl lg:text-4xl font-bold text-neutral-900 dark:text-neutral-100 whitespace-nowrap"
-          data-aos="fade-up"
-        >
+        <h2 className="text-2xl font-semibold text-center whitespace-nowrap">
           Timetables for all departments
         </h2>
-        <p
-          className="mt-4 text-lg text-neutral-700 dark:text-neutral-300"
-          data-aos="fade-up"
-          data-aos-delay="500"
-        >
-          CRs and Moderators can create timetables for their respective
-          departments
+        <p className="text-base text-muted-foreground max-w-2xl mx-auto text-pretty text-center">
+          view your own timetable by selecting your department, year, and
+          semester.
         </p>
+        <div
+          className="mt-5 flex flex-wrap justify-center gap-y-4 px-2 lg:px-4 w-full mx-auto max-w-2xl"
+          data-aos="fade-up"
+          data-aos-anchor-placement="center-bottom"
+        >
+          <ScheduleSearchBox branches={[]} years={[]} />
+        </div>
       </section>
+      <NoteSeparator label={`${timeTables.length} Timetables found`} />
+
+
       {timeTables.length === 0 ? (
-        <section className="max-w-6xl w-full xl:px-6 text-center">
+        <section className="max-w-6xl w-full px-2 xl:px-6 text-center">
           <EmptyArea
             icons={[GrSchedules]}
             title="No Timetables found"
@@ -54,26 +62,42 @@ export default async function Dashboard() {
           />
         </section>
       ) : (
-        <section className="max-w-6xl w-full xl:px-6 grid gap-4 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3">
+        <ResponsiveContainer className="px-2 lg:px-6 max-w-(--max-app-width)">
           {timeTables.map((timetable, i) => {
             return (
               <Card
-                variant="glass"
                 key={timetable._id}
-                className="hover:shadow-lg animate-in popup flex flex-col items-stretch justify-between"
+                className="hover:shadow-lg animate-in popup"
                 style={{
                   animationDelay: `${i * 100}ms`,
                 }}
               >
-                <CardHeader>
-                  <CardTitle>{timetable.sectionName}</CardTitle>
-                  <CardDescription className="text-gray-700 font-semibold">
-                    {timetable.year} Year, {timetable.semester} Semester -{" "}
-                    {getDepartmentName(timetable.department_code as string)}
+                <CardHeader className="p-4">
+                  <CardTitle className="text-base">{timetable.sectionName}</CardTitle>
+                  {timetable.department_code ? (
+                    <Badge size="sm">
+                      {getDepartmentName(timetable.department_code as string)}
+                    </Badge>
+                  ) : null}
+                  <CardDescription>
+                    <Badge size="sm" className="mr-2">
+                      {timetable.year}
+                      <sup>
+                        {timetable.year === 1 ? "st" : timetable.year === 2 ? "nd" : timetable.year === 3 ? "rd" : "th"}
+                      </sup>
+                      Year
+                    </Badge>
+                    <Badge size="sm">
+                      {timetable.semester}
+                      <sup>
+                        {timetable.semester === 1 ? "st" : timetable.semester === 2 ? "nd" : timetable.semester === 3 ? "rd" : "th"}
+                      </sup>
+                      Semester
+                    </Badge>
                   </CardDescription>
                 </CardHeader>
-                <CardFooter className="justify-end">
-                  <Button variant="default_light" size="sm" asChild>
+                <CardFooter className="justify-end p-4 pt-0">
+                  <Button variant="default_light" size="sm" rounded="full" effect="shineHover" asChild>
                     <Link
                       href={`/schedules/${timetable.department_code}/${timetable.year}/${timetable.semester}`}
                     >
@@ -84,7 +108,7 @@ export default async function Dashboard() {
               </Card>
             );
           })}
-        </section>
+        </ResponsiveContainer>
       )}
     </>
   );

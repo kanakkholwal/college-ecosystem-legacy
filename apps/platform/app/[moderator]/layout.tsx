@@ -1,9 +1,7 @@
 import Navbar from "@/components/common/app-navbar";
 import { AppSidebar } from "@/components/common/sidebar/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
-import Page403 from "@/components/utils/403";
 import type { Metadata, ResolvingMetadata } from "next";
-import { notFound, redirect } from "next/navigation";
 import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
@@ -52,20 +50,7 @@ export default async function DashboardLayout({
 
   const session = (await getSession()) as Session;
 
-  const response = checkAuthorization(moderator, session);
 
-  if (response.redirect) {
-    console.log("Redirecting to:", response.redirect.destination);
-    return redirect(response.redirect.destination);
-  }
-  if (response.notFound) {
-    console.log("Returning notFound");
-    return notFound();
-  }
-  if (!response.authorized) {
-    console.log("Returning Page403");
-    return <Page403 />;
-  }
 
   return (
     <SidebarProvider className="selection:bg-primary/10 selection:text-primary">
@@ -93,53 +78,4 @@ export default async function DashboardLayout({
       </SidebarInset>
     </SidebarProvider>
   );
-}
-
-function checkAuthorization(
-  moderator: (typeof ALLOWED_ROLES)[number],
-  session: Awaited<ReturnType<typeof getSession>>
-) {
-  // 1. No session, redirect to sign-in
-  if (!session) {
-    return {
-      redirect: { destination: "/sign-in" },
-      authorized: false,
-      notFound: false,
-    };
-  }
-
-  // 2. Invalid role
-  if (!ALLOWED_ROLES.includes(moderator)) {
-    console.log("Invalid moderator role:", moderator);
-    // const destination = session.user.other_roles.includes("student")
-    //   ? "/"
-    //   : session.user.other_roles[0] || "/";
-    const destination =
-      session.user.other_roles?.length > 0 ? session.user.other_roles[0] : "/";
-    return {
-      redirect: { destination },
-      authorized: false,
-      notFound: false,
-    };
-  }
-
-  // 4. Authorized check
-  if (
-    session.user.other_roles
-      .map((role) => role.toLowerCase())
-      .includes(moderator.toLowerCase()) ||
-    session.user.role.toLowerCase() === moderator.toLowerCase()
-  ) {
-    return {
-      notFound: false,
-      authorized: true,
-      redirect: null,
-    };
-  }
-
-  return {
-    notFound: true,
-    authorized: false,
-    redirect: null,
-  };
 }

@@ -26,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface BaseEvent {
   id: string;
@@ -39,12 +40,15 @@ interface CalendarCell<EventType extends BaseEvent> {
   events: EventType[];
 }
 
+
+
 interface FullScreenCalendarProps<EventType extends BaseEvent> {
   className?: string;
   data: CalendarCell<EventType>[];
   // renderEventMarker: (event: EventType) => React.ReactNode;
   renderEventDetails?: (event: EventType) => React.ReactNode;
-  onNewEvent?: () => void;
+  onNewEvent?: (selectedDate: Date) => void;
+  onNewEventRedirectPath?: string
 }
 
 const colStartClasses = [
@@ -69,12 +73,15 @@ function DefaultRenderEvent<EventType extends BaseEvent>(event: EventType) {
   );
 }
 
+
+
 export function FullScreenCalendar<EventType extends BaseEvent>({
   data,
   className,
   // renderEventMarker,
   renderEventDetails = DefaultRenderEvent,
   onNewEvent,
+  onNewEventRedirectPath,
   ...props
 }: FullScreenCalendarProps<EventType>) {
   const today = startOfToday();
@@ -116,6 +123,8 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
     [data]
   );
 
+
+
   return (
     <div className={cn("flex flex-1 flex-col", className)}>
       <div className="flex flex-col space-y-4 p-4 md:flex-row md:items-center md:justify-between md:space-y-0 lg:flex-none">
@@ -150,7 +159,7 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
               size="icon_sm"
               aria-label="Navigate to previous month"
             >
-              <ChevronLeftIcon size={16} strokeWidth={2} aria-hidden="true" />
+              <ChevronLeftIcon />
             </Button>
             <Button
               onClick={goToToday}
@@ -167,19 +176,30 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
               size="icon_sm"
               aria-label="Navigate to next month"
             >
-              <ChevronRightIcon size={16} strokeWidth={2} aria-hidden="true" />
+              <ChevronRightIcon />
             </Button>
           </div>
-          {onNewEvent && (
+          {(onNewEvent || onNewEventRedirectPath) ? (
             <>
               <Separator orientation="vertical" className="h-6 block" />
 
-              <Button size="sm" onClick={() => onNewEvent && onNewEvent()}>
-                <PlusCircleIcon size={16} strokeWidth={2} aria-hidden="true" />
-                <span>New Event</span>
+              <Button size="sm" onClick={() => {
+                onNewEvent && onNewEvent(selectedDay)
+              }}
+                {...(onNewEventRedirectPath ? {
+                  asChild: true
+                } : {})}
+              >
+                {onNewEventRedirectPath ? <Link href={onNewEventRedirectPath + "?time=" + format(selectedDay, "yyyy-MM-dd'T'HH:mm:ss")}>
+                  <PlusCircleIcon />
+                  <span>New Event</span>
+                </Link> : <>
+                  <PlusCircleIcon />
+                  <span>New Event</span>
+                </>}
               </Button>
             </>
-          )}
+          ) : null}
         </div>
       </div>
 

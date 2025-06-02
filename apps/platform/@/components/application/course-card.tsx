@@ -34,19 +34,20 @@ export default function CourseCard({
 }: Props) {
   return (
     <Card
-      className={cn("hover:shadow-lg animate-in popup", className)}
+      className={cn("hover:shadow-lg hover:border-primary/75 animate-in popup", className)}
       style={style}
     >
       <CardHeader className="px-3 py-4">
         <CardTitle className="text-base">{course.name}</CardTitle>
-        <CardDescription className="text-sm font-medium">
+        <CardDescription>
           {course.code}
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex justify-around items-stretch gap-3 text-center p-3">
+      <CardContent className="flex justify-around items-stretch gap-3 text-center p-3 pt-0">
         <div>
+          
           <p className="text-xs text-muted-foreground">Type</p>
-          <p className="text-base font-bold text-gray-900 dark:text-white">
+          <p className="text-base font-semibold text-gray-900 dark:text-white">
             {course.type}
           </p>
         </div>
@@ -63,7 +64,7 @@ export default function CourseCard({
           </p>
         </div>
       </CardContent>
-      <CardFooter className="justify-end p-3">
+      <CardFooter className="justify-end p-3 pt-0">
         {authorized_role && (
           <Button size="sm" variant="link" effect="hoverUnderline" asChild>
             <Link href={`/${authorized_role}/courses/${course.code}`}>
@@ -75,7 +76,7 @@ export default function CourseCard({
           size="sm"
           variant="default_light"
           rounded="full"
-          effect="gooeyRight"
+          effect="shineHover"
           asChild
         >
           <Link href={`/syllabus/${course.code}`}>View Course</Link>
