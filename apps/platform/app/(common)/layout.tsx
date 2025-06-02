@@ -20,7 +20,7 @@ const PROMO = {
     "Please complete your profile. It'll take a moment to fill in your details to enhance your experience.",
   label: "Update Now!",
   showTill: "2022-01-19T19:00:00",
-  getRedirectUrl: (role:string) => appConfig.url +  "/"+role + "/settings/account",
+  getRedirectUrl: (role: string) => appConfig.url + "/" + role + "/settings/account",
   getConditionByUser: (user: Session["user"]) =>
     // user?.other_roles.includes(ROLES.STUDENT) &&
     user?.gender === "not_specified"
@@ -45,7 +45,7 @@ export default async function Layout({ children }: LayoutProps) {
           btnProps={{
             children: PROMO.label,
             variant: "default_light",
-            
+
           }}
         />
       </ConditionalRender>
