@@ -59,7 +59,7 @@ export default function CreateCommunityPost() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 p-4">
         <FormField
           control={form.control}
           name="title"
@@ -88,7 +88,7 @@ export default function CreateCommunityPost() {
                 <NexoMdxEditor
                   placeholder="Write a great post"
                   className="!h-auto p-0"
-                  rows={8}
+                  rows={12}
                   renderHtml={(md) => (
                     <MarkdownView className="prose max-w-full">
                       {md}

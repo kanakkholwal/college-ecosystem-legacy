@@ -385,7 +385,24 @@ body {
     --max-app-width: 1280px;
 
 }
-
+.nexo-mdx-editor .editor-container textarea{
+    @apply min-h-[80px] w-full rounded-md border border-input bg-card px-3 py-2 text-sm font-medium ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-primary/80 disabled:cursor-not-allowed disabled:opacity-50
+}
+.nexo-mdx-editor .preview-container{
+    @apply w-full rounded-md border border-input bg-card px-3 py-2 text-sm font-medium ring-offset-background empty:!p-0;
+}
+.nexo-mdx-editor .nexo-mdx-toolbar{
+    @apply bg-muted inline-flex space-x-[6px] items-center border border-border rounded-md px-2 py-1;
+}
+.nexo-mdx-editor .nexo-mdx-toolbar .nexo-mdx-toolbar_left p span.font-bold{
+    @apply font-medium text-sm text-muted-foreground leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70;
+}
+.nexo-mdx-editor .nexo-mdx-toolbar .nexo-mdx-toolbar_left p svg{
+    @apply size-4 text-muted-foreground;
+}
+.nexo-mdx-editor .nexo-mdx-toolbar .button{
+    @apply border border-transparent bg-input/50 text-muted-foreground shadow-none hover:shadow-none hover:text-foreground hover:bg-background focus-within:border-primary;
+}
 #gradient-canvas {
     width: 100%;
     height: 100%;

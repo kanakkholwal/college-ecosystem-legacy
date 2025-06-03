@@ -245,8 +245,8 @@ importers:
         specifier: ^5.0.9
         version: 5.1.5
       nexo-mdx:
-        specifier: ^0.8.6
-        version: 0.8.6(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite-plugin-dts@4.5.4(@types/node@22.15.19)(rollup@4.41.0)(typescript@5.8.3))
+        specifier: ^0.8.7
+        version: 0.8.7(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite-plugin-dts@4.5.4(@types/node@22.15.19)(rollup@4.41.0)(typescript@5.8.3))
       next:
         specifier: ^15.3.1
         version: 15.3.2(@opentelemetry/api@1.9.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -5777,8 +5777,8 @@ packages:
     resolution: {integrity: sha512-+EUsqGPLsM+j/zdChZjsnX51g4XrHFOIXwfnCVPGlQk/k5giakcKsuxCObBRu6DSm9opw/O6slWbJdghQM4bBg==}
     engines: {node: '>= 0.6'}
 
-  nexo-mdx@0.8.6:
-    resolution: {integrity: sha512-mfryrYt234jsX7+yOpUWTQoQflsAJ7WfZXi/s2tJt1PgfmU5H1OLvpJCHQ8xINPC+H9vpAjS//SIcShM1+dkOA==}
+  nexo-mdx@0.8.7:
+    resolution: {integrity: sha512-Peji/zR1D+TdXdBg+gLgY7qstBYRdivKUnMJ4lGQa+HGJ34nAa1P14V5oKS0eNpEA4dOaoOhREdd3/K2QGvVgg==}
     peerDependencies:
       vite-plugin-dts: ^4.0.0-beta.2
 
@@ -12934,11 +12934,11 @@ snapshots:
 
   negotiator@0.6.3: {}
 
-  nexo-mdx@0.8.6(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite-plugin-dts@4.5.4(@types/node@22.15.19)(rollup@4.41.0)(typescript@5.8.3)):
+  nexo-mdx@0.8.7(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(vite-plugin-dts@4.5.4(@types/node@22.15.19)(rollup@4.41.0)(typescript@5.8.3)):
     dependencies:
       '@radix-ui/react-dropdown-menu': 2.1.14(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-popover': 1.1.13(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
-      '@radix-ui/react-slot': 1.2.2(@types/react@19.1.4)(react@19.1.0)
+      '@radix-ui/react-slot': 1.2.3(@types/react@19.1.4)(react@19.1.0)
       class-variance-authority: 0.7.1
       classnames: 2.5.1
       clsx: 2.1.1

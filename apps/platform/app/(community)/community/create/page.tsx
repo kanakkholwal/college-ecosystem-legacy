@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 export default async function CreateCommunityPostPage() {
   return (
     <>
-      <div className="bg-card backdrop-blur-lg mt-5 rounded-lg p-4 @container/community">
+      <div className="bg-card backdrop-blur-lg mt-5 rounded-lg p-4 @container/community m-3">
         <div className="w-full flex justify-between items-baseline whitespace-nowrap gap-2">
           <h3 className="text-xl font-semibold">Create Community Post</h3>
         </div>

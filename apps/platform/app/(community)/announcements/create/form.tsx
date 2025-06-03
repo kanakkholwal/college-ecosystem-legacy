@@ -33,11 +33,11 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { VscSend } from "react-icons/vsc";
 import { createAnnouncement } from "src/lib/announcement/actions";
+import type { z } from "zod";
 import {
   RELATED_FOR_TYPES,
   rawAnnouncementSchema,
 } from "~/models/announcement";
-import type { z } from "zod";
 
 export default function CreateAnnouncement() {
   const form = useForm<z.infer<typeof rawAnnouncementSchema>>({
@@ -90,6 +90,8 @@ export default function CreateAnnouncement() {
               <FormLabel>The content of the announcement.</FormLabel>
               <FormControl>
                 <NexoMdxEditor
+                  rows={10}
+                  placeholder="Write the announcement content here..."
                   {...field}
                   disabled={form.formState.isSubmitting}
                   renderHtml={(md) => <MarkdownView>{md}</MarkdownView>}
