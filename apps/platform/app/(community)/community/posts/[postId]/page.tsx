@@ -1,5 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import '@mintlify/mdx/dist/styles.css';
+// import '@mintlify/mdx/dist/styles.css';
 import { formatDistanceToNow } from "date-fns";
 import { notFound } from "next/navigation";
 import { CATEGORY_IMAGES } from "src/constants/community";
