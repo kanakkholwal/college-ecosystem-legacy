@@ -14,7 +14,7 @@ import { AudioLines, CalendarRange } from "lucide-react";
 import { BiSpreadsheet } from "react-icons/bi";
 import { GrAnnounce, GrSchedules } from "react-icons/gr";
 import { MdOutlinePoll } from "react-icons/md";
-import { appConfig } from "~/project.config";
+import { appConfig, supportLinks } from "~/project.config";
 
 export type AllowedRoleType =
   | Session["user"]["role"]
@@ -350,24 +350,7 @@ const checkRoleAccess = (userRole: string, allowedRoles: string[]): boolean => {
   );
 };
 
-export const SUPPORT_LINKS = [
-  {
-    href: appConfig.githubRepo,
-    title: "Contribute to this project",
-  },
-  {
-    href: appConfig.githubRepo + "/issues",
-    title: "Report an issue",
-  },
-  {
-    href: "https://forms.gle/u2ptK12iRVdn5oXF7",
-    title: "Give a feedback",
-  },
-  {
-    href: "https://forms.gle/v8Angn9VCbt9oVko7",
-    title: "Suggest a feature",
-  },
-];
+export const SUPPORT_LINKS = supportLinks
 
 type NavLink = {
   title: string; href: string; description: string

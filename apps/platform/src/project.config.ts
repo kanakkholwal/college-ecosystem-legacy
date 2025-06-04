@@ -38,7 +38,26 @@ export const orgConfig = {
   mailSuffix: "@nith.ac.in",
 } as const;
 
+export const supportLinks = [
+  {
+    href: appConfig.githubRepo,
+    title: "Contribute to this project",
+  },
+  {
+    href: appConfig.githubRepo + "/issues",
+    title: "Report an issue",
+  },
+  {
+    href: "https://forms.gle/u2ptK12iRVdn5oXF7",
+    title: "Give a feedback",
+  },
+  {
+    href: "https://forms.gle/v8Angn9VCbt9oVko7",
+    title: "Suggest a feature",
+  },
+] as const
 export default {
   appConfig,
   orgConfig,
+  supportLinks
 } as const;
