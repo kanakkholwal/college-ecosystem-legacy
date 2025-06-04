@@ -18,7 +18,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { MDXRemote } from '@mintlify/mdx';
 import NexoMdxEditor from "nexo-mdx";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -89,11 +88,11 @@ export default function CreateCommunityPost() {
                   placeholder="Write a great post"
                   className="!h-auto p-0"
                   rows={12}
-                  renderHtml={(md) => (
-                    <div className="prose w-full prose-sm dark:prose-invert">
-                      <MDXRemote source={md} parseFrontmatter />
-                    </div>
-                  )}
+                  // renderHtml={(md) => (
+                  //   <div className="prose w-full prose-sm dark:prose-invert">
+                  //     <MDXRemote source={md} parseFrontmatter />
+                  //   </div>
+                  // )}
                   {...field}
                 />
               </FormControl>

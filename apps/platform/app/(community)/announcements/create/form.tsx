@@ -1,5 +1,4 @@
 "use client";
-import { MDXRemote } from '@mintlify/mdx';
 import NexoMdxEditor from "nexo-mdx";
 
 import { Button } from "@/components/ui/button";
@@ -97,9 +96,9 @@ export default function CreateAnnouncement() {
                   placeholder="Write the announcement content here..."
                   {...field}
                   disabled={form.formState.isSubmitting}
-                  renderHtml={(md) => <article className='prose prose-sm dark:prose-invert max-w-full'>
-                    <MDXRemote source={md} parseFrontmatter />
-                  </article>}
+                  // renderHtml={(md) => <article className='prose prose-sm dark:prose-invert max-w-full'>
+                  //   <MDXRemote source={md} parseFrontmatter />
+                  // </article>}
                 />
               </FormControl>
               <FormMessage />
