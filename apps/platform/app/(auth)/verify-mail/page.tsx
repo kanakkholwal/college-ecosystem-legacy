@@ -1,11 +1,7 @@
-import { AppLogo } from "@/components/logo";
 import { Card } from "@/components/ui/card";
-import { getSession } from "~/lib/auth-server";
 import VerifyEmail from "../sign-in/verify-mail";
 
-export default async function VerifyEmailPage() {
-  const data = await getSession();
-  // if (session) return redirect("/");
+export default  function VerifyEmailPage() {
 
   return (
     <div className="flex flex-col gap-6">
