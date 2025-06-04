@@ -1,6 +1,6 @@
+import { SMTP_SETTINGS } from "@/project.config";
+import { mailerPayloadSchema, type MailerPayload } from "@/types/schema";
 import nodemailer from "nodemailer";
-import {SMTP_SETTINGS} from "@/project.config";
-import {mailerPayloadSchema,type MailerPayload} from "@/types/schema";
 
 
 
@@ -16,6 +16,6 @@ export const handleEmailFire = async (from: string, data: MailerPayload) => {
 
   return await transporter.sendMail({
     from: from, // 'Sender Name <sender@server.com>'
-    ...res.data,
+    ...res.data, // to, subject, html
   });
 };

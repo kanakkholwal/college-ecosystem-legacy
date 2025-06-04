@@ -1,20 +1,12 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 import { render } from "@react-email/components";
+import { type NextRequest, NextResponse } from "next/server";
 
 import { getEmailTemplate } from "@/emails";
 import { handleEmailFire } from "@/emails/helper";
+import { appConfig } from "@/project.config";
+import { requestPayloadSchema } from "@/types/schema";
 
-const ORG_DOMAIN = "nith.ac.in";
 
-const payloadSchema = z.object({
-  template_key: z.string(),
-  targets: z.array(z.string().email()),
-  subject: z.string(),
-  payload: z.record(
-    z.union([z.string(), z.number(), z.array(z.string()), z.array(z.number())])
-  ),
-});
 
 export async function POST(request: NextRequest) {
   try {
@@ -36,7 +28,7 @@ export async function POST(request: NextRequest) {
 
     const body = await request.json();
 
-    const res = payloadSchema.safeParse(body);
+    const res = requestPayloadSchema.safeParse(body);
     if (!res.success) {
       return NextResponse.json(
         {
@@ -55,7 +47,7 @@ export async function POST(request: NextRequest) {
 
     const emailHtml = await render(EmailTemplate);
     const response = await handleEmailFire(
-      `College Platform <platform@${ORG_DOMAIN}>`,
+      appConfig.sender, // Use the sender email from appConfig
       {
         to: targets,
         subject: subject,
