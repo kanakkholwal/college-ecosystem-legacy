@@ -5,8 +5,6 @@
 
 /* @source "../app"; */
 
-/* add this to copy the configuration settings from your project */
-/* @config "./../tailwind.config.ts"; */
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 @custom-variant glass_dark (&:where([data-theme="glass_dark"], [data-theme="glass_dark"] *));

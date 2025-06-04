@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   description: "Create a post in the community",
 };
 
-export default async function CreateCommunityPostPage() {
+export default function CreateCommunityPostPage() {
   return (
     <main className="md:col-span-3 space-y-4 pr-2">
       <div className="bg-card backdrop-blur-lg mt-5 rounded-lg p-4 @container/community m-3">

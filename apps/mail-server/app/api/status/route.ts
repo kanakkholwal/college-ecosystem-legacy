@@ -1,22 +1,22 @@
-import { type NextRequest } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 
 
 
 // get status of the mail server
 export async function GET(request: NextRequest) {
     try {
-    
+        console.log("GET /status called", request);
         // Return a simple status message
-        return new Response(
-        JSON.stringify({ status: "Mail server is running" }),
-        { status: 200, headers: { "Content-Type": "application/json" } }
+        return NextResponse.json(
+            { status: "Mail server is running" },
+            { status: 200, headers: { "Content-Type": "application/json" } }
         );
     } catch (error) {
         console.error("Error in GET /status:", error);
-        return new Response(
-        JSON.stringify({ error: "Internal Server Error" }),
-        { status: 500, headers: { "Content-Type": "application/json" } }
+        return NextResponse.json(
+            { error: "Internal Server Error" },
+            { status: 500, headers: { "Content-Type": "application/json" } }
         );
     }
-    
+
 }

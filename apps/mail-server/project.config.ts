@@ -39,7 +39,7 @@ const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
 
 
 if (!MAIL_EMAIL || !MAIL_PASSWORD || !SMTP_HOST) {
-  throw new Error("Missing MAIL_EMAIL or MAIL_PASSWORD in environment variables");
+  throw new Error("Missing MAIL_EMAIL or MAIL_PASSWORD or SMTP_HOST in environment variables");
 }
 
 
