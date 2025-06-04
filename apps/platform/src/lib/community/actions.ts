@@ -22,7 +22,11 @@ export async function createPost(postData: RawCommunityPostType) {
     await dbConnect();
     const post = new CommunityPost({
       ...postData,
-      author: session.user.id,
+      author: {
+        id: session.user.id,
+        name: session.user.name,
+        username: session.user.username,
+      },
       views: 0,
       likes: [],
       savedBy: [],
@@ -44,7 +48,9 @@ export async function getPostsByCategory(
 ): Promise<CommunityPostTypeWithId[]> {
   try {
     await dbConnect();
-    const posts = await CommunityPost.find({ category })
+    const posts = await CommunityPost.find({
+      category: category === "all" ? { $exists: true } : category,
+    })
       .sort({ createdAt: -1 })
       .skip((page - 1) * limit)
       .limit(limit)
@@ -96,7 +102,7 @@ export async function updatePost(
     }
 
     // Check if the user is the author of the post
-    if (post.author.toString() !== session.user.id.toString()) {
+    if (("title" in updates || "content" in updates) && (post.author.id !== session.user.id || session.user.role !== "admin")) {
       return Promise.reject("You are not authorized to update this post");
     }
 

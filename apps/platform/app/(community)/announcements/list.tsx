@@ -1,6 +1,8 @@
-import MarkdownView from "@/components/common/markdown/view";
+import EmptyArea from '@/components/common/empty-area';
+import { MDXRemote } from '@mintlify/mdx';
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
+import { GrAnnounce } from "react-icons/gr";
 import type { AnnouncementTypeWithId } from "src/models/announcement";
 
 export default function AnnouncementsList({
@@ -8,17 +10,26 @@ export default function AnnouncementsList({
 }: {
   announcements: AnnouncementTypeWithId[];
 }) {
+  if (announcements.length === 0) {
+    return (
+      <EmptyArea
+        icons={[GrAnnounce]}
+        title="No announcements"
+        description="There are no announcements at the moment."
+      />
+    );
+  }
   return (
     <div className="grid gap-4 w-full">
       {announcements.map((announcement) => {
         return (
           <div
             key={announcement._id}
-            className="w-full mx-auto rounded-lg bg-card backdrop-blur-md p-6 space-y-4"
+            className="w-full mx-auto rounded-lg bg-card backdrop-blur-md p-3 lg:p-5 space-y-4"
           >
             <div>
-              <h3 className="text-lg font-medium">{announcement.title}</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="text-base font-medium">{announcement.title}</h3>
+              <p className="text-xs text-muted-foreground">
                 Posted{" "}
                 <span>
                   {formatDistanceToNow(new Date(announcement.createdAt), {
@@ -27,7 +38,7 @@ export default function AnnouncementsList({
                 </span>{" "}
                 in
                 <Link
-                  href={`/announcements?c=${announcement.relatedFor}`}
+                  href={`/announcements?category=${announcement.relatedFor}`}
                   className="text-primary hover:underline"
                 >
                   {` ${announcement.relatedFor}`}
@@ -37,12 +48,13 @@ export default function AnnouncementsList({
                   href={`/u/${announcement.createdBy.username}`}
                   className="text-primary hover:underline"
                 >
-                  {` ${announcement.createdBy.name}`}
+                  @{announcement.createdBy.username}
                 </Link>
-                {` (${announcement.createdBy.username})`}
               </p>
             </div>
-            <MarkdownView>{announcement.content}</MarkdownView>
+            <article className="prose prose-sm dark:prose-invert text-muted-foreground">
+              <MDXRemote source={announcement.content} parseFrontmatter />
+            </article>
           </div>
         );
       })}

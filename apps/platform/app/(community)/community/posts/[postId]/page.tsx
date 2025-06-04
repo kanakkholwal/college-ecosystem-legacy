@@ -1,6 +1,5 @@
-import MarkdownView from "@/components/common/markdown/view";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import '@mintlify/mdx/dist/styles.css';
 import { formatDistanceToNow } from "date-fns";
 import { notFound } from "next/navigation";
 import { CATEGORY_IMAGES } from "src/constants/community";
@@ -14,7 +13,10 @@ interface Props {
   }>;
 }
 
+import { MDXRemote } from "@mintlify/mdx";
+import { Dot } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
+import Link from "next/link";
 
 export async function generateMetadata(
   { params }: Props,
@@ -53,46 +55,46 @@ export default async function CommunityPost(props: Props) {
   console.log(post);
 
   return (
-    <>
-      <Card variant="glass">
-        <CardHeader>
-          <div className="flex flex-wrap items-center w-full mb-4">
-            <div className="flex gap-2">
-              <Avatar className="bg-gray-200 shadow">
-                <AvatarImage
-                  src={CATEGORY_IMAGES[post.category]}
-                  alt={post.category}
-                />
-                <AvatarFallback>
-                  {post.category[0].toUpperCase()}
-                </AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col gap-1">
-                <p className="text-sm text-gray-700 capitalize">
-                  {post.category} {" • "}
-                  <span className="text-sm text-gray-600 lowercase">
-                    {formatDistanceToNow(new Date(post.createdAt), {
-                      addSuffix: true,
-                    })}
-                  </span>
-                </p>
-                <p className="text-xs font-semibold">
-                  by @{typeof post.author !== "string" && post.author.username}
-                </p>
-              </div>
-            </div>
-          </div>
+    <main className="md:col-span-3 space-y-4 pr-2">
+      <div className="w-full mx-auto rounded-lg bg-card backdrop-blur-md p-3 lg:p-5 grid grid-cols-1 space-y-4">
+        <div className='inline-flex items-center gap-2'>
+          <Avatar className="size-10 rounded-full">
+            <AvatarImage
+              alt={post.author.username}
+              width={32}
+              height={32}
+              src={CATEGORY_IMAGES[post.category] ? CATEGORY_IMAGES[post.category] : `https://api.dicebear.com/5.x/initials/svg?seed=${post.category}`}
 
-          <CardTitle>{post.title}</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <MarkdownView className="prose prose-sm dark:prose-invert">
-            {post.content}
-          </MarkdownView>
-        </CardContent>
-        {/* biome-ignore lint/style/noNonNullAssertion: <explanation> */}
+            />
+            <AvatarFallback>
+              {post.category.charAt(0).toUpperCase()}
+            </AvatarFallback>
+          </Avatar>
+          <p className="text-xs text-muted-foreground">
+            <Link href={`/community?c=${post.category}`} className="hover:underline hover:text-primary font-medium">
+              c/{post.category}
+            </Link>
+            <Dot className="inline-block -mx-1" />
+            <span>
+              {formatDistanceToNow(new Date(post.createdAt), {
+                addSuffix: true,
+              })}
+            </span>
+            <br className="block" />
+            <Link
+              href={`/u/${post.author.username}`}
+              className="text-primary hover:underline -mt-1"
+            >
+              @{post.author.username}
+            </Link>
+          </p>
+        </div>
+        <h3 className="text-lg font-medium">{post.title}</h3>
+        <article className="border-l py-4  max-w-full prose prose-sm dark:prose-invert pl-2 bg-muted/10">
+          <MDXRemote source={post.content} parseFrontmatter />
+        </article>
         <PostFooter post={post} user={session?.user!} />
-      </Card>
-    </>
+      </div>
+    </main>
   );
 }

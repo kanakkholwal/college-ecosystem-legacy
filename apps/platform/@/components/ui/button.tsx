@@ -91,7 +91,7 @@ const buttonVariants = cva(
         slate:
           "bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-950 dark:hover:text-slate-100",
         link: "text-primary underline-offset-4 hover:underline",
-        dark: "bg-slate-900 text-white hover:bg-slate-800 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-200",
+        dark: "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-800",
         light:
           "bg-white shadow text-gray-700 hover:text-gray-700 border border-border",
         glass:

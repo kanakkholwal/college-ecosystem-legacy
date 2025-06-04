@@ -1,9 +1,12 @@
-import { cn } from "@/lib/utils";
-import Image from "next/image";
 import Link from "next/link";
 import { CATEGORIES } from "~/constants/community";
 
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
+import { getPostsByCategory } from "~/lib/community/actions";
+import CommunityPostList from "./list";
 
 export const metadata: Metadata = {
   title: 'Communities',
@@ -11,61 +14,53 @@ export const metadata: Metadata = {
 };
 
 export default async function CommunitiesPage(props: {
-  searchParams: Promise<{ category?: string }>;
+  searchParams: Promise<{
+    c?: string,
+    page?: number,
+    limit?: number
+  }>;
 }) {
-  // const searchParams = await props.searchParams;
-  // const category = searchParams.category || CATEGORIES[0].value;
+  const searchParams = await props.searchParams;
+  const category = searchParams.c || 'all'; // Default to 'all' if no category is provided
+  const page = searchParams.page || 1;
+  const limit = searchParams.limit || 10;
+
+  const posts = await getPostsByCategory(category, page, limit);
+
+  const activePopularCategory = CATEGORIES.find(c => c.value === category);
   return (
-    <div className="max-w-5xl mx-auto pb-32">
+    <>
 
-      <div className="ml-4">
-        <h2>
-          <span className="text-xl font-semibold text-center whitespace-nowrap">
-            Communities{" "}
-            <span className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-              Portal
-            </span>
-          </span>
-          <p className="mb-8 text-base text-muted-foreground">
-            Explore different communities and connect with like-minded
-            individuals.
-          </p>
-        </h2>
-      </div>
-
-      <div className="grid grid-cols-1 @lg:grid-cols-2 @3xl:grid-cols-3 items-stretch gap-4 w-full p-4">
-        {CATEGORIES.map((category) => {
-          return (
-            <Link
-              href={`/community/${category.value}`}
-              className={cn(
-                "inline-flex items-center justify-start gap-2 rounded-lg flex-col @md:flex-row bg-card p-4 font-medium text-muted-foreground transition-all border text-md w-full capitalize",
-                "transition-colors hover:shadow hover:border-primary/75"
-              )}
-              key={category.value}
-            >
-              <div className="p-2">
-                <Image
-                  src={category.image}
-                  alt={category.description}
-                  width={160}
-                  height={160}
-                  className="aspect-square size-12 rounded-md object-cover"
-                  priority
-                />
-              </div>
-              <div className="flex-1">
-                <h3 className="text-lg font-medium text-primary">
-                  {category.name}
-                </h3>
-                <p className="text-xs text-muted-foreground">
-                  {category.description}
-                </p>
-              </div>
+      {/* Feed */}
+      <main className="md:col-span-3 lg:col-span-2 space-y-4 pr-2">
+        <div className="md:sticky md:top-4 w-full max-w-2xl mx-1.5 lg:mx-auto flex justify-between items-center gap-2 bg-card px-2 lg:px-4 py-1 lg:py-2 rounded-lg border">
+          <h3 className="text-base font-medium">
+            Announcements
+            <Badge size="sm" className="ml-2">
+              {posts.length}
+            </Badge>
+          </h3>
+          <Button variant="ghost" size="sm" asChild>
+            <Link href="/community/create">
+              Create Announcement
+              <ArrowRight />
             </Link>
-          );
-        })}
-      </div>
-    </div>
+          </Button>
+        </div>
+        <CommunityPostList posts={posts} />
+
+      </main>
+      {/* Active Feed Details */}
+      {activePopularCategory ? (
+        <aside className="hidden lg:block md:col-span-1 space-y-4 sticky top-0 h-fit">
+          <div className="bg-card rounded-2xl shadow p-4">
+            <h2 className="text-base font-medium mb-2">c/{activePopularCategory.name}</h2>
+            <p className="text-sm text-muted-foreground">{activePopularCategory.description}
+            </p>
+          </div>
+        </aside>
+      ) : null}
+
+    </>
   );
 }

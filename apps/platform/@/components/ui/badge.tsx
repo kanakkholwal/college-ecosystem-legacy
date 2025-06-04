@@ -52,9 +52,9 @@ const badgeVariants = cva(
         outline: "border border-input bg-background shadow-sm hover:bg-accent",
       },
       size: {
-        sm: "px-2 py-0.5 text-xs font-regular",
-        md: "px-3 py-0.5 text-sm",
-        lg: "px-4 py-1 text-sm",
+        sm: "px-2 py-0.5 text-xs font-regular [&>svg]:size-3",
+        md: "px-3 py-0.5 text-sm  [&>svg]:size-4",
+        lg: "px-4 py-1 text-sm [&>svg]:size-5",
       },
     },
     defaultVariants: {

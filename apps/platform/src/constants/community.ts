@@ -19,7 +19,12 @@ export const CATEGORY_IMAGES: Record<string, string> = {
   others: "/assets/images/community.others.png",
 };
 
-export const CATEGORIES = [
+export const CATEGORIES:{
+  name: string;
+  value: typeof CATEGORY_TYPES[number];
+  image: string;
+  description: string;
+}[] = [
   {
     name: "Academics",
     value: "academics",

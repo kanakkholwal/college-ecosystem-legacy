@@ -7,6 +7,7 @@ import { GrAnnounce } from "react-icons/gr";
 import { getAnnouncements } from "src/lib/announcement/actions";
 import AnnouncementsList from "./list";
 
+import { Badge } from "@/components/ui/badge";
 import { Tabs, VercelTabsList } from "@/components/ui/tabs";
 import { ArrowRight } from "lucide-react";
 import type { Metadata } from "next";
@@ -31,14 +32,29 @@ export default async function AnnouncementsPage(props: {
     <div className="">
       <Tabs defaultValue={category} className="w-full grid gap-4">
         <VercelTabsList
-          tabs={RELATED_FOR_TYPES.map((category) => ({
-            label: changeCase(category, "camel_to_title"),
-            id: category,
-          }))}
+          tabs={[
+            {
+              label: "All",
+              id: "all",
+            },
+            ...RELATED_FOR_TYPES.map((category) => ({
+              label: changeCase(category, "camel_to_title"),
+              id: category,
+            })),
+          ]}
           onTabChangeQuery="category"
         />
-        <div className="w-full max-w-2xl mx-auto flex justify-between items-center gap-2 bg-card px-2 lg:px-4 py-1 lg:py-2 rounded-lg border">
-          <h3 className="text-base font-medium">Announcements</h3>
+        <div className="w-full max-w-2xl mx-1.5 lg:mx-auto flex justify-between items-center gap-2 bg-card px-2 lg:px-4 py-1 lg:py-2 rounded-lg border">
+          <h3 className="text-base font-medium">
+            Announcements
+            <Badge size="sm" className="ml-2">
+              {(RELATED_FOR_TYPES.includes(category as any) ?
+                announcements.filter(
+                  (announcement) =>
+                    announcement.relatedFor === category
+                ) : announcements).length}
+            </Badge>
+          </h3>
           <Button variant="link" size="sm" asChild>
             <Link href="/announcements/create">
               Create Announcement
@@ -46,7 +62,7 @@ export default async function AnnouncementsPage(props: {
             </Link>
           </Button>
         </div>
-        <div className="grid grid-cols-1 gap-4 columns-1 snap-y snap-mandatory p-4">
+        <div className="grid grid-cols-1 gap-4 columns-1 snap-y snap-mandatory px-2 lg:px-4 w-full max-w-2xl mx-auto">
           {announcements.length === 0 && (
             <EmptyArea
               icons={[GrAnnounce]}
@@ -55,7 +71,13 @@ export default async function AnnouncementsPage(props: {
             />
           )}
           <Suspense fallback={<div>Loading...</div>}>
-            <AnnouncementsList announcements={announcements} />
+            <AnnouncementsList announcements={
+              RELATED_FOR_TYPES.includes(category as any) ?
+                announcements.filter(
+                  (announcement) =>
+                    announcement.relatedFor === category
+                ) : announcements
+            } />
           </Suspense>
         </div>
       </Tabs>

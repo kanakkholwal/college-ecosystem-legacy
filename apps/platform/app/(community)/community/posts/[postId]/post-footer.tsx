@@ -1,9 +1,7 @@
 "use client";
+import ShareButton from "@/components/common/share-button";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CardFooter } from "@/components/ui/card";
-import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
-import { useShare } from "@/hooks/useShare";
 import { Bookmark, BookmarkCheck, Eye, Share, ThumbsUp } from "lucide-react";
 
 import { useState } from "react";
@@ -11,6 +9,7 @@ import type { Session } from "src/lib/auth-client";
 import { updatePost } from "src/lib/community/actions";
 import type { CommunityPostTypeWithId } from "src/models/community";
 import { formatNumber } from "src/utils/number";
+import { appConfig } from "~/project.config";
 
 export default function PostFooter({
   post,
@@ -19,23 +18,23 @@ export default function PostFooter({
   post: CommunityPostTypeWithId;
   user: Session["user"];
 }) {
-  const { share, socials } = useShare({
-    title: post.title,
-    text: post.content,
-    url: `${process.env.NEXT_PUBLIC_BASE_URL}/community/posts/${post._id}`,
-  });
+
 
   // refactor this with useTransition after react 19
   const [liking, setLiking] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
 
   return (
-    <CardFooter className="gap-2 w-full justify-between">
+    <div className="inline-flex items-center gap-3 w-full justify-between">
       <div className="flex gap-2 items-center">
+        <Badge>
+          <Eye />
+          {formatNumber(post.views)}
+        </Badge>
         <Button
-          size="sm"
+          size="xs"
           disabled={liking}
-          variant={post.likes.includes(user.id) ? "default_light" : "glass"}
+          variant={post.likes.includes(user.id) ? "default_light" : "outline"}
           onClick={() => {
             setLiking(true);
             updatePost(post._id, {
@@ -50,9 +49,9 @@ export default function PostFooter({
           <span>Like</span>
         </Button>
         <Button
-          size="sm"
+          size="xs"
           disabled={saving}
-          variant={post.savedBy.includes(user.id) ? "default_light" : "glass"}
+          variant={post.savedBy.includes(user.id) ? "default_light" : "outline"}
           onClick={() => {
             setSaving(true);
             updatePost(post._id, {
@@ -66,57 +65,19 @@ export default function PostFooter({
           <span>{formatNumber(post.savedBy.length)}</span>
           <span>Save</span>
         </Button>
-
-        <ResponsiveDialog
-          title={"Share this Post"}
-          description={"Share this post with your friends"}
-          btnProps={{
-            variant: "glass",
-            size: "sm",
-            children: (
-              <>
-                <Share />
-                <span>Share</span>
-              </>
-            ),
+        <ShareButton
+          data={{
+            title: post.title,
+            text: post.content,
+            url: appConfig.url + `/community/posts/${post._id}`,
           }}
-        >
-          <div className="grid grid-cols-2 gap-2">
-            {socials.map((social, index) => {
-              return (
-                <Button
-                  key={social.name + index.toString()}
-                  size="sm"
-                  variant="default_light"
-                  className="w-full justify-start"
-                  onClick={() => {
-                    window.open(social.url, "_blank");
-                  }}
-                >
-                  <social.icon />
-                  {social.name}
-                </Button>
-              );
-            })}
-            <Button
-              size="sm"
-              variant="default_light"
-              className="w-full justify-start"
-              onClick={() => {
-                share();
-              }}
-            >
-              <span>More</span>
-            </Button>
-          </div>
-        </ResponsiveDialog>
+          variant="ghost" size="xs">
+          <Share />
+          Share
+        </ShareButton>
+
       </div>
-      <div className="flex gap-2 items-center">
-        <Badge className="gap-1" variant="glass">
-          <Eye size={16} />
-          <span>{formatNumber(post.views)}</span>
-        </Badge>
-      </div>
-    </CardFooter>
+
+    </div>
   );
 }
