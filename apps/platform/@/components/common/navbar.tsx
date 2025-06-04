@@ -2,9 +2,12 @@
 import ProfileDropdown from "@/components/common/profile-dropdown";
 import { SUPPORT_LINKS, getNavLinks, socials } from "@/constants/links";
 import { cn } from "@/lib/utils";
+import { ArrowUpRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import type { Session } from "~/lib/auth";
 import { appConfig } from "~/project.config";
+import GithubStars from "./github";
 import { NavTabs } from "./nav-tabs";
 import { ThemeSwitcher } from "./theme-switcher";
 
@@ -27,11 +30,26 @@ export default function Navbar({ user }: NavbarProps) {
       <div className="w-full max-w-(--max-app-width) mx-auto flex items-center justify-between px-4 py-2">
         <Link
           href="/"
-          className="relative  font-bold text-xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:from-secondary hover:to-primary lg:text-xl whitespace-nowrap"
+          className="relative font-bold text-xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:from-secondary hover:to-primary lg:text-xl whitespace-nowrap"
         >
-          {appConfig.name}
+          <Image
+            src={appConfig.logo}
+            alt="Logo"
+            width={280}
+            height={80}
+            className="h-8 w-auto object-contain relative block dark:hidden"
+          />
+          <Image
+            src={appConfig.logoDark}
+            alt="Logo"
+            width={280}
+            height={80}
+            className="h-8 w-auto object-contain relative hidden dark:block"
+          />
+          <span className="sr-only">{appConfig.name}</span>
         </Link>
         <div className="ml-auto flex gap-2 items-center">
+          <GithubStars className="hidden lg:inline-flex"/>
           <ThemeSwitcher />
           <ProfileDropdown user={user} />
         </div>
@@ -67,7 +85,7 @@ export function SocialBar() {
             key={link.href}
             className={cn(
               "inline-flex items-center justify-center rounded-md text-sm font-medium disabled:pointer-events-none disabled:opacity-50 p-1.5 [&_svg]:size-5 size-8 icon text-muted-foreground md:[&_svg]:size-4.5",
-              "hover:bg-accent hover:text-primary hover:-translate-y-1 ease-in transition-all duration-300 flex justify-center items-center"
+              "hover:bg-muted hover:text-primary hover:-translate-y-1 ease-in transition-all duration-300 flex justify-center items-center"
             )}
           >
             <link.icon />
@@ -80,7 +98,7 @@ export function SocialBar() {
 
 export function SupportBar() {
   return (
-    <div className="inline-flex flex-wrap items-center empty:hidden gap-2 mx-auto justify-center md:justify-start">
+    <div className="inline-flex flex-wrap items-center empty:hidden gap-2 justify-center md:justify-start">
       {SUPPORT_LINKS.map((link) => {
         return (
           <Link
@@ -88,10 +106,11 @@ export function SupportBar() {
             target="_blank"
             key={link.href}
             className={cn(
-              "inline-flex items-center gap-1 p-2 text-muted-foreground transition-colors hover:text-primary data-[active=true]:text-primary [&_svg]:size-4 text-xs font-medium"
+              "group inline-flex items-center gap-1 p-2 text-muted-foreground transition-colors hover:text-primary data-[active=true]:text-primary [&_svg]:size-4 text-xs font-medium"
             )}
           >
             {link.title}
+            <ArrowUpRight className="group-hover:translate-x-1 transition-transform" />
           </Link>
         );
       })}

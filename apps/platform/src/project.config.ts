@@ -1,17 +1,16 @@
 // Project configuration for the College Ecosystem platform
 
-import { socials } from "@/constants/links";
 
 // This file contains the configuration for the app and college
 export const appConfig = {
   name: "College Platform",
   appDomain: "nith.eu.org",
   url: "https://app.nith.eu.org",
+  logoSquare: "/logo-square.svg",
+  logo: "/logo.svg",
+  logoDark: "/logo-dark.svg",
   // appDomain: "college-ecosystem.vercel.app",
   // url: "https://college-ecosystem.vercel.app",
-  // logoSquare: "/logo-square.png",
-  // logo: "/logo.png",
-  // logoDark: "/logo-dark.png",
   description:
     "A platform for students, faculty, and staff to interact and collaborate.",
   keywords:
@@ -22,6 +21,7 @@ export const appConfig = {
     { name: "NITH", url: "https://nith.ac.in" },
   ],
   githubRepo: "https://github.com/kanakkholwal/college-ecosystem",
+  githubUri: "kanakkholwal/college-ecosystem",
     socials: {
     twitter: "https://twitter.com/kanakkholwal",
     linkedin: "https://linkedin.com/in/kanakkholwal",

@@ -5,15 +5,11 @@
 
 /* @source "../app"; */
 
-
 /* add this to copy the configuration settings from your project */
 /* @config "./../tailwind.config.ts"; */
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 @custom-variant glass_dark (&:where([data-theme="glass_dark"], [data-theme="glass_dark"] *));
-
-
-
 
 :root,
 [data-theme="light"],
@@ -41,7 +37,6 @@
     --ring: hsl(262.1 83.3% 57.8%);
     --radius: 0.5rem;
 
-
     --chart-1: hsl(238.73deg 83.53% 66.67%);
     --chart-2: hsl(349.72deg 89.16% 60.2%);
     --chart-3: hsl(16.79deg 86.55% 56.27%);
@@ -60,7 +55,6 @@
     --sidebar-accent-foreground: hsl(240 5.9% 10%);
     --sidebar-border: hsl(220 13% 91%);
     --sidebar-ring: hsl(217.2 91.2% 59.8%);
-
 
     --text-primary: hsl(0deg 0% 96.08%);
     --text-secondary: hsl(0deg 0% 9.8%);
@@ -176,10 +170,8 @@
     --color-sidebar-border: var(--sidebar-border);
     --color-sidebar-ring: var(--sidebar-ring);
 
-
     --font-mono: 'Fira Code', 'Courier New', 'Courier', 'monospace';
     --font-sans: 'Inter', 'Helvetica', 'Arial', sans-serif;
-
 
     --shadow-button: 0px -1px 0px 0px hsla(0, 0%, 100%, 0.04), 0px 0px 0px 1px hsla(0, 0%, 100%, 0.12), 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 2px 0px rgba(0, 0, 0, 0.04), 0px 6px 3px 0px rgba(0, 0, 0, 0.04);
 
@@ -190,7 +182,6 @@
     --animate-border-beam: border-beam calc(var(--duration)*1s) infinite linear;
     --animate-collapsible-down: collapsible-down 0.2s ease-out;
     --animate-collapsible-up: collapsible-up 0.2s ease-out;
-
 
     @keyframes accordion-down {
         0% {
@@ -262,10 +253,27 @@
         }
     }
 
-}
+    --animate-rainbow: rainbow var(--speed, 2s) infinite linear;
 
+    --color-color-5: var(--color-5);
 
+    --color-color-4: var(--color-4);
 
+    --color-color-3: var(--color-3);
+
+    --color-color-2: var(--color-2);
+
+    --color-color-1: var(--color-1)
+
+;
+  @keyframes rainbow {
+  0% {
+    background-position: 0%;
+        }
+  100% {
+    background-position: 200%;
+        }
+    }}
 
 @layer base {
 
@@ -332,7 +340,6 @@
         scrollbar-color: hsl(var(--primary) / 0.6) hsl(var(--muted));
     }
 
-
     button:not(:disabled),
     [role="button"]:not(:disabled),
     a {
@@ -371,8 +378,6 @@
 
 }
 
-
-
 body {
     font-weight: 400;
     font-size: 16px;
@@ -400,8 +405,6 @@ body {
     --gradient-color-3: #eae2ff;
     --gradient-color-4: #b9beff;
 }
-
-
 
 @layer components {
     .glass {
@@ -456,4 +459,29 @@ body {
         /* Firefox */
     }
 
+}
+
+:root {
+    --color-1: oklch(66.2% 0.225 25.9);
+    --color-2: oklch(60.4% 0.26 302);
+    --color-3: oklch(69.6% 0.165 251);
+    --color-4: oklch(80.2% 0.134 225);
+    --color-5: oklch(90.7% 0.231 133);
+}
+
+.dark {
+    --color-1: oklch(66.2% 0.225 25.9);
+    --color-2: oklch(60.4% 0.26 302);
+    --color-3: oklch(69.6% 0.165 251);
+    --color-4: oklch(80.2% 0.134 225);
+    --color-5: oklch(90.7% 0.231 133);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
+    }
 }

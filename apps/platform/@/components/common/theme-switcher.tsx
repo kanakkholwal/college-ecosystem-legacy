@@ -56,7 +56,7 @@ export const ThemeSwitcher = ({ onChange, className }: ThemeSwitcherProps) => {
   return (
     <div
       className={cn(
-        "relative ",
+        "relative",
         className
       )}
     >

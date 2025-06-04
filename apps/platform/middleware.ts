@@ -81,6 +81,7 @@ function checkAuthorization(
 }
 
 export async function middleware(request: NextRequest) {
+  
   const url = new URL(request.url);
   // if the request is for the sign-in page, allow it to pass through
   const { data: session } = await betterFetch<Session>(
@@ -114,6 +115,11 @@ export async function middleware(request: NextRequest) {
     }
     // if the user is already authenticated
     // manage the dashboard routes
+    if(request.nextUrl.pathname.slice(1) === "/dashboard"){
+      return NextResponse.redirect(
+          new URL(request.nextUrl.pathname.replace("/dashboard", session.user.other_roles[0]), request.url)
+        );
+    }
     if (request.method === "GET" && 
       DashboardRoutes.includes(request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number])) {
       const authCheck = checkAuthorization(

@@ -45,7 +45,7 @@ export const metadata: Metadata = {
     siteName: appConfig.name,
     images: [
       {
-        url: "https://v4.shadcn.com/opengraph-image.png",
+        url: appConfig.logo,
         width: 1200,
         height: 630,
         alt: appConfig.name,
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: appConfig.name,
     description: appConfig.description,
-    images: ["https://github.com/kanakkholwal.png"],
+    images: [appConfig.logo],
     creator: "@kanakkholwal",
   },
   icons: {

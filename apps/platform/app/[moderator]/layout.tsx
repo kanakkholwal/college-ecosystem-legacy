@@ -2,6 +2,7 @@ import Navbar from "@/components/common/app-navbar";
 import { AppSidebar } from "@/components/common/sidebar/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata, ResolvingMetadata } from "next";
+import { notFound } from "next/navigation";
 import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
@@ -25,7 +26,7 @@ const ALLOWED_ROLES = [
 interface DashboardLayoutProps {
   children: React.ReactNode;
   params: Promise<{
-    moderator: (typeof ALLOWED_ROLES)[number];
+    moderator: string;
   }>;
 }
 
@@ -47,6 +48,9 @@ export default async function DashboardLayout({
   params,
 }: DashboardLayoutProps) {
   const { moderator } = await params;
+  if(!ALLOWED_ROLES.includes(moderator as (typeof ALLOWED_ROLES)[number]) && moderator !== "dashboard"){
+    return notFound()
+  }
 
   const session = (await getSession()) as Session;
 
