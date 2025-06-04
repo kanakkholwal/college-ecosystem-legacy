@@ -41,7 +41,7 @@ export default async function Dashboard({ params }: Props) {
 
   return (
     <>
-      <div className="flex items-center justify-between gap-2 mx-auto max-w-7xl w-full mt-20">
+      <div className="flex items-center justify-between gap-2 mx-auto max-w-7xl w-full mt-12 p-3">
         <Button variant="default_light" size="sm" asChild>
           <Link href={"/schedules"}>
             <ArrowLeft />

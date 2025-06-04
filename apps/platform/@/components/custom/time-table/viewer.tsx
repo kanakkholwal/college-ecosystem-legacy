@@ -25,25 +25,25 @@ export default async function TimeTableViewer({
 
   return (
     <>
-      <div className="flex items-center justify-between gap-2 flex-col md:flex-row mx-auto max-w-7xl w-full mt-20">
+      <div className="flex items-center justify-between gap-2 flex-col md:flex-row mx-auto w-full p-3">
         <div>
           <h4 className="text-lg font-semibold">
             {timetableData?.sectionName} {" | "}
             {getDepartmentName(timetableData?.department_code)}
           </h4>
-          <div className="flex h-5 items-center space-x-4 text-sm text-gray-700">
+          <div className="flex h-5 items-center space-x-4 text-sm text-muted-foreground">
             <div>{timetableData?.year} Year</div>
-            <Separator orientation="vertical" className="bg-gray-600" />
+            <Separator orientation="vertical"/>
             <div>{timetableData?.semester} Semester</div>
           </div>
         </div>
       </div>
-      <Table className="mx-auto max-w-7xl bg-white/20 backdrop-blur-2xl rounded-lg overflow-hidden">
+      <Table className="bg-card backdrop-blur-2xl rounded-lg overflow-hidden">
         <TableHeader>
           <TableRow>
             <TableHead
               className={cn(
-                "sticky top-0 z-10 border-x text-center text-gray-700 min-w-40 whitespace-nowrap"
+                "sticky top-0 z-10 border-x h-10 text-center text-muted-foreground min-w-40 whitespace-nowrap p-2"
               )}
             >
               Time \ Day
@@ -53,10 +53,10 @@ export default async function TimeTableViewer({
                 <TableHead
                   key={index}
                   className={cn(
-                    "sticky top-0 z-10 border-x text-center ",
+                    "sticky top-0 z-10 border-x h-10 text-center p-2",
                     currentDayIndex === index
-                      ? "text-primary bg-primary/10"
-                      : " text-gray-700"
+                      ? "text-primary bg-primary/5"
+                      : " text-muted-foreground"
                   )}
                 >
                   {day}
@@ -68,10 +68,10 @@ export default async function TimeTableViewer({
             })}
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="relative isolate">
           {Array.from(timeMap.entries()).map(([index, time]) => (
             <TableRow key={index}>
-              <TableCell className="sticky left-0 z-10 border-x text-center text-semibold whitespace-nowrap">
+              <TableCell className="sticky left-0 z-10 border-x text-center text-xs text-semibold whitespace-nowrap p-2">
                 {time}
               </TableCell>
               {Array.from(daysMap.entries()).map((_, dayIndex) => (
@@ -81,9 +81,9 @@ export default async function TimeTableViewer({
                     dayIndex
                   }`}
                   className={cn(
-                    "border-x text-center ",
+                    "border-x text-center p-2",
                     currentDayIndex === dayIndex
-                      ? "text-primary bg-primary/10"
+                      ? "text-primary bg-primary/5"
                       : ""
                   )}
                 >

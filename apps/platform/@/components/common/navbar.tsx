@@ -7,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Session } from "~/lib/auth";
 import { appConfig } from "~/project.config";
-import GithubStars from "./github";
 import { NavTabs } from "./nav-tabs";
 import { ThemeSwitcher } from "./theme-switcher";
 
@@ -49,7 +48,6 @@ export default function Navbar({ user }: NavbarProps) {
           <span className="sr-only">{appConfig.name}</span>
         </Link>
         <div className="ml-auto flex gap-2 items-center">
-          <GithubStars className="hidden lg:inline-flex"/>
           <ThemeSwitcher />
           <ProfileDropdown user={user} />
         </div>
