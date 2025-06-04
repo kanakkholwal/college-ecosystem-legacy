@@ -63,22 +63,20 @@ export default async function AnnouncementsPage(props: {
           </Button>
         </div>
         <div className="grid grid-cols-1 gap-4 columns-1 snap-y snap-mandatory px-2 lg:px-4 w-full max-w-2xl mx-auto">
-          {announcements.length === 0 && (
+          {announcements.length === 0 ? (
             <EmptyArea
               icons={[GrAnnounce]}
               title="No announcements"
               description="There are no announcements at the moment."
             />
-          )}
-          <Suspense fallback={<div>Loading...</div>}>
+          ) : (
             <AnnouncementsList announcements={
               RELATED_FOR_TYPES.includes(category as any) ?
                 announcements.filter(
                   (announcement) =>
-                    announcement.relatedFor === category
-                ) : announcements
-            } />
-          </Suspense>
+                  announcement.relatedFor === category
+              ) : announcements
+          } />)}
         </div>
       </Tabs>
 

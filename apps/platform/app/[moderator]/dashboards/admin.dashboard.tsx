@@ -1,4 +1,5 @@
 import { NumberTicker } from "@/components/animation/number-ticker";
+import { ChartPieDonutText } from "@/components/application/chart-pie";
 import { StatsCard } from "@/components/application/stats-card";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/typography";
@@ -61,13 +62,12 @@ export default async function AdminDashboard() {
 
               <p className="text-xs text-muted-foreground">
                 <span
-                  className={`${
-                    userTrend === 1
-                      ? "text-green-500"
-                      : userTrend === -1
-                        ? "text-red-500"
-                        : "text-primary/80"
-                  } text-base`}
+                  className={`${userTrend === 1
+                    ? "text-green-500"
+                    : userTrend === -1
+                      ? "text-red-500"
+                      : "text-primary/80"
+                    } text-base`}
                 >
                   {userTrend === 1 ? (
                     <TrendingUp className="inline-block mr-2 size-4" />
@@ -127,6 +127,31 @@ export default async function AdminDashboard() {
                   </li>
                 ))}
               </ul>
+              <ChartPieDonutText
+                data={usersByGender}
+                config={{
+                  count: {
+                    label: "Users",
+                  },
+                  male: {
+                    label: "Male",
+                    color: "var(--chart-1)",
+                  },
+                  female: {
+                    label: "Female",
+                    color: "var(--chart-2)",
+                  },
+                  not_specified: {
+                    label: "Not Specified",
+                    color: "var(--chart-3)",
+                  },
+                }}
+                dataKey="count"
+                nameKey="gender"
+                valueLabel="Total Users"
+                innerRadius={60}
+                strokeWidth={5}
+              />
             </StatsCard>
 
             {/* Users by Role Card */}
