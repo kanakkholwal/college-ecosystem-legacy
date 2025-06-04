@@ -14,7 +14,7 @@ export default function ErrorBoundary({
     console.error(error);
   }, [error]);
   return (
-    <div className="flex items-center justify-center w-full h-full py-20">
+    <div className="flex items-center justify-center w-full h-full py-20 md:col-span-3">
       <ErrorBanner error={error} />
     </div>
   );
