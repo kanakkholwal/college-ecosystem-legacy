@@ -12,9 +12,10 @@ import {
   Text,
 } from "@react-email/components";
 
-const baseUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "";
+import { appConfig } from "@/project.config";
+
+
+
 
 export default function EmailWrapper({
   children,
@@ -41,42 +42,53 @@ export default function EmailWrapper({
               <Row>
                 <Column className="w-[80%]">
                   <Img
-                    alt="React Email logo"
+                    alt={appConfig.name}
                     height="42"
-                    src="https://react.email/static/logo-without-background.png"
+                    src={appConfig.logo}
                   />
                 </Column>
                 <Column align="right">
                   <Row align="right">
                     <Column>
-                      <Link href="https://x.com/kanakkholwal">
+                      <Link href={appConfig.socials.twitter}>
                         <Img
                           alt="X"
                           className="mx-[4px]"
                           height="36"
-                          src="https://react.email/static/x-logo.png"
+                          src="https://cdn-icons-png.flaticon.com/512/5968/5968958.png"
                           width="36"
                         />
                       </Link>
                     </Column>
                     <Column>
-                      <Link href="https://instagram.com/kanakkholwal">
+                      <Link href={appConfig.socials.linkedin}>
+                        <Img
+                          alt="X"
+                          className="mx-[4px]"
+                          height="36"
+                          src="https://cdn-icons-png.flaticon.com/512/3536/3536505.png"
+                          width="36"
+                        />
+                      </Link>
+                    </Column>
+                    <Column>
+                      <Link href={appConfig.socials.instagram}>
                         <Img
                           alt="Instagram"
                           className="mx-[4px]"
                           height="36"
-                          src={`${baseUrl}/static/github-logo.png`}
+                          src="https://cdn-icons-png.flaticon.com/512/15713/15713420.png"
                           width="36"
                         />
                       </Link>
                     </Column>
                     <Column>
-                      <Link href="https://github.com/kanakkholwal">
+                      <Link href={appConfig.socials.github}>
                         <Img
                           alt="Github"
                           className="mx-[4px]"
                           height="36"
-                          src="https://react.email/static/github-logo.png"
+                          src="https://cdn-icons-png.flaticon.com/512/1051/1051377.png"
                           width="36"
                         />
                       </Link>
@@ -92,19 +104,19 @@ export default function EmailWrapper({
                 <tr className="w-full">
                   <td align="center">
                     <Img
-                      alt="React Email logo"
+                      alt={appConfig.name}
                       height="42"
-                      src="https://react.email/static/logo-without-background.png"
+                      src={appConfig.logo}
                     />
                   </td>
                 </tr>
                 <tr className="w-full">
                   <td align="center">
                     <Text className="my-[8px] text-[16px] font-semibold leading-[24px] text-gray-900">
-                      College Platform
+                      {appConfig.name}
                     </Text>
                     <Text className="mb-0 mt-[4px] text-[16px] leading-[24px] text-gray-500">
-                      Think different
+                      {appConfig.tagline}
                     </Text>
                   </td>
                 </tr>

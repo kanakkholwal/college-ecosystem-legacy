@@ -294,19 +294,19 @@ interface SocialLink {
 
 export const socials: SocialLink[] = [
   {
-    href: "https://x.com/kanakkholwal",
+    href: appConfig.socials.twitter,
     icon: RiTwitterXFill,
   },
   {
-    href: "https://linkedin.com/in/kanak-kholwal",
+    href: appConfig.socials.linkedin,
     icon: FiLinkedin,
   },
   {
-    href: "https://github.com/kanakkholwal",
+    href: appConfig.socials.github,
     icon: LuGithub,
   },
   {
-    href: "https://instagram.com/kanakkholwal",
+    href: appConfig.socials.instagram,
     icon: BsInstagram,
   },
 ];

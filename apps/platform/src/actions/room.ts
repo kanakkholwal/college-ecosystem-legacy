@@ -20,8 +20,8 @@ type UsageHistorySelect = InferSelectModel<typeof roomUsageHistory>;
 
 export async function getRoomByIdForAdmin(roomId: string): Promise<
   | (RoomSelect & {
-      usageHistory: { username: string; name: string; createdAt: Date }[];
-    })
+    usageHistory: { username: string; name: string; createdAt: Date }[];
+  })
   | null
 > {
   "use server";
@@ -117,9 +117,9 @@ export async function listAllRoomsWithHistory(filters?: {
   // Apply filters if any
   const roomQuery = conditions.length
     ? db
-        .select()
-        .from(rooms)
-        .where(and(...conditions))
+      .select()
+      .from(rooms)
+      .where(and(...conditions))
     : db.select().from(rooms);
 
   const filteredRooms = await roomQuery;
@@ -223,23 +223,36 @@ export async function deleteRoom(roomId: string): Promise<RoomSelect> {
   if (!session || !session.user || session.user.role !== "admin") {
     throw new Error("Unauthorized: Only admins can delete rooms");
   }
-  const [deletedRoom] = await db
-    .delete(rooms)
-    .where(eq(rooms.id, roomId))
-    .returning();
+  try {
+    // Start a transaction
+    const deletedRoom = await db.transaction(async (tx) => {
+      // First delete usage history associated with the room
+      await tx.delete(roomUsageHistory).where(eq(roomUsageHistory.roomId, roomId));
 
-  if (!deletedRoom) {
-    throw new Error(`Failed to delete room with ID: ${roomId}`);
+      // Then delete the room itself
+      const [room] = await tx
+        .delete(rooms)
+        .where(eq(rooms.id, roomId))
+        .returning();
+
+      if (!room) {
+        throw new Error(`Failed to delete room with ID: ${roomId}`);
+      }
+
+      return room;
+    });
+
+    // Only revalidate paths if transaction succeeds
+    revalidatePath("/classroom-availability", "page");
+    revalidatePath("/admin/rooms", "page");
+    revalidatePath("/cr/rooms", "page");
+    revalidatePath("/faculty/rooms", "page");
+
+    return deletedRoom;
+  } catch (error) {
+    console.error("Failed to delete room:", error);
+    throw new Error(`Failed to delete room: ${error instanceof Error ? error.message : String(error)}`);
   }
-
-  // Delete usage history associated with the room
-  await db.delete(roomUsageHistory).where(eq(roomUsageHistory.roomId, roomId));
-  revalidatePath("/classroom-availability", "page");
-  revalidatePath("/admin/rooms", "page");
-  revalidatePath("/cr/rooms", "page");
-  revalidatePath("/faculty/rooms", "page");
-
-  return deletedRoom;
 }
 
 // Function to add usage history to a room

@@ -1,18 +1,17 @@
 import {
   integer,
-  jsonb,
   pgTable,
   text,
   timestamp,
   uuid,
-  varchar,
+  varchar
 } from "drizzle-orm/pg-core";
 import { users } from "./auth-schema";
 
 // Sub-schema for Usage History
 export const roomUsageHistory = pgTable("room_usage_history", {
   id: uuid("id").defaultRandom().primaryKey(),
-  roomId: uuid("room_id").references(() => rooms.id),
+  roomId: uuid("room_id").references(() => rooms.id, { onDelete: 'cascade' }),
   userId: text("userId")
     .notNull()
     .references(() => users.id),

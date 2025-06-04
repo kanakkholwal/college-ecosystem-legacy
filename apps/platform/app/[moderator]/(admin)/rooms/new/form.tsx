@@ -45,7 +45,7 @@ export default function CreateRoomForm({
     resolver: zodResolver(roomSchema),
     defaultValues: {
       roomNumber: "",
-      roomType: "classroom",
+      roomType: roomTypes[0],
       capacity: 0,
       currentStatus: "occupied",
       lastUpdatedTime: new Date(),
@@ -97,7 +97,7 @@ export default function CreateRoomForm({
                 <FormLabel>Room Type</FormLabel>
                 <Select
                   onValueChange={(value) =>
-                    field.onChange(value.trim().toUpperCase())
+                    field.onChange(value.trim())
                   }
                   defaultValue={field.value}
                 >

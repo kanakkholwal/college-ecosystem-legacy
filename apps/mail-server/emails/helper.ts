@@ -1,29 +1,21 @@
 import nodemailer from "nodemailer";
+import {SMTP_SETTINGS} from "@/project.config";
+import {mailerPayloadSchema,type MailerPayload} from "@/types/schema";
 
-type Payload = {
-  to: string[];
-  subject: string;
-  html: string;
-};
 
-const smtpSettings = {
-  host: "smtp-relay.sendinblue.com", // "smtp.gmail.com", //replace with your email provider
-  port: 587,
-  // secure: false, // true for 465, false for other ports
-  auth: {
-    user: process.env.MAIL_EMAIL as string,
-    pass: process.env.MAIL_PASSWORD as string,
-  },
-};
 
-export const handleEmailFire = async (from: string, data: Payload) => {
+export const handleEmailFire = async (from: string, data: MailerPayload) => {
+  // Validate the payload`
+  const res = mailerPayloadSchema.safeParse(data);
+  if (!res.success) {
+    throw new Error(res.error.message);
+  }
   const transporter = nodemailer.createTransport({
-    ...smtpSettings,
+    ...SMTP_SETTINGS,
   });
 
   return await transporter.sendMail({
     from: from, // 'Sender Name <sender@server.com>'
-    to: data.to,
-    ...data,
+    ...res.data,
   });
 };

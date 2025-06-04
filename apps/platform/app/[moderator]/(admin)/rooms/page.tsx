@@ -102,7 +102,7 @@ export default async function RoomsPage(props: Props) {
           ))}
         >
           {rooms.map((room) => {
-            return <RoomCard key={room.id} room={room} user={session?.user} />;
+            return <RoomCard key={room.id} room={room} user={session?.user} deletable />;
           })}
         </ErrorBoundaryWithSuspense>
       </ResponsiveContainer>

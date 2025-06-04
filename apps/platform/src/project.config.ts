@@ -1,5 +1,7 @@
 // Project configuration for the College Ecosystem platform
 
+import { socials } from "@/constants/links";
+
 // This file contains the configuration for the app and college
 export const appConfig = {
   name: "College Platform",
@@ -20,6 +22,12 @@ export const appConfig = {
     { name: "NITH", url: "https://nith.ac.in" },
   ],
   githubRepo: "https://github.com/kanakkholwal/college-ecosystem",
+    socials: {
+    twitter: "https://twitter.com/kanakkholwal",
+    linkedin: "https://linkedin.com/in/kanakkholwal",
+    instagram: "https://instagram.com/kanakkholwal",
+    github: "https://github.com/kanakkholwal"
+  }
 };
 
 export const orgConfig = {
