@@ -14,6 +14,7 @@ import {
   users_CountAndGrowth,
 } from "~/actions/dashboard.admin";
 import { getDepartmentCode } from "~/constants/departments";
+import { ROLES } from "~/constants/user";
 
 export default async function AdminDashboard() {
   const {
@@ -148,7 +149,7 @@ export default async function AdminDashboard() {
                 }}
                 dataKey="count"
                 nameKey="gender"
-                valueLabel="Total Users"
+                valueLabel="Total Users by Gender"
                 innerRadius={60}
                 strokeWidth={5}
               />
@@ -159,13 +160,35 @@ export default async function AdminDashboard() {
               title="Users by Role"
               Icon={<CircleDashed className="inline-block mr-2 size-4" />}
             >
-              <ul className="text-sm text-muted-foreground">
-                {usersByRole.map(({ role, count }) => (
-                  <li key={role}>
-                    {role}: <span className="font-bold">{count}</span>
-                  </li>
-                ))}
-              </ul>
+            
+              <ChartPieDonutText
+                data={usersByRole}
+                config={{
+                  count: {
+                    label: "Users",
+                  },
+                  admin:{
+                    label: "Admin",
+                    color: "var(--chart-1)",
+                  },
+                  student: { label: "Student",
+                    color: "var(--chart-2)",
+                  },
+                  // ...ROLES.reduce<Record<string, { label: string; color: string }>>((acc, role,idx) => {
+                  //   acc[role] = {
+                  //     label: role.charAt(0).toUpperCase() + role.slice(1),
+                  //     color: `var(--chart-${idx + 1})`,
+                  //   };
+                  //   console.log(role, acc);
+                  //   return acc;
+                  // }, {}),
+                }}
+                dataKey="count"
+                nameKey="role"
+                valueLabel="Total Users by Role"
+                innerRadius={60}
+                strokeWidth={5}
+              />
             </StatsCard>
 
             {/* Users by Department Card */}

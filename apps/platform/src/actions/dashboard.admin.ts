@@ -156,18 +156,64 @@ export async function getTotalUsers(): Promise<number> {
   return result[0]?.count ?? 0;
 }
 
-export async function getUsersByRole(): Promise<
-  { role: string; count: number }[]
-> {
-  const result = await db
+export async function getUsersByRole(): Promise<{ role: string; count: number }[]> {
+  // const result = await db
+  //   .select({
+  //     role: users.role,
+  //     count: sql<number>`COUNT(*)`,
+  //   })
+  //   .from(users)
+  //   .groupBy(users.role)
+  //   .execute();
+  // return result;
+  // const result = await db
+  //   .select({
+  //     role: sql<string>`role_value`,
+  //     count: sql<number>`COUNT(*)`,
+  //   })
+  //   .from(
+  //     // Create a derived table that combines main role and other_roles
+  //     db
+  //       .select({
+  //         role_value: users.role,
+  //       })
+  //       .from(users)
+  //       .unionAll(
+  //         db
+  //           .select({
+  //             role_value: sql<string>`unnest(${users.other_roles})::text`,
+  //           })
+  //           .from(users)
+  //           .where(sql`array_length(${users.other_roles}, 1) > 0`)
+  //       )
+  //       .as("all_roles")
+  //   )
+  //   .groupBy(sql`role_value`)
+  //   .execute();
+
+  // return result;
+  const allUsers = await db
     .select({
       role: users.role,
-      count: sql<number>`COUNT(*)`,
+      other_roles: users.other_roles,
     })
     .from(users)
-    .groupBy(users.role)
     .execute();
-  return result;
+
+  const roleCounts: Record<string, number> = {};
+  // Iterate through all users to count roles
+  for (const user of allUsers) {
+    // Count main role
+    roleCounts[user.role] = (roleCounts[user.role] || 0) + 1;
+
+    // Count each role in other_roles (converting enum to string)
+    user.other_roles.forEach((otherRole) => {
+      const roleString = String(otherRole); // Convert enum to string
+      roleCounts[roleString] = (roleCounts[roleString] || 0) + 1;
+    });
+  }
+
+  return Object.entries(roleCounts).map(([role, count]) => ({ role, count }));
 }
 
 export async function getUsersByDepartment(): Promise<
