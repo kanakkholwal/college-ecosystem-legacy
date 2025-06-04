@@ -88,6 +88,7 @@
     "use-debounce": "^10.0.4",
     "vaul": "^1.1.2",
     "words-to-numbers": "^1.5.1",
+    "xlsx": "^0.18.5",
     "zod": "^3.24.3",
     "zustand": "^5.0.3"
   },
