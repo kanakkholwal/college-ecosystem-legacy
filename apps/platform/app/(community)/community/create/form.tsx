@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Loader2 } from "lucide-react";
+import { Loader2, SendHorizontal } from "lucide-react";
 import NexoMdxEditor from "nexo-mdx";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -173,7 +173,7 @@ export default function CreateCommunityPost() {
         <Button type="submit" variant="default_light" width="xs" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : null}
           {form.formState.isSubmitting ? "Publishing..." : "Publish Post"}
-          {form.formState.isSubmitting ? null : <ArrowRight/>}
+          {form.formState.isSubmitting ? null : <SendHorizontal />}
         </Button>
       </form>
     </Form>

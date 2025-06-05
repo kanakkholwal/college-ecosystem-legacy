@@ -3,8 +3,6 @@
 @import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
 
-/* @source "../app"; */
-
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 @custom-variant glass_dark (&:where([data-theme="glass_dark"], [data-theme="glass_dark"] *));
