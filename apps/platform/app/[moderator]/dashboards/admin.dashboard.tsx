@@ -13,7 +13,8 @@ import {
   users_CountAndGrowth,
 } from "~/actions/dashboard.admin";
 import { ROLES_LIST } from "~/constants";
-import { DEPARTMENTS_LIST } from "~/constants/departments";
+import { DEPARTMENTS_LIST, getDepartmentCode } from "~/constants/departments";
+import { changeCase } from "~/utils/string";
 
 export default async function AdminDashboard() {
   const {
@@ -124,8 +125,12 @@ export default async function AdminDashboard() {
 
               <ChartBar
                 data={usersByGender}
+                orientation="vertical"
                 config={{
-              
+                    count: {
+                    label: "Gender",
+                  },
+
                   male: {
                     label: "Male",
                     color: "var(--chart-1)",
@@ -155,14 +160,15 @@ export default async function AdminDashboard() {
 
               <ChartBar
                 data={usersByRole}
+                orientation="vertical"
                 config={{
                   count: {
-                    label: "Users",
+                    label: "Role",
                   },
 
                   ...ROLES_LIST.reduce<Record<string, { label: string; color: string }>>((acc, role, idx) => {
                     acc[role] = {
-                      label: role.charAt(0).toUpperCase() + role.slice(1),
+                      label: changeCase(role, "title"),
                       color: `var(--chart-${idx + 1})`,
                     };
                     return acc;
@@ -183,23 +189,26 @@ export default async function AdminDashboard() {
               Icon={<Network  className="inline-block mr-2 size-4" />}
             >
               <ChartBar
-                data={usersByDepartment}
+                data={usersByDepartment.map((dept) => ({
+                  department: getDepartmentCode(dept.department),
+                  count: dept.count,
+                }))}
                 config={{
                   count: {
-                    label: "Users",
+                    label: "Department",
                   },
-
-                  ...DEPARTMENTS_LIST.reduce<Record<string, { label: string; color: string }>>((acc, dept, idx) => {
-                    acc[dept.name] = {
-                      label: dept.name,
-                      color: `var(--chart-${idx + 1})`,
-                    };
-                    return acc;
-                  }, {}),
                   staff: {
                     label: "Staff",
                     color: "var(--chart-1)",
                   },
+
+                  ...DEPARTMENTS_LIST.reduce<Record<string, { label: string; color: string }>>((acc, dept, idx) => {
+                    acc[dept.code] = {
+                      label: changeCase(dept.name, "title"),
+                      color: `var(--chart-${idx + 1})`,
+                    };
+                    return acc;
+                  }, {}),
                 }}
                 dataKey="count"
                 nameKey="department"

@@ -9,16 +9,28 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
+import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary"
 import { cn } from "@/lib/utils"
 import { LoaderCircle } from "lucide-react"
-import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary"
+import { changeCase } from "~/utils/string"
 
+
+/**
+ * Base properties for chart components.
+ * @template TData - The type of data used in the chart.
+ * @template TConfig - The type of configuration for the chart.
+ * @property {TData[]} data - The data to be displayed in the chart.
+ * @property {TConfig} config - The configuration for the chart.
+ * @property {keyof TData} dataKey - The key in the data that represents the value to be plotted.
+ * @property {keyof TData} nameKey - The key in the data that represents the name or label for each data point.
+ * @property {string=} [className] - Optional additional CSS class names for styling the chart container.
+ */
 
 interface BaseProps<TData extends Record<string, any>, TConfig extends ChartConfig> {
     data: TData[]
     config: TConfig
     dataKey: keyof TData
-    nameKey: keyof TData,
+    nameKey: keyof TData
     className?: string
 }
 interface ChartBarProps<TData extends Record<string, any>, TConfig extends ChartConfig> extends BaseProps<TData, TConfig> {
@@ -39,7 +51,7 @@ export function ChartBar<TData extends Record<string, any>, TConfig extends Char
     config,
     dataKey,
     nameKey,
-    orientation = "vertical",
+    orientation = "horizontal",
     className = "mx-auto aspect-square max-h-[250px]",
 }: ChartBarProps<TData, TConfig>) {
 
@@ -66,52 +78,51 @@ export function ChartBar<TData extends Record<string, any>, TConfig extends Char
     >
         <ChartContainer
             config={config}
-            className={cn("mx-auto aspect-square max-h-[250px]", className)}
+            className={cn("mx-auto w-full max-h-[250px]", className)}
         >
-            {orientation === "horizontal" ? (
+            {orientation === "vertical" ? (
                 <BarChart
                     accessibilityLayer
                     data={chartData}
-                    layout="horizontal"
+                    layout="vertical"
                     margin={{
-                        right: 16,
+                        right: 5,
                     }}
+                    compact={true}
                 >
                     <CartesianGrid horizontal={false} />
                     <YAxis
-                        dataKey={nameKey.toLocaleString()}
+                        dataKey={nameKey.toString()}
                         type="category"
                         tickLine={false}
-                        tickMargin={10}
+                        tickMargin={5}
                         axisLine={false}
-                        tickFormatter={(value) => value.slice(0, 3)}
-                        hide
+                        tickFormatter={(value) => changeCase(value, "title")}
+                        // hide
                     />
                     <XAxis dataKey={dataKey.toString()} type="number" hide />
                     <ChartTooltip
-                        cursor={false}
-
-
+                        cursor={true}
                         content={<ChartTooltipContent
                             indicator="line"
                             nameKey={nameKey.toString()}
-                            labelKey={dataKey.toString()}
+                            labelKey={nameKey.toString()}
                         />}
                     />
                     <Bar
-                        dataKey={dataKey.toLocaleString()}
+                        dataKey={dataKey.toString()}
                         layout="vertical"
                         fill="var(--color-primary)"
                         radius={4}
 
                     >
-                        <LabelList
+                        {/* <LabelList
                             dataKey={nameKey.toString()}
-                            position="outside"
+                            position="inside"
                             offset={10}
                             className="fill-(--color-white)"
                             fontSize={12}
-                        />
+                        /> */}
                         <LabelList
                             dataKey={dataKey.toString()}
                             position="right"
@@ -135,13 +146,18 @@ export function ChartBar<TData extends Record<string, any>, TConfig extends Char
                     tickLine={false}
                     tickMargin={10}
                     axisLine={false}
-                    tickFormatter={(value) => value.slice(0, 3)}
+                    tickFormatter={(value) => changeCase(value, "title")}
                 />
                 <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent hideLabel />}
+                    cursor={true}
+                    content={<ChartTooltipContent
+                        indicator="line"
+                        nameKey={nameKey.toString()}
+                        labelKey={dataKey.toString()}
+                        label={dataKey.toString().replace(/([A-Z])/g, ' $1').trim()}
+                    />}
                 />
-                <Bar dataKey={nameKey.toString()} fill="var(--color-primary)" radius={8}>
+                <Bar dataKey={dataKey.toString()} fill="var(--color-primary)" radius={8}>
                     <LabelList
                         position="top"
                         offset={12}
@@ -171,7 +187,7 @@ export function ChartRadialStacked<TData extends Record<string, any>, TConfig ex
     const totalValue = React.useMemo(() => {
         return data.reduce((acc, curr) => acc + (curr[dataKey] as number), 0)
     }, [data, dataKey])
-    const chartData = data.map((item,idx) => ({
+    const chartData = data.map((item, idx) => ({
         ...item,
         fill: `var(--color-${idx + 1})`, // Ensure the nameKey is formatted correctly for CSS variable
     }))
@@ -192,9 +208,9 @@ export function ChartRadialStacked<TData extends Record<string, any>, TConfig ex
         }
     >
         <ChartContainer
-        config={config}
-        className={cn("mx-auto aspect-square max-h-[250px]", className)}
-    >
+            config={config}
+            className={cn("mx-auto aspect-square max-h-[250px]", className)}
+        >
             <RadialBarChart
                 data={chartData}
                 endAngle={180}
@@ -203,11 +219,11 @@ export function ChartRadialStacked<TData extends Record<string, any>, TConfig ex
             >
                 <ChartTooltip
                     cursor={false}
-                    content={<ChartTooltipContent 
+                    content={<ChartTooltipContent
                         indicator="dot"
                         nameKey={nameKey.toString()}
                         labelKey={dataKey.toString()}
-                        />}
+                    />}
                 />
                 <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
                     <Label

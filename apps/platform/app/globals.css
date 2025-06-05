@@ -57,7 +57,7 @@
     --border-secondary: hsla(0, 0%, 100%, 0.08);
     --button-shadow: 0px -1px 0px 0px hsla(0, 0%, 100%, 0.04), 0px 0px 0px 1px hsla(0, 0%, 100%, 0.12), 0px 0px 1px 0px rgba(0, 0, 0, 0.04), 0px 2px 2px 0px rgba(0, 0, 0, 0.04), 0px 4px 2px 0px rgba(0, 0, 0, 0.04), 0px 6px 3px 0px rgba(0, 0, 0, 0.04);
 
-
+    /* chart colors */
     --chart-1: hsl(238.73deg 83.53% 66.67%);
     --chart-2: hsl(349.72deg 89.16% 60.2%);
     --chart-3: hsl(16.79deg 86.55% 56.27%);
@@ -65,11 +65,14 @@
     --chart-5: hsl(43 74% 66%);
     --chart-6: hsl(27 87% 67%);
     --chart-7: hsl(188.74deg 94.5% 42.75%);
-    /* generate unique modern UI colors for charts */
-    --chart-8: hsl(0deg 0% 9.8%);
-    --chart-9: hsl(0deg 0% 9.8%);
-    --chart-10: hsl(0deg 0% 9.8%);
-    --chart-11: hsl(0deg 0% 9.8%);
+    --chart-8: hsl(33.3 5.5% 32.4%);
+    --chart-9: hsl(84.8 85.2% 34.5%);
+    --chart-10: hsl(191.6 91.4% 36.5%);
+    --chart-11: hsl(161.4 93.5% 30.4%);
+    --chart-12: hsl(174.7 83.9% 31.6%);
+    --chart-13: hsl(262.1 83.3% 57.8%);
+    --chart-14: hsl(333.3 71.4% 50.6%);
+    --chart-15: hsl(346.8 77.2% 49.8%);
 
 }
 
@@ -100,6 +103,7 @@
     --input: hsl(0, 0%, 14%);
     --ring: var(--primary,hsl(250deg 100% 80%));
 
+    /* dark:chart colors */
     --chart-1: hsl(238.73deg 83.53% 66.67%);
     --chart-2: hsl(349.72deg 89.16% 60.2%);
     --chart-3: hsl(16.79deg 86.55% 56.27%);
@@ -107,6 +111,14 @@
     --chart-5: hsl(43 74% 66%);
     --chart-6: hsl(27 87% 67%);
     --chart-7: hsl(188.74deg 94.5% 42.75%);
+    --chart-8: hsl(210 20% 98%);
+    --chart-9: hsl(84.8 85.2% 34.5%);
+    --chart-10: hsl(191.6 91.4% 36.5%);
+    --chart-11: hsl(161.4 93.5% 30.4%);
+    --chart-12: hsl(174.7 83.9% 31.6%);
+    --chart-13: hsl(262.1 83.3% 57.8%);
+    --chart-14: hsl(333.3 71.4% 50.6%);
+    --chart-15: hsl(346.8 77.2% 49.8%);
 
     --sidebar: oklch(0.205 0 0);
     --sidebar-background: var(--card);

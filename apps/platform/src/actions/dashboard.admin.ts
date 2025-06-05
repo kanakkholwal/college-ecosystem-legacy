@@ -204,7 +204,8 @@ export async function getUsersByRole(): Promise<{ role: string; count: number }[
   // Iterate through all users to count roles
   for (const user of allUsers) {
     // Count main role
-    roleCounts[user.role] = (roleCounts[user.role] || 0) + 1;
+    if (user.role !== "user")
+      roleCounts[user.role] = (roleCounts[user.role] || 0) + 1;
 
     // Count each role in other_roles (converting enum to string)
     user.other_roles.forEach((otherRole) => {
