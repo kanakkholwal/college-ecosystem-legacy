@@ -25,11 +25,11 @@ const ATTENDANCE_CRITERIA = 75;
 const chartConfig: ChartConfig = {
   attended: {
     label: "Attended",
-    color: "hsl(var(--chart-success))",
+    color: "var(--chart-1)",
   },
   absent: {
     label: "Absent",
-    color: "hsl(var(--chart-danger))",
+    color: "var(--chart-2)",
   },
 };
 
