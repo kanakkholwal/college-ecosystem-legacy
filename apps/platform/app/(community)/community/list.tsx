@@ -10,6 +10,7 @@ import Link from "next/link";
 import { BiUpvote } from 'react-icons/bi';
 import { GrAnnounce } from "react-icons/gr";
 import type { CommunityPostTypeWithId } from "src/models/community";
+import { CATEGORY_IMAGES } from '~/constants/community';
 import { appConfig } from '~/project.config';
 import { formatNumber } from '~/utils/number';
 
@@ -29,7 +30,7 @@ export default function CommunityPostList({
         );
     }
     return (
-        <div className="grid  grid-cols-1 gap-4 w-full">
+        <div className="grid grid-cols-1 gap-4 w-full">
             {posts.map((post) => {
                 return (
                     <div
@@ -40,9 +41,9 @@ export default function CommunityPostList({
                             <Avatar className="size-6 rounded-full">
                                 <AvatarImage
                                     alt={post.author.username}
-                                    width={32}
-                                    height={32}
-                                    src={`https://api.dicebear.com/5.x/initials/svg?seed=${post.category}`}
+                                    width={20}
+                                    height={20}
+                                    src={CATEGORY_IMAGES[post.category] ? CATEGORY_IMAGES[post.category] : `https://api.dicebear.com/5.x/initials/svg?seed=${post.category}`}
 
                                 />
                                 <AvatarFallback>
@@ -73,7 +74,9 @@ export default function CommunityPostList({
                             {/* show only 200 characters */}
                             <MDXRemote source={post.content
                                 .slice(0, 200) + (post.content.length > 200 ? '...' : '')
-                            } parseFrontmatter />
+                            } parseFrontmatter mdxOptions={{
+                                format: "md"
+                            }} />
                         </article>
                         <div className='flex items-center gap-3'>
                             <div className="flex items-center justify-between gap-2">

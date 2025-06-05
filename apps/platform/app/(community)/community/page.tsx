@@ -3,7 +3,7 @@ import { CATEGORIES } from "~/constants/community";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import type { Metadata } from "next";
 import { getPostsByCategory } from "~/lib/community/actions";
 import CommunityPostList from "./list";
@@ -32,17 +32,25 @@ export default async function CommunitiesPage(props: {
     <>
 
       {/* Feed */}
-      <main className="md:col-span-3 lg:col-span-2 space-y-4 pr-2">
-        <div className="md:sticky md:top-4 w-full max-w-2xl mx-1.5 lg:mx-auto flex justify-between items-center gap-2 bg-card px-2 lg:px-4 py-1 lg:py-2 rounded-lg border">
+      <main className="md:col-span-3 lg:col-span-2 space-y-4 pr-2 min-h-screen">
+        <div className="md:sticky md:top-4 z-50 w-full mx-1.5 lg:mx-auto flex justify-between items-center gap-2 bg-card px-2 lg:px-4 py-1 lg:py-2 rounded-lg border">
           <h3 className="text-base font-medium">
-            Announcements
+            Community Posts
+            {activePopularCategory && (
+              <span className="text-sm text-muted-foreground ml-1">
+                in c/{activePopularCategory.name} 
+                <Link href="/community" className="ml-1 hover:text-primary cursor-pointer" shallow>
+                <X className="inline-block size-3" />
+                </Link>
+              </span>
+            )}
             <Badge size="sm" className="ml-2">
               {posts.length}
             </Badge>
           </h3>
           <Button variant="ghost" size="sm" asChild>
             <Link href="/community/create">
-              Create Announcement
+              Create Post
               <ArrowRight />
             </Link>
           </Button>

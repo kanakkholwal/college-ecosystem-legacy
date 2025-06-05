@@ -38,19 +38,19 @@ export async function generateMetadata(
   };
 }
 
-const cache = new Map<string, boolean>();
+const viewCache = new Set<string>()
 
 export default async function CommunityPost(props: Props) {
   const session = await getSession();
   const params = await props.params;
   const post = await getPostById(
     params.postId,
-    cache.has(params.postId) || false
+    viewCache.has(params.postId)
   );
 
   if (!post) return notFound();
   if (post) {
-    cache.set(params.postId, true);
+    viewCache.add(params.postId);
   }
   console.log(post);
 
@@ -91,7 +91,11 @@ export default async function CommunityPost(props: Props) {
         </div>
         <h3 className="text-lg font-medium">{post.title}</h3>
         <article className="border-l py-4  max-w-full prose prose-sm dark:prose-invert pl-2 bg-muted/10">
-          <MDXRemote source={post.content} parseFrontmatter />
+          <MDXRemote source={post.content} parseFrontmatter
+            mdxOptions={{
+              format: "md"
+            }}
+          />
         </article>
         <PostFooter post={post} user={session?.user!} />
       </div>

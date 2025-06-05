@@ -1,10 +1,9 @@
 import { NumberTicker } from "@/components/animation/number-ticker";
-import { ChartPieDonutText } from "@/components/application/chart-pie";
+import { ChartBar } from "@/components/application/charts";
 import { StatsCard } from "@/components/application/stats-card";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/typography";
-import { CircleDashed, Eye, TrendingDown, TrendingUp } from "lucide-react";
-import { FaGenderless } from "react-icons/fa";
+import { Briefcase, CircleDashed, Eye, Network, Transgender, TrendingDown, TrendingUp } from "lucide-react";
 import { TbUsersGroup } from "react-icons/tb";
 import {
   getActiveSessions,
@@ -13,8 +12,8 @@ import {
   getUsersByRole,
   users_CountAndGrowth,
 } from "~/actions/dashboard.admin";
-import { getDepartmentCode } from "~/constants/departments";
-import { ROLES } from "~/constants/user";
+import { ROLES_LIST } from "~/constants";
+import { DEPARTMENTS_LIST } from "~/constants/departments";
 
 export default async function AdminDashboard() {
   const {
@@ -119,91 +118,96 @@ export default async function AdminDashboard() {
             {/* Users by Gender Card */}
             <StatsCard
               title="Users by Gender"
-              Icon={<FaGenderless className="inline-block mr-2 size-4" />}
+              Icon={<Transgender  className="inline-block mr-2 size-4" />}
             >
-              <ul className="text-sm text-muted-foreground">
-                {usersByGender.map(({ gender, count }) => (
-                  <li key={gender}>
-                    {gender}: <span className="font-bold">{count}</span>
-                  </li>
-                ))}
-              </ul>
-              <ChartPieDonutText
+
+
+              <ChartBar
                 data={usersByGender}
                 config={{
-                  count: {
-                    label: "Users",
-                  },
+              
                   male: {
                     label: "Male",
                     color: "var(--chart-1)",
                   },
-                  female: {
-                    label: "Female",
-                    color: "var(--chart-2)",
-                  },
                   not_specified: {
                     label: "Not Specified",
+                    color: "var(--chart-2)",
+                  },
+                  female: {
+                    label: "Female",
                     color: "var(--chart-3)",
                   },
                 }}
                 dataKey="count"
                 nameKey="gender"
-                valueLabel="Total Users by Gender"
-                innerRadius={60}
-                strokeWidth={5}
               />
+              <p className="text-xs text-muted-foreground">
+                Total Users by Gender
+              </p>
             </StatsCard>
 
             {/* Users by Role Card */}
             <StatsCard
               title="Users by Role"
-              Icon={<CircleDashed className="inline-block mr-2 size-4" />}
+              Icon={<Briefcase  className="inline-block mr-2 size-4" />}
             >
-            
-              <ChartPieDonutText
+
+              <ChartBar
                 data={usersByRole}
                 config={{
                   count: {
                     label: "Users",
                   },
-                  admin:{
-                    label: "Admin",
-                    color: "var(--chart-1)",
-                  },
-                  student: { label: "Student",
-                    color: "var(--chart-2)",
-                  },
-                  // ...ROLES.reduce<Record<string, { label: string; color: string }>>((acc, role,idx) => {
-                  //   acc[role] = {
-                  //     label: role.charAt(0).toUpperCase() + role.slice(1),
-                  //     color: `var(--chart-${idx + 1})`,
-                  //   };
-                  //   console.log(role, acc);
-                  //   return acc;
-                  // }, {}),
+
+                  ...ROLES_LIST.reduce<Record<string, { label: string; color: string }>>((acc, role, idx) => {
+                    acc[role] = {
+                      label: role.charAt(0).toUpperCase() + role.slice(1),
+                      color: `var(--chart-${idx + 1})`,
+                    };
+                    return acc;
+                  }, {}),
                 }}
                 dataKey="count"
                 nameKey="role"
-                valueLabel="Total Users by Role"
-                innerRadius={60}
-                strokeWidth={5}
+                
               />
+              <p className="text-xs text-muted-foreground">
+                Total Users per Role
+              </p>
             </StatsCard>
 
             {/* Users by Department Card */}
             <StatsCard
               title="Users by Department"
-              Icon={<CircleDashed className="inline-block mr-2 size-4" />}
+              Icon={<Network  className="inline-block mr-2 size-4" />}
             >
-              <ul className="text-sm text-muted-foreground">
-                {usersByDepartment.map(({ department, count }) => (
-                  <li key={department}>
-                    {getDepartmentCode(department)}:{" "}
-                    <span className="font-bold">{count}</span>
-                  </li>
-                ))}
-              </ul>
+              <ChartBar
+                data={usersByDepartment}
+                config={{
+                  count: {
+                    label: "Users",
+                  },
+
+                  ...DEPARTMENTS_LIST.reduce<Record<string, { label: string; color: string }>>((acc, dept, idx) => {
+                    acc[dept.name] = {
+                      label: dept.name,
+                      color: `var(--chart-${idx + 1})`,
+                    };
+                    return acc;
+                  }, {}),
+                  staff: {
+                    label: "Staff",
+                    color: "var(--chart-1)",
+                  },
+                }}
+                dataKey="count"
+                nameKey="department"
+                
+              />
+              <p className="text-xs text-muted-foreground">
+                Total Users per Department
+              </p>
             </StatsCard>
             {/* Account Creation Trends */}
           </div>
