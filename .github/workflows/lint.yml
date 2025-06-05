@@ -25,8 +25,8 @@ jobs:
       - name: 📥 Checkout code
         uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
+      # - uses: pnpm/action-setup@v4
+      #   name: Install pnpm
         
       - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
@@ -87,14 +87,14 @@ jobs:
       - name: 🚀 Run Turbo lint selectively
         run: |
           if [ "${{ steps.changed.outputs.platform_changed }}" = "true" ]; then
-            pnpx turbo run lint --cache-dir=.turbo --filter=platform
+            npx turbo run lint --cache-dir=.turbo --filter=platform
           fi
           if [ "${{ steps.changed.outputs.website_changed }}" = "true" ]; then
-            pnpx turbo run lint --cache-dir=.turbo --filter=website
+            npx turbo run lint --cache-dir=.turbo --filter=website
           fi
           if [ "${{ steps.changed.outputs.server_changed }}" = "true" ]; then
-            pnpx turbo run lint --cache-dir=.turbo --filter=server
+            npx turbo run lint --cache-dir=.turbo --filter=server
           fi
           if [ "${{ steps.changed.outputs.mail_server_changed }}" = "true" ]; then
-            pnpx turbo run lint --cache-dir=.turbo --filter=mail-server
+            npx turbo run lint --cache-dir=.turbo --filter=mail-server
           fi

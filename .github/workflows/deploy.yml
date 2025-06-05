@@ -3,13 +3,15 @@ name: 🚀 Deployments
 env:
   SERVICE_NAME_SERVER: "college-ecosystem-server"
 
-on:
-  push:
-    branches:
-      - main
-      - staging
+on: workflow_dispatch
+
+# on:
+#   push:
+#     branches:
+#       - main
+#       - staging
       
-  workflow_dispatch:
+  # workflow_dispatch:
 
 concurrency:
   group:  ${{ github.workflow }}-${{ github.ref }}-deploy
