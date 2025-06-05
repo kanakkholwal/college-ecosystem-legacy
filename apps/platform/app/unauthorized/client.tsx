@@ -20,7 +20,7 @@ export function BackButton() {
     const router = useRouter();
 
     return (
-        <Button rounded="full" variant="default_light" width="sm" effect="shineHover" asChild onClick={() => router.back()}>
+        <Button rounded="full" variant="default_light" width="sm" effect="shineHover" onClick={() => router.back()}>
             <ArrowLeft />
             Go Back
         </Button>
