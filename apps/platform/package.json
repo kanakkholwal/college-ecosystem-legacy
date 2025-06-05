@@ -95,7 +95,6 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
-
     "serwist": "^9.0.11",
     "@types/node": "^22",
     "@types/react": "^19",
