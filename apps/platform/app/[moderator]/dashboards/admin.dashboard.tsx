@@ -1,8 +1,6 @@
 import { NumberTicker } from "@/components/animation/number-ticker";
 import { ChartBar } from "@/components/application/charts";
 import { StatsCard } from "@/components/application/stats-card";
-import { Separator } from "@/components/ui/separator";
-import { Heading } from "@/components/ui/typography";
 import {
   Briefcase,
   CircleDashed,
@@ -71,13 +69,12 @@ export default async function AdminDashboard() {
 
               <p className="text-xs text-muted-foreground">
                 <span
-                  className={`${
-                    userTrend === 1
+                  className={`${userTrend === 1
                       ? "text-green-500"
                       : userTrend === -1
                         ? "text-red-500"
                         : "text-primary/80"
-                  } text-base`}
+                    } text-base`}
                 >
                   {userTrend === 1 ? (
                     <TrendingUp className="inline-block mr-2 size-4" />
@@ -230,11 +227,7 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        {/* Messages Section */}
-        <div className="@4xl:w-1/3 p-3">
-          <Heading level={4}>Actions</Heading>
-          <Separator className="mb-4 mt-2" />
-        </div>
+
       </div>
     </div>
   );
