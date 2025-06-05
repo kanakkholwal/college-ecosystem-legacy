@@ -15,7 +15,7 @@ const nextConfig = {
     reactStrictMode: true,
     crossOrigin: 'anonymous',
     // output: "standalone",
-    logging: (process.env.NODE_ENV !== "production" ? false :({
+    logging: (process.env.NODE_ENV !== "production" ? false : ({
         fetches: {
             fullUrl: false
         }
@@ -35,8 +35,6 @@ const nextConfig = {
     experimental: {
         forceSwcTransforms: true,
     }
-    // forceSwcTransforms: true,
-
 }
 
 export default withSerWist(nextConfig);
