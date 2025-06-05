@@ -70,6 +70,7 @@ const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
+
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
