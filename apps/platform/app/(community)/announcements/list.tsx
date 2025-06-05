@@ -53,7 +53,9 @@ export default function AnnouncementsList({
               </p>
             </div>
             <article className="prose prose-sm dark:prose-invert text-muted-foreground">
-              <MDXRemote source={announcement.content} parseFrontmatter />
+              <MDXRemote source={announcement.content} parseFrontmatter mdxOptions={{
+                                format: "md"
+                            }} />
             </article>
           </div>
         );

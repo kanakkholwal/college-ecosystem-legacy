@@ -15,7 +15,7 @@ import { RELATED_FOR_TYPES } from "~/models/announcement";
 import { changeCase } from "~/utils/string";
 
 export const metadata: Metadata = {
-  title: `Announcements `,
+  title: `Announcements`,
   description: "Check the latest announcements here.",
 };
 
