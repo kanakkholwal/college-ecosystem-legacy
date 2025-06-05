@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import NotFoundImg from "./404.svg";
-import { RedirectButton } from "./client";
+import { BackButton } from "./client";
 
 export const metadata: Metadata = {
   title: "Not Authorized",
@@ -32,13 +32,13 @@ export default function NotAuthorized() {
           priority
         />
         <div className="flex mx-auto gap-4">
+          <BackButton />
           <Button rounded="full" variant="default_light" effect="shineHover" width="sm" asChild>
             <Link href="/">
               <Home />
               Go to Home
             </Link>
           </Button>
-          <RedirectButton />
         </div>
       </div>
     </>

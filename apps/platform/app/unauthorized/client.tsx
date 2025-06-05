@@ -1,8 +1,8 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { ArrowRight } from "lucide-react";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 
 export function RedirectButton() {
@@ -13,6 +13,16 @@ export function RedirectButton() {
                 Sign In
                 <ArrowRight />
             </Link>
+        </Button>
+    );
+}
+export function BackButton() {
+    const router = useRouter();
+
+    return (
+        <Button rounded="full" variant="default_light" width="sm" effect="shineHover" asChild onClick={() => router.back()}>
+            <ArrowLeft />
+            Go Back
         </Button>
     );
 }
