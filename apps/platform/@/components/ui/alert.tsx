@@ -4,7 +4,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 const alertVariants = cva(
-  "relative w-full rounded-lg border p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
+  "relative w-full rounded-lg p-4 [&>svg~*]:pl-7 [&>svg+div]:translate-y-[-3px] [&>svg]:absolute [&>svg]:left-4 [&>svg]:top-4 [&>svg]:text-foreground",
   {
     variants: {
       variant: {
@@ -16,6 +16,7 @@ const alertVariants = cva(
         success:
           "border-green-500/50 text-green-500 dark:border-green-500 [&>svg]:text-green-500 bg-green-500/10 dark:bg-green-500/10",
         info: "border-blue-500/50 text-blue-500 dark:border-blue-500 [&>svg]:text-blue-500 bg-blue-500/10 dark:bg-blue-500/10",
+        info_light: "border-none text-blue-500 dark:border-none [&>svg]:text-blue-500 bg-blue-500/10 dark:bg-blue-500/10",
         warning:
           "border-yellow-500/50 text-yellow-500 dark:border-yellow-500 [&>svg]:text-yellow-500 bg-yellow-500/10 dark:bg-yellow-500/10",
         emerald:
@@ -23,6 +24,7 @@ const alertVariants = cva(
         neutral:
           "border-gray-500/50 text-gray-500 dark:border-gray-500 [&>svg]:text-gray-500 bg-gray-500/10 dark:bg-gray-500/10",
       },
+
     },
     defaultVariants: {
       variant: "default",

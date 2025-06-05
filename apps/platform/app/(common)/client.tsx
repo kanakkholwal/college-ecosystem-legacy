@@ -1,5 +1,4 @@
 "use client";
-import { BorderBeam } from "@/components/animation/border-beam";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { RocketIcon } from "@radix-ui/react-icons";
 import { motion } from "motion/react";
@@ -16,7 +15,7 @@ export function HeroSection({ user }: HeroSection) {
   return (
     <section
       id="hero"
-      className="z-10 bg-accent w-full max-w-7xl max-h-96 relative flex justify-center lg:justify-around items-center gap-10 py-24 px-4 rounded-lg text-center lg:text-left"
+      className="z-10 w-full max-w-7xl max-h-96 relative flex justify-center lg:justify-around items-center gap-10 py-24 px-4 rounded-lg text-center lg:text-left"
       suppressHydrationWarning={true}
     >
       <motion.div
@@ -36,7 +35,7 @@ export function HeroSection({ user }: HeroSection) {
           Welcome to the {appConfig.name}
         </p>
         {user?.other_roles.includes("student") && (
-          <Alert variant="info" className="mt-4" data-aos="fade-right">
+          <Alert variant="info_light" className="mt-4" data-aos="fade-right">
             <RocketIcon className="h-4 w-4" />
             <AlertTitle>Join the {appConfig.name} Project!</AlertTitle>
             <AlertDescription>
@@ -53,7 +52,6 @@ export function HeroSection({ user }: HeroSection) {
           </Alert>
         )}
       </motion.div>
-      <BorderBeam />
     </section>
   );
 }

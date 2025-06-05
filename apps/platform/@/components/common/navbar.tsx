@@ -33,6 +33,7 @@ export default function Navbar({ user }: NavbarProps) {
             width={280}
             height={80}
             className="h-8 w-auto object-contain relative block dark:hidden"
+            priority
           />
           <Image
             src={appConfig.logoDark}
@@ -40,6 +41,7 @@ export default function Navbar({ user }: NavbarProps) {
             width={280}
             height={80}
             className="h-8 w-auto object-contain relative hidden dark:block"
+            priority
           />
           <span className="sr-only">{appConfig.name}</span>
         </Link>
