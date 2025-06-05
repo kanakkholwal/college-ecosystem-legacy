@@ -40,11 +40,13 @@ import {
 
 export default function CreateAnnouncement() {
   const form = useForm<z.infer<typeof rawAnnouncementSchema>>({
-    resolver: zodResolver(rawAnnouncementSchema),
+    resolver: zodResolver(rawAnnouncementSchema as any),
     defaultValues: {
       title: "",
       content: "",
       relatedFor: RELATED_FOR_TYPES[0],
+      // after 2 days from now
+      // This is just a default value, it will be overridden by the user.
       expiresAt: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000),
     },
   });
