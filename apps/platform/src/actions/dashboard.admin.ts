@@ -156,7 +156,9 @@ export async function getTotalUsers(): Promise<number> {
   return result[0]?.count ?? 0;
 }
 
-export async function getUsersByRole(): Promise<{ role: string; count: number }[]> {
+export async function getUsersByRole(): Promise<
+  { role: string; count: number }[]
+> {
   // const result = await db
   //   .select({
   //     role: users.role,

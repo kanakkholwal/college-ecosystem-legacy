@@ -16,32 +16,31 @@ interface Props {
   }>;
 }
 
-export const metadata :Metadata = {
+export const metadata: Metadata = {
   title: `Edit Community Post`,
   description: "Edit a post in the community",
-}
+};
 
-export default async function CommunityPostEditPage(props:Props) {
+export default async function CommunityPostEditPage(props: Props) {
   const searchParams = await props.searchParams;
   if (!searchParams.postId) return notFound();
-  const post = await getPostById(
-    searchParams.postId,
-    true
-  );
+  const post = await getPostById(searchParams.postId, true);
   if (!post) return notFound();
-  
-  const session = await getSession() as Session;
+
+  const session = (await getSession()) as Session;
   if (session.user.id !== post.author.id || session.user.role !== "admin") {
-    return <EmptyArea
-      title="Unauthorized"
-      description="You are not authorized to edit this post."
-      actionProps={{
-        variant: "ghost",
-        size: "sm",
-        asChild: true,
-        children: <Link href="/community">Back to Community</Link>
-      }}
-    />;
+    return (
+      <EmptyArea
+        title="Unauthorized"
+        description="You are not authorized to edit this post."
+        actionProps={{
+          variant: "ghost",
+          size: "sm",
+          asChild: true,
+          children: <Link href="/community">Back to Community</Link>,
+        }}
+      />
+    );
   }
 
   if (!post) return notFound();

@@ -4,14 +4,14 @@ import { redirect } from "next/navigation";
 import { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default async function CommunityLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getSession() as Session;
+  const session = (await getSession()) as Session;
   const isStudent = session?.user?.other_roles?.includes("student");
 
   if (!isStudent) return redirect(`/${session.user.other_roles[0]}`);

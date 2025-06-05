@@ -3,7 +3,7 @@ type LayoutProps = Readonly<{
 }>;
 import { ResponsiveAppLogo } from "@/components/logo";
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic";
 
 export default function Layout({ children }: LayoutProps) {
   return (

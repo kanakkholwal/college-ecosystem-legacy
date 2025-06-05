@@ -96,9 +96,7 @@ export default function CreateRoomForm({
               <FormItem>
                 <FormLabel>Room Type</FormLabel>
                 <Select
-                  onValueChange={(value) =>
-                    field.onChange(value.trim())
-                  }
+                  onValueChange={(value) => field.onChange(value.trim())}
                   defaultValue={field.value}
                 >
                   <FormControl>

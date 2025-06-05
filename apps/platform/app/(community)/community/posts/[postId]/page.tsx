@@ -39,41 +39,45 @@ export async function generateMetadata(
   };
 }
 
-const viewCache = new Set<string>()
+const viewCache = new Set<string>();
 
 export default async function CommunityPost(props: Props) {
   const session = await getSession();
   const params = await props.params;
-  const post = await getPostById(
-    params.postId,
-    viewCache.has(params.postId)
-  );
+  const post = await getPostById(params.postId, viewCache.has(params.postId));
 
   if (!post) return notFound();
   if (post) {
     viewCache.add(params.postId);
   }
   console.log(post);
-  const isAuthor = session?.user.id === post.author.id || session?.user.role === "admin";
+  const isAuthor =
+    session?.user.id === post.author.id || session?.user.role === "admin";
 
   return (
     <main className="md:col-span-3 space-y-4 pr-2">
       <div className="w-full mx-auto rounded-lg bg-card backdrop-blur-md p-3 lg:p-5 grid grid-cols-1 space-y-4">
-        <div className='inline-flex items-center gap-2'>
+        <div className="inline-flex items-center gap-2">
           <Avatar className="size-10 rounded-full">
             <AvatarImage
               alt={post.author.username}
               width={32}
               height={32}
-              src={CATEGORY_IMAGES[post.category] ? CATEGORY_IMAGES[post.category] : `https://api.dicebear.com/5.x/initials/svg?seed=${post.category}`}
-
+              src={
+                CATEGORY_IMAGES[post.category]
+                  ? CATEGORY_IMAGES[post.category]
+                  : `https://api.dicebear.com/5.x/initials/svg?seed=${post.category}`
+              }
             />
             <AvatarFallback>
               {post.category.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
           <p className="text-xs text-muted-foreground">
-            <Link href={`/community?c=${post.category}`} className="hover:underline hover:text-primary font-medium">
+            <Link
+              href={`/community?c=${post.category}`}
+              className="hover:underline hover:text-primary font-medium"
+            >
               c/{post.category}
             </Link>
             <Dot className="inline-block -mx-1" />
@@ -92,19 +96,19 @@ export default async function CommunityPost(props: Props) {
           </p>
           {isAuthor && (
             <Button variant="ghost" size="xs" className="ml-auto" asChild>
-              <Link
-                href={`/community/edit?postId=${post._id}`}
-              >
-                Edit Post <Edit/>
+              <Link href={`/community/edit?postId=${post._id}`}>
+                Edit Post <Edit />
               </Link>
             </Button>
           )}
         </div>
         <h3 className="text-lg font-medium">{post.title}</h3>
         <article className="border-l py-4  max-w-full prose prose-sm dark:prose-invert pl-2 bg-muted/10">
-          <MDXRemote source={post.content} parseFrontmatter
+          <MDXRemote
+            source={post.content}
+            parseFrontmatter
             mdxOptions={{
-              format: "md"
+              format: "md",
             }}
           />
         </article>

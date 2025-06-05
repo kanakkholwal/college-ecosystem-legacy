@@ -22,7 +22,7 @@ export default function Navbar({ user }: { user: Session["user"] }) {
         </p>
       </div>
       <div className="ml-auto inline-flex gap-2 items-center">
-          <ThemeSwitcher />
+        <ThemeSwitcher />
         <ProfileDropdown user={user} />
       </div>
     </nav>

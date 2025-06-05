@@ -13,7 +13,7 @@ export default function CourseSearchBox({ departments, types }: Props) {
       label: "By Departments",
       values: [
         { value: "all", label: "All" },
-        ...departments.map(dept => ({ value: dept, label: dept }))
+        ...departments.map((dept) => ({ value: dept, label: dept })),
       ],
     },
     {
@@ -21,7 +21,7 @@ export default function CourseSearchBox({ departments, types }: Props) {
       label: "By Course Types",
       values: [
         { value: "all", label: "All" },
-        ...types.map(type => ({ value: type, label: type }))
+        ...types.map((type) => ({ value: type, label: type })),
       ],
     },
   ];

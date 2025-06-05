@@ -12,12 +12,17 @@ export default function ErrorBanner({ error, title, description }: Props) {
     console.log(error);
   }
   return (
-    <div className={cn(
-      "flex items-center justify-center flex-col p-6 rounded-lg w-full max-w-2xl mx-auto h-full max-h-96 text-center",
-      "bg-destructive/5 border border-destructive"
-    )}>
+    <div
+      className={cn(
+        "flex items-center justify-center flex-col p-6 rounded-lg w-full max-w-2xl mx-auto h-full max-h-96 text-center",
+        "bg-destructive/5 border border-destructive"
+      )}
+    >
       <div className="size-36 rounded-full bg-destructive/10 flex items-center justify-center aspect-square mb-4">
-        <BiError className="m-auto size-24 text-destructive" aria-hidden="true" />
+        <BiError
+          className="m-auto size-24 text-destructive"
+          aria-hidden="true"
+        />
       </div>
 
       <h1 className="text-2xl font-semibold text-destructive/85 mb-2">

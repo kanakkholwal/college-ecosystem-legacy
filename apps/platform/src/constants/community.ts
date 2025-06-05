@@ -19,9 +19,9 @@ export const CATEGORY_IMAGES: Record<string, string> = {
   others: "/assets/images/community.others.png",
 };
 
-export const CATEGORIES:{
+export const CATEGORIES: {
   name: string;
-  value: typeof CATEGORY_TYPES[number];
+  value: (typeof CATEGORY_TYPES)[number];
   image: string;
   description: string;
 }[] = [
@@ -29,22 +29,19 @@ export const CATEGORIES:{
     name: "Academics",
     value: "academics",
     image: CATEGORY_IMAGES.academics,
-    description:
-      "Explore academic communities",
+    description: "Explore academic communities",
   },
   {
     name: "Departmental",
     value: "departmental",
     image: CATEGORY_IMAGES.departmental,
-    description:
-      "Discover departmental communities",
+    description: "Discover departmental communities",
   },
   {
     name: "Technology",
     value: "technology",
     image: CATEGORY_IMAGES.technology,
-    description:
-      "Join technology communities.",
+    description: "Join technology communities.",
   },
   {
     name: "Design",
@@ -56,14 +53,12 @@ export const CATEGORIES:{
     name: "Activities",
     value: "activities",
     image: CATEGORY_IMAGES.activities,
-    description:
-      "Communities on various activities and events.",
+    description: "Communities on various activities and events.",
   },
   {
     name: "Others",
     value: "others",
     image: CATEGORY_IMAGES.others,
-    description:
-      "Explore other communities",
+    description: "Explore other communities",
   },
 ];

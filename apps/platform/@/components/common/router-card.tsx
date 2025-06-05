@@ -65,5 +65,4 @@ function RouterCard({
 
 RouterCard.displayName = "RouterCard";
 
-
 export { RouterCard, type RouterCardLink, type RouterCardProps };

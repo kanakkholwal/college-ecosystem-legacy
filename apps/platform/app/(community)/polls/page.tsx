@@ -21,7 +21,7 @@ const tabs = [
   { label: "Open Polls", id: "opened-polls" },
   { label: "Closed Polls", id: "closed-polls" },
   { label: "Your Polls", id: "your-polls" },
-]
+];
 
 export default async function PollsPage(props: {
   searchParams: Promise<{
@@ -39,10 +39,7 @@ export default async function PollsPage(props: {
 
   return (
     <Tabs defaultValue={activeTab} className="w-full grid gap-4">
-      <VercelTabsList
-        tabs={tabs}
-        onTabChangeQuery="tab"
-      />
+      <VercelTabsList tabs={tabs} onTabChangeQuery="tab" />
 
       <div className="rounded-lg p-4 @container/polls max-w-6xl mx-auto w-full">
         {tabs.map((tab, idx) => {
@@ -72,7 +69,6 @@ export default async function PollsPage(props: {
             </TabsContent>
           );
         })}
-
       </div>
     </Tabs>
   );

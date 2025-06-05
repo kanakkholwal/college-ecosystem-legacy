@@ -1,5 +1,5 @@
-import EmptyArea from '@/components/common/empty-area';
-import { MDXRemote } from '@mintlify/mdx';
+import EmptyArea from "@/components/common/empty-area";
+import { MDXRemote } from "@mintlify/mdx";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { GrAnnounce } from "react-icons/gr";
@@ -53,9 +53,13 @@ export default function AnnouncementsList({
               </p>
             </div>
             <article className="prose prose-sm dark:prose-invert text-muted-foreground">
-              <MDXRemote source={announcement.content} parseFrontmatter mdxOptions={{
-                                format: "md"
-                            }} />
+              <MDXRemote
+                source={announcement.content}
+                parseFrontmatter
+                mdxOptions={{
+                  format: "md",
+                }}
+              />
             </article>
           </div>
         );

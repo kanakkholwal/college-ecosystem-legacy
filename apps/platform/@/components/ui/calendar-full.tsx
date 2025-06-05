@@ -40,15 +40,13 @@ interface CalendarCell<EventType extends BaseEvent> {
   events: EventType[];
 }
 
-
-
 interface FullScreenCalendarProps<EventType extends BaseEvent> {
   className?: string;
   data: CalendarCell<EventType>[];
   // renderEventMarker: (event: EventType) => React.ReactNode;
   renderEventDetails?: (event: EventType) => React.ReactNode;
   onNewEvent?: (selectedDate: Date) => void;
-  onNewEventRedirectPath?: string
+  onNewEventRedirectPath?: string;
 }
 
 const colStartClasses = [
@@ -72,8 +70,6 @@ function DefaultRenderEvent<EventType extends BaseEvent>(event: EventType) {
     </div>
   );
 }
-
-
 
 export function FullScreenCalendar<EventType extends BaseEvent>({
   data,
@@ -122,8 +118,6 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
     },
     [data]
   );
-
-
 
   return (
     <div className={cn("flex flex-1 flex-col", className)}>
@@ -179,24 +173,38 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
               <ChevronRightIcon />
             </Button>
           </div>
-          {(onNewEvent || onNewEventRedirectPath) ? (
+          {onNewEvent || onNewEventRedirectPath ? (
             <>
               <Separator orientation="vertical" className="h-6 block" />
 
-              <Button size="sm" onClick={() => {
-                onNewEvent && onNewEvent(selectedDay)
-              }}
-                {...(onNewEventRedirectPath ? {
-                  asChild: true
-                } : {})}
+              <Button
+                size="sm"
+                onClick={() => {
+                  onNewEvent && onNewEvent(selectedDay);
+                }}
+                {...(onNewEventRedirectPath
+                  ? {
+                      asChild: true,
+                    }
+                  : {})}
               >
-                {onNewEventRedirectPath ? <Link href={onNewEventRedirectPath + "?time=" + format(selectedDay, "yyyy-MM-dd'T'HH:mm:ss")}>
-                  <PlusCircleIcon />
-                  <span>New Event</span>
-                </Link> : <>
-                  <PlusCircleIcon />
-                  <span>New Event</span>
-                </>}
+                {onNewEventRedirectPath ? (
+                  <Link
+                    href={
+                      onNewEventRedirectPath +
+                      "?time=" +
+                      format(selectedDay, "yyyy-MM-dd'T'HH:mm:ss")
+                    }
+                  >
+                    <PlusCircleIcon />
+                    <span>New Event</span>
+                  </Link>
+                ) : (
+                  <>
+                    <PlusCircleIcon />
+                    <span>New Event</span>
+                  </>
+                )}
               </Button>
             </>
           ) : null}
@@ -227,15 +235,15 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                     className={cn(
                       isEqual(day, selectedDay) && "text-primary-foreground",
                       !isEqual(day, selectedDay) &&
-                      !isToday(day) &&
-                      isSameMonth(day, firstDayCurrentMonth) &&
-                      "text-foreground",
+                        !isToday(day) &&
+                        isSameMonth(day, firstDayCurrentMonth) &&
+                        "text-foreground",
                       !isEqual(day, selectedDay) &&
-                      !isToday(day) &&
-                      !isSameMonth(day, firstDayCurrentMonth) &&
-                      "text-muted-foreground",
+                        !isToday(day) &&
+                        !isSameMonth(day, firstDayCurrentMonth) &&
+                        "text-muted-foreground",
                       (isEqual(day, selectedDay) || isToday(day)) &&
-                      "font-semibold",
+                        "font-semibold",
                       "flex h-14 flex-col border-b border-r px-3 py-2 hover:bg-muted focus:z-10"
                     )}
                   >
@@ -244,11 +252,11 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                       className={cn(
                         "ml-auto flex size-6 items-center justify-center rounded-full",
                         isEqual(day, selectedDay) &&
-                        isToday(day) &&
-                        "bg-primary text-primary-foreground",
+                          isToday(day) &&
+                          "bg-primary text-primary-foreground",
                         isEqual(day, selectedDay) &&
-                        !isToday(day) &&
-                        "bg-primary text-primary-foreground"
+                          !isToday(day) &&
+                          "bg-primary text-primary-foreground"
                       )}
                     >
                       {format(day, "d")}
@@ -277,9 +285,9 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                     className={cn(
                       dayIdx === 0 && colStartClasses[getDay(day)],
                       !isEqual(day, selectedDay) &&
-                      !isToday(day) &&
-                      !isSameMonth(day, firstDayCurrentMonth) &&
-                      "bg-accent/50 text-muted-foreground",
+                        !isToday(day) &&
+                        !isSameMonth(day, firstDayCurrentMonth) &&
+                        "bg-accent/50 text-muted-foreground",
                       "relative flex flex-col border-b border-r hover:bg-muted focus:z-10",
                       !isEqual(day, selectedDay) && "hover:bg-accent/75"
                     )}
@@ -289,23 +297,23 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                         type="button"
                         className={cn(
                           isEqual(day, selectedDay) &&
-                          "text-primary-foreground",
+                            "text-primary-foreground",
                           !isEqual(day, selectedDay) &&
-                          !isToday(day) &&
-                          isSameMonth(day, firstDayCurrentMonth) &&
-                          "text-foreground",
+                            !isToday(day) &&
+                            isSameMonth(day, firstDayCurrentMonth) &&
+                            "text-foreground",
                           !isEqual(day, selectedDay) &&
-                          !isToday(day) &&
-                          !isSameMonth(day, firstDayCurrentMonth) &&
-                          "text-muted-foreground",
+                            !isToday(day) &&
+                            !isSameMonth(day, firstDayCurrentMonth) &&
+                            "text-muted-foreground",
                           isEqual(day, selectedDay) &&
-                          isToday(day) &&
-                          "border-none bg-primary",
+                            isToday(day) &&
+                            "border-none bg-primary",
                           isEqual(day, selectedDay) &&
-                          !isToday(day) &&
-                          "bg-border/50 text-foreground",
+                            !isToday(day) &&
+                            "bg-border/50 text-foreground",
                           (isEqual(day, selectedDay) || isToday(day)) &&
-                          "font-semibold",
+                            "font-semibold",
                           "flex h-7 w-7 items-center justify-center rounded-full text-xs hover:border"
                         )}
                       >
@@ -335,15 +343,15 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                   className={cn(
                     isEqual(day, selectedDay) && "text-primary-foreground",
                     !isEqual(day, selectedDay) &&
-                    !isToday(day) &&
-                    isSameMonth(day, firstDayCurrentMonth) &&
-                    "text-foreground",
+                      !isToday(day) &&
+                      isSameMonth(day, firstDayCurrentMonth) &&
+                      "text-foreground",
                     !isEqual(day, selectedDay) &&
-                    !isToday(day) &&
-                    !isSameMonth(day, firstDayCurrentMonth) &&
-                    "text-muted-foreground",
+                      !isToday(day) &&
+                      !isSameMonth(day, firstDayCurrentMonth) &&
+                      "text-muted-foreground",
                     (isEqual(day, selectedDay) || isToday(day)) &&
-                    "font-semibold",
+                      "font-semibold",
                     "flex h-14 flex-col border-b border-r px-3 py-2 hover:bg-muted focus:z-10"
                   )}
                 >
@@ -352,23 +360,25 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
                     className={cn(
                       "ml-auto flex size-6 items-center justify-center rounded-full",
                       isEqual(day, selectedDay) &&
-                      isToday(day) &&
-                      "bg-primary text-primary-foreground",
+                        isToday(day) &&
+                        "bg-primary text-primary-foreground",
                       isEqual(day, selectedDay) &&
-                      !isToday(day) &&
-                      "bg-primary text-primary-foreground"
+                        !isToday(day) &&
+                        "bg-primary text-primary-foreground"
                     )}
                   >
                     {format(day, "d")}
                   </time>
                   {eventsForDay(day).length > 0 && (
                     <div className="-mx-0.5 mt-auto flex flex-wrap-reverse">
-                      {eventsForDay(day).slice(0, 3).map((event, idx) => (
-                        <span
-                          key={event.id + idx}
-                          className="mx-0.5 mt-1 ml-auto size-1 rounded-full text-xs bg-primary/75"
-                        />
-                      ))}
+                      {eventsForDay(day)
+                        .slice(0, 3)
+                        .map((event, idx) => (
+                          <span
+                            key={event.id + idx}
+                            className="mx-0.5 mt-1 ml-auto size-1 rounded-full text-xs bg-primary/75"
+                          />
+                        ))}
                       {/* {eventsForDay(day).length > 3 && (
                         <span className="mx-0.5 mt-1 ml-auto size-1 rounded-full text-xs bg-muted-foreground">
                           +{eventsForDay(day).length - 3}

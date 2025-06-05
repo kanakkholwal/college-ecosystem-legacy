@@ -13,7 +13,6 @@ import { authClient } from "~/lib/auth-client";
 import { changeCase } from "~/utils/string";
 import { NoteSeparator } from "./note-separator";
 
-
 interface ProfileDropdownProps {
   user: Session["user"];
 }
@@ -25,16 +24,16 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
     ...[
       user.role === "admin"
         ? {
-          Icon: UserRound,
-          href: "/admin",
-          title: "Admin",
-        }
+            Icon: UserRound,
+            href: "/admin",
+            title: "Admin",
+          }
         : null,
     ],
     ...user.other_roles.map((role) => ({
       Icon: UserRound,
       href: `/${role}`,
-      title: role
+      title: role,
     })),
   ].filter((elem) => elem !== null);
 
@@ -57,13 +56,13 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
                   ? user.image
                   : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`
               }
-            // src={
-            //   user.image
-            //     ? (user.image as string)
-            //     : user.gender !== "non_specified"
-            //       ? `/assets/avatars/${user.gender}_user.png`
-            //       : ""
-            // }
+              // src={
+              //   user.image
+              //     ? (user.image as string)
+              //     : user.gender !== "non_specified"
+              //       ? `/assets/avatars/${user.gender}_user.png`
+              //       : ""
+              // }
             />
             <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
           </Avatar>
@@ -87,7 +86,10 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           <h4 className="font-semibold tracking-wide text-base">{user.name}</h4>
           <p className="text-muted-foreground font-medium text-sm">
             {user.email}
-            <Link href={`/results/${user.username}`} className="text-primary hover:underline ml-2 text-xs">
+            <Link
+              href={`/results/${user.username}`}
+              className="text-primary hover:underline ml-2 text-xs"
+            >
               View Result
               <ArrowTopRightIcon className="inline-block size-3 ml-1" />
             </Link>
@@ -97,7 +99,10 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
           </p>
         </div>
       </div>
-      <NoteSeparator label="Authorized Dashboard(s)" labelClassName="p-0 text-xs" />
+      <NoteSeparator
+        label="Authorized Dashboard(s)"
+        labelClassName="p-0 text-xs"
+      />
       <div className="grid grid-cols-2 gap-2 w-full">
         {links.map((link) => (
           <Link
@@ -111,7 +116,6 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
         ))}
       </div>
       <div>
-
         <NoteSeparator label="Support" labelClassName="p-0 text-xs" />
 
         <div className="flex flex-row gap-1 flex-wrap">
@@ -170,4 +174,3 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
     </ResponsiveDialog>
   );
 }
-

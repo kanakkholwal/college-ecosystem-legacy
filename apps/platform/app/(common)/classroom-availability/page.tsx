@@ -59,7 +59,10 @@ export default async function RoomsPage(props: Props) {
         loadingFallback={
           <ResponsiveContainer>
             {[...Array(8)].map((_, i) => (
-              <Skeleton className="w-full h-96" key={`skeleton-${i.toString()}`} />
+              <Skeleton
+                className="w-full h-96"
+                key={`skeleton-${i.toString()}`}
+              />
             ))}
           </ResponsiveContainer>
         }
@@ -72,7 +75,7 @@ export default async function RoomsPage(props: Props) {
           />
         </ConditionalRender>
         <ConditionalRender condition={rooms.length > 0}>
-          <ResponsiveContainer >
+          <ResponsiveContainer>
             {rooms.map((room, i) => {
               return (
                 <RoomCard

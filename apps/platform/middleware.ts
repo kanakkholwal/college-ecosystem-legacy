@@ -6,8 +6,6 @@ import type { Session } from "~/lib/auth";
 
 const SIGN_IN_PATH = "/sign-in";
 
-
-
 const UN_PROTECTED_API_ROUTES = ["/api/auth/*"];
 const DashboardRoutes = [
   ROLES.ADMIN,
@@ -23,7 +21,6 @@ const DashboardRoutes = [
   ROLES.LIBRARIAN,
   ROLES.STUDENT,
 ];
-
 
 /**
  * Check if the user is authorized to access the given route.
@@ -81,7 +78,6 @@ function checkAuthorization(
 }
 
 export async function middleware(request: NextRequest) {
-  
   const url = new URL(request.url);
   // if the request is for the sign-in page, allow it to pass through
   const { data: session } = await betterFetch<Session>(
@@ -115,13 +111,23 @@ export async function middleware(request: NextRequest) {
     }
     // if the user is already authenticated
     // manage the dashboard routes
-    if(request.nextUrl.pathname.slice(1) === "/dashboard"){
+    if (request.nextUrl.pathname.slice(1) === "/dashboard") {
       return NextResponse.redirect(
-          new URL(request.nextUrl.pathname.replace("/dashboard", session.user.other_roles[0]), request.url)
-        );
+        new URL(
+          request.nextUrl.pathname.replace(
+            "/dashboard",
+            session.user.other_roles[0]
+          ),
+          request.url
+        )
+      );
     }
-    if (request.method === "GET" && 
-      DashboardRoutes.includes(request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number])) {
+    if (
+      request.method === "GET" &&
+      DashboardRoutes.includes(
+        request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number]
+      )
+    ) {
       const authCheck = checkAuthorization(
         request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number],
         session
@@ -135,13 +141,13 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(
           new URL("/unauthorized?target=" + request.url, request.url)
         );
-
       }
-
     }
-
   }
-  if (request.method === "POST" || request.nextUrl.pathname.startsWith("/api")) {
+  if (
+    request.method === "POST" ||
+    request.nextUrl.pathname.startsWith("/api")
+  ) {
     if (!session) {
       return NextResponse.redirect(new URL(SIGN_IN_PATH, request.url));
     }
@@ -152,7 +158,11 @@ export async function middleware(request: NextRequest) {
     ) {
       return NextResponse.next();
     }
-    if (DashboardRoutes.includes(request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number])) {
+    if (
+      DashboardRoutes.includes(
+        request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number]
+      )
+    ) {
       const authCheck = checkAuthorization(
         request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number],
         session
@@ -174,26 +184,27 @@ export async function middleware(request: NextRequest) {
               "Un-Authorized-Redirect-tries": "1",
             },
           }
-        )
+        );
       }
       if (!authCheck.authorized) {
-        return NextResponse.json({
-          status: "error",
-          message: "You are not authorized to perform this action",
-        }, {
-          status: 403,
-          headers: {
-            "Un-Authorized-Redirect": "true",
-            "Un-Authorized-Redirect-Path": SIGN_IN_PATH,
-            "Un-Authorized-Redirect-Next": request.nextUrl.href,
-            "Un-Authorized-Redirect-Method": request.method,
-            "Un-Authorized-Redirect-max-tries": "5",
-            "Un-Authorized-Redirect-tries": "1",
+        return NextResponse.json(
+          {
+            status: "error",
+            message: "You are not authorized to perform this action",
           },
-        })
-
+          {
+            status: 403,
+            headers: {
+              "Un-Authorized-Redirect": "true",
+              "Un-Authorized-Redirect-Path": SIGN_IN_PATH,
+              "Un-Authorized-Redirect-Next": request.nextUrl.href,
+              "Un-Authorized-Redirect-Method": request.method,
+              "Un-Authorized-Redirect-max-tries": "5",
+              "Un-Authorized-Redirect-tries": "1",
+            },
+          }
+        );
       }
-
     }
   }
 

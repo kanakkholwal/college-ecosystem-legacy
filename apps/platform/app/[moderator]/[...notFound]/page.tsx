@@ -2,8 +2,6 @@ import EmptyArea from "@/components/common/empty-area";
 import { FileText, Files, Link as LinkIcon } from "lucide-react";
 import Link from "next/link";
 
-
-
 interface Props {
   params: Promise<{
     moderator: string[];

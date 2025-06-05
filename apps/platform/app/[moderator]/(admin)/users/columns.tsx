@@ -43,7 +43,9 @@ export const columns: ColumnDef<UserType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium whitespace-nowrap">{row.getValue("name")}</div>
+        <div className="text-left font-medium whitespace-nowrap">
+          {row.getValue("name")}
+        </div>
       );
     },
 
@@ -58,7 +60,9 @@ export const columns: ColumnDef<UserType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium whitespace-nowrap">{row.getValue("email")}</div>
+        <div className="text-left font-medium whitespace-nowrap">
+          {row.getValue("email")}
+        </div>
       );
     },
     enableSorting: true,
@@ -96,7 +100,9 @@ export const columns: ColumnDef<UserType>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-left font-medium whitespace-nowrap">{row.getValue("gender")}</div>
+        <div className="text-left font-medium whitespace-nowrap">
+          {row.getValue("gender")}
+        </div>
       );
     },
     enableSorting: true,
@@ -134,7 +140,11 @@ export const columns: ColumnDef<UserType>[] = [
           day: "numeric",
         }
       );
-      return <div className="text-left font-medium whitespace-nowrap">{formatted}</div>;
+      return (
+        <div className="text-left font-medium whitespace-nowrap">
+          {formatted}
+        </div>
+      );
     },
     enableSorting: true,
     enableHiding: true,

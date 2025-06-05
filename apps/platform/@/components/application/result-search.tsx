@@ -7,14 +7,18 @@ type Props = {
   programmes: string[];
 };
 
-export default function ResultSearchBox({ branches, batches, programmes }: Props) {
+export default function ResultSearchBox({
+  branches,
+  batches,
+  programmes,
+}: Props) {
   const filterOptions = [
     {
       key: "branch",
       label: "By Branches",
       values: [
         { value: "all", label: "All" },
-        ...branches.map(branch => ({ value: branch, label: branch }))
+        ...branches.map((branch) => ({ value: branch, label: branch })),
       ],
     },
     {
@@ -22,7 +26,7 @@ export default function ResultSearchBox({ branches, batches, programmes }: Props
       label: "By Batch",
       values: [
         { value: "all", label: "All" },
-        ...batches.map(batch => ({ value: batch, label: batch }))
+        ...batches.map((batch) => ({ value: batch, label: batch })),
       ],
     },
     {
@@ -30,7 +34,10 @@ export default function ResultSearchBox({ branches, batches, programmes }: Props
       label: "By Programme",
       values: [
         { value: "all", label: "All" },
-        ...programmes.map(programme => ({ value: programme, label: programme }))
+        ...programmes.map((programme) => ({
+          value: programme,
+          label: programme,
+        })),
       ],
     },
   ];

@@ -38,7 +38,12 @@ interface Props extends React.ComponentProps<typeof Card> {
   deletable?: boolean;
 }
 
-export default function RoomCard({ room, user,deletable=false, ...props }: Props) {
+export default function RoomCard({
+  room,
+  user,
+  deletable = false,
+  ...props
+}: Props) {
   const authorized = user
     ? user?.role === "admin" ||
       user.other_roles?.includes("cr") ||
@@ -71,7 +76,7 @@ export default function RoomCard({ room, user,deletable=false, ...props }: Props
       className="hover:shadow-lg animate-in popup @container/0 relative"
       {...props}
     >
-      {(user?.role === "admin" && deletable) && (
+      {user?.role === "admin" && deletable && (
         <div className="absolute -top-2 -left-2 z-10">
           <Button
             size="icon_sm"

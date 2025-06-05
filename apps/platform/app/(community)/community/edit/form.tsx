@@ -26,9 +26,18 @@ import toast from "react-hot-toast";
 import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "src/constants/community";
 import type { z } from "zod";
 import { updatePost } from "~/lib/community/actions";
-import { CommunityPostTypeWithId, rawCommunityPostSchema } from "~/models/community";
+import {
+  CommunityPostTypeWithId,
+  rawCommunityPostSchema,
+} from "~/models/community";
 
-export default function EditCommunityPost({postId,post}: {postId: string,post:CommunityPostTypeWithId}) {
+export default function EditCommunityPost({
+  postId,
+  post,
+}: {
+  postId: string;
+  post: CommunityPostTypeWithId;
+}) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const form = useForm<z.infer<typeof rawCommunityPostSchema>>({
@@ -43,7 +52,7 @@ export default function EditCommunityPost({postId,post}: {postId: string,post:Co
 
   function onSubmit(values: z.infer<typeof rawCommunityPostSchema>) {
     console.log(values);
-    toast.promise(updatePost(postId,values), {
+    toast.promise(updatePost(postId, values), {
       loading: "Updating Post",
       success: (data) => {
         console.log(data);
@@ -56,7 +65,10 @@ export default function EditCommunityPost({postId,post}: {postId: string,post:Co
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-2 lg:p-4 bg-card rounded-lg">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6 p-2 lg:p-4 bg-card rounded-lg"
+      >
         <FormField
           control={form.control}
           name="title"
@@ -168,16 +180,31 @@ export default function EditCommunityPost({postId,post}: {postId: string,post:Co
           />
         )}
         <div className="inline-flex items-center gap-2 justify-between">
-
-        <Button type="submit" variant="default_light" width="xs" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : null}
-          {form.formState.isSubmitting ? "Updating..." : "Update Post"}
-          {form.formState.isSubmitting ? null : <SendHorizontal />}
-        </Button>
-        <Button type="button" variant="destructive_light" width="xs" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <Trash2/>}
-          {form.formState.isSubmitting ? "Deleting..." : "Delete Post"}
-        </Button>
+          <Button
+            type="submit"
+            variant="default_light"
+            width="xs"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? (
+              <Loader2 className="animate-spin" />
+            ) : null}
+            {form.formState.isSubmitting ? "Updating..." : "Update Post"}
+            {form.formState.isSubmitting ? null : <SendHorizontal />}
+          </Button>
+          <Button
+            type="button"
+            variant="destructive_light"
+            width="xs"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? (
+              <Loader2 className="animate-spin" />
+            ) : (
+              <Trash2 />
+            )}
+            {form.formState.isSubmitting ? "Deleting..." : "Delete Post"}
+          </Button>
         </div>
       </form>
     </Form>

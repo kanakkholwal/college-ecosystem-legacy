@@ -33,7 +33,7 @@ export function HeroSection({ user }: HeroSection) {
           {getGreeting()} <span className="text-primary">{user?.name}</span>
         </h2>
         <p className="mb-8 text-lg text-muted-foreground">
-          Welcome to the {appConfig.name} 
+          Welcome to the {appConfig.name}
         </p>
         {user?.other_roles.includes("student") && (
           <Alert variant="info" className="mt-4" data-aos="fade-right">

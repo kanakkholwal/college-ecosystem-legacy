@@ -3,7 +3,15 @@ import { ChartBar } from "@/components/application/charts";
 import { StatsCard } from "@/components/application/stats-card";
 import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/typography";
-import { Briefcase, CircleDashed, Eye, Network, Transgender, TrendingDown, TrendingUp } from "lucide-react";
+import {
+  Briefcase,
+  CircleDashed,
+  Eye,
+  Network,
+  Transgender,
+  TrendingDown,
+  TrendingUp,
+} from "lucide-react";
 import { TbUsersGroup } from "react-icons/tb";
 import {
   getActiveSessions,
@@ -63,12 +71,13 @@ export default async function AdminDashboard() {
 
               <p className="text-xs text-muted-foreground">
                 <span
-                  className={`${userTrend === 1
-                    ? "text-green-500"
-                    : userTrend === -1
-                      ? "text-red-500"
-                      : "text-primary/80"
-                    } text-base`}
+                  className={`${
+                    userTrend === 1
+                      ? "text-green-500"
+                      : userTrend === -1
+                        ? "text-red-500"
+                        : "text-primary/80"
+                  } text-base`}
                 >
                   {userTrend === 1 ? (
                     <TrendingUp className="inline-block mr-2 size-4" />
@@ -119,15 +128,13 @@ export default async function AdminDashboard() {
             {/* Users by Gender Card */}
             <StatsCard
               title="Users by Gender"
-              Icon={<Transgender  className="inline-block mr-2 size-4" />}
+              Icon={<Transgender className="inline-block mr-2 size-4" />}
             >
-
-
               <ChartBar
                 data={usersByGender}
                 orientation="vertical"
                 config={{
-                    count: {
+                  count: {
                     label: "Gender",
                   },
 
@@ -155,9 +162,8 @@ export default async function AdminDashboard() {
             {/* Users by Role Card */}
             <StatsCard
               title="Users by Role"
-              Icon={<Briefcase  className="inline-block mr-2 size-4" />}
+              Icon={<Briefcase className="inline-block mr-2 size-4" />}
             >
-
               <ChartBar
                 data={usersByRole}
                 orientation="vertical"
@@ -166,7 +172,9 @@ export default async function AdminDashboard() {
                     label: "Role",
                   },
 
-                  ...ROLES_LIST.reduce<Record<string, { label: string; color: string }>>((acc, role, idx) => {
+                  ...ROLES_LIST.reduce<
+                    Record<string, { label: string; color: string }>
+                  >((acc, role, idx) => {
                     acc[role] = {
                       label: changeCase(role, "title"),
                       color: `var(--chart-${idx + 1})`,
@@ -176,7 +184,6 @@ export default async function AdminDashboard() {
                 }}
                 dataKey="count"
                 nameKey="role"
-                
               />
               <p className="text-xs text-muted-foreground">
                 Total Users per Role
@@ -186,7 +193,7 @@ export default async function AdminDashboard() {
             {/* Users by Department Card */}
             <StatsCard
               title="Users by Department"
-              Icon={<Network  className="inline-block mr-2 size-4" />}
+              Icon={<Network className="inline-block mr-2 size-4" />}
             >
               <ChartBar
                 data={usersByDepartment.map((dept) => ({
@@ -202,7 +209,9 @@ export default async function AdminDashboard() {
                     color: "var(--chart-1)",
                   },
 
-                  ...DEPARTMENTS_LIST.reduce<Record<string, { label: string; color: string }>>((acc, dept, idx) => {
+                  ...DEPARTMENTS_LIST.reduce<
+                    Record<string, { label: string; color: string }>
+                  >((acc, dept, idx) => {
                     acc[dept.code] = {
                       label: changeCase(dept.name, "title"),
                       color: `var(--chart-${idx + 1})`,
@@ -212,7 +221,6 @@ export default async function AdminDashboard() {
                 }}
                 dataKey="count"
                 nameKey="department"
-                
               />
               <p className="text-xs text-muted-foreground">
                 Total Users per Department

@@ -73,8 +73,7 @@ export async function getPostById(
     if (!postExists) {
       return Promise.resolve(null);
     }
-    const post = await CommunityPost.findById(id)
-    .populate(
+    const post = await CommunityPost.findById(id).populate(
       "author",
       "name email rollNo"
     );
@@ -107,7 +106,10 @@ export async function updatePost(
     }
 
     // Check if the user is the author of the post
-    if (("title" in updates || "content" in updates) && (post.author.id !== session.user.id || session.user.role !== "admin")) {
+    if (
+      ("title" in updates || "content" in updates) &&
+      (post.author.id !== session.user.id || session.user.role !== "admin")
+    ) {
       return Promise.reject("You are not authorized to update this post");
     }
 

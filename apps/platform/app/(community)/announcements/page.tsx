@@ -27,10 +27,12 @@ export default async function AnnouncementsPage(props: {
   const announcements = await getAnnouncements();
   console.log(announcements);
 
-
   return (
     <div className="w-full max-w-(--max-app-width) grid grid-cols-1 gap-4">
-      <Tabs defaultValue={category} className="md:sticky md:top-4 z-50 mx-1.5 md:mx-auto">
+      <Tabs
+        defaultValue={category}
+        className="md:sticky md:top-4 z-50 mx-1.5 md:mx-auto"
+      >
         <VercelTabsList
           tabs={[
             {
@@ -51,17 +53,23 @@ export default async function AnnouncementsPage(props: {
           {category && (
             <span className="text-sm text-muted-foreground ml-1">
               in {category}
-              <Link href="/announcements" className="ml-1 hover:text-primary cursor-pointer">
+              <Link
+                href="/announcements"
+                className="ml-1 hover:text-primary cursor-pointer"
+              >
                 <X className="inline-block size-3" />
               </Link>
             </span>
           )}
           <Badge size="sm" className="ml-2">
-            {(RELATED_FOR_TYPES.includes(category as any) ?
-              announcements.filter(
-                (announcement) =>
-                  announcement.relatedFor === category
-              ) : announcements).length}
+            {
+              (RELATED_FOR_TYPES.includes(category as any)
+                ? announcements.filter(
+                    (announcement) => announcement.relatedFor === category
+                  )
+                : announcements
+              ).length
+            }
           </Badge>
         </h3>
         <Button variant="link" size="sm" asChild>
@@ -79,16 +87,17 @@ export default async function AnnouncementsPage(props: {
             description="There are no announcements at the moment."
           />
         ) : (
-          <AnnouncementsList announcements={
-            RELATED_FOR_TYPES.includes(category as any) ?
-              announcements.filter(
-                (announcement) =>
-                  announcement.relatedFor === category
-              ) : announcements
-          } />)}
+          <AnnouncementsList
+            announcements={
+              RELATED_FOR_TYPES.includes(category as any)
+                ? announcements.filter(
+                    (announcement) => announcement.relatedFor === category
+                  )
+                : announcements
+            }
+          />
+        )}
       </div>
-
-
     </div>
   );
 }

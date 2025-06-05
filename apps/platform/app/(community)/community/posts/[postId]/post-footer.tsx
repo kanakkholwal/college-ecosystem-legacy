@@ -18,8 +18,6 @@ export default function PostFooter({
   post: CommunityPostTypeWithId;
   user: Session["user"];
 }) {
-
-
   // refactor this with useTransition after react 19
   const [liking, setLiking] = useState<boolean>(false);
   const [saving, setSaving] = useState<boolean>(false);
@@ -71,13 +69,13 @@ export default function PostFooter({
             text: post.content,
             url: appConfig.url + `/community/posts/${post._id}`,
           }}
-          variant="ghost" size="xs">
+          variant="ghost"
+          size="xs"
+        >
           <Share />
           Share
         </ShareButton>
-
       </div>
-
     </div>
   );
 }

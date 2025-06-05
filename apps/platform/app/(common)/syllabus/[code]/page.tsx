@@ -34,7 +34,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   // read route params
   const { code } = await params;
-  const {course} = await getCourseByCode(code);
+  const { course } = await getCourseByCode(code);
   if (!course) return notFound();
 
   return {

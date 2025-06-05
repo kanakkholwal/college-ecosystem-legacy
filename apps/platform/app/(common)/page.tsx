@@ -6,8 +6,6 @@ import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { HeroSection } from "./client";
 
-
-
 export default async function Dashboard() {
   const session = (await getSession()) as Session;
 
@@ -20,7 +18,6 @@ export default async function Dashboard() {
   }
   return (
     <div className="flex w-full flex-1 flex-col gap-6 px-4 md:px-6 pt-4 md:pt-6 xl:px-12 xl:mx-auto max-w-6xl max-sm:pb-16">
-
       <HeroSection user={session?.user} />
       <section
         id="quick-links"

@@ -20,8 +20,8 @@ type UsageHistorySelect = InferSelectModel<typeof roomUsageHistory>;
 
 export async function getRoomByIdForAdmin(roomId: string): Promise<
   | (RoomSelect & {
-    usageHistory: { username: string; name: string; createdAt: Date }[];
-  })
+      usageHistory: { username: string; name: string; createdAt: Date }[];
+    })
   | null
 > {
   "use server";
@@ -117,9 +117,9 @@ export async function listAllRoomsWithHistory(filters?: {
   // Apply filters if any
   const roomQuery = conditions.length
     ? db
-      .select()
-      .from(rooms)
-      .where(and(...conditions))
+        .select()
+        .from(rooms)
+        .where(and(...conditions))
     : db.select().from(rooms);
 
   const filteredRooms = await roomQuery;
@@ -227,7 +227,9 @@ export async function deleteRoom(roomId: string): Promise<RoomSelect> {
     // Start a transaction
     const deletedRoom = await db.transaction(async (tx) => {
       // First delete usage history associated with the room
-      await tx.delete(roomUsageHistory).where(eq(roomUsageHistory.roomId, roomId));
+      await tx
+        .delete(roomUsageHistory)
+        .where(eq(roomUsageHistory.roomId, roomId));
 
       // Then delete the room itself
       const [room] = await tx
@@ -251,7 +253,9 @@ export async function deleteRoom(roomId: string): Promise<RoomSelect> {
     return deletedRoom;
   } catch (error) {
     console.error("Failed to delete room:", error);
-    throw new Error(`Failed to delete room: ${error instanceof Error ? error.message : String(error)}`);
+    throw new Error(
+      `Failed to delete room: ${error instanceof Error ? error.message : String(error)}`
+    );
   }
 }
 

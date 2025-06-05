@@ -73,7 +73,6 @@ export default async function CoursesPage(props: {
       </section>
       <NoteSeparator label={`${courses.length} Courses found`} />
 
-
       <ResponsiveContainer>
         <Suspense
           key="Courses"

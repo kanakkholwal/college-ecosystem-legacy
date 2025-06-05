@@ -7,7 +7,6 @@ import { LuBuilding } from "react-icons/lu";
 import { PiStudentFill } from "react-icons/pi";
 import { getHostel } from "~/actions/hostel";
 
-
 export default async function HostelPage({
   params,
 }: {
@@ -54,7 +53,10 @@ export default async function HostelPage({
           </h5>
           <ul className="list-disc list-inside">
             {hostel.administrators.map((admin) => (
-              <li key={admin.email} className="text-sm font-medium text-muted-foreground">
+              <li
+                key={admin.email}
+                className="text-sm font-medium text-muted-foreground"
+              >
                 {admin.name} - {admin.email}
               </li>
             ))}
@@ -78,37 +80,38 @@ export default async function HostelPage({
   );
 }
 
-const getRoutes = (moderator: string, slug: string) => [
-  {
-    title: "Outpass Requests",
-    description: "View all outpass requests for this hostel",
-    href: `/${moderator}/hostels/${slug}/outpass-requests`,
-    Icon: Tickets,
-  },
-  {
-    title: "Outpass Logs (History)",
-    description: "View all outpass logs for this hostel",
-    href: `/${moderator}/hostels/${slug}/outpass-logs`,
-    Icon: HistoryIcon,
-  },
-  {
-    title: "Hostelers",
-    description: "View all hostelers in this hostel",
-    href: `/${moderator}/hostels/${slug}/students`,
-    Icon: PiStudentFill,
-  },
-  {
-    title: "Hostel Rooms",
-    description: "View all rooms in this hostel",
-    href: `/${moderator}/hostels/${slug}/rooms`,
-    Icon: LuBuilding,
-  },
-  {
-    title: "Room Allotment",
-    description: "Room allotment feature is under development.",
-    // description="Manage room allotment for this hostel"
-    Icon: FolderKanban,
-    href: `/${moderator}/hostels/${slug}/allotment`,
-    disabled: true, // Disable for now, implement later
-  },
-] as RouterCardLink[];
+const getRoutes = (moderator: string, slug: string) =>
+  [
+    {
+      title: "Outpass Requests",
+      description: "View all outpass requests for this hostel",
+      href: `/${moderator}/hostels/${slug}/outpass-requests`,
+      Icon: Tickets,
+    },
+    {
+      title: "Outpass Logs (History)",
+      description: "View all outpass logs for this hostel",
+      href: `/${moderator}/hostels/${slug}/outpass-logs`,
+      Icon: HistoryIcon,
+    },
+    {
+      title: "Hostelers",
+      description: "View all hostelers in this hostel",
+      href: `/${moderator}/hostels/${slug}/students`,
+      Icon: PiStudentFill,
+    },
+    {
+      title: "Hostel Rooms",
+      description: "View all rooms in this hostel",
+      href: `/${moderator}/hostels/${slug}/rooms`,
+      Icon: LuBuilding,
+    },
+    {
+      title: "Room Allotment",
+      description: "Room allotment feature is under development.",
+      // description="Manage room allotment for this hostel"
+      Icon: FolderKanban,
+      href: `/${moderator}/hostels/${slug}/allotment`,
+      disabled: true, // Disable for now, implement later
+    },
+  ] as RouterCardLink[];

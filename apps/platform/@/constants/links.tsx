@@ -350,24 +350,26 @@ const checkRoleAccess = (userRole: string, allowedRoles: string[]): boolean => {
   );
 };
 
-export const SUPPORT_LINKS = supportLinks
+export const SUPPORT_LINKS = supportLinks;
 
 type NavLink = {
-  title: string; href: string; description: string
+  title: string;
+  href: string;
+  description: string;
   Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
   items?: NavLink[];
-}
-
+};
 
 export const getNavLinks = (user: Session["user"]): NavLink[] => {
   const linksByRole = [user.role, ...(user.other_roles || [])]
     .map((role) => getLinksByRole(role, quick_links))
     .flat() // filter out unique links
-    .filter((link, index, self) =>
-      index === self.findIndex((l) => l.href === link.href && l.title === link.title)
+    .filter(
+      (link, index, self) =>
+        index ===
+        self.findIndex((l) => l.href === link.href && l.title === link.title)
     );
   // console.log("Links by role:", linksByRole);
-
 
   return [
     // {
@@ -377,32 +379,29 @@ export const getNavLinks = (user: Session["user"]): NavLink[] => {
     //   Icon: House,
     // },
     ...linksByRole,
-    ...(
-      user.other_roles?.length <= 1
-        ? [
-            {
-              title: "Settings",
-              href: user.other_roles[0] + "/settings",
-              description: "Manage your account settings.",
+    ...(user.other_roles?.length <= 1
+      ? [
+          {
+            title: "Settings",
+            href: user.other_roles[0] + "/settings",
+            description: "Manage your account settings.",
+            Icon: Settings,
+          },
+        ]
+      : [
+          {
+            title: "Dashboard",
+            href: "/" + user.other_roles[0],
+            description: "Manage your account settings.",
+            Icon: Settings,
+            items: user.other_roles.map((role) => ({
+              title:
+                role.charAt(0).toUpperCase() + role.slice(1) + " Dashboard",
+              href: `/${role}`,
+              description: `Manage your ${role} dashboard.`,
               Icon: Settings,
-            },
-          ]
-        : [
-            {
-              title: "Dashboard",
-              href: "/"+user.other_roles[0],
-              description: "Manage your account settings.",
-              Icon: Settings,
-              items: user.other_roles.map((role) => ({
-                title: role.charAt(0).toUpperCase() + role.slice(1) + " Dashboard",
-                href: `/${role}`,
-                description: `Manage your ${role} dashboard.`,
-                Icon: Settings,
-              })),
-            },
-          ]
-    )
+            })),
+          },
+        ]),
   ];
-
-
-}
+};

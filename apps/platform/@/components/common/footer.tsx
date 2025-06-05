@@ -6,15 +6,12 @@ import { appConfig } from "~/project.config";
 import GithubStars from "./github";
 import { ThemeSwitcher } from "./theme-switcher";
 
-
-
 export default async function Footer() {
-
   return (
     <footer
       className={cn(
         "z-40 w-full transition-all pt-5 pb-8 mt-auto",
-        "bg-card border-b",
+        "bg-card border-b"
       )}
     >
       <div className="w-full max-w-(--max-app-width) mx-auto p-4 flex flex-wrap gap-3 justify-between items-start">
@@ -46,7 +43,7 @@ export default async function Footer() {
         </div>
       </div>
       <div className="flex flex-wrap items-center justify-start gap-4 w-full max-w-(--max-app-width) mx-auto p-3">
-        <GithubStars/>
+        <GithubStars />
         <SupportBar />
       </div>
     </footer>

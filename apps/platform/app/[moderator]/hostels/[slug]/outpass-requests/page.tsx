@@ -5,7 +5,7 @@ import EmptyArea from "@/components/common/empty-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { SkeletonCardArea } from "@/components/utils/skeleton-cards";
-import { LoaderCircle } from 'lucide-react';
+import { LoaderCircle } from "lucide-react";
 import { useParams } from "next/navigation";
 import { LuBuilding } from "react-icons/lu";
 import useSWR, { type Fetcher } from "swr";
@@ -53,10 +53,10 @@ export default function OutPassRequestsPage() {
     <div className="space-y-5">
       <div>
         <h4 className="text-lg font-semibold">Outpass Requests</h4>
-        <p className="text-sm text-muted-foreground">Check outpass requests here.</p>
+        <p className="text-sm text-muted-foreground">
+          Check outpass requests here.
+        </p>
       </div>
-
-
 
       <Tabs defaultValue={OUTPASS_STATUS[0]}>
         <TabsList>
@@ -68,7 +68,7 @@ export default function OutPassRequestsPage() {
           {OUTPASS_STATUS.map((status) => {
             return (
               <TabsTrigger key={status} value={status} className="capitalize">
-                {changeCase(status,"title")}
+                {changeCase(status, "title")}
               </TabsTrigger>
             );
           })}
@@ -87,7 +87,8 @@ export default function OutPassRequestsPage() {
               title="Error fetching outpass requests"
               className="border-destructive bg-destructive/10 text-destructive hover:bg-destructive/20 hover:border-destructive hover:text-destructive"
               description={
-                error?.toString() || "An error occurred while fetching outpass requests."
+                error?.toString() ||
+                "An error occurred while fetching outpass requests."
               }
             />
           </ConditionalRender>
@@ -114,7 +115,7 @@ export default function OutPassRequestsPage() {
                   >
                     <EmptyArea
                       icons={[LuBuilding]}
-                      title={`No ${changeCase(status,"title")} Outpass Requests Found`}
+                      title={`No ${changeCase(status, "title")} Outpass Requests Found`}
                       description={`No outpass requests found for ${status} status.`}
                     />
                   </ConditionalRender>

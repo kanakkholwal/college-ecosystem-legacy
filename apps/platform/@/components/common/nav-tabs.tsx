@@ -1,144 +1,156 @@
-"use client"
+"use client";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 // import { AnimatePresence, motion } from "motion/react"
-import Link, { type LinkProps } from "next/link"
-import { usePathname } from "next/navigation"
-import * as React from "react"
-import { useEffect, useRef, useState } from "react"
+import Link, { type LinkProps } from "next/link";
+import { usePathname } from "next/navigation";
+import * as React from "react";
+import { useEffect, useRef, useState } from "react";
 
 type NavLinkItems = {
-    title: string;
-    href: string;
-    description: string;
-    Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
-}
+  title: string;
+  href: string;
+  description: string;
+  Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
+};
 
 interface NavLink extends LinkProps {
-    id: string
-    children: React.ReactNode
-    href: string
-    notificationCount?: number,
-    items?: NavLinkItems[]
+  id: string;
+  children: React.ReactNode;
+  href: string;
+  notificationCount?: number;
+  items?: NavLinkItems[];
 }
 
 interface NavTabsProps extends React.HTMLAttributes<HTMLDivElement> {
-    navLinks: NavLink[]
-    activeTab?: string
-    triggerHeight?: string
+  navLinks: NavLink[];
+  activeTab?: string;
+  triggerHeight?: string;
 }
 
 const NavTabs = React.forwardRef<HTMLDivElement, NavTabsProps>(
-    ({ className, navLinks, activeTab, triggerHeight = "h-[30px]", ...props }, ref) => {
-        const pathname = usePathname();
-        const defaultIndex = navLinks.findIndex(link => pathname.startsWith(link.href))
+  (
+    { className, navLinks, activeTab, triggerHeight = "h-[30px]", ...props },
+    ref
+  ) => {
+    const pathname = usePathname();
+    const defaultIndex = navLinks.findIndex((link) =>
+      pathname.startsWith(link.href)
+    );
 
-        const [hoveredIndex, setHoveredIndex] = useState<number | null>(navLinks.length)
-        const [activeIndex, setActiveIndex] = useState<number>(defaultIndex)
-        const [hoverStyle, setHoverStyle] = useState<{
-            left?: string;
-            width?: string;
-        }>({})
-        const [activeStyle, setActiveStyle] = useState({ left: "0px", width: "0px" })
-        const tabRefs = useRef<(HTMLAnchorElement | null)[]>([])
+    const [hoveredIndex, setHoveredIndex] = useState<number | null>(
+      navLinks.length
+    );
+    const [activeIndex, setActiveIndex] = useState<number>(defaultIndex);
+    const [hoverStyle, setHoverStyle] = useState<{
+      left?: string;
+      width?: string;
+    }>({});
+    const [activeStyle, setActiveStyle] = useState({
+      left: "0px",
+      width: "0px",
+    });
+    const tabRefs = useRef<(HTMLAnchorElement | null)[]>([]);
 
-        useEffect(() => {
-            if (hoveredIndex !== null) {
-                const hoveredElement = tabRefs.current[hoveredIndex]
-                if (hoveredElement) {
-                    const { offsetLeft, offsetWidth } = hoveredElement
-                    setHoverStyle({
-                        left: `${offsetLeft}px`,
-                        width: `${offsetWidth}px`,
-                    })
-                }
-            }
-        }, [hoveredIndex])
+    useEffect(() => {
+      if (hoveredIndex !== null) {
+        const hoveredElement = tabRefs.current[hoveredIndex];
+        if (hoveredElement) {
+          const { offsetLeft, offsetWidth } = hoveredElement;
+          setHoverStyle({
+            left: `${offsetLeft}px`,
+            width: `${offsetWidth}px`,
+          });
+        }
+      }
+    }, [hoveredIndex]);
 
-        useEffect(() => {
-            const activeElement = tabRefs.current[activeIndex]
-            if (activeElement) {
-                const { offsetLeft, offsetWidth } = activeElement
-                setActiveStyle({
-                    left: `${offsetLeft}px`,
-                    width: `${offsetWidth}px`,
-                })
-            }
-        }, [activeIndex])
+    useEffect(() => {
+      const activeElement = tabRefs.current[activeIndex];
+      if (activeElement) {
+        const { offsetLeft, offsetWidth } = activeElement;
+        setActiveStyle({
+          left: `${offsetLeft}px`,
+          width: `${offsetWidth}px`,
+        });
+      }
+    }, [activeIndex]);
 
-        useEffect(() => {
-            requestAnimationFrame(() => {
-                const firstElement = tabRefs.current[activeIndex]
-                if (firstElement) {
-                    const { offsetLeft, offsetWidth } = firstElement
-                    setActiveStyle({
-                        left: `${offsetLeft}px`,
-                        width: `${offsetWidth}px`,
-                    })
-                }
-            })
-        }, [])
+    useEffect(() => {
+      requestAnimationFrame(() => {
+        const firstElement = tabRefs.current[activeIndex];
+        if (firstElement) {
+          const { offsetLeft, offsetWidth } = firstElement;
+          setActiveStyle({
+            left: `${offsetLeft}px`,
+            width: `${offsetWidth}px`,
+          });
+        }
+      });
+    }, []);
 
-        return (
-            <div
-                ref={ref}
-                className={cn(
-                    "flex-1 max-w-(--max-app-width)",
-                    "snap-x snap-mandatory overflow-x-auto scrollbar-0 scrollbar-thumb-muted/0 scrollbar-track-transparent no-scrollbar mx-2 lg:mx-4",
-                    className,
-                    "relative"
-                )}
-                {...props}
+    return (
+      <div
+        ref={ref}
+        className={cn(
+          "flex-1 max-w-(--max-app-width)",
+          "snap-x snap-mandatory overflow-x-auto scrollbar-0 scrollbar-thumb-muted/0 scrollbar-track-transparent no-scrollbar mx-2 lg:mx-4",
+          className,
+          "relative"
+        )}
+        {...props}
+      >
+        <div
+          className={cn(
+            "absolute transition-all duration-300 ease-out bg-primary/10 dark:bg-primary/20 rounded-xl flex items-center",
+            triggerHeight
+          )}
+          style={{
+            ...hoverStyle,
+            opacity: hoveredIndex !== null ? 1 : 0,
+          }}
+        />
+        {/* Active Indicator */}
+        <div
+          className="absolute top-auto z-10 bottom-0 h-0.25 bg-primary rounded-full transition-all duration-300 ease-out"
+          style={activeStyle}
+        />{" "}
+        {/* Tabs */}
+        <div className="inline-flex space-x-[6px] items-center">
+          {navLinks.map((navLink, index) => (
+            <Link
+              href={navLink.href}
+              key={navLink.id}
+              ref={(el) => {
+                tabRefs.current[index] = el;
+              }}
+              className={cn(
+                "px-3 py-2 cursor-pointer transition-colors duration-300 z-10",
+                activeIndex === index
+                  ? "text-primary"
+                  : "text-muted-foreground hover:text-foreground/80",
+                "bg-transparent",
+                triggerHeight
+              )}
+              onMouseEnter={() => setHoveredIndex(index)}
+              onMouseLeave={() => setHoveredIndex(null)}
+              onClick={() => {
+                setActiveIndex(index);
+                // onTabChange?.(navLink.id)
+              }}
             >
-
-                <div
-                    className={cn("absolute transition-all duration-300 ease-out bg-primary/10 dark:bg-primary/20 rounded-xl flex items-center", triggerHeight)}
-                    style={{
-                        ...hoverStyle,
-                        opacity: hoveredIndex !== null ? 1 : 0,
-                    }}
-                />
-                {/* Active Indicator */}
-                <div
-                    className="absolute top-auto z-10 bottom-0 h-0.25 bg-primary rounded-full transition-all duration-300 ease-out"
-                    style={activeStyle}
-                />  {/* Tabs */}
-                <div className="inline-flex space-x-[6px] items-center">
-
-
-                    {navLinks.map((navLink, index) => (
-                        <Link
-                            href={navLink.href}
-                            key={navLink.id}
-                            ref={(el) => { tabRefs.current[index] = el; }}
-                            className={cn(
-                                "px-3 py-2 cursor-pointer transition-colors duration-300 z-10",
-                                activeIndex === index
-                                    ? "text-primary"
-                                    : "text-muted-foreground hover:text-foreground/80",
-                                "bg-transparent",
-                                triggerHeight
-
-                            )}
-                            onMouseEnter={() => setHoveredIndex(index)}
-                            onMouseLeave={() => setHoveredIndex(null)}
-                            onClick={() => {
-                                setActiveIndex(index)
-                                // onTabChange?.(navLink.id)
-                            }}
-                        >
-                            <div className="text-xs font-medium leading-5 whitespace-nowrap flex items-center gap-2 justify-center h-full [&>svg]:size-4">
-                                {navLink?.children}
-                                {navLink.notificationCount && navLink.notificationCount > 0 ? (
-                                    <span className="inline-flex items-center justify-center size-4 text-xs font-medium text-primary bg-primary/10 rounded-full">
-                                        {navLink.notificationCount}
-                                    </span>
-                                ) : null}
-                            </div>
-                        </Link>
-                    ))}
-                </div>
-                {/* <AnimatePresence>
+              <div className="text-xs font-medium leading-5 whitespace-nowrap flex items-center gap-2 justify-center h-full [&>svg]:size-4">
+                {navLink?.children}
+                {navLink.notificationCount && navLink.notificationCount > 0 ? (
+                  <span className="inline-flex items-center justify-center size-4 text-xs font-medium text-primary bg-primary/10 rounded-full">
+                    {navLink.notificationCount}
+                  </span>
+                ) : null}
+              </div>
+            </Link>
+          ))}
+        </div>
+        {/* <AnimatePresence>
                     {(hoveredIndex !== null && navLinks[hoveredIndex]?.items) && (
                         <motion.div
                             style={{
@@ -166,12 +178,10 @@ const NavTabs = React.forwardRef<HTMLDivElement, NavTabsProps>(
                         </motion.div>
                     )}
                 </AnimatePresence> */}
+      </div>
+    );
+  }
+);
+NavTabs.displayName = "NavTabs";
 
-            </div>
-        )
-    }
-)
-NavTabs.displayName = "NavTabs"
-
-export { NavTabs }
-
+export { NavTabs };

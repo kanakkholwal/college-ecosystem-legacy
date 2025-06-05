@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Home } from "lucide-react";
 import type { Metadata } from "next";
@@ -20,8 +19,8 @@ export default function NotAuthorized() {
           Stop right there!
         </h2>
         <p className="text-md  text-muted-foreground mt-5 text-pretty">
-          You are not authorized to view this page. 
-          Please sign in with an authorized account to access this page.
+          You are not authorized to view this page. Please sign in with an
+          authorized account to access this page.
         </p>
         <Image
           className="w-full h-80 my-4"
@@ -33,7 +32,13 @@ export default function NotAuthorized() {
         />
         <div className="flex mx-auto gap-4">
           <BackButton />
-          <Button rounded="full" variant="default_light" effect="shineHover" width="sm" asChild>
+          <Button
+            rounded="full"
+            variant="default_light"
+            effect="shineHover"
+            width="sm"
+            asChild
+          >
             <Link href="/">
               <Home />
               Go to Home

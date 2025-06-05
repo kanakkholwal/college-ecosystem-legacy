@@ -59,7 +59,10 @@ export default function CreateCommunityPost() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 p-2 lg:p-4 bg-card rounded-lg">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-6 p-2 lg:p-4 bg-card rounded-lg"
+      >
         <FormField
           control={form.control}
           name="title"
@@ -170,8 +173,15 @@ export default function CreateCommunityPost() {
             )}
           />
         )}
-        <Button type="submit" variant="default_light" width="xs" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : null}
+        <Button
+          type="submit"
+          variant="default_light"
+          width="xs"
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? (
+            <Loader2 className="animate-spin" />
+          ) : null}
           {form.formState.isSubmitting ? "Publishing..." : "Publish Post"}
           {form.formState.isSubmitting ? null : <SendHorizontal />}
         </Button>

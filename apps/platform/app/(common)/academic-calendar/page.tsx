@@ -21,10 +21,7 @@ export const metadata: Metadata = {
   description: "Check the academic calender here.",
 };
 
-
-
 export default async function AcademicCalenderPage(props: Props) {
-
   const searchParams = await props.searchParams;
 
   // const session = await getSession();
@@ -34,7 +31,7 @@ export default async function AcademicCalenderPage(props: Props) {
     to: searchParams.to ? new Date(searchParams.to) : "",
   });
 
-  const session = await getSession() as Session;
+  const session = (await getSession()) as Session;
   if (session?.user?.role === "admin") {
     console.log("Events fetched for admin:", groupedEvents);
   }
@@ -47,10 +44,11 @@ export default async function AcademicCalenderPage(props: Props) {
           Academic Calender
         </h1>
         <p className="text-sm text-muted-foreground mb-4 text-pretty">
-          Check the events and important dates in the academic calendar.
-          This calendar is designed to help students and faculty stay informed
-          about key academic events, including semester start and end dates,
-          examination periods, holidays, and other important academic milestones.
+          Check the events and important dates in the academic calendar. This
+          calendar is designed to help students and faculty stay informed about
+          key academic events, including semester start and end dates,
+          examination periods, holidays, and other important academic
+          milestones.
         </p>
       </div>
       <div className="bg-card p-4 lg:p-5 rounded-lg">

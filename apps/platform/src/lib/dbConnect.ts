@@ -35,7 +35,6 @@ async function dbConnect(dbName: string = defaultDb): Promise<Mongoose> {
   if (!cached.promise) {
     const opts: ConnectOptions = {
       dbName,
-      
     };
 
     try {

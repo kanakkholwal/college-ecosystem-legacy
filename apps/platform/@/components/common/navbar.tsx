@@ -10,7 +10,6 @@ import { appConfig } from "~/project.config";
 import { NavTabs } from "./nav-tabs";
 import { ThemeSwitcher } from "./theme-switcher";
 
-
 interface NavbarProps {
   user: Session["user"];
 }
@@ -21,10 +20,7 @@ export default function Navbar({ user }: NavbarProps) {
 
   return (
     <header
-      className={cn(
-        "z-50 w-full pb-2 transition-all",
-        "bg-card border-b",
-      )}
+      className={cn("z-50 w-full pb-2 transition-all", "bg-card border-b")}
     >
       <div className="w-full max-w-(--max-app-width) mx-auto flex items-center justify-between px-4 py-2">
         <Link
@@ -67,7 +63,6 @@ export default function Navbar({ user }: NavbarProps) {
           }))}
         />
       </div>
-
     </header>
   );
 }

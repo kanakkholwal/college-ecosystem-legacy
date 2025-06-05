@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuTrigger
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { type themeType } from "@/constants/theme";
 import { cn } from "@/lib/utils";
@@ -12,7 +12,6 @@ import { Monitor, Moon, Sun } from "lucide-react";
 import { motion } from "motion/react";
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-
 
 const themes = [
   {
@@ -54,22 +53,23 @@ export const ThemeSwitcher = ({ onChange, className }: ThemeSwitcherProps) => {
   const CurrentTheme = themes.find((t) => t.key === theme);
 
   return (
-    <div
-      className={cn(
-        "relative",
-        className
-      )}
-    >
+    <div className={cn("relative", className)}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon_sm" rounded="full">
-            {CurrentTheme ?
+            {CurrentTheme ? (
               <CurrentTheme.Icon className="size-4 absolute inset-0 m-auto" />
-              : <Monitor className="size-4" />}
+            ) : (
+              <Monitor className="size-4" />
+            )}
             <span className="sr-only">Open theme switcher</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" alignOffset={-8} className="max-w-24 space-y-1">
+        <DropdownMenuContent
+          align="end"
+          alignOffset={-8}
+          className="max-w-24 space-y-1"
+        >
           {themes.map(({ key, Icon: Icon, label }) => {
             const isActive = theme === key;
             return (
@@ -82,9 +82,7 @@ export const ThemeSwitcher = ({ onChange, className }: ThemeSwitcherProps) => {
                   setTheme(key as themeType);
                   onChange?.(key as themeType);
                 }}
-                className={cn(
-                  "justify-start relative text-xs",
-                )}
+                className={cn("justify-start relative text-xs")}
               >
                 {isActive && (
                   <motion.div
@@ -94,13 +92,10 @@ export const ThemeSwitcher = ({ onChange, className }: ThemeSwitcherProps) => {
                   />
                 )}
                 <Icon className="size-4 relative" />
-                <span className="relative">
-                  {label}
-                </span>
+                <span className="relative">{label}</span>
               </Button>
             );
           })}
-
         </DropdownMenuContent>
       </DropdownMenu>
       {/* {themes.map(({ key, Icon: Icon, label }) => {

@@ -1,19 +1,23 @@
 export {
-  accounts, departmentNameEnum, sessions, userGenderEnum, userRolesEnum, users,
-  verifications
+  accounts,
+  departmentNameEnum,
+  sessions,
+  userGenderEnum,
+  userRolesEnum,
+  users,
+  verifications,
 } from "./schema/auth-schema";
 
 export {
-  personalAttendance, personalAttendanceRecords
+  personalAttendance,
+  personalAttendanceRecords,
 } from "./schema/attendance_record";
 
 export {
   booksAndReferences,
   chapters,
   courses,
-  previousPapers
+  previousPapers,
 } from "./schema/course";
 // export { global_events } from "./schema/events";
 export { rooms, roomUsageHistory } from "./schema/room";
-
-

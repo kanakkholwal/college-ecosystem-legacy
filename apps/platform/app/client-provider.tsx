@@ -28,11 +28,7 @@ export function Consumer({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div
-        className={cn(
-          "min-h-screen w-full h-full bg-background"
-        )}
-      >
+      <div className={cn("min-h-screen w-full h-full bg-background")}>
         {children}
       </div>
       <Next13ProgressBar

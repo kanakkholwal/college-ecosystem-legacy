@@ -34,18 +34,18 @@ export default function CourseCard({
 }: Props) {
   return (
     <Card
-      className={cn("hover:shadow-lg hover:border-primary/75 animate-in popup", className)}
+      className={cn(
+        "hover:shadow-lg hover:border-primary/75 animate-in popup",
+        className
+      )}
       style={style}
     >
       <CardHeader className="px-3 py-4">
         <CardTitle className="text-base">{course.name}</CardTitle>
-        <CardDescription>
-          {course.code}
-        </CardDescription>
+        <CardDescription>{course.code}</CardDescription>
       </CardHeader>
       <CardContent className="flex justify-around items-stretch gap-3 text-center p-3 pt-0">
         <div>
-          
           <p className="text-xs text-muted-foreground">Type</p>
           <p className="text-base font-semibold text-gray-900 dark:text-white">
             {course.type}

@@ -48,13 +48,14 @@ export default async function DashboardLayout({
   params,
 }: DashboardLayoutProps) {
   const { moderator } = await params;
-  if(!ALLOWED_ROLES.includes(moderator as (typeof ALLOWED_ROLES)[number]) && moderator !== "dashboard"){
-    return notFound()
+  if (
+    !ALLOWED_ROLES.includes(moderator as (typeof ALLOWED_ROLES)[number]) &&
+    moderator !== "dashboard"
+  ) {
+    return notFound();
   }
 
   const session = (await getSession()) as Session;
-
-
 
   return (
     <SidebarProvider className="selection:bg-primary/10 selection:text-primary">

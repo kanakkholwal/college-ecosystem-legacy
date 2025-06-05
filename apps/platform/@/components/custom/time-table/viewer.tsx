@@ -33,7 +33,7 @@ export default async function TimeTableViewer({
           </h4>
           <div className="flex h-5 items-center space-x-4 text-sm text-muted-foreground">
             <div>{timetableData?.year} Year</div>
-            <Separator orientation="vertical"/>
+            <Separator orientation="vertical" />
             <div>{timetableData?.semester} Semester</div>
           </div>
         </div>

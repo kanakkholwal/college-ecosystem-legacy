@@ -51,7 +51,6 @@ export default async function Dashboard() {
       </section>
       <NoteSeparator label={`${timeTables.length} Timetables found`} />
 
-
       {timeTables.length === 0 ? (
         <section className="max-w-6xl w-full px-2 xl:px-6 text-center">
           <EmptyArea
@@ -72,7 +71,9 @@ export default async function Dashboard() {
                 }}
               >
                 <CardHeader className="p-4">
-                  <CardTitle className="text-base">{timetable.sectionName}</CardTitle>
+                  <CardTitle className="text-base">
+                    {timetable.sectionName}
+                  </CardTitle>
                   {timetable.department_code ? (
                     <Badge size="sm">
                       {getDepartmentName(timetable.department_code as string)}
@@ -82,21 +83,39 @@ export default async function Dashboard() {
                     <Badge size="sm" className="mr-2">
                       {timetable.year}
                       <sup>
-                        {timetable.year === 1 ? "st" : timetable.year === 2 ? "nd" : timetable.year === 3 ? "rd" : "th"}
+                        {timetable.year === 1
+                          ? "st"
+                          : timetable.year === 2
+                            ? "nd"
+                            : timetable.year === 3
+                              ? "rd"
+                              : "th"}
                       </sup>
                       Year
                     </Badge>
                     <Badge size="sm">
                       {timetable.semester}
                       <sup>
-                        {timetable.semester === 1 ? "st" : timetable.semester === 2 ? "nd" : timetable.semester === 3 ? "rd" : "th"}
+                        {timetable.semester === 1
+                          ? "st"
+                          : timetable.semester === 2
+                            ? "nd"
+                            : timetable.semester === 3
+                              ? "rd"
+                              : "th"}
                       </sup>
                       Semester
                     </Badge>
                   </CardDescription>
                 </CardHeader>
                 <CardFooter className="justify-end p-4 pt-0">
-                  <Button variant="default_light" size="sm" rounded="full" effect="shineHover" asChild>
+                  <Button
+                    variant="default_light"
+                    size="sm"
+                    rounded="full"
+                    effect="shineHover"
+                    asChild
+                  >
                     <Link
                       href={`/schedules/${timetable.department_code}/${timetable.year}/${timetable.semester}`}
                     >

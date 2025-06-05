@@ -60,8 +60,8 @@ export default async function ResultPage(props: {
           Portal
         </h2>
         <p className="mt-4 mb-8 text-lg text-muted-foreground">
-          {orgConfig.shortName} Portal is a platform for students of {orgConfig.shortName} to get all the
-          resources at one place.
+          {orgConfig.shortName} Portal is a platform for students of{" "}
+          {orgConfig.shortName} to get all the resources at one place.
         </p>
         <div
           className="mt-10 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"

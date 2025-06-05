@@ -91,7 +91,7 @@ export async function getCourseByCode(code: string): Promise<{
       booksAndReferences: [],
       previousPapers: [],
       chapters: [],
-    }
+    };
   }
 
   const courseId = course.id;

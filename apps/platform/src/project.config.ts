@@ -1,6 +1,5 @@
 // Project configuration for the College Ecosystem platform
 
-
 // This file contains the configuration for the app and college
 export const appConfig = {
   name: "College Platform",
@@ -22,12 +21,12 @@ export const appConfig = {
   ],
   githubRepo: "https://github.com/kanakkholwal/college-ecosystem",
   githubUri: "kanakkholwal/college-ecosystem",
-    socials: {
+  socials: {
     twitter: "https://twitter.com/kanakkholwal",
     linkedin: "https://linkedin.com/in/kanakkholwal",
     instagram: "https://instagram.com/kanakkholwal",
-    github: "https://github.com/kanakkholwal"
-  }
+    github: "https://github.com/kanakkholwal",
+  },
 };
 
 export const orgConfig = {
@@ -55,9 +54,9 @@ export const supportLinks = [
     href: "https://forms.gle/v8Angn9VCbt9oVko7",
     title: "Suggest a feature",
   },
-] as const
+] as const;
 export default {
   appConfig,
   orgConfig,
-  supportLinks
+  supportLinks,
 } as const;
