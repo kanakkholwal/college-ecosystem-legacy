@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ArrowRight, Loader2, SendHorizontal, Trash2 } from "lucide-react";
+import { Loader2, SendHorizontal, Trash2 } from "lucide-react";
 import NexoMdxEditor from "nexo-mdx";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -179,7 +179,7 @@ export default function EditCommunityPost({
             )}
           />
         )}
-        <div className="inline-flex items-center gap-2 justify-between">
+        <div className="inline-flex items-center gap-2 justify-between w-full">
           <Button
             type="submit"
             variant="default_light"
@@ -195,15 +195,17 @@ export default function EditCommunityPost({
           <Button
             type="button"
             variant="destructive_light"
-            width="xs"
+            size="icon_sm"
             disabled={form.formState.isSubmitting}
+            onClick={() => {
+              toast.error("This feature is not implemented yet.");
+            }}
           >
             {form.formState.isSubmitting ? (
               <Loader2 className="animate-spin" />
             ) : (
               <Trash2 />
             )}
-            {form.formState.isSubmitting ? "Deleting..." : "Delete Post"}
           </Button>
         </div>
       </form>
