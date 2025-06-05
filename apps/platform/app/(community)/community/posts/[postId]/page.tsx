@@ -13,8 +13,9 @@ interface Props {
   }>;
 }
 
+import { Button } from "@/components/ui/button";
 import { MDXRemote } from "@mintlify/mdx";
-import { Dot } from "lucide-react";
+import { Dot, Edit } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 
@@ -53,6 +54,7 @@ export default async function CommunityPost(props: Props) {
     viewCache.add(params.postId);
   }
   console.log(post);
+  const isAuthor = session?.user.id === post.author.id || session?.user.role === "admin";
 
   return (
     <main className="md:col-span-3 space-y-4 pr-2">
@@ -88,6 +90,15 @@ export default async function CommunityPost(props: Props) {
               @{post.author.username}
             </Link>
           </p>
+          {isAuthor && (
+            <Button variant="ghost" size="xs" className="ml-auto" asChild>
+              <Link
+                href={`/community/edit?postId=${post._id}`}
+              >
+                Edit Post <Edit/>
+              </Link>
+            </Button>
+          )}
         </div>
         <h3 className="text-lg font-medium">{post.title}</h3>
         <article className="border-l py-4  max-w-full prose prose-sm dark:prose-invert pl-2 bg-muted/10">

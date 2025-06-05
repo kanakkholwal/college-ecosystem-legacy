@@ -20,40 +20,37 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRight, Loader2 } from "lucide-react";
 import NexoMdxEditor from "nexo-mdx";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "src/constants/community";
-import { createPost } from "src/lib/community/actions";
-import { rawCommunityPostSchema } from "src/models/community";
 import type { z } from "zod";
+import { updatePost } from "~/lib/community/actions";
+import { CommunityPostTypeWithId, rawCommunityPostSchema } from "~/models/community";
 
-export default function CreateCommunityPost() {
+export default function EditCommunityPost({postId,post}: {postId: string,post:CommunityPostTypeWithId}) {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const form = useForm<z.infer<typeof rawCommunityPostSchema>>({
     resolver: zodResolver(rawCommunityPostSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      category: CATEGORY_TYPES[0],
-      subCategory: SUB_CATEGORY_TYPES[0],
+      title: post.title,
+      content: post.content,
+      category: post.category,
+      subCategory: post.subCategory,
     },
   });
 
   function onSubmit(values: z.infer<typeof rawCommunityPostSchema>) {
     console.log(values);
-    toast.promise(createPost(values), {
-      loading: "Creating Post",
-      success: () => {
-        form.reset({
-          title: "",
-          content: "",
-          category: CATEGORY_TYPES[0],
-          subCategory: SUB_CATEGORY_TYPES[0],
-        });
-        return "Post Created";
+    toast.promise(updatePost(postId,values), {
+      loading: "Updating Post",
+      success: (data) => {
+        console.log(data);
+        router.refresh();
+        return "Post Updated";
       },
-      error: "Failed to create Post",
+      error: "Failed to update Post",
     });
   }
 
@@ -170,9 +167,14 @@ export default function CreateCommunityPost() {
             )}
           />
         )}
+        <Button type="button" variant="destructive_light" width="xs" disabled={form.formState.isSubmitting}>
+          {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : null}
+          {form.formState.isSubmitting ? "Updating..." : "Update Post"}
+          {form.formState.isSubmitting ? null : <ArrowRight/>}
+        </Button>
         <Button type="submit" variant="default_light" width="xs" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : null}
-          {form.formState.isSubmitting ? "Publishing..." : "Publish Post"}
+          {form.formState.isSubmitting ? "Updating..." : "Update Post"}
           {form.formState.isSubmitting ? null : <ArrowRight/>}
         </Button>
       </form>

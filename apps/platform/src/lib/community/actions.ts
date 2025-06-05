@@ -66,10 +66,15 @@ export async function getPostsByCategory(
 export async function getPostById(
   id: string,
   cached: boolean
-): Promise<CommunityPostTypeWithId> {
+): Promise<CommunityPostTypeWithId | null> {
   try {
     await dbConnect();
-    const post = await CommunityPost.findById(id).populate(
+    const postExists = await CommunityPost.exists({ _id: id });
+    if (!postExists) {
+      return Promise.resolve(null);
+    }
+    const post = await CommunityPost.findById(id)
+    .populate(
       "author",
       "name email rollNo"
     );

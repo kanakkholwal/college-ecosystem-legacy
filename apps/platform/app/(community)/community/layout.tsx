@@ -23,7 +23,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
             <aside className="hidden md:block md:col-span-1 space-y-4 sticky top-4 h-fit">
                 <div className="bg-card rounded-2xl shadow p-4">
                     <h2 className="text-base font-medium mb-2">Communities</h2>
-                    <div className="space-y-1 text-sm grid-cols-1 gap-1 text-muted-foreground dark:text-muted-foreground">
+                    <div className="space-y-1 text-sm grid-cols-1 gap-1 ">
                         <Button
                             variant="ghost"
                             size="sm"
