@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 const envVariables = z.object({
-    IDENTITY_KEY: z.string(),
+    SERVER_IDENTITY: z.string(),
     SMTP_HOST: z.string(),
     MAIL_EMAIL: z.string().email(),
     MAIL_PASSWORD: z.string(),

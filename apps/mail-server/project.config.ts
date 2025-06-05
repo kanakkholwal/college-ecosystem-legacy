@@ -27,9 +27,9 @@ export const appConfig = {
   
 } as const;
 
-export const IDENTITY_KEY = process.env.SERVER_IDENTITY;
+export const SERVER_IDENTITY = process.env.SERVER_IDENTITY;
 
-if (!IDENTITY_KEY) {
+if (!SERVER_IDENTITY) {
   throw new Error("Missing SERVER_IDENTITY in environment variables");
 }
 
