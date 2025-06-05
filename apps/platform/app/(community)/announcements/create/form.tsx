@@ -31,8 +31,8 @@ import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { VscSend } from "react-icons/vsc";
-import { createAnnouncement } from "src/lib/announcement/actions";
 import type { z } from "zod";
+import { createAnnouncement } from "~/lib/announcement/actions";
 import {
   RELATED_FOR_TYPES,
   rawAnnouncementSchema,
