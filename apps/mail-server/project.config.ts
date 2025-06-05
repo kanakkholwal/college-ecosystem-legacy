@@ -29,19 +29,9 @@ export const appConfig = {
 
 export const SERVER_IDENTITY = process.env.SERVER_IDENTITY;
 
-if (!SERVER_IDENTITY) {
-  throw new Error("Missing SERVER_IDENTITY in environment variables");
-}
-
-const SMTP_HOST = process.env.SMTP_HOST;
-const MAIL_EMAIL = process.env.MAIL_EMAIL;
-const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
-
-
-if (!MAIL_EMAIL || !MAIL_PASSWORD || !SMTP_HOST) {
-  throw new Error("Missing MAIL_EMAIL or MAIL_PASSWORD or SMTP_HOST in environment variables");
-}
-
+export const SMTP_HOST = process.env.SMTP_HOST;
+export const MAIL_EMAIL = process.env.MAIL_EMAIL;
+export const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
 
 
 
