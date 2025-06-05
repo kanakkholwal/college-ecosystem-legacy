@@ -31,7 +31,6 @@ const envVariables = z.object({
 
   // Client Side
   NEXT_PUBLIC_BASE_URL: z.string().url(),
-  NEXT_PUBLIC_WEBSITE_NAME: z.string(),
   NEXT_PUBLIC_FIREBASE_API_KEY: z.string(),
   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: z.string(),
   NEXT_PUBLIC_FIREBASE_PROJECT_ID: z.string(),
