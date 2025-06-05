@@ -1,8 +1,5 @@
-import { loadEnvConfig } from "@next/env";
 import mongoose, { type ConnectOptions, type Mongoose } from "mongoose";
 
-const projectDir = process.cwd();
-loadEnvConfig(projectDir);
 
 const MONGODB_URI = process.env.MONGODB_URI;
 
