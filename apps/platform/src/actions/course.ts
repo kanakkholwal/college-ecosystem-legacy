@@ -73,23 +73,28 @@ export async function getCourses(
 }
 
 export async function getCourseByCode(code: string): Promise<{
-  course: CourseSelect;
+  course: CourseSelect | null;
   booksAndReferences: BookReferenceSelect[];
   previousPapers: PreviousPaperSelect[];
   chapters: ChapterSelect[];
 }> {
   // Fetch course details
-  const course = await db
+  const [course] = await db
     .select()
     .from(courses)
     .where(eq(courses.code, code))
     .limit(1);
 
-  if (course.length === 0) {
-    throw new Error(`Course with code ${code} not found`);
+  if (!course) {
+    return {
+      course: null,
+      booksAndReferences: [],
+      previousPapers: [],
+      chapters: [],
+    }
   }
 
-  const courseId = course[0].id;
+  const courseId = course.id;
 
   // Fetch related books and references
   const books = await db
@@ -110,7 +115,7 @@ export async function getCourseByCode(code: string): Promise<{
     .where(eq(chapters.courseId, courseId));
 
   return {
-    course: course[0] as CourseSelect,
+    course: course as CourseSelect,
     booksAndReferences: books as BookReferenceSelect[],
     previousPapers: papers as PreviousPaperSelect[],
     chapters: courseChapters as ChapterSelect[],

@@ -34,12 +34,12 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   // read route params
   const { code } = await params;
-  const data = await getCourseByCode(code);
-  if (!data) return notFound();
+  const {course} = await getCourseByCode(code);
+  if (!course) return notFound();
 
   return {
-    title: `${data.course.name} | ${data.course.code}`,
-    description: `Syllabus of ${data.course.name} (${data.course.code})`,
+    title: `${course.name} | ${course.code}`,
+    description: `Syllabus of ${course.name} (${course.code})`,
   };
 }
 
@@ -49,7 +49,7 @@ export default async function CoursePage(props: Props) {
   const session = await getSession();
 
   const data = await getCourseByCode(params.code);
-  if (!data) {
+  if (!data.course) {
     return notFound();
   }
   console.log(data);

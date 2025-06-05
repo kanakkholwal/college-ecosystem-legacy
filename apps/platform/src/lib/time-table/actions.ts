@@ -11,7 +11,7 @@ export async function getTimeTable(
   department_code: string,
   year: number,
   semester: number
-): Promise<TimeTableWithID> {
+): Promise<TimeTableWithID | null> {
   try {
     await dbConnect();
     // Find the timetable by department code, year and semester
@@ -22,7 +22,7 @@ export async function getTimeTable(
     }).exec();
 
     if (!timetable) {
-      return Promise.reject("Timetable not found");
+      return Promise.resolve(null);
     }
 
     return Promise.resolve(JSON.parse(JSON.stringify(timetable)));

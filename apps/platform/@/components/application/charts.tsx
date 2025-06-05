@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { Bar, BarChart, CartesianGrid, Label, Pie, PieChart, PolarAngleAxis, Radar, RadarChart, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, Label, LabelList, Pie, PieChart, PolarRadiusAxis, RadialBar, RadialBarChart, XAxis, YAxis } from "recharts"
 
 import {
     ChartConfig,
@@ -11,8 +11,7 @@ import {
 } from "@/components/ui/chart"
 import { cn } from "@/lib/utils"
 import { LoaderCircle } from "lucide-react"
-import { LabelList, PolarRadiusAxis, RadialBar, RadialBarChart } from "recharts"
-import { ErrorBoundaryWithSuspense } from "../utils/error-boundary"
+import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary"
 
 
 interface BaseProps<TData extends Record<string, any>, TConfig extends ChartConfig> {
@@ -341,149 +340,149 @@ export function ChartPieDonutText<TData extends Record<string, any>, TConfig ext
 
 
 
-export function ChartPieLabelList<TData extends Record<string, any>, TConfig extends ChartConfig>({
-    data,
-    config,
-    dataKey,
-    nameKey,
-    valueLabel = "Total",
-    innerRadius = 60,
-    strokeWidth = 5,
-    className = "mx-auto aspect-square max-h-[250px]",
-}: PieDonutTextProps<TData, TConfig>) {
+// export function ChartPieLabelList<TData extends Record<string, any>, TConfig extends ChartConfig>({
+//     data,
+//     config,
+//     dataKey,
+//     nameKey,
+//     valueLabel = "Total",
+//     innerRadius = 60,
+//     strokeWidth = 5,
+//     className = "mx-auto aspect-square max-h-[250px]",
+// }: PieDonutTextProps<TData, TConfig>) {
 
-    console.log("ChartPieLabelList", config, data.map((data) => {
-        return {
-            ...data,
-            fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-        }
-    }))
-    return (<ChartContainer
-        config={config}
-        className={cn("mx-auto aspect-square max-h-[250px]", className)}
-    >
-        <PieChart>
-            <ChartTooltip
-                content={<ChartTooltipContent nameKey={nameKey.toString()} hideLabel />}
-            />
-            <Pie data={data.map((data) => {
-                return {
-                    ...data,
-                    fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-                }
-            })} dataKey={dataKey.toString()}
-                nameKey={nameKey.toString()}
-                innerRadius={innerRadius}
-                strokeWidth={strokeWidth}
+//     console.log("ChartPieLabelList", config, data.map((data) => {
+//         return {
+//             ...data,
+//             fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//         }
+//     }))
+//     return (<ChartContainer
+//         config={config}
+//         className={cn("mx-auto aspect-square max-h-[250px]", className)}
+//     >
+//         <PieChart>
+//             <ChartTooltip
+//                 content={<ChartTooltipContent nameKey={nameKey.toString()} hideLabel />}
+//             />
+//             <Pie data={data.map((data) => {
+//                 return {
+//                     ...data,
+//                     fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//                 }
+//             })} dataKey={dataKey.toString()}
+//                 nameKey={nameKey.toString()}
+//                 innerRadius={innerRadius}
+//                 strokeWidth={strokeWidth}
 
-            >
-                <LabelList
-                    dataKey={dataKey.toString()}
-                    className="fill-background"
-                    stroke="none"
-                    fontSize={12}
-                    formatter={(value: keyof typeof config) =>
-                        config[value]?.label
-                    }
-                />
-            </Pie>
-        </PieChart>
-    </ChartContainer>
+//             >
+//                 <LabelList
+//                     dataKey={dataKey.toString()}
+//                     className="fill-background"
+//                     stroke="none"
+//                     fontSize={12}
+//                     formatter={(value: keyof typeof config) =>
+//                         config[value]?.label
+//                     }
+//                 />
+//             </Pie>
+//         </PieChart>
+//     </ChartContainer>
 
-    )
-}
+//     )
+// }
 
 
-export function ChartPieSimple<TData extends Record<string, any>, TConfig extends ChartConfig>({
-    data,
-    config,
-    dataKey,
-    nameKey,
-    valueLabel = "Total",
-    innerRadius = 60,
-    strokeWidth = 5,
-    className = "mx-auto aspect-square max-h-[250px]",
-}: PieDonutTextProps<TData, TConfig>) {
-    console.log("ChartPieSimple", config, data.map((data) => {
-        return {
-            ...data,
-            fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-        }
-    }))
+// export function ChartPieSimple<TData extends Record<string, any>, TConfig extends ChartConfig>({
+//     data,
+//     config,
+//     dataKey,
+//     nameKey,
+//     valueLabel = "Total",
+//     innerRadius = 60,
+//     strokeWidth = 5,
+//     className = "mx-auto aspect-square max-h-[250px]",
+// }: PieDonutTextProps<TData, TConfig>) {
+//     console.log("ChartPieSimple", config, data.map((data) => {
+//         return {
+//             ...data,
+//             fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//         }
+//     }))
 
-    return (
-        <ChartContainer
-            config={config}
-            className={cn("mx-auto aspect-square max-h-[250px]", className)}
-        >
+//     return (
+//         <ChartContainer
+//             config={config}
+//             className={cn("mx-auto aspect-square max-h-[250px]", className)}
+//         >
 
-            <PieChart>
-                <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent hideLabel />}
-                />
-                <Pie data={data.map((data) => {
-                    return {
-                        ...data,
-                        fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-                    }
-                })} dataKey={dataKey.toString()} nameKey={nameKey.toString()}
-                    innerRadius={innerRadius}
-                    strokeWidth={strokeWidth}
-                />
-            </PieChart>
-        </ChartContainer>
+//             <PieChart>
+//                 <ChartTooltip
+//                     cursor={false}
+//                     content={<ChartTooltipContent hideLabel />}
+//                 />
+//                 <Pie data={data.map((data) => {
+//                     return {
+//                         ...data,
+//                         fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//                     }
+//                 })} dataKey={dataKey.toString()} nameKey={nameKey.toString()}
+//                     innerRadius={innerRadius}
+//                     strokeWidth={strokeWidth}
+//                 />
+//             </PieChart>
+//         </ChartContainer>
 
-    )
-}
-export function ChartRadar<TData extends Record<string, any>, TConfig extends ChartConfig>({
-    data,
-    config,
-    dataKey,
-    nameKey,
-    valueLabel = "Total",
-    innerRadius = 60,
-    strokeWidth = 5,
-    className = "mx-auto aspect-square max-h-[250px]",
-}: PieDonutTextProps<TData, TConfig>) {
-    console.log("ChartRadar", config, data.map((data) => {
-        return {
-            ...data,
-            fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-        }
-    }))
+//     )
+// }
+// export function ChartRadar<TData extends Record<string, any>, TConfig extends ChartConfig>({
+//     data,
+//     config,
+//     dataKey,
+//     nameKey,
+//     valueLabel = "Total",
+//     innerRadius = 60,
+//     strokeWidth = 5,
+//     className = "mx-auto aspect-square max-h-[250px]",
+// }: PieDonutTextProps<TData, TConfig>) {
+//     console.log("ChartRadar", config, data.map((data) => {
+//         return {
+//             ...data,
+//             fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//         }
+//     }))
 
-    return (
-        <ChartContainer
-            config={config}
-            className={cn("mx-auto aspect-square max-h-[250px]", className)}
-        >
-            <RadarChart data={data.map((data) => {
-                return {
-                    ...data,
-                    fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-                }
-            })}>
-                <ChartTooltip
-                    cursor={false}
-                    content={<ChartTooltipContent hideLabel />}
-                />
+//     return (
+//         <ChartContainer
+//             config={config}
+//             className={cn("mx-auto aspect-square max-h-[250px]", className)}
+//         >
+//             <RadarChart data={data.map((data) => {
+//                 return {
+//                     ...data,
+//                     fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//                 }
+//             })}>
+//                 <ChartTooltip
+//                     cursor={false}
+//                     content={<ChartTooltipContent hideLabel />}
+//                 />
 
-                <PolarAngleAxis dataKey={nameKey.toString()} />
-                <Radar
-                    dataKey={dataKey.toString()}
-                    fill={`var(--color-primary)`}
-                    fillOpacity={0.6}
-                    dot={{
-                        r: 4,
-                        fillOpacity: 1,
-                    }}
-                />
-            </RadarChart>
-        </ChartContainer>
+//                 <PolarAngleAxis dataKey={nameKey.toString()} />
+//                 <Radar
+//                     dataKey={dataKey.toString()}
+//                     fill={`var(--color-primary)`}
+//                     fillOpacity={0.6}
+//                     dot={{
+//                         r: 4,
+//                         fillOpacity: 1,
+//                     }}
+//                 />
+//             </RadarChart>
+//         </ChartContainer>
 
-    )
-}
+//     )
+// }
 
 
 

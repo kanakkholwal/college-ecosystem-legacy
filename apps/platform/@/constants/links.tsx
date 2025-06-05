@@ -390,7 +390,7 @@ export const getNavLinks = (user: Session["user"]): NavLink[] => {
         : [
             {
               title: "Dashboard",
-              href: "/dashboard",
+              href: "/"+user.other_roles[0],
               description: "Manage your account settings.",
               Icon: Settings,
               items: user.other_roles.map((role) => ({
