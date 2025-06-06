@@ -34,7 +34,7 @@ export default async function RoomsPage(props: Props) {
   });
 
   return (
-    <div className="px-4 md:px-12 xl:px-6 @container">
+    <div className="px-3 md:px-6 xl:px-12 @container">
       <section
         id="hero"
         className="z-10 w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center py-20 max-h-80 text-center"
@@ -75,7 +75,7 @@ export default async function RoomsPage(props: Props) {
           />
         </ConditionalRender>
         <ConditionalRender condition={rooms.length > 0}>
-          <ResponsiveContainer>
+          <ResponsiveContainer className="px-0">
             {rooms.map((room, i) => {
               return (
                 <RoomCard

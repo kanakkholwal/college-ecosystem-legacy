@@ -12,6 +12,8 @@ import { ArrowRight, X } from "lucide-react";
 import type { Metadata } from "next";
 import { RELATED_FOR_TYPES } from "~/models/announcement";
 import { changeCase } from "~/utils/string";
+import { getSession } from "~/lib/auth-server";
+import { Session } from "~/lib/auth";
 
 export const metadata: Metadata = {
   title: `Announcements`,
@@ -21,11 +23,11 @@ export const metadata: Metadata = {
 export default async function AnnouncementsPage(props: {
   searchParams: Promise<{ category?: string }>;
 }) {
-  // const session = await getSession() as sessionType;
+  const session = await getSession() as Session;
   const searchParams = await props.searchParams;
   const category = searchParams.category || "all"; // Default to 'all' if no category is provided
   const announcements = await getAnnouncements();
-  console.log(announcements);
+  // console.log(announcements);
 
   return (
     <div className="w-full max-w-(--max-app-width) grid grid-cols-1 gap-4">
@@ -95,6 +97,7 @@ export default async function AnnouncementsPage(props: {
                   )
                 : announcements
             }
+            session={session}
           />
         )}
       </div>

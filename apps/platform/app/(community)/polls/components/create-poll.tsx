@@ -17,10 +17,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { type Control, useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { CgPoll } from "react-icons/cg";
 import { createPoll } from "src/lib/poll/actions";
 import * as z from "zod";
 
 import { DateTimePicker } from "@/components/extended/date-n-time";
+import { Loader2 } from "lucide-react";
 import { nanoid } from "nanoid";
 
 export const rawPollSchema = z.object({
@@ -53,7 +55,7 @@ export default function CreatePoll() {
       title="Create New Poll"
       description="Create a new poll here. Click save when you're done."
       btnProps={{
-        variant: "default_light",
+        variant: "ghost",
         children: "Create New Poll",
         size: "sm",
       }}
@@ -156,9 +158,9 @@ function PollForm({ className }: { className?: string }) {
               <div className="flex items-center space-x-2 justify-between">
                 <FormLabel className="mb-0">Options</FormLabel>
                 <Button
-                  size="sm"
+                  size="xs"
                   type="button"
-                  variant="default_light"
+                  variant="ghost"
                   onClick={() =>
                     append({
                       id: String(Date.now()),
@@ -169,7 +171,7 @@ function PollForm({ className }: { className?: string }) {
                   Add Option
                 </Button>
               </div>
-              <FormDescription className="text-xs">
+              <FormDescription>
                 Add the options for the poll
               </FormDescription>
               {fields.map((field, index) => (
@@ -179,7 +181,7 @@ function PollForm({ className }: { className?: string }) {
                   name={`options.${index}`}
                   render={({ field }) => (
                     <FormItem className="flex flex-row space-x-3 space-y-0">
-                      <FormLabel className="bg-secondary/5 aspect-square rounded-md p-3 inline-flex justify-center items-center mb-0">
+                      <FormLabel className="bg-card text-muted-foreground aspect-square rounded-lg size-8 inline-flex justify-center items-center mb-0">
                         {index + 1}
                       </FormLabel>
                       <FormControl>
@@ -187,13 +189,14 @@ function PollForm({ className }: { className?: string }) {
                           placeholder={`Enter Option ${index + 1}`}
                           id={`options.${index}.id`}
                           {...form.register(`options.${index}.value`)}
+                          custom-size="sm"
                           disabled={form.formState.isSubmitting}
                         />
                       </FormControl>
                       <Button
                         type="button"
-                        size="icon"
-                        variant="default_light"
+                        size="icon_sm"
+                        variant="destructive_light"
                         disabled={fields.length <= 2}
                         onClick={() => remove(index)}
                       >
@@ -212,7 +215,7 @@ function PollForm({ className }: { className?: string }) {
           control={form.control}
           name="closesAt"
           render={({ field }) => (
-            <FormItem className="flex flex-col">
+            <FormItem>
               <FormLabel>Closes At</FormLabel>
 
               <DateTimePicker
@@ -243,10 +246,14 @@ function PollForm({ className }: { className?: string }) {
         />
         <Button
           type="submit"
-          width="full"
+          width="xs"
+          variant="dark"
+          size="sm"
+          className="ml-2"
           disabled={form.formState.isSubmitting}
         >
-          {form.formState.isSubmitting ? "Creating Poll..." : "Create Poll"}
+          {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <CgPoll />}
+          {form.formState.isSubmitting ? "Creating Poll..." : "Create new Poll"}
         </Button>
       </form>
     </Form>

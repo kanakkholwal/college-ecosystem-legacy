@@ -90,15 +90,15 @@ export default function CommunityPostList({
             </article>
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-between gap-2">
-                <Badge>
+                <Badge size="sm">
                   <Eye />
                   {formatNumber(post.views)}
                 </Badge>
-                <Badge>
+                <Badge size="sm">
                   <BiUpvote />
                   {post.likes.length}
                 </Badge>
-                <Badge>
+                <Badge size="sm">
                   <Bookmark />
                   {post.savedBy.length}
                 </Badge>

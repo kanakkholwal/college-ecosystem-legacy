@@ -30,6 +30,7 @@ import { format } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { GrAnnounce } from "react-icons/gr";
 import { VscSend } from "react-icons/vsc";
 import type { z } from "zod";
 import { createAnnouncement } from "~/lib/announcement/actions";
@@ -66,9 +67,13 @@ export default function CreateAnnouncement() {
     });
   }
 
-  return (
+  return (<div className="bg-card rounded-lg p-4 mx-2 max-w-3xl w-full md:mx-auto">
+    <h3 className="text-lg font-semibold">
+      <GrAnnounce className="size-5 mr-2 inline-block align-middle" />
+      Create Announcement
+    </h3>
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6 pb-10">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-3">
         <FormField
           control={form.control}
           name="title"
@@ -98,9 +103,9 @@ export default function CreateAnnouncement() {
                   placeholder="Write the announcement content here..."
                   {...field}
                   disabled={form.formState.isSubmitting}
-                  // renderHtml={(md) => <article className='prose prose-sm dark:prose-invert max-w-full'>
-                  //   <MDXRemote source={md} parseFrontmatter />
-                  // </article>}
+                // renderHtml={(md) => <article className='prose prose-sm dark:prose-invert max-w-full'>
+                //   <MDXRemote source={md} parseFrontmatter />
+                // </article>}
                 />
               </FormControl>
               <FormMessage />
@@ -187,6 +192,8 @@ export default function CreateAnnouncement() {
         </div>
         <Button
           type="submit"
+          width="content"
+          variant="dark"
           className="ml-4"
           disabled={form.formState.isSubmitting}
         >
@@ -199,5 +206,6 @@ export default function CreateAnnouncement() {
         </Button>
       </form>
     </Form>
+  </div>
   );
 }

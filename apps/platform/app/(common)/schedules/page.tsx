@@ -2,16 +2,14 @@ import EmptyArea from "@/components/common/empty-area";
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card";
 import Link from "next/link";
 import { GrSchedules } from "react-icons/gr";
-import { getDepartmentName } from "src/constants/departments";
-import { getSession } from "src/lib/auth-server";
-import { getAllTimeTables } from "src/lib/time-table/actions";
+import { getDepartmentShort } from "~/constants/departments";
+import { getAllTimeTables } from "~/lib/time-table/actions";
 
 import ScheduleSearchBox from "@/components/application/schedule-search";
 import { ResponsiveContainer } from "@/components/common/container";
@@ -24,8 +22,7 @@ export const metadata: Metadata = {
   description: "Check your schedules here.",
 };
 
-export default async function Dashboard() {
-  const session = await getSession();
+export default async function TimeTables() {
   const timeTables = await getAllTimeTables();
 
   return (
@@ -60,7 +57,7 @@ export default async function Dashboard() {
           />
         </section>
       ) : (
-        <ResponsiveContainer className="px-2 lg:px-6 max-w-(--max-app-width)">
+        <ResponsiveContainer className="px-2 pr-3 lg:px-6 max-w-(--max-app-width) @3xl:grid-cols-3">
           {timeTables.map((timetable, i) => {
             return (
               <Card
@@ -74,13 +71,9 @@ export default async function Dashboard() {
                   <CardTitle className="text-base">
                     {timetable.sectionName}
                   </CardTitle>
-                  {timetable.department_code ? (
+                  <div className="inline-flex items-center gap-2 flex-wrap">
+                  
                     <Badge size="sm">
-                      {getDepartmentName(timetable.department_code as string)}
-                    </Badge>
-                  ) : null}
-                  <CardDescription>
-                    <Badge size="sm" className="mr-2">
                       {timetable.year}
                       <sup>
                         {timetable.year === 1
@@ -106,9 +99,14 @@ export default async function Dashboard() {
                       </sup>
                       Semester
                     </Badge>
-                  </CardDescription>
+                  </div>
                 </CardHeader>
-                <CardFooter className="justify-end p-4 pt-0">
+                <CardFooter className="justify-between p-4 pt-0">
+                  {timetable.department_code ? (
+                    <Badge size="sm">
+                      {getDepartmentShort(timetable.department_code as string)}
+                    </Badge>
+                  ) : null}
                   <Button
                     variant="default_light"
                     size="sm"

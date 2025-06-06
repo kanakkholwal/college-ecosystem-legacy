@@ -4,11 +4,15 @@ import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { GrAnnounce } from "react-icons/gr";
 import type { AnnouncementTypeWithId } from "src/models/announcement";
+import { Session } from "~/lib/auth-client";
+import DeleteButton from "./delete-btn";
 
 export default function AnnouncementsList({
   announcements,
+  session
 }: {
   announcements: AnnouncementTypeWithId[];
+  session:Session
 }) {
   if (announcements.length === 0) {
     return (
@@ -25,7 +29,7 @@ export default function AnnouncementsList({
         return (
           <div
             key={announcement._id}
-            className="w-full mx-auto rounded-lg bg-card backdrop-blur-md p-3 lg:p-5 space-y-4"
+            className="relative w-full mx-auto rounded-lg bg-card backdrop-blur-md p-3 lg:p-5 space-y-4"
           >
             <div>
               <h3 className="text-base font-medium">{announcement.title}</h3>
@@ -52,6 +56,11 @@ export default function AnnouncementsList({
                 </Link>
               </p>
             </div>
+            
+            {(announcement.createdBy.id === session.user.id || session.user.role === "admin") &&
+             (<div className="absolute top-2 right-2">
+              <DeleteButton announcementId={announcement._id} />
+              </div>)}
             <article className="prose prose-sm dark:prose-invert text-muted-foreground">
               <MDXRemote
                 source={announcement.content}

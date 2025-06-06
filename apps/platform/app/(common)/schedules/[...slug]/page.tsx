@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
+import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTimeTable } from "src/lib/time-table/actions";
+import { getTimeTable } from "~/lib/time-table/actions";
 
 import TimeTableViewer from "@/components/custom/time-table/viewer";
 
@@ -12,7 +13,6 @@ interface Props {
   }>;
 }
 
-import type { Metadata, ResolvingMetadata } from "next";
 
 export async function generateMetadata(
   { params }: Props,
@@ -41,10 +41,10 @@ export default async function Dashboard({ params }: Props) {
 
   return (
     <>
-      <div className="flex items-center justify-between gap-2 mx-auto max-w-7xl w-full mt-12 p-3">
+      <div className="flex justify-start gap-2 mr-auto w-full mt-5 p-3">
         <Button variant="default_light" size="sm" asChild>
           <Link href={"/schedules"}>
-            <ArrowLeft />
+            <ArrowLeft /> 
             Go Back
           </Link>
         </Button>

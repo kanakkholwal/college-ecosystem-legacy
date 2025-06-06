@@ -25,7 +25,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "src/constants/community";
 import type { z } from "zod";
-import { updatePost } from "~/lib/community/actions";
+import { deletePost, updatePost } from "~/lib/community/actions";
 import {
   CommunityPostTypeWithId,
   rawCommunityPostSchema,
@@ -60,6 +60,17 @@ export default function EditCommunityPost({
         return "Post Updated";
       },
       error: "Failed to update Post",
+    });
+  }
+  function onDelete() {
+    toast.promise(deletePost(postId), {
+      loading: "Deleting Post",
+      success: (data) => {
+        console.log(data);
+        router.replace("/community");
+        return "Post Deleted";
+      },
+      error: "Failed to delete Post",
     });
   }
 
@@ -179,11 +190,11 @@ export default function EditCommunityPost({
             )}
           />
         )}
-        <div className="inline-flex items-center gap-2 justify-between w-full">
+        <div className="inline-flex items-center justify-between gap-2 mb-4 w-full">
           <Button
             type="submit"
-            variant="default_light"
-            width="xs"
+            variant="dark"
+            width="content"
             disabled={form.formState.isSubmitting}
           >
             {form.formState.isSubmitting ? (
@@ -198,7 +209,7 @@ export default function EditCommunityPost({
             size="icon_sm"
             disabled={form.formState.isSubmitting}
             onClick={() => {
-              toast.error("This feature is not implemented yet.");
+              onDelete();
             }}
           >
             {form.formState.isSubmitting ? (

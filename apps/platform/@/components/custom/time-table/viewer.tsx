@@ -31,7 +31,7 @@ export default async function TimeTableViewer({
             {timetableData?.sectionName} {" | "}
             {getDepartmentName(timetableData?.department_code)}
           </h4>
-          <div className="flex h-5 items-center space-x-4 text-sm text-muted-foreground">
+          <div className="flex h-5 items-center space-x-2 text-sm text-muted-foreground">
             <div>{timetableData?.year} Year</div>
             <Separator orientation="vertical" />
             <div>{timetableData?.semester} Semester</div>

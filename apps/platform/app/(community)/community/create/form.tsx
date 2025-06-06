@@ -175,8 +175,8 @@ export default function CreateCommunityPost() {
         )}
         <Button
           type="submit"
-          variant="default_light"
-          width="xs"
+          variant="dark"
+          width="content"
           disabled={form.formState.isSubmitting}
         >
           {form.formState.isSubmitting ? (

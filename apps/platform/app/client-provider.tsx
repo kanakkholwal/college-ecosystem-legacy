@@ -38,7 +38,7 @@ export function Consumer({ children }: { children: React.ReactNode }) {
         showOnShallow={true}
       />
       <HotToaster
-        position="bottom-right"
+        position="top-center"
         toastOptions={{
           // Define default options
           duration: 2500,

@@ -11,6 +11,7 @@ import PollComponent from "./components/poll-component";
 
 import { Badge } from "@/components/ui/badge";
 import type { Metadata } from "next";
+import { CgPoll } from "react-icons/cg";
 
 export const metadata: Metadata = {
   title: `Polls`,
@@ -45,8 +46,9 @@ export default async function PollsPage(props: {
         {tabs.map((tab, idx) => {
           return (
             <TabsContent value={tab.id} key={tab.id}>
-              <div className="md:sticky md:top-4 z-50 mb-5 w-full max-w-3xl mx-1.5 lg:mx-auto flex justify-between items-center gap-2 bg-card px-2 lg:px-4 py-1 lg:py-2 rounded-lg border">
-                <h3 className="text-base font-medium">
+              <div className="md:sticky md:top-4 z-50 h-10 mb-5 w-full max-w-3xl mx-1.5 lg:mx-auto flex justify-between items-center gap-2 bg-card px-2 lg:px-4 py-1 lg:py-2 rounded-lg border">
+                <h3 className="text-sm font-medium">
+                  <CgPoll className="inline-block align-middle mr-2 size-4" />
                   {tab.label}
                   <Badge size="sm" className="ml-2">
                     {polls[idx].length}

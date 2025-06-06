@@ -29,9 +29,9 @@ export const appConfig = {
   },
   // envs
   env:{
-    baseUrl: "https://app.nith.eu.org",
-    baseServerUrl: "https://server.nith.eu.org",
-    baseMailServerUrl: "https://mail.nith.eu.org",
+    baseUrl: process.env.NODE_ENV === "production" ? "https://app.nith.eu.org" : "http://localhost:3000",
+    baseServerUrl: process.env.NODE_ENV === "production" ?"https://server.nith.eu.org" : "http://localhost:8080",
+    baseMailServerUrl: process.env.NODE_ENV === "production" ?"https://mail.nith.eu.org" : "http://localhost:3001",
   }
 } ;
 

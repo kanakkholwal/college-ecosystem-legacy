@@ -71,8 +71,22 @@ export async function updateAnnouncement(
 }
 export async function deleteAnnouncement(id: string) {
   try {
+    const session = await getSession();
+    if (!session) {
+      return Promise.reject("You need to be logged in to delete an announcement");
+    }
     await dbConnect();
-    await Announcement.findByIdAndDelete(id);
+    // Check if the announcement exists
+    const announcement = await Announcement.findById(id);
+    if (!announcement) {
+      return Promise.reject("Announcement not found");
+    }
+    // Check if the user is the author of the announcement
+    if (announcement.createdBy.id !== session.user.id && session.user.role !== "admin") {
+      return Promise.reject("You are not authorized to delete this announcement");
+    }
+    await announcement.deleteOne();
+    // Revalidate the announcements page
     revalidatePath(`/announcements`);
     return Promise.resolve("Announcement deleted successfully");
   } catch (err) {

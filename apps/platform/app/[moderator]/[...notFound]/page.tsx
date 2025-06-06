@@ -4,7 +4,7 @@ import Link from "next/link";
 
 interface Props {
   params: Promise<{
-    moderator: string[];
+    moderator: string;
     notFound: string[];
   }>;
 }

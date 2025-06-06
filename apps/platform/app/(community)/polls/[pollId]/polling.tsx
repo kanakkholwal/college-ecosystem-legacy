@@ -82,11 +82,11 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
         return (
           <div
             key={`${option}-${index.toString()}`}
-            className="relative bg-secondary/5 rounded-lg"
+            className="relative bg-muted rounded-lg"
           >
             <div
               // className="z-[-1] h-full bg-primary/20 rounded-lg absolute top-0 bottom-0 left-0 right-auto transition-all bg-opacity-40 dark:bg-dark-primary/20"
-              className="flex items-center rounded transition-all bg-opacity-40 h-full bg-primary/20 absolute inset-0"
+              className="flex items-center rounded transition-all h-full bg-primary/5 dark:bg-primary/10 absolute inset-0"
               style={{ width: `${percent}%` }}
             />
             <div className="grid gap-2  p-4 w-full h-full">
@@ -101,6 +101,8 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
               </div>
               <Button
                 width="full"
+                variant="dark"
+                size="sm"
                 className="z-10"
                 disabled={disabled}
                 onClick={() => {

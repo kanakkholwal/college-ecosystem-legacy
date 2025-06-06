@@ -44,10 +44,10 @@ export default async function CoursesPage(props: {
     currentPage,
     filter
   );
-  console.log(courses, departments, types);
+  // console.log(courses, departments, types);
 
   return (
-    <div className="px-4 md:px-12 xl:px-6 @container">
+    <div className="px-3 md:px-6 xl:px-12 @container">
       <section
         id="hero"
         className="z-10 w-full mx-auto max-w-6xl relative flex flex-col items-center justify-center py-24 max-h-80 text-center"
@@ -73,7 +73,7 @@ export default async function CoursesPage(props: {
       </section>
       <NoteSeparator label={`${courses.length} Courses found`} />
 
-      <ResponsiveContainer>
+      <ResponsiveContainer className="px-0 @3xl:grid-cols-3">
         <Suspense
           key="Courses"
           fallback={

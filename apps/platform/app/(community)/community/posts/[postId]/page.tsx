@@ -52,7 +52,7 @@ export default async function CommunityPost(props: Props) {
   if (post) {
     viewCache.add(params.postId);
   }
-  console.log(post);
+  // console.log(post);
   const isAuthor =
     session?.user.id === post.author.id || session?.user.role === "admin";
 

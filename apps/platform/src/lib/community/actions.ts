@@ -122,6 +122,35 @@ export async function updatePost(
     return Promise.reject("Failed to update post");
   }
 }
+export async function deletePost(
+  id: string,
+) {
+  const session = await getSession();
+  if (!session) {
+    return Promise.reject("You need to be logged in to update a post");
+  }
+
+  try {
+    await dbConnect();
+    const post = await CommunityPost.findById(id);
+    if (!post) {
+      return Promise.reject("Post not found");
+    }
+
+    // Check if the user is the author of the post
+    if (post.author.id !== session.user.id && session.user.role !== "admin") {
+      return Promise.reject("You are not authorized to delete this post");
+    }
+    await post.deleteOne();
+    // Also delete all comments related to this post
+    await CommunityComment.deleteMany({ postId: id });
+    revalidatePath(`/community`);
+    return Promise.resolve("Post deleted successfully");
+  } catch (err) {
+    console.error(err);
+    return Promise.reject("Failed to delete post");
+  }
+}
 
 // Create a new comment
 export async function createComment(

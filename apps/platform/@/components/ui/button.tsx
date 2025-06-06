@@ -151,6 +151,8 @@ const buttonVariants = cva(
       width: {
         default: "w-auto",
         full: "w-full",
+        fit: "w-fit mx-auto",
+        content: "max-w-content mx-auto",
         xs: "w-full max-w-xs mx-auto",
         sm: "w-full max-w-sm mx-auto",
         md: "w-full max-w-md mx-auto",

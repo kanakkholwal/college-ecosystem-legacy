@@ -21,8 +21,7 @@ import {
 } from "@/components/ui/drawer";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { cn } from "@/lib/utils";
-import React from "react";
-import { useState, useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
 export type ResponsiveDialogProps = {
   children: React.ReactNode;
@@ -92,9 +91,9 @@ const ResponsiveDialog = React.memo(
             <div className={cn("px-4 w-full @container/dialog", className)}>
               {children}
             </div>
-            <DrawerFooter className="pt-2">
+            <DrawerFooter className="pt-2 justify-end">
               <DrawerClose asChild>
-                <Button variant="outline">Cancel</Button>
+                <Button size="sm" variant="outline">Cancel</Button>
               </DrawerClose>
             </DrawerFooter>
           </DrawerContent>
