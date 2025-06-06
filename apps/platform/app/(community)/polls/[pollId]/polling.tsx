@@ -42,7 +42,7 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
   };
   const handleSync = useCallback(async () => {
     try {
-      // await updateVotes(voteData);
+      await updateVotes(voteData);
       console.log("Poll updated:", voteData);
     } catch (error) {
       console.error("Error updating poll:", error);
