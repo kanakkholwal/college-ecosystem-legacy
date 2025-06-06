@@ -1,9 +1,8 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/utils/link";
 import { cn } from "@/lib/utils";
 
 interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
@@ -25,14 +24,14 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       {...props}
     >
       {items.map((item) => (
-        <Button
+        <ButtonLink
           key={item.href}
-          variant={pathname.includes(item.href) ? "default_light" : "ghost"}
-          className="justify-start border-0"
-          asChild
-        >
-          <Link href={item.href}>{item.title}</Link>
-        </Button>
+          size="sm"
+          variant={pathname.includes(item.href) ? "default_light" : "outline"}
+          className="justify-start"
+          href={item.href}>
+            {item.title}
+        </ButtonLink>
       ))}
     </nav>
   );

@@ -226,7 +226,7 @@ function renderPieLabel(
         y={cy}
         textAnchor="middle"
         dominantBaseline="middle"
-        className="text-lg font-semibold text-primary-foreground"
+        className="text-base font-medium fill-foreground"
       >
         {totalClasses}
       </text>
@@ -235,7 +235,7 @@ function renderPieLabel(
         y={cy + 20}
         textAnchor="middle"
         dominantBaseline="middle"
-        className="text-xs text-muted-foreground"
+        className="text-xs fill-muted-foreground"
       >
         Total Classes
       </text>

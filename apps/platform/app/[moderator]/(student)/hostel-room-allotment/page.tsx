@@ -65,7 +65,7 @@ export default async function HostelRoomAllotmentPage() {
   return (
     <div className="space-y-5 my-2">
       <ErrorBoundaryWithSuspense
-        fallback={<ErrorBanner />}
+        
         loadingFallback={<SkeletonCardArea className="mx-auto" />}
       >
         <ConditionalRender condition={allotmentProcess?.status === "closed"}>

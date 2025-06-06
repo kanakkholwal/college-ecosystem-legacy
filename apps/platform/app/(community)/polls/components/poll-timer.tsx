@@ -10,6 +10,7 @@ export const ClosingBadge = ({ poll }: { poll: PollType }) => {
     const calculateRemainingTime = () => {
       const now = new Date();
       const closesAt = new Date(poll.closesAt);
+      // const timeDifference = closesAt.getTime() - now.getTime();
       if (closesAt > now) {
         const duration = intervalToDuration({ start: now, end: closesAt });
         const formattedDuration = formatDuration(duration, {

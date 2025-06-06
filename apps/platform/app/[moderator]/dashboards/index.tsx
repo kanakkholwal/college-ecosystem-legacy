@@ -58,11 +58,10 @@ export function DashboardTemplate({ user_role }: { user_role: string }) {
             </section>
           </ConditionalRender>
           <ErrorBoundaryWithSuspense
-            fallback={<ErrorBanner />}
             loadingFallback={
               <SkeletonCardArea
                 className="mx-auto"
-                skeletonClassName="bg-gray-200"
+                skeletonClassName="bg-muted"
               />
             }
           >

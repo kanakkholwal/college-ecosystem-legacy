@@ -55,7 +55,6 @@ export default async function RoomsPage(props: Props) {
       </section>
       <NoteSeparator label={`${rooms.length} Rooms found`} />
       <ErrorBoundaryWithSuspense
-        fallback={<ErrorBanner />}
         loadingFallback={
           <ResponsiveContainer>
             {[...Array(8)].map((_, i) => (

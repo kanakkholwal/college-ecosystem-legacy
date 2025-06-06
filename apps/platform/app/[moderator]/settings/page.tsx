@@ -20,19 +20,19 @@ const list = [
     label: "Account",
     description: "Manage your account settings",
     icon: UserRoundCog,
-    href: "/settings/account",
+    href: "settings/account",
   },
-  {
-    label: "Integrations",
-    description: "Manage your integrations",
-    icon: Workflow,
-    href: "settings/integrations",
-  },
+  // {
+  //   label: "Integrations",
+  //   description: "Manage your integrations",
+  //   icon: Workflow,
+  //   href: "settings/integrations",
+  // },
 ] as const;
 
 export default async function SettingsPage() {
   return (
-    <ResponsiveContainer className="p-4 @3xl:grid-cols-3  @5xl:grid-cols-3">
+    <ResponsiveContainer className="p-3 @3xl:grid-cols-2  @5xl:grid-cols-3">
       {list.map((link, index) => {
         return (
           <Link

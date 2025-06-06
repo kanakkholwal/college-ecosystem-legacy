@@ -70,7 +70,6 @@ export default function OutpassVerifier() {
   const [currentOutpass, setCurrentOutpass] = useState<OutPassType | null>(
     null
   );
-  const { toast: toastLg } = useToast();
 
   const fetchOutpassHistory = async (identifier: string) => {
     setIsLoading(true);
@@ -139,11 +138,13 @@ export default function OutpassVerifier() {
         );
       } catch (err) {
         toast.error("Unexpected error occurred");
-        toastLg({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description: err?.toString(),
-        });
+        // toastLg({
+        //   variant: "destructive",
+        //   title: "Uh oh! Something went wrong.",
+        //   description: err?.toString(),
+        // });
+        toast.error("Failed to update status. Please try again.");
+        console.error("Error in handleEntryExit:", err);
       } finally {
         setUpdating(false);
         resolve(true);

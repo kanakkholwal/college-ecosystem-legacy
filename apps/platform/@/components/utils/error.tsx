@@ -2,7 +2,9 @@ import { cn } from "@/lib/utils";
 import { BiError } from "react-icons/bi";
 
 type Props = {
-  error?: Error;
+  error?: Error & {
+    digest?: string;
+  };
   title?: string;
   description?: string;
 };
