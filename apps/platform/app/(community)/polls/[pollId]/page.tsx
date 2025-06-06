@@ -47,7 +47,7 @@ export default async function Dashboard({ params }: Props) {
   if (!poll) {
     return notFound();
   }
-  console.log(poll);
+  // console.log(poll);
 
   const closesAlready = new Date(poll.closesAt) < new Date();
 

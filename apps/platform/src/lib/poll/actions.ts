@@ -56,7 +56,7 @@ export async function getAllPolls(): Promise<PollType[]> {
   }
 }
 
-export async function getPollById(id: string): Promise<PollType> {
+export async function getPollById(id: string): Promise<PollType | null> {
   try {
     await dbConnect();
     const poll = await Poll.findById(id);

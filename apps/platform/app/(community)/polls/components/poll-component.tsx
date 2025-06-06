@@ -39,7 +39,7 @@ export default function PollComponent({
       <div className="w-full flex items-center justify-end gap-2">
         {user?.id === poll.createdBy && <DeletePoll pollId={poll._id} />}
         {!closesAlready && (
-          <Button variant="default_light" size="sm" effect="shineHover" asChild>
+          <Button variant="dark" size="sm" effect="shineHover" asChild>
             <Link href={`/polls/${poll._id}`}>
               Vote
               <ArrowRight />

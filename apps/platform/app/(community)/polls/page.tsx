@@ -12,6 +12,7 @@ import PollComponent from "./components/poll-component";
 import { Badge } from "@/components/ui/badge";
 import type { Metadata } from "next";
 import { CgPoll } from "react-icons/cg";
+import { getSession } from "~/lib/auth-server";
 
 export const metadata: Metadata = {
   title: `Polls`,
@@ -37,6 +38,7 @@ export default async function PollsPage(props: {
     getClosedPolls(),
     getPollsCreatedByLoggedInUser(),
   ]);
+  const session = await getSession();
 
   return (
     <Tabs defaultValue={activeTab} className="w-full grid gap-4">
@@ -64,7 +66,7 @@ export default async function PollsPage(props: {
               ) : (
                 <div className="grid grid-cols-1 @2xl/polls:grid-cols-2 gap-3">
                   {polls[idx].map((poll: PollType) => (
-                    <PollComponent poll={poll} key={poll._id} />
+                    <PollComponent poll={poll} key={poll._id} user={session?.user}/>
                   ))}
                 </div>
               )}
