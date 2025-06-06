@@ -63,13 +63,12 @@ export default function ScrapeResultPage() {
     processed: 0,
     failed: 0,
     success: 0,
-    skipped: 0,
     data: [],
     startTime: Date.now(),
     endTime: null,
     successfulRollNos: [],
     failedRollNos: [],
-    skippedRollNos: [],
+    queue: [],
     list_type: listType,
     taskId: "",
     _id: "",
@@ -90,10 +89,10 @@ export default function ScrapeResultPage() {
     if (eventSourceRef.current) {
       setStreaming(false);
 
-      eventSourceRef.current?.removeEventListener("task_status", () => {});
-      eventSourceRef.current?.removeEventListener("task_list", () => {});
-      eventSourceRef.current?.removeEventListener("task_completed", () => {});
-      eventSourceRef.current?.removeEventListener("error", () => {});
+      eventSourceRef.current?.removeEventListener("task_status", () => { });
+      eventSourceRef.current?.removeEventListener("task_list", () => { });
+      eventSourceRef.current?.removeEventListener("task_completed", () => { });
+      eventSourceRef.current?.removeEventListener("error", () => { });
       eventSourceRef.current?.close();
       eventSourceRef.current = null;
       console.log("SSE connection closed");
@@ -102,10 +101,10 @@ export default function ScrapeResultPage() {
   const handleStartScraping = (
     payload?:
       | {
-          listType: (typeof LIST_TYPE)[keyof typeof LIST_TYPE];
-          actionType: string;
-          task_resume_id: string;
-        }
+        listType: (typeof LIST_TYPE)[keyof typeof LIST_TYPE];
+        actionType: string;
+        task_resume_id: string;
+      }
       | undefined
   ) => {
     if (eventSourceRef.current) {
@@ -198,6 +197,10 @@ export default function ScrapeResultPage() {
       .then(({ data: response }) => {
         if (!response || response.error) {
           console.log("Error fetching task list", response);
+          setError(response?.error || "Failed to fetch task list.");
+          toast.error(
+            response?.error || "Failed to fetch task list."
+          );
           return;
         }
         console.log("Fetched task list", response);
@@ -205,6 +208,7 @@ export default function ScrapeResultPage() {
       })
       .catch((error) => {
         setError(error.message);
+        toast.error(error.message);
       });
     return () => {
       // Cleanup on component unmount
@@ -324,7 +328,7 @@ export default function ScrapeResultPage() {
               </div>
             </div>
             <p className="text-sm text-muted-foreground space-x-1.5 space-y-1.5">
-              <Badge size="sm">{taskData.skipped} skipped</Badge>
+              <Badge size="sm">{taskData.queue.length} skipped</Badge>
               {taskData.status && <Badge size="sm">{taskData.status}</Badge>}
               <Badge size="sm">{taskData.list_type}</Badge>
               <Badge size="sm">
@@ -400,7 +404,7 @@ export default function ScrapeResultPage() {
                 <TableHead>Processed</TableHead>
                 <TableHead>Failed</TableHead>
                 <TableHead>Success</TableHead>
-                <TableHead>Skipped</TableHead>
+                <TableHead>In Queue</TableHead>
                 <TableHead>Details</TableHead>
                 <TableHead>Actions</TableHead>
               </TableRow>
@@ -458,7 +462,7 @@ function DisplayTask({
         <TableCell>{task.processed}</TableCell>
         <TableCell>{task.failed}</TableCell>
         <TableCell>{task.success}</TableCell>
-        <TableCell>{task.skipped}</TableCell>
+        <TableCell>{task.queue.length}</TableCell>
         <TableCell>
           <ResponsiveDialog
             btnProps={{
@@ -476,7 +480,7 @@ function DisplayTask({
         <TableCell className="text-right">
           <div className="flex gap-2 ml-auto">
             {actionFunction &&
-              task.status !== TASK_STATUS.COMPLETED &&
+              // task.status !== TASK_STATUS.COMPLETED &&
               task.processed < task.processable && (
                 <Button
                   size="sm"

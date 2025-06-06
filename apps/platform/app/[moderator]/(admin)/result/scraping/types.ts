@@ -33,7 +33,6 @@ export type taskDataType = {
   processed: number;
   failed: number;
   success: number;
-  skipped: number;
   data: {
     roll_no: string;
     status: (typeof TASK_STATUS)[keyof typeof TASK_STATUS];
@@ -43,7 +42,7 @@ export type taskDataType = {
   status: (typeof TASK_STATUS)[keyof typeof TASK_STATUS];
   successfulRollNos: string[];
   failedRollNos: string[];
-  skippedRollNos: string[];
+  queue: string[];
   list_type: listType;
   taskId: string;
   _id: string;

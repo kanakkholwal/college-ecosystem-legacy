@@ -1,63 +1,16 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
 import { scrapeResult } from "../lib/scrape";
+import type { taskDataType } from "../models/log-result_scraping";
 import { ResultScrapingLog } from "../models/log-result_scraping";
 import ResultModel from "../models/result";
 import dbConnect from "../utils/dbConnect";
 
-const LIST_TYPE = {
-  ALL: "all",
-  BACKLOG: "has_backlog",
-  NEW_SEMESTER: "new_semester",
-  DUAL_DEGREE: "dual_degree",
-}
-type listType = typeof LIST_TYPE[keyof typeof LIST_TYPE];
-
-export const EVENTS = {
-  TASK_STATUS: "task_status",
-
-  TASK_PAUSED_RESUME: "task_paused_resume",
-
-  STREAM_SCRAPING: "stream_scraping",
-
-  TASK_DELETE: "delete_task",
-  TASK_CLEAR_ALL: "clear_all_tasks",
-  TASK_GET_LIST: "task_list",
-  TASK_RETRY_FAILED: "task_retry_failed",
-
-} as const;
+import { EVENTS, LIST_TYPE, TASK_STATUS, type listType } from "../constants/result_scraping";
 
 const BATCH_SIZE = 10; // Number of roll numbers to process in each batch
 
 
-
-const TASK_STATUS = {
-  SCRAPING: "scraping",
-  COMPLETED: "completed",
-  FAILED: "failed",
-  CANCELLED: "cancelled",
-} as const;
-
-type taskDataType = {
-  processable: number;
-  processed: number;
-  failed: number;
-  success: number;
-  skipped: number;
-  data: {
-    roll_no: string;
-    reason: string;
-  }[];
-  startTime: number;
-  endTime: number | null;
-  status: (typeof TASK_STATUS)[keyof typeof TASK_STATUS];
-  successfulRollNos: string[];
-  failedRollNos: string[];
-  skippedRollNos: string[];
-  list_type: listType;
-  taskId: string;
-  _id: string;
-};
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 // helper
@@ -89,6 +42,13 @@ const checkAndRegisterSSE = (ip: string, res: Response): boolean => {
   return true;
 };
 
+const isValidActionType = (actionType: string): actionType is (typeof EVENTS)[keyof typeof EVENTS] => {
+  return Object.values(EVENTS).includes(actionType as (typeof EVENTS)[keyof typeof EVENTS]);
+};
+
+const isValidListType = (listType: string): listType is listType => {
+  return Object.values(LIST_TYPE).includes(listType as listType);
+};
 
 export async function resultScrapingSSEHandler(req: Request, res: Response) {
   const list_type = req.query.list_type as string || LIST_TYPE.BACKLOG;
@@ -97,8 +57,11 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
   const ip = req.headers['x-forwarded-for'] || req.socket.remoteAddress;
 
 
-  if (!actionType || Object.values(EVENTS).indexOf(actionType as typeof EVENTS[keyof typeof EVENTS]) === -1) {
-    return res.status(400).send("Invalid action type");
+  if (!actionType || !isValidActionType(actionType)) {
+    return res.status(400).json({
+      data: null,
+      error: "Invalid or missing action type",
+    });
   }
 
   try {
@@ -106,7 +69,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
     // res.setHeader("Access-Control-Allow-Origin", "*");
     await dbConnect();
     if (actionType === EVENTS.TASK_GET_LIST) {
-      const tasks = await ResultScrapingLog.find({ list_type }).sort({ startTime: -1 });
+      const tasks = await ResultScrapingLog.find({  }).sort({ startTime: -1 });
 
       return res.status(200).json({
         data: JSON.parse(JSON.stringify(tasks)),
@@ -147,14 +110,13 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
       processed: 0,
       failed: 0,
       success: 0,
-      skipped: 0,
       data: [],
-      startTime: Date.now(),
+      startTime:new Date(),
       endTime: null,
       status: TASK_STATUS.SCRAPING,
       successfulRollNos: [],
       failedRollNos: [],
-      skippedRollNos: [],
+      queue: [],
       list_type,
       taskId,
       _id: new mongoose.Types.ObjectId().toString(), // generate a new ObjectId for the task
@@ -168,10 +130,16 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
       }
       const task = await ResultScrapingLog.findOne({ _id: task_resume_id });
       if (!task) {
-        return res.status(404).send("Task not found");
+        return res.status(200).json({
+          data: null,
+          error: "Task not found",
+        });
       }
       if (task.processed >= task.processable) {
-        return res.status(400).send("Task has already been processed");
+        return res.status(200).json({
+          data: null,
+          error: "Task has already been processed",
+        });
       }
       taskData = {
         ...task.toObject(),
@@ -179,25 +147,32 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
         status: TASK_STATUS.SCRAPING,
       };
       taskId = task_resume_id;
-      roll_list = new Set(task.failedRollNos); // retry only failed roll numbers
+      roll_list =  actionType === EVENTS.TASK_PAUSED_RESUME ? new Set(taskData.queue) : new Set(taskData.failedRollNos);
       if (roll_list.size === 0) {
-        return res.status(400).send("No failed roll numbers to retry");
+        return res.status(200).json({
+          data: null,
+          error: actionType === EVENTS.TASK_PAUSED_RESUME ? "No roll numbers to resume from paused task." : "No failed roll numbers to retry.",
+        });
       }
     }
     if (actionType === EVENTS.STREAM_SCRAPING) {
-      if (Object.values(LIST_TYPE).indexOf(list_type) === -1) {
-        return res.status(400).send("Invalid list type");
+      if (!isValidListType(list_type)) {
+        return res.status(200).json({
+          data: null,
+          error: "Invalid list type provided",
+        });
       }
 
       roll_list = await getListOfRollNos(list_type); // should return Set<string>
       if (!roll_list || roll_list.size === 0) {
-        return res.status(404).json({
+        return res.status(200).json({
           data: null,
           error: "No roll numbers found for the selected list type.",
         });
       }
       taskData.processable = roll_list.size; // set processable count based on roll numbers
-
+      taskData.queue = Array.from(roll_list); // convert Set to Array for queue
+      taskData.startTime = new Date(); // set start time to now
 
       const task = await ResultScrapingLog.create(taskData);
       taskId = task._id.toString(); // ensure taskId is a string
@@ -249,7 +224,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
     });
 
     // Process roll numbers in batches
-    const rollArray = Array.from(roll_list);
+    const rollArray = Array.from(taskData.queue);
     for (let i = 0; i < rollArray.length; i += BATCH_SIZE) {
       if (!isConnectionAlive) break; // Exit loop if connection closed
       const batch = rollArray.slice(i, i + BATCH_SIZE);
@@ -280,6 +255,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
           break; // Exit the loop if all roll numbers are processed
         }
         taskData.processed++;
+        taskData.queue = taskData.queue.filter((r) => r !== rollNo); // remove processed rollNo from queue
       }
 
       await ResultScrapingLog.updateOne(
@@ -287,6 +263,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
         {
           $set: {
             processed: taskData.processed,
+            queue: taskData.queue,
             failed: taskData.failed,
             success: taskData.success,
             successfulRollNos: taskData.successfulRollNos,
@@ -305,13 +282,21 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
       req.on('close', async () => {
         console.log('Client disconnected');
         taskData.status = TASK_STATUS.CANCELLED;
-        taskData.endTime = Date.now();
+        taskData.endTime = new Date();
         await ResultScrapingLog.updateOne(
           { taskId },
           {
             $set: {
               endTime: taskData.endTime,
               status: TASK_STATUS.CANCELLED,
+              processable: taskData.processable,
+              processed: taskData.processed,
+              failed: taskData.failed,
+              success: taskData.success,
+              successfulRollNos: taskData.successfulRollNos,
+              failedRollNos: taskData.failedRollNos,
+              data: taskData.data,
+              queue: taskData.queue,
             },
           }
         );
@@ -327,14 +312,13 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
     }
 
     taskData.status = TASK_STATUS.COMPLETED;
-    taskData.endTime = Date.now();
+    taskData.endTime = new Date();
 
     await ResultScrapingLog.updateOne(
       { taskId: taskData.taskId },
       {
         $set: {
           ...taskData, // spread the taskData to update all fields
-
         },
       }
     );
