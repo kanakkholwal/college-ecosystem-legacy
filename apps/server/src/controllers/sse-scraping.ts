@@ -360,27 +360,19 @@ async function getListOfRollNos(list_type: listType): Promise<Set<string>> {
     case LIST_TYPE.NEW_SEMESTER:
       // has less than 8 semesters
       query = {
-
         $expr: {
-          $and: [
+          $lt: [
+            { $size: "$semesters" },
             {
-              $and: [
-                { $lt: [{ $size: "$semesters" }, 8] }, // less than 8 semesters
-                { programme: "B.Tech" } 
-              ]
-            },
-            {
-              $and: [
-                { $lt: [{ $size: "$semesters" }, 10] }, // less than 10 semesters
-                { programme: "B.Arch" } 
-              ]
-            },
-            {
-              $and: [
-                { $lt: [{ $size: "$semesters" }, 12] }, // less than 12 semesters
-                { programme: "Dual Degree" } 
-              ]
-            },
+              $switch: {
+                branches: [
+                  { case: { $eq: ["$programme", "B.Tech"] }, then: 8 },
+                  { case: { $eq: ["$programme", "B.Arch"] }, then: 10 },
+                  { case: { $eq: ["$programme", "Dual Degree"] }, then: 12 }
+                ],
+                default: 0 // exclude if programme is none of these
+              }
+            }
           ]
         }
       };
