@@ -1,6 +1,6 @@
 # Dependency directories
 node_modules/
-
+.turbo
 # Build output
 dist/
 
