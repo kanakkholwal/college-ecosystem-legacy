@@ -84,7 +84,11 @@ const parseResult = (
     gender: "not_specified",
   };
 
-  student.name =
+
+  
+    
+  result_tables.forEach((table, index) => {
+    student.name =
     document
       .querySelectorAll("table")[1]
       .querySelector("td:nth-child(2)>p:nth-child(2)")
@@ -96,7 +100,7 @@ const parseResult = (
   subject_tables.forEach((table, index) => {
     if (!student.semesters[index]) {
       student.semesters.push({
-        semester: "0".concat((index + 1).toString()).slice(-2), // pad with 0
+        semester: "0",
         sgpi: 0,
         sgpi_total: 0,
         cgpi: 0,
@@ -124,22 +128,23 @@ const parseResult = (
   result_tables.forEach((table, index) => {
     table.querySelectorAll("td").forEach((td, i, array) => {
       student.semesters[index].semester = `0${index + 1}`.slice(-2);
-      student.semesters[index].sgpi = Number.parseFloat(array[1].innerText
+      student.semesters[index].sgpi = array[1].innerText
         .trim()
-        .split("=")[1] || "0") || 0;
-      student.semesters[index].sgpi_total = Number.parseFloat(array[2].innerText
-        .trim()
-        .split(" ")
-        .pop() || "0");
-      student.semesters[index].cgpi = Number.parseFloat(array[3].innerText
-        .trim()
-        .split("=")[1] || "0") || 0;
-      student.semesters[index].cgpi_total = Number.parseFloat(array[4].innerText
+        .split("=")[1] as unknown as number;
+      student.semesters[index].sgpi_total = array[2].innerText
         .trim()
         .split(" ")
-        .pop() || "0");
+        .pop() as unknown as number;
+      student.semesters[index].cgpi = array[3].innerText
+        .trim()
+        .split("=")[1] as unknown as number;
+      student.semesters[index].cgpi_total = array[4].innerText
+        .trim()
+        .split(" ")
+        .pop() as unknown as number;
     });
   });
+  
   const [branch_change, department] = determineBranchChange(student);
   if (branch_change && department !== null) {
     student.branch = department;
