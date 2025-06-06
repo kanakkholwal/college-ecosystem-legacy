@@ -69,7 +69,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
     // res.setHeader("Access-Control-Allow-Origin", "*");
     await dbConnect();
     if (actionType === EVENTS.TASK_GET_LIST) {
-      const tasks = await ResultScrapingLog.find({  }).sort({ startTime: -1 });
+      const tasks = await ResultScrapingLog.find({}).sort({ startTime: -1 });
 
       return res.status(200).json({
         data: JSON.parse(JSON.stringify(tasks)),
@@ -111,7 +111,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
       failed: 0,
       success: 0,
       data: [],
-      startTime:new Date(),
+      startTime: new Date(),
       endTime: null,
       status: TASK_STATUS.SCRAPING,
       successfulRollNos: [],
@@ -135,19 +135,28 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
           error: "Task not found",
         });
       }
-      if (task.processed >= task.processable) {
-        return res.status(200).json({
-          data: null,
-          error: "Task has already been processed",
-        });
-      }
+      // if (actionType === EVENTS.TASK_PAUSED_RESUME && task.processed >= task.processable) {
+      //   return res.status(200).json({
+      //     data: null,
+      //     error: "Task has already been processed",
+      //   });
+      // }
       taskData = {
         ...task.toObject(),
         endTime: null,
         status: TASK_STATUS.SCRAPING,
       };
       taskId = task_resume_id;
-      roll_list =  actionType === EVENTS.TASK_PAUSED_RESUME ? new Set(taskData.queue) : new Set(taskData.failedRollNos);
+      if (actionType === EVENTS.TASK_PAUSED_RESUME) {
+        roll_list = new Set(taskData.queue);
+        // If resuming from a paused task, we need to reset the processed count
+        taskData.processable -= taskData.queue.length; // reduce processable count by the number of roll numbers in the queue
+      }
+      else if (actionType === EVENTS.TASK_RETRY_FAILED)  // retry failed task
+      {
+        roll_list = new Set(taskData.failedRollNos);
+        taskData.processable = taskData.failedRollNos.length; // set processable count to the number of failed roll numbers
+      }
       if (roll_list.size === 0) {
         return res.status(200).json({
           data: null,
@@ -224,7 +233,8 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
     });
 
     // Process roll numbers in batches
-    const rollArray = Array.from(taskData.queue);
+    const rollNoQueue = new Set<string>(taskData.queue); // use Set to avoid duplicates
+    const rollArray = Array.from(rollNoQueue);
     for (let i = 0; i < rollArray.length; i += BATCH_SIZE) {
       if (!isConnectionAlive) break; // Exit loop if connection closed
       const batch = rollArray.slice(i, i + BATCH_SIZE);
@@ -241,6 +251,10 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
         if (result.status === "fulfilled" && result.value.success) {
           taskData.success++;
           taskData.successfulRollNos.push(rollNo);
+          if(actionType === EVENTS.TASK_RETRY_FAILED){
+            taskData.failedRollNos = taskData.failedRollNos.filter(r => r !== rollNo);
+            taskData.failed--;
+          }
         } else {
           taskData.failed++;
           taskData.failedRollNos.push(rollNo);
@@ -250,14 +264,16 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
             reason: result.status === "fulfilled" ? result.value.error : result.reason || "Unknown error",
           });
         }
-        if (taskData.processed >= taskData.processable) {
+        if (taskData.queue.length === 0) {
           console.log("All roll numbers processed, breaking the loop");
           break; // Exit the loop if all roll numbers are processed
         }
         taskData.processed++;
-        taskData.queue = taskData.queue.filter((r) => r !== rollNo); // remove processed rollNo from queue
+        rollNoQueue.delete(rollNo); // Remove processed roll number from queue
+        taskData.queue = Array.from(rollNoQueue); // Update queue in taskData
       }
-
+      // Update taskData in the database after each batch
+      taskData.queue = Array.from(rollNoQueue); // Update queue in taskData
       await ResultScrapingLog.updateOne(
         { taskId: taskData.taskId },
         {

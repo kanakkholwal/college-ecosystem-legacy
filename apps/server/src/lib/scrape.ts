@@ -143,20 +143,20 @@ const parseResult = (
   result_tables.forEach((table, index) => {
     table.querySelectorAll("td").forEach((td, i, array) => {
       student.semesters[index].semester = `0${index + 1}`.slice(-2);
-      student.semesters[index].sgpi = array[1].innerText
+      student.semesters[index].sgpi = Number.parseInt(array[1].innerText
         .trim()
-        .split("=")[1] as unknown as number;
-      student.semesters[index].sgpi_total = array[2].innerText
-        .trim()
-        .split(" ")
-        .pop() as unknown as number;
-      student.semesters[index].cgpi = array[3].innerText
-        .trim()
-        .split("=")[1] as unknown as number;
-      student.semesters[index].cgpi_total = array[4].innerText
+        .split("=")[1] || "0") || 0;
+      student.semesters[index].sgpi_total = Number.parseInt(array[2].innerText
         .trim()
         .split(" ")
-        .pop() as unknown as number;
+        .pop() || "0");
+      student.semesters[index].cgpi = Number.parseInt(array[3].innerText
+        .trim()
+        .split("=")[1] || "0") || 0;
+      student.semesters[index].cgpi_total = Number.parseInt(array[4].innerText
+        .trim()
+        .split(" ")
+        .pop() || "0");
     });
   });
   const [branch_change, department] = determineBranchChange(student);
@@ -193,7 +193,7 @@ export async function scrapeResult(rollNo: string): Promise<{
     });
     console.log("parsed");
     // if student is dual degree then we need to fetch the other result
-    if (student.programme === "Dual Degree") {
+    if (student.programme === "Dual Degree" && student.semesters.length > 6) {
       const data = await getInfoFromRollNo(rollNo, true);
       const [result, msg] = await fetchData(data.url, rollNo, data.headers);
       if (result === null) {
@@ -207,13 +207,17 @@ export async function scrapeResult(rollNo: string): Promise<{
         rollNo,
         ...data,
       });
-      student.semesters = student.semesters.concat(
-        student_dual.semesters.map((semester) => ({
+      console.log("parsed dual degree result");
+      // append the dual degree semesters to the student semesters
+      student_dual.semesters.forEach((semester, idx) => {
+        semester.semester = `0${idx + 8}`.slice(-2); // pad with 0, dual degree semesters start from 8
+        semester.cgpi = semester.cgpi || 0; // ensure cgpi is set
+        student.semesters.push({
           ...semester,
-          // semester:  8 + idx + 1, // dual degree semesters start from 8
-          semester: `${semester.semester} (masters)`,
-        }))
-      );
+          semester: `${semester.semester} (masters)`, // append (masters) to the semester
+        })
+      })
+
     }
 
     return Promise.resolve({

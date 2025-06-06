@@ -22,6 +22,7 @@ import type {
   rawResultSchemaType,
   rollNoSchemaType,
 } from "~/lib/server-apis/types";
+import { orgConfig } from "~/project.config";
 import { changeCase } from "~/utils/string";
 
 const availableMethods = [
@@ -219,6 +220,73 @@ export function DeleteResultDiv() {
         aria-label="Delete Result"
       >
         {loading ? "Deleting..." : "Delete Result"}
+      </Button>
+    </div>
+  );
+}
+
+export function MailResultUpdateDiv(){
+  const [targets, setTargets] = useState<string>("");
+  // Batches is a comma-separated list of batches to send the mail to
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const handleMailResultUpdate = async () => {
+    if (!targets) {
+      toast.error("Please enter targets");
+      return;
+    }
+    setLoading(true);
+    try {
+      const { data: response } =
+        await serverApis.mail.sendResultUpdate({
+          subject: " Semester Result Notification",
+          template_key: "result_update",
+          targets: targets.split(",").map((email) => email.trim() + orgConfig.mailSuffix),
+          payload: {
+            batch: "Academic Year " + new Date().getFullYear(),
+          },
+        });
+      if (response?.error || !response?.data) {
+        toast.error(response?.message || "Failed to send mail");
+        return;
+      }
+      toast.success("Mail sent successfully");
+      setTargets(""); // Clear the input after successful mail
+    } catch (error) {
+      console.log("Error sending mail:", error);
+      toast.error("An unexpected error occurred while sending the mail.");
+    } finally {
+      setLoading(false);
+    }
+  };
+  return (
+    <div className="w-full flex flex-col gap-4 @3xl:p-3">
+      <div>
+        <Label className="text-xs">
+          Enter Email Addresses to Send Result Update Mail (comma separated)
+        </Label>
+        <Input
+          type="text"
+          placeholder="Enter Email Addresses (comma separated)"
+          className="w-full max-w-xs"
+          value={targets}
+          custom-size="sm"
+          onChange={(e) => setTargets(e.target.value)}
+          disabled={loading}
+          aria-label="Email Addresses"
+        />
+        <p className="text-xs text-muted-foreground">
+          {targets.split(",").map((email) => email.trim() + orgConfig.mailSuffix).join(", ")}
+        </p>
+      </div>
+      <Button
+        size="sm"
+        variant="dark"
+        disabled={!targets || loading}
+        onClick={handleMailResultUpdate}
+        aria-label="Send Result Update Mail"
+      >
+        {loading ? "Sending..." : "Send Result Update Mail"}
       </Button>
     </div>
   );

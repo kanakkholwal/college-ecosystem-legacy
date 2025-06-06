@@ -74,8 +74,8 @@ export default function ScrapeResultPage() {
     _id: "",
   });
 
-  const handleAction = (id: string, type: string) => {
-    const [_1, listType, ...rest] = id.split(":");
+  const handleAction = (id: string, type: string, listType?: string) => {
+    const [_1, _2, ...rest] = id.split(":");
     console.log("Action triggered", id, type);
 
     handleStartScraping({
@@ -328,7 +328,7 @@ export default function ScrapeResultPage() {
               </div>
             </div>
             <p className="text-sm text-muted-foreground space-x-1.5 space-y-1.5">
-              <Badge size="sm">{taskData.queue.length} skipped</Badge>
+              <Badge size="sm">{taskData.queue.length} Queued</Badge>
               {taskData.status && <Badge size="sm">{taskData.status}</Badge>}
               <Badge size="sm">{taskData.list_type}</Badge>
               <Badge size="sm">
@@ -438,7 +438,7 @@ function DisplayTask({
   deleteTask,
 }: {
   task: taskDataType;
-  actionFunction?: (id: string, type: string) => void;
+  actionFunction?: (id: string, type: string, listType?: string) => void;
   deleteTask?: (updatedTask: taskDataType) => void;
 }) {
   const [_1, listType, _2, timestamp] = task.taskId.split(":");
@@ -497,7 +497,7 @@ function DisplayTask({
                 size="sm"
                 variant="default_light"
                 onClick={() =>
-                  actionFunction(task._id, EVENTS.TASK_RETRY_FAILED)
+                  actionFunction(task._id, EVENTS.TASK_RETRY_FAILED, task.list_type)
                 }
               >
                 Retry failed

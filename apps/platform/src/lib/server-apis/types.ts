@@ -133,4 +133,20 @@ export type APITypes = {
       response: Department[];
     };
   };
+  mail:{
+    sendResultUpdate: {
+      payload: {
+        template_key: "result_update";
+        targets: string[];
+        subject: string;
+        payload: {
+          batch: string;
+        };
+      };
+      response: {
+        accepted: string[];
+        rejected: string[];
+      };
+    };
+  }
 };
