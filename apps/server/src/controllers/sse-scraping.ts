@@ -362,7 +362,7 @@ async function getListOfRollNos(list_type: listType): Promise<Set<string>> {
       query = {
 
         $expr: {
-          $or: [
+          $and: [
             {
               $and: [
                 { $lt: [{ $size: "$semesters" }, 8] }, // less than 8 semesters
