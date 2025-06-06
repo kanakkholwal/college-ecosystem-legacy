@@ -124,17 +124,17 @@ const parseResult = (
   result_tables.forEach((table, index) => {
     table.querySelectorAll("td").forEach((td, i, array) => {
       student.semesters[index].semester = `0${index + 1}`.slice(-2);
-      student.semesters[index].sgpi = Number.parseInt(array[1].innerText
+      student.semesters[index].sgpi = Number.parseFloat(array[1].innerText
         .trim()
         .split("=")[1] || "0") || 0;
-      student.semesters[index].sgpi_total = Number.parseInt(array[2].innerText
+      student.semesters[index].sgpi_total = Number.parseFloat(array[2].innerText
         .trim()
         .split(" ")
         .pop() || "0");
-      student.semesters[index].cgpi = Number.parseInt(array[3].innerText
+      student.semesters[index].cgpi = Number.parseFloat(array[3].innerText
         .trim()
         .split("=")[1] || "0") || 0;
-      student.semesters[index].cgpi_total = Number.parseInt(array[4].innerText
+      student.semesters[index].cgpi_total = Number.parseFloat(array[4].innerText
         .trim()
         .split(" ")
         .pop() || "0");
