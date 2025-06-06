@@ -1,4 +1,4 @@
-import { serverFetch } from "~/lib/server-fetch";
+import { mailFetch, serverFetch } from "~/lib/server-fetch";
 import type { APITypes, ApiResponse, FunctionaryType } from "./types";
 
 /*
@@ -154,6 +154,20 @@ const departments = {
     );
   },
 } as const;
+/*
+ **  Mail API
+ */
+const mail = {
+  sendResultUpdate:
+    async (payload: APITypes["mail"]["sendResultUpdate"]["payload"]) => {
+      return await mailFetch<
+        ApiResponse<APITypes["mail"]["sendResultUpdate"]["response"]>
+      >("/api/send", {
+        method: "POST",
+        body: payload,
+      });
+    },
+} as const;
 
 /*
  **  Exports
@@ -164,6 +178,7 @@ const serverApis = {
   hostels,
   faculties,
   departments,
+  mail
 } as const;
 
 export default serverApis;

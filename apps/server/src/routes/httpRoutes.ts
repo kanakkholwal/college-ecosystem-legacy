@@ -14,6 +14,7 @@ import {
   assignBranchChangeToResults,
   assignRankToResults,
   deleteResult,
+  getAbnormalResults,
   getResult,
   getResultByRollNoFromSite,
   importFreshers,
@@ -56,6 +57,7 @@ router.post(
   assignBranchChangeToResults as unknown as RequestHandler
 );
 // Endpoint to get result by rollNo scraped from the website
+router.get("/results/abnormals", getAbnormalResults);
 router.post("/results/:rollNo", getResultByRollNoFromSite);
 // Endpoint to [get,add,update] result by rollNo from the database
 router.get("/results/:rollNo/get", getResult);

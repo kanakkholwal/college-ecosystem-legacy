@@ -58,6 +58,29 @@ export async function assignRank() {
     return Promise.reject("Failed to assign rank");
   }
 }
+export async function sendMailUpdate(targets: string[]) {
+  if (!targets || !Array.isArray(targets) || targets.length === 0) {
+    return Promise.reject("Invalid targets");
+  }
+  try {
+    const { data: response } = await serverApis.mail.sendResultUpdate({
+      template_key: "result_update",
+      targets: targets,
+      subject: "Semester Result Notification",
+      payload: {
+        batch: "Academic Year " + new Date().getFullYear(),
+      },
+    });
+    if (response?.error) {
+      return Promise.reject(response.message || "Failed to send mail");
+    }
+    return Promise.resolve(response?.data.accepted.length + " mails sent successfully , " +
+      response?.data.rejected.length + " mails rejected");
+  } catch (err) {
+    console.error(err);
+    return Promise.reject("Failed to send mail");
+  }
+}
 
 export async function assignBranchChange() {
   try {

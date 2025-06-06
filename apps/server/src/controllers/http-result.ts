@@ -157,6 +157,71 @@ export const deleteResult = async (req: Request, res: Response) => {
   return;
 };
 
+
+export const getAbnormalResults = async (req: Request, res: Response) => {
+  try {
+    await dbConnect();
+    const pipeline = [
+  {
+    $addFields: {
+      semesterCount: { $size: "$semesters" },
+    },
+  },
+  {
+    $group: {
+      _id: "$batch",
+      avgSemesterCount: { $avg: "$semesterCount" },
+      docs: { $push: "$$ROOT" },
+    },
+  },
+  {
+    $unwind: "$docs",
+  },
+  {
+    $replaceRoot: {
+      newRoot: {
+        $mergeObjects: ["$docs", { avgSemesterCount: "$avgSemesterCount" }],
+      },
+    },
+  },
+  {
+    $addFields: {
+      diff: { $abs: { $subtract: ["$semesterCount", "$avgSemesterCount"] } },
+    },
+  },
+  {
+    $match: {
+      diff: { $gte: 2 },
+    },
+  },
+  {
+    $project: {
+      name: 1,
+      rollNo: 1,
+      branch: 1,
+      batch: 1,
+      semesterCount: 1,
+      avgSemesterCount: 1,
+    },
+  },
+];
+
+const results = await ResultModel.aggregate(pipeline);
+    res.status(200).json({
+      error: false,
+      message: "Abnormal results fetched successfully",
+      data: results,
+    });
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: true,
+      message: "An error occurred",
+      data: error || "Internal Server Error",
+    });
+  }
+};
 export const assignRankToResults = async (req: Request, res: Response) => {
   try {
     const time = new Date();

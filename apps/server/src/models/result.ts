@@ -71,7 +71,7 @@ const ResultSchema: Schema = new Schema(
     semesters: { type: [SemesterSchema], required: true },
     gender: {
       type: String,
-      enums: ["male", "female", "not_specified"],
+      enum: ["male", "female", "not_specified"],
       default: "not_specified",
     },
     rank: {
@@ -85,6 +85,7 @@ const ResultSchema: Schema = new Schema(
     timestamps: true,
   }
 );
+// ResultSchema.index({ rollNo: 1 }, { unique: true });
 
 const ResultModel =
   mongoose.models?.Result || mongoose.model<IResultType>("Result", ResultSchema);

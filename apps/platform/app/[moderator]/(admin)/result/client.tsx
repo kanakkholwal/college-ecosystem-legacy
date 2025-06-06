@@ -17,6 +17,7 @@ import { Label } from "@/components/ui/label";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import toast from "react-hot-toast";
 import serverApis from "~/lib/server-apis/client";
+import {sendMailUpdate} from "./actions";
 import type {
   ResultType,
   rawResultSchemaType,
@@ -31,6 +32,7 @@ const availableMethods = [
   "addResultByRollNo",
   "updateResultByRollNo",
 ] as (keyof typeof serverApis.results)[];
+
 
 export function GetResultDiv() {
   const [rollNo, setRollNo] = useState<string>("");
@@ -225,9 +227,10 @@ export function DeleteResultDiv() {
   );
 }
 
+
 export function MailResultUpdateDiv(){
   const [targets, setTargets] = useState<string>("");
-  // Batches is a comma-separated list of batches to send the mail to
+    // Batches is a comma-separated list of batches to send the mail to
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleMailResultUpdate = async () => {
@@ -237,20 +240,13 @@ export function MailResultUpdateDiv(){
     }
     setLoading(true);
     try {
-      const { data: response } =
-        await serverApis.mail.sendResultUpdate({
-          subject: " Semester Result Notification",
-          template_key: "result_update",
-          targets: targets.split(",").map((email) => email.trim() + orgConfig.mailSuffix),
-          payload: {
-            batch: "Academic Year " + new Date().getFullYear(),
-          },
-        });
-      if (response?.error || !response?.data) {
-        toast.error(response?.message || "Failed to send mail");
-        return;
-      }
-      toast.success("Mail sent successfully");
+      toast.promise(sendMailUpdate(
+        targets.split(",").map((email) => email.trim() + orgConfig.mailSuffix)
+      ),{
+        loading: "Sending mail...",
+        success: "Mail sent successfully",
+        error: (error) => `Failed to send mail: ${error.message || "Unknown error"}`,
+      });
       setTargets(""); // Clear the input after successful mail
     } catch (error) {
       console.log("Error sending mail:", error);

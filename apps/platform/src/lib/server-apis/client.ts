@@ -1,5 +1,4 @@
-import { serverFetch } from "~/lib/client-fetch";
-import { mailFetch } from "../server-fetch";
+import { mailFetch, serverFetch } from "~/lib/client-fetch";
 import type { APITypes, ApiResponse, FunctionaryType } from "./types";
 
 /*
@@ -164,7 +163,7 @@ const mail = {
     async (payload: APITypes["mail"]["sendResultUpdate"]["payload"]) => {
       return await mailFetch<
         ApiResponse<APITypes["mail"]["sendResultUpdate"]["response"]>
-      >("/api/mail/send-result-update", {
+      >("/api/send", {
         method: "POST",
         body: payload,
       });

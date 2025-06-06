@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     const res = requestPayloadSchema.safeParse(body);
+    console.log("Parsed request body", res.data);
     if (!res.success) {
       return NextResponse.json(
         {

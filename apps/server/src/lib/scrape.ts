@@ -1,44 +1,19 @@
 import axios from "axios";
 import HTMLParser from "node-html-parser";
 import { getDepartmentCoursePrefix } from "../constants/departments";
+import { headerMap, PROGRAMME_KEYS, RESPONSE } from "../constants/result_scraping";
 import type { rawResultType } from "../types/result";
 
-const PROGRAMME_KEYS = {
-  "Dual Degree": ["dcs", "dec"],
-  "B.Tech": ["bce", "bme", "bms", "bma", "bph", "bee", "bec", "bcs", "bch"],
-  "B.Arch": ["bar"],
-  "M.Tech": ["mce", "mme", "mms", "mma", "mph", "mee", "mec", "mcs", "mch"],
-};
+
 const CACHE = new Map<string, string>();
 
-const RESPONSE = {
-  ERROR: {
-    INVALID_ROLL_NO: "Invalid Roll No",
-    BATCH_NOT_SUPPORTED: "Batch not supported",
-    NO_SIMILAR_BRANCH: "No Similar branch",
-    NO_PROGRAMME: "No Programme",
-    NO_BRANCH: "No Branch",
-    NO_URL: "No URL",
-    NO_HEADERS: "No Headers",
-    OTHER: "Something went wrong",
-  },
-  SUCCESS: {
-    RESULT_FETCHED: "Result fetched successfully!",
-  },
-  OTHER: {
-    WELCOME: "Welcome to the server!",
-    HEALTHY: "Healthy",
-    SOMETHING_WRONG: "Something went wrong!",
-    OTHER: "Other",
-  },
-};
-
-// function parseResponse(res_type:keyof typeof RESPONSE,response_code:keyof typeof RESPONSE[keyof typeof RESPONSE]){
-//     return {
-//         type:RESPONSE[res_type] ? res_type : "OTHER",
-//         message:RESPONSE[res_type][response_code] ? RESPONSE[res_type][response_code] : RESPONSE.OTHER.OTHER
-//     }
-// }
+/**
+ * Fetches the result data from the NITH results page for a given roll number.
+ * @param url - The URL to fetch the result from.
+ * @param RollNo - The roll number of the student.
+ * @param headers - The headers required for the request.
+ * @returns A promise that resolves to a tuple containing the result data and a message.
+ */
 
 const fetchData = async (
   url: string,
@@ -71,6 +46,12 @@ const fetchData = async (
     return Promise.resolve([null, (error as Error).toString()]);
   }
 };
+/**
+ * Parses the HTML result string fetched from the NITH results page.
+ * @param result - The HTML result string fetched from the NITH results page.
+ * @param info - Additional information about the student.
+ * @returns A promise that resolves to a rawResultType object.
+ */
 
 const parseResult = (
   result: string | null,
@@ -168,14 +149,20 @@ const parseResult = (
   return Promise.resolve(student);
 };
 
+/**
+ * Scrapes the result for a given roll number.
+ * @param rollNo - The roll number of the student.
+ * @returns A promise that resolves to an object containing the result data or an error message.
+ * */
 export async function scrapeResult(rollNo: string): Promise<{
   message: string;
   data: rawResultType | null;
   error?: string | null;
 }> {
-  const data = await getInfoFromRollNo(rollNo, false);
 
+  const data = await getInfoFromRollNo(rollNo, false);
   console.log("Roll No: %s", rollNo);
+
   try {
     console.log("evaluating");
     const [result, msg] = await fetchData(data.url, rollNo, data.headers);
@@ -193,32 +180,35 @@ export async function scrapeResult(rollNo: string): Promise<{
     });
     console.log("parsed");
     // if student is dual degree then we need to fetch the other result
-    if (student.programme === "Dual Degree" && student.semesters.length > 6) {
-      const data = await getInfoFromRollNo(rollNo, true);
-      const [result, msg] = await fetchData(data.url, rollNo, data.headers);
-      if (result === null) {
-        return Promise.resolve({
-          message: msg,
-          data: null,
-          error: "Invalid Roll No",
-        });
-      }
-      const student_dual = await parseResult(result, {
-        rollNo,
-        ...data,
-      });
-      console.log("parsed dual degree result");
-      // append the dual degree semesters to the student semesters
-      student_dual.semesters.forEach((semester, idx) => {
-        semester.semester = `0${idx + 8}`.slice(-2); // pad with 0, dual degree semesters start from 8
-        semester.cgpi = semester.cgpi || 0; // ensure cgpi is set
-        student.semesters.push({
-          ...semester,
-          semester: `${semester.semester} (masters)`, // append (masters) to the semester
-        })
-      })
+    // if (student.programme === "Dual Degree" && student.semesters.length > 6) {
+    //   const data = await getInfoFromRollNo(rollNo, true);
+    //   console.log("evaluating dual degree result", data.url);
+    //   const [result, msg] = await fetchData(data.url, rollNo, data.headers);
+    //   if (result === null) {
+    //     return Promise.resolve({
+    //       message: msg,
+    //       data: null,
+    //       error: "Invalid Roll No",
+    //     });
+    //   }
+    //   const student_dual = await parseResult(result, {
+    //     rollNo,
+    //     ...data,
+    //   });
+    //   console.log("parsed dual degree result");
+    //   // if the dual degree result has only one semester, it means the student is in the first semester of the dual degree
+    //   student_dual.semesters.forEach((semester) => {
+    //     semester.semester = `${semester.semester} (masters)`; // pad with 0, dual degree semesters start from 8
+    //     semester.cgpi = semester.cgpi || 0; // ensure cgpi is set
+    //     student.semesters.push({
+    //       ...semester,
+    //       semester: `${semester.semester} (masters)`, // append (masters) to the semester
+    //     });
+    //   });
 
-    }
+
+
+    // }
 
     return Promise.resolve({
       message: "Result fetched successfully!",
@@ -226,78 +216,23 @@ export async function scrapeResult(rollNo: string): Promise<{
       error: null,
     });
   } catch (err) {
+    console.error("Error in scrapeResult:", err);
+    // If there is an error, return a rejected promise with the error message
     return Promise.resolve({
-      message: "Something went wrong",
+      message: err instanceof Error ? err.message : "Something went wrong",
       data: null,
       error: err?.toString(),
     });
   }
 }
 
-const headerMap = new Map<
-  string | number,
-  {
-    url: string;
-    Referer: string;
-    CSRFToken: string;
-    RequestVerificationToken: string;
-  }
->([
-  [
-    20,
-    {
-      url: "http://results.nith.ac.in/scheme20/studentresult/result.asp",
-      Referer: "http://results.nith.ac.in/scheme20/studentresult/index.asp",
-      CSRFToken: "{782F96DF-5115-4492-8CB2-06104ECFF0CA}",
-      RequestVerificationToken: "094D0BF7-EE18-E102-8CBF-23C329B32E1C",
-    },
-  ],
-  [
-    21,
-    {
-      url: "http://results.nith.ac.in/scheme21/studentresult/result.asp",
-      Referer: "http://results.nith.ac.in/scheme21/studentresult/index.asp",
-      CSRFToken: "{D5D50B24-2DDE-4C35-9F41-10426C59EEA7}",
-      RequestVerificationToken: "7BA3D112-507E-5379-EE25-9539F0DE9076",
-    },
-  ],
-  [
-    22,
-    {
-      url: "http://results.nith.ac.in/scheme22/studentresult/result.asp",
-      Referer: "http://results.nith.ac.in/scheme22/studentresult/index.asp",
-      CSRFToken: "{AF6DB03B-F6EC-475E-B331-6C9DE3846923}",
-      RequestVerificationToken: "DA92D62F-BF6E-B268-4E04-F419F5EA6233",
-    },
-  ],
-  [
-    23,
-    {
-      url: "http://results.nith.ac.in/scheme23/studentresult/result.asp",
-      Referer: "http://results.nith.ac.in/scheme23/studentresult/index.asp",
-      CSRFToken: "{F1E16363-FEDA-48AF-88E9-8A186425C213}",
-      RequestVerificationToken: "4FFEE8F3-14C9-27C4-B370-598406BF99C1",
-    },
-  ],
-  [
-    24,
-    {
-      url: "http://results.nith.ac.in/scheme24/studentresult/result.asp",
-      Referer: "http://results.nith.ac.in/scheme24/studentresult/index.asp",
-      CSRFToken: "{0696D16E-58AD-472B-890E-6537BE62A5EA}",
-      RequestVerificationToken: "F797B72F-DC73-D06D-6B19-012ED5EBA98B",
-    },
-  ],
-  [
-    "21_dual",
-    {
-      url: "http://results.nith.ac.in/dualdegree21/studentresult/result.asp",
-      Referer: "http://results.nith.ac.in/dualdegree21/studentresult/index.asp",
-      CSRFToken: "{BC8FDC16-3133-429F-8FD7-CAC7026512F1}",
-      RequestVerificationToken: "13FD6203-F8C9-FBC3-877F-3D7480CF2325",
-    },
-  ],
-]);
+/**
+ * Gets the information headers for the roll number.
+ * @param rollNo - The roll number of the student.
+ * @param isDualDegree - Whether the student is in a dual degree programme.
+ * @returns A promise that resolves to an object containing the batch, branch, URL, and headers.
+ * */
+
 
 export async function getInfoFromRollNo(rollNo: string, dualDegree = false) {
   // split the roll no into 3 parts starting two characters then 3 characters and then 3 characters
@@ -374,6 +309,13 @@ export async function getInfoFromRollNo(rollNo: string, dualDegree = false) {
     programme: determineProgramme(rollNo),
   };
 }
+
+/**
+ * Determines the department based on the roll number.
+ * @param RollNo - The roll number of the student.
+ * @returns The department name as a string.
+ */
+// This function is used to determine the department based on the roll number.
 export function determineDepartment(RollNo: string) {
   const lowerRollNo = RollNo.toLowerCase();
   switch (true) {
@@ -403,6 +345,11 @@ export function determineDepartment(RollNo: string) {
       throw Error("No Similar branch");
   }
 }
+/**
+ * 
+ * @param rollNo - The roll number of the student.
+ * @returns The programme name as a string.
+ */
 export function determineProgramme(rollNo: string) {
   const programmeCode = rollNo.toLowerCase().substring(2, 5);
   let programme = Object.keys(PROGRAMME_KEYS)[0];
@@ -415,6 +362,11 @@ export function determineProgramme(rollNo: string) {
 
   return programme;
 }
+/**
+ * Determines if a student has changed their branch based on their results.
+ * @param result - The raw result data of the student.
+ * @returns A tuple containing a boolean indicating if the branch has changed and the new department name if applicable.
+ */
 
 export function determineBranchChange(
   result: rawResultType
