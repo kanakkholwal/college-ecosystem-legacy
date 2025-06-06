@@ -1,8 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 // provider.tsx
 "use client";
-// import Aos from "aos";
-// import "aos/dist/aos.css";
 import { Toaster } from "@/components/ui/toaster";
 import { all_themes } from "@/constants/theme";
 import { cn } from "@/lib/utils";
@@ -23,7 +21,6 @@ const queryClient = new QueryClient({
 });
 
 export function Consumer({ children }: { children: React.ReactNode }) {
-  // const [isLoaded, setIsLoaded] = useState<boolean>(true);
   const { theme } = useTheme();
 
   return (
@@ -44,7 +41,6 @@ export function Consumer({ children }: { children: React.ReactNode }) {
           duration: 2500,
         }}
       />
-      <Toaster />
       <div className="fixed bottom-2 right-2 left-auto top-auto z-50 flex gap-1 items-center">
         <span>
           <img
