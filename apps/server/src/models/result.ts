@@ -16,7 +16,7 @@ export interface Semester {
   sgpi: number;
   cgpi: number;
   courses: Course[];
-  semester: number;
+  semester: string | number;
   sgpi_total: number;
   cgpi_total: number;
 }
@@ -56,7 +56,7 @@ const SemesterSchema: Schema = new Schema({
   sgpi: { type: Number, required: true },
   cgpi: { type: Number, required: true },
   courses: { type: [CourseSchema], required: true },
-  semester: { type: Number || String, required: true },
+  semester: { type:  String || Number, required: true },
   sgpi_total: { type: Number, required: true },
   cgpi_total: { type: Number, required: true },
 });

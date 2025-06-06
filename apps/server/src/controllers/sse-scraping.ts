@@ -138,8 +138,8 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
       return res.status(400).send("IP address not found");
     }
     if (!checkAndRegisterSSE(ip as string, res)) {
-    return res.status(429).end('SSE already active from this IP');
-  }
+      return res.status(429).end('SSE already active from this IP');
+    }
 
     let taskId = `result_scraping:${list_type}:${Date.now()}`;
     let taskData: taskDataType = {
@@ -359,10 +359,34 @@ async function getListOfRollNos(list_type: listType): Promise<Set<string>> {
       break;
     case LIST_TYPE.NEW_SEMESTER:
       // has less than 8 semesters
-      query = { $expr: { $lt: [{ $size: "$semesters" }, 8] } };
+      query = {
+
+        $expr: {
+          $or: [
+            {
+              $and: [
+                { $lt: [{ $size: "$semesters" }, 8] }, // less than 8 semesters
+                { programme: "B.Tech" } 
+              ]
+            },
+            {
+              $and: [
+                { $lt: [{ $size: "$semesters" }, 10] }, // less than 10 semesters
+                { programme: "B.Arch" } 
+              ]
+            },
+            {
+              $and: [
+                { $lt: [{ $size: "$semesters" }, 12] }, // less than 12 semesters
+                { programme: "Dual Degree" } 
+              ]
+            },
+          ]
+        }
+      };
       break;
     case LIST_TYPE.DUAL_DEGREE:
-      // has less than 8 semesters
+      // has less than 12 semesters
       query = { programme: "Dual Degree", $expr: { $lt: [{ $size: "$semesters" }, 12] } };
       break;
     case LIST_TYPE.ALL:

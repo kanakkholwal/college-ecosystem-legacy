@@ -115,7 +115,7 @@ const parseResult = (
   subject_tables.forEach((table, index) => {
     if (!student.semesters[index]) {
       student.semesters.push({
-        semester: "0",
+        semester: "0".concat((index + 1).toString()).slice(-2), // pad with 0
         sgpi: 0,
         sgpi_total: 0,
         cgpi: 0,
@@ -210,6 +210,7 @@ export async function scrapeResult(rollNo: string): Promise<{
       student.semesters = student.semesters.concat(
         student_dual.semesters.map((semester) => ({
           ...semester,
+          // semester:  8 + idx + 1, // dual degree semesters start from 8
           semester: `${semester.semester} (masters)`,
         }))
       );
