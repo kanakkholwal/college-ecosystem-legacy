@@ -1,8 +1,6 @@
-import { GoBackButton } from "@/components/common/go-back";
-import { Button } from "@/components/ui/button";
+import { ButtonLink, PreviousPageLink } from "@/components/utils/link";
 import { Home } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Not Found",
@@ -85,13 +83,11 @@ export default function NotFound() {
         </defs>
       </svg>
       <div className="flex mx-auto gap-4">
-        <GoBackButton />
-        <Button rounded="full" variant="default_light" width="sm" asChild>
-          <Link href="/">
-            <Home />
-            Go to Home
-          </Link>
-        </Button>
+        <PreviousPageLink />
+        <ButtonLink href="/" rounded="full" variant="default_light" width="sm">
+          <Home />
+          Go to Home
+        </ButtonLink>
       </div>
     </div>
   );

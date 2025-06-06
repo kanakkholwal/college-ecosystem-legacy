@@ -1,13 +1,13 @@
-import { GoBackButton } from "@/components/common/go-back";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { PreviousPageLink } from "@/components/utils/link";
 import { ArrowDownUp, Mail } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
@@ -66,7 +66,7 @@ export default async function ResultsPage(props: Props) {
         className="z-10 w-full max-w-7xl relative flex flex-col gap-5 py-10 px-4 rounded-lg text-center lg:text-left"
       >
         <div className="mr-auto">
-          <GoBackButton size="sm" />
+          <PreviousPageLink size="sm" />
         </div>
         <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
           <div className="flex flex-col gap-4">

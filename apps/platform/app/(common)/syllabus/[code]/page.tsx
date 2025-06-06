@@ -4,7 +4,6 @@ import { ArrowUpRight, ExternalLink } from "lucide-react";
 import { notFound } from "next/navigation";
 import OthersPng from "./assets/others.png";
 
-import { GoBackButton } from "@/components/common/go-back";
 import {
   Card,
   CardContent,
@@ -13,6 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
+import { PreviousPageLink } from "@/components/utils/link";
 import Image from "next/image";
 import Link from "next/link";
 import { getCourseByCode } from "~/actions/course";
@@ -63,7 +63,7 @@ export default async function CoursePage(props: Props) {
         id="hero"
         className="z-10 w-full relative flex flex-col gap-5 py-10 px-4 text-center"
       >
-        <GoBackButton size="sm" className="mr-auto" />
+        <PreviousPageLink size="sm" className="mr-auto" />
 
         <h1 className="font-bold text-3xl lg:text-5xl">
           <span className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent  md:px-2">

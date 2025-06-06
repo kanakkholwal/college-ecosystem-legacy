@@ -2,7 +2,7 @@
 import { Undo2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 
-export function GoBackButton() {
+export function PreviousPageLink() {
   const router = useRouter();
   return (
     <button

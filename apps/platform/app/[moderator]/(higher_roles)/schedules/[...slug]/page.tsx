@@ -1,5 +1,5 @@
-import { GoBackButton } from "@/components/common/go-back";
 import { TimeTableEditor } from "@/components/custom/time-table";
+import { PreviousPageLink } from "@/components/utils/link";
 import { notFound } from "next/navigation";
 import { getTimeTable } from "src/lib/time-table/actions";
 
@@ -27,7 +27,7 @@ export default async function Dashboard(props: Props) {
   return (
     <>
       <div className="flex items-center justify-between gap-2 mx-auto max-w-7xl w-full mt-20">
-        <GoBackButton variant="default_light" size="sm" />
+        <PreviousPageLink variant="default_light" size="sm" />
       </div>
 
       <TimeTableEditor timetableData={timetableData} mode="edit" />
