@@ -359,11 +359,11 @@ async function getListOfRollNos(list_type: listType): Promise<Set<string>> {
       break;
     case LIST_TYPE.NEW_SEMESTER:
       // has less than 8 semesters
-      query = { $expr: { $gt: [{ $size: "$semesters" }, 8] } };
+      query = { $expr: { $lt: [{ $size: "$semesters" }, 8] } };
       break;
     case LIST_TYPE.DUAL_DEGREE:
       // has less than 8 semesters
-      query = { programme: "Dual Degree" };
+      query = { programme: "Dual Degree", $expr: { $lt: [{ $size: "$semesters" }, 12] } };
       break;
     case LIST_TYPE.ALL:
       query = {};

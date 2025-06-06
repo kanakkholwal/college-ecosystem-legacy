@@ -10,7 +10,7 @@ interface RedirectButtonProps extends ButtonProps {
 }
 export function RedirectWithSearchParamsLink({ href, children, ...props }: RedirectButtonProps) {
     const searchParams = useSearchParams();
-    const url = new URL(href)
+    const url = new URL(href, process.env.NEXT_PUBLIC_BASE_URL);
     searchParams.entries().forEach(([key, value]) => {
         url.searchParams.append(key, value);
     })
@@ -70,7 +70,7 @@ export function ParamsPreserverLink({
     ...props
 }: ParamsPreserverLinkProps) {
     const searchParams = useSearchParams();
-    const url = new URL(href.toString());
+    const url = new URL(href.toString(), process.env.NEXT_PUBLIC_BASE_URL);
     if (preserveParams) url.search = searchParams.toString();
 
     return <Link href={url?.toString()} {...props} />;

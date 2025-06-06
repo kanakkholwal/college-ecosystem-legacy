@@ -19,7 +19,6 @@ import {
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { appConfig } from "~/project.config";
 
 export function NavMain({
   items,
@@ -44,7 +43,7 @@ export function NavMain({
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
-          const url = new URL(item.href);
+          const url = new URL(item.href,process.env.NEXT_PUBLIC_BASE_URL);
           if (item?.preserveParams && pathname === item.href)
             url.search = searchParams.toString();
 
@@ -70,8 +69,7 @@ export function NavMain({
                         {item.items?.map((subItem) => {
                           // combine search params with the item.href and subItem.href to create a new URL
                           const url = new URL(
-                            subItem.href,
-                           
+                            subItem.href, process.env.NEXT_PUBLIC_BASE_URL
                           );
                           if (item?.preserveParams && pathname === item.href)
                             url.search = searchParams.toString();
