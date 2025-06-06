@@ -33,7 +33,7 @@ export const appConfig = {
     baseServerUrl: "https://server.nith.eu.org",
     baseMailServerUrl: "https://mail.nith.eu.org",
   }
-} as const;
+} ;
 
 export const orgConfig = {
   name: "National Institute of Technology, Hamirpur",
