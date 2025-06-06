@@ -14,6 +14,8 @@ const envVariables = z.object({
 
   NODE_ENV: z.string().default("testing"),
   NEXT_PUBLIC_ENV: z.string().default("development"),
+  NEXT_PUBLIC_BASE_URL: z.string().url(),
+  BASE_URL: z.string().url(),
 
   SERVER_IDENTITY: z.string().url(),
   BASE_SERVER_URL: z.string().url(),
@@ -21,10 +23,7 @@ const envVariables = z.object({
 
   REDIS_URL: z.string(),
 
-  FIREBASE_DATABASE_URL: z.string(),
-  FIREBASE_PROJECT_ID: z.string(),
-  FIREBASE_CLIENT_EMAIL: z.string(),
-  FIREBASE_STORAGE_BUCKET: z.string(),
+  
 
   // Client Side
   NEXT_PUBLIC_FIREBASE_API_KEY: z.string(),
@@ -36,14 +35,6 @@ const envVariables = z.object({
   NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string(),
   NEXT_PUBLIC_FIREBASE_DB_URL: z.string(),
 
-  GOOGLE_VERTEX_PROJECT: z.string(),
-  GOOGLE_VERTEX_LOCATION: z.string(),
-  GOOGLE_CLIENT_EMAIL: z.string(),
-  GOOGLE_CLIENT_SECRET: z.string(),
-  GOOGLE_CLIENT_ID: z.string(),
-  GOOGLE_PRIVATE_KEY: z.string(),
-  GOOGLE_AUTH_TOKEN: z.string(),
-  GOOGLE_APPLICATION_CREDENTIALS: z.string().url(),
 });
 
 envVariables.parse(process.env);

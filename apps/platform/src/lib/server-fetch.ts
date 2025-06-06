@@ -1,32 +1,29 @@
 import { createFetch } from "@better-fetch/fetch";
-import { appConfig } from "~/project.config";
 
-const BASE_SERVER_URL = process.env.BASE_SERVER_URL;
-const BASE_MAIL_SERVER_URL = process.env.BASE_MAIL_SERVER_URL;
-const SERVER_IDENTITY = process.env.SERVER_IDENTITY;
+const baseServerUrl = process.env.BASE_SERVER_URL;
+const baseMailServerUrl = process.env.BASE_MAIL_SERVER_URL;
+const serverIdentity = process.env.SERVER_IDENTITY;
 
-if (!BASE_SERVER_URL || !SERVER_IDENTITY || !BASE_MAIL_SERVER_URL) {
+if (!baseServerUrl || !serverIdentity || !baseMailServerUrl) {
   throw new Error("Missing environment variables");
 }
 
 /**
  *  a fetch instance to communicate with the server with the necessary headers
  */
+const baseUrl = process.env.BASE_URL
 
+export const authHeaders = {
+  "Content-Type": "application/json",
+  "X-IDENTITY-KEY": serverIdentity,
+  Origin: baseUrl,
+};
 export const serverFetch = createFetch({
-  baseURL: appConfig.env.baseServerUrl,
-  headers: {
-    "Content-Type": "application/json",
-    "X-IDENTITY-KEY": SERVER_IDENTITY,
-    Origin: appConfig.env.baseUrl,
-  },
+  baseURL: baseServerUrl,
+  headers: {...authHeaders },
 });
 
 export const mailFetch = createFetch({
-  baseURL: appConfig.env.baseMailServerUrl,
-  headers: {
-    "Content-Type": "application/json",
-    "X-IDENTITY-KEY": SERVER_IDENTITY,
-    Origin: appConfig.env.baseUrl,
-  },
+  baseURL: baseMailServerUrl,
+  headers: {...authHeaders },
 });

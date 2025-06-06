@@ -1,4 +1,4 @@
-
+// doesn't work on edge runtime
 export const getEnvironment = () => {
     if (typeof window !== 'undefined' && typeof document !== 'undefined') {
         return 'browser';

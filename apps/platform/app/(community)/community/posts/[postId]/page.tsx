@@ -1,11 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { notFound } from "next/navigation";
+import Markdown from 'react-markdown';
 import { CATEGORY_IMAGES } from "src/constants/community";
 import { getSession } from "src/lib/auth-server";
 import { getPostById } from "src/lib/community/actions";
 import PostFooter from "./post-footer";
-import Markdown from 'react-markdown'
 
 
 interface Props {
@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button";
 import { Dot, Edit } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
-import { appConfig } from "~/project.config";
 
 export async function generateMetadata(
   { params }: Props,
@@ -34,7 +33,7 @@ export async function generateMetadata(
     description: post.content.slice(0, 100),
     openGraph: {
       images: [
-        `${appConfig.env.baseUrl}/${CATEGORY_IMAGES[post.category]}`,
+        `${process.env.BASE_URL}/${CATEGORY_IMAGES[post.category]}`,
       ],
     },
   };

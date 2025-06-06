@@ -1,24 +1,28 @@
 import { createFetch } from "@better-fetch/fetch";
 import { appConfig } from "~/project.config";
 
-const SERVER_IDENTITY = process.env.NEXT_PUBLIC_SERVER_IDENTITY;
+const serverIdentity = process.env.NEXT_PUBLIC_SERVER_IDENTITY;
+const baseServerUrl = process.env.NEXT_PUBLIC_BASE_SERVER_URL;
 
-
-if (!SERVER_IDENTITY) {
+if (!serverIdentity) {
   throw new Error("Missing environment variables for server identity");
 }
+if (!baseServerUrl) {
+  throw new Error("Missing environment variables for base server URL");
+}
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
 export const authHeaders = {
   "Content-Type": "application/json",
-  "X-IDENTITY-KEY": SERVER_IDENTITY,
-  Origin: appConfig.env.baseUrl,
+  "X-IDENTITY-KEY": serverIdentity,
+  Origin: baseUrl,
 };
 /**
  *  a fetch instance to communicate with the server with the necessary headers
  */
 
 export const apiFetch = createFetch({
-  baseURL: appConfig.env.baseUrl,
+  baseURL: baseUrl,
   headers: {
     ...authHeaders,
   },
@@ -29,7 +33,7 @@ export const apiFetch = createFetch({
  */
 
 export const serverFetch = createFetch({
-  baseURL: appConfig.env.baseServerUrl,
+  baseURL:baseServerUrl,
   headers: {
     ...authHeaders,
   },

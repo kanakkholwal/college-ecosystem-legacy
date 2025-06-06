@@ -1,7 +1,5 @@
 // Project configuration for the College Ecosystem platform
 
-import { getEnvironmentDev } from "./utils/env";
-
 // This file contains the configuration for the app and college
 export const appConfig = {
   name: "College Platform",
@@ -30,12 +28,12 @@ export const appConfig = {
     github: "https://github.com/kanakkholwal",
   },
   // envs
-  env: {
-    baseUrl: getEnvironmentDev() ? "https://app.nith.eu.org" : "http://localhost:3000",
-    baseServerUrl: getEnvironmentDev() ? "https://server.nith.eu.org" : "http://localhost:8080",
-    baseMailServerUrl: getEnvironmentDev() ? "https://mail.nith.eu.org" : "http://localhost:3001",
+  env:{
+    baseUrl: process.env.NODE_ENV === "production" ? "https://app.nith.eu.org" : "http://localhost:3000",
+    baseServerUrl: process.env.NODE_ENV === "production" ?"https://server.nith.eu.org" : "http://localhost:8080",
+    baseMailServerUrl: process.env.NODE_ENV === "production" ?"https://mail.nith.eu.org" : "http://localhost:3001",
   }
-};
+} ;
 
 export const orgConfig = {
   name: "National Institute of Technology, Hamirpur",

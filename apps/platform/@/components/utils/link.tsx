@@ -3,7 +3,6 @@ import { Button, ButtonProps } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { appConfig } from "~/project.config";
 
 interface RedirectButtonProps extends ButtonProps {
     href: string;
@@ -71,7 +70,7 @@ export function ParamsPreserverLink({
     ...props
 }: ParamsPreserverLinkProps) {
     const searchParams = useSearchParams();
-    const url = new URL(href.toString(), appConfig.env.baseUrl);
+    const url = new URL(href.toString());
     if (preserveParams) url.search = searchParams.toString();
 
     return <Link href={url?.toString()} {...props} />;
