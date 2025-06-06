@@ -1,11 +1,11 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-// import '@mintlify/mdx/dist/styles.css';
 import { formatDistanceToNow } from "date-fns";
 import { notFound } from "next/navigation";
 import { CATEGORY_IMAGES } from "src/constants/community";
 import { getSession } from "src/lib/auth-server";
 import { getPostById } from "src/lib/community/actions";
 import PostFooter from "./post-footer";
+import Markdown from 'react-markdown'
 
 
 interface Props {
@@ -15,7 +15,6 @@ interface Props {
 }
 
 import { Button } from "@/components/ui/button";
-import { MDXRemote } from "@mintlify/mdx";
 import { Dot, Edit } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
@@ -106,13 +105,10 @@ export default async function CommunityPost(props: Props) {
         </div>
         <h3 className="text-lg font-medium">{post.title}</h3>
         <article className="border-l py-4  max-w-full prose prose-sm dark:prose-invert pl-2 bg-muted/10">
-          <MDXRemote
-            source={post.content}
-            parseFrontmatter
-            mdxOptions={{
-              format: "md",
-            }}
-          />
+
+           <Markdown>
+                {post.content}
+              </Markdown>
         </article>
         <PostFooter post={post} user={session?.user!} />
       </div>

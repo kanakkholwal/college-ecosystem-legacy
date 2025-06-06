@@ -3,7 +3,7 @@ import ShareButton from "@/components/common/share-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { MDXRemote } from "@mintlify/mdx";
+import Markdown from 'react-markdown'
 import { formatDistanceToNow } from "date-fns";
 import { ArrowRight, Bookmark, Dot, Eye, Share } from "lucide-react";
 import Link from "next/link";
@@ -77,16 +77,11 @@ export default function CommunityPostList({
             <h3 className="text-base font-medium">{post.title}</h3>
             <article className="border py-4  max-w-full prose prose-sm dark:prose-invert text-muted-foreground text-xs pl-2 bg-muted/50 w-full rounded-lg">
               {/* show only 200 characters */}
-              <MDXRemote
-                source={
-                  post.content.slice(0, 200) +
-                  (post.content.length > 200 ? "..." : "")
-                }
-                parseFrontmatter
-                mdxOptions={{
-                  format: "md",
-                }}
-              />
+
+               <Markdown>
+                              {post.content.slice(0, 200) +
+                  (post.content.length > 200 ? "..." : "")}
+                            </Markdown>
             </article>
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-between gap-2">

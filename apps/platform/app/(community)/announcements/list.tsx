@@ -1,8 +1,8 @@
 import EmptyArea from "@/components/common/empty-area";
-import { MDXRemote } from "@mintlify/mdx";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { GrAnnounce } from "react-icons/gr";
+import Markdown from 'react-markdown';
 import type { AnnouncementTypeWithId } from "src/models/announcement";
 import { Session } from "~/lib/auth-client";
 import DeleteButton from "./delete-btn";
@@ -12,7 +12,7 @@ export default function AnnouncementsList({
   session
 }: {
   announcements: AnnouncementTypeWithId[];
-  session:Session
+  session: Session
 }) {
   if (announcements.length === 0) {
     return (
@@ -56,19 +56,15 @@ export default function AnnouncementsList({
                 </Link>
               </p>
             </div>
-            
+
             {(announcement.createdBy.id === session.user.id || session.user.role === "admin") &&
-             (<div className="absolute top-2 right-2">
-              <DeleteButton announcementId={announcement._id} />
+              (<div className="absolute top-2 right-2">
+                <DeleteButton announcementId={announcement._id} />
               </div>)}
             <article className="prose prose-sm dark:prose-invert text-muted-foreground">
-              <MDXRemote
-                source={announcement.content}
-                parseFrontmatter
-                mdxOptions={{
-                  format: "md",
-                }}
-              />
+              <Markdown>
+                {announcement.content}
+              </Markdown>
             </article>
           </div>
         );

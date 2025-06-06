@@ -13,6 +13,7 @@ const envVariables = z.object({
   DATABASE_URL: z.string(),
 
   NODE_ENV: z.string().default("testing"),
+  NEXT_PUBLIC_ENV: z.string().default("development"),
 
   SERVER_IDENTITY: z.string().url(),
   BASE_SERVER_URL: z.string().url(),
