@@ -30,7 +30,7 @@ export function RedirectWithSearchParamsLink({ href, children, ...props }: Redir
         </Button>
     );
 }
-export function PreviousPageLink({children, ...props }: ButtonProps) {
+export function PreviousPageLink({...props }: ButtonProps) {
     const router = useRouter();
     const pathname = usePathname();
     return (
@@ -44,19 +44,13 @@ export function PreviousPageLink({children, ...props }: ButtonProps) {
             }}
             {...props}
         >
-            {children ? children : <>
                 <ArrowLeft />
                 Go Back
-            </>}
         </Button>
     );
 }
 
-export function ButtonLink({
-    href,
-    children,
-    ...props
-}: React.ComponentProps<typeof Button> & React.ComponentProps<typeof Link>) {
+export function ButtonLink({ href, children, ...props }: React.ComponentProps<typeof Button> & React.ComponentProps<typeof Link>) {
     return (
         <Button asChild {...props}>
             <Link href={href}>
