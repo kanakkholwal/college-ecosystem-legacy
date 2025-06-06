@@ -7,6 +7,7 @@ import { getSession } from "src/lib/auth-server";
 import { getPostById } from "src/lib/community/actions";
 import PostFooter from "./post-footer";
 
+
 interface Props {
   params: Promise<{
     postId: string;
@@ -18,6 +19,7 @@ import { MDXRemote } from "@mintlify/mdx";
 import { Dot, Edit } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
+import { appConfig } from "~/project.config";
 
 export async function generateMetadata(
   { params }: Props,
@@ -33,7 +35,7 @@ export async function generateMetadata(
     description: post.content.slice(0, 100),
     openGraph: {
       images: [
-        `${process.env.NEXT_PUBLIC_BASE_URL}/${CATEGORY_IMAGES[post.category]}`,
+        `${appConfig.env.baseUrl}/${CATEGORY_IMAGES[post.category]}`,
       ],
     },
   };

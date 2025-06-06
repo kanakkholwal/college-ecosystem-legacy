@@ -1,4 +1,5 @@
 import { createFetch } from "@better-fetch/fetch";
+import { appConfig } from "~/project.config";
 
 const BASE_SERVER_URL = process.env.BASE_SERVER_URL;
 const BASE_MAIL_SERVER_URL = process.env.BASE_MAIL_SERVER_URL;
@@ -13,19 +14,19 @@ if (!BASE_SERVER_URL || !SERVER_IDENTITY || !BASE_MAIL_SERVER_URL) {
  */
 
 export const serverFetch = createFetch({
-  baseURL: BASE_SERVER_URL,
+  baseURL: appConfig.env.baseServerUrl,
   headers: {
     "Content-Type": "application/json",
     "X-IDENTITY-KEY": SERVER_IDENTITY,
-    Origin: process.env.BASE_URL,
+    Origin: appConfig.env.baseUrl,
   },
 });
 
 export const mailFetch = createFetch({
-  baseURL: BASE_MAIL_SERVER_URL,
+  baseURL: appConfig.env.baseMailServerUrl,
   headers: {
     "Content-Type": "application/json",
     "X-IDENTITY-KEY": SERVER_IDENTITY,
-    Origin: process.env.BASE_URL,
+    Origin: appConfig.env.baseUrl,
   },
 });

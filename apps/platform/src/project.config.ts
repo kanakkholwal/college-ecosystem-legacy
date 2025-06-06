@@ -27,7 +27,13 @@ export const appConfig = {
     instagram: "https://instagram.com/kanakkholwal",
     github: "https://github.com/kanakkholwal",
   },
-};
+  // envs
+  env:{
+    baseUrl: "https://app.nith.eu.org",
+    baseServerUrl: "https://server.nith.eu.org",
+    baseMailServerUrl: "https://mail.nith.eu.org",
+  }
+} as const;
 
 export const orgConfig = {
   name: "National Institute of Technology, Hamirpur",
@@ -36,6 +42,8 @@ export const orgConfig = {
   website: "https://nith.ac.in",
   mailSuffix: "@nith.ac.in",
 } as const;
+
+
 
 export const supportLinks = [
   {
@@ -55,6 +63,7 @@ export const supportLinks = [
     title: "Suggest a feature",
   },
 ] as const;
+
 export default {
   appConfig,
   orgConfig,

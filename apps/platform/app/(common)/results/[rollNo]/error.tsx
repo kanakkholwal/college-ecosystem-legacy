@@ -4,6 +4,7 @@ import ErrorBanner from "@/components/utils/error";
 import { Terminal } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { appConfig } from "~/project.config";
 
 export default function ErrorBoundary({
   error,
@@ -30,10 +31,10 @@ export default function ErrorBoundary({
           <p>
             Open This like{" "}
             <a
-              href={`${process.env.NEXT_PUBLIC_BASE_URL}${pathname}?update=true`}
+              href={`${appConfig.env.baseUrl}${pathname}?update=true`}
               className="bg-primary/10 text-primary underline p-2 rounded"
             >
-              {process.env.NEXT_PUBLIC_BASE_URL}
+              {appConfig.env.baseUrl}
               {pathname}?update=true
             </a>{" "}
             for Result update.
@@ -41,10 +42,10 @@ export default function ErrorBoundary({
           <p>
             Open This like{" "}
             <a
-              href={`${process.env.NEXT_PUBLIC_BASE_URL}${pathname}?new=true`}
+              href={`${appConfig.env.baseUrl}${pathname}?new=true`}
               className="bg-primary/10 text-primary underline p-2 rounded"
             >
-              {process.env.NEXT_PUBLIC_BASE_URL}
+              {appConfig.env.baseUrl}
               {pathname}?update=true
             </a>{" "}
             for new Result to be added.
@@ -52,10 +53,10 @@ export default function ErrorBoundary({
           <p>
             Then Open{" "}
             <a
-              href={`${process.env.NEXT_PUBLIC_BASE_URL}/results?cache=new`}
+              href={`${appConfig.env.baseUrl}/results?cache=new`}
               className="bg-primary/10 text-primary underline p-2 rounded"
             >
-              {process.env.NEXT_PUBLIC_BASE_URL}/results
+              {appConfig.env.baseUrl}/results
             </a>{" "}
             to see changes
           </p>

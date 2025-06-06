@@ -8,7 +8,6 @@ const envVariables = z.object({
   BETTER_AUTH_SECRET: z.string(),
   BETTER_AUTH_URL: z.string(),
 
-  BASE_URL: z.string().url(),
   BASE_MAIL_SERVER_URL: z.string().url(),
   MONGODB_URI: z.string(),
   DATABASE_URL: z.string(),
@@ -21,16 +20,12 @@ const envVariables = z.object({
 
   REDIS_URL: z.string(),
 
-  HUGGING_FACE_API_KEY: z.string(),
-  FIREWORKS_API_KEY: z.string(),
-
   FIREBASE_DATABASE_URL: z.string(),
   FIREBASE_PROJECT_ID: z.string(),
   FIREBASE_CLIENT_EMAIL: z.string(),
   FIREBASE_STORAGE_BUCKET: z.string(),
 
   // Client Side
-  NEXT_PUBLIC_BASE_URL: z.string().url(),
   NEXT_PUBLIC_FIREBASE_API_KEY: z.string(),
   NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: z.string(),
   NEXT_PUBLIC_FIREBASE_PROJECT_ID: z.string(),

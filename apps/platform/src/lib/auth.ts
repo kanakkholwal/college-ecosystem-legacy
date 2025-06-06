@@ -19,11 +19,10 @@ import { mailFetch, serverFetch } from "./server-fetch";
 // const VERIFY_EMAIL_PATH_PREFIX = "/sign-in?tab=verify-email&token=";
 const VERIFY_EMAIL_PATH_PREFIX = "/verify-email?token=";
 
-const baseUrl = process.env.BASE_URL || process.env.VERCEL_URL;
 
 export const auth = betterAuth({
   appName: appConfig.name,
-  baseURL: baseUrl,
+  baseURL: appConfig.env.baseUrl,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
@@ -57,7 +56,7 @@ export const auth = betterAuth({
     requireEmailVerification: true,
     autoSignIn: true,
     sendResetPassword: async ({ user, url, token }, request) => {
-      const verification_url = `${baseUrl}${VERIFY_EMAIL_PATH_PREFIX}${token}`;
+      const verification_url = `${appConfig.env.baseUrl}${VERIFY_EMAIL_PATH_PREFIX}${token}`;
       try {
         const response = await mailFetch<{
           data: string[] | null;
@@ -92,7 +91,7 @@ export const auth = betterAuth({
   emailVerification: {
     sendOnSignUp: true,
     sendVerificationEmail: async ({ user, url, token }, request) => {
-      const verification_url = `${baseUrl}${VERIFY_EMAIL_PATH_PREFIX}${token}`;
+      const verification_url = `${appConfig.env.baseUrl}${VERIFY_EMAIL_PATH_PREFIX}${token}`;
       try {
         const response = await mailFetch<{
           data: string[] | null;
