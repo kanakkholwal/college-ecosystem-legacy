@@ -8,7 +8,7 @@ export async function middleware(request: NextRequest) {
   
 
   if (request.nextUrl.pathname.startsWith("/api")) {
-    const headers = request.headers.get("X-IDENTITY-KEY") || "";
+    const headers = request.headers.get("X-Authorization") || "";
     if (headers !== process.env.SERVER_IDENTITY) {
       return NextResponse.json(
         {

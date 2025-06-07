@@ -10,7 +10,7 @@ import { requestPayloadSchema } from "@/types/schema";
 
 export async function POST(request: NextRequest) {
   try {
-    const identityKey = request.headers.get("X-IDENTITY-KEY") || "";
+    const identityKey = request.headers.get("X-Authorization") || "";
     if (identityKey !== process.env.SERVER_IDENTITY) {
       console.log(
         "Missing or invalid SERVER_IDENTITY",

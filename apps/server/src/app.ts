@@ -41,9 +41,9 @@ if (!SERVER_IDENTITY) throw new Error("SERVER_IDENTITY is required in ENV");
 // Middleware to handle custom CORS logic
 app.use((req: Request, res: Response, next: NextFunction): void => {
   const origin = req.header("Origin") || "";
-  const identityKey = req.header("X-IDENTITY-KEY") || "";
+  const identityKey = req.header("X-Authorization") || "";
 
-  // Server-to-server calls with X-IDENTITY-KEY
+  // Server-to-server calls with X-Authorization
   if (!origin) {
     if (identityKey === SERVER_IDENTITY) {
       next();
@@ -64,7 +64,7 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
   ) {
     res.header("Access-Control-Allow-Origin", origin);
     res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS,DELETE,PUT");
-    res.header("Access-Control-Allow-Headers", "Content-Type,X-IDENTITY-KEY,Origin");
+    res.header("Access-Control-Allow-Headers", "Content-Type,X-Authorization,Origin");
     res.header("Access-Control-Allow-Credentials", "true");
     if (req.method === "OPTIONS") {
       res.sendStatus(200); // Preflight request

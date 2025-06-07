@@ -311,3 +311,13 @@ export function MailResultUpdateDiv() {
     </div>
   );
 }
+
+
+export function AbnormalResultsDiv(){
+  return (
+    <div>
+      <h2>Abnormal Results</h2>
+      <p>No abnormal results found.</p>
+    </div>
+  );
+}

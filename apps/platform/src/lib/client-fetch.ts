@@ -14,7 +14,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 
 export const authHeaders = {
   "Content-Type": "application/json",
-  "X-IDENTITY-KEY": serverIdentity,
+  "X-Authorization": serverIdentity,
   Origin: baseUrl,
 };
 /**

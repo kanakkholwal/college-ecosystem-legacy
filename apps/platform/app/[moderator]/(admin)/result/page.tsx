@@ -3,7 +3,7 @@ import { ActionBar } from "@/components/application/action-bar";
 import { StatsCard } from "@/components/application/stats-card";
 import { NotepadText } from "lucide-react";
 import { assignBranchChange, assignRank, getBasicInfo } from "./actions";
-import { DeleteResultDiv, GetResultDiv, MailResultUpdateDiv } from "./client";
+import { AbnormalResultsDiv, DeleteResultDiv, GetResultDiv, MailResultUpdateDiv } from "./client";
 
 export default async function AdminResultPage() {
   const { counts, asOf } = await getBasicInfo();
@@ -70,6 +70,7 @@ export default async function AdminResultPage() {
         >
           <MailResultUpdateDiv />
         </StatsCard>
+        <AbnormalResultsDiv />
       </div>
     </>
   );
