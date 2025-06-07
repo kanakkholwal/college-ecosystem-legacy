@@ -15,6 +15,7 @@ import {
   assignRankToResults,
   deleteResult,
   getAbnormalResults,
+  deleteAbNormalResults,
   getResult,
   getResultByRollNoFromSite,
   importFreshers,
@@ -58,6 +59,7 @@ router.post(
 );
 // Endpoint to get result by rollNo scraped from the website
 router.get("/results/abnormals", getAbnormalResults);
+router.delete("/results/abnormals", deleteAbNormalResults);
 router.post("/results/:rollNo", getResultByRollNoFromSite);
 // Endpoint to [get,add,update] result by rollNo from the database
 router.get("/results/:rollNo/get", getResult);

@@ -83,6 +83,14 @@ const results = {
       body: payload[1],
     });
   },
+  getAbnormalResults: async (
+  ) => {
+    return await serverFetch<
+      ApiResponse<APITypes["results"]["getAbnormalResults"]["response"]>
+    >("/api/results/abnormals", {
+      method: "GET",
+    });
+  },
 } as const;
 
 /*

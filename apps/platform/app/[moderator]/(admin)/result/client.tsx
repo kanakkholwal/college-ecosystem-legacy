@@ -13,11 +13,14 @@ import { useState } from "react";
 import { rollNoSchema } from "~/types/result";
 
 import { ResultCard } from "@/components/application/result-display";
+import { ResponsiveContainer } from "@/components/common/container";
+import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import toast from "react-hot-toast";
 import serverApis from "~/lib/server-apis/client";
 import type {
+  AbNormalResult,
   ResultType,
   rawResultSchemaType,
   rollNoSchemaType,
@@ -313,11 +316,34 @@ export function MailResultUpdateDiv() {
 }
 
 
-export function AbnormalResultsDiv(){
+export function AbnormalResultsDiv({ abnormalsResults }: { abnormalsResults: AbNormalResult[] }) {
   return (
-    <div>
-      <h2>Abnormal Results</h2>
-      <p>No abnormal results found.</p>
+    <div className="w-full p-3 lg:p-6 bg-card rounded-lg col-span-3">
+      <h4 className="text-base font-medium mb-4">Abnormal Results</h4>
+      {abnormalsResults.length === 0 ? (
+        <p className="text-sm text-muted-foreground">No abnormal results found</p>
+      ) : (
+        <ResponsiveContainer>
+          {abnormalsResults.map((result) => (
+            <div key={result._id} className="border-b pb-2">
+              <h5 className="font-medium text-sm">
+                {result.name}
+                <Badge size="sm">
+                  {result.rollNo}
+                </Badge>
+                </h5>
+              <p className="text-sm text-muted-foreground">
+                <Badge size="sm">
+                  sem - {result.semesterCount}
+                </Badge>
+                <Badge size="sm">
+                  avg - {result.avgSemesterCount.toFixed(1)}
+                </Badge>
+                </p>
+            </div>
+          ))}
+        </ResponsiveContainer>
+      )}
     </div>
   );
 }

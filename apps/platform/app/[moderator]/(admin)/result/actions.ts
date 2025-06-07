@@ -112,3 +112,20 @@ export async function assignBranchChange() {
     return Promise.reject("Failed to fix branch change");
   }
 }
+export async function getAbnormalResults() {
+  try {
+    const { data: response } = await serverApis.results.getAbnormalResults();
+    if (response?.error) {
+      console.error(response);
+      return Promise.reject(response.message || "Failed to fetch abnormal results");
+    }
+    if (!response?.data) {
+      console.log("No abnormal results found",response);
+      return Promise.resolve([]);
+    }
+    return Promise.resolve(response.data);
+  } catch (err) {
+    console.error(err);
+    return Promise.reject("Failed to fetch abnormal results");
+  }
+}

@@ -34,39 +34,45 @@ app.get("/", (req, res) => {
 // const isOriginAllowed = (origin: string): boolean => {
 //   return CORS_ORIGINS.includes(origin);
 // };
-
+const CORS_ORIGINS = config.corsOrigins;
 const SERVER_IDENTITY = config.SERVER_IDENTITY;
 if (!SERVER_IDENTITY) throw new Error("SERVER_IDENTITY is required in ENV");
 
 // Middleware to handle custom CORS logic
 app.use((req: Request, res: Response, next: NextFunction): void => {
-  const origin = (req.headers["origin"] || "").toString();
-  const identityKey = (req.headers["x-authorization"] || "").toString();
+  const origin = req.header("origin") || "";
+  const identityKey = req.headers["x-authorization"];
 
-  console.log("SERVER_IDENTITY", identityKey, SERVER_IDENTITY);
-
+  // Server-to-server calls with x-authorization
+  console.log(`Request from ${req.ip} with origin: ${origin} and identityKey: ${identityKey}`);
+  if (!identityKey) {
+    res
+      .status(403)
+      .json({ error: true, data: "Missing x-authorization header" });
+    return;
+  }
   if (!origin) {
     if (identityKey === SERVER_IDENTITY) {
       next();
       return;
     }
-
     res
       .status(403)
-      .json({ error: true, data: "Missing or invalid SERVER_IDENTITY" });
+      .json({ error: true, data: "Missing or invalid x-authorization" });
     return;
   }
 
   // CORS logic for browser requests
   if (
     (process.env.NODE_ENV === "production" &&
-      config.corsOrigins.some((o) => origin.endsWith(o))) ||
+      CORS_ORIGINS.some((o) => origin.endsWith(o))) ||
     (process.env.NODE_ENV !== "production" &&
       origin.startsWith("http://localhost:"))
   ) {
     res.header("Access-Control-Allow-Origin", origin);
     res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS,DELETE,PUT");
-    res.header("Access-Control-Allow-Headers", "Content-Type,X-Authorization,Origin");
+    // Allow specific headers
+    res.header("Access-Control-Allow-Headers", "Content-Type,X-Authorization");
     res.header("Access-Control-Allow-Credentials", "true");
     if (req.method === "OPTIONS") {
       res.sendStatus(200); // Preflight request

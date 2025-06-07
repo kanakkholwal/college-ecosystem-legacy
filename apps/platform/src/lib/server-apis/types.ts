@@ -16,6 +16,16 @@ export type ResultType = rawResultSchemaType & {
   gender: "male" | "female" | "not_specified";
 };
 
+export interface AbNormalResult {
+    _id:              string;
+    name:             string;
+    rollNo:           string;
+    batch:            number;
+    programme:        string;
+    semesterCount:    number;
+    avgSemesterCount: number;
+}
+
 export type FunctionaryType = {
   name: string;
   email: string;
@@ -98,6 +108,14 @@ export type APITypes = {
     updateResultByRollNo: {
       payload: [z.infer<typeof rollNoSchema>, Partial<rawResultSchemaType>];
       response: ResultType;
+    };
+    getAbnormalResults: {
+      payload: undefined;
+      response: AbNormalResult[];
+    };
+    deleteAbNormalResults: {
+      payload: undefined;
+      response: Record<string, string>;
     };
   };
   hostels: {

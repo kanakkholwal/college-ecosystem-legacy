@@ -83,6 +83,24 @@ const results = {
       body: payload[1],
     });
   },
+  getAbnormalResults: async (
+  ) => {
+    return await serverFetch<
+      ApiResponse<APITypes["results"]["getAbnormalResults"]["response"]>
+    >("/api/results/abnormals", {
+      method: "GET",
+    });
+  },
+  deleteAbNormalResults: async (
+    payload: APITypes["results"]["deleteAbNormalResults"]["payload"]
+  ) => {
+    return await serverFetch<
+      ApiResponse<APITypes["results"]["deleteAbNormalResults"]["response"]>
+    >("/api/results/abnormals", {
+      method: "DELETE",
+      body: payload,
+    });
+  },
 } as const;
 
 /*

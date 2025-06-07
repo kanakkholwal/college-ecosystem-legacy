@@ -15,7 +15,7 @@ const baseUrl = process.env.BASE_URL
 
 export const authHeaders = {
   "Content-Type": "application/json",
-  "X-Authorization": serverIdentity,
+  "x-authorization": serverIdentity,
   Origin: baseUrl,
 };
 export const serverFetch = createFetch({

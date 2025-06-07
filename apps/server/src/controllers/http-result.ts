@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
-import type { PipelineStage } from "mongoose";
 import { z } from "zod";
 import { getDepartmentCoursePrefix } from "../constants/departments";
+import { pipelines } from "../constants/pipelines";
 import { getInfoFromRollNo, scrapeResult } from "../lib/scrape";
 import ResultModel from "../models/result";
 import { rawResultSchema } from "../types/result";
@@ -161,62 +161,57 @@ export const deleteResult = async (req: Request, res: Response) => {
 export const getAbnormalResults = async (req: Request, res: Response) => {
   try {
     await dbConnect();
-    const pipeline = [
-      {
-        $match: {
-          semesters: { $type: "array" },
-        },
-      },
-      {
-        $addFields: {
-          semesterCount: { $size: "$semesters" },
-        },
-      },
-      {
-        $group: {
-          _id: { programme: "$programme", batch: "$batch" },
-          avgSemesterCount: { $avg: "$semesterCount" },
-          docs: { $push: "$$ROOT" },
-        },
-      },
-      {
-        $unwind: "$docs",
-      },
-      {
-        $replaceRoot: {
-          newRoot: {
-            $mergeObjects: ["$docs", { avgSemesterCount: "$avgSemesterCount" }],
-          },
-        },
-      },
-      {
-        $addFields: {
-          diff: { $abs: { $subtract: ["$semesterCount", "$avgSemesterCount"] } },
-        },
-      },
-      {
-        $match: {
-          diff: { $gte: 2 },
-        },
-      },
-      {
-        $project: {
-          name: 1,
-          rollNo: 1,
-          programme: 1,
-          batch: 1,
-          semesterCount: 1,
-          avgSemesterCount: 1,
-        },
-      },
-    ];
 
 
     // Execute the aggregation pipeline
-    const results = await ResultModel.aggregate(pipeline);
+    const results = await ResultModel.aggregate(pipelines["abnormal-results"]);
     res.status(200).json({
       error: false,
       message: "Abnormal results fetched successfully",
+      data: results,
+    });
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: true,
+      message: "An error occurred",
+      data: error || "Internal Server Error",
+    });
+  }
+};
+export const deleteAbNormalResults = async (req: Request, res: Response) => {
+  try {
+    await dbConnect();
+
+
+    // Execute the aggregation pipeline
+    const results = await ResultModel.aggregate(pipelines["abnormal-results"]);
+    if (results.length === 0) {
+      res.status(404).json({
+        error: true,
+        message: "No abnormal results found",
+        data: null,
+      });
+      return;
+    }
+    const abnormalIds = results.map((result) => result._id);
+    const deleteResult = await ResultModel.deleteMany({
+      _id: { $in: abnormalIds },
+    });
+    if (deleteResult.deletedCount === 0) {
+      res.status(404).json({
+        error: true,
+        message: "No abnormal results found to delete",
+        data: null,
+      });
+      return;
+    }
+    console.log(`Deleted ${deleteResult.deletedCount} abnormal results`);
+    // Return the deleted results
+    res.status(200).json({
+      error: false,
+      message: `Deleted ${deleteResult.deletedCount} abnormal results`,
       data: results,
     });
   }
@@ -233,53 +228,8 @@ export const assignRankToResults = async (req: Request, res: Response) => {
   try {
     const time = new Date();
     await dbConnect();
-    const aggregationPipeline: PipelineStage[] = [
-      {
-        $set: {
-          latestCgpi: {
-            $let: {
-              vars: { lastSem: { $arrayElemAt: ["$semesters", -1] } },
-              in: "$$lastSem.cgpi"
-            }
-          }
-        }
-      },
-      { $sort: { latestCgpi: -1 } },
-      { $group: { _id: null, results: { $push: "$$ROOT" } } },
-      { $unwind: { path: "$results", includeArrayIndex: "collegeRank" } },
-      { $set: { "results.rank.college": { $add: ["$collegeRank", 1] } } },
-      { $group: { _id: "$results.batch", results: { $push: "$results" } } },
-      { $unwind: { path: "$results", includeArrayIndex: "batchRank" } },
-      { $set: { "results.rank.batch": { $add: ["$batchRank", 1] } } },
-      {
-        $group: {
-          _id: { batch: "$results.batch", branch: "$results.branch" },
-          results: { $push: "$results" },
-        },
-      },
-      { $unwind: { path: "$results", includeArrayIndex: "branchRank" } },
-      { $set: { "results.rank.branch": { $add: ["$branchRank", 1] } } },
-      {
-        $group: {
-          _id: { batch: "$results.batch", branch: "$results.branch" },
-          results: { $push: "$results" },
-        },
-      },
-      { $unwind: { path: "$results", includeArrayIndex: "classRank" } },
-      { $set: { "results.rank.class": { $add: ["$classRank", 1] } } },
-      { $replaceRoot: { newRoot: "$results" } },
-      { $unset: ["latestSemester", "latestCgpi"] },
-      {
-        $merge: {
-          into: "results",
-          whenMatched: "merge",
-          whenNotMatched: "discard",
-        },
-      },
-    ];
 
-
-    const resultsWithRanks = await ResultModel.aggregate(aggregationPipeline)
+    const resultsWithRanks = await ResultModel.aggregate(pipelines["assign-rank"])
       .allowDiskUse(true)
 
 
