@@ -5,8 +5,8 @@ import { ResultScrapingLog } from "../models/log-result_scraping";
 import ResultModel from "../models/result";
 import dbConnect from "../utils/dbConnect";
 
-import { scrapeAndSaveResult } from "~/lib/result_utils";
 import { EVENTS, LIST_TYPE, TASK_STATUS, type listType } from "../constants/result_scraping";
+import { scrapeAndSaveResult } from "../lib/result_utils";
 
 const BATCH_SIZE = 10; // Number of roll numbers to process in each batch
 

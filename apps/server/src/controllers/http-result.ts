@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import { scrapeAndSaveResult } from "~/lib/result_utils";
+import { scrapeAndSaveResult } from "../lib/result_utils";
 import { getDepartmentCoursePrefix, isValidRollNumber } from "../constants/departments";
 import { pipelines } from "../constants/pipelines";
 import { getInfoFromRollNo, scrapeResult } from "../lib/scrape";
