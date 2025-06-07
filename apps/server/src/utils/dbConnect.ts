@@ -1,5 +1,5 @@
-import mongoose, { type ConnectOptions, type Mongoose } from "mongoose";
 import dotenv from "dotenv";
+import mongoose, { type ConnectOptions, type Mongoose } from "mongoose";
 
 dotenv.config();
 
@@ -23,9 +23,9 @@ let cached = global.mongoose || { conn: null, promise: null };
 if (!cached) {
   cached = global.mongoose = { conn: null, promise: null };
 }
-// const defaultDb =
-//   process.env.NODE_ENV === "production" ? "production" : "testing";
-const defaultDb = "production"
+const defaultDb =
+  process.env.NODE_ENV === "production" ? "production" : "testing";
+// const defaultDb = "production"
 
 async function dbConnect(dbName: string = defaultDb): Promise<Mongoose> {
   if (cached.conn) {

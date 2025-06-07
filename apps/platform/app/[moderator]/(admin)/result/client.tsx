@@ -96,6 +96,7 @@ export function GetResultDiv() {
         }
         setResult(response.data);
       }
+      // If the result is not null, it means we have successfully fetched the result
       toast.success(
         `Result fetched successfully using ${changeCase(method, "camel_to_title")}`
       );
@@ -104,6 +105,8 @@ export function GetResultDiv() {
       toast.error("An unexpected error occurred while fetching the result.");
     } finally {
       setLoading(false);
+      console.log(`Result fetched using ${method}:`, result);
+
     }
   };
   return (

@@ -320,7 +320,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
           data: taskData,
           error: null,
         });
-        res.write("event: task_cancelled\n");
+        // res.write("event: task_cancelled\n");
         res.write("data: null\n");
         // break;
         res.end();
@@ -343,7 +343,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
       data: taskData,
       error: null,
     });
-    res.write("event: task_completed\n");
+    // res.write("event: task_completed\n");
     res.end();
 
   } catch (error) {

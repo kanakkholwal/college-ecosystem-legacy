@@ -86,6 +86,41 @@ export const headerMap = new Map<
   ],
 ]);
 
+export const Programmes = {
+  "dual_degree": {
+    name: "Dual Degree",
+    scheme: "dualdegree",
+    identifiers: ["dcs", "dec"],
+  },
+  "btech": {
+    name: "B.Tech",
+    scheme: "scheme",
+    identifiers: ["bce", "bme", "bms", "bma", "bph", "bee", "bec", "bcs", "bch"],
+  },
+  "barch": {
+    name: "B.Arch",
+    scheme: "scheme",
+    identifiers: ["bar"],
+  },
+  "mtech": {
+    name: "M.Tech",
+    scheme: "mtech",
+    identifiers: ["mce", "mme", "mms", "mma", "mph", "mee", "mec", "mcs", "mch"],
+  },
+}
+
+export const getProgrammeByIdentifier = (identifier: string, defaultBTech: boolean): typeof Programmes[keyof typeof Programmes] => {
+  for (const programme of Object.values(Programmes)) {
+    if (programme.identifiers.includes(identifier)) {
+      if (defaultBTech && programme.scheme === Programmes["dual_degree"].scheme) {
+        return Programmes["btech"]; // Return B.Tech if defaultBTech is true
+      }
+      return programme.name ? programme : Programmes["btech"]; // Default to B.Tech if no name is found
+    }
+  }
+  return Programmes["btech"];
+}
+
 export const PROGRAMME_KEYS = {
   "Dual Degree": ["dcs", "dec"],
   "B.Tech": ["bce", "bme", "bms", "bma", "bph", "bee", "bec", "bcs", "bch"],
