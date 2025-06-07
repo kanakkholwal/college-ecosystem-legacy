@@ -17,7 +17,6 @@ import { Label } from "@/components/ui/label";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import toast from "react-hot-toast";
 import serverApis from "~/lib/server-apis/client";
-import {sendMailUpdate} from "./actions";
 import type {
   ResultType,
   rawResultSchemaType,
@@ -25,6 +24,7 @@ import type {
 } from "~/lib/server-apis/types";
 import { orgConfig } from "~/project.config";
 import { changeCase } from "~/utils/string";
+import { sendMailUpdate } from "./actions";
 
 const availableMethods = [
   "getResultByRollNoFromSite",
@@ -173,6 +173,7 @@ export function GetResultDiv() {
 export function DeleteResultDiv() {
   const [rollNo, setRollNo] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [method, setMethod] = useState<string>("rollNo");
 
   const handleDeleteResult = async () => {
     if (!rollNoSchema.safeParse(rollNo).success) {
@@ -202,35 +203,55 @@ export function DeleteResultDiv() {
   return (
     <div className="w-full flex flex-col gap-4 @3xl:p-3">
       <div>
-        <Label className="text-xs">Enter Roll No to Delete Result</Label>
+        <Label className="text-xs" htmlFor="rollNo">Enter Roll No to Delete Result</Label>
         <Input
           type="text"
-          placeholder="Enter Roll No"
+          id="rollNo"
+          name="rollNo"
+          placeholder={method === "rollNo" ? "Enter Roll No" : "Enter Batch"}
           className="w-full max-w-xs"
           value={rollNo}
           onChange={(e) => setRollNo(e.target.value)}
           custom-size="sm"
           disabled={loading}
-          aria-label="Roll No"
         />
       </div>
-      <Button
-        size="sm"
-        variant="destructive_light"
-        disabled={!rollNo || loading}
-        onClick={handleDeleteResult}
-        aria-label="Delete Result"
-      >
-        {loading ? "Deleting..." : "Delete Result"}
-      </Button>
+      <div className="flex gap-1.5 items-center justify-center">
+        <Select
+          value={method}
+          onValueChange={(value) => setMethod(value)}
+          disabled={loading}
+          aria-label="Select Method"
+        >
+          <SelectTrigger custom-size="sm">
+            <SelectValue placeholder="Method" />
+          </SelectTrigger>
+          <SelectContent>
+            {["rollNo", "batch"].map((method) => (
+              <SelectItem key={method} value={method}>
+                {changeCase(method, "camel_to_title")}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Button
+          size="sm"
+          variant="destructive_light"
+          disabled={!rollNo || loading}
+          onClick={handleDeleteResult}
+          aria-label="Delete Result"
+        >
+          {loading ? "Deleting..." : "Delete Result"}
+        </Button>
+      </div>
     </div>
   );
 }
 
 
-export function MailResultUpdateDiv(){
+export function MailResultUpdateDiv() {
   const [targets, setTargets] = useState<string>("");
-    // Batches is a comma-separated list of batches to send the mail to
+  // Batches is a comma-separated list of batches to send the mail to
   const [loading, setLoading] = useState<boolean>(false);
 
   const handleMailResultUpdate = async () => {
@@ -242,7 +263,7 @@ export function MailResultUpdateDiv(){
     try {
       toast.promise(sendMailUpdate(
         targets.split(",").map((email) => email.trim() + orgConfig.mailSuffix)
-      ),{
+      ), {
         loading: "Sending mail...",
         success: "Mail sent successfully",
         error: (error) => `Failed to send mail: ${error.message || "Unknown error"}`,

@@ -2,7 +2,9 @@
 
 import dbConnect from "src/lib/dbConnect";
 import ResultModel from "src/models/result";
+import { emailSchema } from "~/constants";
 import serverApis from "~/lib/server-apis/server";
+import { mailFetch } from "~/lib/server-fetch";
 
 export async function getBasicInfo() {
   try {
@@ -51,7 +53,11 @@ export async function getBasicInfo() {
 
 export async function assignRank() {
   try {
-    await serverApis.results.assignRank();
+    const { data: response } = await serverApis.results.assignRank();
+    if (response?.error) {
+      console.log(response)
+      return Promise.reject(response.message || "Failed to assign rank");
+    }
     return Promise.resolve("Rank assigned successfully");
   } catch (err) {
     console.error(err);
@@ -59,25 +65,40 @@ export async function assignRank() {
   }
 }
 export async function sendMailUpdate(targets: string[]) {
-  if (!targets || !Array.isArray(targets) || targets.length === 0) {
-    return Promise.reject("Invalid targets");
+  const validTargets = targets.filter((target) => emailSchema.safeParse(target).success);
+  if (validTargets.length === 0) {
+    return Promise.reject("Invalid email addresses provided");
   }
   try {
-    const { data: response } = await serverApis.mail.sendResultUpdate({
-      template_key: "result_update",
-      targets: targets,
-      subject: "Semester Result Notification",
-      payload: {
-        batch: "Academic Year " + new Date().getFullYear(),
-      },
+    const { data: response } = await mailFetch<{
+      data: {
+        accepted: string[];
+        rejected: string[];
+      } | null;
+      error?: string | null | object;
+    }>("/api/send", {
+      method: "POST",
+      body: JSON.stringify({
+        template_key: "result_update",
+        targets: validTargets.map((email) => email.toLowerCase()),
+        subject: "Semester Result Notification",
+        payload: {
+          batch: "Academic Year " + new Date().getFullYear(),
+        },
+      }),
     });
-    if (response?.error) {
-      return Promise.reject(response.message || "Failed to send mail");
+
+
+    if (response?.error || !response?.data) {
+      console.log(response);
+      return Promise.reject(response?.error || "Failed to send mail");
     }
-    return Promise.resolve(response?.data.accepted.length + " mails sent successfully , " +
-      response?.data.rejected.length + " mails rejected");
+    return Promise.resolve({
+      accepted: response?.data?.accepted || [],
+      rejected: response?.data?.rejected || [],
+    });
   } catch (err) {
-    console.error(err);
+    console.log("Error sending mail:", err);
     return Promise.reject("Failed to send mail");
   }
 }

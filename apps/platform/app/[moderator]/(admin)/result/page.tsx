@@ -59,7 +59,7 @@ export default async function AdminResultPage() {
           <GetResultDiv />
         </StatsCard>
         <StatsCard
-          title="Get Result"
+          title="Delete Result"
           Icon={<NotepadText className="size-4 text-muted-foreground" />}
         >
           <DeleteResultDiv />

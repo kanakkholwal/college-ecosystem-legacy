@@ -50,7 +50,7 @@ router.post(
 // Endpoint to assign ranks to the results in the database
 router.post(
   "/results/assign-ranks",
-  assignRankToResults as unknown as RequestHandler
+  assignRankToResults 
 );
 router.post(
   "/results/assign-branch-change",

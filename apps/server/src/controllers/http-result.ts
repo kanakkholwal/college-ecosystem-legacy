@@ -272,7 +272,7 @@ export const assignRankToResults = async (req: Request, res: Response) => {
       })
     );
 
-    return res.status(200).json({
+    res.status(200).json({
       error: false,
       message: "Ranks assigned successfully.",
       data: {
@@ -282,7 +282,7 @@ export const assignRankToResults = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error(error);
-    return res.status(500).json({
+    res.status(500).json({
       error: true,
       message: "An error occurred",
       data: error || "Internal Server Error",

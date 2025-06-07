@@ -10,10 +10,8 @@ export type EmailPayload = z.infer<typeof emailPayloadSchema>;
 export const requestPayloadSchema = z.object({
     targets: z.array(z.string().email()),
     subject: z.string(),
-    html: z.string(),
     template_key: z.string(),
     payload: emailPayloadSchema,
-
 })
 export const mailerPayloadSchema = z.object({
     to: z.array(z.string().email()),

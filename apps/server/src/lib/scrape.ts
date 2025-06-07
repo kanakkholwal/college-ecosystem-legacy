@@ -39,7 +39,7 @@ const fetchData = async (
     if (response.status !== 200) {
       console.log("Invalid Roll No");
       return Promise.resolve([null, "Invalid Roll No"]);
-    }
+    } 
     return Promise.resolve([response.data.toString(), "successfully fetched"]);
   } catch (error) {
     console.error("Error fetching data:");
@@ -84,11 +84,7 @@ const parseResult = (
     gender: "not_specified",
   };
 
-
-  
-    
-  result_tables.forEach((table, index) => {
-    student.name =
+  student.name =
     document
       .querySelectorAll("table")[1]
       .querySelector("td:nth-child(2)>p:nth-child(2)")
@@ -144,7 +140,6 @@ const parseResult = (
         .pop() as unknown as number;
     });
   });
-  
   const [branch_change, department] = determineBranchChange(student);
   if (branch_change && department !== null) {
     student.branch = department;

@@ -25,11 +25,11 @@ export async function POST(request: NextRequest) {
         { status: 403 }
       );
     }
-
     const body = await request.json();
 
+    console.log("request body", body);
     const res = requestPayloadSchema.safeParse(body);
-    console.log("Parsed request body", res.data);
+    console.log("Parsed request body", res);
     if (!res.success) {
       return NextResponse.json(
         {
@@ -56,17 +56,14 @@ export async function POST(request: NextRequest) {
       }
     );
     console.log("Email sent", response);
-    if (response.rejected.length > 0) {
-      return NextResponse.json(
-        { error: response.rejected, data: null },
-        { status: 400 }
-      );
-    }
+
     return NextResponse.json(
-      { data: response.accepted, error: null },
+      { data: response, error: null },
       { status: 200 }
     );
   } catch (error) {
+    console.error("Error in sending email:", error);
+    // Handle specific error cases if needed
     return Response.json({ error, data: null }, { status: 500 });
   }
 }

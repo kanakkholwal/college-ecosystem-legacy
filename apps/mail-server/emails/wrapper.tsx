@@ -40,7 +40,7 @@ export default function EmailWrapper({
           <Container className="border border-solid border-[#eaeaea] rounded my-[40px] mx-auto p-[20px] max-w-[465px]">
             <Section className="px-[32px] py-[40px]">
               <Row>
-                <Column className="w-[80%]">
+                <Column className="w-full" align="center">
                   <Img
                     alt={appConfig.name}
                     height="42"

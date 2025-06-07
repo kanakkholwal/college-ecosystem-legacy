@@ -4,7 +4,7 @@ export const appConfig = {
   name: "College Platform",
   appDomain: "nith.eu.org",
   url: "https://app.nith.eu.org",
-  logo: "https://app.nith.eu.org/logo.svg",
+  logo: "https://app.nith.eu.org/logo.png",
   logoSquare: "https://app.nith.eu.org/favicon.ico",
   tagline: "Connecting Students, Faculty, and Staff",
   description:

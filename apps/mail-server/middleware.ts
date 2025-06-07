@@ -10,7 +10,6 @@ export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith("/api")) {
     const headers = request.headers.get("X-IDENTITY-KEY") || "";
     if (headers !== process.env.SERVER_IDENTITY) {
-      console.log("Missing or invalid SERVER_IDENTITY", "received:", headers);
       return NextResponse.json(
         {
           error: "Missing or invalid SERVER_IDENTITY",
@@ -22,7 +21,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
   
-
+  // If the request is not for an API route, redirect to the appConfig URL
   return NextResponse.redirect(
     appConfig.url + "?utm_source=mail-server-middleware"
   )

@@ -32,15 +32,15 @@ export function ResultUpdateEmail({ payload }: { payload: EmailPayload }) {
       <Section className="text-center mt-[32px] mb-[32px]">
         <Button
           className="bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center px-5 py-3"
-          href={`${appConfig.url}/results?batch=${batch}`}
+          href={`${appConfig.url}/results`}
         >
           View Results
         </Button>
       </Section>
       <Text className="text-black text-[14px] leading-[24px]">
         or copy and paste this URL into your browser:{" "}
-        <Link href={`${appConfig.url}/results?batch=${batch}`} className="text-blue-600 no-underline">
-          {`${appConfig.url}/results?batch=${batch}`}
+        <Link href={`${appConfig.url}/results`} className="text-blue-600 no-underline">
+          {`${appConfig.url}/results`}
         </Link>
       </Text>
       <Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
