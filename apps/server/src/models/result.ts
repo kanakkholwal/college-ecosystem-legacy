@@ -16,7 +16,7 @@ export interface Semester {
   sgpi: number;
   cgpi: number;
   courses: Course[];
-  semester: string | number;
+  semester: string;
   sgpi_total: number;
   cgpi_total: number;
 }
@@ -56,7 +56,7 @@ const SemesterSchema: Schema = new Schema({
   sgpi: { type: Number, required: true },
   cgpi: { type: Number, required: true },
   courses: { type: [CourseSchema], required: true },
-  semester: { type:  String || Number, required: true },
+  semester: { type: String, required: true },
   sgpi_total: { type: Number, required: true },
   cgpi_total: { type: Number, required: true },
 });
@@ -85,7 +85,6 @@ const ResultSchema: Schema = new Schema(
     timestamps: true,
   }
 );
-// ResultSchema.index({ rollNo: 1 }, { unique: true });
 
 const ResultModel =
   mongoose.models?.Result || mongoose.model<IResultType>("Result", ResultSchema);

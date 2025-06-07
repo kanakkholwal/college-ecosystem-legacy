@@ -162,51 +162,51 @@ export const getAbnormalResults = async (req: Request, res: Response) => {
   try {
     await dbConnect();
     const pipeline = [
-  {
-    $addFields: {
-      semesterCount: { $size: "$semesters" },
-    },
-  },
-  {
-    $group: {
-      _id: "$batch",
-      avgSemesterCount: { $avg: "$semesterCount" },
-      docs: { $push: "$$ROOT" },
-    },
-  },
-  {
-    $unwind: "$docs",
-  },
-  {
-    $replaceRoot: {
-      newRoot: {
-        $mergeObjects: ["$docs", { avgSemesterCount: "$avgSemesterCount" }],
+      {
+        $addFields: {
+          semesterCount: { $size: "$semesters" },
+        },
       },
-    },
-  },
-  {
-    $addFields: {
-      diff: { $abs: { $subtract: ["$semesterCount", "$avgSemesterCount"] } },
-    },
-  },
-  {
-    $match: {
-      diff: { $gte: 2 },
-    },
-  },
-  {
-    $project: {
-      name: 1,
-      rollNo: 1,
-      branch: 1,
-      batch: 1,
-      semesterCount: 1,
-      avgSemesterCount: 1,
-    },
-  },
-];
+      {
+        $group: {
+          _id: "$batch",
+          avgSemesterCount: { $avg: "$semesterCount" },
+          docs: { $push: "$$ROOT" },
+        },
+      },
+      {
+        $unwind: "$docs",
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: ["$docs", { avgSemesterCount: "$avgSemesterCount" }],
+          },
+        },
+      },
+      {
+        $addFields: {
+          diff: { $abs: { $subtract: ["$semesterCount", "$avgSemesterCount"] } },
+        },
+      },
+      {
+        $match: {
+          diff: { $gte: 2 },
+        },
+      },
+      {
+        $project: {
+          name: 1,
+          rollNo: 1,
+          branch: 1,
+          batch: 1,
+          semesterCount: 1,
+          avgSemesterCount: 1,
+        },
+      },
+    ];
 
-const results = await ResultModel.aggregate(pipeline);
+    const results = await ResultModel.aggregate(pipeline);
     res.status(200).json({
       error: false,
       message: "Abnormal results fetched successfully",
@@ -226,10 +226,18 @@ export const assignRankToResults = async (req: Request, res: Response) => {
   try {
     const time = new Date();
     await dbConnect();
-
     const aggregationPipeline: PipelineStage[] = [
-      { $set: { latestSemester: { $arrayElemAt: ["$semesters", -1] } } },
-      { $sort: { "latestSemester.cgpi": -1 } },
+      {
+        $set: {
+          latestCgpi: {
+            $let: {
+              vars: { lastSem: { $arrayElemAt: ["$semesters", -1] } },
+              in: "$$lastSem.cgpi"
+            }
+          }
+        }
+      },
+      { $sort: { latestCgpi: -1 } },
       { $group: { _id: null, results: { $push: "$$ROOT" } } },
       { $unwind: { path: "$results", includeArrayIndex: "collegeRank" } },
       { $set: { "results.rank.college": { $add: ["$collegeRank", 1] } } },
@@ -253,7 +261,7 @@ export const assignRankToResults = async (req: Request, res: Response) => {
       { $unwind: { path: "$results", includeArrayIndex: "classRank" } },
       { $set: { "results.rank.class": { $add: ["$classRank", 1] } } },
       { $replaceRoot: { newRoot: "$results" } },
-      { $unset: "latestSemester" },
+      { $unset: ["latestSemester", "latestCgpi"] },
       {
         $merge: {
           into: "results",
@@ -263,7 +271,11 @@ export const assignRankToResults = async (req: Request, res: Response) => {
       },
     ];
 
-    const resultsWithRanks = await ResultModel.aggregate(aggregationPipeline);
+
+    const resultsWithRanks = await ResultModel.aggregate(aggregationPipeline)
+      .allowDiskUse(true)
+
+
 
     await Promise.all(
       resultsWithRanks.map(async (result) => {

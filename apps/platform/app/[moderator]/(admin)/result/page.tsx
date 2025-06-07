@@ -10,7 +10,7 @@ export default async function AdminResultPage() {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pr-3">
         <StatsCard
           title="Total Results"
           Icon={<NotepadText className="size-4 text-muted-foreground" />}
