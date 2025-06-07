@@ -1,9 +1,8 @@
-import dotenv from "dotenv";
 import mongoose, { type ConnectOptions, type Mongoose } from "mongoose";
+import { config } from "../config";
 
-dotenv.config();
 
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = config.MONGODB_URI;
 
 declare const global: {
   mongoose: { conn: Mongoose | null; promise: Promise<Mongoose> | null };

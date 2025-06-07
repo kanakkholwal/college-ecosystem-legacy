@@ -163,13 +163,18 @@ export const getAbnormalResults = async (req: Request, res: Response) => {
     await dbConnect();
     const pipeline = [
       {
+        $match: {
+          semesters: { $type: "array" },
+        },
+      },
+      {
         $addFields: {
           semesterCount: { $size: "$semesters" },
         },
       },
       {
         $group: {
-          _id: "$batch",
+          _id: { programme: "$programme", batch: "$batch" },
           avgSemesterCount: { $avg: "$semesterCount" },
           docs: { $push: "$$ROOT" },
         },
@@ -198,7 +203,7 @@ export const getAbnormalResults = async (req: Request, res: Response) => {
         $project: {
           name: 1,
           rollNo: 1,
-          branch: 1,
+          programme: 1,
           batch: 1,
           semesterCount: 1,
           avgSemesterCount: 1,
@@ -206,6 +211,8 @@ export const getAbnormalResults = async (req: Request, res: Response) => {
       },
     ];
 
+
+    // Execute the aggregation pipeline
     const results = await ResultModel.aggregate(pipeline);
     res.status(200).json({
       error: false,

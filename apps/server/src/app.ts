@@ -26,8 +26,8 @@ app.set('trust proxy', true); // to get correct IP behind proxy
 // Default route
 app.get("/", (req, res) => {
   res.json({
-    error:null,
-    data:null,
+    error: null,
+    data: null,
     message: "Welcome to NITH API",
   });
 });
@@ -40,15 +40,17 @@ if (!SERVER_IDENTITY) throw new Error("SERVER_IDENTITY is required in ENV");
 
 // Middleware to handle custom CORS logic
 app.use((req: Request, res: Response, next: NextFunction): void => {
-  const origin = req.header("Origin") || "";
-  const identityKey = req.header("X-Authorization") || "";
+  const origin = (req.headers["origin"] || "").toString();
+  const identityKey = (req.headers["x-authorization"] || "").toString();
 
-  // Server-to-server calls with X-Authorization
+  console.log("SERVER_IDENTITY", identityKey, SERVER_IDENTITY);
+
   if (!origin) {
     if (identityKey === SERVER_IDENTITY) {
       next();
       return;
     }
+
     res
       .status(403)
       .json({ error: true, data: "Missing or invalid SERVER_IDENTITY" });
@@ -83,6 +85,14 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
 });
 
 // Routes
+app.get("/ping", (req, res) => {
+  res.json({
+    error: null,
+    data: "pong",
+    message: "Server is running",
+  });
+});
+
 app.use("/api", httpRoutes);
 
 // Error handling middleware

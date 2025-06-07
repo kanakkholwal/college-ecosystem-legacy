@@ -201,7 +201,7 @@ export default function BaseSearchBox({
           placeholder={searchPlaceholder}
           className={cn(
             "w-full rounded-full h-12",
-            filterOptions.length > 0 ? "px-14" : "px-6",
+            filterOptions.length > 0 ? "px-16" : "px-6",
             variant === "expanded" ? "bg-card" : "border border-border"
           )}
           defaultValue={searchParams.get(searchParamsKey)?.toString()}
