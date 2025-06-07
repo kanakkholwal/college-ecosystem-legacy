@@ -34,20 +34,21 @@ export const apiFetch = createFetch({
 
 export const serverFetch = createFetch({
   baseURL: baseServerUrl,
+  cache: "no-store",
   headers: {
     "Content-Type": "application/json",
-    "X-authorization": serverIdentity,
+    "x-authorization": serverIdentity,
+    "X-IDENTITY-KEY": serverIdentity,
     Origin: baseUrl,
   },
 });
 export const mailFetch = createFetch({
   baseURL: baseMailServerUrl,
-  mode: "cors",
-  credentials: "include",
   headers: {
-  "Content-Type": "application/json",
-  "X-authorization": serverIdentity,
-  Origin: baseUrl,
+    "Content-Type": "application/json",
+    "X-authorization": serverIdentity,
+    "X-IDENTITY-KEY": serverIdentity,
+    Origin: baseUrl,
   },
 });
 

@@ -1,4 +1,4 @@
-import { mailFetch, serverFetch } from "~/lib/client-fetch";
+import { authHeaders, mailFetch, serverFetch } from "~/lib/client-fetch";
 import type { APITypes, ApiResponse, FunctionaryType } from "./types";
 
 /*
@@ -14,6 +14,7 @@ const results = {
     >("/api/results/import-freshers", {
       method: "POST",
       body: payload,
+      headers: authHeaders
     });
   },
   assignRank: async () => {
@@ -60,6 +61,7 @@ const results = {
     >("/api/results/:rollNo/delete", {
       method: "DELETE",
       params: { rollNo: payload },
+      headers: authHeaders
     });
   },
   addResultByRollNo: async (

@@ -1,6 +1,7 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import { getDepartmentCoursePrefix } from "../constants/departments";
+import { scrapeAndSaveResult } from "~/lib/result_utils";
+import { getDepartmentCoursePrefix, isValidRollNumber } from "../constants/departments";
 import { pipelines } from "../constants/pipelines";
 import { getInfoFromRollNo, scrapeResult } from "../lib/scrape";
 import ResultModel from "../models/result";
@@ -224,6 +225,94 @@ export const deleteAbNormalResults = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+export const bulkUpdateResults = async (req: Request, res: Response) => {
+  try {
+    const rollNos = req.body as string[];
+    const validatedRollNos = rollNos.filter((rollNo) => isValidRollNumber(rollNo));
+    if (validatedRollNos.length === 0) {
+      res.status(400).json({
+        error: true,
+        message: "No valid roll numbers provided",
+        data: null,
+      }); return
+    }
+    const BATCH_SIZE = 8;
+    const result = {
+      total: validatedRollNos.length,
+      updated: 0,
+      errors: [] as string[],
+    }
+    for (let i = 0; i < validatedRollNos.length; i += BATCH_SIZE) {
+      const batch = validatedRollNos.slice(i, i + BATCH_SIZE);
+      const results = await Promise.allSettled(
+        batch.map((rollNo) => scrapeAndSaveResult(rollNo))
+      );
+      results.forEach((res) => {
+        if (res.status === "fulfilled") {
+          result.updated += 1;
+        } else {
+          result.errors.push(res.reason ? res.reason : "Unknown error");
+        }
+      });
+    }
+
+
+    res.status(200).json({
+      error: false,
+      message: "Bulk update successful",
+      data: result,
+    });
+    return;
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: true,
+      message: "An error occurred",
+      data: error || "Internal Server Error",
+    });
+    return;
+  }
+}
+export const bulkDeleteResults = async (req: Request, res: Response) => {
+  try {
+    const rollNos = req.body as string[];
+    const validatedRollNos = rollNos.filter((rollNo) => isValidRollNumber(rollNo));
+    if (validatedRollNos.length === 0) {
+       res.status(400).json({
+        error: true,
+        message: "No valid roll numbers provided",
+        data: null,
+      });
+        return
+    }
+    const result = await ResultModel.deleteMany({
+      rollNo: { $in: validatedRollNos },
+    });
+
+    res.status(200).json({
+      error: false,
+      message: "Bulk delete successful",
+      data: {
+        deletedCount: result.deletedCount,
+        acknowledged: result.acknowledged,
+        rollNos: validatedRollNos,
+      },
+    });
+    return
+  }
+  catch (error) {
+    console.error(error);
+    res.status(500).json({
+      error: true,
+      message: "An error occurred",
+      data: error || "Internal Server Error",
+    });
+      return
+  }
+}
 export const assignRankToResults = async (req: Request, res: Response) => {
   try {
     const time = new Date();

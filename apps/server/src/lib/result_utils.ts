@@ -3,8 +3,10 @@ import HTMLParser from "node-html-parser";
 import { getDepartmentCoursePrefix, isValidRollNumber } from "../constants/departments";
 import { getProgrammeByIdentifier } from "../constants/result_scraping";
 import { headerMap, HeaderSchemaModel } from "../models/header";
+import ResultModel from "../models/result";
 import { rawResultType } from "../types/result";
 import dbConnect from "../utils/dbConnect";
+import { scrapeResult } from "./scrape";
 
 /**
  * Determines the department based on the roll number.
@@ -192,4 +194,36 @@ export async function getResultHeaders(rollNo: string, defaultBTech = true): Pro
     }
 
 
+}
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/**
+ * Scrapes the result for a given roll number.
+ * @param rollNo - The roll number of the student.
+ * @returns A promise that resolves to an object containing the scraped data or an error message.
+ */
+export async function scrapeAndSaveResult(rollNo: string) {
+    try {
+        const result = await scrapeResult(rollNo);
+        await sleep(500);
+        //  check if scraping was failed
+        if (result.error || result.data === null) {
+            return { rollNo, success: false, error: result.error || "Scraping failed" };
+        }
+        // check if result already exists
+        const existingResult = await ResultModel.findOne({ rollNo });
+        if (existingResult) {
+            existingResult.semesters = result.data.semesters;
+            await existingResult.save();
+            return { rollNo, success: true, error: null };
+        }
+        // create new result if not exists
+        await ResultModel.create(result.data);
+        return { rollNo, success: true, error: null };
+    } catch (e) {
+        if (e instanceof Error) {
+            console.error(e.message);
+        }
+        return { rollNo, success: false, error: e instanceof Error ? e.message : "Unknown error" };
+    }
 }

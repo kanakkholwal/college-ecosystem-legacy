@@ -22,19 +22,18 @@ import serverApis from "~/lib/server-apis/client";
 import type {
   AbNormalResult,
   ResultType,
-  rawResultSchemaType,
-  rollNoSchemaType,
+  rawResultSchemaType
 } from "~/lib/server-apis/types";
 import { orgConfig } from "~/project.config";
 import { changeCase } from "~/utils/string";
-import { sendMailUpdate } from "./actions";
+import { getResultByRollNo, sendMailUpdate } from "./actions";
 
 const availableMethods = [
   "getResultByRollNoFromSite",
   "getResultByRollNo",
   "addResultByRollNo",
   "updateResultByRollNo",
-] as (keyof typeof serverApis.results)[];
+] as  const;
 
 
 export function GetResultDiv() {
@@ -55,50 +54,23 @@ export function GetResultDiv() {
       toast.error("Please select a method");
       return;
     }
-    if (!availableMethods.includes(method as keyof typeof serverApis.results)) {
+    if (!availableMethods.includes(method as typeof availableMethods[number])) {
       toast.error("Invalid method selected");
       return;
     }
     setLoading(true);
     try {
-      if (method === "getResultByRollNoFromSite") {
-        const { data: response } =
-          await serverApis.results.getResultByRollNoFromSite(rollNo);
-        if (response?.error || !response?.data) {
-          toast.error(response?.message || "Failed to fetch result from site");
-          return;
-        }
-        setResult(response?.data);
-      } else if (method === "getResultByRollNo") {
-        const { data: response } =
-          await serverApis.results.getResultByRollNo(rollNo);
-        if (response?.error || !response?.data) {
-          toast.error(response?.message || "Failed to fetch result by Roll No");
-          return;
-        }
-        setResult(response.data);
-      } else if (method === "addResultByRollNo") {
-        const { data: response } =
-          await serverApis.results.addResultByRollNo(rollNo);
-        if (response?.error || !response?.data) {
-          toast.error(response?.message || "Failed to add result by Roll No");
-          return;
-        }
-        setResult(response.data);
-      } else if (method === "updateResultByRollNo") {
-        const { data: response } =
-          await serverApis.results.updateResultByRollNo([
-            rollNo as rollNoSchemaType,
-            {},
-          ]);
-        if (response?.error || !response?.data) {
-          toast.error(
-            response?.message || "Failed to update result by Roll No"
-          );
-          return;
-        }
-        setResult(response.data);
+        const response = await getResultByRollNo(rollNo, method as typeof availableMethods[number]);
+      if (response?.error || !response?.data) {
+        toast.error(response?.message || "Failed to fetch result");
+        return;
       }
+      // Set the result based on the method
+      if (response.data) {
+        setResult(response.data);
+      } else {
+        setResult(null);
+      } 
       // If the result is not null, it means we have successfully fetched the result
       toast.success(
         `Result fetched successfully using ${changeCase(method, "camel_to_title")}`

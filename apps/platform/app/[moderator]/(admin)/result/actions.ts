@@ -1,10 +1,10 @@
 "use server";
 
-import dbConnect from "src/lib/dbConnect";
-import ResultModel from "src/models/result";
 import { emailSchema } from "~/constants";
+import dbConnect from "~/lib/dbConnect";
 import serverApis from "~/lib/server-apis/server";
 import { mailFetch } from "~/lib/server-fetch";
+import ResultModel from "~/models/result";
 
 export async function getBasicInfo() {
   try {
@@ -120,12 +120,50 @@ export async function getAbnormalResults() {
       return Promise.reject(response.message || "Failed to fetch abnormal results");
     }
     if (!response?.data) {
-      console.log("No abnormal results found",response);
+      console.log("No abnormal results found", response);
       return Promise.resolve([]);
     }
     return Promise.resolve(response.data);
   } catch (err) {
     console.error(err);
     return Promise.reject("Failed to fetch abnormal results");
+  }
+}
+
+const availableMethods = [
+  "getResultByRollNoFromSite",
+  "getResultByRollNo",
+  "addResultByRollNo",
+  "updateResultByRollNo",
+]  as const;
+
+export async function getResultByRollNo(rollNo: string, method:  typeof availableMethods[number]) {
+  try {
+    if (method === "getResultByRollNoFromSite") {
+      const { data: response } =
+        await serverApis.results.getResultByRollNoFromSite(rollNo);
+      return Promise.resolve(response);
+    } else if (method === "getResultByRollNo") {
+      const { data: response } =
+        await serverApis.results.getResultByRollNo(rollNo);
+      return Promise.resolve(response);
+
+    } else if (method === "addResultByRollNo") {
+      const { data: response } =
+        await serverApis.results.addResultByRollNo(rollNo);
+      return Promise.resolve(response);
+
+    } else if (method === "updateResultByRollNo") {
+      const { data: response } =
+        await serverApis.results.updateResultByRollNo([
+          rollNo,
+          {},
+        ]);
+      return Promise.resolve(response);
+
+    }
+  } catch (err) {
+    console.log(err);
+    return Promise.reject("Failed to fetch result by roll number");
   }
 }

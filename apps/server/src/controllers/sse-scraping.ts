@@ -1,11 +1,11 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
-import { scrapeResult } from "../lib/scrape";
 import type { taskDataType } from "../models/log-result_scraping";
 import { ResultScrapingLog } from "../models/log-result_scraping";
 import ResultModel from "../models/result";
 import dbConnect from "../utils/dbConnect";
 
+import { scrapeAndSaveResult } from "~/lib/result_utils";
 import { EVENTS, LIST_TYPE, TASK_STATUS, type listType } from "../constants/result_scraping";
 
 const BATCH_SIZE = 10; // Number of roll numbers to process in each batch
@@ -394,28 +394,3 @@ async function getListOfRollNos(list_type: listType): Promise<Set<string>> {
   return new Set(results.map((result) => result.rollNo));
 }
 
-async function scrapeAndSaveResult(rollNo: string) {
-  try {
-    const result = await scrapeResult(rollNo);
-    await sleep(500);
-    //  check if scraping was failed
-    if (result.error || result.data === null) {
-      return { rollNo, success: false, error: result.error || "Scraping failed" };
-    }
-    // check if result already exists
-    const existingResult = await ResultModel.findOne({ rollNo });
-    if (existingResult) {
-      existingResult.semesters = result.data.semesters;
-      await existingResult.save();
-      return { rollNo, success: true, error: null };
-    }
-    // create new result if not exists
-    await ResultModel.create(result.data);
-    return { rollNo, success: true, error: null };
-  } catch (e) {
-    if (e instanceof Error) {
-      console.error(e.message);
-    }
-    return { rollNo, success: false, error: e instanceof Error ? e.message : "Unknown error" };
-  }
-}
