@@ -16,7 +16,7 @@ export default function PostFooter({
   user,
 }: {
   post: CommunityPostTypeWithId;
-  user: Session["user"];
+  user?: Session["user"];
 }) {
   // refactor this with useTransition after react 19
   const [liking, setLiking] = useState<boolean>(false);
@@ -32,13 +32,14 @@ export default function PostFooter({
         <Button
           size="xs"
           disabled={liking}
-          variant={post.likes.includes(user.id) ? "default_light" : "outline"}
+          variant={user?.id ? (post.likes.includes(user?.id) ? "default_light" : "outline") : "outline"}
           onClick={() => {
+            if(!user?.id)return;
             setLiking(true);
             updatePost(post._id, {
-              likes: post.likes.includes(user.id)
-                ? post.likes.filter((id) => id !== user.id)
-                : [...post.likes, user.id],
+              likes: post.likes.includes(user?.id)
+                ? post.likes.filter((id) => id !== user?.id)
+                : [...post.likes, user?.id],
             }).finally(() => setLiking(false));
           }}
         >
@@ -49,8 +50,9 @@ export default function PostFooter({
         <Button
           size="xs"
           disabled={saving}
-          variant={post.savedBy.includes(user.id) ? "default_light" : "outline"}
+          variant={user?.id ? (post.savedBy.includes(user.id) ? "default_light" : "outline") : "outline"}
           onClick={() => {
+            if (!user?.id) return;
             setSaving(true);
             updatePost(post._id, {
               savedBy: post.savedBy.includes(user.id)
@@ -59,9 +61,9 @@ export default function PostFooter({
             }).finally(() => setSaving(false));
           }}
         >
-          {post.savedBy.includes(user.id) ? <BookmarkCheck /> : <Bookmark />}
+          {user?.id ? (post.savedBy.includes(user.id) ? <BookmarkCheck /> : <Bookmark />) : <Bookmark />}
           <span>{formatNumber(post.savedBy.length)}</span>
-          <span>Save</span>
+          <span>Saves</span>
         </Button>
         <ShareButton
           data={{

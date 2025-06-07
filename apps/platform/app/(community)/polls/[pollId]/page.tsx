@@ -8,6 +8,8 @@ import { getPollById, updateVotes } from "src/lib/poll/actions";
 import { PollRender } from "../components/poll-component";
 import Polling from "./polling";
 
+import EmptyArea from "@/components/common/empty-area";
+import { AuthButtonLink } from "@/components/utils/link";
 import type { Metadata } from "next";
 import { ClosingBadge } from "../components/poll-timer";
 
@@ -83,13 +85,26 @@ export default async function Dashboard({ params }: Props) {
         {closesAlready ? (
           <PollRender poll={poll} />
         ) : (
-          session?.user && (
+          session?.user ? (
             <Polling
               poll={poll}
               user={session.user}
               updateVotes={updateVotes.bind(null, poll._id)}
             />
-          )
+          ):
+          <EmptyArea
+            title="You need to be logged in to vote on this poll"
+            description="Please login to cast your vote."
+            actionProps={{
+              asChild: true,
+              variant: "raw",
+              children: (
+                <AuthButtonLink href={"/polls/" + poll._id} authorized={!!session?.user} variant="rainbow" size="sm">
+                  Login
+                </AuthButtonLink>
+              ),
+            }}
+          />
         )}
       </div>
     </div>

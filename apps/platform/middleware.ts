@@ -1,105 +1,15 @@
 import { betterFetch } from "@better-fetch/fetch";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
-
-const SIGN_IN_PATH = "/sign-in";
-
-const UN_PROTECTED_API_ROUTES =
-  [
-    "/api/auth/*",
-  ];
-const PUBLIC_ROUTES = [
-  "/",
-  "/results/",
-  "/syllabus/",
-  "/classroom-availability/",
-  "/schedules/",
-  "/announcements/",
-  "/polls/",
-  "/community/"
-];
-const DashboardRoutes = [
-  ROLES.ADMIN,
-  ROLES.FACULTY,
-  ROLES.CR,
-  ROLES.FACULTY,
-  ROLES.CHIEF_WARDEN,
-  ROLES.WARDEN,
-  ROLES.ASSISTANT_WARDEN,
-  ROLES.MMCA,
-  ROLES.HOD,
-  ROLES.GUARD,
-  ROLES.LIBRARIAN,
-  ROLES.STUDENT,
-];
-
-/**
- * Check if the user is authorized to access the given route.
- * @param route_path - The path of the route to check authorization for.
- * @param session - The session object containing user information.
- * @returns An object containing authorization status and redirect information.
- */
-function checkAuthorization(
-  route_path: (typeof DashboardRoutes)[number],
-  session: Session | null
-) {
-  // 1. No session, redirect to sign-in
-  if (!session) {
-    return {
-      redirect: { destination: "/sign-in" },
-      authorized: false,
-      notFound: false,
-    };
-  }
-
-  // 2. Invalid role
-  if (!DashboardRoutes.includes(route_path)) {
-    console.log("Invalid moderator role:", route_path);
-    // const destination = session.user.other_roles.includes("student")
-    //   ? "/"
-    //   : session.user.other_roles[0] || "/";
-    const destination =
-      session.user.other_roles?.length > 0 ? session.user.other_roles[0] : "/";
-    return {
-      redirect: { destination },
-      authorized: false,
-      notFound: false,
-    };
-  }
-
-  // 4. Authorized check
-  if (
-    session.user.other_roles
-      .map((role) => role.toLowerCase())
-      .includes(route_path.toLowerCase()) ||
-    session.user.role.toLowerCase() === route_path.toLowerCase()
-  ) {
-    return {
-      notFound: false,
-      authorized: true,
-      redirect: null,
-    };
-  }
-
-  return {
-    notFound: true,
-    authorized: false,
-    redirect: null,
-  };
-}
+import { checkAuthorization, DashboardRoutes, PUBLIC_ROUTES, publicRouteHandleAbsolute, SIGN_IN_PATH, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
 
 export async function middleware(request: NextRequest) {
-  if (
-    PUBLIC_ROUTES.some((route) =>
-      new RegExp(route.replace(/\*/g, ".*")).test(request.nextUrl.pathname)
-    )
-  ) {
-    // if the request is for a public route, allow it to pass through
-    return NextResponse.next();
-  }
   const url = new URL(request.url);
+  const pathname = request.nextUrl.pathname;
+  const isPublicRoute = PUBLIC_ROUTES.some((route) => publicRouteHandleAbsolute(route, pathname));
+  const requiresAuth = !isPublicRoute;
+
   // if the request is for the sign-in page, allow it to pass through
   const { data: session } = await betterFetch<Session>(
     "/api/auth/get-session",
@@ -111,60 +21,60 @@ export async function middleware(request: NextRequest) {
       },
     }
   );
-  if (!session) {
-    if (request.nextUrl.pathname === SIGN_IN_PATH) {
-      return NextResponse.next();
-    }
+  if (requiresAuth && !session) {
+
     // if the user is not authenticated and tries to access a page other than the sign-in page, redirect them to the sign-in page
     url.pathname = SIGN_IN_PATH;
     url.searchParams.set("next", request.url);
     return NextResponse.redirect(url);
   }
-  if (session) {
-    // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page
-    if (
-      request.nextUrl.pathname === SIGN_IN_PATH &&
-      request.nextUrl.searchParams.get("tab") !== "reset-password" &&
-      !request.nextUrl.searchParams.get("token")?.trim()
-    ) {
-      url.pathname = "/";
-      return NextResponse.redirect(url);
-    }
-    // if the user is already authenticated
-    // manage the dashboard routes
-    if (request.nextUrl.pathname.slice(1) === "/dashboard") {
-      return NextResponse.redirect(
-        new URL(
-          request.nextUrl.pathname.replace(
-            "/dashboard",
-            session.user.other_roles[0]
-          ),
-          request.url
-        )
-      );
-    }
-    if (
-      request.method === "GET" &&
-      DashboardRoutes.includes(
-        request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number]
+  if (session &&
+    request.nextUrl.pathname === SIGN_IN_PATH &&
+    request.nextUrl.searchParams.get("tab") !== "reset-password" &&
+    !request.nextUrl.searchParams.get("token")?.trim()
+  ) {
+    url.pathname = "/";
+    return NextResponse.redirect(url);
+  }
+  // Special redirect: /dashboard -> /<first-role>
+  if (request.nextUrl.pathname.startsWith("/dashboard") && session) {
+    return NextResponse.redirect(
+      new URL(
+        request.nextUrl.pathname.replace(
+          "/dashboard",
+          session?.user.other_roles[0]
+        ),
+        request.url
       )
-    ) {
-      const authCheck = checkAuthorization(
-        request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number],
-        session
+    );
+  }
+  // Now handle dashboard-like role-based paths
+  const protectedPaths = DashboardRoutes.map((role) => `/${role.toLowerCase()}`);
+  const matchedRole = protectedPaths.find((path) =>
+    request.nextUrl.pathname.toLowerCase().startsWith(path)
+  )?.slice(1) as (typeof DashboardRoutes)[number];
+
+  if (
+    request.method === "GET" && matchedRole && session) {
+    console.log("Checking authorization for path:", request.nextUrl.pathname);
+    // if the user is authenticated and tries to access a protected route, check if they are authorized
+    const matchedRole = protectedPaths.find((path) =>
+      request.nextUrl.pathname.toLowerCase().startsWith(path)
+    )?.slice(1) as (typeof DashboardRoutes)[number];
+
+    const authCheck = checkAuthorization(matchedRole, session);
+    if (authCheck.redirect) {
+      return NextResponse.redirect(
+        new URL(authCheck.redirect.destination, request.url)
       );
-      if (authCheck.redirect) {
-        return NextResponse.redirect(
-          new URL(authCheck.redirect.destination, request.url)
-        );
-      }
-      if (!authCheck.authorized) {
-        return NextResponse.redirect(
-          new URL("/unauthorized?target=" + request.url, request.url)
-        );
-      }
+    }
+    if (!authCheck.authorized) {
+      return NextResponse.redirect(
+        new URL("/unauthorized?target=" + request.url, request.url)
+      );
     }
   }
+
   if (
     request.method === "POST" ||
     request.nextUrl.pathname.startsWith("/api")
@@ -180,9 +90,10 @@ export async function middleware(request: NextRequest) {
       return NextResponse.next();
     }
     if (
-      DashboardRoutes.includes(
-        request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number]
+      protectedPaths.some((path) =>
+        request.nextUrl.pathname.toLowerCase().startsWith(path)
       )
+
     ) {
       const authCheck = checkAuthorization(
         request.nextUrl.pathname.slice(1) as (typeof DashboardRoutes)[number],
@@ -236,7 +147,7 @@ export async function middleware(request: NextRequest) {
     // console.log("targetUrl", targetUrl);
     const nextRedirect = request.nextUrl.searchParams.get("redirect");
 
-    if (targetUrl && nextRedirect !== "false") {
+    if (targetUrl && nextRedirect !== "false" && session) {
       const targetUrlObj = new URL(targetUrl);
       return NextResponse.redirect(targetUrlObj);
     }

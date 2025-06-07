@@ -52,7 +52,7 @@ export default async function CommunityPost(props: Props) {
   }
   // console.log(post);
   const isAuthor =
-    session?.user.id === post.author.id || session?.user.role === "admin";
+    session?.user?.id === post.author.id || session?.user?.role === "admin";
 
   return (
     <main className="md:col-span-3 space-y-4 pr-2">
@@ -105,9 +105,9 @@ export default async function CommunityPost(props: Props) {
         <h3 className="text-lg font-medium">{post.title}</h3>
         <article className="border-l py-4  max-w-full prose prose-sm dark:prose-invert pl-2 bg-muted/10">
 
-           <Markdown>
-                {post.content}
-              </Markdown>
+          <Markdown>
+            {post.content}
+          </Markdown>
         </article>
         <PostFooter post={post} user={session?.user!} />
       </div>
