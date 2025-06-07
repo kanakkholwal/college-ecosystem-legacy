@@ -117,6 +117,14 @@ export type APITypes = {
       payload: undefined;
       response: Record<string, string>;
     };
+    bulkUpdateResults: {
+      payload: z.infer<typeof rollNoSchema>[];
+      response: Record<string, string>;
+    };
+    bulkDeleteResults: {
+      payload: z.infer<typeof rollNoSchema>[];
+      response: Record<string, string>;
+    };
   };
   hostels: {
     getAll: {

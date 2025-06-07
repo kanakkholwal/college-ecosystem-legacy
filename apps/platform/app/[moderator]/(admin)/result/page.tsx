@@ -11,7 +11,7 @@ export default async function AdminResultPage() {
 
   return (
     <>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pr-3">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pr-3">
         <StatsCard
           title="Total Results"
           Icon={<NotepadText className="size-4 text-muted-foreground" />}
@@ -66,13 +66,13 @@ export default async function AdminResultPage() {
           <DeleteResultDiv />
         </StatsCard>
         <StatsCard
-          title="Get Mail Result Update"
+          title="Send Result Update Mail"
           Icon={<NotepadText className="size-4 text-muted-foreground" />}
         >
           <MailResultUpdateDiv />
         </StatsCard>
-        <AbnormalResultsDiv abnormalsResults={abnormalsResults} />
       </div>
+        <AbnormalResultsDiv abnormalsResults={abnormalsResults} />
     </>
   );
 }

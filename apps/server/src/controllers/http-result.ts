@@ -229,7 +229,7 @@ export const deleteAbNormalResults = async (req: Request, res: Response) => {
 
 export const bulkUpdateResults = async (req: Request, res: Response) => {
   try {
-    const rollNos = req.body as string[];
+    const rollNos = (req.body.rollNos || []) as string[];
     const validatedRollNos = rollNos.filter((rollNo) => isValidRollNumber(rollNo));
     if (validatedRollNos.length === 0) {
       res.status(400).json({
@@ -278,15 +278,15 @@ export const bulkUpdateResults = async (req: Request, res: Response) => {
 }
 export const bulkDeleteResults = async (req: Request, res: Response) => {
   try {
-    const rollNos = req.body as string[];
+    const rollNos = (req.body.rollNos || []) as string[];
     const validatedRollNos = rollNos.filter((rollNo) => isValidRollNumber(rollNo));
     if (validatedRollNos.length === 0) {
-       res.status(400).json({
+      res.status(400).json({
         error: true,
         message: "No valid roll numbers provided",
         data: null,
       });
-        return
+      return
     }
     const result = await ResultModel.deleteMany({
       rollNo: { $in: validatedRollNos },
@@ -310,7 +310,7 @@ export const bulkDeleteResults = async (req: Request, res: Response) => {
       message: "An error occurred",
       data: error || "Internal Server Error",
     });
-      return
+    return
   }
 }
 export const assignRankToResults = async (req: Request, res: Response) => {

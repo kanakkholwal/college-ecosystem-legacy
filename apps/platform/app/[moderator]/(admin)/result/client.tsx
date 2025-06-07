@@ -33,7 +33,7 @@ const availableMethods = [
   "getResultByRollNo",
   "addResultByRollNo",
   "updateResultByRollNo",
-] as  const;
+] as const;
 
 
 export function GetResultDiv() {
@@ -60,7 +60,7 @@ export function GetResultDiv() {
     }
     setLoading(true);
     try {
-        const response = await getResultByRollNo(rollNo, method as typeof availableMethods[number]);
+      const response = await getResultByRollNo(rollNo, method as typeof availableMethods[number]);
       if (response?.error || !response?.data) {
         toast.error(response?.message || "Failed to fetch result");
         return;
@@ -70,7 +70,7 @@ export function GetResultDiv() {
         setResult(response.data);
       } else {
         setResult(null);
-      } 
+      }
       // If the result is not null, it means we have successfully fetched the result
       toast.success(
         `Result fetched successfully using ${changeCase(method, "camel_to_title")}`
@@ -85,7 +85,7 @@ export function GetResultDiv() {
     }
   };
   return (
-    <div className="w-full flex flex-col gap-4 @3xl:p-3">
+    <div className="w-full flex flex-col gap-4">
       <div>
         <Label className="text-xs">Enter Roll No to Get Result</Label>
         <Input
@@ -258,7 +258,7 @@ export function MailResultUpdateDiv() {
     <div className="w-full flex flex-col gap-4 @3xl:p-3">
       <div>
         <Label className="text-xs">
-          Enter Email Addresses to Send Result Update Mail (comma separated)
+          Enter Email Addresses
         </Label>
         <Input
           type="text"
@@ -289,21 +289,66 @@ export function MailResultUpdateDiv() {
 
 
 export function AbnormalResultsDiv({ abnormalsResults }: { abnormalsResults: AbNormalResult[] }) {
+  const [loading, setLoading] = useState<boolean>(false);
+
   return (
     <div className="w-full p-3 lg:p-6 bg-card rounded-lg col-span-3">
-      <h4 className="text-base font-medium mb-4">Abnormal Results</h4>
+      <div className=" flex flex-wrap gap-3 justify-between mb-4">
+        <h4 className="text-base font-medium mb-4">Abnormal Results</h4>
+        <div className="flex items-center justify-between gap-2">
+          <Button
+            variant="dark"
+            disabled={loading}
+            onClick={() => {
+              // Handle update all logic here
+              setLoading(true);
+              toast.promise(
+                serverApis.results.bulkUpdateResults(abnormalsResults.map(result => result.rollNo)),
+                {
+                  loading: "Updating all abnormal results...",
+                  success: "All abnormal results updated successfully",
+                  error: (error) => `Failed to update all abnormal results: ${error.message || "Unknown error"}`,
+                }
+              ).finally(() => setLoading(false));
+            }}
+            size="sm">
+            Update All
+          </Button>
+          <Button
+          disabled={loading}
+            variant="ghost"
+            onClick={() => {
+              // Handle delete all logic here
+              if(!confirm("Are you sure you want to delete all abnormal results? This action cannot be undone.")) {
+                return;
+              }
+              setLoading(true);
+              toast.promise(
+                serverApis.results.bulkDeleteResults(abnormalsResults.map(result => result.rollNo)),
+                {
+                  loading: "Deleting all abnormal results...",
+                  success: "All abnormal results deleted successfully",
+                  error: (error) => `Failed to delete all abnormal results: ${error.message || "Unknown error"}`,
+                }
+              ).finally(() => setLoading(false));
+            }}
+            size="sm">
+              Delete All
+          </Button>
+        </div>
+      </div>
       {abnormalsResults.length === 0 ? (
         <p className="text-sm text-muted-foreground">No abnormal results found</p>
       ) : (
         <ResponsiveContainer>
           {abnormalsResults.map((result) => (
             <div key={result._id} className="border-b pb-2">
-              <h5 className="font-medium text-sm">
+              <h5 className="font-medium text-xs">
                 {result.name}
                 <Badge size="sm">
                   {result.rollNo}
                 </Badge>
-                </h5>
+              </h5>
               <p className="text-sm text-muted-foreground">
                 <Badge size="sm">
                   sem - {result.semesterCount}
@@ -311,7 +356,7 @@ export function AbnormalResultsDiv({ abnormalsResults }: { abnormalsResults: AbN
                 <Badge size="sm">
                   avg - {result.avgSemesterCount.toFixed(1)}
                 </Badge>
-                </p>
+              </p>
             </div>
           ))}
         </ResponsiveContainer>

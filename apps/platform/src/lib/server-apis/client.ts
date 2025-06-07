@@ -103,6 +103,30 @@ const results = {
       body: payload,
     });
   },
+  bulkUpdateResults: async (
+    payload: APITypes["results"]["bulkUpdateResults"]["payload"]
+  ) => {
+    return await serverFetch<
+      ApiResponse<APITypes["results"]["bulkUpdateResults"]["response"]>
+    >("/api/results/bulk/update", {
+      method: "POST",
+      body: {
+        rollNos: payload,
+      },
+    });
+  },
+  bulkDeleteResults: async (
+    payload: APITypes["results"]["bulkDeleteResults"]["payload"]
+  ) => {
+    return await serverFetch<
+      ApiResponse<APITypes["results"]["bulkDeleteResults"]["response"]>
+    >("/api/results/bulk/delete", {
+      method: "POST",
+      body: {
+        rollNos: payload,
+      },
+    });
+  },
 } as const;
 
 /*
