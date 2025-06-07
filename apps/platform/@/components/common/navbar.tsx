@@ -52,7 +52,7 @@ export default function Navbar({ user }: NavbarProps) {
           {user ? <ProfileDropdown user={user} /> : 
           <ButtonLink 
           size="sm" rounded="full"
-          href={`/sign-In?next=${pathname}`}
+          href={`/sign-in?next=${pathname}`}
           variant="rainbow">
             Log In
             <LogIn />
