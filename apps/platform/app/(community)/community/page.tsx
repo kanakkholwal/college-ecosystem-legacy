@@ -2,9 +2,10 @@ import Link from "next/link";
 import { CATEGORIES } from "~/constants/community";
 
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { AuthButtonLink } from "@/components/utils/link";
 import { ArrowRight, X } from "lucide-react";
 import type { Metadata } from "next";
+import { getSession } from "~/lib/auth-server";
 import { getPostsByCategory } from "~/lib/community/actions";
 import CommunityPostList from "./list";
 
@@ -24,7 +25,7 @@ export default async function CommunitiesPage(props: {
   const category = searchParams.c || "all"; // Default to 'all' if no category is provided
   const page = searchParams.page || 1;
   const limit = searchParams.limit || 10;
-
+  const session = await getSession();
   const posts = await getPostsByCategory(category, page, limit);
 
   const activePopularCategory = CATEGORIES.find((c) => c.value === category);
@@ -51,12 +52,10 @@ export default async function CommunitiesPage(props: {
               {posts.length}
             </Badge>
           </h3>
-          <Button variant="ghost" size="sm" asChild>
-            <Link href="/community/create">
-              Create Post
-              <ArrowRight />
-            </Link>
-          </Button>
+          <AuthButtonLink authorized={!!session?.user} variant="ghost" size="sm" href="/community/create">
+            Create Post
+            <ArrowRight />
+          </AuthButtonLink>
         </div>
         <CommunityPostList posts={posts} />
       </main>

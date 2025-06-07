@@ -1,5 +1,4 @@
 import EmptyArea from "@/components/common/empty-area";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { GrAnnounce } from "react-icons/gr";
 
@@ -8,12 +7,13 @@ import AnnouncementsList from "./list";
 
 import { Badge } from "@/components/ui/badge";
 import { Tabs, VercelTabsList } from "@/components/ui/tabs";
-import { ArrowRight, X } from "lucide-react";
+import { AuthButtonLink } from "@/components/utils/link";
+import { X } from "lucide-react";
 import type { Metadata } from "next";
+import { Session } from "~/lib/auth";
+import { getSession } from "~/lib/auth-server";
 import { RELATED_FOR_TYPES } from "~/models/announcement";
 import { changeCase } from "~/utils/string";
-import { getSession } from "~/lib/auth-server";
-import { Session } from "~/lib/auth";
 
 export const metadata: Metadata = {
   title: `Announcements`,
@@ -67,19 +67,18 @@ export default async function AnnouncementsPage(props: {
             {
               (RELATED_FOR_TYPES.includes(category as any)
                 ? announcements.filter(
-                    (announcement) => announcement.relatedFor === category
-                  )
+                  (announcement) => announcement.relatedFor === category
+                )
                 : announcements
               ).length
             }
           </Badge>
         </h3>
-        <Button variant="link" size="sm" asChild>
-          <Link href="/announcements/create">
-            Create Announcement
-            <ArrowRight />
-          </Link>
-        </Button>
+        <AuthButtonLink
+          authorized={!!session?.user}
+          variant="link" size="sm" href="/announcements/create">
+          Create Announcement
+        </AuthButtonLink>
       </div>
       <div className="grid grid-cols-1 gap-4 columns-1 snap-y snap-mandatory px-2 lg:px-4 w-full max-w-2xl mx-auto">
         {announcements.length === 0 ? (
@@ -93,11 +92,11 @@ export default async function AnnouncementsPage(props: {
             announcements={
               RELATED_FOR_TYPES.includes(category as any)
                 ? announcements.filter(
-                    (announcement) => announcement.relatedFor === category
-                  )
+                  (announcement) => announcement.relatedFor === category
+                )
                 : announcements
             }
-            session={session}
+            user={session?.user}
           />
         )}
       </div>

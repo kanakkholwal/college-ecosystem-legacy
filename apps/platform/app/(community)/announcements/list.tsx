@@ -9,10 +9,10 @@ import DeleteButton from "./delete-btn";
 
 export default function AnnouncementsList({
   announcements,
-  session
+  user
 }: {
   announcements: AnnouncementTypeWithId[];
-  session: Session
+  user?: Session["user"]
 }) {
   if (announcements.length === 0) {
     return (
@@ -57,8 +57,8 @@ export default function AnnouncementsList({
               </p>
             </div>
 
-            {(announcement.createdBy.id === session.user.id || session.user.role === "admin") &&
-              (<div className="absolute top-2 right-2">
+            {(announcement.createdBy.id === user?.id || user?.role === "admin") && (
+              <div className="absolute top-2 right-2">
                 <DeleteButton announcementId={announcement._id} />
               </div>)}
             <article className="prose prose-sm dark:prose-invert text-muted-foreground">

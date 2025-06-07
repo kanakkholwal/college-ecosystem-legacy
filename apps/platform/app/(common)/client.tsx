@@ -34,7 +34,7 @@ export function HeroSection({ user }: HeroSection) {
         <p className="mb-8 text-lg text-muted-foreground">
           Welcome to the {appConfig.name}
         </p>
-        {user?.other_roles.includes("student") && (
+        {(user?.other_roles.includes("student") || !user) && (
           <Alert variant="info_light" className="mt-4" data-aos="fade-right">
             <RocketIcon className="h-4 w-4" />
             <AlertTitle>Join the {appConfig.name} Project!</AlertTitle>

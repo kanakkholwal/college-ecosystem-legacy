@@ -360,9 +360,9 @@ type NavLink = {
   items?: NavLink[];
 };
 
-export const getNavLinks = (user: Session["user"]): NavLink[] => {
-  const linksByRole = [user.role, ...(user.other_roles || [])]
-    .map((role) => getLinksByRole(role, quick_links))
+export const getNavLinks = (user?: Session["user"]): NavLink[] => {
+  const linksByRole = [user?.role, ...(user?.other_roles || [])]
+    .map((role) => getLinksByRole("*", quick_links))
     .flat() // filter out unique links
     .filter(
       (link, index, self) =>
@@ -379,7 +379,7 @@ export const getNavLinks = (user: Session["user"]): NavLink[] => {
     //   Icon: House,
     // },
     ...linksByRole,
-    ...(user.other_roles?.length <= 1
+    ...(user ? user.other_roles?.length <= 1
       ? [
           {
             title: "Settings",
@@ -402,6 +402,6 @@ export const getNavLinks = (user: Session["user"]): NavLink[] => {
               Icon: Settings,
             })),
           },
-        ]),
+        ]: []),
   ];
 };

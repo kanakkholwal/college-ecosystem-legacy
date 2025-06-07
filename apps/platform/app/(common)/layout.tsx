@@ -3,7 +3,6 @@ import Navbar from "@/components/common/navbar";
 import { BannerPanel } from "@/components/utils/banner";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { RocketIcon } from "lucide-react";
-import { redirect } from "next/navigation";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { appConfig } from "~/project.config";
@@ -29,19 +28,15 @@ const PROMO = {
 export default async function Layout({ children }: LayoutProps) {
   const session = await getSession();
 
-  if (!session?.user) {
-    return redirect("/sign-in");
-  }
-
   return (
     <div className="flex flex-1 flex-col justify-center min-h-svh bg-background dark:bg-background">
-      <Navbar user={session.user} />
+      <Navbar user={session?.user} />
       <ConditionalRender condition={PROMO.getConditionByUser(session?.user!)}>
         <BannerPanel
           icon={<RocketIcon className="size-4 text-muted-foreground" />}
           title={PROMO.title}
           description={PROMO.description}
-          redirectUrl={PROMO.getRedirectUrl(session.user.other_roles[0])}
+          redirectUrl={session?.user && PROMO.getRedirectUrl(session?.user?.other_roles[0])}
           btnProps={{
             children: PROMO.label,
             variant: "default_light",

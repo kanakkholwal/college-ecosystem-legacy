@@ -29,7 +29,7 @@ export function RedirectWithSearchParamsLink({ href, children, ...props }: Redir
         </Button>
     );
 }
-export function PreviousPageLink({...props }: ButtonProps) {
+export function PreviousPageLink({ ...props }: ButtonProps) {
     const router = useRouter();
     const pathname = usePathname();
     return (
@@ -43,8 +43,8 @@ export function PreviousPageLink({...props }: ButtonProps) {
             }}
             {...props}
         >
-                <ArrowLeft />
-                Go Back
+            <ArrowLeft />
+            Go Back
         </Button>
     );
 }
@@ -53,6 +53,18 @@ export function ButtonLink({ href, children, ...props }: React.ComponentProps<ty
     return (
         <Button asChild {...props}>
             <Link href={href}>
+                {children}
+            </Link>
+        </Button>
+    );
+}
+export function AuthButtonLink({ href, authorized, children, ...props }: React.ComponentProps<typeof Button> & React.ComponentProps<typeof Link> & {
+    authorized?: boolean;
+}) {
+    const pathname = usePathname();
+    return (
+        <Button asChild {...props}>
+            <Link href={authorized ? href : `/sign-in?next=${pathname}`}>
                 {children}
             </Link>
         </Button>

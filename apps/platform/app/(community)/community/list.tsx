@@ -3,12 +3,12 @@ import ShareButton from "@/components/common/share-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import Markdown from 'react-markdown'
 import { formatDistanceToNow } from "date-fns";
 import { ArrowRight, Bookmark, Dot, Eye, Share } from "lucide-react";
 import Link from "next/link";
 import { BiUpvote } from "react-icons/bi";
 import { GrAnnounce } from "react-icons/gr";
+import Markdown from 'react-markdown';
 import type { CommunityPostTypeWithId } from "src/models/community";
 import { CATEGORY_IMAGES } from "~/constants/community";
 import { appConfig } from "~/project.config";
@@ -78,10 +78,10 @@ export default function CommunityPostList({
             <article className="border py-4  max-w-full prose prose-sm dark:prose-invert text-muted-foreground text-xs pl-2 bg-muted/50 w-full rounded-lg">
               {/* show only 200 characters */}
 
-               <Markdown>
-                              {post.content.slice(0, 200) +
+              <Markdown>
+                {post.content.slice(0, 200) +
                   (post.content.length > 200 ? "..." : "")}
-                            </Markdown>
+              </Markdown>
             </article>
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-between gap-2">

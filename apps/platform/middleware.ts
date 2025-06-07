@@ -6,7 +6,20 @@ import type { Session } from "~/lib/auth";
 
 const SIGN_IN_PATH = "/sign-in";
 
-const UN_PROTECTED_API_ROUTES = ["/api/auth/*"];
+const UN_PROTECTED_API_ROUTES =
+  [
+    "/api/auth/*",
+  ];
+const PUBLIC_ROUTES = [
+  "/",
+  "/results/",
+  "/syllabus/",
+  "/classroom-availability/",
+  "/schedules/",
+  "/announcements/",
+  "/polls/",
+  "/community/"
+];
 const DashboardRoutes = [
   ROLES.ADMIN,
   ROLES.FACULTY,
@@ -78,6 +91,14 @@ function checkAuthorization(
 }
 
 export async function middleware(request: NextRequest) {
+  if (
+    PUBLIC_ROUTES.some((route) =>
+      new RegExp(route.replace(/\*/g, ".*")).test(request.nextUrl.pathname)
+    )
+  ) {
+    // if the request is for a public route, allow it to pass through
+    return NextResponse.next();
+  }
   const url = new URL(request.url);
   // if the request is for the sign-in page, allow it to pass through
   const { data: session } = await betterFetch<Session>(

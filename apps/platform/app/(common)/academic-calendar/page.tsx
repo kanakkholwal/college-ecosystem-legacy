@@ -2,7 +2,6 @@ import { FullScreenCalendar } from "@/components/ui/calendar-full";
 import { CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
 import { getEvents } from "~/actions/events";
-import { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 
 type Props = {
@@ -31,7 +30,7 @@ export default async function AcademicCalenderPage(props: Props) {
     to: searchParams.to ? new Date(searchParams.to) : "",
   });
 
-  const session = (await getSession()) as Session;
+  const session = await getSession();
   if (session?.user?.role === "admin") {
     console.log("Events fetched for admin:", groupedEvents);
   }
@@ -54,7 +53,7 @@ export default async function AcademicCalenderPage(props: Props) {
       <div className="bg-card p-4 lg:p-5 rounded-lg">
         <FullScreenCalendar
           data={groupedEvents}
-          onNewEventRedirectPath="/admin/events/new"
+          onNewEventRedirectPath={session?.user?.role === "admin" ? "/admin/events/new" : undefined}
         />
       </div>
     </div>

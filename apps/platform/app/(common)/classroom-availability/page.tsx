@@ -5,7 +5,6 @@ import EmptyArea from "@/components/common/empty-area";
 import { NoteSeparator } from "@/components/common/note-separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import ConditionalRender from "@/components/utils/conditional-render";
-import ErrorBanner from "@/components/utils/error";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { Search } from "lucide-react";
 import type { Metadata } from "next";
@@ -55,6 +54,7 @@ export default async function RoomsPage(props: Props) {
       </section>
       <NoteSeparator label={`${rooms.length} Rooms found`} />
       <ErrorBoundaryWithSuspense
+      
         loadingFallback={
           <ResponsiveContainer>
             {[...Array(8)].map((_, i) => (
