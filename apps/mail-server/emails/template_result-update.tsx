@@ -15,7 +15,7 @@ import {
 export function ResultUpdateEmail({ payload }: { payload: EmailPayload }) {
   const batch = payload.batch as string;
   
-  const previewText = "Semester Result Notification";
+  const previewText = `Semester results for ${batch} batch have been released. Click to view your results with ranking.`;
 
   return (
     <>
