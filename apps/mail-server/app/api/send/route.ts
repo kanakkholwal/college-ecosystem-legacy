@@ -62,6 +62,6 @@ export async function POST(request: NextRequest) {
 
 
 
-export async function OPTIONS(req: NextRequest) {
+export async function OPTIONS() {
   return NextResponse.json({}, { headers: corsHeaders });
 }
