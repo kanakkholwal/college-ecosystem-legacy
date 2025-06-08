@@ -11,13 +11,10 @@ if (!baseServerUrl || !serverIdentity || !baseMailServerUrl) {
 /**
  *  a fetch instance to communicate with the server with the necessary headers
  */
-const baseUrl = process.env.BASE_URL
 
 export const authHeaders = {
   "Content-Type": "application/json",
-  "x-authorization": serverIdentity,
-  "X-IDENTITY-KEY": serverIdentity,
-  Origin: baseUrl,
+  "X-Authorization": serverIdentity,
 };
 export const serverFetch = createFetch({
   baseURL: baseServerUrl,

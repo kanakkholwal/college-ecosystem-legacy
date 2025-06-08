@@ -6,25 +6,16 @@ import { handleEmailFire } from "@/emails/helper";
 import { appConfig } from "@/project.config";
 import { requestPayloadSchema } from "@/types/schema";
 
-
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers":
+    "Content-Type,X-Authorization,X-Identity-Key, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version",
+  "Access-Control-Max-Age": "86400",
+};
 
 export async function POST(request: NextRequest) {
   try {
-    const identityKey = request.headers.get("X-Authorization") || "";
-    if (identityKey !== process.env.SERVER_IDENTITY) {
-      console.log(
-        "Missing or invalid SERVER_IDENTITY",
-        "received:",
-        identityKey
-      );
-      return NextResponse.json(
-        {
-          error: "Missing or invalid SERVER_IDENTITY",
-          data: null,
-        },
-        { status: 403 }
-      );
-    }
     const body = await request.json();
 
     console.log("request body", body);
@@ -36,7 +27,7 @@ export async function POST(request: NextRequest) {
           error: res.error,
           data: null,
         },
-        { status: 400 }
+        { status: 400, headers: corsHeaders  }
       );
     }
     const { template_key, targets, subject, payload } = res.data;
@@ -59,11 +50,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { data: response, error: null },
-      { status: 200 }
+      { status: 200, headers: corsHeaders  }
     );
   } catch (error) {
     console.error("Error in sending email:", error);
     // Handle specific error cases if needed
-    return Response.json({ error, data: null }, { status: 500 });
+    return NextResponse.json({ error, data: null }, { status: 500, headers: corsHeaders });
   }
 }

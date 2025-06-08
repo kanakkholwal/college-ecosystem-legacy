@@ -13,7 +13,7 @@ const results = {
       ApiResponse<APITypes["results"]["importFreshers"]["response"]>
     >("/api/results/import-freshers", {
       method: "POST",
-      body: payload,
+      body: JSON.stringify(payload),
       headers: authHeaders
     });
   },
@@ -71,7 +71,7 @@ const results = {
       ApiResponse<APITypes["results"]["addResultByRollNo"]["response"]>
     >("/api/results/:rollNo/add", {
       method: "POST",
-      params: { rollNo: payload },
+      params: JSON.stringify({ rollNo: payload }),
     });
   },
   updateResultByRollNo: async (
@@ -81,7 +81,7 @@ const results = {
       ApiResponse<APITypes["results"]["updateResultByRollNo"]["response"]>
     >("/api/results/:rollNo/update", {
       method: "POST",
-      params: { rollNo: payload[0] },
+      params: JSON.stringify({ rollNo: payload[0] }),
       body: payload[1],
     });
   },
@@ -110,9 +110,9 @@ const results = {
       ApiResponse<APITypes["results"]["bulkUpdateResults"]["response"]>
     >("/api/results/bulk/update", {
       method: "POST",
-      body: {
+      body: JSON.stringify({
         rollNos: payload,
-      },
+      }),
     });
   },
   bulkDeleteResults: async (
@@ -122,9 +122,9 @@ const results = {
       ApiResponse<APITypes["results"]["bulkDeleteResults"]["response"]>
     >("/api/results/bulk/delete", {
       method: "POST",
-      body: {
+      body: JSON.stringify({
         rollNos: payload,
-      },
+      }),
     });
   },
 } as const;

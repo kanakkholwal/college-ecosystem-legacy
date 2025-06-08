@@ -1,14 +1,14 @@
 "use server";
 import type { InferInsertModel, InferSelectModel } from "drizzle-orm";
 import { and, count, eq, ilike, or } from "drizzle-orm";
-import { db } from "src/db/connect";
+import { db } from "~/db/connect";
 import {
   booksAndReferences,
+  chapters,
   courses,
   previousPapers,
-  chapters,
-} from "src/db/schema";
-import { getSession } from "src/lib/auth-server";
+} from "~/db/schema";
+import { getSession } from "~/lib/auth-server";
 
 // Infer types for courses
 type CourseSelect = InferSelectModel<typeof courses>;

@@ -15,6 +15,7 @@ const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
 export const authHeaders = {
   "Content-Type": "application/json",
   "X-Authorization": serverIdentity,
+  "X-Identity-Key": serverIdentity,
   Origin: baseUrl,
 };
 /**
@@ -37,8 +38,8 @@ export const serverFetch = createFetch({
   cache: "no-store",
   headers: {
     "Content-Type": "application/json",
-    "x-authorization": serverIdentity,
-    "X-IDENTITY-KEY": serverIdentity,
+    "X-Authorization": serverIdentity,
+    "X-Identity-Key": serverIdentity,
     Origin: baseUrl,
   },
 });
@@ -46,8 +47,8 @@ export const mailFetch = createFetch({
   baseURL: baseMailServerUrl,
   headers: {
     "Content-Type": "application/json",
-    "X-authorization": serverIdentity,
-    "X-IDENTITY-KEY": serverIdentity,
+    "X-Authorization": serverIdentity,
+    "X-Identity-Key": serverIdentity,
     Origin: baseUrl,
   },
 });

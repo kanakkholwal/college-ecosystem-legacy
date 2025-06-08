@@ -20,10 +20,10 @@ export const PUBLIC_ROUTES = [
     "/polls",
     "/community",
 ];
-//export  const PUBLIC_ROUTES: { pattern: RegExp }[] = [
+//export const PUBLIC_ROUTES: { pattern: RegExp }[] = [
 //   { pattern: /^\/$/ },                              // home
 //   { pattern: /^\/results\/[a-z0-9]+$/i },           // /results/21bcs123
-//   { pattern: /^\/syllabus\/[a-z0-9-]+$/i },         // /syllabus/cse-3
+//   { pattern: /^\/syllabus\/[a-z0-9-_]+$/i },         // /syllabus/cse-3
 //   { pattern: /^\/classroom-availability\/?$/ },     // allow only main route
 //   { pattern: /^\/schedules\/?$/ },
 //   { pattern: /^\/announcements\/?$/ },
@@ -33,6 +33,7 @@ export const PUBLIC_ROUTES = [
 
 export const publicRouteHandleRegex = (({ pattern }, pathname: string) =>
     pattern.test(pathname)) as (route: { pattern: RegExp }, pathname: string) => boolean;
+
 export const publicRouteHandleAbsolute = (route: string, pathname: string) => {
     // exact match
     if (pathname === route) return true;
@@ -50,7 +51,7 @@ export const publicRouteHandleAbsolute = (route: string, pathname: string) => {
 }
 
 
-export const DashboardRoutes = [
+export const dashboardRoutes = [
     ROLES.ADMIN,
     ROLES.FACULTY,
     ROLES.CR,
@@ -72,7 +73,7 @@ export const DashboardRoutes = [
  * @returns An object containing authorization status and redirect information.
  */
 export function checkAuthorization(
-    route_path: (typeof DashboardRoutes)[number],
+    route_path: (typeof dashboardRoutes)[number],
     session: Session | null
 ) {
     // 1. No session, redirect to sign-in
@@ -85,8 +86,8 @@ export function checkAuthorization(
     }
 
     // 2. Invalid role
-    if (!DashboardRoutes.includes(route_path)) {
-        console.log("Invalid moderator role:", route_path);
+    if (!dashboardRoutes.includes(route_path)) {
+        // console.log("Invalid moderator role:", route_path);
         // const destination = session.user.other_roles.includes("student")
         //   ? "/"
         //   : session.user.other_roles[0] || "/";

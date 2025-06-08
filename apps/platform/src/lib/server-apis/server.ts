@@ -13,7 +13,7 @@ const results = {
       ApiResponse<APITypes["results"]["importFreshers"]["response"]>
     >("/api/results/import-freshers", {
       method: "POST",
-      body: payload,
+      body: JSON.stringify(payload),
     });
   },
   assignRank: async () => {
@@ -80,7 +80,7 @@ const results = {
     >("/api/results/:rollNo/update", {
       method: "POST",
       params: { rollNo: payload[0] },
-      body: payload[1],
+      body: JSON.stringify(payload[1]),
     });
   },
   getAbnormalResults: async (
@@ -98,9 +98,9 @@ const results = {
       ApiResponse<APITypes["results"]["bulkUpdateResults"]["response"]>
     >("/api/results/bulk/update", {
       method: "POST",
-      body: {
+      body: JSON.stringify({
         rollNos: payload,
-      },
+      }),
     });
   },
   bulkDeleteResults: async (
@@ -110,9 +110,9 @@ const results = {
       ApiResponse<APITypes["results"]["bulkDeleteResults"]["response"]>
     >("/api/results/bulk/delete", {
       method: "POST",
-      body: {
+      body: JSON.stringify({
         rollNos: payload,
-      },
+      }),
     });
   },
 } as const;

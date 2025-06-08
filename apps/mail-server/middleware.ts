@@ -3,6 +3,13 @@ import { NextResponse } from "next/server";
 import { appConfig } from "./project.config";
 
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+  "Access-Control-Allow-Headers":
+    "Content-Type,X-Authorization,X-Identity-Key, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version",
+  "Access-Control-Max-Age": "86400",
+};
 
 export async function middleware(request: NextRequest) {
   
@@ -15,7 +22,7 @@ export async function middleware(request: NextRequest) {
           error: "Missing or invalid SERVER_IDENTITY",
           data: null,
         },
-        { status: 403 }
+        { status: 403, headers: corsHeaders }
       );
     }
     return NextResponse.next();
