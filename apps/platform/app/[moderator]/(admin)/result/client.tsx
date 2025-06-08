@@ -14,9 +14,11 @@ import { rollNoSchema } from "~/types/result";
 
 import { ResultCard } from "@/components/application/result-display";
 import { ResponsiveContainer } from "@/components/common/container";
+import EmptyArea from "@/components/common/empty-area";
 import { Badge } from "@/components/ui/badge";
 import { Label } from "@/components/ui/label";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
+import { LoaderCircleIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import serverApis from "~/lib/server-apis/client";
 import type {
@@ -26,7 +28,6 @@ import type {
 } from "~/lib/server-apis/types";
 import { orgConfig } from "~/project.config";
 import { changeCase } from "~/utils/string";
-import { getResultByRollNo, sendMailUpdate } from "./actions";
 
 const availableMethods = [
   "getResultByRollNoFromSite",
@@ -35,6 +36,39 @@ const availableMethods = [
   "updateResultByRollNo",
 ] as const;
 
+
+
+async function getResultByRollNo(rollNo: string, method: typeof availableMethods[number]) {
+  try {
+    if (method === "getResultByRollNoFromSite") {
+      const res =
+        await serverApis.results.getResultByRollNoFromSite(rollNo);
+      console.log("Response from getResultByRollNoFromSite:", res);
+      return Promise.resolve(res.data);
+    } else if (method === "getResultByRollNo") {
+      const { data: response } =
+        await serverApis.results.getResultByRollNo(rollNo);
+      return Promise.resolve(response);
+
+    } else if (method === "addResultByRollNo") {
+      const { data: response } =
+        await serverApis.results.addResultByRollNo(rollNo);
+      return Promise.resolve(response);
+
+    } else if (method === "updateResultByRollNo") {
+      const { data: response } =
+        await serverApis.results.updateResultByRollNo([
+          rollNo,
+          {},
+        ]);
+      return Promise.resolve(response);
+
+    }
+  } catch (err) {
+    console.log(err);
+    return Promise.reject("Failed to fetch result by roll number");
+  }
+}
 
 export function GetResultDiv() {
   const [rollNo, setRollNo] = useState<string>("");
@@ -71,6 +105,7 @@ export function GetResultDiv() {
       } else {
         setResult(null);
       }
+      console.log(`Result fetched using ${method}:`, response.data);
       // If the result is not null, it means we have successfully fetched the result
       toast.success(
         `Result fetched successfully using ${changeCase(method, "camel_to_title")}`
@@ -80,8 +115,6 @@ export function GetResultDiv() {
       toast.error("An unexpected error occurred while fetching the result.");
     } finally {
       setLoading(false);
-      console.log(`Result fetched using ${method}:`, result);
-
     }
   };
   return (
@@ -239,19 +272,23 @@ export function MailResultUpdateDiv() {
     }
     setLoading(true);
     try {
-      toast.promise(sendMailUpdate(
-        targets.split(",").map((email) => email.trim() + orgConfig.mailSuffix)
-      ), {
+      toast.promise(serverApis.mail.sendResultUpdate(
+        {
+          template_key: "result_update",
+          targets: targets.split(",").map((email) => email.trim() + orgConfig.mailSuffix).map((email) => email.toLowerCase()),
+          subject: "Semester Result Notification",
+          payload: {
+            batch: "Academic Year " + (new Date().getFullYear() - 1) + "-" + new Date().getFullYear(),
+          },
+        }), {
         loading: "Sending mail...",
         success: "Mail sent successfully",
         error: (error) => `Failed to send mail: ${error.message || "Unknown error"}`,
-      });
+      }).finally(() => setLoading(false));
       setTargets(""); // Clear the input after successful mail
     } catch (error) {
       console.log("Error sending mail:", error);
       toast.error("An unexpected error occurred while sending the mail.");
-    } finally {
-      setLoading(false);
     }
   };
   return (
@@ -295,7 +332,8 @@ export function AbnormalResultsDiv({ abnormalsResults }: { abnormalsResults: AbN
     <div className="w-full p-3 lg:p-6 bg-card rounded-lg col-span-3">
       <div className=" flex flex-wrap gap-3 justify-between mb-4">
         <h4 className="text-base font-medium mb-4">Abnormal Results</h4>
-        <div className="flex items-center justify-between gap-2">
+        {abnormalsResults.length > 0 && (<div className="flex items-center justify-between gap-2">
+          <LoaderCircleIcon className={`animate-spin ${loading ? "inline-block" : "hidden"}`} />
           <Button
             variant="dark"
             disabled={loading}
@@ -315,11 +353,11 @@ export function AbnormalResultsDiv({ abnormalsResults }: { abnormalsResults: AbN
             Update All
           </Button>
           <Button
-          disabled={loading}
+            disabled={loading}
             variant="ghost"
             onClick={() => {
               // Handle delete all logic here
-              if(!confirm("Are you sure you want to delete all abnormal results? This action cannot be undone.")) {
+              if (!confirm("Are you sure you want to delete all abnormal results? This action cannot be undone.")) {
                 return;
               }
               setLoading(true);
@@ -333,12 +371,15 @@ export function AbnormalResultsDiv({ abnormalsResults }: { abnormalsResults: AbN
               ).finally(() => setLoading(false));
             }}
             size="sm">
-              Delete All
+            Delete All
           </Button>
-        </div>
+        </div>)}
       </div>
       {abnormalsResults.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No abnormal results found</p>
+        <EmptyArea
+          title="No Abnormal Results Found"
+          description="There are no abnormal results to display. Please check back later."
+        />
       ) : (
         <ResponsiveContainer>
           {abnormalsResults.map((result) => (

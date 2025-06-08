@@ -12,6 +12,7 @@ export const UN_PROTECTED_API_ROUTES =
 
 export const PUBLIC_ROUTES = [
     "/",
+    "/unauthorized",
     "/results",
     "/syllabus",
     "/classroom-availability",

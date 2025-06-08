@@ -9,19 +9,8 @@ import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { authClient } from "src/lib/auth-client";
-import * as z from "zod";
-import { orgConfig } from "~/project.config";
 
-const FormSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "Invalid email format" })
-    .min(5, { message: "Email must be at least 5 characters long" })
-    .max(100, { message: "Email cannot exceed 100 characters" })
-    .refine((val) => val.endsWith(orgConfig.mailSuffix), {
-      message: `Email must end with ${orgConfig.mailSuffix}`,
-    }),
-});
+
 
 export default function VerifyEmail() {
   const searchParams = useSearchParams();

@@ -74,6 +74,7 @@ export async function middleware(request: NextRequest) {
           new URL("/unauthorized?target=" + request.url, request.url)
         );
       if (request.method === "POST") {
+        console.log("Unauthorized POST request to:", request.nextUrl.pathname);
         return NextResponse.json(
           {
             status: "error",
@@ -94,6 +95,8 @@ export async function middleware(request: NextRequest) {
       }
     }
     if (matchedRole && authCheck.redirect?.destination) {
+      console.log("Redirecting to:", authCheck.redirect.destination);
+      // if the user is authenticated and tries to access a protected route, redirect them to the appropriate page
       return NextResponse.redirect(
         new URL(authCheck.redirect.destination, request.url)
       );

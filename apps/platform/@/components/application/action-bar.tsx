@@ -34,12 +34,10 @@ export function ActionBar({
         error: (msg: string | undefined) => {
           return msg || "An error occurred while taking action";
         },
-      });
+      }).finally(() => setLoading(false));
     } catch (err) {
       console.error(err);
       toast.error("An error occurred while taking action");
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -48,7 +46,7 @@ export function ActionBar({
       className={cn("grid grid-cols-1 gap-1.5 justify-items-end", className)}
     >
       <h5 className="text-base font-medium">{title}</h5>
-      <p className="text-sm text-muted-foreground">{description}</p>
+      <p className="text-sm text-muted-foreground text-left">{description}</p>
       <Button {...btnProps} disabled={loading} onClick={handleAction}>
         {loading ? (
           <>

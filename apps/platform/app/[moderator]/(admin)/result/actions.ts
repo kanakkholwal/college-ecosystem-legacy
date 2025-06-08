@@ -53,7 +53,7 @@ export async function getBasicInfo() {
 
 export async function assignRank() {
   try {
-    const { data: response } = await serverApis.results.assignRank();
+    const { data: response } = await serverApis.results.assignRank(undefined);
     if (response?.error) {
       console.log(response)
       return Promise.reject(response.message || "Failed to assign rank");
@@ -105,7 +105,7 @@ export async function sendMailUpdate(targets: string[]) {
 
 export async function assignBranchChange() {
   try {
-    await serverApis.results.assignBranchChange();
+    await serverApis.results.assignBranchChange(undefined);
     return Promise.resolve("Branch change fixed successfully");
   } catch (err) {
     console.error(err);
@@ -114,7 +114,7 @@ export async function assignBranchChange() {
 }
 export async function getAbnormalResults() {
   try {
-    const { data: response } = await serverApis.results.getAbnormalResults();
+    const { data: response } = await serverApis.results.getAbnormalResults(undefined);
     if (response?.error) {
       console.error(response);
       return Promise.reject(response.message || "Failed to fetch abnormal results");
@@ -135,14 +135,15 @@ const availableMethods = [
   "getResultByRollNo",
   "addResultByRollNo",
   "updateResultByRollNo",
-]  as const;
+] as const;
 
-export async function getResultByRollNo(rollNo: string, method:  typeof availableMethods[number]) {
+export async function getResultByRollNo(rollNo: string, method: typeof availableMethods[number]) {
   try {
     if (method === "getResultByRollNoFromSite") {
-      const { data: response } =
+      const res =
         await serverApis.results.getResultByRollNoFromSite(rollNo);
-      return Promise.resolve(response);
+      console.log("Response from getResultByRollNoFromSite:", res);
+      return Promise.resolve(res.data);
     } else if (method === "getResultByRollNo") {
       const { data: response } =
         await serverApis.results.getResultByRollNo(rollNo);

@@ -58,3 +58,15 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error, data: null }, { status: 500, headers: corsHeaders });
   }
 }
+
+export async function OPTIONS() {
+  return new NextResponse(null, {
+    status: 204,
+    headers: {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type,Authorization",
+      "Access-Control-Allow-Credentials": "true",
+    },
+  });
+}

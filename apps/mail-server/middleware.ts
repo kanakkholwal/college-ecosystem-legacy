@@ -5,6 +5,7 @@ import { appConfig } from "./project.config";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Credentials": "true",
   "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
   "Access-Control-Allow-Headers":
     "Content-Type,X-Authorization,X-Identity-Key, Authorization, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version",
@@ -12,9 +13,14 @@ const corsHeaders = {
 };
 
 export async function middleware(request: NextRequest) {
-  
+
 
   if (request.nextUrl.pathname.startsWith("/api")) {
+    const newHeaders = new Headers(request.headers)
+    // Set CORS headers for all non-API requests
+    Object.entries(corsHeaders).forEach(([key, value]) => {
+      newHeaders.set(key, value);
+    });
     const headers = request.headers.get("X-Authorization") || "";
     if (headers !== process.env.SERVER_IDENTITY) {
       return NextResponse.json(
@@ -22,13 +28,17 @@ export async function middleware(request: NextRequest) {
           error: "Missing or invalid SERVER_IDENTITY",
           data: null,
         },
-        { status: 403, headers: corsHeaders }
+        { status: 403, headers: newHeaders }
       );
     }
-    return NextResponse.next();
+    return NextResponse.next({
+      request: {
+        // New request headers
+        headers: newHeaders,
+      },
+    })
   }
-  
-  // If the request is not for an API route, redirect to the appConfig URL
+
   return NextResponse.redirect(
     appConfig.url + "?utm_source=mail-server-middleware"
   )
