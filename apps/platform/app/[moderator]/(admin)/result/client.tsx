@@ -28,6 +28,7 @@ import type {
 } from "~/lib/server-apis/types";
 import { orgConfig } from "~/project.config";
 import { changeCase } from "~/utils/string";
+import { sendMailUpdate } from "./actions";
 
 const availableMethods = [
   "getResultByRollNoFromSite",
@@ -272,15 +273,8 @@ export function MailResultUpdateDiv() {
     }
     setLoading(true);
     try {
-      toast.promise(serverApis.mail.sendResultUpdate(
-        {
-          template_key: "result_update",
-          targets: targets.split(",").map((email) => email.trim() + orgConfig.mailSuffix).map((email) => email.toLowerCase()),
-          subject: "Semester Result Notification",
-          payload: {
-            batch: "Academic Year " + (new Date().getFullYear() - 1) + "-" + new Date().getFullYear(),
-          },
-        }), {
+      toast.promise(sendMailUpdate(targets.split(",").map((email) => email.trim() + orgConfig.mailSuffix)
+      .map((email) => email.toLowerCase())), {
         loading: "Sending mail...",
         success: "Mail sent successfully",
         error: (error) => `Failed to send mail: ${error.message || "Unknown error"}`,
