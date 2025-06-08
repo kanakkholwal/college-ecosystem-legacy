@@ -28,6 +28,32 @@ export async function getResults(
   new_cache?: boolean
 ): Promise<getResultsReturnType> {
   try {
+    // Try Redis GET
+
+    const cacheKey = `results_${query}_${currentPage}${filter ? `_${JSON.stringify(Object.entries(filter).sort())}` : ""}`;
+
+    let cachedResults: getResultsReturnType | null = null;
+    if (!new_cache) {
+      try {
+        const cachedData = await redis.get(cacheKey);
+        if (cachedData) {
+          console.log("Cache hit for key:", cacheKey);
+          cachedResults = JSON.parse(cachedData) as getResultsReturnType;
+        }
+      } catch (redisGetErr) {
+        console.log("Redis GET error:", redisGetErr);
+      }
+    } else {
+      try {
+        await redis.del(cacheKey);
+      } catch (redisDelErr) {
+        console.log("Redis DEL error:", redisDelErr);
+      }
+    }
+
+    if (cachedResults) {
+      return cachedResults;
+    }
     await dbConnect();
     const resultsPerPage = filter?.limit || 32;
     const skip = currentPage * resultsPerPage - resultsPerPage;
@@ -52,33 +78,8 @@ export async function getResults(
       filterQuery.batch = filter.batch;
     }
 
-    const cacheKey = `results_${query}_${currentPage}${filter ? `_${JSON.stringify(filter)}` : ""
-      }`;
 
-    let cachedResults: getResultsReturnType | null = null;
 
-    // Try Redis GET
-    if (!new_cache) {
-      try {
-        const cachedData = await redis.get(cacheKey);
-        if (cachedData) {
-          console.log("Cache hit for key:", cacheKey);
-          cachedResults = JSON.parse(cachedData) as getResultsReturnType;
-        }
-      } catch (redisGetErr) {
-        console.log("Redis GET error:", redisGetErr);
-      }
-    } else {
-      try {
-        await redis.del(cacheKey);
-      } catch (redisDelErr) {
-        console.log("Redis DEL error:", redisDelErr);
-      }
-    }
-
-    if (cachedResults) {
-      return cachedResults;
-    }
 
     const results = await ResultModel.find({
       ...filterQuery,
@@ -162,7 +163,7 @@ export async function getCachedLabels(
           "EX",
           60 * 60 * 24 * 30 * 6 // 6 months
         );
-        console.log("Cached labels set successfully");  
+        console.log("Cached labels set successfully");
       } catch (redisSetErr) {
         console.log("Redis SET error:", redisSetErr);
       }
@@ -186,7 +187,7 @@ export async function getResultByRollNo(
 ): Promise<ResultTypeWithId | null> {
 
   const cacheKey = `result_${rollNo}`;
-  try{
+  try {
     let cachedResult: ResultTypeWithId | null = null;
     if (!is_new && !update) {
       try {
@@ -242,19 +243,19 @@ export async function getResultByRollNo(
     }
     await assignRanks();
 
-    
+
     return JSON.parse(JSON.stringify(response.data.data));
   }
   // cache the result
   try {
-      await redis.set(
-        cacheKey,
-        JSON.stringify(result),
-        "EX",
-        60 * 15 // 15 minutes
-      );
-      console.log("Result cached successfully for rollNo:", rollNo);
-    } catch (redisSetErr) {
+    await redis.set(
+      cacheKey,
+      JSON.stringify(result),
+      "EX",
+      60 * 15 // 15 minutes
+    );
+    console.log("Result cached successfully for rollNo:", rollNo);
+  } catch (redisSetErr) {
     console.log("Redis SET error:", redisSetErr);
   }
 
