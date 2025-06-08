@@ -11,9 +11,10 @@ export const appConfig = {
   // appDomain: "college-ecosystem.vercel.app",
   // url: "https://college-ecosystem.vercel.app",
   description:
-    "A platform for students, faculty, and staff to interact and collaborate.",
+    "Un-Official platform of NITH for students, faculty, and staff to collaborate. Manage campus activities, share resources, and connect with the college community.",
   keywords:
-    "college, ecosystem, platform, students, faculty, staff, interact, collaborate",
+    "NITH campus portal, college management system, student portal, faculty collaboration, academic platform, campus resources, " +
+    "NITH Hamirpur, college ecosystem, university platform, student management",
   creator: "Kanak Kholwal",
   authors: [
     { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" },
@@ -27,6 +28,7 @@ export const appConfig = {
     instagram: "https://instagram.com/kanakkholwal",
     github: "https://github.com/kanakkholwal",
   },
+  
   contact: "https://forms.gle/PXbaDm9waeJWYWUP8",
 };
 
@@ -36,6 +38,18 @@ export const orgConfig = {
   domain: "nith.ac.in",
   website: "https://nith.ac.in",
   mailSuffix: "@nith.ac.in",
+  jsonLds:{
+    EducationalOrganization: {
+      "@type": "EducationalOrganization",
+      name: "National Institute of Technology, Hamirpur",
+      url: "https://nith.ac.in",
+      logo: "https://nith.ac.in/uploads/settings/15795036012617.png",
+      sameAs: [
+        "https://www.facebook.com/NITHamirpur",
+        "https://twitter.com/NITHamirpurHP",
+      ],
+    },
+  }
 } as const;
 
 

@@ -2,34 +2,34 @@ import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
-import { appConfig } from "~/project.config";
+import { appConfig, orgConfig } from "~/project.config";
 import { Provider } from "./client-provider";
 import "./globals.css";
 
+
+
 export const metadata: Metadata = {
   title: {
-    default: appConfig.name,
-    template: `%s - ${appConfig.name}`,
+    default: `${appConfig.name} | ${orgConfig.name}`,
+    template: `%s | ${appConfig.name} - ${orgConfig.shortName}`,
   },
   description: appConfig.description,
   applicationName: appConfig.name,
   authors: appConfig.authors,
   creator: appConfig.creator,
-  keywords: appConfig.keywords,
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
+  keywords: appConfig.keywords + ", " + orgConfig.shortName + ", " + orgConfig.name,
   metadataBase: new URL(appConfig.url),
+  alternates: {
+    canonical: '/',
+  },
   robots: {
-    index: false,
+    index: true, // Changed to allow indexing
     follow: true,
     nocache: true,
     googleBot: {
       index: true,
-      follow: false,
-      noimageindex: true,
+      follow: true, // Enabled for better crawling
+      noimageindex: false, // Allow image indexing
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
@@ -40,30 +40,33 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: appConfig.url,
-    title: appConfig.name,
+    title: `${appConfig.name} | ${orgConfig.name}`,
     description: appConfig.description,
     siteName: appConfig.name,
     images: [
       {
-        url: appConfig.logo,
+        url: new URL(appConfig.logo, appConfig.url).toString(),
         width: 1200,
         height: 630,
-        alt: appConfig.name,
+        alt: `${appConfig.name} - ${orgConfig.shortName}`,
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: appConfig.name,
+    title: `${appConfig.name} | ${orgConfig.shortName}`,
     description: appConfig.description,
-    images: [appConfig.logo],
+    images: [new URL(appConfig.logo, appConfig.url).toString()],
     creator: "@kanakkholwal",
+    site: "@kanakkholwal",
   },
   icons: {
     icon: "/favicon.ico",
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
+
+
 };
 
 const fontSans = FontSans({
@@ -75,10 +78,17 @@ type RootLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
 
+
+
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgConfig.jsonLds.EducationalOrganization) }}
+        />
+      </head>
       <body
         className={cn(
           "min-h-screen min-w-screen w-full antialiased",
@@ -89,6 +99,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         {process.env.NODE_ENV === "production" && (
           <GoogleAnalytics gaId="G-SC4TQQ5PCW" />
         )}
+
       </body>
     </html>
   );
