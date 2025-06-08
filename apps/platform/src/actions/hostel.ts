@@ -455,7 +455,7 @@ export async function getHostels(): Promise<{
 
 export async function importHostelsFromSite() {
   try {
-    const res = await serverApis.hostels.getAll();
+    const res = await serverApis.hostels.getAll(undefined);
     console.log(res);
     const response = res.data;
     if (res?.error || response?.error || !response?.data) {
@@ -464,7 +464,7 @@ export async function importHostelsFromSite() {
       );
     }
     await dbConnect();
-    const hostels = response?.data?.hostels.map((hostel) => {
+    const hostels = response?.data?.hostels.map((hostel:any) => {
       return {
         name: hostel.name,
         slug: hostel.slug,
