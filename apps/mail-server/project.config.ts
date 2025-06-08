@@ -23,7 +23,7 @@ export const appConfig = {
   // sender email
   senderEmail: `platform@nith.eu.org`,
   sender: `College Platform <platform@nith.eu.org>`,
-
+  contact:"https://forms.gle/PXbaDm9waeJWYWUP8",
   
 } as const;
 

@@ -47,7 +47,7 @@ export function ResultUpdateEmail({ payload }: { payload: EmailPayload }) {
       <Hr className="border border-solid border-border my-[26px] mx-0 w-full" />
       <Text className="text-muted-foreground text-[8px] leading-[10px]">
         This is an automated email from the {appConfig.name}. If you have any questions, please contact us at{" "}
-        <Link href={`${appConfig.url}/p/contact`} className="text-brand no-underline">
+        <Link href={appConfig.contact} className="text-brand no-underline">
           Contact
         </Link>
       </Text>

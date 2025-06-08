@@ -27,7 +27,8 @@ export const appConfig = {
     instagram: "https://instagram.com/kanakkholwal",
     github: "https://github.com/kanakkholwal",
   },
-} ;
+  contact: "https://forms.gle/PXbaDm9waeJWYWUP8",
+};
 
 export const orgConfig = {
   name: "National Institute of Technology, Hamirpur",
@@ -47,6 +48,10 @@ export const supportLinks = [
   {
     href: appConfig.githubRepo + "/issues",
     title: "Report an issue",
+  },
+  {
+    href: appConfig.contact,
+    title: "Contact us",
   },
   {
     href: "https://forms.gle/u2ptK12iRVdn5oXF7",
