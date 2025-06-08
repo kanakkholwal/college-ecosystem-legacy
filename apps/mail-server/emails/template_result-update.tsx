@@ -14,39 +14,40 @@ import {
 
 export function ResultUpdateEmail({ payload }: { payload: EmailPayload }) {
   const batch = payload.batch as string;
+  
   const previewText = "Semester Result Notification";
 
   return (
     <>
       <Preview>{previewText}</Preview>
-      <Heading className="text-black text-[24px] font-normal text-center p-0 my-[30px] mx-0">
+      <Heading className="text-black text-[16px] font-medium text-center p-0 my-[30px] mx-auto">
         Semester Result Notification
       </Heading>
-      <Text className="text-black text-[14px] leading-[24px]">
+      <Text className="text-black text-[10px] leading-[16px]">
           Hi students of <strong>{batch}</strong> batch,
       </Text>
-      <Text className="text-black text-[14px] leading-[24px]">
+      <Text className="text-black text-[10px] leading-[16px]">
         Your semester results have been released. You can view your results with ranking
         by clicking the button below.
       </Text>
-      <Section className="text-center mt-[32px] mb-[32px]">
+      <Section className="text-center my-[32px]">
         <Button
-          className="bg-[#000000] rounded text-white text-[12px] font-semibold no-underline text-center px-5 py-3"
+          className="bg-brand rounded text-white text-[10px] font-semibold no-underline text-center px-5 py-3"
           href={`${appConfig.url}/results`}
         >
           View Results
         </Button>
       </Section>
-      <Text className="text-black text-[14px] leading-[24px]">
+      <Text className="text-black text-[10px] leading-[16px]">
         or copy and paste this URL into your browser:{" "}
-        <Link href={`${appConfig.url}/results`} className="text-blue-600 no-underline">
+        <Link href={`${appConfig.url}/results`} className="text-brand no-underline">
           {`${appConfig.url}/results`}
         </Link>
       </Text>
-      <Hr className="border border-solid border-[#eaeaea] my-[26px] mx-0 w-full" />
-      <Text className="text-[#666666] text-[12px] leading-[24px]">
+      <Hr className="border border-solid border-border my-[26px] mx-0 w-full" />
+      <Text className="text-muted-foreground text-[8px] leading-[10px]">
         This is an automated email from the {appConfig.name}. If you have any questions, please contact us at{" "}
-        <Link href={`${appConfig.url}/contact`} className="text-blue-600 no-underline">
+        <Link href={`${appConfig.url}/p/contact`} className="text-brand no-underline">
           Contact
         </Link>
       </Text>

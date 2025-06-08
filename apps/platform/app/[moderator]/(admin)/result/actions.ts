@@ -83,7 +83,7 @@ export async function sendMailUpdate(targets: string[]) {
         targets: validTargets.map((email) => email.toLowerCase()),
         subject: "Semester Result Notification",
         payload: {
-          batch: "Academic Year " + new Date().getFullYear(),
+          batch: "Academic Year " + (new Date().getFullYear() - 1) + "-" + new Date().getFullYear(),
         },
       }),
     });
