@@ -1,8 +1,8 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import { scrapeAndSaveResult } from "../lib/result_utils";
 import { getDepartmentCoursePrefix, isValidRollNumber } from "../constants/departments";
 import { pipelines } from "../constants/pipelines";
+import { scrapeAndSaveResult } from "../lib/result_utils";
 import { getInfoFromRollNo, scrapeResult } from "../lib/scrape";
 import ResultModel from "../models/result";
 import { rawResultSchema } from "../types/result";
@@ -162,8 +162,6 @@ export const deleteResult = async (req: Request, res: Response) => {
 export const getAbnormalResults = async (req: Request, res: Response) => {
   try {
     await dbConnect();
-
-
     // Execute the aggregation pipeline
     const results = await ResultModel.aggregate(pipelines["abnormal-results"]);
     res.status(200).json({
@@ -184,8 +182,6 @@ export const getAbnormalResults = async (req: Request, res: Response) => {
 export const deleteAbNormalResults = async (req: Request, res: Response) => {
   try {
     await dbConnect();
-
-
     // Execute the aggregation pipeline
     const results = await ResultModel.aggregate(pipelines["abnormal-results"]);
     if (results.length === 0) {
@@ -200,20 +196,17 @@ export const deleteAbNormalResults = async (req: Request, res: Response) => {
     const deleteResult = await ResultModel.deleteMany({
       _id: { $in: abnormalIds },
     });
-    if (deleteResult.deletedCount === 0) {
-      res.status(404).json({
-        error: true,
-        message: "No abnormal results found to delete",
-        data: null,
-      });
-      return;
-    }
+
     console.log(`Deleted ${deleteResult.deletedCount} abnormal results`);
     // Return the deleted results
     res.status(200).json({
       error: false,
       message: `Deleted ${deleteResult.deletedCount} abnormal results`,
-      data: results,
+      data: {
+        deletedCount: deleteResult.deletedCount,
+        acknowledged: deleteResult.acknowledged,
+        abnormalIds: abnormalIds,
+      },
     });
   }
   catch (error) {
@@ -236,13 +229,17 @@ export const bulkUpdateResults = async (req: Request, res: Response) => {
         error: true,
         message: "No valid roll numbers provided",
         data: null,
-      }); return
+      });
+      return;
     }
     const BATCH_SIZE = 8;
     const result = {
       total: validatedRollNos.length,
       updated: 0,
-      errors: [] as string[],
+      errors: [] as {
+        rollNo: string;
+        error: string;
+      }[],
     }
     for (let i = 0; i < validatedRollNos.length; i += BATCH_SIZE) {
       const batch = validatedRollNos.slice(i, i + BATCH_SIZE);
@@ -253,7 +250,10 @@ export const bulkUpdateResults = async (req: Request, res: Response) => {
         if (res.status === "fulfilled") {
           result.updated += 1;
         } else {
-          result.errors.push(res.reason ? res.reason : "Unknown error");
+          result.errors.push({
+            rollNo: batch[results.indexOf(res)],
+            error: res.reason ? res.reason : "Unknown error",
+          });
         }
       });
     }
@@ -298,7 +298,7 @@ export const bulkDeleteResults = async (req: Request, res: Response) => {
       data: {
         deletedCount: result.deletedCount,
         acknowledged: result.acknowledged,
-        rollNos: validatedRollNos,
+        identifiers: validatedRollNos,
       },
     });
     return
@@ -321,14 +321,17 @@ export const assignRankToResults = async (req: Request, res: Response) => {
     const resultsWithRanks = await ResultModel.aggregate(pipelines["assign-rank"])
       .allowDiskUse(true)
 
+    const bulkUpdates = resultsWithRanks.map((result) => {
+      const { _id, rank } = result;
 
-
-    await Promise.all(
-      resultsWithRanks.map(async (result) => {
-        const { _id, rank } = result;
-        await ResultModel.findByIdAndUpdate(_id, { rank });
-      })
-    );
+      return {
+        updateOne: {
+          filter: { _id },
+          update: { rank }, // Assign rank starting from 1
+        },
+      };
+    });
+    const bulkWriteResult = await ResultModel.bulkWrite(bulkUpdates);
 
     res.status(200).json({
       error: false,
@@ -336,6 +339,10 @@ export const assignRankToResults = async (req: Request, res: Response) => {
       data: {
         timeTaken: `${(new Date().getTime() - time.getTime()) / 1000}s`,
         lastUpdated: new Date().toISOString(),
+        success: bulkWriteResult.ok,
+        modifiedCount: bulkWriteResult.modifiedCount,
+        matchedCount: bulkWriteResult.matchedCount,
+        failed:bulkWriteResult.getWriteErrors ? bulkWriteResult.getWriteErrors() : [],
       },
     });
   } catch (error) {
@@ -357,43 +364,8 @@ export const assignBranchChangeToResults = async (
     await dbConnect();
 
     // Aggregation pipeline to handle processing in MongoDB
-    const pipeline = [
-      {
-        $project: {
-          _id: 1,
-          rollNo: 1,
-          branch: 1,
-          semesters: { $slice: ["$semesters", 2, { $size: "$semesters" }] },
-        },
-      },
-      {
-        $addFields: {
-          courseCodes: {
-            $reduce: {
-              input: "$semesters",
-              initialValue: [],
-              in: { $concatArrays: ["$$value", "$$this.courses.code"] },
-            },
-          },
-        },
-      },
-      {
-        $addFields: {
-          uniquePrefixes: {
-            $map: {
-              input: { $setUnion: "$courseCodes" },
-              as: "code",
-              in: { $toUpper: { $split: ["$$code", "-"][0] } },
-            },
-          },
-        },
-      },
-      {
-        $unset: ["semesters", "courseCodes"], // Remove intermediate fields to avoid schema changes
-      },
-    ];
-
-    const results = await ResultModel.aggregate(pipeline);
+    const results = await ResultModel.aggregate(pipelines["assign-branch-change"])
+      .allowDiskUse(true);
 
     // Prepare bulk operations
     const bulkOperations = results.map((result) => {

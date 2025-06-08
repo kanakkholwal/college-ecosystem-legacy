@@ -61,6 +61,7 @@ export type Department = {
   page: string;
 };
 
+
 /*
  **  APIs Payload types
  */
@@ -68,6 +69,7 @@ export type Department = {
 export type deleteResponseType = {
   acknowledged: boolean;
   deletedCount: number;
+  identifiers?: string[];
 };
 export type ApiResponse<T> = {
   error: boolean;
@@ -115,15 +117,22 @@ export type APITypes = {
     };
     deleteAbNormalResults: {
       payload: undefined;
-      response: Record<string, string>;
+      response: deleteResponseType;
     };
     bulkUpdateResults: {
       payload: z.infer<typeof rollNoSchema>[];
-      response: Record<string, string>;
+      response: {
+        total: number;
+        updated: number;
+        errors: {
+          rollNo: z.infer<typeof rollNoSchema>;
+          error: string;
+        }[];
+      };
     };
     bulkDeleteResults: {
       payload: z.infer<typeof rollNoSchema>[];
-      response: Record<string, string>;
+      response: deleteResponseType;
     };
   };
   hostels: {

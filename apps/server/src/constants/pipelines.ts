@@ -93,7 +93,44 @@ const abnormalResults: PipelineStage[] = [
         },
     },
 ]
+
+const assignBranchChange: PipelineStage[] = [
+      {
+        $project: {
+          _id: 1,
+          rollNo: 1,
+          branch: 1,
+          semesters: { $slice: ["$semesters", 2, { $size: "$semesters" }] },
+        },
+      },
+      {
+        $addFields: {
+          courseCodes: {
+            $reduce: {
+              input: "$semesters",
+              initialValue: [],
+              in: { $concatArrays: ["$$value", "$$this.courses.code"] },
+            },
+          },
+        },
+      },
+      {
+        $addFields: {
+          uniquePrefixes: {
+            $map: {
+              input: { $setUnion: "$courseCodes" },
+              as: "code",
+              in: { $toUpper: { $split: ["$$code", "-"][0] } },
+            },
+          },
+        },
+      },
+      {
+        $unset: ["semesters", "courseCodes"], // Remove intermediate fields to avoid schema changes
+      },
+]
 export const pipelines = {
     "abnormal-results": abnormalResults,
     "assign-rank": assignRank,
+    "assign-branch-change": assignBranchChange,
 } as const;
