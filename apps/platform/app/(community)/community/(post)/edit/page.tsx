@@ -43,7 +43,6 @@ export default async function CommunityPostEditPage(props: Props) {
     );
   }
 
-  if (!post) return notFound();
   // console.log(post);
   return (
     <main className="md:col-span-3 space-y-4 pr-2">

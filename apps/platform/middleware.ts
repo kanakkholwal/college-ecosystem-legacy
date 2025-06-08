@@ -2,13 +2,12 @@ import { betterFetch } from "@better-fetch/fetch";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import type { Session } from "~/lib/auth";
-import { checkAuthorization, dashboardRoutes, PUBLIC_ROUTES, publicRouteHandleAbsolute, SIGN_IN_PATH, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
+import { checkAuthorization, dashboardRoutes, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
 
 export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
   const pathname = request.nextUrl.pathname;
-  const isPublicRoute = PUBLIC_ROUTES.some((route) => publicRouteHandleAbsolute(route, pathname));
-  const requiresAuth = !isPublicRoute;
+  const isPrivateRoute = PRIVATE_ROUTES.some((route) => isRouteAllowed(pathname, route.pattern));
 
   // if the request is for the sign-in page, allow it to pass through
   const { data: session } = await betterFetch<Session>(
@@ -21,86 +20,73 @@ export async function middleware(request: NextRequest) {
       },
     }
   );
-  if (requiresAuth && !session) {
+  // console.log("Private route accessed:", isPrivateRoute, pathname);
+  if (isPrivateRoute) {
+    // console.log("Private route accessed:", pathname);
+    if (session && !UN_PROTECTED_API_ROUTES.some((route) =>
+      new RegExp(route.replace(/\*/g, ".*")).test(request.nextUrl.pathname)
+    )) {
+      // if the user is authenticated and tries to access a private route, allow it to pass through
+      const protectedPaths = dashboardRoutes.map((role) => `/${role.toLowerCase()}`);
+      const matchedRole = protectedPaths.find((path) =>
+        request.nextUrl.pathname.toLowerCase().startsWith(path)
+      )?.slice(1) as (typeof dashboardRoutes)[number];
+      const authCheck = checkAuthorization(matchedRole, session);
 
-    // if the user is not authenticated and tries to access a page other than the sign-in page, redirect them to the sign-in page
+      if (!authCheck.authorized) {
+        if (request.method === "GET") {
+          return NextResponse.redirect(
+            new URL("/unauthorized?target=" + request.url, request.url)
+          );
+        }
+        if (request.method === "POST") {
+          console.log("Unauthorized POST request to:", request.nextUrl.pathname);
+          return NextResponse.json(
+            {
+              status: "error",
+              message: "You are not authorized to perform this action",
+              data: null,
+            },
+            {
+              status: 403,
+              headers: {
+                "Un-Authorized-Redirect": "true",
+                "Un-Authorized-Redirect-Path": SIGN_IN_PATH,
+                "Un-Authorized-Redirect-Next": request.nextUrl.href,
+                "Un-Authorized-Redirect-Method": request.method,
+                "Un-Authorized-Redirect-max-tries": "5",
+                "Un-Authorized-Redirect-tries": "1",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+        }
+      }
+      if (authCheck.redirect?.destination) {
+        console.log("Redirecting to:", authCheck.redirect.destination);
+        // if the user is authenticated and tries to access a protected route, redirect them to the appropriate page
+        return NextResponse.redirect(
+          new URL(authCheck.redirect.destination, request.url)
+        );
+      }
+      // Special redirect: /dashboard -> /<first-role>
+      if (request.nextUrl.pathname.startsWith("/dashboard")) {
+        return NextResponse.redirect(
+          new URL(
+            request.nextUrl.pathname.replace(
+              "/dashboard",
+              session?.user.other_roles[0]
+            ),
+            request.url
+          )
+        );
+      }
+      return NextResponse.next();
+    }
+    // if the user is not authenticated and tries to access a private route, redirect them to the sign-in page
     url.pathname = SIGN_IN_PATH;
     url.searchParams.set("next", request.url);
     return NextResponse.redirect(url);
-  }
-  if (session &&
-    request.nextUrl.pathname === SIGN_IN_PATH &&
-    request.nextUrl.searchParams.get("tab") !== "reset-password" &&
-    !request.nextUrl.searchParams.get("token")?.trim()
-  ) {
-    url.pathname = "/";
-    return NextResponse.redirect(url);
-  }
-  // Special redirect: /dashboard -> /<first-role>
-  if (request.nextUrl.pathname.startsWith("/dashboard") && session) {
-    return NextResponse.redirect(
-      new URL(
-        request.nextUrl.pathname.replace(
-          "/dashboard",
-          session?.user.other_roles[0]
-        ),
-        request.url
-      )
-    );
-  }
-  // Now handle dashboard-like role-based paths
-  const protectedPaths = dashboardRoutes.map((role) => `/${role.toLowerCase()}`);
-  const matchedRole = protectedPaths.find((path) =>
-    request.nextUrl.pathname.toLowerCase().startsWith(path)
-  )?.slice(1) as (typeof dashboardRoutes)[number];
-  const authCheck = checkAuthorization(matchedRole, session);
-
-  if (
-    request.method === "GET" || request.method === "POST" ||
-    request.nextUrl.pathname.startsWith("/api")) {
-
-    console.log("Checking authorization for path:", request.nextUrl.pathname);
-    if (
-      UN_PROTECTED_API_ROUTES.some((route) =>
-        new RegExp(route.replace(/\*/g, ".*")).test(request.nextUrl.pathname)
-      )
-    ) {
-      return NextResponse.next();
-    }
-    // if the user is authenticated and tries to access a protected route, check if they are authorized
-    if (!authCheck.authorized) {
-      if (request.method === "GET") 
-        return NextResponse.redirect(
-          new URL("/unauthorized?target=" + request.url, request.url)
-        );
-      if (request.method === "POST") {
-        console.log("Unauthorized POST request to:", request.nextUrl.pathname);
-        return NextResponse.json(
-          {
-            status: "error",
-            message: "You are not authorized to perform this action",
-          },
-          {
-            status: 403,
-            headers: {
-              "Un-Authorized-Redirect": "true",
-              "Un-Authorized-Redirect-Path": SIGN_IN_PATH,
-              "Un-Authorized-Redirect-Next": request.nextUrl.href,
-              "Un-Authorized-Redirect-Method": request.method,
-              "Un-Authorized-Redirect-max-tries": "5",
-              "Un-Authorized-Redirect-tries": "1",
-            },
-          }
-        );
-      }
-    }
-    if (matchedRole && authCheck.redirect?.destination) {
-      console.log("Redirecting to:", authCheck.redirect.destination);
-      // if the user is authenticated and tries to access a protected route, redirect them to the appropriate page
-      return NextResponse.redirect(
-        new URL(authCheck.redirect.destination, request.url)
-      );
-    }
   }
 
 

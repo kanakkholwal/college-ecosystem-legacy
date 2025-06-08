@@ -61,10 +61,9 @@ export function ButtonLink({ href, children, ...props }: React.ComponentProps<ty
 export function AuthButtonLink({ href, authorized, children, ...props }: React.ComponentProps<typeof Button> & React.ComponentProps<typeof Link> & {
     authorized?: boolean;
 }) {
-    const pathname = usePathname();
     return (
         <Button asChild {...props}>
-            <Link href={authorized ? href : `/sign-in?next=${pathname}`}>
+            <Link href={authorized ? href : `/sign-in?next=${href}`}>
                 {children}
             </Link>
         </Button>

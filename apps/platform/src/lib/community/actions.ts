@@ -69,7 +69,7 @@ export async function getPostById(
 ): Promise<CommunityPostTypeWithId | null> {
   try {
     await dbConnect();
-    const postExists = await CommunityPost.exists({ _id: id });
+    const postExists = await CommunityPost.findById(id);
     if (!postExists) {
       return Promise.resolve(null);
     }

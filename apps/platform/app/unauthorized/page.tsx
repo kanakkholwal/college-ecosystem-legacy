@@ -29,7 +29,7 @@ export default function NotAuthorized() {
           priority
         />
         <div className="flex mx-auto gap-4">
-          <PreviousPageLink size="sm" />
+          <PreviousPageLink  />
           <ButtonLink
             rounded="full"
             variant="dark"

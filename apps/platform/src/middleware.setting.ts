@@ -5,36 +5,59 @@ import type { Session } from "~/lib/auth";
 
 export const SIGN_IN_PATH = "/sign-in";
 
-export const UN_PROTECTED_API_ROUTES =
-    [
-        "/api/auth/*",
-    ];
+export const UN_PROTECTED_API_ROUTES = [
+    "/api/auth/*",
+];
 
-export const PUBLIC_ROUTES = [
-    "/",
-    "/unauthorized",
+export type RoutePattern = string | RegExp;
+
+export const toRegex = (route: RoutePattern): RegExp => {
+  if (route instanceof RegExp) return route;
+  if (route === "/") return /^\/?$/; // Special case for root
+
+  const parts = route
+    .split("/")
+    .filter(part => part !== ""); // Remove empty parts
+
+  if (parts.length === 0) return /^\/?$/; // Handle cases like empty string
+
+  const regexStr = parts
+    .map(part => {
+      if (part === "*") return ".*";
+      if (part.startsWith(":")) return "[a-z0-9-_]+";
+      return part.replace(/[-[\]{}()+?.,\\^$|#\s]/g, "\\$&");
+    })
+    .join("\\/");
+
+  return new RegExp(`^\\/${regexStr}\\/?$`, "i");
+};
+
+// Define public routes more cleanly
+const RAW_PUBLIC_ROUTES: RoutePattern[] = [
+    "/",                          // home
     "/results",
+    "/results/:roll",
     "/syllabus",
+    "/syllabus/:branch",
     "/classroom-availability",
+    "/academic-calendar",
     "/schedules",
+    "/schedules/:branch",
+    "/schedules/:branch/:year/:semester",
+    "/schedules/:branch/:year/:semester/:section",
     "/announcements",
     "/polls",
-    "/community",
+    "/unauthorized",
+    "/community/:postId"
 ];
-//export const PUBLIC_ROUTES: { pattern: RegExp }[] = [
-//   { pattern: /^\/$/ },                              // home
-//   { pattern: /^\/results\/[a-z0-9]+$/i },           // /results/21bcs123
-//   { pattern: /^\/syllabus\/[a-z0-9-_]+$/i },         // /syllabus/cse-3
-//   { pattern: /^\/classroom-availability\/?$/ },     // allow only main route
-//   { pattern: /^\/schedules\/?$/ },
-//   { pattern: /^\/announcements\/?$/ },
-//   { pattern: /^\/polls\/?$/ },
-//   { pattern: /^\/community\/[a-z0-9-]+$/i },        // post view, like /community/some-post
-// ];
 
-export const publicRouteHandleRegex = (({ pattern }, pathname: string) =>
-    pattern.test(pathname)) as (route: { pattern: RegExp }, pathname: string) => boolean;
+export const PUBLIC_ROUTES = RAW_PUBLIC_ROUTES.map((route) => ({
+    pattern: toRegex(route),
+}));
 
+export const isRouteAllowed = (pathname: string,pathRegex: RegExp) => {
+    return pathRegex.test(pathname);
+};
 export const publicRouteHandleAbsolute = (route: string, pathname: string) => {
     // exact match
     if (pathname === route) return true;
@@ -66,6 +89,24 @@ export const dashboardRoutes = [
     ROLES.LIBRARIAN,
     ROLES.STUDENT,
 ];
+
+export type DashboardRoute = (typeof dashboardRoutes)[number];
+
+export const RAW_PRIVATE_ROUTES: RoutePattern[] = [
+    ...dashboardRoutes.map(role => `/${role.toLowerCase()}`),
+    ...dashboardRoutes.map(role => `/${role.toLowerCase()}/*`),
+    "/dashboard", // catch-all for dashboard
+    "/dashboard/*", // catch-all for dashboard routes
+    "/api/*", // catch-all for API routes
+    "/announcements/create",
+    "/community/create",
+    "/community/edit",
+];
+
+export const PRIVATE_ROUTES = RAW_PRIVATE_ROUTES.map((route) => ({
+    pattern: toRegex(route),
+}));
+
 
 /**
  * Check if the user is authorized to access the given route.
