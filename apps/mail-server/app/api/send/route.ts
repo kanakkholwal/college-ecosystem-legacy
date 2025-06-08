@@ -50,7 +50,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       { data: response, error: null },
-      { status: 200, headers: corsHeaders  }
+      { status: 200, headers: corsHeaders }
     );
   } catch (error) {
     console.error("Error in sending email:", error);
@@ -59,14 +59,9 @@ export async function POST(request: NextRequest) {
   }
 }
 
-export async function OPTIONS() {
-  return new NextResponse(null, {
-    status: 204,
-    headers: {
-      "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "GET,POST,PUT,DELETE,OPTIONS",
-      "Access-Control-Allow-Headers": "Content-Type,Authorization",
-      "Access-Control-Allow-Credentials": "true",
-    },
-  });
+
+
+
+export async function OPTIONS(req: NextRequest) {
+  return NextResponse.json({}, { headers: corsHeaders });
 }
