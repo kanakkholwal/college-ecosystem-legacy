@@ -70,7 +70,7 @@ router.post("/results/:rollNo", getResultByRollNoFromSite);
 // Endpoint to [get,add,update] result by rollNo from the database
 router.get("/results/:rollNo/get", getResult);
 router.post("/results/:rollNo/add", addResult);
-router.post("/results/:rollNo/update", updateResult);
+router.put("/results/:rollNo/update", updateResult);
 router.delete("/results/:rollNo/delete", deleteResult);
 
 

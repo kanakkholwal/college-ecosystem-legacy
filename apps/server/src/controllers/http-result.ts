@@ -14,6 +14,15 @@ export const getResultByRollNoFromSite = async (
   res: Response
 ) => {
   const rollNo = req.params.rollNo;
+  console.log("Fetching result for rollNo:", rollNo);
+  if (!isValidRollNumber(rollNo)) {
+    res.status(400).json({
+      message: "Invalid roll number",
+      error: true,
+      data: null,
+    });
+    return;
+  }
   const data = await scrapeResult(rollNo);
 
   res.status(200).json(data);

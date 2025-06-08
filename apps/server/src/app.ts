@@ -91,4 +91,12 @@ app.use(
   }
 );
 
+// Catch-all route for undefined routes
+app.use((req, res) => {
+  res.status(404).json({
+    message: "Not Found",
+    error: "The requested resource could not be found.",
+    data: null,
+  });
+});
 export default app;
