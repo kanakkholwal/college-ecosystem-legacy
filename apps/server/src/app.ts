@@ -1,8 +1,9 @@
 import type { NextFunction, Request, Response } from "express";
 import express from "express";
 // import rateLimit from "express-rate-limit";
+import cors from "cors";
+import { config } from "./config";
 import httpRoutes from "./routes/httpRoutes";
-
 // const limiter = rateLimit({
 //   windowMs: 15 * 60 * 1000, // 15 minutes
 //   max: 100, // limit each IP to 100 requests per windowMs
@@ -12,6 +13,20 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors({
+  // origin: (origin, callback) => {
+  //   if (!origin || config.corsOrigins.some((o) => origin.endsWith(o))) {
+  //     callback(null, true);
+  //   } else {
+  //     callback(new Error("CORS policy does not allow this origin"));
+  //   }
+  // },
+  origin:"*",
+  optionsSuccessStatus: 200, // For legacy browser support
+  methods: "GET,POST,OPTIONS,PUT,DELETE",
+  allowedHeaders: "Content-Type,X-Identity-Key,X-Authorization",
+  credentials: true,
+}));
 // app.use(limiter);
 
 // Default route
@@ -21,56 +36,38 @@ app.get("/", (req, res) => {
     status: "healthy",
   });
 });
-const CORS_ORIGINS = ["https://nith.eu.org", "https://app.nith.eu.org"];
-// const isOriginAllowed = (origin: string): boolean => {
-//   return CORS_ORIGINS.includes(origin);
-// };
 
-const SERVER_IDENTITY = process.env.SERVER_IDENTITY;
+const SERVER_IDENTITY = config.SERVER_IDENTITY;
 if (!SERVER_IDENTITY) throw new Error("SERVER_IDENTITY is required in ENV");
 
 // Middleware to handle custom CORS logic
 app.use((req: Request, res: Response, next: NextFunction): void => {
-  const origin = req.header("Origin") || "";
-  const identityKey = req.header("X-IDENTITY-KEY") || "";
-
-  // Server-to-server calls with X-IDENTITY-KEY
+  const origin = req.header("Origin") || req.header("Referrer") || "";
+  const identityKey = req.header("X-Identity-Key") || "";
+  const authorization = req.header("X-Authorization") || "";
+  // Allow server-to-server calls with X-Identity-Key,X-Authorization
+  console.log(` Identity Key: ${identityKey}, Authorization: ${authorization}`);
+  // Server-to-server calls with X-Identity-Key,X-Authorization
+  
   if (!origin) {
-    if (identityKey === SERVER_IDENTITY) {
+    console.warn("CORS request without origin, skipping CORS headers");
+    if (authorization === SERVER_IDENTITY) {
       next();
       return;
     }
     res
       .status(403)
-      .json({ error: true, data: "Missing or invalid SERVER_IDENTITY" });
+      .json({ error:"Missing or invalid Authorization headers",data: null });
     return;
   }
-
-  // CORS logic for browser requests
-  if (
-    (process.env.NODE_ENV === "production" &&
-      CORS_ORIGINS.some((o) => origin.endsWith(o))) ||
-    (process.env.NODE_ENV !== "production" &&
-      origin.startsWith("http://localhost:"))
-  ) {
-    res.header("Access-Control-Allow-Origin", origin);
-    res.header("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
-    res.header("Access-Control-Allow-Headers", "Content-Type,X-IDENTITY-KEY,X-Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
-    if (req.method === "OPTIONS") {
-      res.sendStatus(200); // Preflight request
-      return;
-    }
+  console.log(`CORS request from origin: ${origin}`);
+  if (authorization === SERVER_IDENTITY) {
     next();
     return; // Explicitly end processing here
   }
-  if (identityKey === SERVER_IDENTITY) {
-    next();
-    return; // Explicitly end processing here
-  }
-
-  // Block invalid CORS origins
-  res.status(403).json({ error: "CORS policy does not allow this origin" });
+  // If the origin is not allowed, block the request
+  console.warn(`CORS request from disallowed origin: ${origin}`);
+  res.status(403).json({ error: "CORS policy does not allow this origin", data: null });
 });
 
 // Routes
