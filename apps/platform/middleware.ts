@@ -89,7 +89,15 @@ export async function middleware(request: NextRequest) {
     url.searchParams.set("next", request.url);
     return NextResponse.redirect(url);
   }
+  if(session){
+    if(pathname === SIGN_IN_PATH) {
+      url.pathname = "/";
+      url.search = url.searchParams.toString();
+      // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page
+      return NextResponse.redirect(url);
+    }
 
+  }
 
   // nextTargetRoute is used to redirect the user to the page they were trying to access before being redirected to the sign-in page
   const nextTargetRoute = request.nextUrl.searchParams.get("next");
