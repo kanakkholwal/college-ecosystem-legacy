@@ -89,8 +89,8 @@ export async function middleware(request: NextRequest) {
     url.searchParams.set("next", request.url);
     return NextResponse.redirect(url);
   }
-  if(session){
-    if(pathname === SIGN_IN_PATH) {
+  if (session) {
+    if (pathname === SIGN_IN_PATH) {
       url.pathname = "/";
       url.search = url.searchParams.toString();
       // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page
@@ -106,37 +106,42 @@ export async function middleware(request: NextRequest) {
         url.search = url.searchParams.toString();
         return NextResponse.redirect(url);
       }
+      if (error) {
+        url.pathname = SIGN_IN_PATH;
+        url.search = url.searchParams.toString();
+        return NextResponse.redirect(url);
+        // Handle other specific error cases
+      }
+
     }
 
-  }
+    // nextTargetRoute is used to redirect the user to the page they were trying to access before being redirected to the sign-in page
+    const nextTargetRoute = request.nextUrl.searchParams.get("next");
+    // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page
+    if (nextTargetRoute) {
+      const targetUrl = decodeURIComponent(nextTargetRoute);
+      // console.log("targetUrl", targetUrl);
+      const nextRedirect = request.nextUrl.searchParams.get("redirect");
 
-  // nextTargetRoute is used to redirect the user to the page they were trying to access before being redirected to the sign-in page
-  const nextTargetRoute = request.nextUrl.searchParams.get("next");
-  // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page
-  if (nextTargetRoute) {
-    const targetUrl = decodeURIComponent(nextTargetRoute);
-    // console.log("targetUrl", targetUrl);
-    const nextRedirect = request.nextUrl.searchParams.get("redirect");
-
-    if (targetUrl && nextRedirect !== "false" && session) {
-      const targetUrlObj = new URL(targetUrl, appConfig.url);
-      return NextResponse.redirect(targetUrlObj);
+      if (targetUrl && nextRedirect !== "false" && session) {
+        const targetUrlObj = new URL(targetUrl, appConfig.url);
+        return NextResponse.redirect(targetUrlObj);
+      }
     }
-  }
 
-  return NextResponse.next();
-}
-// the following code has been copied from https://nextjs.org/docs/advanced-features/middleware#matcher
-export const config = {
-  matcher: [
-    /*
-     * Match all request paths except for the ones starting with:
-     * - api (API routes)
-     * - _next/static (static files)
-     * - _next/image (image optimization files)
-     * - favicon.ico (favicon file)
-     * - manifest.manifest (manifest file)
-     */
-    "/((?!api|_next/static|_next/image|assets|favicon.ico|manifest.webmanifest|.*\\.(?:png|jpg|jpeg|svg|webp|ico|txt|json|xml|js)).*)",
-  ],
-};
+    return NextResponse.next();
+  }
+  // the following code has been copied from https://nextjs.org/docs/advanced-features/middleware#matcher
+  export const config = {
+    matcher: [
+      /*
+       * Match all request paths except for the ones starting with:
+       * - api (API routes)
+       * - _next/static (static files)
+       * - _next/image (image optimization files)
+       * - favicon.ico (favicon file)
+       * - manifest.manifest (manifest file)
+       */
+      "/((?!api|_next/static|_next/image|assets|favicon.ico|manifest.webmanifest|.*\\.(?:png|jpg|jpeg|svg|webp|ico|txt|json|xml|js)).*)",
+    ],
+  };
