@@ -7,6 +7,7 @@ import SignInForm from "./sign-in";
 import SignUpForm from "./sign-up";
 // import VerifyEmail from "./verify-mail";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Metadata } from "next";
 
 const TABS = [
   ["sign-in", <SignInForm key="sign-in" />],
@@ -18,6 +19,22 @@ const TABS = [
 
 const hidden_tabs = ["forget-password", "reset-password"];
 
+export const metadata: Metadata = {
+  title: "Sign In",
+  description: "Sign in to your account",
+  keywords: [
+    "Sign In",
+    "Login",
+    "Authentication",
+    "User Account",
+    "NITH Platform",
+    "NITH Sign In",
+    "NITH Login",
+  ],
+  alternates: {
+    canonical: "/sign-in",
+  },
+};
 interface Props {
   searchParams: Promise<{
     tab: string;
