@@ -96,6 +96,17 @@ export async function middleware(request: NextRequest) {
       // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page
       return NextResponse.redirect(url);
     }
+    // Exception for the error page : Production issue on Google Sign in
+    if (pathname === "/api/auth/error") {
+      const error = request.nextUrl.searchParams.get("error");
+      // api/auth/error?error=please_restart_the_process
+      if (error === "please_restart_the_process") {
+        // if the user is authenticated and tries to access the error page, redirect them to the home page
+        url.pathname = "/";
+        url.search = url.searchParams.toString();
+        return NextResponse.redirect(url);
+      }
+    }
 
   }
 
