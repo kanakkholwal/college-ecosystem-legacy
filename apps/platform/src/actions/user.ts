@@ -87,12 +87,14 @@ export async function deleteUserResourcesById(userId: string): Promise<void> {
         .where(eq(personalAttendanceRecords.userId, userId));
       await tx.delete(personalAttendance)
         .where(eq(personalAttendance.userId, userId));
+      await tx.delete(roomUsageHistory)
+        .where(eq(roomUsageHistory.userId, userId));
       await tx.delete(sessions)
         .where(eq(sessions.userId, userId));
       await tx.delete(accounts)
         .where(eq(accounts.userId, userId));
-      await tx.delete(roomUsageHistory)
-        .where(eq(roomUsageHistory.userId, userId));
+      await tx.delete(users)
+        .where(eq(users.id, userId));
       // mongoose models
       try {
 
