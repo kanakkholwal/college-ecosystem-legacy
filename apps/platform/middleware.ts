@@ -22,7 +22,7 @@ export async function middleware(request: NextRequest) {
     }
   );
   // Exception for the error page : Production issue on Google Sign in
-  if (pathname === "/api/auth/error") {
+  if (pathname === "/api/auth/error" && session) {
     const error = request.nextUrl.searchParams.get("error");
     // api/auth/error?error=please_restart_the_process
     if (error === "please_restart_the_process") {
