@@ -1,3 +1,4 @@
+import { InferSelectModel } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { DEPARTMENTS } from "src/constants/departments";
 
@@ -49,6 +50,10 @@ export const users = pgTable("users", {
     .$defaultFn(() => "not_specified"),
   department: departmentNameEnum("department").notNull(),
 });
+
+export type UserType = InferSelectModel<
+  typeof users
+>;
 
 export const sessions = pgTable("sessions", {
   id: text("id").primaryKey(),
