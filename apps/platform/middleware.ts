@@ -114,7 +114,7 @@ export async function middleware(request: NextRequest) {
       }
 
     }
-
+  }
     // nextTargetRoute is used to redirect the user to the page they were trying to access before being redirected to the sign-in page
     const nextTargetRoute = request.nextUrl.searchParams.get("next");
     // if the user is already authenticated and tries to access the sign-in page, redirect them to the home page

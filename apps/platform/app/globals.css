@@ -30,6 +30,8 @@
     --destructive-foreground: hsl(0deg 0% 92.16%);
     --border: hsl(220 13% 91%);
     --input: hsl(220 13% 91%);
+    --input: oklch(.922 0 0);
+    
     --ring: hsl(262.1 83.3% 57.8%);
     --radius: 0.5rem;
 
@@ -100,7 +102,8 @@
     --destructive: hsl(0 62.8% 30.6%);
     --destructive-foreground: hsl(0deg 0% 92.16%);
     --border: hsl(0, 0%, 14%);
-    --input: hsl(0, 0%, 14%);
+    /* --input: hsl(0, 0%, 14%); */
+    --input: oklch(1 0 0/15%);
     --ring: var(--primary,hsl(250deg 100% 80%));
 
     /* dark:chart colors */
