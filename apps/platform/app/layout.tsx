@@ -83,18 +83,18 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head >
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgConfig.jsonLds.EducationalOrganization) }}
-        />
-      </head>
+      <head />
       <body
         className={cn(
           "min-h-screen min-w-screen w-full antialiased",
           fontSans.variable
         )}
       >
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgConfig.jsonLds.EducationalOrganization) }}
+          id="json-ld-educational-organization"
+        />
         <Provider>{children} </Provider>
         {process.env.NODE_ENV === "production" && (
           <GoogleAnalytics gaId="G-SC4TQQ5PCW" />

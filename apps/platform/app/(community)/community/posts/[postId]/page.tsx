@@ -18,6 +18,7 @@ import { Button } from "@/components/ui/button";
 import { Dot, Edit } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
+import { appConfig } from "~/project.config";
 
 export async function generateMetadata(
   { params }: Props,
@@ -56,6 +57,23 @@ export default async function CommunityPost(props: Props) {
 
   return (
     <main className="md:col-span-3 space-y-4 pr-2">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "DiscussionForumPosting",
+          headline: post.title,
+          description: post.content.slice(0, 100),
+          author: {
+            "@type": "Person",
+            name: post.author.name,
+          },
+          datePublished: post.createdAt,
+          about:post.category,
+          image: `${appConfig.url}/${CATEGORY_IMAGES[post.category]}`,
+        }) }}
+        id="json-ld-blog-post"
+      />
       <div className="w-full mx-auto rounded-lg bg-card backdrop-blur-md p-3 lg:p-5 grid grid-cols-1 space-y-4">
         <div className="inline-flex items-center gap-2">
           <Avatar className="size-10 rounded-full">

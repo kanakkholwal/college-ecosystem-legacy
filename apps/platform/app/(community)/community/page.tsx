@@ -12,6 +12,19 @@ import CommunityPostList from "./list";
 export const metadata: Metadata = {
   title: "Communities",
   description: "Explore different communities",
+  alternates: {
+    canonical: '/community',
+  },
+  keywords: [
+    "NITH",
+    "Communities",
+    "Community Posts",
+    "NITH Community",
+    "NITH Community Posts",
+    "NITH Community Discussions",
+    "NITH Community Forum",
+    "NITH Community Engagement",
+  ],
 };
 
 export default async function CommunitiesPage(props: {

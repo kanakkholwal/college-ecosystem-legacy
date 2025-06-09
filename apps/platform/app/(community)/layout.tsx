@@ -13,7 +13,7 @@ export default async function CommunityLayout({
 
 
   return (
-    <div className="min-h-svh h-full w-full @container/community">
+    <div className="min-h-svh h-full w-full">
       <Navbar user={session?.user} />
       <main className="flex-1 @container flex-col items-center justify-start space-y-4 mx-auto pt-5 pb-16 min-h-[78vh] max-w-(--max-app-width)">
         {children}

@@ -23,6 +23,9 @@ export const metadata: Metadata = {
     "NITH Syllabus Search",
     "NITH Courses Search",
   ],
+  alternates: {
+    canonical: "/syllabus",
+  },
 };
 export default async function CoursesPage(props: {
   searchParams?: Promise<{

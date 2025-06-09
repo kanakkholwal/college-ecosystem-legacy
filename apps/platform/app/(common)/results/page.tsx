@@ -14,8 +14,28 @@ import type { Metadata } from "next";
 import { orgConfig } from "~/project.config";
 
 export const metadata: Metadata = {
-  title: `Results`,
-  description: "Check your results here.",
+  title: "Results",
+  description: "Search for results in NITH",
+  applicationName: "Result Portal",
+  alternates:{
+    canonical: '/results',
+  },
+  keywords: [
+    orgConfig.shortName,
+    orgConfig.name,
+    "Results",
+    "NITH Results",
+    "NITH Result Portal",
+    "NITH Result Search",
+    "Result Search",
+    "NITH Result",
+    "Result Portal",
+    "NITH Result Portal",
+    "NITH Result Search",
+    "NITH Result Search Portal",
+    "NITH Result Search Engine",
+    "NITH Result Search Engine Portal",
+  ],
 };
 
 export default async function ResultPage(props: {

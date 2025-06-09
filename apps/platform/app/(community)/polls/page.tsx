@@ -19,6 +19,20 @@ import { getSession } from "~/lib/auth-server";
 export const metadata: Metadata = {
   title: `Polls`,
   description: "Check the latest polls here.",
+  alternates: {
+    canonical: '/polls',
+  },
+  keywords: [
+    "NITH",
+    "Polls",
+    "NITH Polls",
+    "NITH Polling",
+    "NITH Voting",
+    "NITH Community Polls",
+    "NITH Community Voting",
+    "NITH Student Polls",
+    "NITH Student Voting",
+  ],
 };
 
 const tabs = [

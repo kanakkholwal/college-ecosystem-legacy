@@ -1,8 +1,8 @@
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -35,6 +35,9 @@ export async function generateMetadata(
   return {
     title: `${rollNo} | Results`,
     description: `Check the results of ${rollNo}`,
+    alternates: {
+      canonical: '/results/' + rollNo,
+    }
   };
 }
 

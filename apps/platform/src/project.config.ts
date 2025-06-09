@@ -37,6 +37,8 @@ export const orgConfig = {
   shortName: "NITH",
   domain: "nith.ac.in",
   website: "https://nith.ac.in",
+  logo: "https://nith.ac.in/uploads/settings/15795036012617.png",
+  logoSquare:"https://nith.ac.in/uploads/topics/nit-logo15954991401255.jpg",
   mailSuffix: "@nith.ac.in",
   jsonLds:{
     EducationalOrganization: {

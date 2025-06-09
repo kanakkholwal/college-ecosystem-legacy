@@ -21,6 +21,21 @@ type Props = {
 export const metadata: Metadata = {
   title: `Rooms`,
   description: "Search for rooms based on their availability and type.",
+  alternates: {
+    canonical: '/classroom-availability',
+  },
+  keywords: [
+    "NITH",
+    "Rooms",
+    "Room Search",
+    "NITH Room Search",
+    "Classroom Availability",
+    "NITH Classroom Availability",
+    "Room Booking",
+    "NITH Room Booking",
+    "Room Management",
+    "NITH Room Management",
+  ],
 };
 
 export default async function RoomsPage(props: Props) {
@@ -54,7 +69,7 @@ export default async function RoomsPage(props: Props) {
       </section>
       <NoteSeparator label={`${rooms.length} Rooms found`} />
       <ErrorBoundaryWithSuspense
-      
+
         loadingFallback={
           <ResponsiveContainer>
             {[...Array(8)].map((_, i) => (

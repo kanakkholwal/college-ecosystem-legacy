@@ -18,6 +18,20 @@ import { changeCase } from "~/utils/string";
 export const metadata: Metadata = {
   title: `Announcements`,
   description: "Check the latest announcements here.",
+  alternates: {
+    canonical: '/announcements',
+  },
+  keywords: [
+    "NITH",
+    "Announcements",
+    "NITH Announcements",
+    "NITH News",
+    "NITH Updates",
+    "NITH Notifications",
+    "NITH Events",
+    "NITH College Events",
+    "NITH College News",
+  ],
 };
 
 export default async function AnnouncementsPage(props: {

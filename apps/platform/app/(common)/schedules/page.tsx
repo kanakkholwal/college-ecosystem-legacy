@@ -20,6 +20,9 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Timetables",
   description: "Check your schedules here.",
+  alternates: {
+    canonical: '/schedules',
+  }
 };
 
 export default async function TimeTables() {

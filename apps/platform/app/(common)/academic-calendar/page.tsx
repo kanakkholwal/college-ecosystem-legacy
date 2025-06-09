@@ -18,6 +18,20 @@ type Props = {
 export const metadata: Metadata = {
   title: "Academic Calender",
   description: "Check the academic calender here.",
+  alternates: {
+    canonical: '/academic-calendar',
+  },
+  keywords:[
+    "NITH",
+    "Academic Calender",
+    "NITH Academic Calender",
+    "NITH Events",
+    "NITH Important Dates",
+    "NITH Calendar",
+    "Academic Events",
+    "College Events",
+    "NITH College Events",
+  ]
 };
 
 export default async function AcademicCalenderPage(props: Props) {
@@ -37,6 +51,7 @@ export default async function AcademicCalenderPage(props: Props) {
 
   return (
     <div className="max-w-6xl mx-auto px-4 pt-10 space-y-6 pb-5">
+      {/* schema event */}
       <div className="bg-card p-4 lg:p-5 rounded-lg">
         <h1 className="text-xl font-semibold mb-2">
           <CalendarDays className="inline-block size-5 mr-2" />
@@ -55,6 +70,7 @@ export default async function AcademicCalenderPage(props: Props) {
           data={groupedEvents}
           onNewEventRedirectPath={session?.user?.role === "admin" ? "/admin/events/new" : undefined}
         />
+        
       </div>
     </div>
   );

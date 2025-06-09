@@ -22,6 +22,7 @@ import { IconMap } from "./render-link";
 
 import type { Metadata, ResolvingMetadata } from "next";
 import { getSession } from "~/lib/auth-server";
+import { orgConfig } from "~/project.config";
 
 type Props = {
   params: Promise<{ code: string }>;
@@ -40,6 +41,7 @@ export async function generateMetadata(
   return {
     title: `${course.name} | ${course.code}`,
     description: `Syllabus of ${course.name} (${course.code})`,
+
   };
 }
 
@@ -59,6 +61,26 @@ export default async function CoursePage(props: Props) {
 
   return (
     <div className="max-w-6xl mx-auto px-6 md:px-6 xl:px-12">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Course",
+          name: course.name,
+          description: `Syllabus of ${course.name} (${course.code})`,
+          courseMode: course.type,
+          provider: {
+            "@type": "EducationalOrganization",
+            name: orgConfig.name,
+            url: orgConfig.website,
+            logo: orgConfig.logoSquare,
+          },
+          courseCode: course.code,
+          department: course.department,
+          credits: course.credits,
+        }) }}
+        id="json-ld-course"
+      />
       <section
         id="hero"
         className="z-10 w-full relative flex flex-col gap-5 py-10 px-4 text-center"
@@ -175,15 +197,15 @@ export default async function CoursePage(props: Props) {
                           {ref.name}
                         </h4>
 
-                          <a
-                            href={ref.link}
-                            target="_blank"
-                            rel="noreferrer"
-                            className="text-primary text-xs font-medium hover:underline space-x-1"
-                          >
-                            Go to Link
-                            <ArrowUpRight className="size-3 inline-block" />
-                          </a>
+                        <a
+                          href={ref.link}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-primary text-xs font-medium hover:underline space-x-1"
+                        >
+                          Go to Link
+                          <ArrowUpRight className="size-3 inline-block" />
+                        </a>
                       </div>
                     </div>
                   </div>
@@ -228,7 +250,7 @@ export default async function CoursePage(props: Props) {
                     <div className="ml-auto">
                       <Button size="icon_sm" variant="ghost" asChild>
                         <a href={paper.link} target="_blank" rel="noreferrer">
-                          <ExternalLink/>
+                          <ExternalLink />
                         </a>
                       </Button>
                     </div>
