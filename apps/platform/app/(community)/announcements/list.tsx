@@ -1,3 +1,4 @@
+import { UserPreview } from "@/components/application/user-preview";
 import EmptyArea from "@/components/common/empty-area";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
@@ -48,12 +49,11 @@ export default function AnnouncementsList({
                   {` ${announcement.relatedFor}`}
                 </Link>
                 {" by "}
-                <Link
-                  href={`/u/${announcement.createdBy.username}`}
-                  className="text-primary hover:underline"
-                >
-                  @{announcement.createdBy.username}
-                </Link>
+                <UserPreview user={announcement.createdBy}>
+                  <span className="ml-1 text-primary hover:underline cursor-pointer">
+                    {announcement.createdBy.name}
+                  </span>
+                </UserPreview>
               </p>
             </div>
 

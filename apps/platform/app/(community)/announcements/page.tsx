@@ -90,7 +90,7 @@ export default async function AnnouncementsPage(props: {
         </h3>
         <AuthButtonLink
           authorized={!!session?.user}
-          variant="link" size="sm" href="/announcements/create">
+          variant="ghost" size="sm" href="/announcements/create">
           Create Announcement
         </AuthButtonLink>
       </div>

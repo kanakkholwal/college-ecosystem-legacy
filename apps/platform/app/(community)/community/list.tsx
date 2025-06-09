@@ -1,3 +1,4 @@
+import { UserPreview } from "@/components/application/user-preview";
 import EmptyArea from "@/components/common/empty-area";
 import ShareButton from "@/components/common/share-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -66,12 +67,11 @@ export default function CommunityPostList({
                   })}
                 </span>
                 <Dot className="inline-block -mx-1" />
-                <Link
-                  href={`/u/${post.author.username}`}
-                  className="text-primary hover:underline"
-                >
-                  @{post.author.username}
-                </Link>
+                <UserPreview user={post.author}>
+                  <span className="ml-1 text-primary hover:underline cursor-pointer">
+                    {post.author.name}
+                  </span>
+                </UserPreview>
               </p>
             </div>
             <h3 className="text-base font-medium">{post.title}</h3>
