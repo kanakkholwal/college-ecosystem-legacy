@@ -3,6 +3,7 @@
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { CardDescription, CardTitle } from "@/components/ui/card";
 import ConditionalRender from "@/components/utils/conditional-render";
+import { ButtonLink } from "@/components/utils/link";
 import { cn } from "@/lib/utils";
 import { CheckCircle2, LoaderCircle } from "lucide-react";
 import { redirect, useSearchParams } from "next/navigation";
@@ -34,6 +35,7 @@ export default function VerifyEmail() {
         })
         .then((res) => {
           if (res.error) {
+            console.log("Error verifying email:", res);
             toast.error(
               res.error?.message ??
                 "An error occurred while verifying your email."
@@ -48,6 +50,7 @@ export default function VerifyEmail() {
           }
         })
         .catch((e) => {
+          console.log("Error verifying email:", e);
           toast.error(e.toString());
           setError(e.toString());
         })
@@ -58,7 +61,7 @@ export default function VerifyEmail() {
   }, [token]);
 
   return (
-    <main className="flex flex-col items-center justify-center w-full space-y-4">
+    <main className="flex flex-col items-center justify-center w-full space-y-4 pt-6  ">
       <ConditionalRender condition={!!token}>
         <CardTitle>
           {isVerifying ? "Verifying..." : verified ? "Email verified" : "Error"}
@@ -72,10 +75,13 @@ export default function VerifyEmail() {
         </CardDescription>
 
         <ConditionalRender condition={isVerifying}>
-          <LoaderCircle className="w-12 h-12 text-primary animate-spin" />
+          <LoaderCircle className="size-12 text-primary animate-spin" />
         </ConditionalRender>
         <ConditionalRender condition={verified}>
-          <CheckCircle2 className="w-12 h-12 text-green-500" />
+          <CheckCircle2 className="size-12 text-green-500" />
+          <ButtonLink href="/" variant="rainbow" size="xs">
+            Go to Home
+          </ButtonLink>
         </ConditionalRender>
         <ConditionalRender condition={!!error}>
           <Alert variant="destructive" className={cn("w-full")}>

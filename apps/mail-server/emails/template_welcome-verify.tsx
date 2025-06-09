@@ -1,4 +1,4 @@
-import { Button, Hr, Preview, Text } from "@react-email/components";
+import { Button, Hr, Preview, Section, Text } from "@react-email/components";
 import { z } from "zod";
 
 const payloadSchema = z.record(
@@ -16,25 +16,28 @@ export function WelcomeVerifyEmail({ payload }: { payload: Payload }) {
   return (
     <>
       <Preview>{previewText}</Preview>
-      <Text className="text-gray-800 text-lg">
+      <Text className="text-black text-[10px] leading-[16px]">
         Hi {userName},{"\n"}
         Welcome to <strong>{platform_name}</strong>! We're thrilled to have you
         join our community.
       </Text>
-      <Text className="text-gray-800 mt-4">
+      <Text className="text-black text-[10px] leading-[16px]">
         Please verify your email address ({payload.email}) to get started.
       </Text>
+      <Section className="text-center my-[32px]">
+
       <Button
-        className="bg-blue-600 text-white font-bold py-2 px-4 rounded-lg mt-4 hover:bg-blue-700"
+          className="bg-brand rounded text-white text-[10px] font-semibold no-underline text-center px-5 py-3"
         href={verifyUrl}
       >
         Verify Email
       </Button>
-      <Hr className="border-border my-6" />
-      <Text className="text-gray-600 text-sm">
+      </Section>
+      <Hr className="border border-solid border-border my-[26px] mx-0 w-full" />
+      <Text className="text-muted-foreground text-[8px] leading-[10px]">
         If you didn't create an account, you can safely ignore this email.
       </Text>
-      <Text className="text-gray-600 text-sm mt-6">
+      <Text className="text-black text-[10px] leading-[16px] mt-6">
         — The {platform_name} Team
       </Text>
     </>
