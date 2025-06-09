@@ -203,6 +203,7 @@ export default function SignInForm() {
               await authClient.signIn.social({
                 provider: "google",
                 callbackURL: redirect,
+                errorCallbackURL: "/sign-in?social=google",
               });
               setIsLoading(false);
             }}
