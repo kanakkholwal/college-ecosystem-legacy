@@ -1,1 +1,8 @@
-Allow: /api/og/*
+User-agent: *
+Allow: /
+
+# Host
+Host: https://app.nith.eu.org
+
+# Sitemaps
+Sitemap: https://app.nith.eu.org/sitemap.xml
