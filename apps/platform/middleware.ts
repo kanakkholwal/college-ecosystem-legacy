@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import type { Session } from "~/lib/auth";
 import { checkAuthorization, dashboardRoutes, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
+import { appConfig } from "~/project.config";
 
 export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
@@ -99,7 +100,7 @@ export async function middleware(request: NextRequest) {
     const nextRedirect = request.nextUrl.searchParams.get("redirect");
 
     if (targetUrl && nextRedirect !== "false" && session) {
-      const targetUrlObj = new URL(targetUrl);
+      const targetUrlObj = new URL(targetUrl, appConfig.url);
       return NextResponse.redirect(targetUrlObj);
     }
   }

@@ -58,6 +58,7 @@ export default function SignUpForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
@@ -185,7 +186,7 @@ export default function SignUpForm() {
                 </FormItem>
               )}
             />
-            <p className="text-left mt-2 text-[8px] italic font-medium text-gray-600">
+            <p className="text-left mt-2 text-[8px] italic font-medium text-muted-foreground">
               You must use your NITH email to sign up.(you{"'"}ll get a
               verification link in your email if your email isn{"'"}t in the
               database)

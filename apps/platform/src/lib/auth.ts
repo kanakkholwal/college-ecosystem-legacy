@@ -24,6 +24,7 @@ const baseUrl = process.env.BASE_URL;
 export const auth = betterAuth({
   appName: appConfig.name,
   baseURL: baseUrl,
+  secret: process.env.BETTER_AUTH_SECRET,
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
@@ -40,7 +41,7 @@ export const auth = betterAuth({
       create: {
         before: async (user) => {
           const info = await getUserInfo(user.email);
-
+          console.log("Creating user for ", info);
           return {
             data: {
               ...user,
@@ -132,8 +133,8 @@ export const auth = betterAuth({
       mapProfileToUser: async (profile) => {
         return {
           image: profile.picture,
-        };
-      },
+        }
+      }
     },
   },
   user: {
@@ -247,7 +248,6 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
         message: "Result not found for the given roll number | Contact admin",
       });
     }
-    console.log(response.data?.gender);
 
     const hostelStudent = await getHostelStudent({
       rollNo: username,

@@ -46,19 +46,6 @@ CREATE TABLE "courses" (
 	CONSTRAINT "courses_code_unique" UNIQUE("code")
 );
 --> statement-breakpoint
-CREATE TABLE "global_events" (
-	"id" text PRIMARY KEY GENERATED ALWAYS AS (5KTLg_tdiJHpOFgLHt4dZzRyGLSF9b1u) STORED NOT NULL,
-	"name" text NOT NULL,
-	"description" text,
-	"links" text[] DEFAULT '{}',
-	"time" timestamp NOT NULL,
-	"userId" text NOT NULL,
-	"end_date" timestamp NOT NULL,
-	"event_type" text NOT NULL,
-	"location" text,
-	"created_at" timestamp DEFAULT now() NOT NULL
-);
---> statement-breakpoint
 CREATE TABLE "personal_attendance" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" text NOT NULL,
@@ -147,11 +134,10 @@ CREATE TABLE "verifications" (
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "books_and_references" ADD CONSTRAINT "books_and_references_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "chapters" ADD CONSTRAINT "chapters_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "global_events" ADD CONSTRAINT "global_events_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "personal_attendance" ADD CONSTRAINT "personal_attendance_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "personal_attendance_records" ADD CONSTRAINT "personal_attendance_records_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "personal_attendance_records" ADD CONSTRAINT "personal_attendance_records_record_id_personal_attendance_id_fk" FOREIGN KEY ("record_id") REFERENCES "public"."personal_attendance"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "previous_papers" ADD CONSTRAINT "previous_papers_course_id_courses_id_fk" FOREIGN KEY ("course_id") REFERENCES "public"."courses"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "room_usage_history" ADD CONSTRAINT "room_usage_history_room_id_rooms_id_fk" FOREIGN KEY ("room_id") REFERENCES "public"."rooms"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "room_usage_history" ADD CONSTRAINT "room_usage_history_room_id_rooms_id_fk" FOREIGN KEY ("room_id") REFERENCES "public"."rooms"("id") ON DELETE cascade ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "room_usage_history" ADD CONSTRAINT "room_usage_history_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "sessions" ADD CONSTRAINT "sessions_userId_users_id_fk" FOREIGN KEY ("userId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;

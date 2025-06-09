@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import mongoose, { type CallbackError, type Document, Schema } from "mongoose";
+import mongoose, { type Document, Schema } from "mongoose";
 import type { OUTPASS_STATUS, REASONS } from "~/constants/outpass";
 import { db } from "~/db/connect";
 import { users } from "~/db/schema/auth-schema";
@@ -228,42 +228,42 @@ async function updateCorrespondingUserId(student: IHostelStudentType) {
 }
 
 // Pre hook for insertMany
-HostelStudentSchema.pre("insertMany", async (next, docs) => {
-  try {
-    for await (const student of docs) {
-      // Fetch userId from PostgreSQL based on student's email
-      await updateCorrespondingUserId(student as unknown as IHostelStudentType);
-    }
-    next();
-  } catch (error) {
-    next(error as CallbackError);
-  }
-});
+// HostelStudentSchema.pre("insertMany", async (next, docs) => {
+//   try {
+//     for await (const student of docs) {
+//       // Fetch userId from PostgreSQL based on student's email
+//       await updateCorrespondingUserId(student as unknown as IHostelStudentType);
+//     }
+//     next();
+//   } catch (error) {
+//     next(error as CallbackError);
+//   }
+// });
 
 // Pre hook for insertOne (save)
-HostelStudentSchema.pre("save", async function (next) {
-  const student = this as unknown as IHostelStudentType;
+// HostelStudentSchema.pre("save", async function (next) {
+//   const student = this as unknown as IHostelStudentType;
 
-  try {
-    // Fetch userId from PostgreSQL based on student's email
-    await updateCorrespondingUserId(student);
-    next();
-  } catch (error) {
-    next(error as CallbackError);
-  }
-});
-HostelStudentSchema.pre("save", async (next) => {
-  const student = this as unknown as IHostelStudentType;
+//   try {
+//     // Fetch userId from PostgreSQL based on student's email
+//     await updateCorrespondingUserId(student);
+//     next();
+//   } catch (error) {
+//     next(error as CallbackError);
+//   }
+// });
+// HostelStudentSchema.pre("save", async (next) => {
+//   const student = this as unknown as IHostelStudentType;
 
-  try {
-    // Fetch userId from PostgreSQL based on student's email
-    await updateCorrespondingUserId(student);
+//   try {
+//     // Fetch userId from PostgreSQL based on student's email
+//     await updateCorrespondingUserId(student);
 
-    next();
-  } catch (error) {
-    next(error as CallbackError);
-  }
-});
+//     next();
+//   } catch (error) {
+//     next(error as CallbackError);
+//   }
+// });
 
 // 🔴 Post-save hook: Auto-update ResultModel gender if missing
 HostelStudentSchema.post("save", async (doc) => {

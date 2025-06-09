@@ -84,7 +84,7 @@ export async function deleteUserResourcesById(userId: string): Promise<void> {
     await db.transaction(async (tx) => {
       // Delete user sessions if any
       await tx.delete(personalAttendanceRecords)
-        .where(eq(personalAttendance.userId, userId));
+        .where(eq(personalAttendanceRecords.userId, userId));
       await tx.delete(personalAttendance)
         .where(eq(personalAttendance.userId, userId));
       await tx.delete(sessions)
@@ -100,18 +100,23 @@ export async function deleteUserResourcesById(userId: string): Promise<void> {
         await Announcement.deleteMany({
           "createdBy.id": userId,
         });
+        console.log("Deleted Announcement for user:", userId);
         await CommunityPost.deleteMany({
           "author.id": userId,
         });
+        console.log("Deleted CommunityPost for user:", userId);
         await CommunityComment.deleteMany({
           "author.id": userId,
         });
+        console.log("Deleted CommunityComment for user:", userId);
         await HostelStudentModel.deleteMany({
           "userId": userId,
         });
+        console.log("Deleted HostelStudentModel for user:", userId);
         await PollModel.deleteMany({
           "createdBy": userId,
         });
+        console.log("Deleted PollModel for user:", userId);
       } catch (error) {
         console.log("Error deleting mongoose models:", error);
       }

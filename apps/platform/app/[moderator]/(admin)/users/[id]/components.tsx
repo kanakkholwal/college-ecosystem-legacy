@@ -421,23 +421,24 @@ export function UserDisplay({ currentUser: user }: Props) {
             );
             if (!confirm) return;
             toast.promise(
-              authClient.admin.removeUser({
-                userId: user.id,
-              }),
-              {
-                loading: "Deleting user...",
-                success: "User deleted successfully",
-                error: "Failed to delete user",
-              }
-            )
-            toast.promise(
               deleteUserResourcesById(user.id),
               {
                 loading: "Deleting user resources...",
                 success: "User resources deleted successfully",
                 error: "Failed to delete user resources",
               }
-            );
+            ).then(() => {
+              toast.promise(
+                authClient.admin.removeUser({
+                  userId: user.id,
+                }),
+                {
+                  loading: "Deleting user...",
+                  success: "User deleted successfully",
+                  error: "Failed to delete user",
+                }
+              )
+            });
           }}
           size="sm"
         >
