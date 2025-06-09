@@ -90,7 +90,11 @@ interface ICommunityComment extends Document {
 const communityCommentSchema = new Schema<ICommunityComment>(
   {
     content: { type: String, required: true },
-    author: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    author: {
+      id: { type: String, required: true },
+      name: { type: String, required: true },
+      username: { type: String, required: true },
+    },
     postId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "CommunityPost",

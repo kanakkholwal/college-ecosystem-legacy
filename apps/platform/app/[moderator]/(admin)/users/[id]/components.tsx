@@ -44,6 +44,7 @@ import toast from "react-hot-toast";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
 import * as z from "zod";
 import { updateUser } from "~/actions/dashboard.admin";
+import { deleteUserResourcesById } from "~/actions/user";
 import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
 import { ROLES, emailSchema, genderSchema } from "~/constants/user";
 import type { users } from "~/db/schema";
@@ -427,6 +428,14 @@ export function UserDisplay({ currentUser: user }: Props) {
                 loading: "Deleting user...",
                 success: "User deleted successfully",
                 error: "Failed to delete user",
+              }
+            )
+            toast.promise(
+              deleteUserResourcesById(user.id),
+              {
+                loading: "Deleting user resources...",
+                success: "User resources deleted successfully",
+                error: "Failed to delete user resources",
               }
             );
           }}

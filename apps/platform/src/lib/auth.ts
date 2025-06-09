@@ -2,7 +2,7 @@ import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { APIError } from "better-auth/api";
 import { nextCookies } from "better-auth/next-js";
-import { admin, username } from "better-auth/plugins";
+import { admin, haveIBeenPwned, username } from "better-auth/plugins";
 import { getHostelStudent } from "~/actions/hostel";
 import { ROLES } from "~/constants";
 import {
@@ -196,6 +196,9 @@ export const auth = betterAuth({
       defaultRole: "user",
       adminRole: ["admin"],
       defaultBanExpiresIn: 60 * 60 * 24 * 7, // 1 week
+    }),
+    haveIBeenPwned({
+      customPasswordCompromisedMessage: "Please choose a more secure password."
     }),
     nextCookies(),
   ], // make sure this is the last plugin (nextCookies) in the array

@@ -1,7 +1,14 @@
+"use server";
 import type { InferSelectModel } from "drizzle-orm";
 import { eq, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
-import { users } from "~/db/schema/auth-schema";
+import { personalAttendance, personalAttendanceRecords, roomUsageHistory } from "~/db/schema";
+import { accounts, sessions, users } from "~/db/schema/auth-schema";
+import dbConnect from "~/lib/dbConnect";
+import Announcement from "~/models/announcement";
+import CommunityPost, { CommunityComment } from "~/models/community";
+import { HostelStudentModel } from "~/models/hostel_n_outpass";
+import PollModel from "~/models/poll";
 
 // Infer the user model type from the schema
 type User = InferSelectModel<typeof users>;
@@ -69,4 +76,48 @@ export async function getUsersByOtherRoles(role: string): Promise<User[]> {
     .select()
     .from(users)
     .where(sql`${role} = ANY(${users.other_roles})`);
+}
+
+// delete user resources 
+export async function deleteUserResourcesById(userId: string): Promise<void> {
+  try {
+    await db.transaction(async (tx) => {
+      // Delete user sessions if any
+      await tx.delete(personalAttendanceRecords)
+        .where(eq(personalAttendance.userId, userId));
+      await tx.delete(personalAttendance)
+        .where(eq(personalAttendance.userId, userId));
+      await tx.delete(sessions)
+        .where(eq(sessions.userId, userId));
+      await tx.delete(accounts)
+        .where(eq(accounts.userId, userId));
+      await tx.delete(roomUsageHistory)
+        .where(eq(roomUsageHistory.userId, userId));
+      // mongoose models
+      try {
+
+        await dbConnect();
+        await Announcement.deleteMany({
+          "createdBy.id": userId,
+        });
+        await CommunityPost.deleteMany({
+          "author.id": userId,
+        });
+        await CommunityComment.deleteMany({
+          "author.id": userId,
+        });
+        await HostelStudentModel.deleteMany({
+          "userId": userId,
+        });
+        await PollModel.deleteMany({
+          "createdBy": userId,
+        });
+      } catch (error) {
+        console.log("Error deleting mongoose models:", error);
+      }
+    })
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return Promise.reject("Failed to delete user resources");
+  }
 }
