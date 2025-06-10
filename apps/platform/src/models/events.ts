@@ -20,16 +20,6 @@ const eventsSchema = new Schema<IEvent>(
     },
     endDate: {
       type: Date,
-      validate: {
-        validator: function (value: Date) {
-          // Ensure endDate is after time if both are provided
-          if (this.time && value) {
-            return new Date(value) > new Date(this.time);
-          }
-          return true;
-        },
-        message: "End date must be after the event time",
-      },
       optional: true,
       default: null,
     },

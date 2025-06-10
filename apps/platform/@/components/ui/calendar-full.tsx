@@ -211,7 +211,7 @@ export function FullScreenCalendar<EventType extends BaseEvent>({
         </div>
       </div>
 
-      <div className="flex-col flex lg:flex-row gap-2">
+      <div className="flex-col flex lg:flex-row gap-2" suppressHydrationWarning>
         <div className="lg:flex lg:flex-auto lg:flex-col bg-card rounded-t-lg overflow-hidden">
           <div className="grid grid-cols-7 border text-center text-xs font-semibold leading-6 lg:flex-none bg-muted dark:bg-background rounded-t-lg">
             <div className="border-r py-2.5">Sun</div>

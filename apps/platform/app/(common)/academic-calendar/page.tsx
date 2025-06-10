@@ -1,4 +1,11 @@
+import { EventCard } from "@/components/application/event-card";
+import { ResponsiveContainer } from "@/components/common/container";
+import EmptyArea from "@/components/common/empty-area";
+import { StaticStep } from "@/components/common/step";
 import { FullScreenCalendar } from "@/components/ui/calendar-full";
+import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
+import ConditionalRender from "@/components/utils/conditional-render";
+import { format } from "date-fns";
 import { CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
 import { getEvents } from "~/actions/events";
@@ -21,7 +28,7 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/academic-calendar',
   },
-  keywords:[
+  keywords: [
     "NITH",
     "Academic Calender",
     "NITH Academic Calender",
@@ -65,13 +72,54 @@ export default async function AcademicCalenderPage(props: Props) {
           milestones.
         </p>
       </div>
-      <div className="bg-card p-4 lg:p-5 rounded-lg">
-        <FullScreenCalendar
-          data={groupedEvents}
-          onNewEventRedirectPath={session?.user?.role === "admin" ? "/admin/events/new" : undefined}
+      <Tabs defaultValue="calendar" className="bg-card p-4 lg:p-5 rounded-lg">
+        <VercelTabsList
+          className="mb-4 mx-auto"
+          tabs={[
+            {
+              label: "Calendar View",
+              id: "calendar",
+            },
+            {
+              label: "List View",
+              id: "list",
+            },
+          ]}
+
         />
-        
-      </div>
+        <TabsContent value="calendar">
+          <FullScreenCalendar
+            data={groupedEvents}
+            onNewEventRedirectPath={session?.user?.role === "admin" ? "/admin/events/new" : undefined}
+          />
+        </TabsContent>
+        <TabsContent value="list">
+          <ConditionalRender condition={groupedEvents.length === 0}>
+            <EmptyArea
+              title="No Events Found"
+              description="There are no events available in the academic calendar at the moment. Please check back later or contact the administration for more information."
+              icons={[CalendarDays]}
+            />
+          </ConditionalRender>
+          {groupedEvents.map((group, idx) => {
+            return <StaticStep
+              key={group.day.toString()}
+              step={idx + 1}
+              title={`${format(group.day, "dd MMMM yyyy")}`}
+            >
+              <ResponsiveContainer>
+                {group.events.map((event) => {
+                  return <EventCard
+                    key={event.id}
+                    event={event}
+                  />;
+                })}
+
+              </ResponsiveContainer>
+            </StaticStep>;
+          })}
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

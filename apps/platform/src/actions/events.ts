@@ -23,6 +23,27 @@ export async function createNewEvent(newEvent: rawEventsSchemaType) {
   }
 }
 
+export async function saveNewEvents(
+  newEvents: rawEventsSchemaType[]
+): Promise<EventJSONType[]> {
+  try {
+    const validatedEvents = rawEventsSchema.array().safeParse(newEvents);
+    if (!validatedEvents.success) {
+      return Promise.reject(validatedEvents.error.errors[0].message);
+    }
+    await dbConnect();
+    const events = await EventModel.insertMany(newEvents);
+    return Promise.resolve(
+      JSON.parse(JSON.stringify(events.map((event) => ({ ...event, id: event._id.toString() }))))
+    );
+  } catch (err) {
+    console.log(err);
+    return Promise.reject(
+      err instanceof Error ? err.message : "Something went wrong"
+    );
+  }
+}
+
 interface GroupedEvents {
   day: Date;
   events: EventJSONType[];

@@ -1,7 +1,6 @@
-import { ActionBar, ActionButton } from "@/components/application/action-bar";
-import { Button } from "@/components/ui/button";
+import { ActionButton } from "@/components/application/action-bar";
+import { ButtonLink } from "@/components/utils/link";
 import { format } from "date-fns";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteEvent, getEventById } from "~/actions/events";
 
@@ -32,7 +31,7 @@ export default async function EventPage(props: {
       <div className="bg-card p-4 rounded-lg">
         <h2 className="text-lg font-semibold mb-2">{event.title}</h2>
         <p className="text-sm text-muted-foreground mb-4">
-          {format(new Date(event.time), "PPPpp")}
+          {format(new Date(event.time), "dd MMMM yyyy 'at' hh:mm a")}
         </p>
         <p className="mb-4 text-sm text-muted-foreground">
           {event.description}
@@ -44,13 +43,13 @@ export default async function EventPage(props: {
         </p>
         <p className="text-sm text-muted-foreground">
           {event.endDate
-            ? `Ends: ${format(new Date(event.endDate), "PPPpp")}`
+            ? `Ends: ${format(new Date(event.endDate), "dd MMMM yyyy 'at' hh:mm a")}`
             : "No end date specified"}
         </p>
         <div className="mt-4 space-x-2">
-          <Button variant="default" size="sm" asChild>
-            <Link href={`/admin/events/${event.id}/edit`}>Edit Event</Link>
-          </Button>
+          <ButtonLink variant="rainbow" size="sm" href={`/admin/events/${event.id}/edit`}>
+            Edit Event
+          </ButtonLink>
 
         </div>
       </div>
