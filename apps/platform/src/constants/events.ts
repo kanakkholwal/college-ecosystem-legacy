@@ -42,6 +42,15 @@ export const rawEventsSchema = z.object({
     .optional(), // Optional end date for the event
   eventType: eventTypesEnums, // Type of event (e.g., "meeting", "holiday", etc.)
   location: z.string().optional(), // Optional location for the event
+}).refine((data) => {
+  // Ensure that endDate is after time if both are provided
+  if (data.endDate && data.time) {
+    return new Date(data.endDate) > new Date(data.time);
+  }
+  return true;
+}, {
+  message: "End date must be after the event time",
+  path: ["endDate"],
 });
 
 export type rawEventsSchemaType = z.infer<typeof rawEventsSchema>;

@@ -54,7 +54,8 @@ export async function middleware(request: NextRequest) {
       if (!authCheck.authorized) {
         if (request.method === "GET") {
           return NextResponse.redirect(
-            new URL("/unauthorized?target=" + request.url, request.url)
+            new URL(`/unauthorized?target=${encodeURIComponent(request.nextUrl.pathname)}`,
+              request.nextUrl.origin)
           );
         }
         if (request.method === "POST") {

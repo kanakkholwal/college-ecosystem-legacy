@@ -1,8 +1,9 @@
+import { ActionBar, ActionButton } from "@/components/application/action-bar";
 import { Button } from "@/components/ui/button";
 import { format } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getEventById } from "~/actions/events";
+import { deleteEvent, getEventById } from "~/actions/events";
 
 export default async function EventPage(props: {
   params: Promise<{
@@ -16,7 +17,18 @@ export default async function EventPage(props: {
   }
   return (
     <div>
-      <h1 className="text-lg font-semibold mb-4">Event Details</h1>
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="text-lg font-medium3">Event Details</h2>
+        <ActionButton
+          variant="destructive"
+          size="sm"
+          actionName="Event Deletion"
+          loadingLabel="Deleting event..."
+          action={deleteEvent.bind(null, event.id)}
+        >
+          Delete Event
+        </ActionButton>
+      </div>
       <div className="bg-card p-4 rounded-lg">
         <h2 className="text-lg font-semibold mb-2">{event.title}</h2>
         <p className="text-sm text-muted-foreground mb-4">
@@ -39,9 +51,7 @@ export default async function EventPage(props: {
           <Button variant="default" size="sm" asChild>
             <Link href={`/admin/events/${event.id}/edit`}>Edit Event</Link>
           </Button>
-          <Button variant="destructive_light" size="sm">
-            Delete Event
-          </Button>
+
         </div>
       </div>
     </div>

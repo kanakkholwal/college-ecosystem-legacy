@@ -71,9 +71,9 @@ export function DateTimePicker(field: DateTimePickerProps) {
           {...field.btnProps}
         >
           {field.value ? (
-            format(field.value, "MM/dd/yyyy hh:mm aa")
+            format(field.value, "dd/MM/yyyy hh:mm aa")
           ) : (
-            <span>MM/DD/YYYY hh:mm aa</span>
+            <span>DD/MM/YYYY hh:mm aa</span>
           )}
           <CalendarIcon className="ml-auto focus-within:text-primary" />
         </Button>

@@ -82,27 +82,35 @@ export async function getEvents({
     // Add grouping by day
     // Add grouping and projection
     pipeline.push(
+      // {
+      //   $addFields: {
+      //     dayStart: {
+      //       $dateFromParts: {
+      //         year: { $year: "$time" },
+      //         month: { $month: "$time" },
+      //         day: { $dayOfMonth: "$time" },
+      //       },
+      //     },
+      //   },
+      // },
       {
         $addFields: {
-          dayStart: {
+          localDayStart: {
             $dateFromParts: {
-              year: { $year: "$time" },
-              month: { $month: "$time" },
-              day: { $dayOfMonth: "$time" },
+              year: { $year: { date: "$time", timezone: "Asia/Kolkata" } },
+              month: { $month: { date: "$time", timezone: "Asia/Kolkata" } },
+              day: { $dayOfMonth: { date: "$time", timezone: "Asia/Kolkata" } },
+              timezone: "Asia/Kolkata",
             },
           },
         },
       },
       {
         $group: {
-          _id: "$dayStart",
+          _id: "$localDayStart",
           events: {
             $push: {
-              $mergeObjects: [
-                "$$ROOT",
-                { id: "$_id" }, // Convert _id to id
-                { _id: "$$REMOVE" }, // Remove the original _id
-              ],
+              $mergeObjects: ["$$ROOT", { id: "$_id" }, { _id: "$$REMOVE" }],
             },
           },
         },
@@ -115,6 +123,7 @@ export async function getEvents({
         },
       },
       { $sort: { day: 1 } }
+
     );
 
     // Execute aggregation
@@ -136,7 +145,7 @@ export async function getEventById(
     await dbConnect();
     const event = await EventModel.findById(eventId);
     if (!event) {
-      return Promise.reject("Event not found");
+      return Promise.resolve(null);
     }
     return Promise.resolve(
       JSON.parse(
@@ -192,5 +201,5 @@ export async function deleteEvent(eventId: string) {
     return Promise.reject(
       err instanceof Error ? err.message : "Something went wrong"
     );
-  }
+  } 
 }

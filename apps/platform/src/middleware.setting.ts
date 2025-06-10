@@ -1,6 +1,7 @@
 import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
-
+import type { RoutePattern } from "~/utils/string";
+import { toRegex } from "~/utils/string";
 
 
 export const SIGN_IN_PATH = "/sign-in";
@@ -9,28 +10,7 @@ export const UN_PROTECTED_API_ROUTES = [
     "/api/auth/*",
 ];
 
-export type RoutePattern = string | RegExp;
 
-export const toRegex = (route: RoutePattern): RegExp => {
-  if (route instanceof RegExp) return route;
-  if (route === "/") return /^\/?$/; // Special case for root
-
-  const parts = route
-    .split("/")
-    .filter(part => part !== ""); // Remove empty parts
-
-  if (parts.length === 0) return /^\/?$/; // Handle cases like empty string
-
-  const regexStr = parts
-    .map(part => {
-      if (part === "*") return ".*";
-      if (part.startsWith(":")) return "[a-z0-9-_]+";
-      return part.replace(/[-[\]{}()+?.,\\^$|#\s]/g, "\\$&");
-    })
-    .join("\\/");
-
-  return new RegExp(`^\\/${regexStr}\\/?$`, "i");
-};
 
 // Define public routes more cleanly
 const RAW_PUBLIC_ROUTES: RoutePattern[] = [

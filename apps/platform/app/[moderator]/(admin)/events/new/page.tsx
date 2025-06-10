@@ -47,6 +47,7 @@ export default function CreateNewEvent() {
   });
 
   const handleSubmit = async (data: z.infer<typeof rawEventsSchema>) => {
+    console.log("Form Data:", data);
     toast.promise(createNewEvent(data), {
       loading: "Creating new event",
       success: "New Event created successfully",
