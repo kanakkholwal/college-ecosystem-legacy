@@ -68,23 +68,23 @@ export default async function ResultPage(props: {
 
   return (
     <div className="px-4 md:px-12 xl:px-6 @container">
-      <section
+      <section  
         id="hero"
-        className="z-10 w-full max-w-6xl mx-auto  relative flex flex-col items-center justify-center  py-24 max-h-80 text-center"
+        className="w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center pt-24 pb-16 max-h-80 text-center"
       >
-        <h2 className="text-3xl font-semibold text-center whitespace-nowrap">
+        <h2 className="mb-2 text-2xl lg:text-4xl font-semibold text-center whitespace-nowrap">
           {orgConfig.shortName}
-          <span className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent dark:from-primaryLight dark:to-secondaryLight md:px-2">
+          <span className="relative mx-1 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent dark:from-primaryLight dark:to-secondaryLight md:px-2">
             Result
           </span>
           Portal
         </h2>
-        <p className="mt-4 mb-8 text-lg text-muted-foreground">
+        <p className="text-base text-muted-foreground">
           {orgConfig.shortName} Portal is a platform for students of{" "}
           {orgConfig.shortName} to get all the resources at one place.
         </p>
         <div
-          className="mt-10 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"
+          className="mt-6 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"
           data-aos="fade-up"
           data-aos-anchor-placement="center-bottom"
         >

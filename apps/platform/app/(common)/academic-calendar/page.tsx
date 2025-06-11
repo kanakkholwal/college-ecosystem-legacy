@@ -64,7 +64,7 @@ export default async function AcademicCalenderPage(props: Props) {
           <CalendarDays className="inline-block size-5 mr-2" />
           Academic Calender
         </h1>
-        <p className="text-sm text-muted-foreground mb-4 text-pretty">
+        <p className="text-sm text-muted-foreground mb-4 text-pretty line-clamp-3">
           Check the events and important dates in the academic calendar. This
           calendar is designed to help students and faculty stay informed about
           key academic events, including semester start and end dates,

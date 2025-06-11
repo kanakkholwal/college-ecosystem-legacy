@@ -35,11 +35,11 @@ export default function BaseSearchBox({
   filterDialogDescription = "Filter by different options",
   variant = "default",
 }: SearchBoxProps) {
-    const isDesktop = useMediaQuery("(min-width: 768px)");
+  const isDesktop = useMediaQuery("(min-width: 768px)");
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
-  const [open, setOpen] = useState(variant === "expanded" ? true : false);
+  const [open, setOpen] = useState(false);
 
   const handleSearch = useDebouncedCallback((term: string) => {
     const params = new URLSearchParams(searchParams);

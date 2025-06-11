@@ -53,19 +53,18 @@ export default async function CoursesPage(props: {
     <div className="px-3 md:px-6 xl:px-12 @container">
       <section
         id="hero"
-        className="z-10 w-full mx-auto max-w-6xl relative flex flex-col items-center justify-center py-24 max-h-80 text-center"
+        className="w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center pt-24 pb-16 max-h-80 text-center"
       >
-        <h2
-          className="text-2xl lg:text-4xl font-bold whitespace-nowrap"
-          data-aos="fade-up"
-        >
+      
+        <h2 className="mb-2 text-2xl lg:text-4xl font-semibold text-center whitespace-nowrap">
+   
           Syllabus <span className="text-primary">Search</span>
         </h2>
-        <p className="mt-4 text-muted-foreground" data-aos="zoom-in">
+        <p className="text-base text-muted-foreground">
           Search for syllabus of any course in {orgConfig.shortName}
         </p>
         <div
-          className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"
+          className="mt-6 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"
           data-aos="fade-up"
           data-aos-anchor-placement="center-bottom"
         >

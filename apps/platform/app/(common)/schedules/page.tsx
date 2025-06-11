@@ -32,17 +32,17 @@ export default async function TimeTables() {
     <>
       <section
         id="hero"
-        className="z-10 w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center pt-20 pb-10 max-h-80 text-center"
+        className="w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center pt-24 pb-16 max-h-80 text-center"
       >
-        <h2 className="text-2xl font-semibold text-center whitespace-nowrap">
+        <h2 className="mb-2 text-2xl lg:text-4xl font-semibold text-center whitespace-nowrap">
           Timetables for all departments
         </h2>
-        <p className="text-base text-muted-foreground max-w-2xl mx-auto text-pretty text-center">
+        <p className="text-base text-muted-foreground">
           view your own timetable by selecting your department, year, and
           semester.
         </p>
         <div
-          className="mt-5 flex flex-wrap justify-center gap-y-4 px-2 lg:px-4 w-full mx-auto max-w-2xl"
+          className="mt-6 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"
           data-aos="fade-up"
           data-aos-anchor-placement="center-bottom"
         >

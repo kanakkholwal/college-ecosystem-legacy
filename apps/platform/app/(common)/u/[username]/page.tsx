@@ -3,6 +3,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
 import { ButtonLink } from "@/components/utils/link";
 import { ArrowRight } from "lucide-react";
+import { Metadata } from "next";
 import { PiSmileySad } from "react-icons/pi";
 import { getHostelById } from "~/actions/hostel";
 import { getUserByUsername } from "~/actions/user";
@@ -13,6 +14,26 @@ interface UserPageProps {
   params: Promise<{
     username: string;
   }>;
+}
+
+export const metadata:Metadata = {
+  title: "User Profile",
+  description: "View user profile and details.",
+  alternates: {
+    canonical: '/u/[username]',
+  },
+  robots: {
+    index: false,
+    follow: false,
+  },
+  keywords: [
+    "NITH",
+    "User Profile",
+    "NITH User Profile",
+    "Profile Page",
+    "User Details",
+    "NITH User Details",
+  ],
 }
 export default async function PublicUserPage({ params }: UserPageProps) {
   // Extract username from params
