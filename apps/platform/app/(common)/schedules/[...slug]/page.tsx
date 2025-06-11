@@ -1,11 +1,9 @@
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTimeTable } from "~/lib/time-table/actions";
 
 import TimeTableViewer from "@/components/custom/time-table/viewer";
+import { PreviousPageLink } from "@/components/utils/link";
 
 interface Props {
   params: Promise<{
@@ -41,13 +39,8 @@ export default async function Dashboard({ params }: Props) {
 
   return (
     <>
-      <div className="flex justify-start gap-2 mr-auto w-full mt-5 p-3">
-        <Button variant="default_light" size="sm" asChild>
-          <Link href={"/schedules"}>
-            <ArrowLeft /> 
-            Go Back
-          </Link>
-        </Button>
+      <div className="mt-5 p-3">
+        <PreviousPageLink size="sm" variant="light" />
       </div>
 
       <TimeTableViewer timetableData={timetableData} />

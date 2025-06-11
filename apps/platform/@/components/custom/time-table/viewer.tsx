@@ -24,26 +24,27 @@ export default async function TimeTableViewer({
   const currentDayIndex = new Date().getDay() - 1;
 
   return (
-    <>
-      <div className="flex items-center justify-between gap-2 flex-col md:flex-row mx-auto w-full p-3">
-        <div>
-          <h4 className="text-lg font-semibold">
-            {timetableData?.sectionName} {" | "}
+    <div className="flex flex-col items-center justify-center gap-4 ml-3 mr-4">
+      <div className="p-4 lg:p-6 bg-card rounded-lg shadow w-full">
+        <div className="space-y-1">
+          <h4 className="text-sm leading-none font-medium">{timetableData?.sectionName}</h4>
+          <p className="text-muted-foreground text-sm">
             {getDepartmentName(timetableData?.department_code)}
-          </h4>
-          <div className="flex h-5 items-center space-x-2 text-sm text-muted-foreground">
-            <div>{timetableData?.year} Year</div>
-            <Separator orientation="vertical" />
-            <div>{timetableData?.semester} Semester</div>
-          </div>
+          </p>
+        </div>
+        <Separator className="my-2" />
+        <div className="flex items-center space-x-3 h-4 text-sm text-muted-foreground">
+          <div>{timetableData?.year} Year</div>
+          <Separator orientation="vertical" />
+          <div>{timetableData?.semester} Semester</div>
         </div>
       </div>
-      <Table className="bg-card backdrop-blur-2xl rounded-lg overflow-hidden">
+      <Table className="bg-card border shadow-2xl rounded-lg overflow-hidden">
         <TableHeader>
           <TableRow>
             <TableHead
               className={cn(
-                "sticky top-0 z-10 border-x h-10 text-center text-muted-foreground min-w-40 whitespace-nowrap p-2"
+                "bg-muted text-center text-muted-foreground min-w-12 whitespace-nowrap p-2"
               )}
             >
               Time \ Day
@@ -53,15 +54,18 @@ export default async function TimeTableViewer({
                 <TableHead
                   key={index}
                   className={cn(
-                    "sticky top-0 z-10 border-x h-10 text-center p-2",
+                    "bg-muted text-center text-muted-foreground p-2",
+                    "border-b",
                     currentDayIndex === index
-                      ? "text-primary bg-primary/5"
+                      ? "text-primary border-primary"
                       : " text-muted-foreground"
                   )}
                 >
-                  {day}
+                  <p className="text-sm font-medium">
+                    {day}
+                  </p>
                   {currentDayIndex === index && (
-                    <span className="text-primary text-xs italic">(Today)</span>
+                    <p className="text-primary text-xs italic">(Today)</p>
                   )}
                 </TableHead>
               );
@@ -71,20 +75,19 @@ export default async function TimeTableViewer({
         <TableBody className="relative isolate">
           {Array.from(timeMap.entries()).map(([index, time]) => (
             <TableRow key={index}>
-              <TableCell className="sticky left-0 z-10 border-x text-center text-xs text-semibold whitespace-nowrap p-2">
+              <TableCell className="bg-muted text-center text-muted-foreground min-w-12 text-xs text-medium whitespace-nowrap p-2">
                 {time}
               </TableCell>
               {Array.from(daysMap.entries()).map((_, dayIndex) => (
                 <TableCell
-                  key={`${index}-${
-                    // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                    dayIndex
-                  }`}
+                  key={`day-${dayIndex}-${index}`}
+                  id={`day-${dayIndex}-${index}`}
                   className={cn(
                     "border-x text-center p-2",
-                    currentDayIndex === dayIndex
-                      ? "text-primary bg-primary/5"
-                      : ""
+                    currentDayIndex === dayIndex 
+                    ? "bg-primary/2"
+                    : "",
+            
                   )}
                 >
                   {timetableData.schedule[dayIndex]?.timeSlots[
@@ -92,24 +95,21 @@ export default async function TimeTableViewer({
                   ]?.events.map((event, eventIndex) => (
                     <Event
                       event={event}
-                      key={`${index}-${dayIndex}-event-${
-                        // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                        eventIndex
-                      }`}
+                      key={`${index}-${dayIndex}-event-${eventIndex}`}
                     />
                   ))}
                   {timetableData.schedule[dayIndex]?.timeSlots[index]?.events
                     .length === 0 && (
-                    <Badge className="text-xs" variant="success" size="sm">
-                      Free Time
-                    </Badge>
-                  )}
+                      <Badge variant="default" size="sm">
+                        Free Time
+                      </Badge>
+                    )}
                 </TableCell>
               ))}
             </TableRow>
           ))}
         </TableBody>
       </Table>
-    </>
+    </div>
   );
 }

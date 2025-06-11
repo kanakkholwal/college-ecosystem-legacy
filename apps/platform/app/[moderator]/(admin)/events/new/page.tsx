@@ -105,30 +105,6 @@ export default function CreateNewEvent() {
         );
         setAcceptedIndices([]);
         toast.success(response.message);
-        // toast.promise(
-        //   generateEventsByDoc([fileReference as string]),
-        //   {
-        //     loading: "Generating events from reference",
-        //     success: (response) => {
-        //       if (response.error !== null) {
-        //         console.error("Error generating events:", response.error);
-        //         throw Error(response.message)
-        //       }
-        //       console.log("Generated Events:", response.events);
-        //       setGeneratedEvents(
-        //         response.events.map((event) => ({
-        //           ...event,
-        //           time: new Date(event.time),
-        //           endDate: event.endDate ? new Date(event.endDate) : undefined,
-        //           description: event.description ?? "",
-        //           links: [],
-        //         }))
-        //       )
-        //       return response.message
-        //     },
-        //     error: "Error occurred while generating events"
-        //   }
-        // ).finally(() => setGeneratingEvents(false));
       } catch (error) {
         console.error(error)
         toast.error(error instanceof Error ? error.message : "Error occurred while generating events")

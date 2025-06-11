@@ -314,16 +314,16 @@ export function TimeTableMetaData({ className }: React.ComponentProps<"form">) {
 export function Event({ event }: { event: EventTypeWithID | RawEvent }) {
   return (
     <div>
-      <HoverCard>
+      <HoverCard closeDelay={100}>
         <HoverCardTrigger asChild>
-          <Button variant="link" className="p-4">
+          <Button variant="outline" size="sm" className="whitespace-normal">
             {event.title}
           </Button>
         </HoverCardTrigger>
-        <HoverCardContent className="w-80 text-left">
+        <HoverCardContent className="max-w-80 text-left">
           <div className="space-y-1">
-            <h4 className="text-sm font-semibold">{event.title}</h4>
-            <p className="text-sm">{event?.description}</p>
+            <h4 className="text-sm font-medium">{event.title}</h4>
+            <p className="text-xs text-muted-foreground">{event?.description}</p>
           </div>
         </HoverCardContent>
       </HoverCard>
