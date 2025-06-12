@@ -6,6 +6,7 @@ import { Suspense } from "react";
 import { BiSpreadsheet } from "react-icons/bi";
 import { getCachedLabels, getResults } from "~/actions/result";
 
+import { BaseHeroSection } from "@/components/application/base-hero";
 import EmptyArea from "@/components/common/empty-area";
 import { NoteSeparator } from "@/components/common/note-separator";
 import ConditionalRender from "@/components/utils/conditional-render";
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
   title: "Results",
   description: "Search for results in NITH",
   applicationName: "Result Portal",
-  alternates:{
+  alternates: {
     canonical: '/results',
   },
   keywords: [
@@ -68,38 +69,27 @@ export default async function ResultPage(props: {
 
   return (
     <div className="px-4 md:px-12 xl:px-6 @container">
-      <section  
-        id="hero"
-        className="w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center pt-24 pb-16 max-h-80 text-center"
+      <BaseHeroSection
+        title={
+          <>
+            {orgConfig.shortName}{" "}
+            <span className="text-primary">Result</span> Portal
+          </>
+        }
+        description="Search for results by entering your roll number or name."
       >
-        <h2 className="mb-2 text-2xl lg:text-4xl font-semibold text-center whitespace-nowrap">
-          {orgConfig.shortName}
-          <span className="relative mx-1 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent dark:from-primaryLight dark:to-secondaryLight md:px-2">
-            Result
-          </span>
-          Portal
-        </h2>
-        <p className="text-base text-muted-foreground">
-          {orgConfig.shortName} Portal is a platform for students of{" "}
-          {orgConfig.shortName} to get all the resources at one place.
-        </p>
-        <div
-          className="mt-6 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"
-          data-aos="fade-up"
-          data-aos-anchor-placement="center-bottom"
+        <Suspense
+          key={"key_search_bar"}
+          fallback={<Skeleton className="h-12 w-full " />}
         >
-          <Suspense
-            key={"key_search_bar"}
-            fallback={<Skeleton className="h-12 w-full " />}
-          >
-            <SearchBox
-              branches={branches}
-              programmes={programmes}
-              batches={batches}
-            />
-          </Suspense>
-        </div>
-      </section>
+          <SearchBox
+            branches={branches}
+            programmes={programmes}
+            batches={batches}
+          />
+        </Suspense>
+      </BaseHeroSection>
+
       <NoteSeparator label={`${results.length} Results found`} />
       <ErrorBoundaryWithSuspense
         fallback={

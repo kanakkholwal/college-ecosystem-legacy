@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getCourses } from "~/actions/course";
 
+import { BaseHeroSection } from "@/components/application/base-hero";
 import Pagination from "@/components/application/course-pagination";
 import SearchBox from "@/components/application/course-search";
 import { ResponsiveContainer } from "@/components/common/container";
@@ -51,28 +52,19 @@ export default async function CoursesPage(props: {
 
   return (
     <div className="px-3 md:px-6 xl:px-12 @container">
-      <section
-        id="hero"
-        className="w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center pt-24 pb-16 max-h-80 text-center"
+      <BaseHeroSection
+        title={
+          <>
+            Syllabus <span className="text-primary">Search</span>
+          </>
+        }
+        description={`Search for syllabus of any course in ${orgConfig.shortName}.`}
       >
-      
-        <h2 className="mb-2 text-2xl lg:text-4xl font-semibold text-center whitespace-nowrap">
-   
-          Syllabus <span className="text-primary">Search</span>
-        </h2>
-        <p className="text-base text-muted-foreground">
-          Search for syllabus of any course in {orgConfig.shortName}
-        </p>
-        <div
-          className="mt-6 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"
-          data-aos="fade-up"
-          data-aos-anchor-placement="center-bottom"
-        >
-          <Suspense fallback={<Skeleton className="h-12 w-full" />}>
-            <SearchBox departments={departments} types={types} />
-          </Suspense>
-        </div>
-      </section>
+        <Suspense fallback={<Skeleton className="h-12 w-full" />}>
+          <SearchBox departments={departments} types={types} />
+        </Suspense>
+      </BaseHeroSection>
+
       <NoteSeparator label={`${courses.length} Courses found`} />
 
       <ResponsiveContainer className="px-0 @3xl:grid-cols-3">

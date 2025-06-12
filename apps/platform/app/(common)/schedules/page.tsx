@@ -11,6 +11,7 @@ import { GrSchedules } from "react-icons/gr";
 import { getDepartmentShort } from "~/constants/departments";
 import { getAllTimeTables } from "~/lib/time-table/actions";
 
+import { BaseHeroSection } from "@/components/application/base-hero";
 import ScheduleSearchBox from "@/components/application/schedule-search";
 import { ResponsiveContainer } from "@/components/common/container";
 import { NoteSeparator } from "@/components/common/note-separator";
@@ -27,28 +28,25 @@ export const metadata: Metadata = {
 
 export default async function TimeTables() {
   const timeTables = await getAllTimeTables();
+  const years = Array.from(
+    new Set(timeTables.map((timetable) => timetable.year?.toString() || ""))
+  );
+  const branches = Array.from(
+    new Set(timeTables.map((timetable) => timetable.department_code || ""))
+  ).filter((branch) => branch !== "");
 
   return (
     <>
-      <section
-        id="hero"
-        className="w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center pt-24 pb-16 max-h-80 text-center"
-      >
-        <h2 className="mb-2 text-2xl lg:text-4xl font-semibold text-center whitespace-nowrap">
-          Timetables for all departments
-        </h2>
-        <p className="text-base text-muted-foreground">
-          view your own timetable by selecting your department, year, and
-          semester.
-        </p>
-        <div
-          className="mt-6 flex flex-wrap justify-center gap-y-4 gap-x-6 w-full mx-auto max-w-2xl"
-          data-aos="fade-up"
-          data-aos-anchor-placement="center-bottom"
-        >
-          <ScheduleSearchBox branches={[]} years={[]} />
-        </div>
-      </section>
+    <BaseHeroSection
+      title={
+        <>
+          Timetables <span className="text-primary">Search</span>
+        </>
+      }
+      description="View your own timetable by selecting your department, year, and semester.">
+          <ScheduleSearchBox branches={branches} years={years} />
+      </BaseHeroSection>
+
       <NoteSeparator label={`${timeTables.length} Timetables found`} />
 
       {timeTables.length === 0 ? (
