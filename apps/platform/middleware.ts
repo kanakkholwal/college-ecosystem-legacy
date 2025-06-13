@@ -49,56 +49,58 @@ export async function middleware(request: NextRequest) {
       const matchedRole = protectedPaths.find((path) =>
         request.nextUrl.pathname.toLowerCase().startsWith(path)
       )?.slice(1) as (typeof dashboardRoutes)[number];
-      const authCheck = checkAuthorization(matchedRole, session);
-
-      if (!authCheck.authorized) {
-        if (request.method === "GET") {
-          return NextResponse.redirect(
-            new URL(`/unauthorized?target=${encodeURIComponent(request.nextUrl.pathname)}`,
-              request.nextUrl.origin)
-          );
-        }
-        if (request.method === "POST") {
-          console.log("Unauthorized POST request to:", request.nextUrl.pathname);
-          return NextResponse.json(
-            {
-              status: "error",
-              message: "You are not authorized to perform this action",
-              data: null,
-            },
-            {
-              status: 403,
-              headers: {
-                "Un-Authorized-Redirect": "true",
-                "Un-Authorized-Redirect-Path": SIGN_IN_PATH,
-                "Un-Authorized-Redirect-Next": request.nextUrl.href,
-                "Un-Authorized-Redirect-Method": request.method,
-                "Un-Authorized-Redirect-max-tries": "5",
-                "Un-Authorized-Redirect-tries": "1",
-                "Content-Type": "application/json",
+      if(matchedRole){
+        const authCheck = checkAuthorization(matchedRole, session);
+  
+        if (!authCheck.authorized) {
+          if (request.method === "GET") {
+            return NextResponse.redirect(
+              new URL(`/unauthorized?target=${encodeURIComponent(request.nextUrl.pathname)}`,
+                request.nextUrl.origin)
+            );
+          }
+          if (request.method === "POST") {
+            console.log("Unauthorized POST request to:", request.nextUrl.pathname);
+            return NextResponse.json(
+              {
+                status: "error",
+                message: "You are not authorized to perform this action",
+                data: null,
               },
-            }
+              {
+                status: 403,
+                headers: {
+                  "Un-Authorized-Redirect": "true",
+                  "Un-Authorized-Redirect-Path": SIGN_IN_PATH,
+                  "Un-Authorized-Redirect-Next": request.nextUrl.href,
+                  "Un-Authorized-Redirect-Method": request.method,
+                  "Un-Authorized-Redirect-max-tries": "5",
+                  "Un-Authorized-Redirect-tries": "1",
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+          }
+        }
+        if (authCheck.redirect?.destination) {
+          console.log("Redirecting to:", authCheck.redirect.destination);
+          // if the user is authenticated and tries to access a protected route, redirect them to the appropriate page
+          return NextResponse.redirect(
+            new URL(authCheck.redirect.destination, request.url)
           );
         }
-      }
-      if (authCheck.redirect?.destination) {
-        console.log("Redirecting to:", authCheck.redirect.destination);
-        // if the user is authenticated and tries to access a protected route, redirect them to the appropriate page
-        return NextResponse.redirect(
-          new URL(authCheck.redirect.destination, request.url)
-        );
-      }
-      // Special redirect: /dashboard -> /<first-role>
-      if (request.nextUrl.pathname.startsWith("/dashboard")) {
-        return NextResponse.redirect(
-          new URL(
-            request.nextUrl.pathname.replace(
-              "/dashboard",
-              session?.user.other_roles[0]
-            ),
-            request.url
-          )
-        );
+        // Special redirect: /dashboard -> /<first-role>
+        if (request.nextUrl.pathname.startsWith("/dashboard")) {
+          return NextResponse.redirect(
+            new URL(
+              request.nextUrl.pathname.replace(
+                "/dashboard",
+                session?.user.other_roles[0]
+              ),
+              request.url
+            )
+          );
+        }
       }
       return NextResponse.next();
     }
