@@ -16,10 +16,10 @@ import {
 } from "@/components/ui/sidebar";
 import type { Session } from "~/lib/auth-client";
 
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { sidebar_links } from "@/constants/links";
 import Link from "next/link";
-import { appConfig } from "~/project.config";
-import { ThemeSwitcher } from "../theme-switcher";
+import { appConfig, orgConfig } from "~/project.config";
 
 const getSideNavLinks = (role: string) => {
   return sidebar_links
@@ -61,21 +61,23 @@ export function AppSidebar({ user, moderator, ...props }: SidebarProps) {
             <SidebarMenuButton
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
+              size="lg"
             >
               <Link href={`/${moderator}`}>
-                {/* <div>
-                <ArrowUpCircleIcon className="h-5 w-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-                </div> */}
-                <div className="flex items-center justify-center rounded-lg text-3xl font-bold text-center relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary whitespace-nowrap">
-                  N
-                </div>
+                <Avatar className="h-8 w-8 rounded-lg">
+                  <AvatarImage
+                    src="/logo-square.webp"
+                    alt={appConfig.name}
+                  />
+                  <AvatarFallback className="flex items-center justify-center rounded-lg text-3xl font-bold text-center relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary whitespace-nowrap">
+                    {orgConfig.shortName.charAt(0).toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate text-base font-semibold">
-                    {appConfig.name}
-                  </span>
-                  {/* <span className="truncate text-xs">{activeRole.role}</span> */}
+                  <span className="truncate font-semibold">{appConfig.name}</span>
+                  <span className="truncate text-xs">{orgConfig.mailSuffix}</span>
                 </div>
+
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -14,10 +14,10 @@ export default function Navbar({ user }: { user: Session["user"] }) {
     <nav className="w-full p-4 backdrop-blur border-b border-solid flex items-center lg:px-6 z-2">
       <SidebarTrigger className="mx-2" />
       <div className="flex items-start flex-col">
-        <h3 className="text-lg font-bold">
+        <h3 className="text-sm font-semibold">
           {titlesMap.get(pathname)?.title ?? "Dashboard"}
         </h3>
-        <p className="text-xs text-muted-foreground font-medium truncate w-full max-w-64">
+        <p className="text-xs text-muted-foreground font-light truncate w-full max-w-80">
           {titlesMap.get(pathname)?.description ?? pathname}
         </p>
       </div>
