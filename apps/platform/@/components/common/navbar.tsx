@@ -3,11 +3,10 @@ import ProfileDropdown from "@/components/common/profile-dropdown";
 import { SUPPORT_LINKS, getNavLinks, socials } from "@/constants/links";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight, LogIn } from "lucide-react";
-import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Session } from "~/lib/auth";
-import { appConfig } from "~/project.config";
+import { ApplicationInfo } from "../logo";
 import { ButtonLink } from "../utils/link";
 import { NavTabs } from "./nav-tabs";
 import { ThemeSwitcher } from "./theme-switcher";
@@ -27,25 +26,9 @@ export default function Navbar({ user }: NavbarProps) {
       <div className="w-full max-w-(--max-app-width) mx-auto flex items-center justify-between px-4 py-2">
         <Link
           href="/"
-          className="relative font-bold text-xl bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:from-secondary hover:to-primary lg:text-xl whitespace-nowrap"
+          className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:from-secondary hover:to-primary lg:text-xl whitespace-nowrap"
         >
-          <Image
-            src={appConfig.logo}
-            alt="Logo"
-            width={280}
-            height={80}
-            className="h-8 w-auto object-contain relative block dark:hidden"
-            priority
-          />
-          <Image
-            src={appConfig.logoDark}
-            alt="Logo"
-            width={280}
-            height={80}
-            className="h-8 w-auto object-contain relative hidden dark:block"
-            priority
-          />
-          <span className="sr-only">{appConfig.name}</span>
+          <ApplicationInfo/>
         </Link>
         <div className="ml-auto flex gap-2 items-center">
           <ThemeSwitcher />
