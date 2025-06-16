@@ -105,7 +105,7 @@ export default async function AcademicCalenderPage(props: Props) {
             return <StaticStep
               key={group.day.toString()}
               step={idx + 1}
-              title={`${format(group.day, "dd MMMM yyyy")}`}
+              title={format(new Date(event.time),  "MMMM d, yyyy"))}
             >
               <ResponsiveContainer>
                 {group.events.map((event) => {
