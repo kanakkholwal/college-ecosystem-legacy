@@ -2,45 +2,19 @@ import { cn } from "@/lib/utils";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Star } from "lucide-react";
 import Link from "next/link";
+import { getRepoStarGazers } from "~/lib/github";
 import { appConfig } from "~/project.config";
 import { NumberTicker } from "../animation/number-ticker";
 import { Button } from "../ui/button";
 
-async function getStarGazers(): Promise<number> {
-  let stars = 6; // Default value
 
-  try {
-    const response = await fetch(
-      "https://api.github.com/repos/" + appConfig.githubUri,
-      {
-        headers: process.env.GITHUB_OAUTH_TOKEN
-          ? {
-              Authorization: `Bearer ${process.env.GITHUB_OAUTH_TOKEN}`,
-              "Content-Type": "application/json",
-            }
-          : {},
-        next: {
-          revalidate: 3600,
-        },
-      }
-    );
-
-    if (response.ok) {
-      const data = await response.json();
-      stars = data.stargazers_count || stars; // Update stars if API response is valid
-    }
-  } catch (error) {
-    console.error("Error fetching GitHub stars:", error);
-  }
-  return stars;
-}
 
 export default async function GithubStars({
   className,
 }: {
   className?: string;
 }) {
-  const stargazers_count = await getStarGazers();
+  const stargazers_count = await getRepoStarGazers();
 
   return (
     <Button variant="rainbow" size="sm" className={cn(className)} asChild>

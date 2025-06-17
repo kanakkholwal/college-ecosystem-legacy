@@ -39,8 +39,10 @@ export function ResponsiveAppLogo({ className }: { className?: string }) {
 
 export function ApplicationInfo({
   className,
+  children,
 }: {
   className?: string;
+  children?: React.ReactNode;
 }) {
   return (
     <div
@@ -62,7 +64,7 @@ export function ApplicationInfo({
         <span className="truncate font-semibold">{appConfig.name}</span>
         <span className="truncate text-xs text-muted-foreground font-medium">{orgConfig.mailSuffix}</span>
       </div>
-
+      {children}
     </div>
   );
 }

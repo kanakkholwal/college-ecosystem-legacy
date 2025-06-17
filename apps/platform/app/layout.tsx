@@ -94,6 +94,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(orgConfig.jsonLds.EducationalOrganization) }}
           id="json-ld-educational-organization"
+          suppressHydrationWarning
         />
         <Provider>{children} </Provider>
         {process.env.NODE_ENV === "production" && (

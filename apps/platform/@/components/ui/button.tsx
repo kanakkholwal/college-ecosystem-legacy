@@ -132,7 +132,7 @@ const buttonVariants = cva(
         icon_xl: "h-14 w-14 p-4 [&>svg]:size-8",
       },
       effect: {
-        expandIcon: "group relative group-hover:gap-4",
+        expandIcon: "group relative group-hover:gap-4 [&>svg.icon]:transition-transform [&>svg.icon]:group-hover:translate-x-1",
         ringHover:
           "transition-all duration-300 hover:ring-2 hover:ring-primary/90 hover:ring-offset-2",
         shine:
@@ -147,6 +147,9 @@ const buttonVariants = cva(
           "relative !no-underline after:absolute after:bg-primary after:bottom-2 after:h-[1px] after:w-2/3 after:origin-bottom-left after:scale-x-100 hover:after:origin-bottom-right hover:after:scale-x-0 after:transition-transform after:ease-in-out after:duration-300",
         hoverUnderline:
           "relative !no-underline after:absolute after:bg-primary after:bottom-2 after:h-[1px] after:w-2/3 after:origin-bottom-right after:scale-x-0 hover:after:origin-bottom-left hover:after:scale-x-100 after:transition-transform after:ease-in-out after:duration-300",
+      },
+      hoverEffect: {
+        none: "",
       },
       width: {
         default: "w-auto",
@@ -173,6 +176,7 @@ const buttonVariants = cva(
       variant: "default",
       size: "default",
       transition: "none",
+      hoverEffect: "none",
     },
   }
 );
@@ -209,6 +213,7 @@ const Button = React.forwardRef<
       transition,
       width,
       effect,
+      hoverEffect,
       icon: Icon,
       iconPlacement,
       ...props
@@ -227,6 +232,7 @@ const Button = React.forwardRef<
             rounded,
             width,
             effect,
+            hoverEffect,
           })
         )}
         ref={ref}

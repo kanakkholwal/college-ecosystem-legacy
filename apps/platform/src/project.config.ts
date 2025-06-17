@@ -20,7 +20,7 @@ export const appConfig = {
     { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" },
     { name: "NITH", url: "https://nith.ac.in" },
   ],
-  githubRepo: "https://github.com/kanakkholwal/college-ecosystem",
+  githubRepo: "https://github.com/kanakkholwal/college-ecosystem?utm_source=app.nith.eu.org&utm_medium=referral&utm_campaign=repo_link",
   githubUri: "kanakkholwal/college-ecosystem",
   socials: {
     twitter: "https://twitter.com/kanakkholwal",
@@ -65,10 +65,7 @@ export const supportLinks = [
     href: appConfig.githubRepo + "/issues",
     title: "Report an issue",
   },
-  {
-    href: appConfig.contact,
-    title: "Contact us",
-  },
+
   {
     href: "https://forms.gle/u2ptK12iRVdn5oXF7",
     title: "Give a feedback",
@@ -77,6 +74,7 @@ export const supportLinks = [
     href: "https://forms.gle/v8Angn9VCbt9oVko7",
     title: "Suggest a feature",
   },
+
 ] as const;
 
 export default {

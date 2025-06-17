@@ -31,7 +31,7 @@
     --border: hsl(220 13% 91%);
     --input: hsl(220 13% 91%);
     --input: oklch(.922 0 0);
-    
+
     --ring: hsl(262.1 83.3% 57.8%);
     --radius: 0.5rem;
 
@@ -104,7 +104,7 @@
     --border: hsl(0, 0%, 14%);
     /* --input: hsl(0, 0%, 14%); */
     --input: oklch(1 0 0/15%);
-    --ring: var(--primary,hsl(250deg 100% 80%));
+    --ring: var(--primary, hsl(250deg 100% 80%));
 
     /* dark:chart colors */
     --chart-1: hsl(238.73deg 83.53% 66.67%);
@@ -408,7 +408,6 @@ body {
     overflow-x: hidden;
     position: relative;
     font-family: var(--font-sans, 'Inter', 'Helvetica', 'Arial', sans-serif);
-    @apply bg-background text-foreground;
     --max-app-width: 1280px;
 
 }
@@ -420,6 +419,14 @@ body {
 .nexo-mdx-editor .toolbar .button {
     @apply border border-transparent bg-input/50 text-muted-foreground shadow-none hover:shadow-none hover:text-foreground hover:bg-background focus-within:border-primary;
 }
+
+/* .rainbow {
+    @apply animate-rainbow bg-[linear-gradient(#121213, #121213), linear-gradient(#121213_50%, rgba(18, 18, 19, 0.6)_80%, rgba(18, 18, 19, 0)), linear-gradient(90deg, var(--color-1), var(--color-5), var(--color-3), var(--color-4), var(--color-2))] bg-[length:200%] text-primary-foreground dark:text-black [background-clip:padding-box, border-box, border-box] [background-origin:border-box] [border:calc(0.125rem)_solid_transparent] before:absolute before:bottom-[-20%] before:left-1/2 before:z-0 before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg, var(--color-1), var(--color-5), var(--color-3), var(--color-4), var(--color-2))] before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#fff, #fff), linear-gradient(#fff_50%, rgba(255, 255, 255, 0.6)_80%, rgba(0, 0, 0, 0)), linear-gradient(90deg, var(--color-1), var(--color-5), var(--color-3), var(--color-4), var(--color-2))];
+}
+
+.rainbow_outline {
+    @apply border border-input border-b-transparent bg-[linear-gradient(#ffffff, #ffffff), linear-gradient(#ffffff_50%, rgba(18, 18, 19, 0.6)_80%, rgba(18, 18, 19, 0)), linear-gradient(90deg, var(--color-1), var(--color-5), var(--color-3), var(--color-4), var(--color-2))] bg-[length:200%] text-accent-foreground dark:text-primary-foreground [background-clip:padding-box, border-box, border-box] [background-origin:border-box] before:absolute before:bottom-[-20%] before:left-1/2 before:z-0 before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg, var(--color-1), var(--color-5), var(--color-3), var(--color-4), var(--color-2))] before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#0a0a0a, #0a0a0a), linear-gradient(#0a0a0a_50%, rgba(255, 255, 255, 0.6)_80%, rgba(0, 0, 0, 0)), linear-gradient(90deg, var(--color-1), var(--color-5), var(--color-3), var(--color-4), var(--color-2))];
+} */
 
 #gradient-canvas {
     width: 100%;

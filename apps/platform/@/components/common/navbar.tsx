@@ -26,7 +26,6 @@ export default function Navbar({ user }: NavbarProps) {
       <div className="w-full max-w-(--max-app-width) mx-auto flex items-center justify-between px-4 py-2">
         <Link
           href="/"
-          className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:from-secondary hover:to-primary lg:text-xl whitespace-nowrap"
         >
           <ApplicationInfo/>
         </Link>
@@ -62,9 +61,12 @@ export default function Navbar({ user }: NavbarProps) {
   );
 }
 
-export function SocialBar() {
+export function SocialBar({className}: {className?: string}) {
+  if (socials.length === 0) {
+    return null;
+  }
   return (
-    <div className="inline-flex flex-row items-center empty:hidden gap-3 mx-auto">
+    <div className={cn("inline-flex flex-row items-center empty:hidden gap-3 mx-auto", className)}>
       {socials.map((link) => {
         return (
           <Link

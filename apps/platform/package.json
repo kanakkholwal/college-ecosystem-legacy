@@ -77,6 +77,8 @@
     "next13-progressbar": "^1.2.2",
     "node-html-parser": "^7.0.1",
     "postcss": "^8.5.4",
+    "posthog-js": "^1.253.4",
+    "posthog-node": "^5.1.1",
     "react": "^19.1.0",
     "react-day-picker": "^9.7.0",
     "react-dom": "^19.1.0",
