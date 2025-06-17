@@ -15,8 +15,7 @@ import { appConfig } from "~/project.config";
 import type { ResultType } from "~/types/result";
 import { mailFetch, serverFetch } from "./server-fetch";
 
-// const ALLOWED_ROLES = [ROLES.STUDENT, ROLES.FACULTY, ROLES.STAFF];
-// const VERIFY_EMAIL_PATH_PREFIX = "/sign-in?tab=verify-email&token=";
+
 const VERIFY_EMAIL_PATH_PREFIX = "/verify-mail?token=";
 
 const baseUrl = process.env.BASE_URL;
@@ -50,10 +49,20 @@ export const auth = betterAuth({
           };
         },
       },
+      // delete:{
+      //   before: async (user) => {
+      //     console.log("Deleting user", user.email);
+      //     return {
+      //       data: {
+      //         ...user,
+      //       },
+      //     };
+      //   },
+      // }
     },
   },
 onAPIError: {
-    throw: false,
+		throw: true,
     onError: (error) => {
       console.error("Auth error:", error);
     },

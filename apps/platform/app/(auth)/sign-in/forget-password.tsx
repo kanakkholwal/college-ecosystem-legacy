@@ -36,7 +36,6 @@ const FormSchema = z.object({
 });
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
 

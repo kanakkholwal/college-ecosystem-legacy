@@ -1,7 +1,7 @@
 "use client";
 import ErrorBanner from "@/components/utils/error";
 import { useEffect } from "react";
-import posthog from "posthog-js";
+// import posthog from "posthog-js";
 
 export default function ErrorBoundary({
   error,
@@ -11,7 +11,7 @@ export default function ErrorBoundary({
   reset: () => void;
 }) {
   useEffect(() => {
-    posthog.captureException(error);
+    // posthog.captureException(error);
 
     // Log the error to an error reporting service
     console.error(error);

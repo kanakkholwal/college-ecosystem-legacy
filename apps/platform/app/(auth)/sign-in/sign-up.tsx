@@ -115,7 +115,7 @@ export default function SignUpForm() {
                 <FormItem>
                   <div className="relative group">
                     <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
-                      <LuMail className="w-4 h-4" />
+                      <LuMail className="w-4 h-4 group-focus-within:text-primary" />
                     </FormLabel>
                     <FormControl className="relative">
                       <Input
@@ -141,7 +141,7 @@ export default function SignUpForm() {
                 <FormItem>
                   <div className="relative group">
                     <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
-                      <LuMail className="w-4 h-4" />
+                      <LuMail className="w-4 h-4 group-focus-within:text-primary" />
                     </FormLabel>
                     <FormControl className="relative">
                       <Input
@@ -167,7 +167,7 @@ export default function SignUpForm() {
                 <FormItem>
                   <div className="relative group">
                     <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
-                      <BiLockOpenAlt className="w-4 h-4" />
+                      <BiLockOpenAlt className="w-4 h-4 group-focus-within:text-primary" />
                     </FormLabel>
                     <FormControl>
                       <Input
