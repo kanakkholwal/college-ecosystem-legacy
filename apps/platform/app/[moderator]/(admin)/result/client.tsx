@@ -45,19 +45,19 @@ async function getResultByRollNo(rollNo: string, method: typeof availableMethods
       const res =
         await serverApis.results.getResultByRollNoFromSite(rollNo);
       console.log("Response from getResultByRollNoFromSite:", res);
-      return Promise.resolve(res.data);
+      return Promise.resolve(res);
     } else if (method === "getResultByRollNo") {
-      const { data: response } =
+      const response =
         await serverApis.results.getResultByRollNo(rollNo);
       return Promise.resolve(response);
 
     } else if (method === "addResultByRollNo") {
-      const { data: response } =
+      const response =
         await serverApis.results.addResultByRollNo(rollNo);
       return Promise.resolve(response);
 
     } else if (method === "updateResultByRollNo") {
-      const { data: response } =
+      const response =
         await serverApis.results.updateResultByRollNo([
           rollNo,
           {},
@@ -194,7 +194,7 @@ export function DeleteResultDiv() {
     }
     setLoading(true);
     try {
-      const { data: response } =
+      const response =
         await serverApis.results.deleteResultByRollNo(rollNo);
       if (response?.error || !response?.data) {
         toast.error(response?.message || "Failed to delete result by Roll No");

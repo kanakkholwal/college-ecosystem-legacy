@@ -457,14 +457,13 @@ export async function importHostelsFromSite() {
   try {
     const res = await serverApis.hostels.getAll(undefined);
     console.log(res);
-    const response = res.data;
-    if (res?.error || response?.error || !response?.data) {
+    if (res?.error) {
       return Promise.reject(
-        res?.error?.message || "Some error occurred while fetching hostels"
+        res?.message || "Some error occurred while fetching hostels"
       );
     }
     await dbConnect();
-    const hostels = response?.data?.hostels.map((hostel:any) => {
+    const hostels = res?.data?.hostels.map((hostel:any) => {
       return {
         name: hostel.name,
         slug: hostel.slug,

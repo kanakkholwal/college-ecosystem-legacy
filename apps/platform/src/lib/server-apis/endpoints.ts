@@ -1,15 +1,46 @@
-import type { ApiConfigMap } from "./base-api";
+import type { ApiConfigEntry, ApiConfigMap } from "./base-api";
 import type { ApiResponse, APITypes } from "./types";
 /*
  **  Result APIs
  */
-//  ApiConfigMap<APITypes["results"], ApiResponse<any>> 
-const results:ApiConfigMap = {
+export type Endpoints = {
+    results: ApiConfigMap<{
+        [K in keyof APITypes['results']]: ApiConfigEntry<
+            APITypes['results'][K]['payload'],
+            ApiResponse<APITypes['results'][K]['response']>
+        >;
+    }>;
+    hostels: ApiConfigMap<{
+        [K in keyof APITypes['hostels']]: ApiConfigEntry<
+            APITypes['hostels'][K]['payload'],
+            ApiResponse<APITypes['hostels'][K]['response']>
+        >;
+    }>;
+    faculties: ApiConfigMap<{
+        [K in keyof APITypes['faculties']]: ApiConfigEntry<
+            APITypes['faculties'][K]['payload'],
+            ApiResponse<APITypes['faculties'][K]['response']>
+        >;
+    }>;
+    departments: ApiConfigMap<{
+        [K in keyof APITypes['departments']]: ApiConfigEntry<
+            APITypes['departments'][K]['payload'],
+            ApiResponse<APITypes['departments'][K]['response']>
+        >;
+    }>;
+    mail: ApiConfigMap<{
+        [K in keyof APITypes['mail']]: ApiConfigEntry<
+            APITypes['mail'][K]['payload'],
+            ApiResponse<APITypes['mail'][K]['response']>
+        >;
+    }>;
+};
+const results:Endpoints["results"] = {
   importFreshers:{
     url: "/api/results/import-freshers",
     method: "POST",
-    transformBody: (payload: APITypes["results"]["importFreshers"]["payload"]) => payload,
-    transformResponse: (res: unknown) => res as ApiResponse<APITypes["results"]["importFreshers"]["response"]>,
+    transformBody: (payload) => payload,
+    transformResponse: (res) => res as ApiResponse<APITypes["results"]["importFreshers"]["response"]>,
   },
   assignRank: {
     url: "/api/results/assign-ranks",
@@ -24,7 +55,7 @@ const results:ApiConfigMap = {
   getResultByRollNoFromSite: {
     url: "/api/results/:rollNo",
     method: "POST",
-    transformParams: (payload: APITypes["results"]["getResultByRollNoFromSite"]["payload"]) => ({
+    transformParams: (payload) => ({
       rollNo: payload,
     }),
     transformResponse: (res: unknown) => res as ApiResponse<APITypes["results"]["getResultByRollNoFromSite"]["response"]>,
@@ -35,7 +66,7 @@ const results:ApiConfigMap = {
     transformParams: (payload: APITypes["results"]["getResultByRollNo"]["payload"]) => ({
       rollNo: payload,
     }),
-    transformResponse: (res: unknown) => res as APITypes["results"]["getResultByRollNo"]["response"],
+    transformResponse: (res: unknown) => res as ApiResponse<APITypes["results"]["getResultByRollNo"]["response"]>,
   },
   deleteResultByRollNo: {
     url: "/api/results/:rollNo/delete",
@@ -91,7 +122,7 @@ const results:ApiConfigMap = {
  **  Hostel APIs
  */
 
-export const hostels:ApiConfigMap = {
+export const hostels:Endpoints["hostels"] = {
   getAll:{
     url: "/api/hostels",
     method: "GET",
@@ -103,7 +134,7 @@ export const hostels:ApiConfigMap = {
  **  Faculties APIs
  */
 
-export const faculties:ApiConfigMap = {
+export const faculties:Endpoints["faculties"] = {
  searchByEmail:{
   url: "/api/faculties/search/:email",
   method: "GET",
@@ -132,7 +163,7 @@ export const faculties:ApiConfigMap = {
  **  Departments API
  */
 
-export const departments:ApiConfigMap = {
+export const departments:Endpoints["departments"] = {
   getAll: {
     url: "/api/departments",
     method: "GET",
@@ -149,7 +180,7 @@ export const departments:ApiConfigMap = {
 /*
  **  Mail API
  */
-export const mail:ApiConfigMap  = {
+export const mail:Endpoints["mail"]  = {
   sendResultUpdate:{
     url: "/api/send",
     method: "POST",

@@ -114,7 +114,7 @@ export async function assignBranchChange() {
 }
 export async function getAbnormalResults() {
   try {
-    const { data: response } = await serverApis.results.getAbnormalResults(undefined);
+    const response = await serverApis.results.getAbnormalResults(undefined);
     if (response?.error) {
       console.error(response);
       return Promise.reject(response.message || "Failed to fetch abnormal results");
