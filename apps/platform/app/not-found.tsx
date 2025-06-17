@@ -9,7 +9,14 @@ export const metadata: Metadata = {
 
 export default function NotFound() {
   return (
-    <div className="flex flex-col justify-center items-center p-4 w-full h-full gap-4 py-36">
+    <div className="flex flex-col justify-center items-center p-4 w-full h-full gap-4 py-36 relative">
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20 "
+      >
+        <div className="blur-[106px] h-56 bg-gradient-to-br from-primary to-secondary" />
+        <div className="blur-[106px] h-32 bg-gradient-to-r from-secondary to-primary" />
+      </div>
       <h2 className="text-5xl font-bold text-center">Sorry, Page Not Found!</h2>
       <p className="text-md text-muted-foreground mt-5 text-center">
         Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve

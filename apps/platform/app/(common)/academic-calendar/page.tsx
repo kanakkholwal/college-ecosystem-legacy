@@ -5,7 +5,7 @@ import { StaticStep } from "@/components/common/step";
 import { FullScreenCalendar } from "@/components/ui/calendar-full";
 import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
 import ConditionalRender from "@/components/utils/conditional-render";
-import { format } from "date-fns";
+import { format, startOfDay } from "date-fns";
 import { CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
 import { getEvents } from "~/actions/events";
@@ -105,7 +105,7 @@ export default async function AcademicCalenderPage(props: Props) {
             return <StaticStep
               key={group.day.toString()}
               step={idx + 1}
-              title={format(new Date(event.time),  "MMMM d, yyyy"))}
+              title={format(new Date(startOfDay(group.day)),  "MMMM d, yyyy")}
             >
               <ResponsiveContainer>
                 {group.events.map((event) => {

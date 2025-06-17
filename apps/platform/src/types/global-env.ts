@@ -17,6 +17,10 @@ const envVariables = z.object({
   NEXT_PUBLIC_BASE_URL: z.string().url(),
   BASE_URL: z.string().url(),
 
+  // ai 
+  DEEPSEEK_API_KEY: z.string(),
+  GOOGLE_GENERATIVE_AI_API_KEY: z.string(),
+
   SERVER_IDENTITY: z.string().url(),
   BASE_SERVER_URL: z.string().url(),
   NEXT_PUBLIC_BASE_SERVER_URL: z.string().url(),
