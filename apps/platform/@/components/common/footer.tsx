@@ -34,8 +34,8 @@ export default async function Footer() {
       )}
     >
       <div className="w-full max-w-(--max-app-width) mx-auto px-3 sm:px-6 lg:px-8">
-        <div className="flex w-full flex-col justify-between gap-10 lg:flex-row lg:items-start lg:text-left">
-          <div className="flex w-full flex-col justify-between gap-6 lg:items-start">
+        <div className="grid w-full grid-cols-10 gap-10 lg:flex-row lg:items-start lg:text-left">
+          <div className="flex w-full col-span-10 md:col-span-6 flex-col justify-between gap-6 lg:items-start">
             {/* Logo */}
             <div className="flex items-center gap-2 lg:justify-start">
               <Link href="/">
@@ -43,13 +43,15 @@ export default async function Footer() {
               </Link>
               
             </div>
-            <p className="max-w-[70%] text-sm text-muted-foreground">
+            <p className="text-pretty text-sm text-muted-foreground">
               {appConfig.description}
             </p>
-            <SocialBar className="ml-0 my-2" />
+            <div>
             <GithubStars />
+            </div>
+            <SocialBar className="ml-0 my-2" />
           </div>
-          <div className="grid w-full gap-6 md:grid-cols-2 lg:gap-20 lg:ml-auto justify-end">
+          <div className="grid w-full gap-6 col-span-10 md:col-span-4 grid-cols-2 sm:grid-cols-2 lg:gap-20 lg:ml-auto justify-end">
             {sectionLinks.map((section, sectionIdx) => (
               <div key={sectionIdx}>
                 <h3 className="mb-4 font-semibold text-sm">{section.title}</h3>

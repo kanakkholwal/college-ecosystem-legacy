@@ -352,7 +352,7 @@ const checkRoleAccess = (userRole: string, allowedRoles: string[]): boolean => {
 
 export const SUPPORT_LINKS = supportLinks;
 
-type NavLink = {
+export type NavLink = {
   title: string;
   href: string;
   description: string;

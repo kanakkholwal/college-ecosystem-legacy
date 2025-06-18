@@ -1,4 +1,4 @@
-import {ParamsPreserverLink} from "@/components/utils/link";
+import { ParamsPreserverLink } from "@/components/utils/link";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 

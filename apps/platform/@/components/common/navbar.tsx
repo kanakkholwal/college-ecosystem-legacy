@@ -1,19 +1,61 @@
 "use client";
 import ProfileDropdown from "@/components/common/profile-dropdown";
-import { SUPPORT_LINKS, getNavLinks, socials } from "@/constants/links";
+import { Button } from "@/components/ui/button";
+import { NavLink, SUPPORT_LINKS, getNavLinks, socials } from "@/constants/links";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight, LogIn } from "lucide-react";
+import { ArrowUpRight, LayoutDashboard, LogIn } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import type { Session } from "~/lib/auth";
 import { ApplicationInfo } from "../logo";
 import { ButtonLink } from "../utils/link";
 import { NavTabs } from "./nav-tabs";
 import { ThemeSwitcher } from "./theme-switcher";
 
+import { Search, Settings, User } from "lucide-react";
+
+import {
+  CommandDialog,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+  CommandSeparator,
+} from "@/components/ui/command";
+import React from "react";
+
+const loggedInList = [
+  {
+    path: "/dashboard",
+    title: "Dashboard",
+    icon: LayoutDashboard,
+  },
+  {
+    path: "/dashboard/settings",
+    title: "Settings",
+    icon: Settings,
+  },
+];
+const defaultList = [
+  {
+    title: "Nexo Scout",
+    path: "/scout",
+  },
+  {
+    title: "Marketplace",
+    path: "/marketplace",
+  },
+  {
+    title: "Dev Tools",
+    path: "/dev-tools",
+  },
+];
 interface NavbarProps {
   user?: Session["user"];
 }
+
 
 export default function Navbar({ user }: NavbarProps) {
   const navLinks = getNavLinks(user);
@@ -27,18 +69,19 @@ export default function Navbar({ user }: NavbarProps) {
         <Link
           href="/"
         >
-          <ApplicationInfo/>
+          <ApplicationInfo />
         </Link>
         <div className="ml-auto flex gap-2 items-center">
+          <QuickLinks user={user} publicLinks={navLinks} />
           <ThemeSwitcher />
-          {user ? <ProfileDropdown user={user} /> : 
-          <ButtonLink 
-          size="sm" rounded="full"
-          href={`/sign-in?next=${pathname}`}
-          variant="rainbow">
-            Log In
-            <LogIn />
-          </ButtonLink>
+          {user ? <ProfileDropdown user={user} /> :
+            <ButtonLink
+              size="sm" rounded="full"
+              href={`/sign-in?next=${pathname}`}
+              variant="rainbow">
+              Log In
+              <LogIn />
+            </ButtonLink>
           }
         </div>
       </div>
@@ -61,7 +104,105 @@ export default function Navbar({ user }: NavbarProps) {
   );
 }
 
-export function SocialBar({className}: {className?: string}) {
+interface QuickLinksProps extends NavbarProps {
+  publicLinks: NavLink[];
+}
+export function QuickLinks({ user, publicLinks }: QuickLinksProps) {
+  const [open, setOpen] = useState(false);
+
+  const isLoggedIn = !!user;
+
+  React.useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "j" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        setOpen((open) => !open);
+      }
+    };
+
+    document.addEventListener("keydown", down);
+    return () => document.removeEventListener("keydown", down);
+  }, []);
+
+  return (
+    <>
+      <Button
+        aria-label="Search for anything (Ctrl + J)"
+        role="button"
+        onClick={() => setOpen(!open)}
+        title="Search for anything (Ctrl + J)"
+        aria-labelledby="search"
+        size="icon_sm"
+        variant="outline"
+        rounded="full"
+      >
+        <Search />
+      </Button>
+      <CommandDialog open={open} onOpenChange={setOpen}>
+        <CommandInput placeholder="Type a search..." />
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup heading="Suggestions">
+            {publicLinks.map((item, index) => {
+              return (
+                <CommandItem key={`command-item-${index}`} asChild>
+                  <Link href={item.href} className="flex items-center w-full flex-wrap cursor-pointer group">
+                    {item.Icon && <item.Icon className="size-3 mr-2" />}
+                    <span>
+                      <span className="text-sm">{item.title}</span>
+                      <span className="block text-xs text-muted-foreground w-full">
+                        {item.description}
+                      </span>
+                    </span>
+                  </Link>
+                </CommandItem>
+              );
+            })}
+            {!isLoggedIn && (
+              <CommandItem>
+                <Link href={`/sign-in`} className="flex items-center w-full">
+                  <LogIn className="size-3 mr-3" />
+                  <span>
+                      <span className="text-sm">Sign In</span>
+                      <span className="block text-xs text-muted-foreground w-full">
+                        Sign in to your account
+                      </span>
+                    </span>
+                </Link>
+              </CommandItem>
+            )}
+          </CommandGroup>
+          <CommandSeparator />
+          {isLoggedIn && (
+            <CommandGroup heading="Go To">
+              <CommandItem>
+                <Link
+                  href={`/u/` + user?.username!}
+                  className="flex items-center  w-full"
+                >
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Your Profile</span>
+                </Link>
+              </CommandItem>
+              {loggedInList.map((item, index) => {
+                return (
+                  <CommandItem key={`command-item-${index}`}>
+                    <Link href={item.path} className="flex items-center w-full">
+                      <item.icon className="mr-2 h-4 w-4" />
+                      <span>{item.title}</span>
+                    </Link>
+                  </CommandItem>
+                );
+              })}
+            </CommandGroup>
+          )}
+        </CommandList>
+      </CommandDialog>
+    </>
+  );
+}
+
+export function SocialBar({ className }: { className?: string }) {
   if (socials.length === 0) {
     return null;
   }
