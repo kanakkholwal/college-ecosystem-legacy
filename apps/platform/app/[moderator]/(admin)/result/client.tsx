@@ -121,9 +121,11 @@ export function GetResultDiv() {
   return (
     <div className="w-full flex flex-col gap-4">
       <div>
-        <Label className="text-xs">Enter Roll No to Get Result</Label>
+        <Label className="text-xs" htmlFor="rollNo">Enter Roll No to Get Result</Label>
         <Input
           type="text"
+          id="rollNo"
+          name="rollNo"
           placeholder="Enter Roll No"
           className="w-full max-w-xs"
           value={rollNo}
@@ -215,11 +217,11 @@ export function DeleteResultDiv() {
   return (
     <div className="w-full flex flex-col gap-4 @3xl:p-3">
       <div>
-        <Label className="text-xs" htmlFor="rollNo">Enter Roll No to Delete Result</Label>
+        <Label className="text-xs" htmlFor="rollNoDel">Enter Roll No to Delete Result</Label>
         <Input
           type="text"
-          id="rollNo"
-          name="rollNo"
+          id="rollNoDel"
+          name="rollNoDel"
           placeholder={method === "rollNo" ? "Enter Roll No" : "Enter Batch"}
           className="w-full max-w-xs"
           value={rollNo}
@@ -288,11 +290,13 @@ export function MailResultUpdateDiv() {
   return (
     <div className="w-full flex flex-col gap-4 @3xl:p-3">
       <div>
-        <Label className="text-xs">
+        <Label className="text-xs" htmlFor="emailAddresses">
           Enter Email Addresses
         </Label>
         <Input
           type="text"
+          id="emailAddresses"
+          name="emailAddresses"
           placeholder="Enter Email Addresses (comma separated)"
           className="w-full max-w-xs"
           value={targets}
