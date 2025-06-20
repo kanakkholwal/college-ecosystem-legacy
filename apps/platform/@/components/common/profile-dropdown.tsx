@@ -46,11 +46,12 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
         rounded: "full",
         variant: "outline",
         children: (
-          <Avatar className="size-8 rounded-full">
+          <Avatar className="size-8 rounded-full" suppressHydrationWarning>
             <AvatarImage
               alt={user.username}
               width={32}
               height={32}
+              
               src={
                 (user.image && user.image !== "null" && user.image.trim().length > 0)
                   ? user.image

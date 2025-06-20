@@ -4,7 +4,7 @@ import { appConfig } from "~/project.config";
 const BASE_URL = appConfig.url
 
 const staticRoutes = [
-    { path: "/", priority: 1.0, changefreq: "daily" },
+    { path: "/", priority: 1.0, changefreq: "monthly" },
     { path: "/sign-in", priority: 0.8, changefreq: "monthly" },
     { path: "/results", priority: 0.8, changefreq: "monthly" },
     { path: "/academic-calendar", priority: 0.8, changefreq: "monthly" },

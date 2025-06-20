@@ -22,6 +22,7 @@ import {
   updateResult,
   bulkDeleteResults,
   bulkUpdateResults,
+  createBatchUsingPrevious,
 } from "../controllers/http-result";
 import { resultScrapingSSEHandler } from "../controllers/sse-scraping";
 
@@ -49,6 +50,11 @@ router.get(
 router.post(
   "/results/import-freshers",
   importFreshers as unknown as RequestHandler
+);
+// Endpoint to create new batch using previous batch 
+router.post(
+  "/results/create-batch",
+  createBatchUsingPrevious as unknown as RequestHandler
 );
 // Endpoint to assign ranks to the results in the database
 router.post(

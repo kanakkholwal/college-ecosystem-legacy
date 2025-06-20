@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
+import { ResultScrapingLog } from "~/models/log-result_scraping";
 import { getDepartmentCoursePrefix, isValidRollNumber } from "../constants/departments";
 import { pipelines } from "../constants/pipelines";
 import { scrapeAndSaveResult } from "../lib/result_utils";
@@ -503,3 +504,47 @@ export const importFreshers = async (req: Request, res: Response) => {
     });
   }
 };
+
+
+export const createBatchUsingPrevious = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    await dbConnect();
+    const allBatches = await ResultModel.distinct("batch") as number[];
+    const latestBatch = allBatches.sort((a, b) => b - a)[0];
+    const newBatch = latestBatch + 1;
+    const previousBatchResults = await ResultModel.find({ batch: latestBatch });
+    await ResultScrapingLog.create({
+      processable: previousBatchResults.length,
+      processed: 0,
+      failed: 0,
+      success: 0,
+      data: [],
+      status: "in_progress",
+      successfulRollNos: [],  
+      failedRollNos: [],
+      queue: [],
+      list_type: "previous_batch",
+      taskId: `create-batch-${newBatch}`,
+      startTime: new Date(),
+      endTime: null,
+    });
+    return res.status(200).json({
+      error: false,
+      message: "Batch created successfully",
+      data: {
+        previousBatchResults,
+        newBatch,
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      error: true,
+      message: "An error occurred",
+      data: error || "Internal Server Error",
+    });
+  }
+}

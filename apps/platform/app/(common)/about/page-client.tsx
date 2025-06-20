@@ -4,7 +4,6 @@ import { MagicCard } from '@/components/animation/magic-card';
 import { NumberTicker } from '@/components/animation/number-ticker';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ButtonLink } from '@/components/utils/link';
 import { motion, useInView } from 'framer-motion';
@@ -134,10 +133,11 @@ export default function AboutPage({ contributors, stats }: AboutPageProps) {
                                 View on GitHub
                                 <ChevronRight className='icon' />
                             </ButtonLink>
-                            <Button size="lg" variant="outline" disabled >
+                            <ButtonLink size="lg" variant="outline" href={content.wiki_url} target='_blank' effect="expandIcon" >
                                 <BookOpen />
                                 Documentation
-                            </Button>
+                                <ChevronRight className='icon' />
+                            </ButtonLink>
                         </motion.div>
                     </motion.div>
                 </div>
@@ -167,7 +167,7 @@ export default function AboutPage({ contributors, stats }: AboutPageProps) {
                                             <CardContent className="pt-6">
                                                 <stat.icon className="h-12 w-12 mx-auto mb-4 text-primary" />
                                                 <div className="text-3xl font-bold mb-2 text-primary">
-                                                    <NumberTicker value={stat.value} className="inline-block ml-2"  suffix={stat.suffix} />
+                                                    <NumberTicker value={stat.value} className="inline-block ml-2" suffix={stat.suffix} />
                                                 </div>
                                                 <p className="text-muted-foreground">{stat.label}</p>
                                             </CardContent>
@@ -371,10 +371,10 @@ export default function AboutPage({ contributors, stats }: AboutPageProps) {
                                             <ButtonLink href={`/sign-in?tab=sign-up&utm_source=${appConfig.appDomain}&utm_medium=redirect&utm_campaign=sign_up`} className="w-full">
                                                 Get Started Free
                                             </ButtonLink>
-                                            <Button variant="outline" className="w-full" disabled>
-                                                <ExternalLink className="mr-2 h-4 w-4" />
+                                            <ButtonLink variant="outline" className="w-full" target="_blank" href={content.wiki_url}>
+                                                <ExternalLink />
                                                 View Documentation
-                                            </Button>
+                                            </ButtonLink>
                                         </div>
                                     </CardContent>
                                 </Card>
@@ -388,10 +388,16 @@ export default function AboutPage({ contributors, stats }: AboutPageProps) {
                                     We welcome contributions from developers, designers, educators, and anyone passionate about improving education technology.
                                 </p>
                                 <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                                    <ButtonLink variant="rainbow_outline" effect="expandIcon" href={'https://github.com/' + appConfig.githubUri + '/blob/main/CONTRIBUTING.md'} target="_blank">
-                                        <Github className="mr-2 h-4 w-4" />
+                                    <ButtonLink variant="rainbow_outline" effect="expandIcon" href={content.contributing_url} target="_blank">
+                                        <Github />
                                         Contribution Guide
-                                        <ArrowUpRight className='icon'/>
+                                        <ArrowUpRight className='icon' />
+                                    </ButtonLink>
+                                    <ButtonLink variant="outline" effect="expandIcon" href={content.wiki_url} target="_blank">
+                                        <BookOpen />
+                                        Wiki
+                                        <ArrowUpRight className='icon' />
+
                                     </ButtonLink>
                                 </div>
                             </Card>
