@@ -22,24 +22,24 @@ export async function middleware(request: NextRequest) {
     }
   );
   // Exception for the error page : Production issue on Google Sign in
-  // console.log(pathname, session);
-  // if (pathname === "/api/auth/error" && session) {
-  //   const error = request.nextUrl.searchParams.get("error");
-  //   // api/auth/error?error=please_restart_the_process
-  //   if (error === "please_restart_the_process") {
-  //     // if the user is authenticated and tries to access the error page, redirect them to the home page
-  //     url.pathname = "/";
-  //     url.search = url.searchParams.toString();
-  //     return NextResponse.redirect(url);
-  //   }
-  //   if (error) {
-  //     url.pathname = SIGN_IN_PATH;
-  //     url.search = url.searchParams.toString();
-  //     return NextResponse.redirect(url);
-  //     // Handle other specific error cases
-  //   }
+  if (pathname === "/api/auth/error" && session) {
+    console.log(pathname, "is accessed by an authenticated user");
+    const error = request.nextUrl.searchParams.get("error");
+    // api/auth/error?error=please_restart_the_process
+    if (error === "please_restart_the_process") {
+      // if the user is authenticated and tries to access the error page, redirect them to the home page
+      url.pathname = "/";
+      url.search = url.searchParams.toString();
+      return NextResponse.redirect(url);
+    }
+    if (error) {
+      url.pathname = SIGN_IN_PATH;
+      url.search = url.searchParams.toString();
+      return NextResponse.redirect(url);
+      // Handle other specific error cases
+    }
 
-  // }
+  }
   if (isPrivateRoute) {
     // console.log("Private route accessed:", pathname);
     if (session && !UN_PROTECTED_API_ROUTES.some((route) =>
@@ -50,9 +50,9 @@ export async function middleware(request: NextRequest) {
       const matchedRole = protectedPaths.find((path) =>
         request.nextUrl.pathname.toLowerCase().startsWith(path)
       )?.slice(1) as (typeof dashboardRoutes)[number];
-      if(matchedRole){
+      if (matchedRole) {
         const authCheck = checkAuthorization(matchedRole, session);
-  
+
         if (!authCheck.authorized) {
           if (request.method === "GET") {
             return NextResponse.redirect(
@@ -147,5 +147,7 @@ export const config = {
      * - manifest.manifest (manifest file)
      */
     "/((?!api|_next/static|_next/image|assets|favicon.ico|manifest.webmanifest|.*\\.(?:png|jpg|jpeg|svg|webp|ico|txt|json|xml|js)).*)",
+    // Explicitly include /api/auth/error
+    "/api/auth/error",
   ],
 };
