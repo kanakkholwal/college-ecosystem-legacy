@@ -1,7 +1,6 @@
 import type { BetterFetch } from "@better-fetch/fetch";
 
 export type FetchParams = Parameters<BetterFetch>;
-
 export type HttpMethod = "GET" | "POST" | "DELETE" | "PUT" | "OPTIONS";
 
 export interface ApiConfigEntry<P, R> {
@@ -34,6 +33,7 @@ export function createApiInstance<T extends Record<string, ApiConfigEntry<any, a
         api[key] = async (payload: any) => {
             let finalUrl = url;
 
+            // Handle URL parameters
             if (transformParams) {
                 const params = transformParams(payload);
                 finalUrl = finalUrl.replace(/:(\w+)/g, (_, key) =>
@@ -51,10 +51,11 @@ export function createApiInstance<T extends Record<string, ApiConfigEntry<any, a
             });
 
             // Handle JSON parsing consistently
+            const _transformResponse = transformResponse || ((res: unknown) => res as any);
 
-            return transformResponse 
-                ? transformResponse(response) 
-                : response;
+            return _transformResponse 
+                ? _transformResponse(response.data) 
+                : response.data;
         };
     }
 

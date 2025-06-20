@@ -140,7 +140,7 @@ export function GetResultDiv() {
           disabled={loading}
           aria-label="Select Method"
         >
-          <SelectTrigger custom-size="sm">
+          <SelectTrigger aria-size="sm">
             <SelectValue placeholder="Method" />
           </SelectTrigger>
           <SelectContent>
@@ -235,7 +235,7 @@ export function DeleteResultDiv() {
           disabled={loading}
           aria-label="Select Method"
         >
-          <SelectTrigger custom-size="sm">
+          <SelectTrigger aria-size="sm">
             <SelectValue placeholder="Method" />
           </SelectTrigger>
           <SelectContent>

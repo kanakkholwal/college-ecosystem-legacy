@@ -8,7 +8,6 @@ import { AbnormalResultsDiv, DeleteResultDiv, GetResultDiv, MailResultUpdateDiv 
 export default async function AdminResultPage() {
   const { counts, asOf } = await getBasicInfo();
   const abnormalsResults = await getAbnormalResults();
-
   return (
     <>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pr-3">
