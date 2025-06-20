@@ -110,7 +110,7 @@ export function AccountForm({ currentUser }: Props) {
           <div>
             <h3 className="text-lg font-medium">Password</h3>
             <p className="text-sm text-muted-foreground">
-              Change your password. Make sure it's at least 8 characters long.
+              Change your password.
             </p>
           </div>
         </TabsContent>
