@@ -30,7 +30,7 @@ export async function getResults(
   try {
     // Try Redis GET
 
-    const cacheKey = `results_${query}_${currentPage}${filter ? `_${JSON.stringify(Object.entries(filter).sort())}` : ""}`;
+    const cacheKey = `results_${currentPage}${filter ? `_${JSON.stringify(Object.entries(filter).sort())}_${query}` : ""}`;
 
     let cachedResults: getResultsReturnType | null = null;
     if (!new_cache) {
