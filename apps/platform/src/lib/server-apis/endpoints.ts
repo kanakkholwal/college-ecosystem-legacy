@@ -94,12 +94,12 @@ const results:Endpoints["results"] = {
     transformResponse: (res: unknown) => res as ApiResponse<APITypes["results"]["updateResultByRollNo"]["response"]>,
   },
   getAbnormalResults: {
-    url: "/api/results/abnormal",
+    url: "/api/results/abnormals",
     method: "GET",
     transformResponse: (res: unknown) => res as ApiResponse<APITypes["results"]["getAbnormalResults"]["response"]>,
   },
   deleteAbNormalResults: {
-    url: "/api/results/abnormal/delete",
+    url: "/api/results/abnormals",
     method: "DELETE",
     transformResponse: (res: unknown) => res as ApiResponse<APITypes["results"]["deleteAbNormalResults"]["response"]>,
   },
