@@ -1,10 +1,10 @@
 "use client";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
@@ -22,9 +22,9 @@ import { LoaderCircleIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import serverApis from "~/lib/server-apis/client";
 import type {
-  AbNormalResult,
-  ResultType,
-  rawResultSchemaType
+    AbNormalResult,
+    ResultType,
+    rawResultSchemaType
 } from "~/lib/server-apis/types";
 import { orgConfig } from "~/project.config";
 import { changeCase } from "~/utils/string";
@@ -142,7 +142,7 @@ export function GetResultDiv() {
           disabled={loading}
           aria-label="Select Method"
         >
-          <SelectTrigger aria-size="sm">
+          <SelectTrigger size="sm">
             <SelectValue placeholder="Method" />
           </SelectTrigger>
           <SelectContent>
@@ -237,7 +237,7 @@ export function DeleteResultDiv() {
           disabled={loading}
           aria-label="Select Method"
         >
-          <SelectTrigger aria-size="sm">
+          <SelectTrigger size="sm">
             <SelectValue placeholder="Method" />
           </SelectTrigger>
           <SelectContent>

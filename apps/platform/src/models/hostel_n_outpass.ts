@@ -72,6 +72,7 @@ export interface rawHostelStudentType {
   gender: "male" | "female";
   position: string;
   hostelId: string | null;
+  hostelSlug: string | null;
   roomNumber: string;
   phoneNumber?: string | null;
   banned: boolean;
@@ -103,6 +104,7 @@ const HostelStudentSchema = new Schema<IHostelStudentType>(
     cgpi: { type: Number, default: 0 },
     userId: { type: String, default: null },
     hostelId: { type: Schema.Types.ObjectId, ref: "Hostel", default: null },
+    hostelSlug: { type: String, default: null },
     roomNumber: { type: String, required: true, default: "UNKNOWN" },
     phoneNumber: { type: String, default: null },
     banned: { type: Boolean, default: false },

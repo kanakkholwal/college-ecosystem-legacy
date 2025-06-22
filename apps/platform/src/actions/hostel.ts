@@ -233,12 +233,12 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
 export async function getHostel(slug: string): Promise<{
   success: boolean;
   hostel:
-    | (HostelType & {
-        students: {
-          count: number;
-        };
-      })
-    | null;
+  | (HostelType & {
+    students: {
+      count: number;
+    };
+  })
+  | null;
   error?: object;
 }> {
   try {
@@ -361,14 +361,21 @@ export async function getHostelByUser(
       });
     }
 
+    const orConditions = [];
+    if (session?.user?.hostelId !== "not_specified") {
+      orConditions.push({
+        _id: new mongoose.Types.ObjectId(session?.user?.hostelId as string),
+      });
+    }
+    orConditions.push(
+      { "warden.email": session.user.email as string },
+      { "warden.email": { $in: session.user?.other_emails || [] } },
+      { "administrators.email": session.user.email as string },
+      { "administrators.email": { $in: session.user?.other_emails || [] } }
+    );
+
     const hostel = await HostelModel.findOne({
-      $or: [
-        { _id: new mongoose.Types.ObjectId(session?.user?.hostelId as string) },
-        { "warden.email": session.user.email as string },
-        { "warden.email": { $in: session.user?.other_emails || [] } },
-        { "administrators.email": session.user.email as string },
-        { "administrators.email": { $in: session.user?.other_emails || [] } },
-      ],
+      $or: orConditions,
     }).lean();
     if (!hostel) {
       console.log("Hostel not found");
@@ -463,7 +470,7 @@ export async function importHostelsFromSite() {
       );
     }
     await dbConnect();
-    const hostels = res?.data?.hostels.map((hostel:any) => {
+    const hostels = res?.data?.hostels.map((hostel: any) => {
       return {
         name: hostel.name,
         slug: hostel.slug,
@@ -577,6 +584,31 @@ export async function getStudentsByHostelId(
   } catch (err) {
     console.log("Failed to fetch students", err);
     return Promise.reject("Failed to fetch students");
+  }
+}
+
+export async function getEligibleStudentsForHostel(
+  hostelId: string
+): Promise<HostelStudentJson[]> {
+  try {
+    await dbConnect();
+    const hostel = (await HostelModel.findById(hostelId).lean()) as IHostelType | null;
+    if (!hostel) {
+      return Promise.reject("Hostel not found");
+    }
+    const students = await HostelStudentModel.find({
+      gender: hostel.gender,
+      $or: [
+        { hostelId: null },
+      ]
+    })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return Promise.resolve(JSON.parse(JSON.stringify(students)));
+  } catch (err) {
+    console.log("Failed to fetch eligible students", err);
+    return Promise.reject("Failed to fetch eligible students");
   }
 }
 

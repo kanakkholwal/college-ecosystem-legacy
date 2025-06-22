@@ -1,6 +1,7 @@
 import { ResponsiveContainer } from "@/components/common/container";
 import EmptyArea from "@/components/common/empty-area";
 import { RouterCard, RouterCardLink } from "@/components/common/router-card";
+import { Badge } from "@/components/ui/badge";
 import { Paragraph } from "@/components/ui/typography";
 import { FolderKanban, HistoryIcon, Tickets } from "lucide-react";
 import { LuBuilding } from "react-icons/lu";
@@ -32,35 +33,38 @@ export default async function HostelPage({
 
   return (
     <div className="space-y-5 my-2">
-      <div className="flex justify-between w-full">
-        <div className="w-1/2">
-          <h4 className="text-lg font-semibold">{hostel.name}</h4>
-          <p className="text-muted-foreground capitalize mt-1">
-            {hostel.gender} Hostel
-          </p>
+      <div className="bg-card p-4 rounded-lg">
+        <div className="flex justify-between w-full">
+          <div className="w-1/2">
+            <h4 className="text-lg font-semibold">{hostel.name}</h4>
+            <Badge className="mt-1" size="sm">
+              {hostel.gender === "female" ? "Girls" : hostel.gender === "male" ? "Boys" : hostel.gender}
+              {" "}Hostel
+            </Badge>
+          </div>
         </div>
-      </div>
-      <div className="grid grid-cols-1 gap-3">
-        <div>
-          <h5 className="text-base font-medium">Warden</h5>
-          <Paragraph className="!mt-0">
-            {hostel.warden.name} ({hostel.warden.email})
-          </Paragraph>
-        </div>
-        <div>
-          <h5 className="text-base font-medium">
-            Admin / MMCA ({hostel.administrators.length})
-          </h5>
-          <ul className="list-disc list-inside">
-            {hostel.administrators.map((admin) => (
-              <li
-                key={admin.email}
-                className="text-sm font-medium text-muted-foreground"
-              >
-                {admin.name} - {admin.email}
-              </li>
-            ))}
-          </ul>
+        <div className="grid grid-cols-1 gap-3 mt-2">
+          <div>
+            <h5 className="text-sm font-medium">Warden</h5>
+            <Paragraph  className="!mt-0 text-sm text-muted-foreground">
+              {hostel.warden.name} ({hostel.warden.email})
+            </Paragraph>
+          </div>
+          <div>
+            <h5 className="text-sm font-medium">
+              Admin / MMCA ({hostel.administrators.length})
+            </h5>
+            <ul className="list-disc list-inside">
+              {hostel.administrators.map((admin) => (
+                <li
+                  key={admin.email}
+                  className="text-sm font-medium text-muted-foreground"
+                >
+                  {admin.name} - {admin.email}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
 

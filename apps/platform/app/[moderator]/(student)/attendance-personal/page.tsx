@@ -17,12 +17,12 @@ export default async function PersonalAttendanceManager() {
   const attendance_records = await getAttendanceRecords();
 
   return (
-    <div className="z-10 w-full max-w-7xl relative p-4 space-y-10 @container/attendance">
+    <div className="z-10 w-full max-w-7xl relative space-y-10 @container/attendance">
       {/* Analytics Section */}
       <AttendanceAnalytics records={attendance_records} />
       {/* Header Section */}
-      <div className="w-full flex justify-between items-center whitespace-nowrap gap-2">
-        <h3 className="text-xl font-semibold">
+      <div className="w-full flex justify-between items-center whitespace-nowrap gap-2 bg-card p-3 rounded-md">
+        <h3 className="text-base font-medium">
           Attendance Records ({attendance_records.length})
         </h3>
         <CreateAttendanceRecordButton />
@@ -34,12 +34,7 @@ export default async function PersonalAttendanceManager() {
           icons={[BookUser]}
           title="No attendance records"
           description="There are no attendance records at the moment."
-          actionProps={{
-            asChild: true,
-            variant: "default_light",
-            size: "sm",
-            children: <CreateAttendanceRecordButton />,
-          }}
+    
         />
       )}
 

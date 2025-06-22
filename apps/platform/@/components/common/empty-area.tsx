@@ -48,7 +48,7 @@ export default function EmptyArea({
             </div>
           </>
         ) : (
-          <div className="bg-background size-12 grid place-items-center rounded-xl shadow-lg ring-1 ring-border group-hover:-translate-y-0.5 transition duration-500 group-hover:duration-200">
+          <div className="bg-card size-12 grid place-items-center rounded-xl shadow-lg ring-1 ring-border group-hover:-translate-y-0.5 transition duration-500 group-hover:duration-200">
             {icons[0] ? (
               React.createElement(icons[0], {
                 className: "w-6 h-6 text-muted-foreground",
@@ -74,7 +74,7 @@ export default function EmptyArea({
         )}
       </div>
       <h2 className="text-foreground font-medium mt-6">{title}</h2>
-      <div className="text-sm text-muted-foreground mt-1 whitespace-pre-line">
+      <div className="text-sm text-muted-foreground mt-1 whitespace-pre-line mb-5">
         {description}
       </div>
       {actionProps && (
@@ -82,7 +82,6 @@ export default function EmptyArea({
           variant="outline"
           {...actionProps}
           className={cn(
-            "mt-4",
             "shadow-sm active:shadow-none",
             actionProps.className
           )}

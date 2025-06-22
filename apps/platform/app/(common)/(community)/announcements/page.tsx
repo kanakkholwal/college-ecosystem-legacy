@@ -47,7 +47,7 @@ export default async function AnnouncementsPage(props: {
     <div className="w-full max-w-(--max-app-width) grid grid-cols-1 gap-4">
       <Tabs
         defaultValue={category}
-        className="md:sticky md:top-4 z-50 mx-1.5 md:mx-auto"
+        className="md:sticky md:top-4 z-50 mx-1.5 md:mx-auto mt-5"
       >
         <VercelTabsList
           tabs={[

@@ -3,6 +3,8 @@ import type { InferSelectModel } from "drizzle-orm";
 import { asc, desc, eq, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
 import { accounts, sessions, users } from "~/db/schema/auth-schema";
+import { auth } from "~/lib/auth";
+import { getSession } from "~/lib/auth-server";
 
 export async function users_CountAndGrowth(timeInterval: string): Promise<{
   count: number;
@@ -142,6 +144,25 @@ export async function updateUser(
   } catch (error) {
     console.error(error);
     return null;
+  }
+}
+
+export async function changeUserPassword(
+  userId: string,
+  newPassword: string
+): Promise<boolean> {
+  try {
+    const session = await getSession();
+    if (!session || session.user.id !== userId || session.user.role !== "admin") {
+      throw new Error("Unauthorized: You can only change your own password.");
+    }
+    const ctx = await auth.$context;
+    const hash = await ctx.password.hash(newPassword);
+    await ctx.internalAdapter.updatePassword(userId, hash);
+    return Promise.resolve(true);
+  } catch (error) {
+    console.error("Error changing user password:", error);
+    return false;
   }
 }
 

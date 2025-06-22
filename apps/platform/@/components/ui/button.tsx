@@ -65,7 +65,7 @@ import { cn } from "@/lib/utils";
 // );
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap capitalize rounded-md text-sm font-medium tracking-wide ring-offset-background transition-transform transition-duration-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0 relative cursor-pointer group transition-all",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap capitalize rounded-md text-sm font-medium ring-offset-background transition-transform transition-duration-600 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:shrink-0 relative cursor-pointer group transition-all",
   {
     variants: {
       variant: {
@@ -83,7 +83,7 @@ const buttonVariants = cva(
         destructive:
           "bg-red-100 hover:bg-red-200 text-red-700	dark:bg-red-700 dark:text-red-200 dark:hover:bg-red-800 dark:hover:text-red-200",
         outline:
-          "border border-border bg-card hover:bg-card/80 dark:bg-muted text-foreground hover:border-primary",
+          "border border-border bg-card hover:bg-card/80 dark:bg-muted text-foreground dark:text-muted-foreground dark:hover:text-foreground hover:border-primary",
         ghost:
           "bg-slate-100/20 hover:bg-slate-100/80 text-muted-foreground hover:text-accent-foreground dark:bg-accent dark:text-muted-foreground dark:hover:bg-accent/80 dark:hover:text-white",
         success:
@@ -121,7 +121,7 @@ const buttonVariants = cva(
         raw: "",
       },
       size: {
-        default: "h-10 px-4 px-5 py-2.5 [&>svg]:size-5",
+        default: "h-10 px-4 py-2.5 [&>svg]:size-5",
         xs: "h-6 rounded-md px-2.5 py-1.5 text-xs [&>svg]:size-3",
         sm: "h-8 rounded-md px-3 py-2 text-xs [&>svg]:size-4",
         lg: "px-5 py-3 text-base h-12 [&>svg]:size-6",

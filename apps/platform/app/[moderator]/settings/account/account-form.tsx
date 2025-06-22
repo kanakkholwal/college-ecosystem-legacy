@@ -20,7 +20,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { BiLockOpenAlt } from "react-icons/bi";
 import * as z from "zod";
-import { updateUser } from "~/actions/dashboard.admin";
+import { changeUserPassword, updateUser } from "~/actions/dashboard.admin";
 import { emailSchema } from "~/constants";
 import type { Session } from "~/lib/auth-client";
 
@@ -76,20 +76,18 @@ export function AccountForm({ currentUser }: Props) {
   };
   const changePassword = async (data: z.infer<typeof passwordSchema>) => {
 
-    // toast
-    //   .promise(
-    //     // handleUpdatePassword(confirmPassword),
-    //     {
-    //       loading: "Updating password..",
-    //       success: "Password updated successfully",
-    //       error: "Something went wrong",
-    //     }
-    //   )
-    //   .finally(() => {
-    //     setCurrentPassword("");
-    //     setConfirmPassword("");
-    //     setEditingPassword(false);
-    //   });
+    toast
+      .promise(
+        changeUserPassword(currentUser.id, data.password),
+        {
+          loading: "Updating password..",
+          success: "Password updated successfully",
+          error: "Something went wrong",
+        }
+      )
+      .finally(() => {
+        passwordForm.reset();
+      });
   };
   const isOnlyStudent =
     currentUser.other_roles.length === 1 &&
@@ -213,9 +211,9 @@ export function AccountForm({ currentUser }: Props) {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                      <Label htmlFor={field.name}>
-                        New Password
-                      </Label>
+                    <Label htmlFor={field.name}>
+                      New Password
+                    </Label>
                     <div className="relative group">
                       <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
                         <BiLockOpenAlt className="w-4 h-4 group-focus-within:text-primary" />
@@ -243,6 +241,8 @@ export function AccountForm({ currentUser }: Props) {
                 variant="default_light"
                 type="submit"
                 size="sm"
+
+                disabled={passwordForm.formState.isSubmitting}
               >
                 <Save />
                 Update Password

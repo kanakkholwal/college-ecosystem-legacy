@@ -59,7 +59,7 @@ export default async function PollsPage(props: {
 
   return (
     <Tabs defaultValue={activeTab} className="w-full grid gap-4">
-      <VercelTabsList tabs={tabs} onTabChangeQuery="tab" />
+      <VercelTabsList tabs={tabs} onTabChangeQuery="tab" className=" mt-5"/>
 
       <div className="rounded-lg p-4 @container/polls max-w-6xl mx-auto w-full">
         {tabs.map((tab, idx) => {

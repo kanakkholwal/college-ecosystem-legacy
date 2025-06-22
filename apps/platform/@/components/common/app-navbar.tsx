@@ -17,7 +17,7 @@ export default function Navbar({ user }: { user: Session["user"] }) {
         <h3 className="text-sm font-semibold">
           {titlesMap.get(pathname)?.title ?? "Dashboard"}
         </h3>
-        <p className="text-xs text-muted-foreground font-light truncate w-full max-w-80">
+        <p className="text-xs text-muted-foreground font-normal truncate w-full max-w-80">
           {titlesMap.get(pathname)?.description ?? pathname}
         </p>
       </div>

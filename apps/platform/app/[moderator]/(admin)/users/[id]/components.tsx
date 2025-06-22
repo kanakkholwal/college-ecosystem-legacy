@@ -105,11 +105,12 @@ export function UserUpdate({
                 <FormLabel>Gender</FormLabel>
                 <FormControl>
                   <ToggleGroup
-                    defaultValue={"not_specified"}
+                    defaultValue={currentUser.gender}
                     value={field.value}
                     onValueChange={(value) => field.onChange(value)}
                     className="justify-start"
                     type="single"
+                    size="sm"
                   >
                     {["male", "female", "not_specified"].map((item) => (
                       <ToggleGroupItem
@@ -306,8 +307,8 @@ export function UserSessions({ currentUser }: Props) {
       fallback={<div>Error fetching sessions</div>}
       loadingFallback={<div>Loading sessions...</div>}
     >
-      <div className="w-full flex justify-between items-center mt-5">
-        <h4 className="text-lg font-bold">User Sessions</h4>
+      <div className="w-full flex justify-between items-center">
+        <h4 className="text-base font-semibold">User Sessions</h4>
         <Button
           variant="destructive"
           size="sm"
@@ -385,7 +386,7 @@ export function UserSessions({ currentUser }: Props) {
 
 export function UserDisplay({ currentUser: user }: Props) {
   return (
-    <div className="container mx-auto py-10 px-2">
+    <div className="container mx-auto px-2">
       <table className="w-full">
         <thead>
           <tr className="m-0 border-t p-0 even:bg-muted">

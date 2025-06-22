@@ -40,7 +40,7 @@ export function ImportStudents({
 
     const [keys, ...data] = await readXlsxFile(file);
     console.log(keys);
-    setExtractedKeys(keys as string[]);
+    setExtractedKeys(keys.filter((key) => typeof key === "string" && key.trim() !== "") as string[]);
     console.log(data);
     setData(data as string[][]);
   };

@@ -57,7 +57,7 @@ export default function ThemeToggle() {
           <RadioGroup
             defaultValue={theme}
             onValueChange={(value: ThemeType) => setTheme(value)}
-            className="grid gap-3 max-sm:space-y-3 sm:grid-cols-3"
+            className="grid gap-3 max-sm:space-y-3 sm:grid-cols-3 relative"
           >
             {themes.map((themeOption) => {
               const Icon = themeOption.icon;
@@ -71,7 +71,7 @@ export default function ThemeToggle() {
                 <div
                   key={themeOption.value}
                   className={cn(
-                    "flex items-end justify-center rounded-md border px-1.5 pt-3 transition",
+                    "flex items-end justify-center rounded-md border px-1.5 pt-3 transition relative",
                     currentSystemTheme,
                     {
                       "border-blue-500 ring-2 ring-blue-800/60": isSelected,

@@ -1,11 +1,11 @@
 import EmptyArea from "@/components/common/empty-area";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import ConditionalRender from "@/components/utils/conditional-render";
-import ErrorBanner from "@/components/utils/error";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
+import { ButtonLink } from "@/components/utils/link";
 import { SkeletonCardArea } from "@/components/utils/skeleton-cards";
 import { RocketIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
+import { ArrowUpRight } from "lucide-react";
 import AdminDashboard from "./admin.dashboard";
 import ChiefWardenDashboard from "./chief_warden.dashboard";
 import CRDashboard from "./cr.dashboard";
@@ -33,26 +33,29 @@ export function DashboardTemplate({ user_role }: { user_role: string }) {
       return (
         <>
           <ConditionalRender condition={user_role === "student"}>
-            <section id="main-section">
+            <section id="main-section" className="w-full max-w-4xl mx-auto">
               <Alert className="mt-4">
-                <RocketIcon className="h-4 w-4" />
-                <AlertTitle>
+                <RocketIcon className="size-4" />
+                <AlertTitle className="text-sm">
                   Suggest a feature for the platform here.(what do you want to
                   see here?)
                 </AlertTitle>
                 <AlertDescription>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-xs text-muted-foreground">
                     We are changing the way you interact with the platform and
                     adding new features.
                   </p>
-                  <Link
+                  <ButtonLink
                     href="https://forms.gle/v8Angn9VCbt9oVko7"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="hover:underline text-primary text-sm"
+                    variant="outline"
+                    size="xs"
+                    className="mt-1"
                   >
                     Suggest a feature here
-                  </Link>{" "}
+                    <ArrowUpRight/>
+                  </ButtonLink>
                 </AlertDescription>
               </Alert>
             </section>

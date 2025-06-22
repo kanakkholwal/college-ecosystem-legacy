@@ -49,7 +49,7 @@ const badgeVariants = cva(
           "backdrop-blur-lg bg-white/30 dark:bg-slate-800/15 backdrop-blur-xl border-white/5 dark:border-white/5 dark:text-white shadow",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-secondary/90",
-        outline: "border border-input bg-background shadow-sm hover:bg-accent",
+        outline: "border border-input bg-background hover:bg-accent",
       },
       size: {
         sm: "px-2 py-0.5 text-xs font-regular [&>svg]:size-3",

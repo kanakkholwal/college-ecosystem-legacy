@@ -75,12 +75,13 @@ export default function SearchBar() {
           placeholder="Search query..."
           className="w-full pl-10"
           type="search"
-          value={searchField}
+          value={searchField || ""}
+          autoComplete="off"
           onChange={(e) => setSearchField(e.target.value)}
         />
         <Button
           variant="default_light"
-          size="sm"
+          size="icon_sm"
           onClick={() => setOpen(!open)}
         >
           <SlidersHorizontal />
@@ -103,7 +104,7 @@ export default function SearchBar() {
         )}
       >
         <div>
-          <p className="text-muted-foreground font-medium text-sm mb-1">
+          <p className="text-muted-foreground font-normal text-xs mb-1">
             Search Field
           </p>
 
@@ -115,13 +116,13 @@ export default function SearchBar() {
                 setSortBy(value as "desc" | "asc");
               }}
             >
-              <SelectTrigger className="w-full h-8">
+              <SelectTrigger className="w-full" size="sm">
                 <SelectValue placeholder="Sort By" className="h-6 text-sm" />
               </SelectTrigger>
               <SelectContent>
                 {["asc", "desc"].map((field) => {
                   return (
-                    <SelectItem key={field} value={field}>
+                    <SelectItem key={field} value={field} size="sm">
                       {field}
                     </SelectItem>
                   );
@@ -132,14 +133,14 @@ export default function SearchBar() {
         </div>
         <Separator orientation="vertical" />
         <div>
-          <p className="text-muted-foreground font-medium text-sm mb-1">
+          <p className="text-muted-foreground font-normal text-xs mb-1">
             Limit & Offset
           </p>
           <div className="flex items-center space-x-4">
             <Input
               type="number"
               placeholder="Limit"
-              className="h-8 max-w-16"
+              className="h-8 max-w-16 text-xs"
               value={limit}
               min={1}
               max={500}
@@ -147,7 +148,7 @@ export default function SearchBar() {
             />
             <Input
               placeholder="Offset"
-              className="h-8 max-w-16"
+              className="h-8 max-w-16 text-xs"
               type="number"
               value={offset}
               min={0}

@@ -26,8 +26,7 @@ export function SidebarNav({ className, items, ...props }: SidebarNavProps) {
       {items.map((item) => (
         <ButtonLink
           key={item.href}
-          size="sm"
-          variant={pathname.includes(item.href) ? "default_light" : "outline"}
+          variant={pathname.includes(item.href) ? "outline" : "ghost"}
           className="justify-start"
           href={item.href}>
             {item.title}

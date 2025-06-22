@@ -1,6 +1,5 @@
 import EmptyArea from "@/components/common/empty-area";
 import ConditionalRender from "@/components/utils/conditional-render";
-import ErrorBanner from "@/components/utils/error";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { SkeletonCardArea } from "@/components/utils/skeleton-cards";
 import { cn } from "@/lib/utils";
@@ -26,7 +25,7 @@ export default async function HostelRoomAllotmentPage() {
 
   console.log(hostelResponse);
 
-  if (!hostelResponse.success || !hostelResponse.hostel) {
+  if (!hostelResponse.success || !hostelResponse.hosteler || !hostelResponse.hostel) {
     return (
       <div className="w-full">
         <EmptyArea
@@ -37,7 +36,7 @@ export default async function HostelRoomAllotmentPage() {
     );
   }
   const { hostel, hosteler } = hostelResponse;
-  const allotmentProcess = await getAllotmentProcess(hostel._id);
+  const allotmentProcess = await getAllotmentProcess(hosteler._id);
   const { data } = await getHostRoom(hosteler?._id as string);
 
   let hostelRoomsResponse: Awaited<ReturnType<typeof getHostelRooms>> | null =

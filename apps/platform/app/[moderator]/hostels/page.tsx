@@ -19,7 +19,7 @@ export default async function ChiefWardenPage({
 }) {
   const { moderator } = await params;
   const response = await getHostels();
-  console.log(response);
+  // console.log(response);
   const { success, data: hostels } = response;
   const session = await getSession();
 
@@ -27,7 +27,7 @@ export default async function ChiefWardenPage({
     <div className="space-y-5 my-2">
       <div className="flex justify-between w-full">
         <div className="w-1/2">
-          <Heading level={3}>Hostels</Heading>
+          <Heading level={5}>Hostels</Heading>
         </div>
         <div className="w-1/2 flex gap-2 justify-end">
           <ResponsiveDialog

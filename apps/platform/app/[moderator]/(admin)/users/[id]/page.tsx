@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { getUser } from "~/actions/dashboard.admin";
 import { UserDisplay, UserSessions, UserUpdate } from "./components";
 
-import { TabsTransitionPanel } from "@/components/ui/tabs-transition";
+import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
 import { getHostels } from "~/actions/hostel";
 
 interface PageProps {
@@ -21,25 +21,28 @@ export default async function UpdateUserPage({ params }: PageProps) {
 
   return (
     <div className="space-y-6 my-5">
-      <TabsTransitionPanel
-        items={[
-          {
-            title: "User Details",
-            content: <UserDisplay currentUser={user} />,
-            id: "user_details",
-          },
-          {
-            title: "User Sessions",
-            content: <UserSessions currentUser={user} />,
-            id: "user_sessions",
-          },
-          {
-            title: "Update User",
-            content: <UserUpdate currentUser={user} hostels={data} />,
-            id: "user_update",
-          },
-        ]}
-      />
+      <Tabs defaultValue="user_details" className="w-full max-w-(--max-app-width) mx-auto">
+        <VercelTabsList
+          tabs={[
+            { label: "User Details", id: "user_details" },
+            { label: "User Sessions", id: "user_sessions" },
+            { label: "Update User", id: "user_update" },
+          ]}
+          onTabChangeQuery="tab"
+        />
+        <div className="w-full max-w-(--max-app-width) mx-auto bg-card p-4 rounded-lg shadow mt-4">
+        <TabsContent value="user_details">
+          <UserDisplay currentUser={user} />
+        </TabsContent>
+        <TabsContent value="user_sessions">
+          <UserSessions currentUser={user} />
+        </TabsContent>
+        <TabsContent value="user_update">
+          <UserUpdate currentUser={user} hostels={data} />
+        </TabsContent>
+        </div>
+      </Tabs>
+
     </div>
   );
 }
