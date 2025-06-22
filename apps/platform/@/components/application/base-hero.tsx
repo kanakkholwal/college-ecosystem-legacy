@@ -14,7 +14,7 @@ function BaseHeroSection(props: BaseHeroSectionProps) {
         <h2 className="mb-2 text-2xl lg:text-4xl font-semibold text-center whitespace-nowrap bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary ">
             {props.title}
         </h2>
-        <p className="text-base text-muted-foreground line-clamp-3 max-w-2xl mx-auto">
+        <p className="text-base text-muted-foreground max-w-4xl mx-auto">
             {props.description}
         </p>
         <div

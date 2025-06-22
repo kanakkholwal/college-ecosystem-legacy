@@ -123,9 +123,8 @@ export default async function ResultPage(props: {
     <div className="px-4 md:px-12 xl:px-6 @container">
       <BaseHeroSection
         title={`${orgConfig.shortName} Semester Results Portal`}
-        description="Access official exam results for BTech, MTech, MCA, BArch, and PhD programs 
-at National Institute of Technology Hamirpur. Check grades, download mark sheets, 
-and track academic performance since 2020."
+        description="Access official exam results for National Institute of Technology Hamirpur. Check grades,
+and track academic performance"
       >
         <Suspense
           key={"key_search_bar"}
