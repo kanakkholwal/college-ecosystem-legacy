@@ -8,9 +8,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "paths": {
-      "~/*": ["./src/*"]
-    },
+
   },
   "include": ["src/**/*","package.json","tsconfig.json"],
   "exclude": ["node_modules", "dist"]

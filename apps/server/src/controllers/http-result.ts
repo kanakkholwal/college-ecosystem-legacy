@@ -1,10 +1,10 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
-import { ResultScrapingLog } from "~/models/log-result_scraping";
 import { getDepartmentCoursePrefix, isValidRollNumber } from "../constants/departments";
 import { pipelines } from "../constants/pipelines";
 import { scrapeAndSaveResult } from "../lib/result_utils";
 import { getInfoFromRollNo, scrapeResult } from "../lib/scrape";
+import { ResultScrapingLog } from "../models/log-result_scraping";
 import ResultModel from "../models/result";
 import { rawResultSchema } from "../types/result";
 import dbConnect from "../utils/dbConnect";

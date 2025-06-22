@@ -1,5 +1,5 @@
 import mongoose, { type Document, Schema } from "mongoose";
-import { listType, TASK_STATUS } from "~/constants/result_scraping";
+import { listType, TASK_STATUS } from "../constants/result_scraping";
 
 
 export type taskDataType = {
