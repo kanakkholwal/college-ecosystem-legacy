@@ -1,7 +1,7 @@
 import axios from "axios";
 import HTMLParser from "node-html-parser";
 import { getDepartmentCoursePrefix, isValidRollNumber } from "../constants/departments";
-import { getProgrammeByIdentifier } from "../constants/result_scraping";
+import { getProgrammeByIdentifier, LIST_TYPE, listType } from "../constants/result_scraping";
 import { headerMap, HeaderSchemaModel } from "../models/header";
 import ResultModel from "../models/result";
 import { rawResultType } from "../types/result";
@@ -227,3 +227,108 @@ export async function scrapeAndSaveResult(rollNo: string) {
         return { rollNo, success: false, error: e instanceof Error ? e.message : "Unknown error" };
     }
 }
+
+export async function getListOfRollNos(list_type: listType): Promise<Set<string>> {
+    await dbConnect();
+
+    switch (list_type) {
+        case LIST_TYPE.BACKLOG: {
+            const results = await ResultModel.find({ "semesters.courses.cgpi": 0 })
+                .select("rollNo updatedAt")
+                .sort("updatedAt");
+            return new Set(results.map((r) => r.rollNo));
+        }
+
+        case LIST_TYPE.NEW_SEMESTER: {
+            const results = await ResultModel.find({
+                $expr: {
+                    $lt: [
+                        { $size: "$semesters" },
+                        {
+                            $switch: {
+                                branches: [
+                                    { case: { $eq: ["$programme", "B.Tech"] }, then: 8 },
+                                    { case: { $eq: ["$programme", "B.Arch"] }, then: 10 },
+                                    { case: { $eq: ["$programme", "Dual Degree"] }, then: 12 }
+                                ],
+                                default: 0
+                            }
+                        }
+                    ]
+                }
+            }).select("rollNo updatedAt");
+            return new Set(results.map((r) => r.rollNo));
+        }
+
+        case LIST_TYPE.DUAL_DEGREE: {
+            const results = await ResultModel.find({
+                programme: "Dual Degree",
+                $expr: { $gt: [{ $size: "$semesters" }, 6] }
+            }).select("rollNo updatedAt");
+            return new Set(results.map((r) => r.rollNo));
+        }
+
+        case LIST_TYPE.NEW_BATCH: {
+            const [{ maxBatch }] = await ResultModel.aggregate([
+                { $group: { _id: null, maxBatch: { $max: "$batch" } } }
+            ]);
+
+            const groups = await ResultModel.aggregate([
+                { $match: { batch: maxBatch } },
+                { $sort: { rollNo: 1 } },
+                {
+                    $group: {
+                        _id: { programme: "$programme", branch: "$branch" },
+                        minRollNo: { $first: "$rollNo" },
+                        maxRollNo: { $last: "$rollNo" }
+                    }
+                }
+            ]);
+
+            function extractPrefixSuffix(rollNo: string): { prefix: string; number: number } {
+                const match = rollNo.match(/^(\D+)(\d+)$/) || rollNo.match(/^(\d+\D+)(\d+)$/);
+                if (!match) throw new Error(`Invalid rollNo format: ${rollNo}`);
+                return {
+                    prefix: match[1],
+                    number: parseInt(match[2], 10)
+                };
+            }
+
+            function generateRollNos(prefix: string, start: number, end: number): string[] {
+                const rollNos = [];
+                for (let i = start; i <= end; i++) {
+                    rollNos.push(`${prefix}${i.toString().padStart(3, "0")}`);
+                }
+                return rollNos;
+            }
+
+            const rollNoSet = new Set<string>();
+            for (const { minRollNo, maxRollNo } of groups) {
+                const { prefix, number: startNum } = extractPrefixSuffix(minRollNo);
+                const { number: endNum } = extractPrefixSuffix(maxRollNo);
+
+    
+                // next batch rollNos
+                const nextPrefix = prefix.replace(/^(\d{2})/, (y) =>
+                    String(Number(y) + 1).padStart(2, "0")
+                );
+                generateRollNos(nextPrefix, startNum, endNum).forEach((r) => rollNoSet.add(r));
+            }
+
+            return rollNoSet;
+        }
+
+
+
+        case LIST_TYPE.ALL: {
+            const results = await ResultModel.find({})
+                .select("rollNo updatedAt")
+                .sort("updatedAt");
+            return new Set(results.map((r) => r.rollNo));
+        }
+
+        default:
+            return new Set<string>();
+    }
+}
+

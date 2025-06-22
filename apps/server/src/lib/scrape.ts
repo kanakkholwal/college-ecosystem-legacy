@@ -159,7 +159,7 @@ const parseResult = (
  * @param dualDegree - Whether to also fetch the dual degree results.
  * @returns A promise that resolves to an object containing the result data or an error message.
  * */
-export async function scrapeResult(rollNo: string,): Promise<{
+export async function scrapeResult(rollNo: string): Promise<{
   message: string;
   data: rawResultType | null;
   error?: string | null;

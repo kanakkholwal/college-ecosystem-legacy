@@ -53,7 +53,7 @@ const results:Endpoints["results"] = {
     transformResponse: (res: unknown) => res as ApiResponse<APITypes["results"]["assignBranchChange"]["response"]>,
   },
   getResultByRollNoFromSite: {
-    url: "/api/results/:rollNo",
+    url: "/api/results/:rollNo/scrape",
     method: "POST",
     transformParams: (payload) => ({
       rollNo: payload,
@@ -61,7 +61,7 @@ const results:Endpoints["results"] = {
     transformResponse: (res: unknown) => res as ApiResponse<APITypes["results"]["getResultByRollNoFromSite"]["response"]>,
   },
   getResultByRollNo: {
-    url: "/api/results/:rollNo/get",
+    url: "/api/results/:rollNo",
     method: "GET",
     transformParams: (payload: APITypes["results"]["getResultByRollNo"]["payload"]) => ({
       rollNo: payload,
@@ -69,7 +69,7 @@ const results:Endpoints["results"] = {
     transformResponse: (res: unknown) => res as ApiResponse<APITypes["results"]["getResultByRollNo"]["response"]>,
   },
   deleteResultByRollNo: {
-    url: "/api/results/:rollNo/delete",
+    url: "/api/results/:rollNo",
     method: "DELETE",
     transformParams: (payload: APITypes["results"]["deleteResultByRollNo"]["payload"]) => ({
       rollNo: payload,
@@ -77,7 +77,7 @@ const results:Endpoints["results"] = {
     transformResponse: (res: unknown) => res as ApiResponse<APITypes["results"]["deleteResultByRollNo"]["response"]>,
   },
   addResultByRollNo: {
-    url: "/api/results/:rollNo/add",
+    url: "/api/results/:rollNo",
     method: "POST",
     transformParams: (payload: APITypes["results"]["addResultByRollNo"]["payload"]) => ({
       rollNo: payload,
@@ -85,7 +85,7 @@ const results:Endpoints["results"] = {
     transformResponse: (res: unknown) => res as ApiResponse<APITypes["results"]["addResultByRollNo"]["response"]>,
   },
   updateResultByRollNo: {
-    url: "/api/results/:rollNo/update",
+    url: "/api/results/:rollNo",
     method: "PUT",
     transformParams: (payload: APITypes["results"]["updateResultByRollNo"]["payload"]) => ({
       rollNo: payload[0],

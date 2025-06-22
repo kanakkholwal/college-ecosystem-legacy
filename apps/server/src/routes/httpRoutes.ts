@@ -13,18 +13,18 @@ import {
   addResult,
   assignBranchChangeToResults,
   assignRankToResults,
+  bulkDeleteResults,
+  bulkUpdateResults,
+  createBatchUsingPrevious,
+  deleteAbNormalResults,
   deleteResult,
   getAbnormalResults,
-  deleteAbNormalResults,
   getResult,
   getResultByRollNoFromSite,
   importFreshers,
   updateResult,
-  bulkDeleteResults,
-  bulkUpdateResults,
-  createBatchUsingPrevious,
 } from "../controllers/http-result";
-import { resultScrapingSSEHandler } from "../controllers/sse-scraping";
+import { resultScrapingSSEHandler, resultScrapingSSEHandlerV2 } from "../controllers/sse-scraping";
 
 const router = Router();
 
@@ -71,16 +71,17 @@ router.delete("/results/abnormals", deleteAbNormalResults);
 // Endpoint to [get,add,update,delete] result by rollNo from the database
 router.post("/results/bulk/update", bulkUpdateResults);
 router.post("/results/bulk/delete", bulkDeleteResults);
-
-router.post("/results/:rollNo", getResultByRollNoFromSite);
-// Endpoint to [get,add,update] result by rollNo from the database
-router.get("/results/:rollNo/get", getResult);
-router.post("/results/:rollNo/add", addResult);
-router.put("/results/:rollNo/update", updateResult);
-router.delete("/results/:rollNo/delete", deleteResult);
-
-
 // Endpoint to get result by rollNo scraped from the website
 router.get("/results/scrape-sse",resultScrapingSSEHandler as unknown as RequestHandler);
+router.get("/results/test",resultScrapingSSEHandlerV2 as unknown as RequestHandler);
+
+router.post("/results/:rollNo/scrape", getResultByRollNoFromSite);
+// Endpoint to [get,add,update] result by rollNo from the database
+router.get("/results/:rollNo", getResult);
+router.post("/results/:rollNo", addResult);
+router.put("/results/:rollNo", updateResult);
+router.delete("/results/:rollNo", deleteResult);
+
+
 
 export default router;

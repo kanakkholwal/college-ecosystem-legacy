@@ -1,18 +1,14 @@
 import type { Request, Response } from "express";
 import mongoose from "mongoose";
+import { EVENTS, LIST_TYPE, TASK_STATUS, type listType } from "../constants/result_scraping";
+import { getListOfRollNos, scrapeAndSaveResult } from "../lib/result_utils";
+import { sleep } from "../lib/utils";
 import type { taskDataType } from "../models/log-result_scraping";
 import { ResultScrapingLog } from "../models/log-result_scraping";
-import ResultModel from "../models/result";
 import dbConnect from "../utils/dbConnect";
-
-import { EVENTS, LIST_TYPE, TASK_STATUS, type listType } from "../constants/result_scraping";
-import { scrapeAndSaveResult } from "../lib/result_utils";
 
 const BATCH_SIZE = 10; // Number of roll numbers to process in each batch
 
-
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 // helper
 const sendEvent = (res: Response, event: string, data: {
   data: taskDataType | null,
@@ -95,6 +91,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
         error: null,
       });
     }
+
 
     console.log("ip", ip)
     if (!ip) {
@@ -251,7 +248,7 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
         if (result.status === "fulfilled" && result.value.success) {
           taskData.success++;
           taskData.successfulRollNos.push(rollNo);
-          if(actionType === EVENTS.TASK_RETRY_FAILED){
+          if (actionType === EVENTS.TASK_RETRY_FAILED) {
             taskData.failedRollNos = taskData.failedRollNos.filter(r => r !== rollNo);
             taskData.failed--;
           }
@@ -351,46 +348,13 @@ export async function resultScrapingSSEHandler(req: Request, res: Response) {
     res.status(500).send("Internal Server Error");
   }
 }
-async function getListOfRollNos(list_type: listType): Promise<Set<string>> {
-  let query = {};
-  switch (list_type) {
-    case LIST_TYPE.BACKLOG:
-      query = { "semesters.courses.cgpi": 0 };
-      break;
-    case LIST_TYPE.NEW_SEMESTER:
-      // has less than 8 semesters
-      query = {
-        $expr: {
-          $lt: [
-            { $size: "$semesters" },
-            {
-              $switch: {
-                branches: [
-                  { case: { $eq: ["$programme", "B.Tech"] }, then: 8 },
-                  { case: { $eq: ["$programme", "B.Arch"] }, then: 10 },
-                  { case: { $eq: ["$programme", "Dual Degree"] }, then: 12 }
-                ],
-                default: 0 // exclude if programme is none of these
-              }
-            }
-          ]
-        }
-      };
-      break;
-    case LIST_TYPE.DUAL_DEGREE:
-      // has more than 6 semesters
-      query = { programme: "Dual Degree", $expr: { $gt: [{ $size: "$semesters" }, 6] } };
-      break;
-    case LIST_TYPE.ALL:
-      query = {};
-      break;
-    default:
-      return new Set<string>();
-  }
-  await dbConnect();
-  const results = (await ResultModel.find(query)
-    .select("rollNo updatedAt")
-    .sort("updatedAt")) as { rollNo: string; updatedAt: Date }[];
-  return new Set(results.map((result) => result.rollNo));
-}
 
+
+export async function resultScrapingSSEHandlerV2(req: Request, res: Response) {
+  // This is a placeholder for the V2 handler
+  const list = await getListOfRollNos(LIST_TYPE.NEW_BATCH);
+  res.status(200).json({
+    data: Array.from(list),
+    error: null,
+  });
+}

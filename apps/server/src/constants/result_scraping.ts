@@ -4,8 +4,9 @@ export const LIST_TYPE = {
   BACKLOG: "has_backlog",
   NEW_SEMESTER: "new_semester",
   DUAL_DEGREE: "dual_degree",
+  NEW_BATCH: "new_batch",
 }
-export type listType = typeof LIST_TYPE[keyof typeof LIST_TYPE];
+export type listType = typeof LIST_TYPE[keyof typeof LIST_TYPE]
 
 export const EVENTS = {
   TASK_STATUS: "task_status",
