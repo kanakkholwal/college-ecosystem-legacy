@@ -1,4 +1,103 @@
 // Project configuration for the College Ecosystem platform
+export const orgConfig = {
+  name: "National Institute of Technology, Hamirpur",
+  shortName: "NITH",
+  domain: "nith.ac.in",
+  website: "https://nith.ac.in",
+  logo: "https://nith.ac.in/uploads/settings/15795036012617.png",
+  logoSquare: "https://nith.ac.in/uploads/topics/nit-logo15954991401255.jpg",
+  mailSuffix: "@nith.ac.in",
+
+  // Enhanced social profiles
+  socials: {
+    twitter: {
+      url: "https://twitter.com/nithamirpur",
+      handle: "@nithamirpur",
+      publisher: "@nithamirpur"
+    },
+    linkedin: "https://linkedin.com/company/nithamirpur",
+    instagram: "https://instagram.com/nithamirpur",
+    facebook: "https://facebook.com/NITHamirpur",
+    youtube: "https://youtube.com/@NITHamirpur"
+  },
+   // Enhanced organization details
+  foundingDate: "1986-01-01",
+  location: {
+    address: {
+      "@type": "PostalAddress",
+      "streetAddress": "NIT Hamirpur Campus, Anu",
+      "addressLocality": "Hamirpur",
+      "addressRegion": "Himachal Pradesh",
+      "postalCode": "177005",
+      "addressCountry": "IN"
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      "latitude": "31.7087",
+      "longitude": "76.5270"
+    }
+  },
+  
+  contact: {
+    email: "registrar@nith.ac.in",
+    phone: "+91-1972-254001",
+    fax: "+91-1972-223834"
+  },
+  
+  socialProfiles: [
+    "https://www.facebook.com/NITHamirpur",
+    "https://twitter.com/NITHamirpurHP",
+    "https://www.instagram.com/nithamirpur/",
+    "https://www.linkedin.com/school/nithamirpur/",
+    "https://www.youtube.com/@NITHamirpur"
+  ],
+  
+  // Enhanced structured data
+  jsonLds: {
+
+    EducationalOrganization: {
+      "@context": "https://schema.org",
+      "@type": ["CollegeOrUniversity", "GovernmentOrganization"],
+      "name": "National Institute of Technology, Hamirpur",
+      "url": "https://nith.ac.in",
+      "logo": "https://nith.ac.in/uploads/settings/15795036012617.png",
+      "foundingDate": "1986",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "NIT Hamirpur Campus, Anu",
+        "addressLocality": "Hamirpur",
+        "addressRegion": "Himachal Pradesh",
+        "postalCode": "177005",
+        "addressCountry": "IN"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Admissions",
+        "telephone": "+91-1972-254001",
+        "email": "registrar@nith.ac.in"
+      },
+      "sameAs": [
+        "https://www.facebook.com/NITHamirpur",
+        "https://twitter.com/NITHamirpurHP",
+        "https://www.instagram.com/nithamirpur/",
+        "https://www.linkedin.com/school/nithamirpur/",
+        "https://www.youtube.com/@NITHamirpur"
+      ],
+      "department": [
+        {
+          "@type": "CollegeDepartment",
+          "name": "Computer Science and Engineering"
+        },
+        {
+          "@type": "CollegeDepartment",
+          "name": "Electronics and Communication Engineering"
+        },
+        // Add all departments
+      ]
+    }
+  }
+} as const;
+
 
 // This file contains the configuration for the app and college
 export const appConfig = {
@@ -11,14 +110,34 @@ export const appConfig = {
   // appDomain: "college-ecosystem.vercel.app",
   // url: "https://college-ecosystem.vercel.app",
   description:
-    "Un-Official platform of NITH for students, faculty, and staff to collaborate. Manage campus activities, share resources, and connect with the college community.",
-  keywords:
-    "NITH campus portal, college management system, student portal, faculty collaboration, academic platform, campus resources, " +
-    "NITH Hamirpur, college ecosystem, university platform, student management",
+    "NIT Hamirpur student portal for academic results, campus resources, and community collaboration. Manage your college ecosystem in one platform.",
+  keywords: [
+    // Primary terms
+    "NITH portal", "NIT Hamirpur", "campus management",
+    "student portal", "college ecosystem", "academic platform",
+
+    // Feature-specific
+    "NITH results", "semester results", "exam grades",
+    "course materials", "faculty collaboration", "campus resources",
+
+    // Program-specific
+    "BTech portal", "MTech portal", "MCA portal", "BArch portal", "PhD portal",
+
+    // Location-based
+    "Hamirpur colleges", "Himachal Pradesh colleges", "NIT Hamirpur portal",
+
+    // Action-oriented
+    "check results online", "download marksheet", "academic records",
+    "connect with faculty", "campus announcements"
+  ].join(', '),
   creator: "Kanak Kholwal",
   authors: [
     { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" },
-    { name: "NITH", url: "https://nith.ac.in" },
+    {
+      name: "NITH Administration",
+      url: "https://nith.ac.in",
+      role: "EducationalInstitution"
+    },
   ],
   githubRepo: "https://github.com/kanakkholwal/college-ecosystem?utm_source=app.nith.eu.org&utm_medium=referral&utm_campaign=repo_link",
   githubUri: "kanakkholwal/college-ecosystem",
@@ -28,31 +147,36 @@ export const appConfig = {
     instagram: "https://instagram.com/kanakkholwal",
     github: "https://github.com/kanakkholwal",
   },
-  
-  contact: "https://forms.gle/PXbaDm9waeJWYWUP8",
-};
-
-export const orgConfig = {
-  name: "National Institute of Technology, Hamirpur",
-  shortName: "NITH",
-  domain: "nith.ac.in",
-  website: "https://nith.ac.in",
-  logo: "https://nith.ac.in/uploads/settings/15795036012617.png",
-  logoSquare:"https://nith.ac.in/uploads/topics/nit-logo15954991401255.jpg",
-  mailSuffix: "@nith.ac.in",
-  jsonLds:{
-    EducationalOrganization: {
-      "@type": "EducationalOrganization",
-      name: "National Institute of Technology, Hamirpur",
-      url: "https://nith.ac.in",
-      logo: "https://nith.ac.in/uploads/settings/15795036012617.png",
-      sameAs: [
-        "https://www.facebook.com/NITHamirpur",
-        "https://twitter.com/NITHamirpurHP",
-      ],
+// SEO-specific enhancements
+  seo: {
+    locale: "en_IN",
+    timezone: "Asia/Kolkata",
+    geo: {
+      placename: "Hamirpur",
+      region: "Himachal Pradesh",
+      position: "31.7087° N, 76.5270° E"
     },
+    category: "Education",
+    publisher: orgConfig.name,
+    schemaType: "WebApplication"
+  },
+  contact: "https://forms.gle/PXbaDm9waeJWYWUP8",
+   // Structured data templates
+  jsonLds: {
+    WebApplication: {
+      "@type": "WebApplication",
+      "name": "NITH Campus Portal",
+      "url": "https://app.nith.eu.org",
+      "applicationCategory": "Education",
+      "operatingSystem": "Web",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "INR"
+      }
+    }
   }
-} as const;
+};
 
 
 

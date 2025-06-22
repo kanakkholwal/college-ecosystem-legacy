@@ -12,31 +12,83 @@ import { NoteSeparator } from "@/components/common/note-separator";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import type { Metadata } from "next";
-import { orgConfig } from "~/project.config";
+import { appConfig, orgConfig } from "~/project.config";
 
 export const metadata: Metadata = {
-  title: "Results",
-  description: "Search for results in NITH",
-  applicationName: "Result Portal",
+  title: orgConfig.shortName + " Results Portal - Check Semester Results Online",
+  description: orgConfig.shortName + " result portal. Search semester results by roll number, name, or course. Access academic records, grades, and transcripts for all programs.",
+  applicationName: orgConfig.shortName + " Result Portal",
   alternates: {
     canonical: '/results',
   },
   keywords: [
     orgConfig.shortName,
     orgConfig.name,
-    "Results",
+    // Primary Keywords
     "NITH Results",
     "NITH Result Portal",
+    "NITH Semester Results",
+    "NITH Exam Results",
+
+    // Program-Specific
+    "NITH BTech Results",
+    "NITH MTech Results",
+    "NITH BArch Results",
+    "NITH MCA Results",
+    "NITH PhD Results",
+
+    // Search Functionality
+    "Check NITH Results",
+    "NITH Result by Roll Number",
+    "NITH Result by Name",
     "NITH Result Search",
-    "Result Search",
-    "NITH Result",
-    "Result Portal",
-    "NITH Result Portal",
-    "NITH Result Search",
-    "NITH Result Search Portal",
-    "NITH Result Search Engine",
-    "NITH Result Search Engine Portal",
+
+    // Location-Based
+    "NITH Hamirpur Results",
+    "NIT Hamirpur Results",
+
+    // Academic Terms
+    "NITH Grade Card",
+    "NITH Academic Records",
+    "NITH Transcript",
+
+    // Technical Terms
+    "NITH Result 2024",
+    "NITH Odd Semester Results",
+    "NITH Even Semester Results"
   ],
+  openGraph: {
+    title: `NITH Results Portal | ${orgConfig.shortName}`,
+    description: "Access exam results, grade cards and academic records for all programs at NIT Hamirpur",
+    url: `${appConfig.url}/results`,
+    images: [
+      {
+        url: new URL('/og-results.jpg', appConfig.url).toString(),
+        width: 1200,
+        height: 630,
+        alt: 'NITH Results Portal Interface',
+      }
+    ],
+
+    locale: 'en_IN',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `Check NITH Results Online | ${orgConfig.shortName}`,
+    description: "Instant access to semester exam results for NIT Hamirpur students",
+    images: [new URL('/logo.png', appConfig.url).toString()]
+  },
+  // robots: {
+  //     index: true,
+  //     follow: true,
+  //     nocache: true,
+  //     googleBot: {
+  //       index: true,
+  //       follow: true,
+  //     }
+  //   },
+    
 };
 
 export default async function ResultPage(props: {
@@ -70,13 +122,10 @@ export default async function ResultPage(props: {
   return (
     <div className="px-4 md:px-12 xl:px-6 @container">
       <BaseHeroSection
-        title={
-          <>
-            {orgConfig.shortName}{" "}
-            <span className="text-primary">Result</span> Portal
-          </>
-        }
-        description="Search for results by entering your roll number or name."
+        title={`${orgConfig.shortName} Semester Results Portal`}
+        description="Access official exam results for BTech, MTech, MCA, BArch, and PhD programs 
+at National Institute of Technology Hamirpur. Check grades, download mark sheets, 
+and track academic performance since 2020."
       >
         <Suspense
           key={"key_search_bar"}
@@ -88,6 +137,16 @@ export default async function ResultPage(props: {
             batches={batches}
           />
         </Suspense>
+        <script type="application/ld+json" id="search-results-json">
+          {JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "SearchResultsPage",
+            "name": "NITH Results Portal",
+            "description": "Official examination results portal for NIT Hamirpur",
+            "url": `${appConfig.url}/results`,
+            "publisher": orgConfig.jsonLds.EducationalOrganization
+          })}
+        </script>
       </BaseHeroSection>
 
       <NoteSeparator label={`${results.length} Results found`} />

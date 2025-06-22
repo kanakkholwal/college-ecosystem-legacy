@@ -17,19 +17,19 @@ export const metadata: Metadata = {
   applicationName: appConfig.name,
   authors: appConfig.authors,
   creator: appConfig.creator,
-  keywords: appConfig.keywords + ", " + orgConfig.shortName + ", " + orgConfig.name,
+  keywords: appConfig.keywords,
   metadataBase: new URL(appConfig.url),
   alternates: {
-    canonical: '/',
+    canonical: "/",
   },
   robots: {
-    index: true, // Changed to allow indexing
+    index: true,
     follow: true,
     nocache: true,
     googleBot: {
       index: true,
-      follow: true, // Enabled for better crawling
-      noimageindex: false, // Allow image indexing
+      follow: true,
+      noimageindex: false,
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
@@ -37,20 +37,22 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   openGraph: {
-    type: "website",
-    locale: "en_US",
+   type: "website",
+    locale: appConfig.seo.locale,
     url: appConfig.url,
     title: `${appConfig.name} | ${orgConfig.name}`,
     description: appConfig.description,
     siteName: appConfig.name,
     images: [
       {
-        url: new URL(appConfig.logo, appConfig.url).toString(),
+        url: new URL('/social/og-image.jpg', appConfig.url).toString(),
         width: 1200,
         height: 630,
         alt: `${appConfig.name} - ${orgConfig.shortName}`,
       },
     ],
+    phoneNumbers: [orgConfig.contact.phone],
+    countryName: "India"
   },
   twitter: {
     card: "summary_large_image",
@@ -65,7 +67,21 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-
+// New SEO fields
+  category: appConfig.seo.category,
+  publisher: appConfig.seo.publisher,
+  appLinks: {
+    web: {
+      url: appConfig.url,
+      should_fallback: true
+    }
+  },
+  other: {
+    "geo.position": appConfig.seo.geo.position,
+    "geo.placename": appConfig.seo.geo.placename,
+    "geo.region": appConfig.seo.geo.region,
+    "og:locale:alternate": "hi_IN"
+  }
 
 };
 
