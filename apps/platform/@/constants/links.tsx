@@ -1,4 +1,4 @@
-import { Settings, Users } from "lucide-react";
+import { Settings, Tickets, Users } from "lucide-react";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuBookA, LuBuilding, LuGithub, LuSchool } from "react-icons/lu";
@@ -182,6 +182,12 @@ export const sidebar_links: rawLinkType[] = [
     title: "Personal Attendance",
     icon: CalendarRange,
     path: "/attendance-personal",
+    allowed_roles: [ROLES.STUDENT],
+  },
+  {
+    title: "Out Pass",
+    icon: Tickets,
+    path: "/outpass",
     allowed_roles: [ROLES.STUDENT],
   },
   {

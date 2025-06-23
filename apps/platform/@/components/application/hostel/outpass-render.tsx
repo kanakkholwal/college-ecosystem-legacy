@@ -3,12 +3,12 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/typography";
+import { ButtonLink } from "@/components/utils/link";
 import { cn } from "@/lib/utils";
 import BarCode from "barcode-react";
 import { format } from "date-fns";
 import { toPng } from "html-to-image";
 import { ArrowRight, LoaderCircle } from "lucide-react";
-import Link from "next/link";
 import { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { HiOutlineDownload } from "react-icons/hi";
@@ -92,8 +92,26 @@ export default function OutpassRender({
   return (
     <>
       {!viewOnly && (
-        <div className="flex justify-between items-center w-full gap-2 flex-wrap">
-          <Heading level={5}>Requested OutPass</Heading>
+        <div className="flex justify-between items-center w-full gap-2 flex-wrap bg-card p-3 rounded-lg mb-4">
+          <Heading level={6}>
+            Requested OutPass
+            <Badge
+              size="sm"
+              className="ml-2 capitalize"
+              variant={
+                outpass.status === "approved"
+                  ? "success_light"
+                  : outpass.status === "rejected" ||
+                    outpass.status === "processed"
+                    ? "destructive_light"
+                    : outpass.status === "pending"
+                      ? "warning_light"
+                      : "default_light"
+              }
+            >
+              {outpass.status}
+            </Badge>
+          </Heading>
           <div className="flex gap-2 justify-end items-center flex-wrap">
             <Button
               type="button"
@@ -118,12 +136,10 @@ export default function OutpassRender({
                 </>
               )}
             </Button>
-            <Button variant="link" effect="hoverUnderline" size="sm" asChild>
-              <Link href="outpass/request">
-                Request Outpass
-                <ArrowRight />
-              </Link>
-            </Button>
+            <ButtonLink variant="link" effect="hoverUnderline" size="sm" href="outpass/request">
+              Request Outpass
+              <ArrowRight />
+            </ButtonLink>
           </div>
         </div>
       )}
@@ -153,7 +169,7 @@ export default function OutpassRender({
                       outpass.status === "approved"
                         ? "success_light"
                         : outpass.status === "rejected" ||
-                            outpass.status === "processed"
+                          outpass.status === "processed"
                           ? "destructive_light"
                           : outpass.status === "pending"
                             ? "warning_light"
@@ -223,23 +239,23 @@ export default function OutpassRender({
                   {format(
                     new Date(
                       outpass.validTill ||
-                        new Date(
-                          new Date().getFullYear(),
-                          new Date().getMonth(),
-                          new Date().getDate(),
-                          23,
-                          59,
-                          59,
-                          999
-                        )
+                      new Date(
+                        new Date().getFullYear(),
+                        new Date().getMonth(),
+                        new Date().getDate(),
+                        23,
+                        59,
+                        59,
+                        999
+                      )
                     ),
                     "dd/MM/yyyy hh:mm a"
                   )}
                 </strong>
                 {new Date(outpass.validTill || "").getTime() <
                   new Date().getTime() && (
-                  <span className="text-red-500 italic"> (Expired)</span>
-                )}
+                    <span className="text-red-500 italic"> (Expired)</span>
+                  )}
               </p>
             </section>
             <footer className={classNames.footer}>

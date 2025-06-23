@@ -18,6 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Heading } from "@/components/ui/typography";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -64,8 +65,14 @@ export default function RequestOutPassForm<T>({
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-6 my-5 p-2"
+        className="space-y-6 my-5 p-3 bg-card rounded-lg border shadow-sm"
       >
+        <div>
+          <Heading level={4}>Request an Outpass</Heading>
+          <p className="text-muted-foreground text-sm">
+            Please fill out the form below to request an outpass.
+          </p>
+        </div>
         <div className="grid grid-cols-1 gap-4">
           <div className="grid grid-cols-1 @lg:grid-cols-2 gap-3">
             <FormField

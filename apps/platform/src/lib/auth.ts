@@ -279,8 +279,8 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       emailVerified: true,
       email,
       username,
-      gender: hostelStudent.gender || "not_specified",
-      hostelId: hostelStudent.hostelId || "not_specified",
+      gender: hostelStudent?.gender || "not_specified",
+      hostelId: hostelStudent?.hostelId || "not_specified",
     };
   }
   const { data: response } = await serverFetch<{

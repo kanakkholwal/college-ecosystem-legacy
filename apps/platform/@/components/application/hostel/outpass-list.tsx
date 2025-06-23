@@ -1,4 +1,5 @@
 import { Heading } from "@/components/ui/typography";
+import { Tickets } from "lucide-react";
 import type { OutPassType } from "~/models/hostel_n_outpass";
 import { OutpassDetails } from "./outpass";
 
@@ -14,7 +15,13 @@ const classNames = {
 export default function OutpassList({ outPasses }: OutpassListProps) {
   return (
     <>
-      <Heading level={4}>Last {outPasses.length} OutPass</Heading>
+      <div className="flex items-center justify-between p-3 bg-card rounded-lg border">
+        <Heading level={6}>
+          <Tickets className="inline-block mr-2 size-4" />
+          Last {outPasses.length} OutPass
+          {outPasses.length > 0 ? `s` : ""}
+        </Heading>
+      </div>
       <div className={classNames.container}>
         {outPasses.map((outpass) => (
           <OutpassDetails key={outpass._id} outpass={outpass} />

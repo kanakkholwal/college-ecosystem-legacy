@@ -1,12 +1,11 @@
 import RequestOutPassForm from "@/components/application/hostel/outpass-request-form";
 import EmptyArea from "@/components/common/empty-area";
-import { Button } from "@/components/ui/button";
 import { Heading } from "@/components/ui/typography";
+import { ButtonLink } from "@/components/utils/link";
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { LuBuilding } from "react-icons/lu";
-import { getHostelByUser } from "~/actions/hostel";
+import { getHostelForStudent } from "~/actions/hostel";
 import { createOutPass } from "~/actions/hostel_outpass";
 
 interface PageProps {
@@ -22,7 +21,7 @@ export const metadata: Metadata = {
 
 export default async function RequestOutPassPage(props: PageProps) {
   const { slug } = await props.searchParams;
-  const { success, message, hosteler } = await getHostelByUser(slug);
+  const { success, message, hosteler } = await getHostelForStudent(slug);
 
   if (!success || !hosteler) {
     return (
@@ -38,13 +37,10 @@ export default async function RequestOutPassPage(props: PageProps) {
 
   return (
     <div className="space-y-3 my-2">
-      <Button variant="outline" size="sm" effect="shineHover" asChild>
-        <Link href="/student/outpass">
+      <ButtonLink variant="outline" size="sm" effect="shineHover"  href="/student/outpass">
           <ArrowLeft />
           Go Back
-        </Link>
-      </Button>
-      <Heading level={4}>Request an Outpass</Heading>
+      </ButtonLink>
       <RequestOutPassForm student={hosteler} onSubmit={createOutPass} />
     </div>
   );

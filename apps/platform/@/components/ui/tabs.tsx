@@ -57,6 +57,7 @@ TabsContent.displayName = TabsPrimitive.Content.displayName;
 interface Tab {
   id: string;
   label: string | React.ReactNode;
+  icon?:React.FC<React.SVGProps<SVGSVGElement>>;
 }
 
 interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -184,7 +185,10 @@ const VercelTabsList = React.forwardRef<HTMLDivElement, TabsProps>(
                 onTabChange?.(tab.id);
               }}
             >
-              <div className="text-sm font-medium leading-5 whitespace-nowrap flex items-center justify-center h-full z-10">
+              <div className="text-sm font-medium leading-5 whitespace-nowrap flex items-center justify-center h-full gap-2 z-10">
+                {tab.icon && (
+                  <tab.icon className="size-4 text-[inherit]" />
+                )}
                 {tab.label}
               </div>
             </TabsTrigger>

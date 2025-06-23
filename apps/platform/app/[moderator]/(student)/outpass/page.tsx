@@ -1,13 +1,14 @@
 import OutpassList from "@/components/application/hostel/outpass-list";
 import OutpassRender from "@/components/application/hostel/outpass-render";
 import EmptyArea from "@/components/common/empty-area";
-import { Separator } from "@/components/ui/separator";
+import { Tabs, VercelTabsList } from "@/components/ui/tabs";
 import ConditionalRender from "@/components/utils/conditional-render";
+import { TabsContent } from "@radix-ui/react-tabs";
 import { format } from "date-fns";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { LuBuilding } from "react-icons/lu";
-import { getHostelByUser } from "~/actions/hostel";
+import { getHostelForStudent } from "~/actions/hostel";
 import { getOutPassForHosteler } from "~/actions/hostel_outpass";
 
 interface PageProps {
@@ -19,8 +20,10 @@ interface PageProps {
 export default async function HostelPage(props: PageProps) {
   const { slug } = await props.searchParams;
 
-  const { success, message, hostel, hosteler } = await getHostelByUser(slug);
-  if(!hosteler){
+  const response = await getHostelForStudent(slug);
+  if (!response.hosteler) {
+    console.log("No hosteler account found for this user.", response);
+    const { success, message } = response;
     return (
       <EmptyArea
         icons={[LuBuilding]}
@@ -29,47 +32,68 @@ export default async function HostelPage(props: PageProps) {
       />
     );
   }
-
+  const hosteler = response.hosteler;
   const outPasses = await getOutPassForHosteler();
-  console.dir(outPasses[0], { depth: null });
 
   return (
     <div className="space-y-5">
-      <ConditionalRender condition={!!hosteler?.banned}>
-        <EmptyArea
-          icons={[LuBuilding]}
-          title="You are banned from requesting outpass for the following reason"
-          description={`${hosteler?.bannedReason} till ${hosteler?.bannedTill ? format(new Date(hosteler.bannedTill), "dd/MM/yyyy HH:mm:ss") : "N/A"}`}
+      <div className="p-1 mt-3 pb-3 border-b">
+        <h3 className="text-base font-semibold">Hostel Outpass</h3>
+        <p className="text-muted-foreground text-sm">
+          Here you can view your outpass details and request new outpass.
+        </p>
+      </div>
+      <Tabs defaultValue="outpass_list" className="w-full">
+        <VercelTabsList tabs={[
+          {
+            id: "requested_outpass",
+            label: "Requested Outpass",
+          },
+          {
+            id: "outpass_list",
+            label: "Outpass List",
+          },
+        ]}
         />
-      </ConditionalRender>
+        <div className="mt-4">
+          <TabsContent value="requested_outpass">
+            <ConditionalRender condition={!!hosteler?.banned}>
+              <EmptyArea
+                icons={[LuBuilding]}
+                title="You are banned from requesting outpass for the following reason"
+                description={`${hosteler?.bannedReason} till ${hosteler?.bannedTill ? format(new Date(hosteler.bannedTill), "dd/MM/yyyy HH:mm:ss") : "N/A"}`}
+              />
+            </ConditionalRender>
 
-      <ConditionalRender condition={!hosteler?.banned}>
-        <ConditionalRender condition={outPasses.length > 0}>
-          <OutpassRender outpass={outPasses[0]} />
-        </ConditionalRender>
-        <ConditionalRender condition={outPasses.length === 0}>
-          <EmptyArea
-            icons={[LuBuilding]}
-            title="No Outpass Found"
-            description="No outpass have been requested yet"
-            actionProps={{
-              asChild: true,
-              children: (
-                <Link href="outpass/request">
-                  Request Outpass <ArrowRight />
-                </Link>
-              ),
-              effect: "underline",
-              variant: "link",
-            }}
-          />
-        </ConditionalRender>
-      </ConditionalRender>
-
-      <ConditionalRender condition={outPasses.length > 0}>
-        <Separator />
-        <OutpassList outPasses={outPasses} />
-      </ConditionalRender>
+            {/* <ConditionalRender condition={!hosteler?.banned}> */}
+              <ConditionalRender condition={outPasses.length > 0}>
+                <OutpassRender outpass={outPasses[0]} />
+              </ConditionalRender>
+            {/* </ConditionalRender> */}
+          </TabsContent>
+          <TabsContent value="outpass_list">
+            <ConditionalRender condition={outPasses.length > 0}>
+              <OutpassList outPasses={outPasses} />
+            </ConditionalRender>
+            <ConditionalRender condition={outPasses.length === 0}>
+              <EmptyArea
+                icons={[LuBuilding]}
+                title="No Outpass Found"
+                description="No outpass have been requested yet"
+                actionProps={{
+                  asChild: true,
+                  children: (
+                    <Link href="outpass/request">
+                      Request Outpass <ArrowRight />
+                    </Link>
+                  ),
+                  variant: "light",
+                }}
+              />
+            </ConditionalRender>
+          </TabsContent>
+        </div>
+      </Tabs>
     </div>
   );
 }

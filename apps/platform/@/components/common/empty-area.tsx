@@ -79,7 +79,6 @@ export default function EmptyArea({
       </div>
       {actionProps && (
         <Button
-          variant="outline"
           {...actionProps}
           className={cn(
             "shadow-sm active:shadow-none",
