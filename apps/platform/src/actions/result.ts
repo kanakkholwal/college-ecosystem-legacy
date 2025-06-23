@@ -187,7 +187,7 @@ export async function getResultByRollNo(
   is_new?: boolean
 ): Promise<ResultTypeWithId | null> {
 
-  const cacheKey = `result_${rollNo}`;
+  const cacheKey = `result_r_${rollNo}`;
   try {
     let cachedResult: ResultTypeWithId | null = null;
     if (!is_new && !update) {
