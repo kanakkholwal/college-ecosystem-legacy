@@ -1,5 +1,5 @@
 import Page403 from "@/components/utils/403";
-// import { getSession } from "src/lib/auth-server";
+// import { getSession } from "~/lib/auth-server";
 import { ROLES } from "~/constants";
 
 const NOT_ALLOWED_ROLES = [ROLES.STUDENT, ROLES.GUARD];

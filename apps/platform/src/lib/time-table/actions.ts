@@ -135,6 +135,13 @@ export async function deleteTimeTable(timetableId: string) {
     return Promise.reject("Failed to delete timetable");
   }
 }
+
+const timetable_authorization = [
+  "admin",
+  "moderator",
+  "faculty",
+  "cr",
+]
 export async function updateTimeTable(
   timetableId: string,
   timetableData: Partial<TimeTableWithID>
@@ -147,12 +154,10 @@ export async function updateTimeTable(
 
   try {
     if (
-      !session.user.other_roles.includes("admin") &&
-      !session.user.other_roles.includes("faculty") &&
-      !session.user.other_roles.includes("cr") &&
-      !session.user.other_roles.includes("moderator")
+      !timetable_authorization.includes(session.user.role) &&
+      !session.user.other_roles.some(role => timetable_authorization.includes(role))
     ) {
-      return Promise.reject("Student can't update a timetable");
+      return Promise.reject(session.user.other_roles[0] + " can't update a timetable");
     }
     await dbConnect();
 

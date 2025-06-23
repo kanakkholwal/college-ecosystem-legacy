@@ -1,4 +1,11 @@
 "use client";
+
+import type React from "react";
+import { useCallback } from "react";
+import { DEPARTMENTS_LIST } from "src/constants/departments";
+import type { EventTypeWithID, RawEvent } from "src/models/time-table";
+import { FormattedTimetable, } from "./store";
+
 import { Button } from "@/components/ui/button";
 import {
   HoverCard,
@@ -18,105 +25,52 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { useAtom } from "jotai";
 import { Trash } from "lucide-react";
-import type React from "react";
-import { useState } from "react";
-import { DEPARTMENTS_LIST } from "src/constants/departments";
-import type { EventTypeWithID, RawEvent } from "src/models/time-table";
+import { nanoid } from "nanoid";
+import { useEffect, useState } from "react";
 import { daysMap, timeMap } from "./constants";
-import {
-  editingEventAtom,
-  type FormattedTimetable,
-  isEditingAtom,
-  timetableDataAtom,
-} from "./store";
+import { useTimeTableStore } from "./store";
 
 export const EditTimetableDialog: React.FC = () => {
-  const [timetableData, setTimetableData] = useAtom(timetableDataAtom);
-  const [editingEvent, setEditingEvent] = useAtom(editingEventAtom);
-  const [isEditing, setIsEditing] = useAtom(isEditingAtom);
+  const {
+    timetableData,
+    editingEvent,
+    isEditing,
+    setIsEditing,
+    setEditingEvent,
+    updateEvent,
+    deleteEvent,
+  } = useTimeTableStore();
 
-  const [newEvent, setNewEvent] = useState<
-    FormattedTimetable["schedule"][number]["timeSlots"][number]["events"][number]
+  const [newEvent, setNewEvent] = useState<FormattedTimetable["schedule"][number]["timeSlots"][number]["events"][number]
   >({
+    _id: nanoid(),
     title: "",
     description: "",
   });
 
-  const handleSave = () => {
-    const updatedTimetableData = {
-      ...timetableData,
-      schedule: timetableData.schedule.map((daySchedule, dayIndex) => {
-        if (dayIndex === editingEvent.dayIndex) {
-          return {
-            ...daySchedule,
-            timeSlots: daySchedule.timeSlots.map((timeSlot, timeSlotIndex) => {
-              if (timeSlotIndex === editingEvent.timeSlotIndex) {
-                const updatedEvents = [...timeSlot.events];
-                if (editingEvent.eventIndex !== -1) {
-                  updatedEvents[editingEvent.eventIndex] = newEvent;
-                } else {
-                  updatedEvents.push(newEvent);
-                }
-                return { ...timeSlot, events: updatedEvents };
-              }
-              return timeSlot;
-            }),
-          };
-        }
-        return daySchedule;
-      }),
-    };
-    setTimetableData(updatedTimetableData);
-    setIsEditing(false);
-    setEditingEvent({ dayIndex: 0, timeSlotIndex: 0, eventIndex: -1 });
+  useEffect(() => {
+    if (isEditing && editingEvent.eventIndex !== -1) {
+      const event =
+        timetableData.schedule[editingEvent.dayIndex]?.timeSlots[
+          editingEvent.timeSlotIndex
+        ]?.events[editingEvent.eventIndex];
+      if (event) setNewEvent(event);
+    } else {
+      setNewEvent({ title: "", description: "", _id: nanoid() });
+    }
+  }, [isEditing, editingEvent]);
 
-    setNewEvent({ title: "", description: "" });
-  };
-
-  const handleCancel = () => {
-    setIsEditing(false);
-    setEditingEvent({ dayIndex: 0, timeSlotIndex: 0, eventIndex: -1 });
-  };
-  const handleDelete = () => {
-    const updatedTimetableData = {
-      ...timetableData,
-      schedule: timetableData.schedule.map((daySchedule, dayIndex) => {
-        if (dayIndex === editingEvent.dayIndex) {
-          return {
-            ...daySchedule,
-            timeSlots: daySchedule.timeSlots.map((timeSlot, timeSlotIndex) => {
-              if (timeSlotIndex === editingEvent.timeSlotIndex) {
-                const updatedEvents = timeSlot.events.filter(
-                  (_, index) => index !== editingEvent.eventIndex
-                );
-                return { ...timeSlot, events: updatedEvents };
-              }
-              return timeSlot;
-            }),
-          };
-        }
-        return daySchedule;
-      }),
-    };
-    setTimetableData(updatedTimetableData);
-    setIsEditing(false);
-    setEditingEvent({ dayIndex: 0, timeSlotIndex: 0, eventIndex: -1 });
-    setNewEvent({ title: "", description: "" });
-  };
-
-  // biome-ignore lint/suspicious/noExplicitAny: <explanation>
   const handleEventChange = (field: keyof typeof newEvent, value: any) => {
     setNewEvent((prevEvent) => ({ ...prevEvent, [field]: value }));
   };
 
   return (
-    <Sheet open={isEditing} onOpenChange={(value) => setIsEditing(value)}>
+    <Sheet open={isEditing} onOpenChange={setIsEditing}>
       <SheetContent className="w-full max-w-lg">
         <SheetHeader>
           <SheetTitle>Edit Event</SheetTitle>
-          <SheetDescription className="font-semibold">
+          <SheetDescription className="text-sm text-muted-foreground">
             {daysMap.get(editingEvent.dayIndex)} :{" "}
             {timeMap.get(editingEvent.timeSlotIndex)}
           </SheetDescription>
@@ -158,22 +112,38 @@ export const EditTimetableDialog: React.FC = () => {
                   ...editingEvent,
                   eventIndex: checked
                     ? timetableData.schedule[editingEvent.dayIndex]?.timeSlots[
-                        editingEvent.timeSlotIndex
-                      ]?.events.length
+                      editingEvent.timeSlotIndex
+                    ]?.events.length
                     : 0,
                 });
               }}
             />
           </div>
           <div className="flex items-center gap-2">
-            <Button onClick={handleSave} size="sm" width="sm" variant="dark">
+            <Button
+              onClick={() => {
+                updateEvent(newEvent);
+                setNewEvent({ title: "", description: "", _id: nanoid() });
+                setIsEditing(false);
+              }}
+              size="sm"
+              width="sm"
+              variant="dark"
+            >
               Save
             </Button>
-            <Button variant="outline" size="sm" onClick={handleCancel}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setIsEditing(false)}
+            >
               Cancel
             </Button>
             <Button
-              onClick={handleDelete}
+              onClick={() => {
+                deleteEvent();
+                setIsEditing(false);
+              }}
               size="icon_sm"
               variant="destructive_light"
             >
@@ -182,135 +152,139 @@ export const EditTimetableDialog: React.FC = () => {
           </div>
         </div>
         <div className="grid gap-4 py-4">
-          {/* map all the events in the same time and day */}
+          <h6 className="text-sm font-medium text-muted-foreground">
+            Events in{" "}
+            {daysMap.get(editingEvent.dayIndex)} :{" "}
+            {timeMap.get(editingEvent.timeSlotIndex)}
+          </h6>
           {timetableData.schedule[editingEvent.dayIndex]?.timeSlots[
             editingEvent.timeSlotIndex
-          ]?.events.map((event, eventIndex) => {
-            return (
-              <div
-                key={event.title}
-                className={cn(
-                  "flex items-center justify-between whitespace-nowrap gap-2 border p-2 rounded-lg bg-gray-200",
-                  editingEvent.eventIndex === eventIndex ? "bg-primary/10" : ""
-                )}
+          ]?.events.map((event, eventIndex) => (
+            <div
+              key={event.title}
+              className={cn(
+                "flex items-center justify-between whitespace-nowrap gap-2 border p-2 rounded-lg bg-muted",
+                editingEvent.eventIndex === eventIndex ? "border-primary" : ""
+              )}
+            >
+              <span className="font-medium text-sm">{event.title}</span>
+              <Button
+                variant="outline"
+                size="xs"
+                onClick={() => {
+                  setIsEditing(true);
+                  setEditingEvent({
+                    ...editingEvent,
+                    eventIndex,
+                  });
+                  setNewEvent(event);
+                }}
               >
-                <span className="font-semibold">{event.title}</span>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => {
-                    setIsEditing(true);
-                    setEditingEvent({
-                      dayIndex: editingEvent.dayIndex,
-                      timeSlotIndex: editingEvent.timeSlotIndex,
-                      eventIndex,
-                    });
-                    setNewEvent(event);
-                  }}
-                >
-                  Edit
-                </Button>
-              </div>
-            );
-          })}
+                Edit
+              </Button>
+            </div>
+          ))}
         </div>
       </SheetContent>
     </Sheet>
   );
 };
 
-export function TimeTableMetaData({ className }: React.ComponentProps<"form">) {
-  const [timetableData, setTimetableData] = useAtom(timetableDataAtom);
+
+
+export const TimeTableMetaData = ({ className }: React.ComponentProps<"form">) => {
+  const timetableData = useTimeTableStore((state) => state.timetableData);
+  const setTimetableData = useTimeTableStore((state) => state.setTimetableData);
+
+  // Memoize the change handler to prevent unnecessary re-renders
+  const handleChange = useCallback(
+    <T extends keyof typeof timetableData>(
+      field: T,
+      value: typeof timetableData[T]
+    ) => {
+      setTimetableData({
+        ...timetableData,
+        [field]: value,
+      });
+    },
+    [timetableData, setTimetableData]
+  );
+
+  // Memoize department radio change handler
+  const handleDepartmentChange = useCallback(
+    (code: string) => {
+      setTimetableData({
+        ...timetableData,
+        department_code: code,
+      });
+    },
+    [timetableData, setTimetableData]
+  );
 
   return (
-    <>
-      <div
-        className={cn(
-          "grid items-start gap-4 mx-auto max-w-7xl py-10",
-          className
-        )}
-      >
-        <div className="flex gap-2 flex-wrap w-full">
-          <div className="grid grow">
-            <Label htmlFor="sectionName">Section Name</Label>
-            <Input
-              id="sectionName"
-              placeholder="ECE 3-B"
-              value={timetableData?.sectionName}
-              onChange={(e) => {
-                setTimetableData({
-                  ...timetableData,
-                  sectionName: e.target.value,
-                });
-              }}
-            />
-          </div>
-          <div className="grid grow">
-            <Label htmlFor="year">Year</Label>
-            <Input
-              id="year"
-              type="number"
-              placeholder="3"
-              min={1}
-              max={5}
-              value={timetableData.year}
-              onChange={(e) => {
-                setTimetableData({
-                  ...timetableData,
-                  year: Number.parseInt(e.target.value),
-                });
-              }}
-            />
-          </div>
-          <div className="grid grow">
-            <Label htmlFor="semester">Semester</Label>
-            <Input
-              id="semester"
-              type="number"
-              placeholder="1"
-              min={1}
-              max={10}
-              value={timetableData.semester}
-              onChange={(e) => {
-                setTimetableData({
-                  ...timetableData,
-                  semester: Number.parseInt(e.target.value),
-                });
-              }}
-            />
-          </div>
+    <div className={cn("grid items-start gap-4", className)}>
+      <h4 className="text-base font-semibold">Edit Time Table Metadata</h4>
+
+      <div className="flex gap-2 flex-wrap w-full">
+        <div className="grid grow">
+          <Label htmlFor="sectionName">Section Name</Label>
+          <Input
+            id="sectionName"
+            placeholder="ECE 3-B"
+            value={timetableData.sectionName}
+            onChange={(e) => handleChange("sectionName", e.target.value)}
+          />
         </div>
-        <div className="grid gap-2 grow">
-          <Label htmlFor="department">Department</Label>
-          <div className="grid gap-4 w-full grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4">
-            {DEPARTMENTS_LIST.map((department, index) => {
-              return (
-                <label key={department.code} className={RadioStyle.label}>
-                  {department.name}
-                  <input
-                    type="radio"
-                    required
-                    checked={department.code === timetableData.department_code}
-                    onChange={(e) => {
-                      setTimetableData({
-                        ...timetableData,
-                        department_code: department.code,
-                      });
-                    }}
-                    name="department"
-                    value={department.code}
-                    className={RadioStyle.input}
-                  />
-                </label>
-              );
-            })}
-          </div>
+
+        <div className="grid grow">
+          <Label htmlFor="year">Year</Label>
+          <Input
+            id="year"
+            type="number"
+            placeholder="3"
+            min={1}
+            max={5}
+            value={timetableData.year}
+            onChange={(e) => handleChange("year", Number(e.target.value))}
+          />
+        </div>
+
+        <div className="grid grow">
+          <Label htmlFor="semester">Semester</Label>
+          <Input
+            id="semester"
+            type="number"
+            placeholder="1"
+            min={1}
+            max={10}
+            value={timetableData.semester}
+            onChange={(e) => handleChange("semester", Number(e.target.value))}
+          />
         </div>
       </div>
-    </>
-  );
-}
 
+      <div className="grid gap-2 grow">
+        <Label htmlFor="department">Department</Label>
+        <div className="grid gap-4 w-full grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4">
+          {DEPARTMENTS_LIST.map((department) => (
+            <label key={department.code} className={RadioStyle.label}>
+              {department.name}
+              <input
+                type="radio"
+                required
+                checked={department.code === timetableData.department_code}
+                onChange={() => handleDepartmentChange(department.code)}
+                name="department"
+                value={department.code}
+                className={RadioStyle.input}
+              />
+            </label>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 export function Event({ event }: { event: EventTypeWithID | RawEvent }) {
   return (
     <div>

@@ -8,9 +8,10 @@ export interface RawEvent {
   title: string;
   description?: string;
   heldBy?: string; // e.g., "Prof. John Doe"
+  _id?: string; // Unique identifier for the event
 }
-export type EventTypeWithID = RawEvent & { _id: string };
-export interface IEvent extends Document, RawEvent {}
+export type EventTypeWithID = RawEvent;
+export interface IEvent extends Document, Omit<RawEvent, "_id"> {}
 
 export interface rawTimeSlot {
   startTime: number;
@@ -76,6 +77,8 @@ const timetableSchema = new Schema<ITimetable>(
               {
                 title: { type: String, required: true },
                 description: { type: String },
+                heldBy: { type: String },
+                _id: { type: String}, // Unique identifier for the event
               },
             ],
           },

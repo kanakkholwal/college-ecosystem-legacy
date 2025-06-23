@@ -34,7 +34,7 @@ function RouterCard({
       className={cn(
         "@max-lg:col-span-full bg-card block border p-4 rounded-lg shadow-md text-fd-card-foreground transition-colors",
         "group flex flex-col justify-between gap-2 animate-in popup backdrop-blur-2xl shadow-sm",
-        "hover:-translate-2",
+        "hover:-translate-1",
         disabled ? "pointer-events-none cursor-not-allowed" : ""
       )}
       target={external ? "_blank" : "_self"}

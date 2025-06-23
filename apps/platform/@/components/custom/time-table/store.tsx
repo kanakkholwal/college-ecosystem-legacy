@@ -1,10 +1,11 @@
-import { atom } from "jotai";
-import type { RawTimetable, TimeTableWithID } from "src/models/time-table";
-import { daysMap, timeMap } from "./constants";
+// src/app/[locale]/(main)/timetable/editor/store.ts
+import { create } from "zustand";
+import { daysMap, timeMap, rawTimetableData } from "./constants";
+import type { RawEvent, RawTimetable, TimeTableWithID } from "src/models/time-table";
 
 export type FormattedTimetable = TimeTableWithID | RawTimetable;
 
-export interface TimeTableState {
+export interface TimeTableStore {
   timetableData: FormattedTimetable;
   editingEvent: {
     dayIndex: number;
@@ -12,30 +13,115 @@ export interface TimeTableState {
     eventIndex: number;
   };
   isEditing: boolean;
-  disabled?: boolean;
+  disabled: boolean;
+  initialize: (
+    timetableDataProp?: TimeTableWithID | RawTimetable,
+    mode?: "create" | "edit"
+  ) => void;
+  setTimetableData: (data: FormattedTimetable) => void;
+  setEditingEvent: (event: {
+    dayIndex: number;
+    timeSlotIndex: number;
+    eventIndex: number;
+  }) => void;
+  setIsEditing: (editing: boolean) => void;
+  setDisabled: (disabled: boolean) => void;
+  updateEvent: (newEvent: RawEvent) => void;
+  deleteEvent: () => void;
 }
 
-const initialTimetableData: FormattedTimetable = {
-  department_code: "",
-  sectionName: "",
-  year: 1,
-  semester: 1,
-  schedule: Array.from(daysMap.entries()).map((_, dayIndex) => ({
-    day: dayIndex,
-    timeSlots: Array.from(timeMap.entries()).map((_, timeSlotIndex) => ({
-      startTime: timeSlotIndex,
-      endTime: timeSlotIndex + 1,
-      events:
-        [] as FormattedTimetable["schedule"][number]["timeSlots"][number]["events"],
-    })),
-  })),
-};
-
-export const timetableDataAtom = atom<FormattedTimetable>(initialTimetableData);
-export const editingEventAtom = atom({
-  dayIndex: 0,
-  timeSlotIndex: 0,
-  eventIndex: 0,
-});
-export const isEditingAtom = atom(false);
-export const disabledAtom = atom(false);
+export const useTimeTableStore = create<TimeTableStore>((set) => ({
+  timetableData: rawTimetableData,
+  editingEvent: {
+    dayIndex: 0,
+    timeSlotIndex: 0,
+    eventIndex: -1,
+  },
+  isEditing: false,
+  disabled: false,
+  initialize: (timetableDataProp, mode) => {
+    set({
+      timetableData:
+        mode === "edit" && timetableDataProp
+          ? timetableDataProp
+          : rawTimetableData,
+      editingEvent: { dayIndex: 0, timeSlotIndex: 0, eventIndex: -1 },
+      isEditing: false,
+      disabled: false,
+    });
+  },
+  setTimetableData: (timetableData) => set({ timetableData }),
+  setEditingEvent: (editingEvent) => set({ editingEvent }),
+  setIsEditing: (isEditing) => set({ isEditing }),
+  setDisabled: (disabled) => set({ disabled }),
+  updateEvent: (newEvent) => {
+    set((state) => {
+      const { dayIndex, timeSlotIndex, eventIndex } = state.editingEvent;
+      const updatedSchedule = [...state.timetableData.schedule];
+      
+      if (updatedSchedule[dayIndex]) {
+        const updatedTimeSlots = [...updatedSchedule[dayIndex].timeSlots];
+        
+        if (updatedTimeSlots[timeSlotIndex]) {
+          const updatedEvents = [...updatedTimeSlots[timeSlotIndex].events];
+          
+          if (eventIndex !== -1) {
+            updatedEvents[eventIndex] = newEvent;
+          } else {
+            updatedEvents.push(newEvent);
+          }
+          
+          updatedTimeSlots[timeSlotIndex] = {
+            ...updatedTimeSlots[timeSlotIndex],
+            events: updatedEvents,
+          };
+        }
+        
+        updatedSchedule[dayIndex] = {
+          ...updatedSchedule[dayIndex],
+          timeSlots: updatedTimeSlots,
+        };
+      }
+      
+      return {
+        timetableData: {
+          ...state.timetableData,
+          schedule: updatedSchedule,
+        },
+      };
+    });
+  },
+  deleteEvent: () => {
+    set((state) => {
+      const { dayIndex, timeSlotIndex, eventIndex } = state.editingEvent;
+      const updatedSchedule = [...state.timetableData.schedule];
+      
+      if (updatedSchedule[dayIndex]) {
+        const updatedTimeSlots = [...updatedSchedule[dayIndex].timeSlots];
+        
+        if (updatedTimeSlots[timeSlotIndex]) {
+          const updatedEvents = updatedTimeSlots[timeSlotIndex].events.filter(
+            (_, index) => index !== eventIndex
+          );
+          
+          updatedTimeSlots[timeSlotIndex] = {
+            ...updatedTimeSlots[timeSlotIndex],
+            events: updatedEvents,
+          };
+        }
+        
+        updatedSchedule[dayIndex] = {
+          ...updatedSchedule[dayIndex],
+          timeSlots: updatedTimeSlots,
+        };
+      }
+      
+      return {
+        timetableData: {
+          ...state.timetableData,
+          schedule: updatedSchedule,
+        },
+      };
+    });
+  },
+}));

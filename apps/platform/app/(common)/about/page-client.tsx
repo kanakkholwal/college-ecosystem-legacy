@@ -93,7 +93,7 @@ export default function AboutPage({ contributors, stats }: AboutPageProps) {
     const gettingStartedInView = useInView(gettingStartedRef, { once: true });
 
     const statsMapping = [
-        { icon: Eye, label: 'Visitors', value: 39_443, suffix: '+' },
+        { icon: Eye, label: 'Visitors', value: content.visitors, suffix: '+' },
         { icon: Star, label: 'GitHub Stars', value: stats.stars, suffix: '+' },
         { icon: GitFork, label: 'Forks', value: stats.forks, suffix: '+' },
         { icon: Users, label: 'Contributors', value: stats.contributors, suffix: '+' },
