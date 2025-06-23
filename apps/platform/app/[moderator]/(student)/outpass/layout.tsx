@@ -9,19 +9,26 @@ export default async function HostelPageLayout(props: {
 }) {
   const response = await getHostelByUser();
 
-  if (!response.success || !response.hostel) {
-    return (
-      <EmptyArea
-        icons={[LuBuilding]}
-        title="No Hostel Found for this user"
-        description={response.message}
-      />
-    );
-  }
 
   return (
     <div className="space-y-5">
-      <HostelDetailsForNonAdmins hostel={response.hostel} />
+      <div className="space-y-1">
+        <h2 className="text-lg font-semibold">
+          Hostel Outpass Request Portal
+        </h2>
+        <p className="text-sm text-muted-foreground">
+          Here you can view your hostel details and request outpass if you are a hosteler.
+        </p>
+      </div>
+      {!response.success || !response.hostel ? (
+        <EmptyArea
+          icons={[LuBuilding]}
+          title="No Hostel Found for this user"
+          description={response.message}
+        />
+      ) : (
+        <HostelDetailsForNonAdmins hostel={response.hostel} />
+      )}
       <Separator />
       {props.children}
     </div>

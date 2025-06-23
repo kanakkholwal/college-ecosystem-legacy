@@ -20,6 +20,15 @@ export default async function HostelPage(props: PageProps) {
   const { slug } = await props.searchParams;
 
   const { success, message, hostel, hosteler } = await getHostelByUser(slug);
+  if(!hosteler){
+    return (
+      <EmptyArea
+        icons={[LuBuilding]}
+        title="No Hosteler Account Found"
+        description={message}
+      />
+    );
+  }
 
   const outPasses = await getOutPassForHosteler();
   console.dir(outPasses[0], { depth: null });

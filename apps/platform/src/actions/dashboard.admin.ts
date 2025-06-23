@@ -5,6 +5,7 @@ import { db } from "~/db/connect";
 import { accounts, sessions, users } from "~/db/schema/auth-schema";
 import { auth } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
+import { updateHostelStudent } from "./hostel";
 
 export async function users_CountAndGrowth(timeInterval: string): Promise<{
   count: number;
@@ -140,7 +141,15 @@ export async function updateUser(
 ): Promise<User | null> {
   try {
     await db.update(users).set(data).where(eq(users.id, userId)).execute();
-    return getUser(userId);
+    const user = await getUser(userId);
+    if(data.hostelId && user){
+      console.log("Hostel updating for user:", user.email);
+      await updateHostelStudent(user.email, {
+        hostel: data.hostelId
+      });
+      console.log("Hostel updated for user:", user.email);
+    }
+    return user;
   } catch (error) {
     console.error(error);
     return null;

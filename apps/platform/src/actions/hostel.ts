@@ -8,6 +8,7 @@ import { ROLES } from "~/constants";
 import {
   createHostelSchema,
   createHostelStudentSchema,
+  updateHostelAbleStudentSchema,
   updateHostelSchema,
   updateHostelStudentSchema,
 } from "~/constants/hostel_n_outpass";
@@ -145,6 +146,30 @@ export async function updateHostel(
   }
 }
 
+export async function updateHostelStudent(
+  email: string,
+  data: z.infer<typeof updateHostelAbleStudentSchema>
+): Promise<string> {
+  try {
+    const response = updateHostelAbleStudentSchema.safeParse(data);
+    if (!response.success) {
+      return Promise.reject("Invalid schema has passed");
+    }
+    await dbConnect();
+    const hostelStudent = await HostelStudentModel.findOne({ email });
+    if (!hostelStudent) {
+      return Promise.reject("Hostel student not found");
+    }
+
+    // Update the hostel student
+    Object.assign(hostelStudent, data);
+    await hostelStudent.save();
+
+    return Promise.resolve("Hostel student updated successfully");
+  } catch (err) {
+    return Promise.reject(err?.toString());
+  }
+}
 async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
   try {
     await dbConnect();
