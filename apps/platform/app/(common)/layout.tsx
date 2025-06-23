@@ -29,7 +29,7 @@ export default async function Layout({ children }: LayoutProps) {
   const session = await getSession();
 
   return (
-    <div className="flex flex-1 flex-col justify-center min-h-svh w-full bg-background dark:bg-background">
+    <div className="flex flex-1 flex-col justify-center min-h-svh w-full z-0">
       <Navbar user={session?.user} />
       <ConditionalRender condition={PROMO.getConditionByUser(session?.user!)}>
         <BannerPanel
@@ -43,6 +43,7 @@ export default async function Layout({ children }: LayoutProps) {
           }}
         />
       </ConditionalRender>
+
       <main className="relative flex-1 mx-auto max-w-(--max-app-width) w-full h-full min-h-screen @container flex-col items-center justify-start space-y-4 pb-8">
         {/* <div
         aria-hidden="true"

@@ -1,3 +1,4 @@
+import { BackgroundBeamsWithCollision } from "@/components/animation/bg-beam-with-collision";
 import { RouterCard } from "@/components/common/router-card";
 import { getLinksByRole, quick_links } from "@/constants/links";
 import { redirect } from "next/navigation";
@@ -18,7 +19,9 @@ export default async function Dashboard() {
   }
   return (
     <div className="flex w-full flex-1 flex-col gap-6 px-4 md:px-6 pt-4 md:pt-6 xl:px-12 xl:mx-auto max-w-6xl max-sm:pb-16">
-      <HeroSection user={session?.user} />
+      <BackgroundBeamsWithCollision>
+        <HeroSection user={session?.user} />
+      </BackgroundBeamsWithCollision>
       <section
         id="quick-links"
         className="z-10 w-full max-w-6xl mx-auto relative space-y-4 text-left"

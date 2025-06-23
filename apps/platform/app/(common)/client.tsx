@@ -1,8 +1,9 @@
 "use client";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { ButtonLink } from "@/components/utils/link";
 import { RocketIcon } from "@radix-ui/react-icons";
+import { ArrowUpRight } from "lucide-react";
 import { motion } from "motion/react";
-import Link from "next/link";
 import type { Session } from "~/lib/auth";
 import { appConfig } from "~/project.config";
 // import "./greetings.css";
@@ -24,27 +25,53 @@ export function HeroSection({ user }: HeroSection) {
       className="z-10 w-full max-w-7xl max-h-96 relative flex flex-col gap-4 items-center justify-center py-24 px-2 sm:px-4 rounded-lg text-center lg:text-left"
       suppressHydrationWarning={true}
     >
-
-      <h2 className="text-3xl font-semibold text-center">
-        {getGreeting()} <span className="text-primary">{user?.name}</span>
+      
+      <script type="application/ld+json">
+        {JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": appConfig.name,
+          "url": appConfig.url,
+          "applicationCategory": "Education",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "INR"
+          },
+          "operatingSystem": "Web",
+          "featureList": [
+            "Exam Results",
+            "Course Syllabus",
+            "Classroom Availability",
+            "Academic Schedules",
+            ...appConfig.keywords
+          ]
+        })}
+      </script>
+      <h2 className="text-3xl font-semibold text-center mt-10">
+        {getGreeting()} <span className="bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-primary via-violet-500 to-pink-500">{user?.name}</span>
       </h2>
-      <p className="mb-8 text-lg text-muted-foreground">
-        Welcome to the {appConfig.name}
+      <p className="mb-8 text-base text-muted-foreground text-center">
+        {appConfig.description.split(". ")[0] || "Welcome to the digital campus platform!"}
       </p>
       {(user?.other_roles.includes("student") || !user) && (
-        <Alert variant="info_light" className="mt-4" data-aos="fade-right">
+        <Alert variant="default" className="mt-4 max-w-4xl border bg-card/50 backdrop-blur-md" data-aos="fade-right">
           <RocketIcon className="h-4 w-4" />
-          <AlertTitle>Join the {appConfig.name} Project!</AlertTitle>
-          <AlertDescription>
-            We are looking for contributors to help us build the platform.
-            Check out the
-            <Link
-              href={`${appConfig.githubRepo}/blob/main/CONTRIBUTING.md`}
-              className="underline mx-1"
+          <AlertTitle className="text-left">
+            Join the {appConfig.name} Project!
+          </AlertTitle>
+          <AlertDescription className="text-sm text-muted-foreground text-left">
+            Join our open-source initiative to enhance the digital campus experience for everyone. Your contributions—whether code, designs, ideas, or feedback—will help shape the future of campus technology.
+            <br/>
+            <ButtonLink
+              size="sm"
+              variant="rainbow"
+              target="_blank"
+              href={`https://github.com/${appConfig.githubUri}/blob/main/CONTRIBUTING.md`}
+              className="ml-1 mt-2"
             >
-              Contribute
-            </Link>{" "}
-            page for more information.
+              Contribute Now <ArrowUpRight />
+            </ButtonLink>
           </AlertDescription>
         </Alert>
       )}

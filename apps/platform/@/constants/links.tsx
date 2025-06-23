@@ -60,7 +60,7 @@ export const quick_links: RouterCardLink[] = [
     title: "Schedules",
     description: "Check your schedules here.",
     Icon: GrSchedules,
-    disabled: true,
+    disabled: false,
     allowed_roles: ["*"],
   },
   {

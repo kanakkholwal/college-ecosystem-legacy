@@ -58,7 +58,7 @@ export default async function DashboardLayout({
   const session = (await getSession()) as Session;
 
   return (
-    <SidebarProvider className="selection:bg-primary/10 selection:text-primary">
+    <SidebarProvider>
       <AppSidebar user={session.user} moderator={moderator} />
       <SidebarInset className="flex flex-col flex-1 w-full relative z-0">
         <Navbar user={session.user} />

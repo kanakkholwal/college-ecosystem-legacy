@@ -4,16 +4,16 @@ import { appConfig } from "~/project.config";
 const BASE_URL = appConfig.url
 
 const staticRoutes = [
-    { path: "/", priority: 1.0, changefreq: "monthly" },
-    { path: "/sign-in", priority: 0.8, changefreq: "monthly" },
-    { path: "/results", priority: 0.8, changefreq: "monthly" },
-    { path: "/academic-calendar", priority: 0.8, changefreq: "monthly" },
-    { path: "/classroom-availability", priority: 0.8, changefreq: "daily" },
-    { path: "/schedules", priority: 0.8, changefreq: "daily" },
-    { path: "/syllabus", priority: 0.8, changefreq: "yearly" },
-    { path: "/announcements", priority: 0.8, changefreq: "daily" },
-    { path: "/community", priority: 0.8, changefreq: "daily" },
-    { path: "/polls", priority: 0.8, changefreq: "daily" },
+    { path: "/", },
+    { path: "/sign-in", },
+    { path: "/results", },
+    { path: "/academic-calendar", },
+    { path: "/classroom-availability", },
+    { path: "/schedules", },
+    { path: "/syllabus", },
+    { path: "/announcements", },
+    { path: "/community", },
+    { path: "/polls", },
 
 ];
 
@@ -28,6 +28,9 @@ export async function GET(request: NextRequest) {
         ...staticRoutes.map((route) => ({
             ...route,
             date: LASTMOD,
+            priority: route.path === '/' ? 1 : 0.8,
+            changefreq: 'daily',
+
         })),
         // ...dynamicRoutes
     ]);
@@ -65,15 +68,15 @@ function generateSiteMap(
     return `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
 ${pages
-    .map(
-        (page) => `
+            .map(
+                (page) => `
     <url>
         <loc>${BASE_URL}${escapeXml(page.path)}</loc>
         <lastmod>${escapeXml(page.date)}</lastmod>
         <changefreq>${page.changefreq}</changefreq>
         <priority>${page.priority}</priority>
     </url>`
-    )
-    .join("")}
+            )
+            .join("")}
 </urlset>`;
 }

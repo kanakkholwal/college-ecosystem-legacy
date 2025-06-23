@@ -30,7 +30,7 @@ export async function getResults(
   try {
     // Try Redis GET
 
-    const cacheKey = `results_${currentPage}${filter ? `_${JSON.stringify(Object.entries(filter).sort())}_${query}` : ""}`;
+    const cacheKey = `results_${filter ? `_${JSON.stringify(Object.entries(filter).sort())}_${query}_${currentPage}` : ""}`;
 
     let cachedResults: getResultsReturnType | null = null;
     if (!new_cache) {
@@ -102,7 +102,8 @@ export async function getResults(
         cacheKey,
         JSON.stringify(response),
         "EX",
-        60 * 60 * 24 * 7 // 1 week
+        60 * 60 * 24// 1 week
+
       );
       console.log("Results cached successfully");
     } catch (redisSetErr) {

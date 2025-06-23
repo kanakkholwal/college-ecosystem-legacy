@@ -23,20 +23,27 @@ export function Provider({ children }: { children: React.ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <NextThemesProvider
-        themes={all_themes as unknown as string[]}
-        defaultTheme="system"
-      >
-        <div className={cn("min-h-screen w-full h-full bg-background")}>
-          {children}
-        </div>
-      </NextThemesProvider>
       <Next13ProgressBar
         height="4px"
         color="var(--primary)"
         options={{ showSpinner: true, trickle: true }}
         showOnShallow={true}
       />
+      <NextThemesProvider
+        themes={all_themes as unknown as string[]}
+        defaultTheme="system"
+      >
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 grid grid-cols-2 -space-x-52 pattern_feed -z-1"
+        >
+          <div className="blur-[106px] h-56 bg-gradient-to-br from-secondary via-emerald-500 to-primary" />
+          <div className="blur-[106px] h-32 bg-gradient-to-r from-primary via-violet-500 to-pink-500" />
+        </div>
+        <div className={cn("min-h-screen w-full h-full")}>
+          {children}
+        </div>
+      </NextThemesProvider>
       <HotToaster
         position="top-center"
         toastOptions={{
@@ -49,7 +56,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
           <img
             height={20}
             width={80}
-            src="http://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
+            src="https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
             alt="Visitor counter"
             className="inline-block font-inherit h-4"
             loading="lazy"

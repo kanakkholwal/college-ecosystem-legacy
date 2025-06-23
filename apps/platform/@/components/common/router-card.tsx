@@ -1,6 +1,7 @@
 import { ParamsPreserverLink } from "@/components/utils/link";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { Badge } from "../ui/badge";
 
 type RouterCardLink = {
   href: string;
@@ -32,7 +33,8 @@ function RouterCard({
       preserveParams={preserveParams}
       className={cn(
         "@max-lg:col-span-full bg-card block border p-4 rounded-lg shadow-md text-fd-card-foreground transition-colors",
-        "group flex flex-col justify-between gap-2 animate-in popup transition-colors backdrop-blur-2xl shadow-sm",
+        "group flex flex-col justify-between gap-2 animate-in popup backdrop-blur-2xl shadow-sm",
+        "hover:-translate-2",
         disabled ? "pointer-events-none cursor-not-allowed" : ""
       )}
       target={external ? "_blank" : "_self"}
@@ -46,9 +48,9 @@ function RouterCard({
         <div className="flex-auto">
           <h5 className="not-prose mb-1 text-sm font-medium">{title}</h5>
           {disabled ? (
-            <p className="text-xs text-muted-foreground prose-no-margin">
-              (Maintenance)
-            </p>
+            <Badge size="sm" className="text-xs text-muted-foreground prose-no-margin">
+              Maintenance
+            </Badge>
           ) : null}
         </div>
       </div>
