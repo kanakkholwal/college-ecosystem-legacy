@@ -51,7 +51,7 @@ export function HeroSection({ user }: HeroSection) {
       <h2 className="text-3xl font-semibold text-center mt-10">
         {getGreeting()} <span className="bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-primary via-violet-500 to-pink-500">{user?.name}</span>
       </h2>
-      <p className="mb-8 text-base text-muted-foreground text-center">
+      <p className="mb-8 text-base text-muted-foreground text-center truncate line-clamp-3">
         {appConfig.description.split(". ")[0] || "Welcome to the digital campus platform!"}
       </p>
       {(user?.other_roles.includes("student") || !user) && (
