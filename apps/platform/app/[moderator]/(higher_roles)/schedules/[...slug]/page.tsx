@@ -1,5 +1,7 @@
+import { HeaderBar } from "@/components/common/header-bar";
 import { TimeTableEditor } from "@/components/custom/time-table";
-import { PreviousPageLink } from "@/components/utils/link";
+import { ButtonLink, PreviousPageLink } from "@/components/utils/link";
+import { ArrowUpRight, CalendarDays } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getTimeTable } from "src/lib/time-table/actions";
 
@@ -26,10 +28,25 @@ export default async function Dashboard(props: Props) {
 
   return (
     <>
-      <div className="flex items-center justify-between gap-2 mx-auto max-w-7xl w-full mt-20">
-        <PreviousPageLink variant="default_light" size="sm" />
-      </div>
 
+      <HeaderBar
+        Icon={CalendarDays}
+        titleNode={
+          <>
+            Edit Timetable{" "}
+            <span className="text-sm font-normal text-muted-foreground">
+              {timetableData.sectionName || "Untitled Timetable"}
+            </span>
+          </>
+        }
+        descriptionNode="Here you can edit the timetable details and manage the schedule."
+        actionNode={
+          <ButtonLink variant="dark" size="sm" href={`/schedules/${params.slug.join("/")}`} target="_blank">
+            View Timetable
+            <ArrowUpRight />
+          </ButtonLink>
+        }
+      />
       <TimeTableEditor timetableData={timetableData} mode="edit" />
     </>
   );

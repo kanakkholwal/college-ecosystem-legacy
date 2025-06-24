@@ -1,9 +1,16 @@
+import { BaseHeroSection } from "@/components/application/base-hero";
 import CourseCard from "@/components/application/course-card";
 import Pagination from "@/components/application/course-pagination";
 import SearchBox from "@/components/application/course-search";
+import { ResponsiveContainer } from "@/components/common/container";
+import { HeaderBar } from "@/components/common/header-bar";
+import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
+import { ButtonLink } from "@/components/utils/link";
+import { ArrowUpRight, Plus } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import { Suspense } from "react";
+import { LuBookA } from "react-icons/lu";
 import { getCourses } from "~/actions/course";
 
 type Props = {
@@ -48,27 +55,40 @@ export default async function CoursesPage(props: Props) {
 
   return (
     <>
-      <div className="relative mb-28" id="home">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6">
-          <div className="relative pt-24 ml-auto">
-            <div className="lg:w-3/4 text-center mx-auto">
-              <h1 className="text-2xl lg:text-4xl font-bold whitespace-nowrap">
-                Courses <span className="text-primary">Search</span>
-              </h1>
+      <HeaderBar
+        Icon={LuBookA}
+        titleNode={
+          <>Manage Courses <Badge size="sm">{courses.length} found</Badge></>
+        }
+        descriptionNode={
+          <>Here you can create new courses or view existing ones.</>
+        }
+        actionNode={<>
 
-              <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
-                <Suspense
-                  key="SearchBox"
-                  fallback={<Skeleton className="h-12 w-full " />}
-                >
-                  <SearchBox departments={departments} types={types} />
-                </Suspense>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mb-32 max-w-[144rem] grid lg:mb-0 lg:w-full mx-auto grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-3 @6xl:grid-cols-4 text-left gap-4">
+          <ButtonLink variant="dark" size="sm" effect="shineHover" disabled href={`/${params.moderator}/courses/create`}>
+            <Plus />
+            New Course
+          </ButtonLink>
+          <ButtonLink variant="light" size="sm" effect="shineHover" href={`/syllabus`} target="_blank">
+            View Course
+            <ArrowUpRight />
+          </ButtonLink>
+        </>
+        }
+      />
+      <BaseHeroSection
+        title="Courses Search"
+        description="Search for courses based on their name, code, department, and type."
+      >
+        <Suspense
+          key="SearchBox"
+          fallback={<Skeleton className="h-12 w-full " />}
+        >
+          <SearchBox departments={departments} types={types} />
+        </Suspense>
+      </BaseHeroSection>
+
+      <ResponsiveContainer>
         <Suspense
           key="Courses"
           fallback={
@@ -89,7 +109,7 @@ export default async function CoursesPage(props: Props) {
             );
           })}
         </Suspense>
-      </div>
+      </ResponsiveContainer>
       <div className="max-w-7xl mx-auto px-6 md:px-12 xl:px-6 mt-5">
         <Suspense
           key="Pagination"

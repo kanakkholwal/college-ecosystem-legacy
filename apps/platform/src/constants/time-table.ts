@@ -1,6 +1,23 @@
-import { DEPARTMENTS_LIST } from "src/constants/departments";
+import { DEPARTMENTS_LIST } from "~/constants/departments";
 
 import * as z from "zod";
+import { nanoid } from "nanoid";
+
+export const rawEvent = z.object({
+  title: z.string(),
+  description: z.string().optional(),
+  heldBy: z.string().optional(),
+  _id: z.string().default(() => nanoid()).optional(),
+});
+
+export type RawEvent = z.infer<typeof rawEvent>;
+
+export const rawTimeSlot = z.object({
+  startTime: z.number().int().min(0).max(9),
+  endTime: z.number().int().min(0).max(10),
+  events: z.array(rawEvent),
+});
+export type RawTimeSlot = z.infer<typeof rawTimeSlot>;
 
 export const rawTimetableSchema = z.object({
   department_code: z

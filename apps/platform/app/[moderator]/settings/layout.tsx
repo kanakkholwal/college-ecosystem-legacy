@@ -1,4 +1,5 @@
-import { Separator } from "@/components/ui/separator";
+import { HeaderBar } from "@/components/common/header-bar";
+import { Settings2 } from "lucide-react";
 import { SidebarNav } from "./sidenav";
 
 const sidebarNavItems = [
@@ -26,13 +27,13 @@ export default async function SettingsLayout({ children, params }: SettingsLayou
   const { moderator } = await params;
   return (
     <div className="w-full space-y-6 my-5">
-      <div className="space-y-0.5">
-        <h2 className="text-2xl font-bold tracking-tight">Settings</h2>
-        <p className="text-muted-foreground">
-          Manage your account settings and set other preferences.
-        </p>
-      </div>
-      <Separator />
+
+      <HeaderBar
+        Icon={Settings2}
+        titleNode="Manage Settings"
+        descriptionNode="Here you can manage your account settings, appearance, and other preferences."
+
+      />
       <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
         <aside className="lg:w-1/5">
           <SidebarNav items={sidebarNavItems.map((item) => ({

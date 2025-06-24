@@ -1,13 +1,17 @@
 import RoomCard from "@/components/application/room-card";
 import SearchBox from "@/components/application/room-search";
-import { RouterCard } from "@/components/common/router-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
-import { BadgePlus } from "lucide-react";
+import { Plus } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import { changeCase } from "~/utils/string";
 
+import { BaseHeroSection } from "@/components/application/base-hero";
 import { ResponsiveContainer } from "@/components/common/container";
+import { HeaderBar } from "@/components/common/header-bar";
+import { Badge } from "@/components/ui/badge";
+import { ButtonLink } from "@/components/utils/link";
+import { MdRoom } from "react-icons/md";
 import { getRoomsInfo, listAllRoomsWithHistory } from "~/actions/room";
 import { getSession } from "~/lib/auth-server";
 
@@ -51,42 +55,57 @@ export default async function RoomsPage(props: Props) {
 
   const session = await getSession();
 
+  const stats = [
+    {
+      label: "Total Rooms",
+      value: totalRooms,
+    },
+    {
+      label: "Available Rooms",
+      value: totalAvailableRooms,
+    },
+    {
+      label: "Occupied Rooms",
+      value: totalOccupiedRooms,
+    }
+  ]
   return (
     <div className="w-full space-y-6">
-      <div>
-        <h3 className="text-lg font-semibold">Rooms Overview</h3>
-      </div>
+      <HeaderBar
+        Icon={MdRoom}
+        titleNode={
+          <>Manage Rooms <Badge size="sm">{rooms.length} found</Badge></>
+        }
+        descriptionNode="Here you can create new rooms or view existing ones."
+        actionNode={
+          <ButtonLink variant="dark" size="sm" effect="shineHover" href={`/admin/rooms/new`}>
+            <Plus />
+            New Room
+          </ButtonLink>
+        }
+      />
+
       <div className="grid grid-cols-1 gap-4 @md:grid-cols-2 @lg:grid-cols-3 @xl:grid-cols-4 px-4">
-        <div className="bg-card border p-4 rounded-lg">
-          <h4 className="text-lg font-semibold">Total Rooms</h4>
-          <h3 className="text-primary font-semibold tracking-wide text-3xl mt-4">
-            {totalRooms}
-          </h3>
-        </div>
-        <div className="bg-card border p-4 rounded-lg">
-          <h4 className="text-lg font-semibold">Available Rooms</h4>
-          <h3 className="text-primary font-semibold tracking-wide text-3xl mt-4">
-            {totalAvailableRooms}
-          </h3>
-        </div>
-        <div className="bg-card border p-4 rounded-lg">
-          <h4 className="text-lg font-semibold">Occupied Rooms</h4>
-          <h3 className="text-primary font-semibold tracking-wide text-3xl mt-4">
-            {totalOccupiedRooms}
-          </h3>
-        </div>
-        <RouterCard
-          Icon={BadgePlus}
-          title="Add New Room"
-          description="Add a new room to the system"
-          href={`/${moderator}/rooms/new`}
-        />
+        {stats.map((item, index) => (
+          <div className="bg-card border p-4 rounded-lg" key={index}>
+            <h3 className="text-sm font-medium">{item.label}</h3>
+            <h4 className="text-primary font-semibold tracking-wide text-3xl mt-4">
+              {item.value}
+            </h4>
+          </div>
+        ))}
       </div>
-      <div className="lg:w-3/4 text-center mx-auto">
-        <div className="mt-16 flex flex-wrap justify-center gap-y-4 gap-x-6">
-          <SearchBox />
-        </div>
-      </div>
+
+      <BaseHeroSection
+        title={
+          <>
+            Rooms <span className="text-primary">Search</span>
+          </>
+        }
+        description="Search for rooms based on their availability and type.">
+        <SearchBox />
+
+      </BaseHeroSection>
       <ResponsiveContainer className="mb-32 max-w-[144rem] @md:grid-cols-1 @lg:grid-cols-2  @3xl:grid-cols-4 @7xl:grid-cols-5">
         <ErrorBoundaryWithSuspense
           key="Rooms"

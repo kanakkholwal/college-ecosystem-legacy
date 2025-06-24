@@ -1,7 +1,10 @@
 "use client";
+import { HeaderBar } from "@/components/common/header-bar";
+import { Badge } from "@/components/ui/badge";
 import { DataTable } from "@/components/ui/data-table";
 import { ErrorBoundary } from "@/components/utils/error-boundary";
-import { LoaderCircle } from "lucide-react";
+import { ButtonLink } from "@/components/utils/link";
+import { LoaderCircle, Plus, User2Icon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { authClient } from "~/lib/auth-client";
@@ -100,7 +103,20 @@ export default function DashboardPage(props: PageProps) {
 
   return (
     <div className="space-y-6 my-5">
-      <div className="container mx-auto py-10 px-2">
+      <HeaderBar
+        Icon={User2Icon}
+        titleNode={
+          <>Manage Users <Badge size="sm">{users.length} found</Badge></>
+        }
+        descriptionNode="Here you can create new users or view existing ones."
+        actionNode={
+          <ButtonLink variant="dark" size="sm" effect="shineHover" href={`/admin/users/new`}>
+            <Plus />
+            New User
+          </ButtonLink>
+        }
+      />
+      <div className="container mx-auto px-2">
         <SearchBar />
         {loading ? (
           <div className="glassmorphism px-2 sm:px-4 pb-2 pt-4 rounded-lg space-y-4 flex items-center justify-center w-full min-h-80 border">

@@ -105,6 +105,7 @@ export const toRegex = (route: RoutePattern): RegExp => {
     .filter(part => part !== ""); // Remove empty parts
 
   if (parts.length === 0) return /^\/?$/; // Handle cases like empty string
+  // handle "!" as a negation
 
   const regexStr = parts
     .map(part => {
@@ -116,3 +117,44 @@ export const toRegex = (route: RoutePattern): RegExp => {
 
   return new RegExp(`^\\/${regexStr}\\/?$`, "i");
 };
+// export const toRegex = (route: RoutePattern): RegExp => {
+//   if (route instanceof RegExp) return route;
+
+//   let negate = false;
+//   let pattern = route;
+  
+//   // Handle negation prefix
+//   if (typeof pattern === 'string' && pattern.startsWith("!")) {
+//     negate = true;
+//     pattern = pattern.substring(1);
+//   }
+
+//   // Handle empty pattern after negation
+//   if (pattern === "/") return negate ? /^(?!\/?$).*$/i : /^\/?$/i;
+  
+//   const parts = pattern
+//     .split("/")
+//     .filter(part => part !== ""); // Remove empty parts
+
+//   if (parts.length === 0) return negate ? /^(?!\/?$).*$/i : /^\/?$/i;
+
+//   const regexStr = parts
+//     .map(part => {
+//       if (part === "*") return ".*";
+//       if (part.startsWith(":")) return "[a-z0-9-_]+";
+//       return part.replace(/[-[\]{}()+?.,\\^$|#\s]/g, "\\$&");
+//     })
+//     .join("\\/");
+
+//   const baseRegex = new RegExp(`^\\/${regexStr}\\/?$`, "i");
+  
+//   // Convert to negative match if needed
+//   if (negate) {
+//     const innerPattern = baseRegex.source
+//       .slice(1, -1)     // Remove ^ and $
+//       .replace("\\/", "/"); // Unescape slashes for clean lookahead
+//     return new RegExp(`^(?!/${innerPattern}$).*$`, "i");
+//   }
+  
+//   return baseRegex;
+// };

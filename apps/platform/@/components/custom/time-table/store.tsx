@@ -1,9 +1,10 @@
 // src/app/[locale]/(main)/timetable/editor/store.ts
 import { create } from "zustand";
-import { daysMap, timeMap, rawTimetableData } from "./constants";
-import type { RawEvent, RawTimetable, TimeTableWithID } from "src/models/time-table";
+import type { RawEvent, RawTimetableType } from "~/constants/time-table";
+import type { TimeTableWithID } from "~/models/time-table";
+import { rawTimetableData } from "./constants";
 
-export type FormattedTimetable = TimeTableWithID | RawTimetable;
+export type FormattedTimetable = TimeTableWithID | RawTimetableType;
 
 export interface TimeTableStore {
   timetableData: FormattedTimetable;
@@ -15,7 +16,7 @@ export interface TimeTableStore {
   isEditing: boolean;
   disabled: boolean;
   initialize: (
-    timetableDataProp?: TimeTableWithID | RawTimetable,
+    timetableDataProp?: TimeTableWithID | RawTimetableType,
     mode?: "create" | "edit"
   ) => void;
   setTimetableData: (data: FormattedTimetable) => void;

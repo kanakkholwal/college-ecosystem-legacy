@@ -15,7 +15,7 @@ export default function CreateTimeTablePage() {
         <>
             <PreviousPageLink variant="light" size="sm" />
 
-            <TimeTableEditor mode="edit" />
+            <TimeTableEditor mode="create" />
         </>
     );
 }

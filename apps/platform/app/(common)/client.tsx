@@ -60,19 +60,18 @@ export function HeroSection({ user }: HeroSection) {
           <AlertTitle className="text-left">
             Join the {appConfig.name} Project!
           </AlertTitle>
-          <AlertDescription className="text-sm text-muted-foreground text-left">
+          <AlertDescription className="text-sm text-muted-foreground text-left line-clamp-3">
             Join our open-source initiative to enhance the digital campus experience for everyone. Your contributions—whether code, designs, ideas, or feedback—will help shape the future of campus technology.
-            <br/>
+          </AlertDescription>
             <ButtonLink
               size="sm"
               variant="rainbow"
               target="_blank"
               href={`https://github.com/${appConfig.githubUri}/blob/main/CONTRIBUTING.md`}
-              className="ml-1 mt-2"
+              className="mr-auto mt-2"
             >
               Contribute Now <ArrowUpRight />
             </ButtonLink>
-          </AlertDescription>
         </Alert>
       )}
     </motion.section>

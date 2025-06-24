@@ -15,6 +15,7 @@ import { BiSpreadsheet } from "react-icons/bi";
 import { GrAnnounce, GrSchedules } from "react-icons/gr";
 import { MdOutlinePoll } from "react-icons/md";
 import { appConfig, supportLinks } from "~/project.config";
+import { toRegex } from "~/utils/string";
 
 export type AllowedRoleType =
   | Session["user"]["role"]
@@ -176,7 +177,8 @@ export const sidebar_links: rawLinkType[] = [
     title: "Schedules",
     icon: GrSchedules,
     path: "/schedules",
-    allowed_roles: [`!${ROLES.GUARD}`],
+    // make it regex
+    allowed_roles: [ROLES.ADMIN, ROLES.FACULTY, ROLES.HOD,ROLES.CR],
   },
   {
     title: "Personal Attendance",
@@ -216,6 +218,7 @@ export const sidebar_links: rawLinkType[] = [
     ],
     items: [],
   },
+  
   // {
   //   title: "Hostel",
   //   icon: LuBuilding,
@@ -342,17 +345,17 @@ const checkRoleAccess = (userRole: string, allowedRoles: string[]): boolean => {
   if (allowedRoles.includes(userRole)) return true;
 
   // Check for negation roles (starting with "!")
-  const positiveRoles = allowedRoles.filter((role) => !role.startsWith("!"));
-  const negatedRoles = allowedRoles.filter((role) => role.startsWith("!"));
+  // const positiveRoles = allowedRoles.filter((role) => !role.startsWith("!"));
+  // const negatedRoles = allowedRoles.filter((role) => role.startsWith("!"));
 
-  // If there are positive roles specified, use standard inclusion logic
-  if (positiveRoles.length > 0) {
-    return positiveRoles.includes(userRole);
-  }
+  // // If there are positive roles specified, use standard inclusion logic
+  // if (positiveRoles.length > 0) {
+  //   return positiveRoles.includes(userRole);
+  // }
 
   // If only negation roles are specified, allow access if user's role is not negated
-  return !negatedRoles.some(
-    (negRole) => userRole === negRole.slice(1) // Remove "!" prefix for comparison
+  return !allowedRoles.some(
+    (roles) =>  toRegex(roles).test(userRole)
   );
 };
 

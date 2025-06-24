@@ -15,15 +15,20 @@ import { cn } from "@/lib/utils";
 import React, { useRef } from "react";
 import toast from "react-hot-toast";
 import { getDepartmentName } from "src/constants/departments";
-import { createTimeTable, updateTimeTable } from "src/lib/time-table/actions";
-import type { RawTimetable, TimeTableWithID } from "src/models/time-table";
+import { rawTimetableSchema, type RawTimetableType } from "~/constants/time-table";
+import { createTimeTable, updateTimeTable } from "~/lib/time-table/actions";
+import type { TimeTableWithID } from "~/models/time-table";
 import { EditTimetableDialog, Event, TimeTableMetaData } from "./components";
 import { daysMap, rawTimetableData, timeMap } from "./constants";
 import { useTimeTableStore } from "./store";
 
+
 export type TimeTableEditorProps = {
-  timetableData?: TimeTableWithID | RawTimetable;
-  mode: "create" | "edit";
+  timetableData: TimeTableWithID,
+  mode: "edit";
+} | {
+  timetableData?: RawTimetableType;
+  mode: "create";
 };
 
 export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
@@ -42,7 +47,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
     setTimetableData(
       mode === "edit" && !!timetableDataProp
         ? (timetableDataProp as TimeTableWithID)
-        : (rawTimetableData as RawTimetable)
+        : (rawTimetableData as RawTimetableType)
     );
     setIsEditing(false);
     setEditingEvent({ dayIndex: 0, timeSlotIndex: 0, eventIndex: -1 });
@@ -51,26 +56,41 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
     console.log("initialized");
   }
 
-  const handleSaveTimetable = async () => {
+  const handleSaveTimetable = async (data: TimeTableEditorProps) => {
     setIsEditing(false);
     setDisabled(true);
 
-    if (mode === "edit") {
-      const data = timetableData as TimeTableWithID;
+    if (data.mode === "edit") {
+      const validatedData = rawTimetableSchema.safeParse(data.timetableData);
+      if (!validatedData.success) {
+        toast.error(validatedData.error.errors[0].message);
+        console.error("Validation error:", validatedData.error);
+        setDisabled(false);
+        return;
+      }
+      
       toast
-        .promise(updateTimeTable(data._id, data), {
-          loading: "Saving Timetable",
-          success: "Timetable saved successfully",
-          error: "Failed to save timetable",
-        })
+        .promise(
+          updateTimeTable(data.timetableData._id, data.timetableData),
+          {
+            loading: "Updating Timetable",
+            success: "Timetable updated successfully",
+            error: "Failed to update timetable",
+          }
+        )
         .finally(() => {
           setDisabled(false);
         });
     } else {
-      const data = timetableData as RawTimetable;
-
+      const validatedData = rawTimetableSchema.safeParse(data.timetableData);
+      if (!validatedData.success) {
+        toast.error(validatedData.error.errors[0].message);
+        console.error("Validation error:", validatedData.error);
+        setDisabled(false);
+        return;
+      }
       toast
-        .promise(createTimeTable(data), {
+        .promise(createTimeTable(validatedData.data), {
           loading: "Creating Timetable",
           success: "Timetable created successfully",
           error: "Failed to create timetable",
@@ -91,14 +111,16 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
             <p className="text-muted-foreground text-sm">
               {getDepartmentName(timetableData?.department_code) || "Unknown Department"}
             </p>
-            <div className="absolute top-4 right-4 flex items-center gap-2">
+            <div className="absolute -top-4 right-4 flex items-center gap-2">
 
               <Button
                 size="sm"
                 onClick={(e) => {
                   e.stopPropagation();
                   e.preventDefault();
-                  handleSaveTimetable();
+                  handleSaveTimetable(
+                    { timetableData, mode } as TimeTableEditorProps
+                  );
                 }}
               >
                 {mode === "create" ? "Save" : "Update"} TimeTable
@@ -132,99 +154,98 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
         />
         <div className="bg-card p-4 mx-auto max-w-7xl w-full mt-5 rounded-lg">
 
-        <TabsContent value="metadata">
-          <TimeTableMetaData />
+          <TabsContent value="metadata">
+            <TimeTableMetaData />
 
-        </TabsContent>
-        <TabsContent value="timetable">
-          <EditTimetableDialog />
-          <Table className="bg-card border shadow-2xl rounded-lg overflow-hidden">
-            <TableHeader>
-              <TableRow>
-                <TableHead
-                  className={cn(
-                    "bg-muted text-center text-muted-foreground min-w-12 whitespace-nowrap p-2"
-                  )}
-                >
-                  Time \ Day
-                </TableHead>
-                {Array.from(daysMap.entries()).map(([index, day]) => {
-                  return (
-                    <TableHead
-                      key={index}
-                      className={cn(
-                        "bg-muted text-center text-muted-foreground p-2",
-                        "border-b",
-                        currentDayIndex === index
-                          ? "text-primary border-primary"
-                          : " text-muted-foreground"
-                      )}
-                    >
-                      <p className="text-sm font-medium">
-                        {day}
-                      </p>
-                      {currentDayIndex === index && (
-                        <p className="text-primary text-xs italic">(Today)</p>
-                      )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            </TableHeader>
-            <TableBody className="relative">
-              {Array.from(timeMap.entries()).map(([index, time]) => (
-                <TableRow key={index}>
-                  <TableCell className="bg-muted text-center text-muted-foreground min-w-12 text-xs text-medium whitespace-nowrap p-2">
-                    {time}
-                  </TableCell>
-                  {Array.from(daysMap.entries()).map((_, dayIndex) => (
-                    <TableCell
-                      key={`day-${dayIndex}-${index}`}
-                      id={`day-${dayIndex}-${index}`}
-                      className={cn(
-                        "border-x text-center p-2",
-                        currentDayIndex === dayIndex
-                          ? "bg-primary/2"
-                          : "",
-
-                      )}
-                      // biome-ignore lint/a11y/useSemanticElements: <explanation>
-                      role="button"
-                      tabIndex={0}
-                      aria-disabled={disabled ? "true" : "false"}
-                      onClick={() => {
-                        setIsEditing(true);
-                        setEditingEvent({
-                          dayIndex,
-                          timeSlotIndex: index,
-                          eventIndex: 0,
-                        });
-                      }}
-                    >
-                      {timetableData.schedule[dayIndex]?.timeSlots[
-                        index
-                      ]?.events.map((event, eventIndex) => (
-                        <Event
-                          event={event}
-                          key={`${index}-${dayIndex}-event-${
-                            // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-                            eventIndex
-                            }`}
-                        />
-                      ))}
-                      {timetableData.schedule[dayIndex]?.timeSlots[index]?.events
-                        .length === 0 && (
-                          <Badge variant="default" size="sm">
-                            Free Time
-                          </Badge>
+          </TabsContent>
+          <TabsContent value="timetable">
+            <EditTimetableDialog />
+            <Table className="bg-card border shadow-2xl rounded-lg overflow-hidden">
+              <TableHeader>
+                <TableRow>
+                  <TableHead
+                    className={cn(
+                      "bg-muted text-center text-muted-foreground min-w-12 whitespace-nowrap p-2"
+                    )}
+                  >
+                    Time \ Day
+                  </TableHead>
+                  {Array.from(daysMap.entries()).map(([index, day]) => {
+                    return (
+                      <TableHead
+                        key={index}
+                        className={cn(
+                          "bg-muted text-center text-muted-foreground p-2",
+                          "border-b",
+                          currentDayIndex === index
+                            ? "text-primary border-primary"
+                            : " text-muted-foreground"
                         )}
-                    </TableCell>
-                  ))}
+                      >
+                        <p className="text-sm font-medium">
+                          {day}
+                        </p>
+                        {currentDayIndex === index && (
+                          <p className="text-primary text-xs italic">(Today)</p>
+                        )}
+                      </TableHead>
+                    );
+                  })}
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TabsContent>
+              </TableHeader>
+              <TableBody className="relative">
+                {Array.from(timeMap.entries()).map(([index, time]) => (
+                  <TableRow key={index}>
+                    <TableCell className="bg-muted text-center text-muted-foreground min-w-12 text-xs text-medium whitespace-nowrap p-2">
+                      {time}
+                    </TableCell>
+                    {Array.from(daysMap.entries()).map((_, dayIndex) => (
+                      <TableCell
+                        key={`day-${dayIndex}-${index}`}
+                        id={`day-${dayIndex}-${index}`}
+                        className={cn(
+                          "border-x text-center p-2",
+                          currentDayIndex === dayIndex
+                            ? "bg-primary/2"
+                            : "",
+
+                        )}
+                        role="button"
+                        tabIndex={0}
+                        aria-disabled={disabled ? "true" : "false"}
+                        onClick={() => {
+                          setIsEditing(true);
+                          setEditingEvent({
+                            dayIndex,
+                            timeSlotIndex: index,
+                            eventIndex: 0,
+                          });
+                        }}
+                      >
+                        {timetableData.schedule[dayIndex]?.timeSlots[
+                          index
+                        ]?.events.map((event, eventIndex) => (
+                          <Event
+                            event={event}
+                            key={`${index}-${dayIndex}-event-${
+                              // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
+                              eventIndex
+                              }`}
+                          />
+                        ))}
+                        {timetableData.schedule[dayIndex]?.timeSlots[index]?.events
+                          .length === 0 && (
+                            <Badge variant="default" size="sm">
+                              Free Time
+                            </Badge>
+                          )}
+                      </TableCell>
+                    ))}
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TabsContent>
         </div>
 
       </Tabs>

@@ -1,9 +1,12 @@
 import { ResponsiveContainer } from "@/components/common/container";
 import EmptyArea from "@/components/common/empty-area";
+import { HeaderBar } from "@/components/common/header-bar";
 import { NoteSeparator } from "@/components/common/note-separator";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/utils/link";
 import { format } from "date-fns";
-import { CalendarDays } from "lucide-react";
+import { ArrowUpRight, CalendarDays, Plus } from "lucide-react";
 import Link from "next/link";
 import { getEvents } from "~/actions/events";
 
@@ -33,24 +36,27 @@ export default async function ManageEventsPage(props: Props) {
 
   return (
     <>
-      <div className="flex flex-wrap justify-between gap-3">
-        <div>
-          <h2 className="text-xl font-semibold mb-2">Events</h2>
-          <p className="text-sm text-muted-foreground">
-            Manage your events here. You can add, edit, or delete events as
-            needed.
-          </p>
-        </div>
-        <div>
-          <Button variant="default_light" size="sm" asChild>
-            <Link href="/admin/events/new">
-              <CalendarDays />
-              Add New Event
-            </Link>
-          </Button>
-        </div>
-      </div>
-      <div>
+    <HeaderBar
+            Icon={CalendarDays}
+            titleNode={
+              <>Manage Events <Badge size="sm">{groupedEvents.flatMap(group => group.events).length} found</Badge></>
+            }
+            descriptionNode="Here you can create new events or view existing ones."
+            actionNode={
+              <>
+                <ButtonLink variant="dark" size="sm" effect="shineHover" href={`/admin/events/new`}>
+                  <Plus />
+                  New Event
+                </ButtonLink>
+                <ButtonLink variant="light" size="sm" effect="shineHover" href="/academic-calendar" target="_blank">
+                  View Calendar
+                  <ArrowUpRight />
+                </ButtonLink>
+              </>
+            }
+          />
+
+      <div className="px-3">
         {groupedEvents.length > 0 ? (
           <>
             <h4 className="text-base font-medium">Upcoming Events</h4>

@@ -1,12 +1,14 @@
 import EmptyArea from "@/components/common/empty-area";
 import { RouterCard } from "@/components/common/router-card";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
-import { Heading } from "@/components/ui/typography";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { LuBuilding } from "react-icons/lu";
 import { getHostels } from "~/actions/hostel";
 
+import { HeaderBar } from "@/components/common/header-bar";
+import { Badge } from "@/components/ui/badge";
+import { MdRoom } from "react-icons/md";
 import { getSession } from "~/lib/auth-server";
 import { CreateHostelForm, ImportFromSiteButton } from "./client";
 
@@ -25,26 +27,30 @@ export default async function ChiefWardenPage({
 
   return (
     <div className="space-y-5 my-2">
-      <div className="flex justify-between w-full">
-        <div className="w-1/2">
-          <Heading level={5}>Hostels</Heading>
-        </div>
-        <div className="w-1/2 flex gap-2 justify-end">
-          <ResponsiveDialog
-            title="Add Hostel"
-            description="Add a new hostel to the system"
-            btnProps={{
-              variant: "default_light",
-              size: "sm",
-              children: "Add Hostel",
-            }}
-          >
-            <CreateHostelForm />
-          </ResponsiveDialog>
-          {hostels.length === 0 && <ImportFromSiteButton />}
-        </div>
-      </div>
-
+     
+      <HeaderBar
+        Icon={MdRoom}
+        titleNode={
+          <>Manage Hostels <Badge size="sm">{hostels.length} found</Badge></>
+        }
+        descriptionNode="Here you can create new hostels or view existing ones."
+        actionNode={
+          <>
+            <ResponsiveDialog
+              title="Add Hostel"
+              description="Add a new hostel to the system"
+              btnProps={{
+                variant: "default_light",
+                size: "sm",
+                children: "Add Hostel",
+              }}
+            >
+              <CreateHostelForm />
+            </ResponsiveDialog>
+            {hostels.length === 0 && <ImportFromSiteButton />}
+          </>
+        }
+      />
       <ErrorBoundaryWithSuspense
         fallback={
           <EmptyArea

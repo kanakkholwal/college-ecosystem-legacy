@@ -1,43 +1,29 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
 import { DEPARTMENTS_LIST } from "~/constants/departments";
 
-export type { RawTimetableType } from "~/constants/time-table";
+
+import type { RawTimeSlot,RawEvent,RawTimetableType } from "~/constants/time-table";
 
 
-export interface RawEvent {
-  title: string;
-  description?: string;
-  heldBy?: string; // e.g., "Prof. John Doe"
-  _id?: string; // Unique identifier for the event
-}
+
 export type EventTypeWithID = RawEvent;
+
 export interface IEvent extends Document, Omit<RawEvent, "_id"> {}
 
-export interface rawTimeSlot {
-  startTime: number;
-  endTime: number;
-  events: RawEvent[];
-}
-export type TimeSlotWithID = rawTimeSlot & { _id: string };
-export interface ITimeSlot extends Document, rawTimeSlot {}
 
-export interface rawDaySchedule {
+export type TimeSlotWithID = RawTimeSlot & { _id: string };
+
+export interface RawDaySchedule {
   day: number;
-  timeSlots: rawTimeSlot[];
+  timeSlots: RawTimeSlot[];
 }
-export type DayScheduleWithID = rawDaySchedule & { _id: string };
-export interface IDaySchedule extends Document, rawDaySchedule {}
+export type DayScheduleWithID = RawDaySchedule & { _id: string };
+export interface IDaySchedule extends Document, RawDaySchedule {}
 
-export type RawTimetable = {
-  department_code: string;
-  sectionName: string;
-  year: number;
-  semester: number;
-  schedule: rawDaySchedule[];
-};
 
-export interface PublicTimetable extends RawTimetable {
-  author: Types.ObjectId;
+
+export interface PublicTimetable extends RawTimetableType {
+  author: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -85,7 +71,7 @@ const timetableSchema = new Schema<ITimetable>(
         ],
       },
     ],
-    author: { type: Schema.Types.ObjectId, ref: "User" },
+    author: { type: String, required: true }, // Assuming you have a User model
   },
   {
     timestamps: true,

@@ -1,80 +1,61 @@
+import { ResponsiveContainer } from "@/components/common/container";
+import EmptyArea from "@/components/common/empty-area";
+import { HeaderBar } from "@/components/common/header-bar";
 import {
-  RouterCard,
-  type RouterCardLink,
+  RouterCard
 } from "@/components/common/router-card";
-import { CalendarDays, CalendarPlus } from "lucide-react";
-import { getInfo } from "./actions";
+import { Badge } from "@/components/ui/badge";
+import { ButtonLink } from "@/components/utils/link";
+import { CalendarDays, Plus } from "lucide-react";
+import { getAllTimeTables } from "~/lib/time-table/actions";
 
 export default async function Schedules(props: {
   params: Promise<{
     moderator: string;
   }>;
 }) {
-  const data = await getInfo();
+  const timetables = await getAllTimeTables();
   const params = await props.params;
 
-  const routes = formatRoutes(params.moderator, data);
 
   return (
     <>
-      <div className="grid grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 text-left gap-4">
-        {routes.map((link, i) => (
-          <RouterCard
-            key={link.href}
-            {...link}
-            style={{
-              animationDelay: `${i * 500}ms`,
-            }}
-          />
-        ))}
-      </div>
+
+      <HeaderBar
+        Icon={CalendarDays}
+        titleNode={
+          <>Manage Timetables <Badge size="sm">{timetables.length} found</Badge></>
+        }
+        descriptionNode={
+          <>Here you can create new timetables or view existing ones.</>
+        }
+        actionNode={
+          <ButtonLink variant="dark" size="sm" effect="shineHover" href={`/${params.moderator}/schedules/create`}>
+            <Plus />
+            New Timetable
+          </ButtonLink>
+        }
+      />
+      {timetables.length === 0 ? <EmptyArea
+        title="No Timetables Found"
+        description="You can create a new timetable by clicking the button above."
+        icons={[CalendarDays, Plus]}
+      /> :
+        <ResponsiveContainer>
+          {timetables.map((timetable, i) => (
+            <RouterCard
+              key={timetable._id}
+              href={`/${params.moderator}/schedules/${timetable.department_code}/${timetable.year}/${timetable.semester}`}
+              title={timetable.sectionName || "Untitled Timetable"}
+              description={`Department: ${timetable.department_code}, Year: ${timetable.year}, Semester: ${timetable.semester}`}
+              Icon={CalendarDays}
+              style={{
+                animationDelay: `${i * 500}ms`,
+              }}
+            />
+          ))}
+        </ResponsiveContainer>
+      }
     </>
   );
 }
-
-const formatRoutes = (
-  moderator: string,
-  data: Awaited<ReturnType<typeof getInfo>>
-): RouterCardLink[] => {
-  const { studentInfo, timetables } = data;
-
-  if (studentInfo !== null) {
-    const filteredTimetables = timetables.filter((timetable) => {
-      return (
-        timetable.department_code === studentInfo.departmentCode &&
-        timetable.year === studentInfo.currentYear &&
-        timetable.semester === studentInfo.currentSemester
-      );
-    });
-    return [
-      {
-        href: `/${moderator}/schedules/create`,
-        title: "New Time Table",
-        description: "Create new timetable here.",
-        Icon: CalendarPlus,
-      },
-      ...filteredTimetables.map((timetable) => ({
-        href: `/${moderator}/schedules/${timetable.department_code}/${timetable.year}/${timetable.semester}`,
-        title: timetable.sectionName,
-        description: "View your timetable here.",
-        Icon: CalendarDays,
-      })),
-    ];
-  }
-
-  const quick_links: RouterCardLink[] = [
-    {
-      href: `/${moderator}/schedules/create`,
-      title: "New Time Table",
-      description: "Create new timetable here.",
-      Icon: CalendarPlus,
-    },
-    ...timetables.map((timetable) => ({
-      href: `/${moderator}/schedules/${timetable.department_code}/${timetable.year}/${timetable.semester}`,
-      title: timetable.sectionName,
-      description: "View your timetable here.",
-      Icon: CalendarDays,
-    })),
-  ];
-  return quick_links;
-};

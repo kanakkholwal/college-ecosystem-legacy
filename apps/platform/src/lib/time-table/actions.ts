@@ -3,9 +3,9 @@
 import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import Timetable, {
-  type RawTimetable,
   type TimeTableWithID,
 } from "src/models/time-table";
+import type { RawTimetableType as RawTimetable } from "~/constants/time-table";
 
 export async function getTimeTable(
   department_code: string,
