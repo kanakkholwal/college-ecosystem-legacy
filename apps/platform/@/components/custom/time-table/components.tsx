@@ -3,7 +3,8 @@
 import type React from "react";
 import { useCallback } from "react";
 import { DEPARTMENTS_LIST } from "src/constants/departments";
-import type { EventTypeWithID, RawEvent } from "src/models/time-table";
+import type { EventTypeWithID } from "src/models/time-table";
+import type { RawEvent } from "src/constants/time-table";
 import { FormattedTimetable, } from "./store";
 
 import { Button } from "@/components/ui/button";
