@@ -2,9 +2,12 @@ import { BaseHeroSection } from "@/components/application/base-hero";
 import BaseSearchBox from "@/components/application/base-search";
 import ResourceCard from "@/components/application/resource-card";
 import { ResponsiveContainer } from "@/components/common/container";
+import { ButtonLink } from "@/components/utils/link";
+import { ArrowUpRight, Plus } from "lucide-react";
 import { Metadata } from "next";
 import { getAllResources } from "~/lib/mdx";
 import { appConfig } from "~/project.config";
+import { changeCase } from "~/utils/string";
 
 // Site constants (should match those in your blog post page)
 
@@ -123,9 +126,22 @@ export default async function Page() {
             }
           ]}
         />
+        <ButtonLink
+          href={`https://github.com/${appConfig.githubUri}/new/main/apps/platform/resources?filename=example.mdx`}
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="rainbow_outline"
+          rounded="full"
+          size="sm"
+          aria-label={`Write your resources`}
+        >
+          <Plus />
+          Write Your Resources
+          <ArrowUpRight />
+        </ButtonLink>
       </BaseHeroSection>
 
-      <ResponsiveContainer 
+      <ResponsiveContainer
         className="px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3"
         role="list"
         aria-label="List of resources"

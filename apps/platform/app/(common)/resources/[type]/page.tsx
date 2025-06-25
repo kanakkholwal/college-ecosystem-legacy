@@ -3,7 +3,7 @@ import { ResponsiveContainer } from '@/components/common/container';
 import { Icon } from '@/components/icons';
 import { ButtonLink } from '@/components/utils/link';
 import { cn } from '@/lib/utils';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, Plus } from 'lucide-react';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAllMDXMeta, ResourceType } from '~/lib/mdx';
@@ -53,6 +53,18 @@ export default async function ResourceList({ params }: PageProps) {
                 </div>
                 <div className="inline-flex items-center gap-2 sm:ml-auto">
                     <ButtonLink
+                        href={`https://github.com/${appConfig.githubUri}/new/main/apps/platform/resources?filename=${resolvedParams.type}/example.mdx`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        variant="rainbow_outline"
+                        rounded="full"
+                        size="sm"
+                        aria-label={`Write ${changeCase(resolvedParams.type, "title")} resource`}
+                    >
+                        <Plus />
+                        Write Your {changeCase(resolvedParams.type, "title")}
+                    </ButtonLink>
+                    <ButtonLink
                         href="/resources"
                         variant="ghost"
                         size="sm"
@@ -60,6 +72,7 @@ export default async function ResourceList({ params }: PageProps) {
                         View All
                         <ArrowRight />
                     </ButtonLink>
+
                 </div>
             </div>
             <ResponsiveContainer

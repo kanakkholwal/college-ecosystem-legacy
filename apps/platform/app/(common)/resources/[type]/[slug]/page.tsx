@@ -1,6 +1,6 @@
 import { Badge } from '@/components/ui/badge';
 import { ButtonLink } from '@/components/utils/link';
-import { ArrowLeftIcon } from 'lucide-react';
+import { ArrowLeftIcon, Edit, Plus } from 'lucide-react';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getAllResourcesGroupedByType, getResourceBySlug, ResourceType } from '~/lib/mdx';
@@ -129,17 +129,29 @@ export default async function ResourcePage({ params }: PageProps) {
             />
 
             <main className="max-w-6xl mx-auto" itemType="https://schema.org/BlogPosting" itemScope>
+            <div className='flex justify-between items-center m-4 gap-2 pr-2'>
                 <ButtonLink
                     href={`/resources/${resolvedParams.type}`}
                     variant="ghost"
                     size="sm"
-                    className="m-4"
                     aria-label={`Back to ${changeCase(resolvedParams.type, "title")} resources`}
                 >
                     <ArrowLeftIcon />
                     Back to {changeCase(resolvedParams.type, "title")}
                 </ButtonLink>
-
+                <ButtonLink
+                    href={`https://github.com/${appConfig.githubUri}/new/main/apps/platform/resources?filename=${resolvedParams.type}/example.mdx`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    variant="rainbow_outline"
+                    rounded="full"
+                    size="sm"
+                    aria-label={`Write ${changeCase(resolvedParams.type, "title")} resource`}
+                >
+                    <Plus />
+                    Write Your {changeCase(resolvedParams.type, "title")}
+                </ButtonLink>
+            </div>
                 <div className='text-center mb-4 space-y-5 py-8 px-3 lg:px-0'>
                     <h1 className="text-xl lg:text-3xl font-semibold mx-auto max-w-5xl" itemProp="headline">
                         {frontmatter.title}
@@ -176,7 +188,7 @@ export default async function ResourcePage({ params }: PageProps) {
                     <ClientMdx mdxSource={mdxSource} />
                 </article>
 
-                <div className="flex justify-between mt-8 px-2 pr-3 max-w-3xl mx-auto ">
+                <div className="flex justify-between items-center    mt-8 px-2 pr-3 max-w-3xl mx-auto ">
                     <div className="text-xs text-muted-foreground bg-card p-2 rounded-lg">
                         Last updated on <br />
                         <p
@@ -190,6 +202,22 @@ export default async function ResourcePage({ params }: PageProps) {
                                 day: 'numeric',
                             })}
                         </p>
+                    </div>
+                    <div className="text-xs text-muted-foreground bg-card p-2 rounded-lg">
+                        
+                        <ButtonLink
+                            href={`https://github.com/${appConfig.githubUri}/edit/main/apps/platform/resources/${resolvedParams.type}/${resolvedParams.slug}.mdx`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            variant="ghost"
+                            rounded="full"
+                            size="xs"
+                            aria-label={`Write ${changeCase(resolvedParams.type, "title")} resource`}
+                            >
+                                <Edit />
+                                Edit on GitHub
+                                <span className="sr-only">Edit this resource on GitHub</span>
+                            </ButtonLink>
                     </div>
                 </div>
             </main>
