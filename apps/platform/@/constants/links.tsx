@@ -12,7 +12,7 @@ import { ROLES } from "~/constants";
 
 import { AudioLines, CalendarRange } from "lucide-react";
 import { BiSpreadsheet } from "react-icons/bi";
-import { GrAnnounce, GrSchedules } from "react-icons/gr";
+import { GrAnnounce, GrResources, GrSchedules } from "react-icons/gr";
 import { MdOutlinePoll } from "react-icons/md";
 import { appConfig, supportLinks } from "~/project.config";
 import { toRegex } from "~/utils/string";
@@ -35,6 +35,13 @@ export type RouterCardLink = {
 };
 
 export const quick_links: RouterCardLink[] = [
+  {
+    href: "/resources",
+    title: "Resources",
+    description: "Explore resources like articles, experiences, and more.",
+    allowed_roles: ["*"],
+    Icon: GrResources ,
+  },
   {
     href: "/results",
     title: "Results",

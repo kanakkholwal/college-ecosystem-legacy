@@ -92,6 +92,14 @@ export function validatePassword(password: string) {
     message: "Password is strong",
   };
 }
+export function calculateReadingTime(text: string, wordsPerMinute = 200): string {
+  if (!text) return "0 min read";
+
+  const words = text.trim().split(/\s+/).length;
+  const minutes = Math.ceil(words / wordsPerMinute);
+
+  return `${minutes} min read`;
+}
 
 
 export type RoutePattern = string | RegExp;

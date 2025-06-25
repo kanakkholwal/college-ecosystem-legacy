@@ -24,6 +24,8 @@ type SearchBoxProps = {
   filterDialogTitle?: string;
   filterDialogDescription?: string;
   variant?: "default" | "expanded";
+  className?: string;
+  disabled?: boolean;
 };
 
 export default function BaseSearchBox({
@@ -34,6 +36,8 @@ export default function BaseSearchBox({
   filterDialogTitle = "Filter",
   filterDialogDescription = "Filter by different options",
   variant = "default",
+  className,
+  disabled = false,
 }: SearchBoxProps) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const searchParams = useSearchParams();
@@ -85,8 +89,11 @@ export default function BaseSearchBox({
         "w-full pr-2",
         variant === "expanded"
           ? "grid gap-4"
-          : "relative flex items-stretch rounded-full"
+          : "relative flex items-stretch rounded-full",
+        className,
       )}
+      aria-disabled={disabled}
+      data-disabled={disabled ? "true" : "false"}
     >
       <div
         className={cn(
@@ -106,6 +113,7 @@ export default function BaseSearchBox({
                     variant="glass"
                     rounded="full"
                     size={isDesktop ? "default" : "icon_sm"}
+                    disabled={disabled}
                   >
                     <IoMdOptions />
                   </Button>
@@ -121,6 +129,7 @@ export default function BaseSearchBox({
                     "aria-label": "Filter Options",
                     title: "Filter",
                     children: <IoMdOptions />,
+                    disabled: disabled,
                   }}
                 >
 
@@ -172,6 +181,7 @@ export default function BaseSearchBox({
                 variant="light"
                 rounded="full"
                 size={isDesktop ? "default" : "icon_sm"}
+                disabled={disabled}
               >
                 <IoMdOptions />
               </Button>
@@ -187,6 +197,7 @@ export default function BaseSearchBox({
           )}
           defaultValue={searchParams.get(searchParamsKey)?.toString()}
           onChange={(e) => handleSearch(e.target.value)}
+          disabled={disabled}
         />
 
         <div className="absolute top-1 bottom-1 right-1">
@@ -199,6 +210,7 @@ export default function BaseSearchBox({
             className="h-auto"
             transition="damped"
             size={isDesktop ? "default" : "sm"}
+            disabled={disabled}
           >
             <Search className="mx-auto" />
           </Button>
