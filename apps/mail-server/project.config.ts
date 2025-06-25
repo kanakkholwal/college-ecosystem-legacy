@@ -36,9 +36,9 @@ export const MAIL_PASSWORD = process.env.MAIL_PASSWORD;
 
 
 export const SMTP_SETTINGS = {
-  host: SMTP_HOST || "smtp-relay.sendinblue.com", // "smtp.gmail.com", //replace with your email provider
+  host: SMTP_HOST || "smtp-relay.brevo.com", // "smtp.gmail.com", //replace with your email provider
   port: 587,
-  // secure: false, // true for 465, false for other ports
+  secure: false, // true for 465, false for other ports
   auth: {
     user: MAIL_EMAIL,
     pass: MAIL_PASSWORD,
