@@ -58,11 +58,14 @@ export default async function ResourceList({ params }: PageProps) {
                         size="sm"
                     >
                         View All
-                        <ArrowRight/>
+                        <ArrowRight />
                     </ButtonLink>
                 </div>
             </div>
-            <ResponsiveContainer className="px-3 lg:px-6 @5xl:grid-cols-3">
+            <ResponsiveContainer
+                className="px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3"
+
+            >
 
                 {resources.map(frontmatter => {
                     return (
