@@ -110,10 +110,8 @@ export async function deleteTimeTable(timetableId: string) {
 
   try {
     if (
-      !session.user.other_roles.includes("admin") &&
-      !session.user.other_roles.includes("faculty") &&
-      !session.user.other_roles.includes("cr") &&
-      !session.user.other_roles.includes("moderator")
+      !timetable_authorization.includes(session.user.role) &&
+      !session.user.other_roles.some(role => timetable_authorization.includes(role))
     ) {
       return Promise.reject("Student can't delete a timetable");
     }

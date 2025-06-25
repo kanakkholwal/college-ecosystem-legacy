@@ -6,7 +6,7 @@ import { notFound } from 'next/navigation';
 import { getAllResourcesGroupedByType, getResourceBySlug, ResourceType } from '~/lib/mdx';
 import { appConfig } from '~/project.config';
 import { changeCase } from '~/utils/string';
-import { ClientMdx } from './client';
+import { ClientMdx, CommentSection } from './client';
 
 
 type PageProps = {
@@ -129,29 +129,29 @@ export default async function ResourcePage({ params }: PageProps) {
             />
 
             <main className="max-w-6xl mx-auto" itemType="https://schema.org/BlogPosting" itemScope>
-            <div className='flex justify-between items-center m-4 gap-2 pr-2'>
-                <ButtonLink
-                    href={`/resources/${resolvedParams.type}`}
-                    variant="ghost"
-                    size="sm"
-                    aria-label={`Back to ${changeCase(resolvedParams.type, "title")} resources`}
-                >
-                    <ArrowLeftIcon />
-                    Back to {changeCase(resolvedParams.type, "title")}
-                </ButtonLink>
-                <ButtonLink
-                    href={`https://github.com/${appConfig.githubUri}/new/main/apps/platform/resources?filename=${resolvedParams.type}/example.mdx`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="rainbow_outline"
-                    rounded="full"
-                    size="sm"
-                    aria-label={`Write ${changeCase(resolvedParams.type, "title")} resource`}
-                >
-                    <Plus />
-                    Write Your {changeCase(resolvedParams.type, "title")}
-                </ButtonLink>
-            </div>
+                <div className='flex justify-between items-center m-4 gap-2 pr-2'>
+                    <ButtonLink
+                        href={`/resources/${resolvedParams.type}`}
+                        variant="ghost"
+                        size="sm"
+                        aria-label={`Back to ${changeCase(resolvedParams.type, "title")} resources`}
+                    >
+                        <ArrowLeftIcon />
+                        Back to {changeCase(resolvedParams.type, "title")}
+                    </ButtonLink>
+                    <ButtonLink
+                        href={`https://github.com/${appConfig.githubUri}/new/main/apps/platform/resources?filename=${resolvedParams.type}/example.mdx`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        variant="rainbow_outline"
+                        rounded="full"
+                        size="sm"
+                        aria-label={`Write ${changeCase(resolvedParams.type, "title")} resource`}
+                    >
+                        <Plus />
+                        Write Your {changeCase(resolvedParams.type, "title")}
+                    </ButtonLink>
+                </div>
                 <div className='text-center mb-4 space-y-5 py-8 px-3 lg:px-0'>
                     <h1 className="text-xl lg:text-3xl font-semibold mx-auto max-w-5xl" itemProp="headline">
                         {frontmatter.title}
@@ -188,8 +188,8 @@ export default async function ResourcePage({ params }: PageProps) {
                     <ClientMdx mdxSource={mdxSource} />
                 </article>
 
-                <div className="flex justify-between items-center    mt-8 px-2 pr-3 max-w-3xl mx-auto ">
-                    <div className="text-xs text-muted-foreground bg-card p-2 rounded-lg">
+                <div className="flex justify-between items-center flex-wrap text-xs text-muted-foreground bg-card p-3 rounded-lg mt-8 max-w-3xl mx-auto ">
+                    <div>
                         Last updated on <br />
                         <p
                             className="inline-block px-1 mx-1 text-base font-semibold text-foreground"
@@ -203,8 +203,8 @@ export default async function ResourcePage({ params }: PageProps) {
                             })}
                         </p>
                     </div>
-                    <div className="text-xs text-muted-foreground bg-card p-2 rounded-lg">
-                        
+                    <div>
+
                         <ButtonLink
                             href={`https://github.com/${appConfig.githubUri}/edit/main/apps/platform/resources/${resolvedParams.type}/${resolvedParams.slug}.mdx`}
                             target="_blank"
@@ -212,13 +212,15 @@ export default async function ResourcePage({ params }: PageProps) {
                             variant="ghost"
                             rounded="full"
                             size="xs"
-                            aria-label={`Write ${changeCase(resolvedParams.type, "title")} resource`}
-                            >
-                                <Edit />
-                                Edit on GitHub
-                                <span className="sr-only">Edit this resource on GitHub</span>
-                            </ButtonLink>
+                            title={`Edit on GitHub`}
+                        >
+                            <Edit />
+                            Edit on GitHub
+                            <span className="sr-only">Edit this resource on GitHub</span>
+                        </ButtonLink>
                     </div>
+
+                    <CommentSection  />
                 </div>
             </main>
         </>

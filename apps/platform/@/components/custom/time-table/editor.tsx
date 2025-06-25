@@ -16,7 +16,7 @@ import React, { useRef } from "react";
 import toast from "react-hot-toast";
 import { getDepartmentName } from "src/constants/departments";
 import { rawTimetableSchema, type RawTimetableType } from "~/constants/time-table";
-import { createTimeTable, updateTimeTable } from "~/lib/time-table/actions";
+import { createTimeTable, deleteTimeTable, updateTimeTable } from "~/lib/time-table/actions";
 import type { TimeTableWithID } from "~/models/time-table";
 import { EditTimetableDialog, Event, TimeTableMetaData } from "./components";
 import { daysMap, rawTimetableData, timeMap } from "./constants";
@@ -31,10 +31,7 @@ export type TimeTableEditorProps = {
   mode: "create";
 };
 
-export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
-  timetableData: timetableDataProp,
-  mode = "create",
-}) => {
+export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => {
   const isInitialized = useRef<boolean>(false);
   const setEditingEvent = useTimeTableStore((state) => state.setEditingEvent);
   const setIsEditing = useTimeTableStore((state) => state.setIsEditing);
@@ -45,8 +42,8 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
 
   if (!isInitialized.current) {
     setTimetableData(
-      mode === "edit" && !!timetableDataProp
-        ? (timetableDataProp as TimeTableWithID)
+      editorProps.mode === "edit" && !!editorProps.timetableData
+        ? (editorProps.timetableData as TimeTableWithID)
         : (rawTimetableData as RawTimetableType)
     );
     setIsEditing(false);
@@ -68,7 +65,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
         setDisabled(false);
         return;
       }
-      
+
       toast
         .promise(
           updateTimeTable(data.timetableData._id, data.timetableData),
@@ -100,6 +97,21 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
         });
     }
   };
+  const handleDeleteTimetable = async (timetableId: string) => {
+    setDisabled(true);
+    toast
+      .promise(deleteTimeTable(timetableId), {
+        loading: "Deleting Timetable",
+        success: () => {
+          
+          return "Timetable deleted successfully";
+        },
+        error: "Failed to delete timetable",
+      })
+      .finally(() => {
+        setDisabled(false);
+      });
+  }
   const currentDayIndex = new Date().getDay() - 1;
 
   return (
@@ -111,30 +123,45 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = ({
             <p className="text-muted-foreground text-sm">
               {getDepartmentName(timetableData?.department_code) || "Unknown Department"}
             </p>
-            <div className="absolute -top-4 right-4 flex items-center gap-2">
 
-              <Button
-                size="sm"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  e.preventDefault();
-                  handleSaveTimetable(
-                    { timetableData, mode } as TimeTableEditorProps
-                  );
-                }}
-              >
-                {mode === "create" ? "Save" : "Update"} TimeTable
-              </Button>
-            </div>
           </div>
           <Separator className="my-2" />
-          <div className="flex items-center space-x-3 h-4 text-sm text-muted-foreground">
+          <div className="flex items-center space-x-3 text-sm text-muted-foreground">
             <div>{timetableData?.year} Year</div>
             <Separator orientation="vertical" />
             <div>{timetableData?.semester} Semester</div>
             <Separator orientation="vertical" />
           </div>
-          <div className="flex gap-3 items-center mt-4">
+          <div className="flex gap-3 items-center justify-end mt-4">
+
+            <Button
+              size="sm"
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                handleSaveTimetable(
+                  { timetableData, mode: editorProps.mode } as TimeTableEditorProps
+                );
+              }}
+            >
+              {editorProps.mode === "create" ? "Save" : "Update"} TimeTable
+            </Button>
+            {editorProps.mode === "edit" && (<Button
+              size="sm"
+              variant="destructive_light"
+              disabled={disabled}
+              onClick={(e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (!editorProps.timetableData?._id) {
+                  toast.error("You cannot delete a timetable that is not created yet.");
+                  return;
+                }
+                handleDeleteTimetable(editorProps.timetableData._id);
+              }}
+            >
+              Delete TimeTable
+            </Button>)}
           </div>
         </div>
       </div>
