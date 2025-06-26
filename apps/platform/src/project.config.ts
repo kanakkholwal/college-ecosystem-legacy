@@ -132,7 +132,7 @@ export const appConfig = {
   ].join(', '),
   creator: "Kanak Kholwal",
   authors: [
-    { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org" },
+    { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org",image: "https://github.com/kanakkholwal.png" },
     {
       name: "NITH Administration",
       url: "https://nith.ac.in",

@@ -1,3 +1,4 @@
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { ButtonLink } from '@/components/utils/link';
 import { ArrowLeftIcon, Edit, Plus } from 'lucide-react';
@@ -152,15 +153,48 @@ export default async function ResourcePage({ params }: PageProps) {
                         Write Your {changeCase(resolvedParams.type, "title")}
                     </ButtonLink>
                 </div>
-                <div className='text-center mb-4 space-y-5 py-8 px-3 lg:px-0'>
-                    <h1 className="text-xl lg:text-3xl font-semibold mx-auto max-w-5xl" itemProp="headline">
+                <div className='container max-w-[900px] py-12 md:px-8 mb-4 space-y-5 px-3 lg:px-0'>
+                    <h1 className="mb-4 text-4xl font-bold text-foreground sm:text-5xl" itemProp="headline">
                         {frontmatter.title}
                     </h1>
 
-                    <p className="text-muted-foreground text-base mb-3 line-clamp-3 max-w-3xl mx-auto" itemProp="abstract">
+                    <p className="text-lg text-muted-foreground mb-3 line-clamp-3" itemProp="abstract">
                         {frontmatter.summary}
                     </p>
+                    <div className="flex flex-col gap-4 px-4 text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
+                        {/* <Author /> */}
+                        <a
+                            href={frontmatter.author?.url || appConfig.authors[0].url}
+                            className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-foreground/5"
+                            aria-description="Author"
+                        >
+                            <Avatar>
+                                <AvatarImage
+                                    alt={frontmatter.author?.name || 'Author Avatar'}
+                                    className="size-9 rounded-full"
+                                    role="presentation"
+                                    loading="lazy"
+                                    src={frontmatter.author?.image || appConfig.authors[0].image}
+                                />
+                                <AvatarFallback>
+                                    {frontmatter.author?.name?.charAt(0) || 'A'}
+                                    <span className="sr-only">{frontmatter.author?.name || 'Author'}</span>
+                                </AvatarFallback>
+                            </Avatar>
 
+                            <div>
+                                <p className="font-semibold text-foreground">{frontmatter.author?.name}</p>
+                                <p className="text-xs text-muted-foreground">{frontmatter.author?.handle || '@kanakkholwal'}</p>
+                            </div>
+                        </a>
+                        {frontmatter.date && (
+                            <p className="text-sm font-medium text-muted-foreground">
+                                {new Date(frontmatter.date).toLocaleDateString('en-GB', {
+                                    dateStyle: 'long'
+                                })}
+                            </p>
+                        )}
+                    </div>
                     <div className="text-sm text-muted-foreground">
                         <span itemProp="publisher" itemScope itemType="https://schema.org/Organization">
                             <meta itemProp="name" content={appConfig.name} />
@@ -179,6 +213,8 @@ export default async function ResourcePage({ params }: PageProps) {
                             })}
                         </Badge>
                     </div>
+                    <hr className="my-4" />
+
                 </div>
 
                 <article
@@ -220,7 +256,7 @@ export default async function ResourcePage({ params }: PageProps) {
                         </ButtonLink>
                     </div>
 
-                    <CommentSection  />
+                    <CommentSection />
                 </div>
             </main>
         </>

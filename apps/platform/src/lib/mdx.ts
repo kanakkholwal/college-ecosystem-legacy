@@ -1,4 +1,5 @@
 import fs from 'fs';
+import matter from 'gray-matter';
 import { type MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import path from 'path';
@@ -21,7 +22,7 @@ export interface ResourceFrontMatter {
     name: string;
     url: string;
     image?: string;
-    bio?: string;
+    handle?: string;
   };
   tags?: string[];
   summary?: string;
@@ -35,12 +36,13 @@ export interface ResourceFrontMatter {
 
 export const compileMdxSource = async (content: string): Promise<MDXRemoteSerializeResult> => {
   try {
-    const mdxSource = await serialize(content,{
-      parseFrontmatter: true, // Enable frontmatter parsing
+
+    const mdxSource = await serialize(content, {
+      parseFrontmatter: false, // Enable frontmatter parsing
       mdxOptions: {
         // You can add any additional MDX options here if needed
         remarkPlugins: [remarkGfm], // Enable GitHub Flavored Markdown
-        
+
       },
       scope: {}, // You can pass any additional scope variables here
     })
@@ -96,17 +98,19 @@ export async function getMDXBySlug(
 
   const source = fs.readFileSync(fullPath, 'utf-8');
   const mdxSource = await compileMdxSource(source);
-
+  const frontmatter = matter(source);
   // Validate required frontmatter fields
-  if (typeof mdxSource.frontmatter.title !== 'string' || typeof mdxSource.frontmatter.slug !== 'string' || typeof mdxSource.frontmatter.date !== 'string') {
-    throw new Error(`Invalid frontmatter in ${fullPath}`);
-  }
-  mdxSource.frontmatter.readingTime = calculateReadingTime(mdxSource.compiledSource || '');
-  mdxSource.frontmatter.type = type;
+  console.log('Frontmatter:', frontmatter.data);
+  console.log('calculateReadingTime:', calculateReadingTime(mdxSource.compiledSource || ''));
+  // if (typeof frontmatter.data.title !== 'string' || typeof frontmatter.data.slug !== 'string' || typeof frontmatter.data.date !== 'string') {
+  //   throw new Error(`Invalid frontmatter in ${fullPath}`);
+  // }
+  // frontmatter.data.readingTime = calculateReadingTime(mdxSource.compiledSource || '');
+  // frontmatter.data.type = type;
 
   return {
-    mdxSource: mdxSource,
-    frontmatter: mdxSource.frontmatter as unknown as ResourceFrontMatter
+    mdxSource,
+    frontmatter: frontmatter.data as ResourceFrontMatter
   };
 }
 
