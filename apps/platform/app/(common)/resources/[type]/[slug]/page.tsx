@@ -128,6 +128,8 @@ export default async function ResourcePage({ params }: PageProps) {
                         <a
                             href={frontmatter.author?.url || appConfig.authors[0].url}
                             className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-foreground/5"
+                            target='_blank'
+                            rel="noopener noreferrer"
                             aria-description="Author"
                             title='Author Profile'
                             itemProp="author"
@@ -186,7 +188,7 @@ export default async function ResourcePage({ params }: PageProps) {
                 </div>
 
                 <article
-                    className="prose mx-auto p-6 dark:prose-invert  container max-w-[900px] bg-card rounded-lg"
+                    className="prose mx-auto p-6 prose-gray dark:prose-invert  container max-w-[900px] bg-card rounded-lg"
                     itemProp="articleBody"
                 >
                     <ClientMdx mdxSource={mdxSource} />

@@ -29,7 +29,7 @@ export default function ResourceCard({
 }: ResourceCardProps) {
     return (
         <Link href={`/resources/${type}/${slug}`} className="block group">
-            <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-shadow duration-200">
+            <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl hover:border-primary/50 hover:-translate-y-1 transition-all duration-500 ease-in-out">
                 {(coverImage || appConfig.flags.enableOgImage) && (
                     <div className="relative h-52 w-full aspect-video overflow-hidden">
                         <Image

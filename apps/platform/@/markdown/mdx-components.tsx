@@ -1,5 +1,6 @@
-import React, { ComponentPropsWithoutRef } from 'react';
+import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { ComponentPropsWithoutRef } from 'react';
 // import { highlight } from 'sugar-high';
 
 type HeadingProps = ComponentPropsWithoutRef<'h1'>;
@@ -15,29 +16,31 @@ export const mdxComponents = {
   ),
   h2: (props: HeadingProps) => (
     <h2
-      className="text-gray-800 dark:text-zinc-200 font-medium mt-8 mb-3"
+      className="text-foreground font-medium mt-8 mb-3"
       {...props}
     />
   ),
   h3: (props: HeadingProps) => (
     <h3
-      className="text-gray-800 dark:text-zinc-200 font-medium mt-8 mb-3"
+      className="text-foreground font-medium mt-8 mb-3"
       {...props}
     />
   ),
   h4: (props: HeadingProps) => <h4 className="font-medium" {...props} />,
+  h5: (props: HeadingProps) => <h5 className="font-medium" {...props} />,
+  h6: (props: HeadingProps) => <h6 className="font-medium" {...props} />,
   p: (props: ParagraphProps) => (
-    <p className="text-gray-800 dark:text-zinc-300 leading-snug" {...props} />
+    <p className="text-muted-foreground" {...props} />
   ),
   ol: (props: ListProps) => (
     <ol
-      className="text-gray-800 dark:text-zinc-300 list-decimal pl-5 space-y-2"
+      className="text-muted-foreground list-decimal pl-5 space-y-2"
       {...props}
     />
   ),
   ul: (props: ListProps) => (
     <ul
-      className="text-gray-800 dark:text-zinc-300 list-disc pl-5 space-y-1"
+      className="text-muted-foreground list-disc pl-5 space-y-1"
       {...props}
     />
   ),
@@ -50,7 +53,7 @@ export const mdxComponents = {
   ),
   a: ({ href, children, ...props }: AnchorProps) => {
     const className =
-      'text-primary/80 hover:text-primary/100 dark:text-gray-400 hover:dark:text-gray-300 dark:underline dark:underline-offset-2 dark:decoration-gray-800';
+      'text-foreground underline underline-offset-2 hover:underline-2 decoration-primary';
     if (href?.startsWith('/')) {
       return (
         <Link href={href} className={className} {...props}>
@@ -60,7 +63,9 @@ export const mdxComponents = {
     }
     if (href?.startsWith('#')) {
       return (
-        <a href={href} className={className} {...props}>
+        <a href={href} className={cn(
+          "underline-0 not-prose"
+        )} {...props}>
           {children}
         </a>
       );
@@ -78,7 +83,6 @@ export const mdxComponents = {
     );
   },
   code: ({ ...props }: ComponentPropsWithoutRef<'code'>) => {
-    // const codeHTML = highlight(children as string);
     return <code {...props} />;
   },
   Table: ({ data }: { data: { headers: string[]; rows: string[][] } }) => (

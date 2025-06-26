@@ -1,13 +1,11 @@
 import { BaseHeroSection } from "@/components/application/base-hero";
 import BaseSearchBox from "@/components/application/base-search";
-import ResourceCard from "@/components/application/resource-card";
-import { ResponsiveContainer } from "@/components/common/container";
 import { ButtonLink } from "@/components/utils/link";
 import { ArrowUpRight, Plus } from "lucide-react";
 import { Metadata } from "next";
 import { getAllResources } from "~/lib/mdx";
 import { appConfig } from "~/project.config";
-import { changeCase } from "~/utils/string";
+import { CategoryFilter, ResourcesList } from "./client";
 
 // Site constants (should match those in your blog post page)
 
@@ -74,7 +72,7 @@ export default async function Page() {
       }))
     }
   };
-
+  const allCategories = [...new Set(resources.filter(r => r.category !== undefined && r.category !== null).map(r => r.category))] as string[]
   return (
     <>
       {/* Structured Data */}
@@ -140,28 +138,10 @@ export default async function Page() {
           <ArrowUpRight />
         </ButtonLink>
       </BaseHeroSection>
-
-      <ResponsiveContainer
-        className="px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3"
-        role="list"
-        aria-label="List of resources"
-      >
-        {resources.map((frontmatter, index) => (
-          <div key={frontmatter.slug} role="listitem">
-            <ResourceCard
-              type={frontmatter.type || 'misc'}
-              title={frontmatter.title}
-              slug={frontmatter.slug}
-              summary={frontmatter.summary}
-              tags={frontmatter.tags}
-              coverImage={frontmatter.coverImage}
-              date={frontmatter.date}
-              readingTime={frontmatter.readingTime}
-              category={frontmatter.category}
-            />
-          </div>
-        ))}
-      </ResponsiveContainer>
+      <div className="max-w-(--max-app-width) mx-auto px-4 lg:px-6 mb-8">
+          <CategoryFilter categories={allCategories} />
+      </div>
+      <ResourcesList resources={resources} />
     </>
   );
 }

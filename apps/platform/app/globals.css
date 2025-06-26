@@ -76,6 +76,25 @@
     --chart-14: hsl(333.3 71.4% 50.6%);
     --chart-15: hsl(346.8 77.2% 49.8%);
 
+    /* syntax highlighting */
+    --sh-class: #4d9ef6;
+    /* Brighter blue for class */
+    --sh-identifier: #6caedd;
+    /* Lighter blue for identifiers */
+    --sh-sign: #cdd3de;
+    /* Lighter gray to ensure signs are visible */
+    --sh-property: #3182ce;
+    /* Brighter blue for properties */
+    --sh-entity: #2db1bc;
+    /* Lighter teal for entities */
+    --sh-jsxliterals: #939dfd;
+    /* Lighter purple for JSX literals */
+    --sh-string: #26dabd;
+    /* Lighter teal for strings */
+    --sh-keyword: #ff6b6b;
+    /* Brighter red for keywords */
+    --sh-comment: #cbc3c3;
+    /* Lighter gray for comments */
 }
 
 .dark,
@@ -514,6 +533,13 @@ body {
     --color-3: oklch(69.6% 0.165 251);
     --color-4: oklch(80.2% 0.134 225);
     --color-5: oklch(90.7% 0.231 133);
+}
+
+:not(pre)>code {
+    overflow-wrap: break-word;
+    border-radius: var(--rounded-md, .375rem);
+    background-color: rgb(var(--gray-100) / .5);
+    padding: .125rem .5rem;
 }
 
 @layer base {

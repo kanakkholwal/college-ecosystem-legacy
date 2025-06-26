@@ -3,12 +3,20 @@ import matter from 'gray-matter';
 import { type MDXRemoteSerializeResult } from 'next-mdx-remote';
 import { serialize } from 'next-mdx-remote/serialize';
 import path from 'path';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import rehypeSlug from 'rehype-slug';
 import remarkGfm from 'remark-gfm';
+import { highlight } from 'remark-sugar-high';
+
 import { calculateReadingTime } from '~/utils/string';
+
+
+
+export const resourcesTypes = ['guides', 'articles', 'experiences', 'misc'] as const;
 /**
  * Resource types corresponding to folders under /resources
  */
-export type ResourceType = 'articles' | 'experiences' | "misc"
+export type ResourceType = typeof resourcesTypes[number];
 
 /**
  * Expected frontmatter schema for resource MDX files
@@ -16,6 +24,7 @@ export type ResourceType = 'articles' | 'experiences' | "misc"
 export interface ResourceFrontMatter {
   title: string;
   slug: string;
+  type: ResourceType; // 'articles' | 'experiences' | 'misc'
   date: string;         // ISO date string
   updated?: string;     // ISO date string, optional
   author?: {
@@ -23,6 +32,7 @@ export interface ResourceFrontMatter {
     url: string;
     image?: string;
     handle?: string;
+    handleUrl?: string; // Optional URL for the author's handle
   };
   tags?: string[];
   summary?: string;
@@ -31,8 +41,22 @@ export interface ResourceFrontMatter {
   published?: boolean;
   featured?: boolean;
   category?: string;
-  type: ResourceType; // Optional, can be used to filter by type
 }
+export type Toc = TocItem[];
+
+type TocItem = {
+  depth: number;
+  value: string;
+  slug: string;
+  children: TocItem[];
+};
+
+
+/**
+ * Compile MDX content into a serializable format
+ * @param content - The MDX content as a string
+ * @returns A promise that resolves to the serialized MDX content
+ */
 
 export const compileMdxSource = async (content: string): Promise<MDXRemoteSerializeResult> => {
   try {
@@ -41,10 +65,17 @@ export const compileMdxSource = async (content: string): Promise<MDXRemoteSerial
       parseFrontmatter: true, // Enable frontmatter parsing
       mdxOptions: {
         // You can add any additional MDX options here if needed
-        remarkPlugins: [remarkGfm], // Enable GitHub Flavored Markdown
-
+        remarkPlugins: [
+          remarkGfm, highlight,
+        ], // Enable GitHub Flavored Markdown
+        rehypePlugins: [
+          rehypeSlug,
+          [rehypeAutolinkHeadings, { behavior: 'wrap', test: ['h2', 'h3', 'h4'] }],
+        ], // Add any rehype plugins if needed
       },
-      scope: {}, // You can pass any additional scope variables here
+      scope: {
+        toc: []
+      }, // You can pass any additional scope variables here
     })
     return mdxSource
   } catch (error) {
@@ -58,8 +89,7 @@ const RESOURCE_DIR = path.join(process.cwd(), 'resources');
  * Verify that the given resource type is supported
  */
 function assertResourceType(type: string): asserts type is ResourceType {
-  const types: ResourceType[] = ['articles', 'experiences'];
-  if (!types.includes(type as ResourceType)) {
+  if (!resourcesTypes.includes(type as ResourceType)) {
     throw new Error(`Unsupported resource type: ${type}`);
   }
 }
@@ -101,7 +131,7 @@ export async function getMDXBySlug(
   const frontmatter = matter(source);
   // Validate required frontmatter fields
   // console.log('Frontmatter:', frontmatter.data);
-  frontmatter.data.readingTime = calculateReadingTime(mdxSource.compiledSource || '');
+  frontmatter.data.readingTime = calculateReadingTime(source || '');
   frontmatter.data.type = type;
 
   return {
@@ -235,3 +265,23 @@ export async function getResourceBySlug(
     return null; // Return null if not found
   }
 }
+
+/**
+ * API for resource management
+ * Provides methods to fetch resources, MDX content, and metadata
+ */
+export const resourceApi = {
+  getResourceBySlug,
+  getMDXBySlug,
+  getAllMDXMeta,
+  getAllResources,
+  getAllResourcesGroupedByType,
+  getResourceTypes,
+  getMDXFiles,
+  getResourcesByTag,
+  getFeaturedResources,
+  getResourcesByCategory,
+  getRecentResources,
+  getAllResourcePaths,
+  
+} as const
