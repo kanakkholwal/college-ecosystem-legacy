@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import Image from "next/image";
 import Link from "next/link";
+import { appConfig } from "~/project.config";
 
 export interface ResourceCardProps {
     type: string;
@@ -28,11 +29,11 @@ export default function ResourceCard({
 }: ResourceCardProps) {
     return (
         <Link href={`/resources/${type}/${slug}`} className="block group">
-            <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-200">
-                {coverImage && (
-                    <div className="relative h-52 w-full overflow-hidden">
+            <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition-shadow duration-200">
+                {(coverImage || appConfig.flags.enableOgImage) && (
+                    <div className="relative h-52 w-full aspect-video overflow-hidden">
                         <Image
-                            src={coverImage}
+                            src={coverImage || `/og/resources/${type}/${slug}`}
                             alt={title}
                             fill
                             className="object-cover transition-transform duration-300 group-hover:scale-105"

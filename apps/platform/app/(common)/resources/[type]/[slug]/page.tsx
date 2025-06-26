@@ -24,55 +24,6 @@ export async function generateStaticParams() {
     });
 }
 
-export async function generateMetadata(
-    { params }: PageProps,
-    parent: ResolvingMetadata
-): Promise<Metadata> {
-    const resolvedParams = await params;
-    const resourceMeta = await getResourceBySlug(resolvedParams.type, resolvedParams.slug);
-    if (!resourceMeta) notFound();
-
-    const { frontmatter } = resourceMeta;
-
-    const title = `${frontmatter.title} • ${changeCase(resolvedParams.type, "title")} • ${(await parent).title}`;
-    const description = frontmatter.summary || "Explore our resources";
-    const resourceUrl = `${appConfig.url}/resources/${resolvedParams.type}/${resolvedParams.slug}`;
-    return {
-        title,
-        description,
-        alternates: {
-            canonical: resourceUrl,
-        },
-        openGraph: {
-            title,
-            description,
-            url: resourceUrl,
-            type: 'article',
-            publishedTime: new Date(frontmatter.date).toISOString(),
-            modifiedTime: new Date(frontmatter.updated || frontmatter.date).toISOString(),
-            //   authors: frontmatter.author ? [frontmatter.author] : [],
-            section: frontmatter.category,
-            images: []
-        },
-        twitter: {
-            card: 'summary',
-            title,
-            description,
-            creator: appConfig.socials.twitter,
-            images: [],
-        },
-        robots: {
-            index: true,
-            follow: true,
-            nocache: false,
-            googleBot: {
-                index: true,
-                follow: true,
-                noimageindex: false,
-            },
-        },
-    };
-}
 
 export default async function ResourcePage({ params }: PageProps) {
     const resolvedParams = await params;
@@ -114,10 +65,13 @@ export default async function ResourcePage({ params }: PageProps) {
         },
         "articleSection": frontmatter.category,
         "keywords": frontmatter.tags?.join(', ') || '',
-        // "image": frontmatter.image ? {
-        //     "@type": "ImageObject",
-        //     "url": frontmatter.image
-        // } : undefined
+        "image": appConfig.flags.enableOgImage ? {
+            "@type": "ImageObject",
+            "url": `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
+            "width": 1200,
+            "height": 630
+        } : undefined,
+
     };
 
     return (
@@ -153,7 +107,16 @@ export default async function ResourcePage({ params }: PageProps) {
                         Write Your {changeCase(resolvedParams.type, "title")}
                     </ButtonLink>
                 </div>
-                <div className='container max-w-[900px] py-12 md:px-8 mb-4 space-y-5 px-3 lg:px-0'>
+                <div className='container max-w-[900px] py-12 md:px-8 space-y-5 px-3 lg:px-0'>
+                    {appConfig.flags.enableOgImage && (<img
+                        src={`/og/resources/${resolvedParams.type}/${resolvedParams.slug}`}
+                        alt={frontmatter.title}
+                        className="w-full h-auto rounded-lg"
+                        itemProp="image"
+                        itemType="https://schema.org/ImageObject"
+                        loading="lazy"
+
+                    />)}
                     <h1 className="mb-4 text-4xl font-bold text-foreground sm:text-5xl" itemProp="headline">
                         {frontmatter.title}
                     </h1>
@@ -162,11 +125,14 @@ export default async function ResourcePage({ params }: PageProps) {
                         {frontmatter.summary}
                     </p>
                     <div className="flex flex-col gap-4 px-4 text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
-                        {/* <Author /> */}
                         <a
                             href={frontmatter.author?.url || appConfig.authors[0].url}
                             className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-foreground/5"
                             aria-description="Author"
+                            title='Author Profile'
+                            itemProp="author"
+                            itemScope
+                            itemType="https://schema.org/Person"
                         >
                             <Avatar>
                                 <AvatarImage
@@ -175,6 +141,9 @@ export default async function ResourcePage({ params }: PageProps) {
                                     role="presentation"
                                     loading="lazy"
                                     src={frontmatter.author?.image || appConfig.authors[0].image}
+                                    itemProp="image"
+                                    itemType="https://schema.org/ImageObject"
+
                                 />
                                 <AvatarFallback>
                                     {frontmatter.author?.name?.charAt(0) || 'A'}
@@ -183,17 +152,16 @@ export default async function ResourcePage({ params }: PageProps) {
                             </Avatar>
 
                             <div>
-                                <p className="font-semibold text-foreground">{frontmatter.author?.name}</p>
+                                <p className="font-semibold text-foreground"
+                                    itemProp="name"
+                                    itemType="https://schema.org/Person"
+                                > {frontmatter.author?.name}</p>
                                 <p className="text-xs text-muted-foreground">{frontmatter.author?.handle || '@kanakkholwal'}</p>
                             </div>
                         </a>
-                        {frontmatter.date && (
-                            <p className="text-sm font-medium text-muted-foreground">
-                                {new Date(frontmatter.date).toLocaleDateString('en-GB', {
-                                    dateStyle: 'long'
-                                })}
-                            </p>
-                        )}
+                        <p className="text-sm font-medium text-muted-foreground">
+                            {frontmatter.readingTime}
+                        </p>
                     </div>
                     <div className="text-sm text-muted-foreground">
                         <span itemProp="publisher" itemScope itemType="https://schema.org/Organization">
@@ -201,7 +169,7 @@ export default async function ResourcePage({ params }: PageProps) {
                         </span>
 
                         Published under
-                        <Badge size="sm" className='px-1 mx-1' itemProp="articleSection">
+                        <Badge size="sm" className='px-1 mx-1 capitalize' itemProp="articleSection">
                             {frontmatter.category}
                         </Badge>
                         on
@@ -213,12 +181,12 @@ export default async function ResourcePage({ params }: PageProps) {
                             })}
                         </Badge>
                     </div>
-                    <hr className="my-4" />
+                    <hr className="mt-4" />
 
                 </div>
 
                 <article
-                    className="prose mx-auto p-6 dark:prose-invert prose-sm max-w-3xl bg-card rounded-lg"
+                    className="prose mx-auto p-6 dark:prose-invert  container max-w-[900px] bg-card rounded-lg"
                     itemProp="articleBody"
                 >
                     <ClientMdx mdxSource={mdxSource} />
@@ -261,4 +229,65 @@ export default async function ResourcePage({ params }: PageProps) {
             </main>
         </>
     );
+}
+
+export async function generateMetadata(
+    { params }: PageProps,
+    parent: ResolvingMetadata
+): Promise<Metadata> {
+    const resolvedParams = await params;
+    const resourceMeta = await getResourceBySlug(resolvedParams.type, resolvedParams.slug);
+    if (!resourceMeta) notFound();
+
+    const { frontmatter } = resourceMeta;
+
+    const title = `${frontmatter.title} • ${changeCase(resolvedParams.type, "title")} • ${(await parent).title}`;
+    const description = frontmatter.summary || "Explore our resources";
+    const resourceUrl = `${appConfig.url}/resources/${resolvedParams.type}/${resolvedParams.slug}`;
+    return {
+        title,
+        description,
+        alternates: {
+            canonical: resourceUrl,
+        },
+        openGraph: {
+            title,
+            description,
+            url: resourceUrl,
+            type: 'article',
+            publishedTime: new Date(frontmatter.date).toISOString(),
+            modifiedTime: new Date(frontmatter.updated || frontmatter.date).toISOString(),
+            //   authors: frontmatter.author ? [frontmatter.author] : [],
+            section: frontmatter.category,
+
+            images: appConfig.flags.enableOgImage ? [{
+                url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
+                alt: frontmatter.title,
+                width: 1200,
+                height: 630,
+            }] : []
+        },
+        twitter: {
+            card: 'summary',
+            title,
+            description,
+            creator: appConfig.socials.twitter,
+            images: appConfig.flags.enableOgImage ? [{
+                url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
+                alt: frontmatter.title,
+                width: 1200,
+                height: 630,
+            }] : []
+        },
+        robots: {
+            index: true,
+            follow: true,
+            nocache: false,
+            googleBot: {
+                index: true,
+                follow: true,
+                noimageindex: false,
+            },
+        },
+    };
 }

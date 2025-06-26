@@ -38,7 +38,7 @@ export const compileMdxSource = async (content: string): Promise<MDXRemoteSerial
   try {
 
     const mdxSource = await serialize(content, {
-      parseFrontmatter: false, // Enable frontmatter parsing
+      parseFrontmatter: true, // Enable frontmatter parsing
       mdxOptions: {
         // You can add any additional MDX options here if needed
         remarkPlugins: [remarkGfm], // Enable GitHub Flavored Markdown
@@ -100,11 +100,7 @@ export async function getMDXBySlug(
   const mdxSource = await compileMdxSource(source);
   const frontmatter = matter(source);
   // Validate required frontmatter fields
-  console.log('Frontmatter:', frontmatter.data.slug);
-  // console.log('calculateReadingTime:', calculateReadingTime(mdxSource.compiledSource || ''));
-  // if (typeof frontmatter.data.title !== 'string' || typeof frontmatter.data.slug !== 'string' || typeof frontmatter.data.date !== 'string') {
-  //   throw new Error(`Invalid frontmatter in ${fullPath}`);
-  // }
+  // console.log('Frontmatter:', frontmatter.data);
   frontmatter.data.readingTime = calculateReadingTime(mdxSource.compiledSource || '');
   frontmatter.data.type = type;
 

@@ -1,4 +1,4 @@
-import type { NextRequest } from "next/server";
+import { MetadataRoute } from "next";
 import { appConfig } from "~/project.config";
 
 const BASE_URL = appConfig.url
@@ -20,27 +20,27 @@ const staticRoutes = [
 // Use a consistent lastmod date (e.g., build time)
 const LASTMOD = new Date().toISOString();
 
-export async function GET(request: NextRequest) {
+export default function sitemap(): MetadataRoute.Sitemap {
     // Optionally, fetch dynamic routes here (e.g., blog posts)
     // const dynamicRoutes = await fetchDynamicRoutes();
 
-    const sitemap = generateSiteMap([
-        ...staticRoutes.map((route) => ({
-            ...route,
-            date: LASTMOD,
-            priority: route.path === '/' ? 1 : 0.8,
-            changefreq: 'daily',
+    // const sitemap = generateSiteMap([
+    //     ...staticRoutes.map((route) => ({
+    //         ...route,
+    //         date: LASTMOD,
+    //         priority: route.path === '/' ? 1 : 0.8,
+    //         changefreq: 'daily',
 
-        })),
-        // ...dynamicRoutes
-    ]);
+    //     })),
+    //     // ...dynamicRoutes
+    // ]);
 
-    return new Response(sitemap, {
-        status: 200,
-        headers: {
-            "Content-Type": "text/xml",
-        },
-    });
+    return staticRoutes.map((route) => ({
+        date: LASTMOD,
+        priority: route.path === '/' ? 1 : 0.8,
+        changefreq: 'daily',
+        url: BASE_URL + escapeXml(route.path)
+    }));
 }
 
 function escapeXml(unsafe: string) {

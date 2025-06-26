@@ -175,6 +175,10 @@ export const appConfig = {
         "priceCurrency": "INR"
       }
     }
+  },
+
+  flags:{
+    enableOgImage: false, // Enable Open Graph image generation
   }
 };
 
