@@ -8,11 +8,11 @@ import { appConfig } from '~/project.config'
 import { changeCase } from '~/utils/string'
 
 // Image metadata
-export const size = {
+const size = {
   width: 1200,
   height: 675
 }
-export const contentType = 'image/png'
+const contentType = 'image/png'
 export const dynamic = 'force-static'
 
 const { fonts, images } = await loadResources()
