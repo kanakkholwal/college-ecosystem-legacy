@@ -22,9 +22,12 @@ const { fonts, images } = await loadResources()
 // Image generation
 export async function GET(
   request: Request,
-  { params }: { params: { slugs: string[] } }
+  { params }: { params: Promise<{ slugs: string[] }> }
 ) {
-  const slugs = params.slugs
+  const slugs = (await params).slugs
+  if (slugs.length < 2) {
+    return notFound()
+  }
   const type = slugs[1] as ResourceType
   const slug = slugs.slice(2).join('/')
   const page = await getResourceBySlug(type, slug)
@@ -98,7 +101,7 @@ export async function GET(
               fontWeight: 500
             }}
           >
-            {changeCase(type,"title")}
+            {changeCase(type, "title")}
           </p>
         </header>
         <h1
