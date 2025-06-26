@@ -100,13 +100,13 @@ export async function getMDXBySlug(
   const mdxSource = await compileMdxSource(source);
   const frontmatter = matter(source);
   // Validate required frontmatter fields
-  console.log('Frontmatter:', frontmatter.data);
-  console.log('calculateReadingTime:', calculateReadingTime(mdxSource.compiledSource || ''));
+  console.log('Frontmatter:', frontmatter.data.slug);
+  // console.log('calculateReadingTime:', calculateReadingTime(mdxSource.compiledSource || ''));
   // if (typeof frontmatter.data.title !== 'string' || typeof frontmatter.data.slug !== 'string' || typeof frontmatter.data.date !== 'string') {
   //   throw new Error(`Invalid frontmatter in ${fullPath}`);
   // }
-  // frontmatter.data.readingTime = calculateReadingTime(mdxSource.compiledSource || '');
-  // frontmatter.data.type = type;
+  frontmatter.data.readingTime = calculateReadingTime(mdxSource.compiledSource || '');
+  frontmatter.data.type = type;
 
   return {
     mdxSource,
