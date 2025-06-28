@@ -1,33 +1,13 @@
 import type { NextFunction, Request, Response } from "express";
 import express from "express";
-// import rateLimit from "express-rate-limit";
-import cors from "cors";
 import { config } from "./config";
 import httpRoutes from "./routes/httpRoutes";
-// const limiter = rateLimit({
-//   windowMs: 15 * 60 * 1000, // 15 minutes
-//   max: 100, // limit each IP to 100 requests per windowMs
-// });
+
 const app = express();
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors({
-  // origin: (origin, callback) => {
-  //   if (!origin || config.corsOrigins.some((o) => origin.endsWith(o))) {
-  //     callback(null, true);
-  //   } else {
-  //     callback(new Error("CORS policy does not allow this origin"));
-  //   }
-  // },
-  origin:"*",
-  optionsSuccessStatus: 200, // For legacy browser support
-  methods: "GET,POST,OPTIONS,PUT,DELETE",
-  allowedHeaders: "Content-Type,X-Identity-Key,X-Authorization",
-  credentials: true,
-}));
-// app.use(limiter);
 
 // Default route
 app.get("/", (req, res) => {
@@ -46,10 +26,11 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
   const identityKey = req.header("X-Identity-Key") || "";
   const authorization = req.header("X-Authorization") || "";
   // Allow server-to-server calls with X-Identity-Key,X-Authorization
-  console.log(` Identity Key: ${identityKey}, Authorization: ${authorization}`);
+  console.log(`origin: ${origin}, Identity Key: ${identityKey}, Authorization: ${authorization}`);
   // Server-to-server calls with X-Identity-Key,X-Authorization
   
   if (!origin) {
+    
     console.warn("CORS request without origin, skipping CORS headers");
     if (authorization === SERVER_IDENTITY) {
       next();
@@ -60,8 +41,20 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
       .json({ error:"Missing or invalid Authorization headers",data: null });
     return;
   }
-  console.log(`CORS request from origin: ${origin}`);
+  console.log(`CORS request from origin: ${origin}`,authorization === SERVER_IDENTITY);
   if (authorization === SERVER_IDENTITY) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type,X-Identity-Key,X-Authorization"
+    );
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    // If the request method is OPTIONS, respond with 204 No Content
+    if (req.method === "OPTIONS") {
+      res.status(204).end();
+      return; // Explicitly end processing here
+    }
     next();
     return; // Explicitly end processing here
   }

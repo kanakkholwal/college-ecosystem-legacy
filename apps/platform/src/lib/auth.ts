@@ -248,7 +248,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
       message: string;
       data: ResultType | null;
       error?: string | null;
-    }>("/api/results/:rollNo/get", {
+    }>("/api/results/:rollNo", {
       method: "GET",
       params: {
         rollNo: username,
