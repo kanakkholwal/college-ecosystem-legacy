@@ -777,7 +777,7 @@ const getHostelStudentSchema = z.object({
 
 export async function getHostelStudent(
   payload: z.infer<typeof getHostelStudentSchema>
-): Promise<HostelStudentJson> {
+): Promise<HostelStudentJson | null> {
   const response = getHostelStudentSchema.safeParse(payload);
   if (!response.success) {
     return Promise.reject("Invalid schema has passed");
@@ -808,6 +808,6 @@ export async function getHostelStudent(
     return Promise.resolve(JSON.parse(JSON.stringify(hostelStudent)));
   } catch (err) {
     console.log("Failed to fetch student", err);
-    return Promise.reject("Failed to fetch student");
+    return Promise.resolve(null);
   }
 }
