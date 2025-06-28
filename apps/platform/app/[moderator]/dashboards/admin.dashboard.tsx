@@ -21,6 +21,7 @@ import {
 import { ROLES_LIST } from "~/constants";
 import { DEPARTMENTS_LIST, getDepartmentCode } from "~/constants/departments";
 import { changeCase } from "~/utils/string";
+import { extractVisitorCount } from '~/lib/github';
 
 export default async function AdminDashboard() {
   const {
@@ -34,6 +35,7 @@ export default async function AdminDashboard() {
   const usersByRole = await getUsersByRole();
   const usersByDepartment = await getUsersByDepartment();
   const activeSessions = await getActiveSessions();
+  const visitors = await extractVisitorCount()
 
   return (
     <div className="space-y-6 my-5">
@@ -70,10 +72,10 @@ export default async function AdminDashboard() {
               <p className="text-xs text-muted-foreground">
                 <span
                   className={`${userTrend === 1
-                      ? "text-green-500"
-                      : userTrend === -1
-                        ? "text-red-500"
-                        : "text-primary/80"
+                    ? "text-green-500"
+                    : userTrend === -1
+                      ? "text-red-500"
+                      : "text-primary/80"
                     } text-base`}
                 >
                   {userTrend === 1 ? (
@@ -106,8 +108,8 @@ export default async function AdminDashboard() {
               title="Total Visitors"
               Icon={<Eye className="inline-block mr-2 size-4" />}
             >
-              <p className="text-3xl mt-auto">
-                {/* eslint-disable @next/next/no-img-element */}
+              {/* eslint-disable @next/next/no-img-element */}
+              {/* <p className="text-3xl mt-auto">
                 <img
                   height={20}
                   width={80}
@@ -116,7 +118,11 @@ export default async function AdminDashboard() {
                   className="inline-block font-inherit h-4"
                   loading="lazy"
                 />
-              </p>
+              </p> */}
+              <NumberTicker
+                value={visitors}
+                className="text-3xl font-bold text-primary"
+              />
               <p className="text-xs text-muted-foreground">
                 Total visitors to the portal
               </p>
