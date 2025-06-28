@@ -29,6 +29,7 @@ import type {
 import { orgConfig } from "~/project.config";
 import { changeCase } from "~/utils/string";
 import { sendMailUpdate } from "./actions";
+import z from "zod";
 
 const availableMethods = [
   "getResultByRollNoFromSite",
@@ -275,7 +276,12 @@ export function MailResultUpdateDiv() {
     }
     setLoading(true);
     try {
-      toast.promise(sendMailUpdate(targets.split(",").map((email) => email.trim() + orgConfig.mailSuffix)
+      toast.promise(sendMailUpdate(targets.split(",").map((email) => {
+        if (z.string().email().safeParse(email.trim()).success) {
+          return email.trim();
+        }
+        return email.trim() + orgConfig.mailSuffix;
+      })
       .map((email) => email.toLowerCase())), {
         loading: "Sending mail...",
         success: "Mail sent successfully",
