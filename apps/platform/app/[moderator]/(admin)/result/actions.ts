@@ -83,7 +83,7 @@ export async function sendMailUpdate(targets: string[]) {
       body: JSON.stringify({
         template_key: "result_update",
         targets: validTargets.map((email) => email.toLowerCase()),
-        subject: "Semester Result Notification",
+        subject: `NITH Semester Results for ${new Date().getFullYear() - 1}-${new Date().getFullYear()} Batch Now Available`,
         payload: {
           batch: "Academic Year " + (new Date().getFullYear() - 1) + "-" + new Date().getFullYear(),
         },
