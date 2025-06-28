@@ -234,6 +234,7 @@ export async function getListOfRollNos(list_type: listType): Promise<Set<string>
     switch (list_type) {
         case LIST_TYPE.BACKLOG: {
             const results = await ResultModel.find({ "semesters.courses.cgpi": 0 })
+                .allowDiskUse(true)
                 .select("rollNo updatedAt")
                 .sort("updatedAt");
             return new Set(results.map((r) => r.rollNo));
@@ -256,7 +257,7 @@ export async function getListOfRollNos(list_type: listType): Promise<Set<string>
                         }
                     ]
                 }
-            }).select("rollNo updatedAt");
+            }).select("rollNo updatedAt").allowDiskUse(true)
             return new Set(results.map((r) => r.rollNo));
         }
 
@@ -264,7 +265,7 @@ export async function getListOfRollNos(list_type: listType): Promise<Set<string>
             const results = await ResultModel.find({
                 programme: "Dual Degree",
                 $expr: { $gt: [{ $size: "$semesters" }, 6] }
-            }).select("rollNo updatedAt");
+            }).select("rollNo updatedAt").allowDiskUse(true);
             return new Set(results.map((r) => r.rollNo));
         }
 
@@ -283,7 +284,7 @@ export async function getListOfRollNos(list_type: listType): Promise<Set<string>
                         maxRollNo: { $last: "$rollNo" }
                     }
                 }
-            ]);
+            ]).allowDiskUse(true)
 
             function extractPrefixSuffix(rollNo: string): { prefix: string; number: number } {
                 const match = rollNo.match(/^(\D+)(\d+)$/) || rollNo.match(/^(\d+\D+)(\d+)$/);
@@ -323,7 +324,8 @@ export async function getListOfRollNos(list_type: listType): Promise<Set<string>
         case LIST_TYPE.ALL: {
             const results = await ResultModel.find({})
                 .select("rollNo updatedAt")
-                .sort("updatedAt");
+                .sort("updatedAt")
+                .allowDiskUse(true);
             return new Set(results.map((r) => r.rollNo));
         }
 
