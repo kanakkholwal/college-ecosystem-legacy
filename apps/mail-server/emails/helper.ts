@@ -20,6 +20,9 @@ export const handleEmailFire = async (from: string, data: MailerPayload) => {
     headers: {
       "X-Mailer": appConfig.name,
       'List-Unsubscribe': `<mailto:unsubscribe@${appConfig.appDomain}>`,
+      'Precedence': 'bulk',
+      'X-Auto-Response-Suppress': 'All',
+      'Auto-Submitted': 'auto-generated',
     },
   });
 };
