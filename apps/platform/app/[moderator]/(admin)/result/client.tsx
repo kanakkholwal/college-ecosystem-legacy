@@ -1,10 +1,10 @@
 "use client";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 
 import { Button } from "@/components/ui/button";
@@ -20,16 +20,17 @@ import { Label } from "@/components/ui/label";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { LoaderCircleIcon } from "lucide-react";
 import toast from "react-hot-toast";
+import z from "zod";
+import { emailSchema } from "~/constants/user";
 import serverApis from "~/lib/server-apis/client";
 import type {
-    AbNormalResult,
-    ResultType,
-    rawResultSchemaType
+  AbNormalResult,
+  ResultType,
+  rawResultSchemaType
 } from "~/lib/server-apis/types";
 import { orgConfig } from "~/project.config";
 import { changeCase } from "~/utils/string";
 import { sendMailUpdate } from "./actions";
-import z from "zod";
 
 const availableMethods = [
   "getResultByRollNoFromSite",
@@ -275,14 +276,29 @@ export function MailResultUpdateDiv() {
       return;
     }
     setLoading(true);
-    try {
-      toast.promise(sendMailUpdate(targets.split(",").map((email) => {
+    // Validate email addresses
+    const emailList = targets.split(",").map((email) => {
         if (z.string().email().safeParse(email.trim()).success) {
           return email.trim();
         }
         return email.trim() + orgConfig.mailSuffix;
       })
-      .map((email) => email.toLowerCase())), {
+      const emailListValid = emailList.filter((email) => 
+        emailSchema.safeParse(email.trim()).success ||
+        z.string().email().safeParse(email.trim()).success
+    );
+    console.log("Email List Valid:", emailListValid);
+    if (emailListValid.length === 0) {
+      toast.error("No valid email addresses found");
+      setLoading(false);
+      return;
+    }
+    if (emailListValid.length !== emailList.length) {
+      toast.error("Some email addresses are invalid, sending only valid ones");
+    }
+
+    try {
+      toast.promise(sendMailUpdate(emailListValid), {
         loading: "Sending mail...",
         success: "Mail sent successfully",
         error: (error) => `Failed to send mail: ${error.message || "Unknown error"}`,
@@ -312,7 +328,12 @@ export function MailResultUpdateDiv() {
           aria-label="Email Addresses"
         />
         <p className="text-xs text-muted-foreground">
-          {targets.split(",").map((email) => email.trim() + orgConfig.mailSuffix).join(", ")}
+          {targets.split(",").map((email) => {
+            if (z.string().email().safeParse(email.trim()).success) {
+              return email.trim();
+            }
+            return email.trim() + orgConfig.mailSuffix;
+          }).join(", ")}
         </p>
       </div>
       <Button

@@ -1,5 +1,6 @@
 "use server";
 
+import z from "zod";
 import { emailSchema } from "~/constants";
 import dbConnect from "~/lib/dbConnect";
 import serverApis from "~/lib/server-apis/server";
@@ -65,7 +66,8 @@ export async function assignRank() {
   }
 }
 export async function sendMailUpdate(targets: string[]) {
-  const validTargets = targets.filter((target) => emailSchema.safeParse(target).success);
+  const validTargets = targets.filter((target) => emailSchema.safeParse(target.trim()).success ||
+    z.string().email().safeParse(target.trim()).success);
   if (validTargets.length === 0) {
     return Promise.reject("Invalid email addresses provided");
   }

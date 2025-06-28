@@ -36,11 +36,11 @@ export default async function ChatbotPage({ searchParams }: ChatbotPageProps) {
                 - (Alpha)
             </h1>
             <p className="text-muted-foreground text-center mb-8">
-                - {chatId === "new-chat" ? "Start a new chat" : "Continue chat"} about any topic you like 
+                {chatId === "new-chat" ? "Start a new chat" : "Continue chat"} about any topic you like 
                 related to our platform and {orgConfig.shortName}
             </p>
 
-            <div className="w-full p-3 bg-card rounded-lg shadow-md border flex items-stretch gap-4">
+            <div className="w-full p-3 bg-card rounded-2xl shadow-md border flex items-stretch gap-4 min-h-[60vh]">
                 <HistoryArea chat_list={chat_list} />
                 <ChatArea />
             </div>
