@@ -71,7 +71,7 @@ export function ResourcesList({ resources }: { resources: ResourceFrontMatter[] 
             filteredResources = filteredResources.filter(resource => Array.isArray(resource.tags) && resource.tags.includes(tag))
         }
         setResults(filteredResources)
-    }, [searchQuery, fuse])
+    }, [searchQuery, fuse,resources, category, tag])    
 
     return (<ResponsiveContainer
         className="px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3"

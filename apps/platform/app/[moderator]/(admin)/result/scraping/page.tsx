@@ -139,6 +139,8 @@ export default function ScrapeResultPage() {
           headers: {
             ...init.headers,
             ...authHeaders,
+            "X-Identity-Key": authHeaders["X-Identity-Key"],
+            "X-Authorization": authHeaders["X-Authorization"],
           },
         }),
     });

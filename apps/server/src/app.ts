@@ -25,23 +25,35 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
   const origin = req.header("Origin") || req.header("Referrer") || "";
   const identityKey = req.header("X-Identity-Key") || "";
   const authorization = req.header("X-Authorization") || "";
-  // Allow server-to-server calls with X-Identity-Key,X-Authorization
-  console.log(`origin: ${origin}, Identity Key: ${identityKey}, Authorization: ${authorization}`);
-  // Server-to-server calls with X-Identity-Key,X-Authorization
-  
-  if (!origin) {
-    
-    console.warn("CORS request without origin, skipping CORS headers");
-    if (authorization === SERVER_IDENTITY) {
-      next();
-      return;
+
+  // 1. Handle preflight requests first
+  if (req.method === "OPTIONS") {
+    if (origin) {
+      res.setHeader("Access-Control-Allow-Origin", origin);
+      res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
+      res.setHeader(
+        "Access-Control-Allow-Headers",
+        "Content-Type,X-Identity-Key,X-Authorization"
+      );
+      res.setHeader("Access-Control-Allow-Credentials", "true");
     }
-    res
-      .status(403)
-      .json({ error:"Missing or invalid Authorization headers",data: null });
+    res.status(204).end(); // Respond to preflight
     return;
   }
-  console.log(`CORS request from origin: ${origin}`,authorization === SERVER_IDENTITY);
+
+  // 2. Handle regular requests
+  console.log(`Origin: ${origin}, Identity Key: ${identityKey}, Authorization: ${authorization}`);
+
+  if (!origin) {
+    console.warn("Request without origin");
+    if (authorization === SERVER_IDENTITY) {
+      next();
+    } else {
+      res.status(403).json({ error: "Missing or invalid authorization", data: null });
+    }
+    return;
+  }
+
   if (authorization === SERVER_IDENTITY) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,PUT,DELETE");
@@ -50,19 +62,12 @@ app.use((req: Request, res: Response, next: NextFunction): void => {
       "Content-Type,X-Identity-Key,X-Authorization"
     );
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    // If the request method is OPTIONS, respond with 204 No Content
-    if (req.method === "OPTIONS") {
-      res.status(204).end();
-      return; // Explicitly end processing here
-    }
     next();
-    return; // Explicitly end processing here
+  } else {
+    console.warn(`CORS request from disallowed origin: ${origin}`);
+    res.status(403).json({ error: "CORS policy: Invalid credentials", data: null });
   }
-  // If the origin is not allowed, block the request
-  console.warn(`CORS request from disallowed origin: ${origin}`);
-  res.status(403).json({ error: "CORS policy does not allow this origin", data: null });
 });
-
 // Routes
 app.use("/api", httpRoutes);
 
