@@ -259,6 +259,7 @@ async function getUserInfo(email: string): Promise<getUserInfoReturnType> {
     console.log(response?.data ? "has result" : "No result");
 
     if (!response?.data) {
+      console.log("Result not found for roll number:", username);
       throw new APIError("UPGRADE_REQUIRED", {
         message: "Result not found for the given roll number | Contact admin",
       });
