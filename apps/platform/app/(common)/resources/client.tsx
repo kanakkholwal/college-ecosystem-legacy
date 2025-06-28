@@ -2,7 +2,9 @@
 import ResourceCard from '@/components/application/resource-card'
 import { ResponsiveContainer } from '@/components/common/container'
 import { Button } from '@/components/ui/button'
+import Fuse from 'fuse.js'
 import { parseAsStringEnum, useQueryState } from 'nuqs'
+import { useEffect, useMemo, useState } from 'react'
 import { ResourceFrontMatter } from '~/lib/mdx'
 
 
@@ -29,31 +31,68 @@ export function CategoryFilter({ categories }: { categories: string[] }) {
 
 export function ResourcesList({ resources }: { resources: ResourceFrontMatter[] }) {
     const [category, _] = useQueryState('category', parseAsStringEnum(resources.map(r => r.category || '')))
+    const [searchQuery, __] = useQueryState('q', {
+        throttleMs: 500, // Debounce typing
+        defaultValue: '',
+    })
+    const [tag, setTag] = useQueryState('tag')
+    const [results, setResults] = useState<ResourceFrontMatter[]>([])
+
+    // Memoized Fuse.js instance
+    const fuse = useMemo(() => {
+        return new Fuse(resources, {
+            keys: ['title', 'summary', 'content', 'tags'],
+            includeMatches: true,
+            minMatchCharLength: 2,
+            threshold: 0.4,
+            isCaseSensitive: false,
+            shouldSort: true,
+            useExtendedSearch: true,
+            distance: 100,
+            ignoreLocation: true,
+        })
+    }, [])
+    useEffect(() => {
+        let filteredResources: ResourceFrontMatter[] = []
+        if (searchQuery && searchQuery.trim().length > 2) {
+            const searchResults = fuse.search(searchQuery)
+            if (searchResults.length > 0) {
+                filteredResources = searchResults.map(result => result.item)
+            } else {
+                setResults([])
+            }
+        } else {
+            filteredResources = resources
+        }
+        if (category && category.trim() !== '') {
+            filteredResources = filteredResources.filter(resource => resource.category?.toLowerCase() === category.toLowerCase())
+        }
+        if (tag && tag.trim() !== '') {
+            filteredResources = filteredResources.filter(resource => Array.isArray(resource.tags) && resource.tags.includes(tag))
+        }
+        setResults(filteredResources)
+    }, [searchQuery, fuse])
 
     return (<ResponsiveContainer
         className="px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3"
         role="list"
         aria-label="List of resources"
     >
-        {resources
-        .filter((frontmatter) =>  {
-            if (!category || category === '') return true
-            return frontmatter.category?.toLowerCase() === category.toLowerCase()
-        })
-        .map((frontmatter) => (
-            <div key={frontmatter.slug} role="listitem">
-                <ResourceCard
-                    type={frontmatter.type || 'misc'}
-                    title={frontmatter.title}
-                    slug={frontmatter.slug}
-                    summary={frontmatter.summary}
-                    tags={frontmatter.tags}
-                    coverImage={frontmatter.coverImage}
-                    date={frontmatter.date}
-                    readingTime={frontmatter.readingTime}
-                    category={frontmatter.category}
-                />
-            </div>
-        ))}
+        {results
+            .map((frontmatter) => (
+                <div key={frontmatter.slug} role="listitem">
+                    <ResourceCard
+                        type={frontmatter.type || 'misc'}
+                        title={frontmatter.title}
+                        slug={frontmatter.slug}
+                        summary={frontmatter.summary}
+                        tags={frontmatter.tags}
+                        coverImage={frontmatter.coverImage}
+                        date={frontmatter.date}
+                        readingTime={frontmatter.readingTime}
+                        category={frontmatter.category}
+                    />
+                </div>
+            ))}
     </ResponsiveContainer>)
 }

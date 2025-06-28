@@ -124,7 +124,7 @@ export default async function ResourcePage({ params }: PageProps) {
                     <p className="text-lg text-muted-foreground mb-3 line-clamp-3" itemProp="abstract">
                         {frontmatter.summary}
                     </p>
-                    <div className="flex flex-col gap-4 px-4 text-sm sm:flex-row sm:items-center sm:justify-between lg:px-8">
+                    <div className="flex gap-4 px-4 text-sm items-center justify-between lg:px-8">
                         <a
                             href={frontmatter.author?.url || appConfig.authors[0].url}
                             className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-foreground/5"
@@ -182,6 +182,7 @@ export default async function ResourcePage({ params }: PageProps) {
                                 day: 'numeric',
                             })}
                         </Badge>
+
                     </div>
                     <hr className="mt-4" />
 
@@ -192,6 +193,18 @@ export default async function ResourcePage({ params }: PageProps) {
                     itemProp="articleBody"
                 >
                     <ClientMdx mdxSource={mdxSource} />
+                    <p className='text-sm text-muted-foreground mt-4 pt-4 border-t'>
+                        Tags:
+                        {frontmatter.tags?.length ? (
+                            frontmatter.tags.map((tag, index) => (
+                                <Badge size="sm" key={index} className="ml-2">
+                                    #{tag}
+                                </Badge>
+                            ))
+                        ) : (
+                            <span className="text-muted-foreground">No tags available</span>
+                        )}
+                    </p>
                 </article>
 
                 <div className="flex justify-between items-center flex-wrap text-xs text-muted-foreground bg-card p-3 rounded-lg mt-8 max-w-3xl mx-auto ">

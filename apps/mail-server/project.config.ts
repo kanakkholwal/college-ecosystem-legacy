@@ -21,8 +21,8 @@ export const appConfig = {
     github: "https://github.com/kanakkholwal"
   },
   // sender email
-  senderEmail: `platform@nith.ac.in`,
-  sender: `College Platform <platform@nith.ac.in>`,
+  senderEmail: `21dec026@nith.ac.in`,
+  sender: `College Platform <21dec026@nith.ac.in>`,
   contact:"https://forms.gle/PXbaDm9waeJWYWUP8",
   
 } as const;

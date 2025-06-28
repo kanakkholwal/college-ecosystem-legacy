@@ -30,18 +30,39 @@ export async function getRepoStarGazers(repoUri = appConfig.githubUri): Promise<
         return 0;
     }
 }
+export async function extractVisitorCount(): Promise<number> {
+    const url = 'https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge';
 
+    try {
+        const response = await fetch(url);
+        const svgText = await response.text();
+
+        // Use regex to extract the number from the SVG text
+        const countMatch = svgText.match(/<text[^>]*x="711\.0"[^>]*>(\d+)<\/text>/);
+        if (countMatch && countMatch[1]) {
+            return parseInt(countMatch[1], 10);
+        }
+
+        throw new Error('Visitor count not found in SVG');
+    } catch (error) {
+        console.error('Error extracting visitor count:', error);
+        throw error;
+    }
+}
 export async function getRepoStats(repoUri = appConfig.githubUri): Promise<StatsData> {
     try {
         const response = await githubApiFetch<RepoData>(`/repos/${repoUri}`);
         if (response.error) {
             return Promise.reject(response.error);
         }
+
+
         return {
             stars: response.data.stargazers_count || 0,
             forks: response.data.forks_count || 0,
             contributors: response.data.subscribers_count || 0, // Assuming subscribers as contributors
-        }
+            visitors: await extractVisitorCount()
+        };
     } catch (error) {
         console.error("Error fetching GitHub repository data:", error);
         return Promise.reject(error);
@@ -74,6 +95,7 @@ type StatsData = {
     stars: number;
     forks: number;
     contributors: number;
+    visitors: number
 }
 
 export interface RepoData {
@@ -192,24 +214,24 @@ export interface License {
 }
 
 export interface Contributor {
-  login: string
-  id: number
-  node_id: string
-  avatar_url: string
-  gravatar_id: string
-  url: string
-  html_url: string
-  followers_url: string
-  following_url: string
-  gists_url: string
-  starred_url: string
-  subscriptions_url: string
-  organizations_url: string
-  repos_url: string
-  events_url: string
-  received_events_url: string
-  type: string
-  user_view_type: string
-  site_admin: boolean
-  contributions: number
+    login: string
+    id: number
+    node_id: string
+    avatar_url: string
+    gravatar_id: string
+    url: string
+    html_url: string
+    followers_url: string
+    following_url: string
+    gists_url: string
+    starred_url: string
+    subscriptions_url: string
+    organizations_url: string
+    repos_url: string
+    events_url: string
+    received_events_url: string
+    type: string
+    user_view_type: string
+    site_admin: boolean
+    contributions: number
 }

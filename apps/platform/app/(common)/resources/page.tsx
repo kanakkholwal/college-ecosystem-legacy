@@ -91,7 +91,7 @@ export default async function Page() {
           filterDialogTitle="Filter Resources"
           filterDialogDescription="Filter resources by type, category, or tags to find exactly what you need."
           searchParamsKey="q"
-          disabled={true}
+          // disabled={true}
           filterOptions={[
             {
               key: 'type',
