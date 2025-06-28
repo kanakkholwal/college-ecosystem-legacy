@@ -16,6 +16,7 @@ export const handleEmailFire = async (from: string, data: MailerPayload) => {
 
   return await transporter.sendMail({
     from: from, // 'Sender Name <sender@server.com>'
+    replyTo: from, // Optional: Set reply-to to the sender
     ...res.data, // to, subject, html
     headers: {
       "X-Mailer": appConfig.name,

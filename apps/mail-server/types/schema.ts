@@ -12,6 +12,7 @@ export const requestPayloadSchema = z.object({
     subject: z.string(),
     template_key: z.string(),
     payload: emailPayloadSchema,
+    text: z.string().optional(),
 })
 export type RequestPayload = z.infer<typeof requestPayloadSchema>;
 
@@ -19,6 +20,7 @@ export const mailerPayloadSchema = z.object({
     to: z.array(z.string().email()),
     subject: z.string(),
     html: z.string(),
+    text: z.string().optional(),
 })
 
 export type MailerPayload = z.infer<typeof mailerPayloadSchema>

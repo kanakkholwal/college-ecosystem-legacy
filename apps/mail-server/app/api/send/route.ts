@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
         { status: 400, headers: corsHeaders  }
       );
     }
-    const { template_key, targets, subject, payload } = res.data;
+    const { template_key, targets, subject, payload,text } = res.data;
     console.log("Sending email to", targets);
     console.log("Subject", subject);
     console.log("Template", template_key);
@@ -44,6 +44,7 @@ export async function POST(request: NextRequest) {
         to: targets,
         subject: subject,
         html: emailHtml,
+        text: text
       }
     );
     console.log("Email sent", response);
