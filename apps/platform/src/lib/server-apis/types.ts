@@ -143,6 +143,11 @@ export type APITypes = {
         hostels: HostelType[];
       };
     };
+    // hostels/allotment/rooms-from-excel
+    allotRoomsFromExcel: {
+      payload: FormData;
+      response: Blob;
+    };
   };
   faculties: {
     searchByEmail: {

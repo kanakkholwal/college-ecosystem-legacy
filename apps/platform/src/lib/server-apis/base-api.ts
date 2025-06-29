@@ -9,6 +9,7 @@ export interface ApiConfigEntry<P, R> {
     transformParams?: (payload: P) => Record<string, string>;
     transformBody?: (payload: P) => any;
     transformResponse?: (res: unknown) => R;
+    disabled?: boolean;
 }
 
 export type ApiConfigMap<T extends Record<string, ApiConfigEntry<any, any>>> = {

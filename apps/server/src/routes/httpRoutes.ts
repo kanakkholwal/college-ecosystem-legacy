@@ -1,4 +1,6 @@
 import { type RequestHandler, Router } from "express";
+import multer from "multer";
+import { allotRoomsFromExcel } from "../controllers/http-allotment";
 import {
   getDepartments,
   getDepartmentsList,
@@ -27,6 +29,7 @@ import {
 import { resultScrapingSSEHandler, resultScrapingSSEHandlerV2 } from "../controllers/sse-scraping";
 
 const router = Router();
+const upload = multer({ storage: multer.memoryStorage() });
 
 /** UTILS ENDPOINTS */
 
@@ -44,7 +47,10 @@ router.get(
   "/hostels",
   getFunctionaryListByHostelHandler as unknown as RequestHandler
 );
-
+// Endpoint to allot rooms to new students
+router.post(
+  "/hostels/allotment/rooms-from-excel",
+  upload.single("file"), allotRoomsFromExcel as unknown as RequestHandler);
 /** RESULT ENDPOINTS */
 // Endpoint to import freshers results from the json data
 router.post(
@@ -59,7 +65,7 @@ router.post(
 // Endpoint to assign ranks to the results in the database
 router.post(
   "/results/assign-ranks",
-  assignRankToResults 
+  assignRankToResults
 );
 router.post(
   "/results/assign-branch-change",
@@ -72,8 +78,8 @@ router.delete("/results/abnormals", deleteAbNormalResults);
 router.post("/results/bulk/update", bulkUpdateResults);
 router.post("/results/bulk/delete", bulkDeleteResults);
 // Endpoint to get result by rollNo scraped from the website
-router.get("/results/scrape-sse",resultScrapingSSEHandler as unknown as RequestHandler);
-router.get("/results/test",resultScrapingSSEHandlerV2 as unknown as RequestHandler);
+router.get("/results/scrape-sse", resultScrapingSSEHandler as unknown as RequestHandler);
+router.get("/results/test", resultScrapingSSEHandlerV2 as unknown as RequestHandler);
 
 router.post("/results/:rollNo/scrape", getResultByRollNoFromSite);
 // Endpoint to [get,add,update] result by rollNo from the database
@@ -81,6 +87,7 @@ router.get("/results/:rollNo", getResult);
 router.post("/results/:rollNo", addResult);
 router.put("/results/:rollNo", updateResult);
 router.delete("/results/:rollNo", deleteResult);
+
 
 
 

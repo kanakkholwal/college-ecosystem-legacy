@@ -127,7 +127,13 @@ export const hostels:Endpoints["hostels"] = {
     url: "/api/hostels",
     method: "GET",
     transformResponse: (res: unknown) => res as ApiResponse<APITypes["hostels"]["getAll"]["response"]>,
-  }
+  },
+  allotRoomsFromExcel: {
+    url: "/api/hostels/allotment/rooms-from-excel",
+    method: "POST",
+    transformBody: (payload: APITypes["hostels"]["allotRoomsFromExcel"]["payload"]) => payload,
+    transformResponse: (res: unknown) => res as ApiResponse<APITypes["hostels"]["allotRoomsFromExcel"]["response"]>,
+  },
 } as const;
 
 /*

@@ -111,11 +111,19 @@ const getRoutes = (moderator: string, slug: string) =>
       Icon: LuBuilding,
     },
     {
-      title: "Room Allotment",
+      title: "Room Allotment By Cgpi",
       description: "Room allotment feature is under development.",
       // description="Manage room allotment for this hostel"
       Icon: FolderKanban,
       href: `/${moderator}/hostels/${slug}/allotment`,
+      disabled: true, // Disable for now, implement later
+    },
+    {
+      title: "Room Allotment By State Of Entry and Excel",
+      description: "Room allotment feature is under development.",
+      // description="Manage room allotment for this hostel"
+      Icon: FolderKanban,
+      href: `/${moderator}/hostels/${slug}/allotment-by-excel`,
       disabled: true, // Disable for now, implement later
     },
   ] as RouterCardLink[];
