@@ -209,17 +209,17 @@ export const auth = betterAuth({
 			ipAddressHeaders: ["x-client-ip", "x-forwarded-for"],
 			disableIpTracking: false
 		},
-    useSecureCookies: process.env.NODE_ENV === "production",
+    // useSecureCookies: process.env.NODE_ENV === "production",
     // crossSubDomainCookies: {
     //   enabled: process.env.NODE_ENV === "production",
     //   domain: process.env.NODE_ENV === "production" ? appConfig.appDomain : "localhost",
     // },
   },
-  trustedOrigins: [
-    `https://${appConfig.appDomain}`,            
-    `https://*.${appConfig.appDomain}`, 
+  // trustedOrigins: [
+  //   `https://${appConfig.appDomain}`,            
+  //   `https://*.${appConfig.appDomain}`, 
 
-  ],
+  // ],
   plugins: [
     username(),
     admin({
