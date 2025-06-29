@@ -14,7 +14,8 @@ export const UN_PROTECTED_API_ROUTES = [
 
 // Define public routes more cleanly
 const RAW_PUBLIC_ROUTES: RoutePattern[] = [
-    "/",                          // home
+    "/",               // home
+    "/about",
     "/results",
     "/results/:roll",
     "/syllabus",

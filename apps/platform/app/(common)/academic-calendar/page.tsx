@@ -106,7 +106,7 @@ export default async function AcademicCalenderPage(props: Props) {
               key={group.day.toString()}
               step={idx + 1}
               // increment single day by one to avoid timezone issues
-              title={startOfDay(group.day).toLocaleString("en-US", {
+              title={startOfDay(group.day).toLocaleString("en-IN", {
                 weekday: "long",
                 month: "long",
                 day: "numeric",

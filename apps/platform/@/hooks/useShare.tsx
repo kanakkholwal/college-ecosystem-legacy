@@ -1,7 +1,7 @@
 "use client";
 // create a useShare hook with navigator.share() as a fallback
 // https://web.dev/web-share/
-// https://developer.mozilla.org/en-US/docs/Web/API/Navigator/share
+// https://developer.mozilla.org/en-IN/docs/Web/API/Navigator/share
 // https://caniuse.com/web-share
 // https://caniuse.com/web-share-api
 // https://caniuse.com/web-share-target

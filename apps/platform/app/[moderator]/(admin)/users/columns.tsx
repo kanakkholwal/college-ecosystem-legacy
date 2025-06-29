@@ -133,7 +133,7 @@ export const columns: ColumnDef<UserType>[] = [
     ),
     cell: ({ row }) => {
       const formatted = new Date(row.getValue("createdAt")).toLocaleDateString(
-        "en-US",
+        "en-IN",
         {
           year: "numeric",
           month: "long",

@@ -1,5 +1,5 @@
 export function formatNumber(num: number) {
-  const formatter = new Intl.NumberFormat("en-US", {
+  const formatter = new Intl.NumberFormat("en-IN", {
     notation: "compact",
     compactDisplay: "short",
   });

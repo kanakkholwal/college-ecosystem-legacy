@@ -110,7 +110,7 @@ export const columns: ColumnDef<OutPassType>[] = [
     ),
     cell: ({ row }) => {
       const formatted = new Date(row.getValue("updatedAt")).toLocaleDateString(
-        "en-US",
+        "en-IN",
         {
           year: "numeric",
           month: "long",

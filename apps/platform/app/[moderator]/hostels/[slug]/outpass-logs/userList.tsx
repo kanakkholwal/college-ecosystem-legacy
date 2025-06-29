@@ -2,18 +2,18 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
 import type { InferSelectModel } from "drizzle-orm";
@@ -136,7 +136,7 @@ function UserRow({ user }: { user: UserListType }) {
         {user.department}
       </TableCell>
       <TableCell className="font-medium whitespace-nowrap">
-        {new Date(user.createdAt).toLocaleDateString("en-US", {
+        {new Date(user.createdAt).toLocaleDateString("en-IN", {
           year: "numeric",
           month: "long",
           day: "numeric",

@@ -26,8 +26,8 @@ export default function PollComponent({
         <p className="text-sm text-muted-foreground">{poll.description}</p>
       </div>
       <PollRender poll={poll} />
-      <div className="w-full flex items-center gap-2">
-        <span className="rounded-md bg-muted text-muted-foreground px-2 py-1 text-xs inline-flex items-center">
+      <div className="w-full flex items-center gap-2 flex-wrap">
+        <span className="rounded-md bg-muted text-muted-foreground px-2 py-1 text-xs inline-flex items-center whitespace-nowrap">
           <BiUpvote className="mr-1 inline-block size-4" />
           {poll.votes.length} votes
         </span>

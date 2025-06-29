@@ -176,7 +176,7 @@ export default async function ResourcePage({ params }: PageProps) {
                         </Badge>
                         on
                         <Badge size="sm" className='px-1 mx-1' itemProp="datePublished" content={publishedDate}>
-                            {new Date(frontmatter.date).toLocaleDateString('en-US', {
+                            {new Date(frontmatter.date).toLocaleDateString('en-IN', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
@@ -215,7 +215,7 @@ export default async function ResourcePage({ params }: PageProps) {
                             itemProp="dateModified"
                             content={modifiedDate}
                         >
-                            {new Date(frontmatter.updated || frontmatter.date).toLocaleDateString('en-US', {
+                            {new Date(frontmatter.updated || frontmatter.date).toLocaleDateString('en-IN', {
                                 year: 'numeric',
                                 month: 'long',
                                 day: 'numeric',
