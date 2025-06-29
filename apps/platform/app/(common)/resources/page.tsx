@@ -1,7 +1,7 @@
 import { BaseHeroSection } from "@/components/application/base-hero";
 import BaseSearchBox from "@/components/application/base-search";
 import { ButtonLink } from "@/components/utils/link";
-import { ArrowUpRight, Plus } from "lucide-react";
+import { ArrowUpRight, Plus, RssIcon } from "lucide-react";
 import { Metadata } from "next";
 import { getAllResources } from "~/lib/mdx";
 import { appConfig } from "~/project.config";
@@ -72,7 +72,7 @@ export default async function Page() {
       }))
     }
   };
-  const allCategories = [...new Set(resources.filter(r => r.category !== undefined && r.category !== null).map(r => r.category))] as string[]
+  const allCategories = [...new Set(resources.map(r => r.type))] as string[]
   return (
     <>
       {/* Structured Data */}
@@ -135,6 +135,19 @@ export default async function Page() {
         >
           <Plus />
           Write Your Resources
+          <ArrowUpRight />
+        </ButtonLink>
+        <ButtonLink
+          href={`${appConfig.url}/resources/rss.xml`}
+          target="_blank"
+          rel="noopener noreferrer"
+          variant="outline"
+          rounded="full"
+          size="sm"
+          aria-label="Subscribe to RSS Feed"
+        >
+          <RssIcon />
+          Rss Feed
           <ArrowUpRight />
         </ButtonLink>
       </BaseHeroSection>

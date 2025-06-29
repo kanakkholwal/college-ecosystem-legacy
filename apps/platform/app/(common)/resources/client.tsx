@@ -9,7 +9,7 @@ import { ResourceFrontMatter } from '~/lib/mdx'
 
 
 export function CategoryFilter({ categories }: { categories: string[] }) {
-    const [category, setCategory] = useQueryState('category', parseAsStringEnum(categories))
+    const [category, setCategory] = useQueryState('type', parseAsStringEnum(categories))
     return (
         <div className='flex flex-wrap gap-2 mb-4'>
 
@@ -21,7 +21,7 @@ export function CategoryFilter({ categories }: { categories: string[] }) {
                     rounded="full"
                     size="sm"
                 >
-                    {cat || "All Categories"}
+                    {cat || "All Resources"}
                 </Button>
             ))}
 
@@ -35,13 +35,14 @@ export function ResourcesList({ resources }: { resources: ResourceFrontMatter[] 
         throttleMs: 500, // Debounce typing
         defaultValue: '',
     })
-    const [tag, setTag] = useQueryState('tag')
+    const [tag] = useQueryState('tag')
+    const [type] = useQueryState('type', parseAsStringEnum(resources.map(r => r.type || '')))
     const [results, setResults] = useState<ResourceFrontMatter[]>([])
 
     // Memoized Fuse.js instance
     const fuse = useMemo(() => {
         return new Fuse(resources, {
-            keys: ['title', 'summary', 'content', 'tags'],
+            keys: ['title', 'summary', 'content', 'tags','type'],
             includeMatches: true,
             minMatchCharLength: 2,
             threshold: 0.4,
@@ -70,8 +71,11 @@ export function ResourcesList({ resources }: { resources: ResourceFrontMatter[] 
         if (tag && tag.trim() !== '') {
             filteredResources = filteredResources.filter(resource => Array.isArray(resource.tags) && resource.tags.includes(tag))
         }
+        if (type && type.trim() !== '') {
+            filteredResources = filteredResources.filter(resource => resource.type?.toLowerCase() === type.toLowerCase())
+        }
         setResults(filteredResources)
-    }, [searchQuery, fuse,resources, category, tag])    
+    }, [searchQuery, fuse,resources, category, tag,type])    
 
     return (<ResponsiveContainer
         className="px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3"
@@ -82,7 +86,7 @@ export function ResourcesList({ resources }: { resources: ResourceFrontMatter[] 
             .map((frontmatter) => (
                 <div key={frontmatter.slug} role="listitem">
                     <ResourceCard
-                        type={frontmatter.type || 'misc'}
+                        type={frontmatter.type}
                         title={frontmatter.title}
                         slug={frontmatter.slug}
                         summary={frontmatter.summary}

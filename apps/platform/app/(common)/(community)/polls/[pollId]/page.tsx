@@ -56,7 +56,7 @@ export default async function Dashboard({ params }: Props) {
   return (
     <div className="max-w-6xl mx-auto w-full grid justify-start items-start gap-4 grid-cols-1 px-2 lg:px-4 pr-4">
 
-      <div className="md:sticky md:top-4 z-50 w-full mx-1.5 lg:mx-auto flex justify-between items-center gap-2 bg-card px-2 lg:px-4 py-1 lg:py-2 rounded-lg border">
+      <div className="md:sticky md:top-8 z-50 w-full mx-1.5 lg:mx-auto flex justify-between items-center gap-2 bg-card px-2 lg:px-4 py-1 lg:py-2 rounded-lg border">
         <Button variant="ghost" size="sm" asChild>
           <Link href="/polls">
             <ArrowLeft />
