@@ -153,10 +153,6 @@ export const auth = betterAuth({
     },
   },
   user: {
-    deleteUser: {
-      enabled: true,
-      
-    },
     additionalFields: {
       role: {
         type: "string",
@@ -204,22 +200,7 @@ export const auth = betterAuth({
       trustedProviders: ["google"],
     },
   },
-  advanced: {
-    ipAddress: {
-			ipAddressHeaders: ["x-client-ip", "x-forwarded-for"],
-			disableIpTracking: false
-		},
-    useSecureCookies: process.env.NODE_ENV === "production",
-    crossSubDomainCookies: {
-      enabled: process.env.NODE_ENV === "production",
-      domain: process.env.NODE_ENV === "production" ? appConfig.appDomain : "localhost",
-    },
-  },
-  // trustedOrigins: [
-  //   `https://${appConfig.appDomain}`,            
-  //   `https://*.${appConfig.appDomain}`, 
 
-  // ],
   plugins: [
     username(),
     admin({
