@@ -215,11 +215,11 @@ export const auth = betterAuth({
       domain: process.env.NODE_ENV === "production" ? appConfig.appDomain : "localhost",
     },
   },
-  trustedOrigins: [
-    `https://${appConfig.appDomain}`,            
-    `https://*.${appConfig.appDomain}`, 
+  // trustedOrigins: [
+  //   `https://${appConfig.appDomain}`,            
+  //   `https://*.${appConfig.appDomain}`, 
 
-  ],
+  // ],
   plugins: [
     username(),
     admin({
