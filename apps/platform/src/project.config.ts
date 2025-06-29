@@ -143,7 +143,7 @@ export const appConfig = {
   githubUri: "kanakkholwal/college-ecosystem",
   socials: {
     twitter: "https://twitter.com/kanakkholwal",
-    linkedin: "https://linkedin.com/in/kanakkholwal",
+    linkedin: "https://linkedin.com/in/kanak-kholwal",
     instagram: "https://instagram.com/kanakkholwal",
     github: "https://github.com/kanakkholwal",
   },
