@@ -2,6 +2,7 @@
 import Autoplay from 'embla-carousel-autoplay'
 import useEmblaCarousel from 'embla-carousel-react'
 import { sliderImages } from "../constants"
+import Image from 'next/image'
 
 
 const EmblaCarousel = () => {
@@ -21,7 +22,7 @@ const EmblaCarousel = () => {
         <div className="embla__container">
           {sliderImages.map((image, index) => (
             <div className="embla__slide" key={index}>
-              <img src={image.src} alt={image.alt} className='embla__slide__img w-full h-full object-cover' />
+              <Image src={image.src} alt={image.alt} className='embla__slide__img w-full h-full object-cover' />
             </div>
           ))}
         </div>

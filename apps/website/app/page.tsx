@@ -132,7 +132,7 @@ export default function Home() {
         {/* Director's Message */}
         <Card>
           <CardHeader className="border-b">
-            <CardTitle className="text-primary">Director's Message</CardTitle>
+            <CardTitle className="text-primary">Director{"'"}s Message</CardTitle>
           </CardHeader>
           <CardContent className="p-6">
             <div className="flex items-start gap-4 mb-4">
