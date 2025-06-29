@@ -132,7 +132,7 @@ export const columns: ColumnDef<OutPassType>[] = [
       return (
         <div className="text-left font-medium">
           <Button variant="link" asChild>
-            <Link href={`list/${row.original.student._id}`}>
+            <Link href={`outpass-logs/${row.original.student._id}`}>
               View all outpass
             </Link>
           </Button>
