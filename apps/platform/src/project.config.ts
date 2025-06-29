@@ -20,7 +20,7 @@ export const orgConfig = {
     facebook: "https://facebook.com/NITHamirpur",
     youtube: "https://youtube.com/@NITHamirpur"
   },
-   // Enhanced organization details
+  // Enhanced organization details
   foundingDate: "1986-01-01",
   location: {
     address: {
@@ -37,13 +37,13 @@ export const orgConfig = {
       "longitude": "76.5270"
     }
   },
-  
+
   contact: {
     email: "registrar@nith.ac.in",
     phone: "+91-1972-254001",
     fax: "+91-1972-223834"
   },
-  
+
   socialProfiles: [
     "https://www.facebook.com/NITHamirpur",
     "https://twitter.com/NITHamirpurHP",
@@ -51,7 +51,7 @@ export const orgConfig = {
     "https://www.linkedin.com/school/nithamirpur/",
     "https://www.youtube.com/@NITHamirpur"
   ],
-  
+
   // Enhanced structured data
   jsonLds: {
 
@@ -132,7 +132,7 @@ export const appConfig = {
   ].join(', '),
   creator: "Kanak Kholwal",
   authors: [
-    { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org",image: "https://github.com/kanakkholwal.png" },
+    { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org", image: "https://github.com/kanakkholwal.png" },
     {
       name: "NITH Administration",
       url: "https://nith.ac.in",
@@ -147,7 +147,11 @@ export const appConfig = {
     instagram: "https://instagram.com/kanakkholwal",
     github: "https://github.com/kanakkholwal",
   },
-// SEO-specific enhancements
+  verifications: {
+    google_adsense: "ca-pub-6988693445063744",
+    google_analytics: "G-SC4TQQ5PCW",
+  },
+  // SEO-specific enhancements
   seo: {
     locale: "en_IN",
     timezone: "Asia/Kolkata",
@@ -161,7 +165,7 @@ export const appConfig = {
     schemaType: "WebApplication"
   },
   contact: "https://forms.gle/PXbaDm9waeJWYWUP8",
-   // Structured data templates
+  // Structured data templates
   jsonLds: {
     WebApplication: {
       "@type": "WebApplication",
@@ -177,7 +181,7 @@ export const appConfig = {
     }
   },
 
-  flags:{
+  flags: {
     enableOgImage: false, // Enable Open Graph image generation
   }
 };

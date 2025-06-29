@@ -99,7 +99,9 @@ type RootLayoutProps = Readonly<{
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head >
+        <meta name="google-adsense-account" content={appConfig.verifications.google_adsense}/>
+      </head>
       <body
         className={cn(
           "min-h-screen min-w-screen w-full antialiased",
@@ -114,7 +116,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         />
         <Provider>{children} </Provider>
         {process.env.NODE_ENV === "production" && (
-          <GoogleAnalytics gaId="G-SC4TQQ5PCW" />
+          <GoogleAnalytics gaId={appConfig.verifications.google_analytics} />
         )}
 
       </body>
