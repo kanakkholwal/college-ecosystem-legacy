@@ -97,7 +97,7 @@ export const auth = betterAuth({
             message: "Error sending email from mail server",
           });
         }
-        console.log(response);
+        console.log(response.data);
       } catch (err) {
         console.error(err);
         throw new APIError("INTERNAL_SERVER_ERROR", {

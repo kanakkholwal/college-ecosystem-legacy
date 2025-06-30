@@ -55,7 +55,7 @@
     "ai": "^4.3.16",
     "axios": "^1.9.0",
     "barcode-react": "^1.0.5",
-    "better-auth": "^1.2.8",
+    "better-auth": "^1.2.12",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
