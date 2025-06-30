@@ -32,6 +32,7 @@
         "node-html-parser": "^7.0.1",
         "read-excel-file": "^5.8.6",
         "socket.io": "^4.8.1",
+        "xlsx": "^0.18.5",
         "zod": "^3.24.1"
     },
     "devDependencies": {
