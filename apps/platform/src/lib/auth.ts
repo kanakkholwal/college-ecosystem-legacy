@@ -62,13 +62,13 @@ export const auth = betterAuth({
       // }
     },
   },
-  onAPIError: {
-    throw: true,
-    onError: (error) => {
-      console.error("Auth error:", error);
-    },
-    errorURL: "/auth-error",
-  },
+  // onAPIError: {
+  //   throw: true,
+  //   onError: (error) => {
+  //     console.error("Auth error:", error);
+  //   },
+  //   // errorURL: "/auth-error",
+  // },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
