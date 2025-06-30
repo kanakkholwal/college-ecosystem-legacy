@@ -62,17 +62,16 @@ export const auth = betterAuth({
       // }
     },
   },
-  // onAPIError: {
-  //   throw: true,
-  //   onError: (error) => {
-  //     console.error("Auth error:", error);
-  //   },
-  //   // errorURL: "/auth-error",
-  // },
+  onAPIError: {
+    throw: true,
+    onError: (error) => {
+      console.error("Auth error:", error);
+    },
+    // errorURL: "/auth-error",
+  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
-    autoSignIn: true,
     sendResetPassword: async ({ user, url, token }, request) => {
       const verification_url = `${baseUrl}${RESET_PASSWORD_PATH_PREFIX}${token}`;
       try {
@@ -152,6 +151,13 @@ export const auth = betterAuth({
         }
       }
     },
+  },
+  advanced:{
+    crossSubDomainCookies: {
+      enabled: true,
+      // domain: process.env.COOKIE_DOMAIN || undefined,
+    },
+    useSecureCookies: process.env.NODE_ENV === "production",
   },
   user: {
     additionalFields: {
