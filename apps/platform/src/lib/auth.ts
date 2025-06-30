@@ -157,7 +157,18 @@ export const auth = betterAuth({
       enabled: true,
       // domain: process.env.COOKIE_DOMAIN || undefined,
     },
-    useSecureCookies: process.env.NODE_ENV === "production",
+    cookie: {
+      sameSite: "none",
+      secure: true,
+      // domain: process.env.COOKIE_DOMAIN || undefined,
+      path: "/",
+    },
+    defaultCookieAttributes: {
+      secure: true,
+      // httpOnly: true,
+      sameSite: "none", // Allows CORS-based cookie sharing across subdomains
+      // partitioned: true, // New browser standards will mandate this for foreign cookies
+    },
   },
   user: {
     additionalFields: {
