@@ -65,6 +65,7 @@
     "eslint": "^9.28.0",
     "eslint-config-next": "^15.1.6",
     "eventsource": "^4.0.0",
+    "exceljs": "^4.4.0",
     "firebase": "^11.8.1",
     "fuse.js": "^7.1.0",
     "gray-matter": "^4.0.3",

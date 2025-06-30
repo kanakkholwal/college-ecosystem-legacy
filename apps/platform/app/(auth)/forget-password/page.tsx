@@ -4,12 +4,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import ConditionalRender from "@/components/utils/conditional-render";
@@ -79,7 +79,7 @@ export default function ForgotPassword() {
   }
 
   return (
-    <>
+    <div className="px-4 py-6">
       <ConditionalRender condition={isSubmitted}>
         <CardHeader className="text-center">
           <CardTitle>Check your email</CardTitle>
@@ -144,6 +144,6 @@ export default function ForgotPassword() {
           </Form>
         </div>
       </ConditionalRender>
-    </>
+    </div>
   );
 }

@@ -5,6 +5,9 @@ dotenv.config();
 // It includes the server identity, port, database URL, Redis URL, and CORS settings.
 
 export const config = {
+    appName: "College Platform Server",
+    // The version of the application
+    appVersion: "1.0.0",
     // The identity key for the server
     SERVER_IDENTITY: process.env.SERVER_IDENTITY as string || "",
     

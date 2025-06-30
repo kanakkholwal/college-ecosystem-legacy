@@ -18,6 +18,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { LoaderCircleIcon } from "lucide-react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -40,7 +42,12 @@ const FormSchema = z
 
 export default function ResetPassword() {
   const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const token =
+    (searchParams.get("token") ?? "").trim().length > 0
+      ? searchParams.get("token")
+      : null;
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -50,12 +57,32 @@ export default function ResetPassword() {
   });
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
+    if (!token) {
+      toast.error("Invalid or missing token");
+      return;
+    }
+    if(!data.newPassword || !data.confirmNewPassword) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+    if (data.newPassword !== data.confirmNewPassword) {
+      toast.error("Passwords do not match");
+      form.setError("confirmNewPassword", {
+        type: "manual",
+        message: "Passwords do not match",
+      });
+      form.setError("newPassword", {
+        type: "validate",
+        message: "Passwords do not match",
+      });
+      return;
+    }
     setIsSubmitting(true);
-
     try {
       // Replace this with the actual reset password API call
       const res = await authClient.resetPassword({
         newPassword: data.newPassword,
+        token: token,
       });
       if (res.error) {
         toast.error(
@@ -63,9 +90,8 @@ export default function ResetPassword() {
         );
         return;
       }
-
-      console.log(data);
       toast.success("Password reset successful,Can Login now ");
+      router.push("/sign-in");
     } catch (err) {
       console.error(err);
       toast.error("An error occurred. Please try again.");
@@ -75,14 +101,14 @@ export default function ResetPassword() {
   }
 
   return (
-    <>
+    <div className="px-4 py-6">
       <CardHeader className="text-center">
         <CardTitle>Reset Your Password</CardTitle>
         <CardDescription>
           Enter and confirm your new password below
         </CardDescription>
       </CardHeader>
-      <CardContent className={cn("grid gap-6 w-full text-left py-4")}>
+      <CardContent className={cn("grid gap-6 w-full text-left pb-4")}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
             <FormField
@@ -124,17 +150,18 @@ export default function ResetPassword() {
               )}
             />
             <Button
-              className="mt-2 tracking-wide"
+              className="mt-2"
               variant="default"
               rounded="full"
               type="submit"
               disabled={isSubmitting}
             >
+              {isSubmitting && <LoaderCircleIcon className="animate-spin" />}
               {isSubmitting ? "Resetting..." : "Reset Password"}
             </Button>
           </form>
         </Form>
       </CardContent>
-    </>
+    </div>
   );
 }

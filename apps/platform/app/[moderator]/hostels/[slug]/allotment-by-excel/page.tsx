@@ -13,12 +13,18 @@ import { Textarea } from '@/components/ui/textarea';
 import React, { useState } from 'react';
 import toast from 'react-hot-toast';
 import readXlsxFile from 'read-excel-file';
+import { baseUrl, serverIdentity } from '~/lib/client-fetch';
 import { hostels } from '~/lib/server-apis/endpoints';
+import { downloadAllotmentAsExcelNative } from './utils';
 
 const GENDER_VALUES = ['male', 'female'];
+const FIELD_ROLES = ['ignore', 'rollNo', 'name', 'gender', 'soe', 'fatherName', 'motherName', 'program'] as const;
+type FieldRole = typeof FIELD_ROLES[number];
 
 export default function AllotmentPage() {
   const [file, setFile] = useState<File | null>(null);
+  const [gender, setGender] = useState<string>('');
+  const [soePriority, setSoePriority] = useState<string>();
   const [headerKeys, setHeaderKeys] = useState<string[]>([]);
   const [sheetData, setSheetData] = useState<string[][]>([]);
   const [genderKey, setGenderKey] = useState<number>();
@@ -26,6 +32,7 @@ export default function AllotmentPage() {
   const [roomDistribution, setRoomDistribution] = useState({ "4": 94, "3": 110 });
   const [loading, setLoading] = useState(false);
 
+  const [selectedFields, setSelectedFields] = useState<Record<string, FieldRole>>({});
   const handleExcelUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -62,87 +69,143 @@ export default function AllotmentPage() {
       toast.error('Gender column must only contain "Male"/"Female" values.');
       return;
     }
+    const requiredFields: FieldRole[] = ['gender', 'soe', 'name', 'rollNo'];
+    const missing = requiredFields.filter(f => !Object.values(selectedFields).includes(f));
 
+    if (missing.length) {
+      toast.error(`Missing required fields: ${missing.join(', ')}`);
+      return;
+    }
     const genderCol = headerKeys[genderKey];
     const soeCol = headerKeys[soeKey];
 
     const formData = new FormData();
+    const fieldMapping: Record<FieldRole, string> = Object.entries(selectedFields).reduce((acc, [header, role]) => {
+      if (role !== 'ignore') acc[role] = header;
+      return acc;
+    }, {} as Record<FieldRole, string>);
+
+    formData.append('fieldMapping', JSON.stringify(fieldMapping));
     formData.append('file', file);
-    formData.append('gender', '');
     formData.append('roomDistribution', JSON.stringify(roomDistribution));
+    formData.append('genderKey', headerKeys[genderKey]);
+    formData.append('gender', gender);
+    formData.append('soeKey', headerKeys[soeKey]);
+    formData.append('soePriority', "Home State"); // e.g., "Rajasthan"
+
     formData.append('extraFields', JSON.stringify([genderCol, soeCol]));
 
     setLoading(true);
-    toast.promise(
-      fetch(hostels.allotRoomsFromExcel.url, {
-        method: 'POST',
-        body: formData,
-      }).then(async (res) => {
-        if (!res.ok) throw new Error('Server Error');
-        const blob = await res.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'allotment.xlsx';
-        a.click();
-        a.remove();
-      }),
-      {
-        loading: 'Processing...',
-        success: 'Allotment downloaded!',
-        error: 'Upload failed',
+    fetch(process.env.NEXT_PUBLIC_BASE_SERVER_URL + hostels.allotRoomsFromExcel.url, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        "X-Authorization": serverIdentity,
+        Origin: baseUrl,
       }
-    ).finally(() => setLoading(false));
+    }).then(async (res) => {
+      if (!res.ok) throw new Error('Server Error');
+
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || 'Failed to allot rooms');
+      console.log(data);
+      toast.success('Rooms allotted successfully! Downloading file...');
+      // Download the allotment file
+      await downloadAllotmentAsExcelNative(data.allocation, gender,[]);
+      toast.success('File downloaded successfully!');
+    }).catch((error) => {
+      console.error('Error during allotment:', error);
+      toast.error(error.message || 'Failed to allot rooms');
+    }).finally(() => setLoading(false));
+
   };
 
   return (
     <div className="max-w-4xl mx-auto py-10 px-4 space-y-6">
-      <h1 className="text-2xl font-semibold">🏢 Hostel Allotment Tool</h1>
+      <h1 className="text-2xl font-semibold">🏢 Room Allotment Tool by SOE for Freshers</h1>
+      <div className="grid gap-4 @lg:grid-cols-3">
 
-      <div className="space-y-2">
-        <Label htmlFor="file">Excel File</Label>
-        <Input id="file" type="file" accept=".xlsx" onChange={handleExcelUpload} />
+        <div className="space-y-2">
+          <Label htmlFor="file">Excel File</Label>
+          <Input id="file" type="file" accept=".xlsx" onChange={handleExcelUpload} />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="gender">Gender</Label>
+          <Select onValueChange={(value) => setGender(value)}
+            disabled={!file || genderKey === undefined}
+          >
+            <SelectTrigger>
+              <SelectValue placeholder="Select Gender" />
+            </SelectTrigger>
+            <SelectContent>
+              {GENDER_VALUES.map((value) => (
+                <SelectItem key={value} value={value}>
+                  {value}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="soe">SOE Priority</Label>
+          <Select
+            value={soePriority}
+            name="soe"
+            disabled={!file || soeKey === undefined}
+            onValueChange={(value) => setSoePriority(value)}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select SOE Priority (Home State)" />
+            </SelectTrigger>
+            <SelectContent>
+              {Array.from(new Set(sheetData.map(row => row[soeKey!]))).map((value) => (
+                <SelectItem key={value} value={value}>
+                  {value}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {headerKeys.length > 0 && (
         <>
-          <div className="grid gap-4 @lg:grid-cols-2">
-            <div className="space-y-2">
-              <Label>Gender Column</Label>
-              <Select value={genderKey?.toString()} onValueChange={(v) => setGenderKey(Number(v))}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select Gender Column" />
-                </SelectTrigger>
-                <SelectContent>
-                  {headerKeys.map((key, index) => (
-                    <SelectItem key={key} value={index.toString()}>
-                      {key}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="space-y-2">
-              <Label>SOE Column</Label>
-              <Select value={soeKey?.toString()} onValueChange={(v) => setSoeKey(Number(v))}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select SOE Column" />
-                </SelectTrigger>
-                <SelectContent>
-                  {headerKeys.map((key, index) => (
-                    <SelectItem key={key} value={index.toString()}>
-                      {key}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          <div className="space-y-2">
+            <Label>
+              Select Labels of Columns you want to return in the allotment file.
+              <span className="text-xs text-muted-foreground"> (Gender, SOE, Name, Roll No)</span>
+            </Label>
+            <div className="grid grid-cols-1 @lg:grid-cols-2 gap-4 pl-2 border-l">
+              {headerKeys.map((key) => (
+                <div key={key} className="space-y-1">
+                  <Label>{key} Column</Label>
+                  <Select
+                    value={selectedFields[key] || 'ignore'}
+                    onValueChange={(role) => setSelectedFields(prev => ({ ...prev, [key]: role as FieldRole }))}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select role" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {FIELD_ROLES.map(role => (
+                        <SelectItem key={role} value={role}>
+                          {role === 'ignore' ? 'Ignore' : role}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              ))}
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label>Room Distribution (JSON)</Label>
+            <Label htmlFor='room-distribution'>
+              Room Distribution (JSON)
+              - Format: {`"<room_capacity>": <count>, ...`}
+            </Label>
             <Textarea
+              id="room-distribution"
+              placeholder='{"4": 94, "3": 110}'
               value={JSON.stringify(roomDistribution)}
               onChange={(e) => setRoomDistribution(JSON.parse(e.target.value))}
               rows={2}

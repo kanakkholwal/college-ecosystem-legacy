@@ -30,6 +30,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiOutlineLoading } from "react-icons/ai";
 
+import { AtSign } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { getDepartmentName } from "src/constants/departments";
 import * as z from "zod";
@@ -141,7 +142,7 @@ export default function SignUpForm() {
                 <FormItem>
                   <div className="relative group">
                     <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
-                      <LuMail className="w-4 h-4 group-focus-within:text-primary" />
+                      <AtSign className="w-4 h-4 group-focus-within:text-primary" />
                     </FormLabel>
                     <FormControl className="relative">
                       <Input

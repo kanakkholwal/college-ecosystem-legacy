@@ -126,7 +126,7 @@ export function ChartBar<
               tickMargin={5}
               axisLine={false}
               tickFormatter={(value) => changeCase(value, "title")}
-              // hide
+            // hide
             />
             <XAxis dataKey={dataKey.toString()} type="number" hide />
             <ChartTooltip
@@ -135,23 +135,19 @@ export function ChartBar<
                 <ChartTooltipContent
                   indicator="line"
                   nameKey={nameKey.toString()}
-                  labelKey={nameKey.toString()}
+                  labelKey={dataKey.toString()}
+                  label={dataKey
+                    .toString()
+                    .replace(/([A-Z])/g, " $1")
+                    .trim()}
                 />
               }
             />
             <Bar
               dataKey={dataKey.toString()}
-              layout="vertical"
               fill="var(--color-primary)"
               radius={4}
             >
-              {/* <LabelList
-                            dataKey={nameKey.toString()}
-                            position="inside"
-                            offset={10}
-                            className="fill-(--color-white)"
-                            fontSize={12}
-                        /> */}
               <LabelList
                 dataKey={dataKey.toString()}
                 position="right"

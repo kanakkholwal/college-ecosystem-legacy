@@ -25,6 +25,7 @@ const envVariables = z.object({
   BASE_SERVER_URL: z.string().url(),
   NEXT_PUBLIC_BASE_SERVER_URL: z.string().url(),
   NEXT_PUBLIC_BASE_MAIL_SERVER_URL: z.string().url(),
+  NEXT_PUBLIC_SERVER_IDENTITY: z.string(),
 
   REDIS_URL: z.string(),
 

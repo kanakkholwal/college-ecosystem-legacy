@@ -119,11 +119,11 @@ const getRoutes = (moderator: string, slug: string) =>
       disabled: true, // Disable for now, implement later
     },
     {
-      title: "Room Allotment By State Of Entry and Excel",
+      title: "Room Allotment By SOE and Excel",
       description: "Room allotment feature is under development.",
       // description="Manage room allotment for this hostel"
       Icon: FolderKanban,
       href: `/${moderator}/hostels/${slug}/allotment-by-excel`,
-      disabled: true, // Disable for now, implement later
+      // disabled: true, // Disable for now, implement later
     },
   ] as RouterCardLink[];

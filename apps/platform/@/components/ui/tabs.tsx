@@ -4,7 +4,7 @@ import * as TabsPrimitive from "@radix-ui/react-tabs";
 import * as React from "react";
 
 import { cn } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useQueryState } from "nuqs";
 import { useEffect, useRef, useState } from "react";
 
 const Tabs = TabsPrimitive.Root;
@@ -82,8 +82,9 @@ const VercelTabsList = React.forwardRef<HTMLDivElement, TabsProps>(
     },
     ref
   ) => {
-    const searchParams = useSearchParams();
-    const router = useRouter();
+    const [, setTabsState] = useQueryState(onTabChangeQuery || "tab", {
+      defaultValue: activeTab || tabs[0]?.id,
+    });
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
     const [activeIndex, setActiveIndex] = useState(0);
     const [hoverStyle, setHoverStyle] = useState({});
@@ -178,9 +179,7 @@ const VercelTabsList = React.forwardRef<HTMLDivElement, TabsProps>(
               onClick={() => {
                 setActiveIndex(index);
                 if (onTabChangeQuery) {
-                  const params = new URLSearchParams(searchParams.toString());
-                  params.set(onTabChangeQuery, tab.id);
-                  router.push(`?${params.toString()}`);
+                  setTabsState(tab.id);
                 }
                 onTabChange?.(tab.id);
               }}

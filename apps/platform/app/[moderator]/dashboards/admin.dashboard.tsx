@@ -20,8 +20,8 @@ import {
 } from "~/actions/dashboard.admin";
 import { ROLES_LIST } from "~/constants";
 import { DEPARTMENTS_LIST, getDepartmentCode } from "~/constants/departments";
-import { changeCase } from "~/utils/string";
 import { extractVisitorCount } from '~/lib/github';
+import { changeCase } from "~/utils/string";
 
 export default async function AdminDashboard() {
   const {
@@ -41,7 +41,7 @@ export default async function AdminDashboard() {
     <div className="space-y-6 my-5">
       <div className="flex justify-between gap-2 w-full flex-col @4xl:flex-row divide-y @4xl:divide-x divide-border">
         <div className="w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 pr-1.5 @4xl:pr-0">
             {/* Total Users Card */}
 
             <StatsCard
@@ -108,17 +108,6 @@ export default async function AdminDashboard() {
               title="Total Visitors"
               Icon={<Eye className="inline-block mr-2 size-4" />}
             >
-              {/* eslint-disable @next/next/no-img-element */}
-              {/* <p className="text-3xl mt-auto">
-                <img
-                  height={20}
-                  width={80}
-                  src="https://visitor-badge.laobi.icu/badge?page_id=nith_portal.visitor-badge"
-                  alt="Visitor counter"
-                  className="inline-block font-inherit h-4"
-                  loading="lazy"
-                />
-              </p> */}
               <NumberTicker
                 value={visitors}
                 className="text-3xl font-bold text-primary"
@@ -132,6 +121,7 @@ export default async function AdminDashboard() {
             <StatsCard
               title="Users by Gender"
               Icon={<Transgender className="inline-block mr-2 size-4" />}
+              
             >
               <ChartBar
                 data={usersByGender}

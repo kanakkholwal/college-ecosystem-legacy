@@ -1,6 +1,7 @@
 type LayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
+import { MagicCard } from "@/components/animation/magic-card";
 import { ApplicationInfo } from "@/components/logo";
 import Link from "next/link";
 
@@ -13,7 +14,11 @@ export default function Layout({ children }: LayoutProps) {
         <Link href="/" className="flex items-center gap-2 self-center font-medium !h-10">
           <ApplicationInfo className="flex items-center gap-2 self-center font-medium !h-10" />
         </Link>
-        {children}
+        <div className="flex flex-col gap-6">
+          <MagicCard className="rounded-lg shadow" layerClassName="bg-card">
+            {children}
+          </MagicCard>
+        </div>
       </div>
     </div>
   );

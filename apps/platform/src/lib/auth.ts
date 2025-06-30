@@ -17,6 +17,7 @@ import { mailFetch, serverFetch } from "./server-fetch";
 
 
 const VERIFY_EMAIL_PATH_PREFIX = "/verify-mail?token=";
+const RESET_PASSWORD_PATH_PREFIX = "/reset-password?token=";
 
 const baseUrl = process.env.BASE_URL;
 
@@ -73,7 +74,7 @@ export const auth = betterAuth({
     requireEmailVerification: true,
     autoSignIn: true,
     sendResetPassword: async ({ user, url, token }, request) => {
-      const verification_url = `${baseUrl}${VERIFY_EMAIL_PATH_PREFIX}${token}`;
+      const verification_url = `${baseUrl}${RESET_PASSWORD_PATH_PREFIX}${token}`;
       try {
         const response = await mailFetch<{
           data: string[] | null;
@@ -93,7 +94,7 @@ export const auth = betterAuth({
         });
         if (response.error) {
           throw new APIError("INTERNAL_SERVER_ERROR", {
-            message: "Error sending email",
+            message: "Error sending email from mail server",
           });
         }
         console.log(response);
@@ -104,6 +105,7 @@ export const auth = betterAuth({
         });
       }
     },
+    revokeSessionsOnPasswordReset: true,
   },
   emailVerification: {
     sendOnSignUp: true,
@@ -194,6 +196,7 @@ export const auth = betterAuth({
       },
     },
   },
+
   account: {
     accountLinking: {
       enabled: true,

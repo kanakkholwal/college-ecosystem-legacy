@@ -161,9 +161,8 @@ export default function SignInForm() {
 
             <p className="text-right mt-2 text-sm font-medium">
               <Link
-                href="/sign-in?tab=forget-password"
+                href="/forget-password"
                 className="text-primary hover:underline text-xs"
-                shallow
               >
                 Forgot Password?
               </Link>

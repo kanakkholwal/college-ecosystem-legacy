@@ -150,7 +150,7 @@ export function QuickLinks({ user, publicLinks }: QuickLinksProps) {
                     {item.Icon && <item.Icon className="size-3 mr-2" />}
                     <span>
                       <span className="text-sm">{item.title}</span>
-                      <span className="block text-xs text-muted-foreground w-full">
+                      <span className="block text-xs opacity-75 w-full">
                         {item.description}
                       </span>
                     </span>
@@ -164,7 +164,7 @@ export function QuickLinks({ user, publicLinks }: QuickLinksProps) {
                   <LogIn className="size-3 mr-3" />
                   <span>
                       <span className="text-sm">Sign In</span>
-                      <span className="block text-xs text-muted-foreground w-full">
+                      <span className="block text-xs  opacity-75 w-full">
                         Sign in to your account
                       </span>
                     </span>
