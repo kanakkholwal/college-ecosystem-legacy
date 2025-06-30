@@ -145,7 +145,7 @@ export async function updateUser(
     if(data.hostelId && user){
       console.log("Hostel updating for user:", user.email);
       await updateHostelStudent(user.email, {
-        hostel: data.hostelId
+        hostelId: data.hostelId
       });
       console.log("Hostel updated for user:", user.email);
     }

@@ -1,6 +1,6 @@
 "use server";
 import type { InferSelectModel } from "drizzle-orm";
-import { eq, sql } from "drizzle-orm";
+import { eq, or, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
 import { personalAttendance, personalAttendanceRecords, roomUsageHistory } from "~/db/schema";
 import { accounts, sessions, users } from "~/db/schema/auth-schema";
@@ -40,7 +40,10 @@ export async function getUserByUsername(
   const user = await db
     .select()
     .from(users)
-    .where(eq(users.username, username))
+    .where(or(
+      eq(users.username, username),
+      eq(users.id, username) // Allow ID as username for legacy support
+    ))
     .limit(1);
   return user.length > 0 ? user[0] : null;
 }

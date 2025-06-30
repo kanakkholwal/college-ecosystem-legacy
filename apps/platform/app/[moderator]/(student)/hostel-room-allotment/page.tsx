@@ -12,7 +12,7 @@ import {
   getHostelRooms,
   getUpcomingSlots,
 } from "~/actions/allotment-process";
-import { getHostelByUser } from "~/actions/hostel";
+import { getHostelForStudent } from "~/actions/hostel";
 
 import type { HostelRoomJson } from "~/models/allotment";
 import { ViewRoomButton } from "./client";
@@ -20,12 +20,11 @@ import { ViewRoomButton } from "./client";
 import { ResponsiveContainer } from "@/components/common/container";
 
 export default async function HostelRoomAllotmentPage() {
-  // const session = await getSession();
-  const hostelResponse = await getHostelByUser();
+  const hostelResponse = await getHostelForStudent();
 
-  console.log(hostelResponse);
 
   if (!hostelResponse.success || !hostelResponse.hosteler || !hostelResponse.hostel) {
+    console.log(hostelResponse);
     return (
       <div className="w-full">
         <EmptyArea
@@ -37,6 +36,8 @@ export default async function HostelRoomAllotmentPage() {
   }
   const { hostel, hosteler } = hostelResponse;
   const allotmentProcess = await getAllotmentProcess(hosteler._id);
+  console.log("allotment process:", allotmentProcess);
+
   const { data } = await getHostRoom(hosteler?._id as string);
 
   let hostelRoomsResponse: Awaited<ReturnType<typeof getHostelRooms>> | null =
@@ -47,7 +48,6 @@ export default async function HostelRoomAllotmentPage() {
 
   if (allotmentProcess?.status === "open") {
     hostelRoomsResponse = await getHostelRooms(hostel._id);
-
     if (hostelRoomsResponse?.error) {
       console.log(hostelRoomsResponse.message);
     }
@@ -64,7 +64,7 @@ export default async function HostelRoomAllotmentPage() {
   return (
     <div className="space-y-5 my-2">
       <ErrorBoundaryWithSuspense
-        
+
         loadingFallback={<SkeletonCardArea className="mx-auto" />}
       >
         <ConditionalRender condition={allotmentProcess?.status === "closed"}>

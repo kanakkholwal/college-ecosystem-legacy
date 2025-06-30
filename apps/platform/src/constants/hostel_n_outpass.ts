@@ -65,7 +65,7 @@ export const updateHostelAbleStudentSchema = z.object({
   name: z.string().optional(),
   userId: z.string().optional(),
   gender: z.enum(["male", "female"]).optional(),
-  hostel: z.string().optional(),
+  hostelId: z.string().optional(),
   roomNumber: z.string().optional(),
   phoneNumber: z.string().optional(),
   banned: z.boolean().optional(),

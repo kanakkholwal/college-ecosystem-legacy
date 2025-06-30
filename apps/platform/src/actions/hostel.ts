@@ -163,6 +163,9 @@ export async function updateHostelStudent(
 
     // Update the hostel student
     Object.assign(hostelStudent, data);
+    if(data.hostelId) {
+      hostelStudent.hostelId = data.hostelId;
+    }
     await hostelStudent.save();
 
     return Promise.resolve("Hostel student updated successfully");
@@ -544,12 +547,11 @@ export async function getHostelForStudent(
       });
     }
     //  check if HostelStudentModel exists for the user
-    const hostelId = new mongoose.Types.ObjectId(hostel._id as string);
     const hostelerStudent = await HostelStudentModel.findOne({
       email: session.user.email,
     });
     if (session.user.hostelId !== "not_specified" && !hostelerStudent?.hostelId) {
-      hostelerStudent.hostelId = hostelId;
+      hostelerStudent.hostelId = hostel._id;
       await hostelerStudent.save();
     }
     if (hostelerStudent) {
@@ -733,6 +735,7 @@ export async function getStudentsByHostelId(
   try {
     await dbConnect();
     const students = await HostelStudentModel.find({ hostelId })
+      .select("-__v")
       .sort({ createdAt: -1 })
       .lean();
     return Promise.resolve(JSON.parse(JSON.stringify(students)));
@@ -755,6 +758,9 @@ export async function getEligibleStudentsForHostel(
       gender: hostel.gender,
       $or: [
         { hostelId: null },
+      ],
+      $nor: [
+        { _id: hostel._id }
       ]
     })
       .sort({ createdAt: -1 })

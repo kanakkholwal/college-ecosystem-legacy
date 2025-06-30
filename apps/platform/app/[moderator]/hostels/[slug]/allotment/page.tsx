@@ -31,7 +31,6 @@ export default async function HostelRoomAllotmentPage({
 }) {
   const slug = (await params).slug;
   const response = await getHostel(slug);
-  // console.log(response);
   const { success, hostel } = response;
 
   if (!success || !hostel) {
@@ -45,7 +44,7 @@ export default async function HostelRoomAllotmentPage({
   }
 
   const allotmentProcess = await getAllotmentProcess(hostel._id);
-
+  console.log("allotment process from admin:", allotmentProcess);
   const hostelRoomsResponse = await getHostelRooms(hostel._id);
   if (hostelRoomsResponse.error) {
     console.log(hostelRoomsResponse.message);
@@ -95,7 +94,7 @@ export default async function HostelRoomAllotmentPage({
         </Heading>
         <Paragraph className="text-muted-foreground">
           Allotment process is
-          <Badge variant="info" className="capitalize">
+          <Badge variant="default_light" size="sm" className="capitalize mx-1">
             {allotmentProcess?.status}
           </Badge>{" "}
           for this hostel
