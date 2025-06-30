@@ -169,6 +169,7 @@ export const auth = betterAuth({
       sameSite: "none", // Allows CORS-based cookie sharing across subdomains
       // partitioned: true, // New browser standards will mandate this for foreign cookies
     },
+    useSecureCookies: process.env.NODE_ENV === "production", // Use secure cookies in production
   },
   user: {
     additionalFields: {
