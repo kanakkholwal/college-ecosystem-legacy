@@ -69,6 +69,10 @@ export default function AllotmentPage() {
       toast.error('Gender column must only contain "Male"/"Female" values.');
       return;
     }
+    if(gender.trim() === '') {
+      toast.error('Please select a gender.');
+      return;
+    }
     const requiredFields: FieldRole[] = ['gender', 'soe', 'name', 'rollNo'];
     const missing = requiredFields.filter(f => !Object.values(selectedFields).includes(f));
 
