@@ -105,7 +105,6 @@ export const auth = betterAuth({
         });
       }
     },
-    revokeSessionsOnPasswordReset: true,
   },
   emailVerification: {
     sendOnSignUp: true,
