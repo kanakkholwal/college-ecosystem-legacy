@@ -1,7 +1,8 @@
-import { betterFetch } from "@better-fetch/fetch";
+// import { betterFetch } from "@better-fetch/fetch";
+import { headers } from "next/headers";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
-import type { Session } from "~/lib/auth";
+import { auth } from "~/lib/auth";
 import { checkAuthorization, dashboardRoutes, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
 import { appConfig } from "~/project.config";
 
@@ -11,16 +12,19 @@ export async function middleware(request: NextRequest) {
   const isPrivateRoute = PRIVATE_ROUTES.some((route) => isRouteAllowed(pathname, route.pattern));
 
   // if the request is for the sign-in page, allow it to pass through
-  const { data: session } = await betterFetch<Session>(
-    "/api/auth/get-session",
-    {
-      baseURL: request.nextUrl.origin,
-      headers: {
-        //get the cookie from the request
-        cookie: request.headers.get("cookie") || "",
-      },
-    }
-  );
+  // const { data: session } = await betterFetch<Session>(
+  //   "/api/auth/get-session",
+  //   {
+  //     baseURL: request.nextUrl.origin,
+  //     headers: {
+  //       //get the cookie from the request
+  //       cookie: request.headers.get("cookie") || "",
+  //     },
+  //   }
+  // );
+  const session = await auth.api.getSession({
+        headers: await headers()
+    })
   // Exception for the error page : Production issue on Google Sign in
   if (pathname === "/api/auth/error" && session) {
     console.log(pathname, "is accessed by an authenticated user");
@@ -137,6 +141,7 @@ export async function middleware(request: NextRequest) {
 }
 // the following code has been copied from https://nextjs.org/docs/advanced-features/middleware#matcher
 export const config = {
+  runtime: "nodejs",
   matcher: [
     /*
      * Match all request paths except for the ones starting with:

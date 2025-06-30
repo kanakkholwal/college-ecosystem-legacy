@@ -64,8 +64,9 @@ export const auth = betterAuth({
   },
   onAPIError: {
     throw: true,
-    onError: (error) => {
-      console.error("Auth error:", error);
+    onError: (error,ctx) => {
+      console.log("Auth error:", error);
+      console.log("Auth error , context:", ctx);
     },
     // errorURL: "/auth-error",
   },
@@ -152,25 +153,26 @@ export const auth = betterAuth({
       }
     },
   },
-  advanced:{
-    crossSubDomainCookies: {
-      enabled: true,
-      // domain: process.env.COOKIE_DOMAIN || undefined,
-    },
-    cookie: {
-      sameSite: "none",
-      secure: true,
-      // domain: process.env.COOKIE_DOMAIN || undefined,
-      path: "/",
-    },
-    defaultCookieAttributes: {
-      secure: true,
-      // httpOnly: true,
-      sameSite: "none", // Allows CORS-based cookie sharing across subdomains
-      // partitioned: true, // New browser standards will mandate this for foreign cookies
-    },
-    useSecureCookies: process.env.NODE_ENV === "production", // Use secure cookies in production
-  },
+  // advanced:{
+  //   crossSubDomainCookies: {
+  //     enabled: true,
+  //     // domain: process.env.COOKIE_DOMAIN || undefined,
+  //   },
+  //   cookie: {
+  //     sameSite: "none",
+  //     secure: true,
+  //     // domain: process.env.COOKIE_DOMAIN || undefined,
+  //     path: "/",
+  //   },
+  //   defaultCookieAttributes: {
+  //     secure: true,
+  //     // httpOnly: true,
+  //     sameSite: "none", // Allows CORS-based cookie sharing across subdomains
+  //     // partitioned: true, // New browser standards will mandate this for foreign cookies
+  //   },
+  //   useSecureCookies: process.env.NODE_ENV === "production", // Use secure cookies in production
+  //   credentials: "include"
+  // },
   user: {
     additionalFields: {
       role: {
