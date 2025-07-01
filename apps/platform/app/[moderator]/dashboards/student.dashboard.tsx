@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { quick_links } from "@/constants/links";
 import { getStudentDashboardData } from "~/actions/dashboard.student";
 
-export default async function StudentDashboard() {
+export default async function StudentDashboard({role}: { role: string })  {
   const dashboardData = await getStudentDashboardData();
   console.log("Student Dashboard Data:", dashboardData);
 

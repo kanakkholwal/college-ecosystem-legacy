@@ -36,7 +36,7 @@ export const PUBLIC_ROUTES = RAW_PUBLIC_ROUTES.map((route) => ({
     pattern: toRegex(route),
 }));
 
-export const isRouteAllowed = (pathname: string,pathRegex: RegExp) => {
+export const isRouteAllowed = (pathname: string, pathRegex: RegExp) => {
     return pathRegex.test(pathname);
 };
 export const publicRouteHandleAbsolute = (route: string, pathname: string) => {
@@ -88,6 +88,35 @@ export const PRIVATE_ROUTES = RAW_PRIVATE_ROUTES.map((route) => ({
     pattern: toRegex(route),
 }));
 
+export const HOSTEL_AUTHORIZED_ROUTES = [
+    ROLES.MMCA,
+    ROLES.ASSISTANT_WARDEN,
+    ROLES.WARDEN,
+];
+export const HOSTEL_ACCESSED_PATHS = [
+    "outpass-requests",
+    "outpass-logs",
+    "students",
+    "rooms",
+    "allotment",
+    "allotment-by-excel"
+];
+export const isHostelRoute = (pathname: string) => {
+    if (pathname.split("/").length < 2 || !HOSTEL_AUTHORIZED_ROUTES.some((role) => pathname.slice(1).toLowerCase().startsWith(role.toLowerCase()))) {
+        return {
+            isHostelRoute: false,
+            route: ""
+        };
+    }
+    const [,,route] = pathname.split("/");
+    const path = HOSTEL_ACCESSED_PATHS.find((path) => {
+            return route.toLowerCase() === path.toLowerCase();
+        })
+    return {
+        isHostelRoute: !!path,
+        route: route
+    };
+};
 
 /**
  * Check if the user is authorized to access the given route.

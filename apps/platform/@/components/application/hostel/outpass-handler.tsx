@@ -11,7 +11,6 @@ import { Separator } from "@/components/ui/separator";
 import { Heading } from "@/components/ui/typography";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { ErrorBoundary } from "@/components/utils/error-boundary";
-import { useToast } from "@/hooks/use-toast";
 import { useExternalBarcodeScanner } from "@/hooks/useBarcodeScanner";
 import { CircleCheckBig, LogIn, LogOut, ScanSearch } from "lucide-react";
 import { useState } from "react";
@@ -19,24 +18,26 @@ import toast from "react-hot-toast";
 import { allowEntryExit } from "~/actions/hostel_outpass";
 
 import { format } from "date-fns";
+import { parseAsString, useQueryState } from "nuqs";
+import { MdClear } from "react-icons/md";
 import { apiFetch } from "~/lib/client-fetch";
 import OutpassList from "./outpass-list";
 import OutpassRender from "./outpass-render";
 
 type responseType =
   | {
-      identifier: "rollNo";
-      history: OutPassType[];
-    }
+    identifier: "rollNo";
+    history: OutPassType[];
+  }
   | {
-      identifier: "id";
-      outpass: OutPassType | null;
-    }
+    identifier: "id";
+    outpass: OutPassType | null;
+  }
   | {
-      identifier: "unknown";
-      message: string;
-      error?: string | unknown;
-    };
+    identifier: "unknown";
+    message: string;
+    error?: string | unknown;
+  };
 
 async function fetchByIdentifier(identifier: string) {
   return await apiFetch<responseType>(
@@ -55,14 +56,15 @@ function isActionAllowed(outpass: OutPassType) {
     new Date(outpass.validTill).getTime() < new Date().getTime();
 
   if (isExpired) return false;
-
+  if(outpass?.actualInTime) return true
   return true;
 }
 
 export default function OutpassVerifier() {
   const { currentCode, scanHistory, clearHistory } =
     useExternalBarcodeScanner();
-  const [rollNo, setRollNo] = useState("");
+  const [rollNo, setRollNo] = useQueryState<string>("rollNo", parseAsString)
+  // const [rollNo, setRollNo] = useState("");
   const [outpassHistory, setOutpassHistory] = useState<OutPassType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
@@ -103,7 +105,7 @@ export default function OutpassVerifier() {
   };
 
   const handleVerify = () => {
-    if (rollNo.trim() || currentCode.trim()) {
+    if (rollNo?.trim() || currentCode.trim()) {
       const identifier = rollNo || currentCode; // Use rollNo or scanned code
       fetchOutpassHistory(identifier.trim());
     }
@@ -158,20 +160,24 @@ export default function OutpassVerifier() {
         Outpass Verifier
       </Heading>
       <div className="relative flex items-stretch w-full rounded-full h-auto max-w-2xl mx-auto">
-        <div className="absolute top-0 bottom-0 left-0">
-          <div className="relative flex h-12 w-full items-center justify-center px-6 before:absolute before:inset-0 before:rounded-full before:border before:border-transparent before:bg-primary/10 before:bg-gradient-to-b before:transition before:duration-300 hover:before:scale-105 active:duration-75 active:before:scale-95 dark:before:border-gray-700 dark:before:bg-gray-800 sm:w-max">
-            <span className="relative text-base font-semibold text-primary ">
-              <LuScanBarcode className="w-5 h-5" />
-            </span>
-          </div>
+        <div className="absolute top-1 bottom-1 left-1">
+          <Button
+            type="button"
+            aria-label="Filter Options"
+            title="Filter"
+            variant="glass"
+            rounded="full"
+          >
+              <LuScanBarcode/>
+          </Button>
         </div>
         <Input
-          className="w-full rounded-full px-20 border border-border h-12 "
+          className="w-full rounded-full pl-16 pr-30 border border-border h-12 "
           id="rollNo"
           name="rollNo"
           type="text"
           placeholder="Enter Roll No. or Scan Barcode"
-          value={rollNo}
+          value={rollNo || ""}
           onChange={(e) => setRollNo(e.target.value)}
           onKeyUp={(e) => {
             if (e.key === "Enter") {
@@ -183,7 +189,7 @@ export default function OutpassVerifier() {
           <Button
             onClick={handleVerify}
             disabled={isLoading}
-            variant="gradient_purple"
+            variant="rainbow"
             effect="shineHover"
             className="relative rounded-r-full h-12"
           >
@@ -215,42 +221,43 @@ export default function OutpassVerifier() {
       <ConditionalRender
         condition={outpassHistory.length > 0 && currentOutpass !== null}
       >
-        <div className="relative flex items-stretch w-full max-w-2xl mx-auto bg-card border rounded-lg p-6">
-          <div className="flex w-full gap-2 justify-start items-stretch text-sm">
+        <div className="relative w-full max-w-2xl mx-auto bg-card border rounded-lg p-3 lg:p-6 space-y-4">
+          <div className="flex w-full gap-2 justify-around items-stretch">
             <div className="flex flex-col">
-              <span className="font-semibold text-muted-foreground">
+              <span className="font-medium text-muted-foreground text-sm mb-1">
                 Actual Out Time
               </span>
               <span className="font-medium text-left">
                 {currentOutpass?.actualOutTime
                   ? format(
-                      new Date(currentOutpass.actualOutTime || ""),
-                      "dd/MM/yyyy hh:mm a"
-                    )
+                    new Date(currentOutpass.actualOutTime || ""),
+                    "dd/MM/yyyy hh:mm a"
+                  )
                   : "Not exited yet"}
               </span>
             </div>
             <Separator orientation="vertical" />
             <div className="flex flex-col">
-              <span className="font-semibold text-muted-foreground">
+              <span className="font-medium text-muted-foreground text-sm mb-1">
                 Actual In Time
               </span>
               <span className="font-medium text-left">
                 {currentOutpass?.actualInTime
                   ? format(
-                      new Date(currentOutpass.actualInTime || ""),
-                      "dd/MM/yyyy hh:mm a"
-                    )
+                    new Date(currentOutpass.actualInTime || ""),
+                    "dd/MM/yyyy hh:mm a"
+                  )
                   : "Not entered yet"}
               </span>
             </div>
             <Separator orientation="vertical" />
             <div className="flex flex-col">
-              <span className="font-semibold text-muted-foreground">
+              <span className="font-medium text-muted-foreground text-sm mb-1">
                 Status
               </span>
               <Badge
                 size="sm"
+                className="capitalize"
                 variant={
                   currentOutpass?.status === "approved"
                     ? "success_light"
@@ -264,12 +271,16 @@ export default function OutpassVerifier() {
             </div>
             <Separator orientation="vertical" />
           </div>
-          <div className="flex items-center justify-between my-auto">
+          <div className="flex items-center justify-center gap-3 pt-4 border-t">
             <Button
               onClick={handleEntryExit}
               disabled={
                 updating ||
                 (currentOutpass ? isActionAllowed(currentOutpass) : false)
+                || (
+                  !updating &&
+                  !!currentOutpass?.actualInTime
+                )
               }
               variant={currentOutpass?.actualInTime ? "glass" : "default_light"}
               effect="shineHover"
@@ -296,8 +307,21 @@ export default function OutpassVerifier() {
                 </>
               )}
             </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setRollNo("");  
+                setOutpassHistory([]);
+                setCurrentOutpass(null);
+                clearHistory();
+              }}
+            >
+              Clear Search
+              <MdClear />
+            </Button>
           </div>
-        </div>
+          </div>
         <ErrorBoundary
           fallback={
             <EmptyArea

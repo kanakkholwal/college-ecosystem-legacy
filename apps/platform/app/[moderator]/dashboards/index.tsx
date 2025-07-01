@@ -54,7 +54,7 @@ export function DashboardTemplate({ user_role }: { user_role: string }) {
               />
             }
           >
-            <DashboardComponent />
+            <DashboardComponent role={user_role} />
           </ErrorBoundaryWithSuspense>
         </>
       );

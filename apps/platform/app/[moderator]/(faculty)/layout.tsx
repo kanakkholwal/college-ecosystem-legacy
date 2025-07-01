@@ -5,8 +5,7 @@ import { ROLES } from "~/constants";
 const ALLOWED_ROLES = [
   ROLES.FACULTY,
   ROLES.HOD,
-  ROLES.ASSISTANT_WARDEN,
-  ROLES.WARDEN,
+
 ];
 
 interface DashboardLayoutProps {

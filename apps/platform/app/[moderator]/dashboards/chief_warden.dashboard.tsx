@@ -10,9 +10,9 @@ import { getHostels } from "~/actions/hostel";
 import {
   CreateHostelForm,
   ImportFromSiteButton,
-} from "./chief_warden.dashboard.client";
+} from "../hostels/client";
 
-export default async function ChiefWardenPage() {
+export default async function ChiefWardenPage({role}: { role: string })  {
   const response = await getHostels();
   console.log(response);
   const { success, data: hostels } = response;

@@ -43,7 +43,7 @@ export function NavMain({
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
-          const url = new URL(item.href,process.env.NEXT_PUBLIC_BASE_URL);
+          const url = new URL(item.href, process.env.NEXT_PUBLIC_BASE_URL);
           if (item?.preserveParams && pathname === item.href)
             url.search = searchParams.toString();
 
@@ -71,8 +71,19 @@ export function NavMain({
                           const url = new URL(
                             subItem.href, process.env.NEXT_PUBLIC_BASE_URL
                           );
-                          if (item?.preserveParams && pathname === item.href)
-                            url.search = searchParams.toString();
+                          if (item?.preserveParams && pathname === item.href) {
+                            // if the item is active, preserve the search params
+                            const preservedParams = new URLSearchParams(
+                              searchParams.toString()
+                            );
+                            // remove any existing params that are not in the subItem.href
+                            for (const key of searchParams.keys()) {
+                              const value = preservedParams.get(key);
+                              if (value !== null)
+                                url.searchParams.set(key, value.toString());
+                            }
+
+                          }
                           return (
                             <SidebarMenuSubItem key={subItem.title}>
                               <SidebarMenuSubButton asChild>

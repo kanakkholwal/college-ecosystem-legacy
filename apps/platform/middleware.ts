@@ -1,13 +1,15 @@
 import { betterFetch } from "@better-fetch/fetch";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
 import { Session } from "~/lib/auth";
-import { checkAuthorization, dashboardRoutes, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
+import { checkAuthorization, dashboardRoutes, isHostelRoute, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
 import { appConfig } from "~/project.config";
 
 export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
   const pathname = request.nextUrl.pathname;
+  const searchParams = request.nextUrl.searchParams
   const isPrivateRoute = PRIVATE_ROUTES.some((route) => isRouteAllowed(pathname, route.pattern));
 
   // if the request is for the sign-in page, allow it to pass through
@@ -103,6 +105,26 @@ export async function middleware(request: NextRequest) {
             )
           );
         }
+        const hostelRoute = isHostelRoute(pathname);
+        // console.log("Hostel Route Check:", hostelRoute, pathname);
+        if (hostelRoute.isHostelRoute && session.user.hostelId && searchParams.get("hostel_slug")) {
+          // Temporary fix for the hostel slug issue
+          // This should be replaced with a proper slug to ID mapping in the future
+          const hostelSlug = searchParams.get("hostel_slug") || ""
+          // console.log("Hostel slug Check:", hostelSlug);
+          const hostel = IN_CHARGES_EMAILS.find(
+            (hostel) => hostel.slug === hostelSlug
+          );
+          if (hostel) {
+            // request.headers.set("hostelSlug", hostelSlug);
+            return NextResponse.rewrite(
+              new URL(`/${matchedRole}/hostels/${hostel.slug}/${hostelRoute.route}`, request.url)
+            );
+          }
+
+
+
+        }
       }
       return NextResponse.next();
     }
@@ -147,7 +169,7 @@ export const config = {
      * - favicon.ico (favicon file)
      * - manifest.manifest (manifest file)
      */
-    "/((?!api|_next/static|_next/image|assets|favicon.ico|manifest.webmanifest|.*\\.(?:png|jpg|jpeg|svg|webp|ico|txt|json|xml|js)).*)",
+    "/((?!api|_next/static|_next/image|assets|favicon.ico|manifest.webmanifest|ads.txt|.*\\.(?:png|jpg|jpeg|svg|webp|ico|txt|json|xml|js)).*)",
     // Explicitly include /api/auth/error
     "/api/auth/error",
   ],
