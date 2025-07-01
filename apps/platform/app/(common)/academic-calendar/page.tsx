@@ -5,8 +5,9 @@ import { StaticStep } from "@/components/common/step";
 import { FullScreenCalendar } from "@/components/ui/calendar-full";
 import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
 import ConditionalRender from "@/components/utils/conditional-render";
+import { ButtonLink } from "@/components/utils/link";
 import { startOfDay } from "date-fns";
-import { CalendarDays } from "lucide-react";
+import { ArrowUpRight, CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
 import { getEvents } from "~/actions/events";
 import { getSession } from "~/lib/auth-server";
@@ -71,6 +72,17 @@ export default async function AcademicCalenderPage(props: Props) {
           examination periods, holidays, and other important academic
           milestones.
         </p>
+        <ButtonLink
+          href="https://nith.ac.in/uploads/topics/17244223408638.pdf"
+          size="sm"
+          variant="dark"
+          target="_blank"
+
+          >
+          <CalendarDays  />
+          View Official Calendar
+          <ArrowUpRight />
+        </ButtonLink>
       </div>
       <Tabs defaultValue="calendar" className="bg-card p-4 lg:p-5 rounded-lg">
         <VercelTabsList
@@ -105,7 +117,6 @@ export default async function AcademicCalenderPage(props: Props) {
             return <StaticStep
               key={group.day.toString()}
               step={idx + 1}
-              // increment single day by one to avoid timezone issues
               title={startOfDay(group.day).toLocaleString("en-IN", {
                 weekday: "long",
                 month: "long",

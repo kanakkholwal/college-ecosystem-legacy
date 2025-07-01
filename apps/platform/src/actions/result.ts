@@ -248,6 +248,10 @@ export async function getResultByRollNo(
     return JSON.parse(JSON.stringify(response.data.data));
   }
   // cache the result
+  if (!result) {
+    console.log("Result not found for rollNo:", rollNo);
+    return JSON.parse(JSON.stringify(null));
+  }
   try {
     await redis.set(
       cacheKey,

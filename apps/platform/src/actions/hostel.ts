@@ -550,7 +550,7 @@ export async function getHostelForStudent(
     const hostelerStudent = await HostelStudentModel.findOne({
       email: session.user.email,
     });
-    if (session.user.hostelId !== "not_specified" && !hostelerStudent?.hostelId) {
+    if (session.user.hostelId !== hostel._id.toString() && !hostelerStudent?.hostelId) {
       hostelerStudent.hostelId = hostel._id;
       await hostelerStudent.save();
     }

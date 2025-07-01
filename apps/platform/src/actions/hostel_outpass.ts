@@ -1,7 +1,7 @@
 "use server";
 import { format } from "date-fns";
 import type z from "zod";
-import { getHostelByUser } from "~/actions/hostel";
+import { getHostelByUser, getHostelForStudent } from "~/actions/hostel";
 import { REASONS, requestOutPassSchema } from "~/constants/outpass";
 // import { getSession } from "~/lib/auth-server";
 import dbConnect from "~/lib/dbConnect";
@@ -98,7 +98,7 @@ export async function createOutPass(
 
 export async function getOutPassForHosteler(): Promise<OutPassType[]> {
   try {
-    const { success, message, hostel, hosteler } = await getHostelByUser();
+    const { success, message, hostel, hosteler } = await getHostelForStudent();
     if (!success || !hosteler || !hostel) {
       return Promise.reject(message);
     }

@@ -1,11 +1,9 @@
 import EmptyArea from "@/components/common/empty-area";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { BannerPanel } from "@/components/utils/banner";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
-import { ButtonLink } from "@/components/utils/link";
 import { SkeletonCardArea } from "@/components/utils/skeleton-cards";
 import { RocketIcon } from "@radix-ui/react-icons";
-import { ArrowUpRight } from "lucide-react";
 import AdminDashboard from "./admin.dashboard";
 import ChiefWardenDashboard from "./chief_warden.dashboard";
 import CRDashboard from "./cr.dashboard";
@@ -33,32 +31,20 @@ export function DashboardTemplate({ user_role }: { user_role: string }) {
       return (
         <>
           <ConditionalRender condition={user_role === "student"}>
-            <section id="main-section" className="w-full max-w-4xl mx-auto">
-              <Alert className="mt-4">
-                <RocketIcon className="size-4" />
-                <AlertTitle className="text-sm">
-                  Suggest a feature for the platform here.(what do you want to
-                  see here?)
-                </AlertTitle>
-                <AlertDescription>
-                  <p className="text-xs text-muted-foreground">
-                    We are changing the way you interact with the platform and
-                    adding new features.
-                  </p>
-                  <ButtonLink
-                    href="https://forms.gle/v8Angn9VCbt9oVko7"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    variant="outline"
-                    size="xs"
-                    className="mt-1"
-                  >
-                    Suggest a feature here
-                    <ArrowUpRight/>
-                  </ButtonLink>
-                </AlertDescription>
-              </Alert>
-            </section>
+            <BannerPanel
+              icon={<RocketIcon className="size-4 text-muted-foreground" />}
+              isClosable={true}
+              className="rounded-xl bg-card"
+              title="Suggest a Feature"
+              description=" We are changing the way you interact with the platform and adding new features."
+              redirectUrl="https://forms.gle/v8Angn9VCbt9oVko7"
+
+              btnProps={{
+                children: "Suggest a feature here",
+                variant: "default_light",
+              }}
+            />
+
           </ConditionalRender>
           <ErrorBoundaryWithSuspense
             loadingFallback={

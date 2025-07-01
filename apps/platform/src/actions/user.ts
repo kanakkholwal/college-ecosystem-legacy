@@ -131,3 +131,37 @@ export async function deleteUserResourcesById(userId: string): Promise<void> {
     return Promise.reject("Failed to delete user resources");
   }
 }
+
+export async function getUserPlatformActivities(userId: string, username: string) {
+  try {
+    await dbConnect();
+    const activitiesPromise = [
+      PollModel.countDocuments({ createdBy: userId }),
+      Announcement.countDocuments({ createdBy: userId }),
+      CommunityPost.countDocuments({ "author.id": userId }),
+      CommunityComment.countDocuments({ "author.id": userId }),
+    ];  
+    const [
+      pollsCount,
+      announcementsCount,
+      communityPostsCount,
+      communityCommentsCount,
+    ] = await Promise.all(activitiesPromise);
+    return {
+      pollsCount,
+      announcementsCount,
+      communityPostsCount,
+      communityCommentsCount,
+      // resourcesCount
+    }
+  } catch (error) {
+    console.error("Failed to fetch user activities:", error);
+    return {
+      pollsCount: 0,
+      announcementsCount: 0,
+      communityPostsCount: 0,
+      communityCommentsCount: 0,
+      // resourcesCount: 0,
+    }
+  }
+}

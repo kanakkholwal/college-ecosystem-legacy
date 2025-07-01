@@ -1,4 +1,3 @@
-import { Separator } from "@/components/ui/separator";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { getSession } from "~/lib/auth-server";
 import { changeCase } from "~/utils/string";
@@ -28,7 +27,6 @@ export default async function ModeratorDashboard(props: Props) {
           </Paragraph>
         </div>
       </section>
-      <Separator />
       <DashboardTemplate user_role={params.moderator} />
     </div>
   );

@@ -33,6 +33,7 @@ export interface ResourceFrontMatter {
     image?: string;
     handle?: string;
     handleUrl?: string; // Optional URL for the author's handle
+    username?: string; // Optional username for the author corresponding to platform
   };
   tags?: string[];
   summary?: string;
