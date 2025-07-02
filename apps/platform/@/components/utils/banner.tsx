@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 import { X } from "lucide-react";
 import React from "react";
+import { ButtonLink } from "./link";
 
 interface BannerActionPropsBase {
   className?: string;
@@ -18,7 +19,7 @@ interface BannerActionPropsBase {
 }
 
 interface BannerActionWithBtnProps extends BannerActionPropsBase {
-  btnProps: React.ComponentProps<typeof Button>;
+  btnProps: React.ComponentProps<typeof Button> |  React.ComponentProps<typeof ButtonLink>
   actionComponent?: never;
 }
 

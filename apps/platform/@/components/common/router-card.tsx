@@ -1,6 +1,6 @@
-import { ParamsPreserverLink } from "@/components/utils/link";
 import { cn } from "@/lib/utils";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import Link from "next/link";
 import { Badge } from "../ui/badge";
 
 type RouterCardLink = {
@@ -10,7 +10,7 @@ type RouterCardLink = {
   external?: boolean;
   Icon: React.FC<React.SVGProps<SVGSVGElement>>;
   disabled?: boolean;
-  preserveParams?: boolean;
+  // preserveParams?: boolean;
 };
 
 interface RouterCardProps extends RouterCardLink {
@@ -25,12 +25,11 @@ function RouterCard({
   Icon,
   style,
   disabled,
-  preserveParams,
+  // preserveParams,
 }: RouterCardProps) {
   return (
-    <ParamsPreserverLink
+    <Link
       href={href}
-      preserveParams={preserveParams}
       className={cn(
         "@max-lg:col-span-full bg-card block border p-4 rounded-lg shadow-md text-fd-card-foreground transition-colors",
         "group flex flex-col justify-between gap-2 animate-in popup backdrop-blur-2xl shadow-sm",
@@ -61,7 +60,7 @@ function RouterCard({
         Go to {title}
         {external ? <ArrowUpRight /> : <ArrowRight />}
       </p>
-    </ParamsPreserverLink>
+    </Link>
   );
 }
 

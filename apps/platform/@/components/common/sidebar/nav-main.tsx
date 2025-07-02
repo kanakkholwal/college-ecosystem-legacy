@@ -43,7 +43,8 @@ export function NavMain({
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
-          const url = new URL(item.href, process.env.NEXT_PUBLIC_BASE_URL);
+          const baseUrl = window?.location?.origin || process.env.NEXT_PUBLIC_BASE_URL;
+          const url = new URL(item.href, baseUrl);
           if (item?.preserveParams && pathname === item.href)
             url.search = searchParams.toString();
 

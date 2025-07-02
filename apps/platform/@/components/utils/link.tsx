@@ -81,7 +81,8 @@ export function ParamsPreserverLink({
     ...props
 }: ParamsPreserverLinkProps) {
     const searchParams = useSearchParams();
-    const url = new URL(href.toString(), process.env.NEXT_PUBLIC_BASE_URL);
+    const baseUrl = window?.location?.origin || process.env.NEXT_PUBLIC_BASE_URL;
+    const url = new URL(href.toString(), baseUrl);
     if (preserveParams) url.search = searchParams.toString();
 
     return <Link href={url?.toString()} {...props} />;
