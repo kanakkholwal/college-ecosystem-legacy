@@ -153,26 +153,15 @@ export const auth = betterAuth({
       }
     },
   },
-  // advanced:{
-  //   crossSubDomainCookies: {
-  //     enabled: true,
-  //     // domain: process.env.COOKIE_DOMAIN || undefined,
-  //   },
-  //   cookie: {
-  //     sameSite: "none",
-  //     secure: true,
-  //     // domain: process.env.COOKIE_DOMAIN || undefined,
-  //     path: "/",
-  //   },
-  //   defaultCookieAttributes: {
-  //     secure: true,
-  //     // httpOnly: true,
-  //     sameSite: "none", // Allows CORS-based cookie sharing across subdomains
-  //     // partitioned: true, // New browser standards will mandate this for foreign cookies
-  //   },
-  //   useSecureCookies: process.env.NODE_ENV === "production", // Use secure cookies in production
-  //   credentials: "include"
-  // },
+  advanced:{
+    crossSubDomainCookies: {
+      enabled: process.env.NODE_ENV === "production",
+      domain: appConfig.appDomain,
+    },
+    cookiePrefix: "nith",
+
+  },
+  trustedOrigins: [appConfig.url, `https://${appConfig.appDomain}`,`https://*.nith.eu.org`],
   user: {
     additionalFields: {
       role: {
