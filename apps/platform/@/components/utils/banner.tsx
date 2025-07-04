@@ -53,7 +53,7 @@ export function BannerPanel({
     <div
       className={cn("bg-muted px-4 py-3 md:py-2 relative shadow", className)}
     >
-      <div className="mx-auto max-w-(--max-app-width) w-full flex grow gap-3 md:items-center justify-between px-3 lg:px-6 z-50 relative ">
+      <div className="mx-auto max-w-(--max-app-width) w-full flex grow gap-3 flex-wrap md:items-center justify-between px-3 lg:px-6 z-50 relative ">
         <div className="flex grow gap-3 md:items-center">
           {icon && (
             <div
@@ -95,7 +95,7 @@ export function BannerPanel({
             <Button
               variant="raw"
               size="icon_sm"
-              className="group size-8 shrink-0 p-0 -mr-2"
+              className="group size-8 shrink-0 p-0 -mr-2 absolute right-2 left-auto top-1/2 -translate-y-1/2 hover:bg-transparent"
               onClick={() => {
                 setIsBannerPanelClosed(true);
                 onClose?.();

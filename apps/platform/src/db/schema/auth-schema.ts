@@ -1,5 +1,6 @@
 import { InferSelectModel } from "drizzle-orm";
 import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { nanoid } from "nanoid";
 import { DEPARTMENTS } from "src/constants/departments";
 
 export const departmentNameEnum = pgEnum("department_name_enum", [
@@ -94,4 +95,15 @@ export const verifications = pgTable("verifications", {
   expiresAt: timestamp("expiresAt").notNull(),
   createdAt: timestamp("createdAt"),
   updatedAt: timestamp("updatedAt"),
+});
+
+export const emailVerifications = pgTable("email_verifications", {
+  id: text("id").primaryKey().default(nanoid(21)),
+  userId: text("userId").notNull().references(() => users.id),
+  email: text("email").notNull(),
+  expiresAt: timestamp("expiresAt").notNull(),
+  verified: boolean("verified").notNull().default(false),
+  token: text("token").notNull().unique(),
+  // The token is a unique identifier for the email verification process
+  createdAt: timestamp("createdAt").notNull(),
 });

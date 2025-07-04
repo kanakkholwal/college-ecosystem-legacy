@@ -1,5 +1,6 @@
 "use client";
 import { Button, ButtonProps } from "@/components/ui/button";
+import { getWindowOrigin } from "@/lib/env";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
@@ -10,7 +11,7 @@ interface RedirectButtonProps extends ButtonProps {
 }
 export function RedirectWithSearchParamsLink({ href, children, ...props }: RedirectButtonProps) {
     const searchParams = useSearchParams();
-    const url = new URL(href, process.env.NEXT_PUBLIC_BASE_URL);
+    const url = new URL(href, getWindowOrigin());
     searchParams.entries().forEach(([key, value]) => {
         url.searchParams.append(key, value);
     })
@@ -81,8 +82,7 @@ export function ParamsPreserverLink({
     ...props
 }: ParamsPreserverLinkProps) {
     const searchParams = useSearchParams();
-    const baseUrl = window?.location?.origin || process.env.NEXT_PUBLIC_BASE_URL;
-    const url = new URL(href.toString(), baseUrl);
+    const url = new URL(href.toString(), getWindowOrigin());
     if (preserveParams) url.search = searchParams.toString();
 
     return <Link href={url?.toString()} {...props} />;

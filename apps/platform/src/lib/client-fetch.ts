@@ -1,3 +1,4 @@
+import { getWindowOrigin } from "@/lib/env";
 import { createFetch } from "@better-fetch/fetch";
 
 export const serverIdentity = process.env.NEXT_PUBLIC_SERVER_IDENTITY;
@@ -10,7 +11,7 @@ if (!serverIdentity) {
 if (!baseServerUrl) {
   throw new Error("Missing environment variables for base server URL");
 }
-export const baseUrl = process.env.NEXT_PUBLIC_BASE_URL
+export const baseUrl = getWindowOrigin()
 
 export const authHeaders = {
   "Content-Type": "application/json",

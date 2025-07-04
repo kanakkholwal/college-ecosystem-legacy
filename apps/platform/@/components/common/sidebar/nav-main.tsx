@@ -16,6 +16,7 @@ import {
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
+import { getWindowOrigin } from "@/lib/env";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -43,8 +44,7 @@ export function NavMain({
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
       <SidebarMenu>
         {items.map((item) => {
-          const baseUrl = window?.location?.origin || process.env.NEXT_PUBLIC_BASE_URL;
-          const url = new URL(item.href, baseUrl);
+          const url = new URL(item.href, getWindowOrigin());
           if (item?.preserveParams && pathname === item.href)
             url.search = searchParams.toString();
 
@@ -70,7 +70,7 @@ export function NavMain({
                         {item.items?.map((subItem) => {
                           // combine search params with the item.href and subItem.href to create a new URL
                           const url = new URL(
-                            subItem.href, process.env.NEXT_PUBLIC_BASE_URL
+                            subItem.href,  getWindowOrigin()
                           );
                           if (item?.preserveParams && pathname === item.href) {
                             // if the item is active, preserve the search params

@@ -1,10 +1,9 @@
 import {
   boolean,
   pgTable,
-  primaryKey,
   text,
   timestamp,
-  uuid,
+  uuid
 } from "drizzle-orm/pg-core";
 
 export const calender_sem_events = pgTable(
