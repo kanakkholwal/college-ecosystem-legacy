@@ -3,7 +3,7 @@ import ProfileDropdown from "@/components/common/profile-dropdown";
 import { Button } from "@/components/ui/button";
 import { NavLink, SUPPORT_LINKS, getNavLinks, socials } from "@/constants/links";
 import { cn } from "@/lib/utils";
-import { ArrowUpRight, LayoutDashboard, LogIn } from "lucide-react";
+import { ArrowUp, ArrowUpRight, LayoutDashboard, LogIn } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -38,20 +38,8 @@ const loggedInList = [
     icon: Settings,
   },
 ];
-const defaultList = [
-  {
-    title: "Nexo Scout",
-    path: "/scout",
-  },
-  {
-    title: "Marketplace",
-    path: "/marketplace",
-  },
-  {
-    title: "Dev Tools",
-    path: "/dev-tools",
-  },
-];
+
+
 interface NavbarProps {
   user?: Session["user"];
 }
@@ -246,5 +234,17 @@ export function SupportBar() {
         );
       })}
     </div>
+  );
+}
+
+export function GoToTopButton({ className }: { className?: string }) {
+  return (
+    <Link
+      href="#top"
+      className={cn("relative bottom-4 right-4 z-50 p-2 bg-primary text-white rounded-full shadow-lg hover:bg-primary/90 transition-colors", className)}
+      title="Go to top"
+    >
+      <ArrowUp className="size-4" />
+    </Link>
   );
 }

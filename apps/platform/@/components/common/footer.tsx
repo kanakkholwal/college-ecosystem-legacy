@@ -79,6 +79,7 @@ export default async function Footer() {
             ))}
           </ul> */}
           <ThemeSwitcher className="order-1 md:order-2" />
+          {/* <GoToTopButton className="order-3 md:order-3" /> */}
         </div>
       </div>
     </footer>
