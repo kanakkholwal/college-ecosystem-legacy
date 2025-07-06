@@ -171,9 +171,14 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
                 </div>
               </div>
             </main>
+
           </div>
         </div>
         <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
+            {/* Background pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8cGF0aCBkPSJNIDIwIDAgTCAwIDAgMCAyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEiLz4KICAgIDwvcGF0dGVybj4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPgo8L3N2Zz4=')]"></div>
+            </div>
           <div className="h-56 w-full bg-card rounded-bl-xl sm:h-72 md:h-96 lg:w-full lg:h-full" >
           </div>
         </div>
@@ -479,7 +484,7 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
                 {clubData.tagline}
               </p>
               <div className="mt-4 flex justify-start space-x-4">
-                {['facebook', 'twitter', 'github', 'linkedin', 'instagram'].map((platform) => {
+                {['twitter', 'github', 'linkedin', 'instagram'].map((platform) => {
                   return (
                     <a
                       key={platform}
@@ -545,7 +550,7 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
             </div>
           </div>
 
-      
+
         </div>
         <div className="w-full max-w-(--max-app-width) mx-auto mt-8 flex flex-col justify-between gap-4 border-t py-8 text-xs font-medium text-muted-foreground md:flex-row md:items-center md:text-left">
           <p className="order-2 lg:order-1">
