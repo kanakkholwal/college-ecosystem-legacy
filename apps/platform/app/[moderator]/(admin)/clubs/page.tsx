@@ -1,3 +1,5 @@
+import { ClubCardEdit } from "@/components/clubs/card";
+import EmptyArea from "@/components/common/empty-area";
 import { HeaderBar } from "@/components/common/header-bar";
 import { ButtonLink } from "@/components/utils/link";
 import { CalendarDays } from "lucide-react";
@@ -17,6 +19,7 @@ export default async function AllClubsPage() {
             href="clubs/new"
             size="sm"
             variant="dark"
+            prefetch={true}
           >
             Create New Club
           </ButtonLink>
@@ -25,14 +28,15 @@ export default async function AllClubsPage() {
       {clubs.length > 0 ? (
         <div className="mt-4">
           {clubs.map((club) => (
-            <div key={club.id} className="border-b py-4">
-              <h2 className="text-xl font-semibold">{club.name}</h2>
-              <p className="text-gray-600">{club.description}</p>
-            </div>
+            <ClubCardEdit key={club._id} club={club} />
           ))}
         </div>
       ) : (
-        <p className="mt-4 text-gray-600">No clubs found.</p>
+        <EmptyArea
+          title="No Clubs Found"
+          description="It seems there are no clubs available at the moment. You can create a new club using the button above."
+          
+        />
       )}
     </>
   );

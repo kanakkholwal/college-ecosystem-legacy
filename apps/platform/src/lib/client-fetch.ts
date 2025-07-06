@@ -17,9 +17,8 @@ export const authHeaders = {
   "Content-Type": "application/json",
   "X-Authorization": serverIdentity,
   "X-Identity-Key": serverIdentity,
-  Origin: baseUrl,
-};
-/**
+  Origin: getWindowOrigin(),
+};/**
  *  a fetch instance to communicate with the server with the necessary headers
  */
 
@@ -50,7 +49,7 @@ export const mailFetch = createFetch({
     "Content-Type": "application/json",
     "X-Authorization": serverIdentity,
     "X-Identity-Key": serverIdentity,
-    Origin: baseUrl,
+    Origin: getWindowOrigin(),
   },
 });
 

@@ -1,19 +1,19 @@
 "use client";
 
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -22,46 +22,52 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Save } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { createClub } from "~/actions/clubs";
+import { updateClub } from "~/actions/clubs";
 import { clubCategories, clubSchema, ClubSchemaType } from "~/constants/clubs";
+import { ClubTypeJson } from "~/models/clubs";
 
-export default function CreateClubsPage() {
+interface EditClubsPageProps {
+  club: ClubTypeJson;
+}
+export default function EditClubsForm({ club }: EditClubsPageProps) {
   const form = useForm<ClubSchemaType>({
     resolver: zodResolver(clubSchema),
     defaultValues: {
-      name: "",
-      subDomain: "",
-      tagline: "",
-      description: "",
-      logo: "",
-      establishedYear: "",
-      customDomain: "",
-      category: clubCategories[0],
-      type: "public",
-      operationAs: "offline",
-      operationSpan: "semester",
-      members: [],
-      tags: [],
-      isVerified: false,
-      isClubEmailVerified: false,
+      name: club.name,
+      subDomain: club.subDomain,
+      tagline: club.tagline,
+      description: club.description,
+      logo: club.logo,
+      establishedYear: club.establishedYear,
+      customDomain: club.customDomain,
+      category: club.category,
+      type: club.type,
+      operationAs: club.operationAs,
+      operationSpan: club.operationSpan,
+      members: club.members,
+      tags: club.tags,
+      clubEmail: club.clubEmail,
+      isVerified: club.isVerified,
+      isClubEmailVerified: club.isClubEmailVerified,
+      club_type: club.club_type,
       president: {
-        name: "",
-        email: "",
-        phoneNumber: "",
+        name: club.president.name,
+        email: club.president.email,
+        phoneNumber: club.president.phoneNumber,
       },
     },
   });
 
   const onSubmit =  async (values: ClubSchemaType) => {
     console.log(values);
-    toast.promise(createClub(values), {
-      loading: "Creating club...",
+    toast.promise(updateClub(club._id,values), {
+      loading: "Updating club...",
       success: () => {
-        return "Club created successfully!";
+        return "Club updated successfully!";
       },
       error: (error) => {
-        console.error("Error creating club:", error);
-        return "Failed to create club. Please try again.";
+        console.error("Error updating club:", error);
+        return "Failed to update club. Please try again.";
       },
     });
   };

@@ -103,6 +103,7 @@ export const orgConfig = {
 export const appConfig = {
   name: "College Platform",
   appDomain: "nith.eu.org",
+  otherAppDomains : ["app.nith.eu.org",'platform.nith.eu.org','nith-app.vercel.app', 'nith-app.pages.dev',],
   url: "https://app.nith.eu.org",
   logoSquare: "/logo-square.svg",
   logo: "/logo.svg",

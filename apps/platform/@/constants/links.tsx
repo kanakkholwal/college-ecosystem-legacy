@@ -13,6 +13,7 @@ import { ROLES } from "~/constants";
 import { AudioLines, CalendarRange } from "lucide-react";
 import { BiSpreadsheet } from "react-icons/bi";
 import { GrAnnounce, GrResources, GrSchedules } from "react-icons/gr";
+import { HiOutlineUserGroup } from "react-icons/hi";
 import { MdOutlinePoll } from "react-icons/md";
 import { appConfig, supportLinks } from "~/project.config";
 import { toRegex } from "~/utils/string";
@@ -211,6 +212,13 @@ export const sidebar_links: rawLinkType[] = [
         allowed_roles: [ROLES.ADMIN],
       },
     ],
+  },
+  {
+    title: "Clubs",
+    icon: HiOutlineUserGroup,
+    path: "/clubs",
+    allowed_roles: [ROLES.ADMIN],
+    items: [],
   },
   {
     title: "Hostels",
