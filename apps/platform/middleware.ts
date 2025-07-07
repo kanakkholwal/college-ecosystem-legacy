@@ -50,7 +50,7 @@ export async function middleware(request: NextRequest) {
     const SubdomainRestricted = Auth_SUBDOMAIN_TO_PATH_REWRITES_Map.get(subdomain);
     if (SubdomainRestricted && (SubdomainRestricted.roles.includes(session.user.role) || SubdomainRestricted.roles.some(role => session.user.other_roles.includes(role)))) {
       // If the user is authenticated and has access to the subdomain, rewrite the path
-      console.log(`Rewriting request for subdomain: ${subdomain} to path: ${SubdomainRestricted.path}`);
+      // console.log(`Rewriting request for subdomain: ${subdomain} to path: ${SubdomainRestricted.path}`);
       return NextResponse.rewrite(new URL(`/${SubdomainRestricted.path}${pathname}`, request.url));
     }
   }

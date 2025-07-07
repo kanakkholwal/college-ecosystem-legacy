@@ -80,14 +80,14 @@ export function CategorySection({
         </CardHeader>
         <CardContent className="p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {displayClubs.map((club) => (
+            {/* {displayClubs.map((club) => (
               <ClubCard
                 key={club.id}
                 club={club}
                 onJoin={onJoinClub}
                 isJoined={joinedClubs.includes(club.id)}
               />
-            ))}
+            ))} */}
           </div>
         </CardContent>
       </Card>
