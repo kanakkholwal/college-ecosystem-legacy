@@ -231,18 +231,7 @@ export default function ClubsAndSocietiesPageClient({ recentClubs }: ClubsAndSoc
             ))}
           </div>
         </section>
-
-        {/* Call to Action */}
-        <section className="mt-16 relative  py-16 bg-gradient-to-r from-card via-primary/50 to-card rounded-xl p-8 text-center">
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8cGF0aCBkPSJNIDIwIDAgTCAwIDAgMCAyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEiLz4KICAgIDwvcGF0dGVybj4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPgo8L3N2Zz4=')]"></div>
-          </div>
-          <h2 className="text-2xl font-bold mb-4">Want to start your own club?</h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto mb-6">
-            Bring your passion to life by creating a new student organization. We'll help you with the process!
-          </p>
-          <Button size="lg">Apply to Create a Club</Button>
-        </section>
+          
       </div>
 
       {/* Admin Controls */}
