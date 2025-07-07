@@ -16,8 +16,8 @@ import type { ResultType } from "~/types/result";
 import { mailFetch, serverFetch } from "./server-fetch";
 
 
-const VERIFY_EMAIL_PATH_PREFIX = "/verify-mail?token=";
-const RESET_PASSWORD_PATH_PREFIX = "/reset-password?token=";
+const VERIFY_EMAIL_PATH_PREFIX = "/auth/verify-mail?token=";
+const RESET_PASSWORD_PATH_PREFIX = "/auth/reset-password?token=";
 
 const baseUrl = process.env.BASE_URL;
 
@@ -68,7 +68,7 @@ export const auth = betterAuth({
       console.log("Auth error:", error);
       console.log("Auth error , context:", ctx);
     },
-    // errorURL: "/auth-error",
+    // errorURL: "/auth/error",
   },
   emailAndPassword: {
     enabled: true,

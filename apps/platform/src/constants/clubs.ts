@@ -11,7 +11,7 @@ export const clubCategories = [
     'Arts & Crafts'
 ] as const;
 
-const restrictedSubDomains = [
+export const restrictedSubDomains = [
     'admin',
     'moderator',
     'support',

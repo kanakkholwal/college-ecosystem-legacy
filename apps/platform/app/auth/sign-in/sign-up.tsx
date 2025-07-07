@@ -2,16 +2,16 @@
 
 import { authClient } from "src/lib/auth-client";
 
-import { Button } from "@/components/ui/button";
 import {
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { BiLockOpenAlt } from "react-icons/bi";
-import { FcGoogle } from "react-icons/fc";
 import { LuMail } from "react-icons/lu";
 
 import {
@@ -25,36 +25,33 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { AiOutlineLoading } from "react-icons/ai";
+
+import { AtSign } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
+import { getDepartmentName } from "src/constants/departments";
+import * as z from "zod";
+import { emailSchema } from "~/constants/user";
 import { orgConfig } from "~/project.config";
 
-import * as z from "zod";
-
 const FormSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "Invalid email format" })
-    .min(5, { message: "Email must be at least 5 characters long" })
-    .max(100, { message: "Email cannot exceed 100 characters" })
-    .refine((val) => val.endsWith(orgConfig.mailSuffix), {
-      message: `Email must end with ${orgConfig.mailSuffix}`,
-    }),
-
+  email: emailSchema,
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters long" })
-    .max(128, { message: "Password cannot exceed 128 characters" })
+    .max(50, { message: "Password cannot exceed 50 characters" })
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/, {
       message:
         "Password must contain at least one uppercase letter, one lowercase letter, and one number",
     }),
+  name: z.string(),
 });
 
-export default function SignInForm() {
+export default function SignUpForm() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const redirect = searchParams?.get("next") || "/";
 
@@ -62,18 +59,25 @@ export default function SignInForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
+      name: "",
       email: "",
       password: "",
     },
   });
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    // console.log(data);
+    console.log(data);
 
-    await authClient.signIn.email(
+    setIsLoading(true);
+    await authClient.signUp.email(
       {
         email: data.email,
         password: data.password,
         callbackURL: redirect,
+        name: data.name,
+        username: data.email.split("@")[0],
+        // gender: GENDER.NOT_SPECIFIED,
+        department: getDepartmentName("ece"), // automatically corrects it on the backend
+        other_roles: ["student"],
       },
       {
         onRequest: () => {
@@ -82,15 +86,12 @@ export default function SignInForm() {
         onResponse: () => {
           setIsLoading(false);
         },
-        onSuccess: () => {
-          toast.success("Logged In successfully");
+        onSuccess(context) {
+          console.log(context);
+          toast.success("Account created successfully");
         },
-        onError: (ctx) => {
+        onError: (ctx: { error: { message: string } }) => {
           console.log(ctx);
-          // Handle the error
-          if (ctx.error.status === 403) {
-            alert("Please verify your email address");
-          }
           toast.error(ctx.error.message);
         },
       }
@@ -100,12 +101,40 @@ export default function SignInForm() {
   return (
     <>
       <CardHeader className="text-center">
-        <CardTitle className="text-xl">Welcome back</CardTitle>
-        <CardDescription>Log in for a seamless experience.</CardDescription>
+        <CardTitle className="text-xl">Sign Up</CardTitle>
+        <CardDescription>
+          Create a new account for platform access.
+        </CardDescription>
       </CardHeader>
-      <CardContent className={cn("grid gap-6 w-full text-left p-4 ")}>
+      <CardContent className={cn("grid gap-6 w-full text-left p-4")}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <div className="relative group">
+                    <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
+                      <LuMail className="w-4 h-4 group-focus-within:text-primary" />
+                    </FormLabel>
+                    <FormControl className="relative">
+                      <Input
+                        placeholder="Your Name"
+                        type="text"
+                        autoCapitalize="none"
+                        autoComplete="name"
+                        disabled={isLoading}
+                        autoCorrect="off"
+                        className="pl-10 pr-5"
+                        {...field}
+                      />
+                    </FormControl>
+                  </div>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               control={form.control}
               name="email"
@@ -113,7 +142,7 @@ export default function SignInForm() {
                 <FormItem>
                   <div className="relative group">
                     <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
-                      <LuMail className="w-4 h-4 group-focus-within:text-primary" />
+                      <AtSign className="w-4 h-4 group-focus-within:text-primary" />
                     </FormLabel>
                     <FormControl className="relative">
                       <Input
@@ -158,14 +187,10 @@ export default function SignInForm() {
                 </FormItem>
               )}
             />
-
-            <p className="text-right mt-2 text-sm font-medium">
-              <Link
-                href="/forget-password"
-                className="text-primary hover:underline text-xs"
-              >
-                Forgot Password?
-              </Link>
+            <p className="text-left mt-2 text-[8px] italic font-medium text-muted-foreground">
+              You must use your NITH email to sign up.(you{"'"}ll get a
+              verification link in your email if your email isn{"'"}t in the
+              database)
             </p>
 
             <Button
@@ -176,9 +201,9 @@ export default function SignInForm() {
               rounded="full"
             >
               {isLoading && (
-                <AiOutlineLoading className="mr-2 h-4 w-4 animate-spin" />
+                <AiOutlineLoading className="animate-spin" />
               )}
-              Sign In with Email
+              Sign Up with Email
             </Button>
           </form>
         </Form>
@@ -195,24 +220,24 @@ export default function SignInForm() {
             variant="light"
             type="button"
             disabled={isLoading}
-            width={"full"}
+            width="full"
             rounded="full"
             onClick={async () => {
               setIsLoading(true);
               await authClient.signIn.social({
                 provider: "google",
                 callbackURL: redirect,
-                errorCallbackURL: "/sign-in?social=google",
+                errorCallbackURL: "/auth/sign-in?social=google",
               });
               setIsLoading(false);
             }}
           >
             {isLoading ? (
-              <AiOutlineLoading className="h-6 w-6 animate-spin" />
+              <AiOutlineLoading className="animate-spin" />
             ) : (
-              <FcGoogle className=" h-6 w-6" />
+              <FcGoogle  />
             )}
-            {isLoading ? "Signing in..." : "Sign in with Google"}
+            {isLoading ? "Signing in..." : "Sign Up with Google"}
           </Button>
         </div>
       </CardContent>

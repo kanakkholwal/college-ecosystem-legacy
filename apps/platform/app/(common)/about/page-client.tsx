@@ -369,7 +369,7 @@ export default function AboutPage({ contributors, stats }: AboutPageProps) {
                                             </div>
                                         </div>
                                         <div className="space-y-2 mt-6">
-                                            <ButtonLink href={`/sign-in?tab=sign-up&utm_source=${appConfig.appDomain}&utm_medium=redirect&utm_campaign=sign_up`} className="w-full">
+                                            <ButtonLink href={`/auth/sign-in?tab=sign-up&utm_source=${appConfig.appDomain}&utm_medium=redirect&utm_campaign=sign_up`} className="w-full">
                                                 Get Started Free
                                             </ButtonLink>
                                             <ButtonLink variant="outline" className="w-full" target="_blank" href={content.wiki_url}>

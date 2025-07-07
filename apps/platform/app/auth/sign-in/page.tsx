@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     "NITH Login",
   ],
   alternates: {
-    canonical: "/sign-in",
+    canonical: "/auth/sign-in",
   },
 };
 
@@ -38,7 +38,7 @@ interface Props {
 export default async function SignInPage({ searchParams }: Props) {
   const data = await getSession();
   const tabs = TABS.filter(([key]) => {
-    // Filter out sign-up/sign-in if session is expired
+    // Filter out sign-up/auth/sign-in if session is expired
     if (
       data?.session?.expiresAt &&
       new Date(data.session.expiresAt) < new Date() &&

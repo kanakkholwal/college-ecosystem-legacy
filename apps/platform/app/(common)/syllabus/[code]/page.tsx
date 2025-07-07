@@ -5,11 +5,11 @@ import { notFound } from "next/navigation";
 import OthersPng from "./assets/others.png";
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
 import { PreviousPageLink } from "@/components/utils/link";
@@ -223,7 +223,7 @@ export default async function CoursePage(props: Props) {
             ) : (
               <p className="text-center text-muted-foreground text-sm font-medium pt-3">
                 <Link
-                  href="/sign-in"
+                  href="/auth/sign-in"
                   className="text-primary font-semibold hover:underline"
                 >
                   Login
@@ -270,7 +270,7 @@ export default async function CoursePage(props: Props) {
             ) : (
               <p className="text-center text-muted-foreground text-sm font-semibold pt-3">
                 <Link
-                  href="/sign-in"
+                  href="/auth/sign-in"
                   className="text-primary font-semibold hover:underline"
                 >
                   Login

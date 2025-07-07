@@ -5,7 +5,6 @@ import { MagicCard } from "@/components/animation/magic-card";
 import { ApplicationInfo } from "@/components/logo";
 import Link from "next/link";
 
-export const dynamic = "force-dynamic";
 
 export default function Layout({ children }: LayoutProps) {
   return (

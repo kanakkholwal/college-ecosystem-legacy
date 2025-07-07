@@ -4,12 +4,12 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import ConditionalRender from "@/components/utils/conditional-render";
@@ -54,7 +54,7 @@ export default function ForgotPassword() {
     try {
       const res = await authClient.forgetPassword({
         email: data.email,
-        redirectTo: "/sign-in?tab=reset-password",
+        redirectTo: "/auth/sign-in?tab=reset-password",
       });
       if (res.error) {
         toast.error(

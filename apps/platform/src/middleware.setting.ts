@@ -6,7 +6,7 @@ import { toRegex } from "~/utils/string";
 import { appConfig } from "./project.config";
 
 
-export const SIGN_IN_PATH = "/sign-in";
+export const SIGN_IN_PATH = "/auth/sign-in";
 
 export const UN_PROTECTED_API_ROUTES = [
     "/api/auth/*",
@@ -133,7 +133,7 @@ export function checkAuthorization(
     // 1. No session, redirect to sign-in
     if (!session) {
         return {
-            redirect: { destination: "/sign-in" },
+            redirect: { destination: "/auth/sign-in" },
             authorized: false,
             notFound: false,
         };
@@ -175,11 +175,26 @@ export function checkAuthorization(
     };
 }
 
-export const SUBDOMAIN_TO_PATH_REWRITES: Record<string, string> = {
-    "clubs": "/clubs-and-societies",
-    "resources": "/resources",
-    "community": "/community",
-};
+export const SUBDOMAIN_TO_PATH_REWRITES_Map = new Map<string, string>([
+    ["clubs", "clubs-and-societies"],
+    ["resources", "resources"],
+    ["community", "community"],
+    ["auth", "auth"],
+]);
+export const Auth_SUBDOMAIN_TO_PATH_REWRITES_Map = new Map<string, {
+    path: string;
+    roles: string[];
+}>([
+    ["guard", {
+        path: "guard",
+        roles: [ROLES.GUARD, ROLES.ADMIN],
+    }],
+    ["admin", {
+        path: "admin",
+        roles: [ROLES.ADMIN],
+    }],
+]);
+
 
 export function extractSubdomain(request: NextRequest): string | null {
   const url = request.url;

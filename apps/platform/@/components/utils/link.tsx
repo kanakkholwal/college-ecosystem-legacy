@@ -64,7 +64,7 @@ export function AuthButtonLink({ href, authorized, children, ...props }: React.C
 }) {
     return (
         <Button asChild {...props}>
-            <Link href={authorized ? href : `/sign-in?next=${href}`}>
+            <Link href={authorized ? href : `/auth/sign-in?next=${href}`}>
                 {children}
             </Link>
         </Button>

@@ -161,7 +161,7 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
               await authClient.signOut({
                 fetchOptions: {
                   onSuccess: () => {
-                    router.push("/sign-in"); // redirect to login page
+                    router.push("/auth/sign-in"); // redirect to login page
                   },
                 },
               });

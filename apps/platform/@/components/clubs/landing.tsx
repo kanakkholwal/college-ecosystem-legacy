@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
+import { Link1Icon } from '@radix-ui/react-icons';
 import {
   Activity,
   ArrowUpRight,
@@ -84,7 +85,7 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
 
   return (
     <div
-      className={cn(`min-h-screen transition-colors duration-300`, {
+      className={cn(`min-h-screen transition-colors duration-300 selection:text-white selection:bg-primary/50`, {
         'dark bg-gray-900': darkMode,
         'bg-gradient-to-br from-[#f0f9ff] to-[#e0f2fe]': !darkMode
       })}
@@ -137,61 +138,64 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
       </nav>
 
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        <div className="max-w-7xl mx-auto">
-          <div className="relative z-10 pb-8 sm:pb-16 md:pb-20 lg:max-w-2xl lg:w-full lg:pb-28 xl:pb-32">
-            <main className="mt-10 mx-auto max-w-7xl px-4 sm:mt-12 sm:px-6 md:mt-16 lg:mt-20 lg:px-8 xl:mt-28">
-              <div className="sm:text-center lg:text-left">
-                <h1 className="text-4xl tracking-tight font-extrabold sm:text-5xl md:text-6xl">
-                  <span className="block text-(--primary) dark:text-(--secondary)">{clubData.name}</span>
-                  <span className="block mt-2 text-2xl sm:text-3xl text-(--secondary) dark:text-(--territory)">
-                    {clubData.tagline}
-                  </span>
-                </h1>
-                <p className="mt-3 text-base sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0 text-gray-700 dark:text-gray-300">
-                  {clubData.description}
-                </p>
-                <div className="mt-5 sm:mt-8 sm:flex sm:justify-center lg:justify-start">
-                  <div className="rounded-md shadow">
-                    <Button
-                      size="lg"
-                      variant="rainbow_outline"
-                    >
-                      Join Now
-                    </Button>
-                  </div>
-                  <div className="mt-3 sm:mt-0 sm:ml-3">
-                    <Button
-                      variant="default"
-                      size="lg"
-                    >
-                      View Events
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </main>
+      <div id="hero" className="w-full flex relative flex-col items-center h-full min-h-96 py-14 px-20 text-foreground bg-accent"
+      >
+        <div className="absolute -top-[4rem] -left-[3.3rem] hidden sm:block rotate-[90deg]">
+          <div className="border-[8px] border-primary rounded-t-full border-b-0 w-[13rem] h-[6.6rem] opacity-20 lg:opacity-50" />
+        </div>
+        <div className="absolute bottom-[1rem] hidden sm:block right-[0.3rem] -rotate-[32deg]">
+          <div className="border-[8px] border-primary rounded-t-full border-b-0 w-[13rem] h-[6.6rem] opacity-20 lg:opacity-60" />
+        </div>
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8cGF0aCBkPSJNIDIwIDAgTCAwIDAgMCAyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEiLz4KICAgIDwvcGF0dGVybj4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPgo8L3N2Zz4=')]"></div>
+        </div>
+        <div className="max-w-7xl mx-auto gap-3 flex flex-col w-fit h-full items-start justify-center z-10 sm:text-center lg:text-left">
+          <Link className="text-xs text-muted-foreground hover:text-foreground  flex gap-1 items-center" target="_blank"
+            href={"https://webstudio.is"}>
+            Get to know us more
+            <Link1Icon className='inline-block size-3' />
 
+          </Link>
+
+          <div className="text-4xl 3xl:text-5xl font-semibold">
+            <h1 className="text-4xl 3xl:text-5xl w-full font-semibold text-(--primary) dark:text-(--secondary)">
+              {clubData.name}
+            </h1>
+            <h2 className="text-xl 3xl:text-2xl w-full font-medium  text-(--secondary) dark:text-(--territory)">
+              {clubData.tagline}
+            </h2>
+          </div>
+          <p className="text-xl mb-8 text-foreground opacity-80 text-pretty max-w-4xl">
+            {clubData.description}
+          </p>
+          <div className="flex justify-start gap-2">
+            <Button
+              size="lg"
+              variant="rainbow_outline"
+            >
+              Join Now
+            </Button>
+            <Button
+              variant="dark"
+              size="lg"
+            >
+              View Events
+            </Button>
           </div>
         </div>
-        <div className="lg:absolute lg:inset-y-0 lg:right-0 lg:w-1/2">
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8cGF0aCBkPSJNIDIwIDAgTCAwIDAgMCAyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEiLz4KICAgIDwvcGF0dGVybj4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPgo8L3N2Zz4=')]"></div>
-            </div>
-          <div className="h-56 w-full bg-card rounded-bl-xl sm:h-72 md:h-96 lg:w-full lg:h-full" >
-          </div>
+        <div className="h-56 w-full bg-card rounded-bl-xl sm:h-72 md:h-96 lg:w-full lg:h-full" >
         </div>
       </div>
+      
 
       {/* Stats Section */}
-      <div className="py-12 ">
+      <div className="py-12 bg-accent">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="lg:text-center">
-            <h2 className="text-base font-semibold tracking-wide uppercase text-(--secondary)">
+            <h2 className="text-base font-semibold tracking-wide uppercase text-(--secondary) dark:text-(--territory)">
               Community
             </h2>
-            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-(--primary) dark:text-(--text)">
+            <p className="mt-2 text-3xl leading-8 font-extrabold tracking-tight  text-(--primary) dark:text-(--secondary)">
               Our Growing Community
             </p>
             <p className="mt-4 max-w-2xl text-xl lg:mx-auto text-muted-foreground">
@@ -201,15 +205,15 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
 
           <div className="mt-10">
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-              <Card className="transition-all hover:shadow-lg hover:scale-[1.02] dark:bg-gray-700">
+              <Card className="transition-all hover:shadow-lg hover:scale-[1.02] ">
                 <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle className="text-lg font-medium text-(--primary) dark:text-(--text)">
+                  <CardTitle className="text-lg font-medium ">
                     Members
                   </CardTitle>
-                  <Users className="size-6 text-(--secondary)" />
+                  <Users className="size-6 text-primary" />
                 </CardHeader>
                 <CardContent>
-                  <div className="text-3xl font-bold text-(--primary) dark:text-(--text)">
+                  <div className="text-3xl font-bold text-(--primary)">
                     {clubData.stats.members}+
                   </div>
                   <p className="mt-2 text-muted-foreground">

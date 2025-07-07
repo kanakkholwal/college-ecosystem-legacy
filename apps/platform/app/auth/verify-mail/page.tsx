@@ -46,7 +46,7 @@ export default function VerifyEmail() {
             );
           } else {
             setVerified(true);
-            redirect("/sign-in");
+            redirect("/auth/sign-in");
           }
         })
         .catch((e) => {

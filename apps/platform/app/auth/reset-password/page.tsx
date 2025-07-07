@@ -2,18 +2,18 @@
 
 import { Button } from "@/components/ui/button";
 import {
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle,
 } from "@/components/ui/card";
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
+    Form,
+    FormControl,
+    FormField,
+    FormItem,
+    FormLabel,
+    FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -91,7 +91,7 @@ export default function ResetPassword() {
         return;
       }
       toast.success("Password reset successful,Can Login now ");
-      router.push("/sign-in");
+      router.push("/auth/sign-in");
     } catch (err) {
       console.error(err);
       toast.error("An error occurred. Please try again.");

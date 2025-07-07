@@ -65,7 +65,7 @@ export default function Navbar({ user }: NavbarProps) {
           {user ? <ProfileDropdown user={user} /> :
             <ButtonLink
               size="sm" rounded="full"
-              href={`/sign-in?next=${pathname}`}
+              href={`/auth/sign-in?next=${pathname}`}
               variant="rainbow">
               Log In
               <LogIn />
@@ -148,7 +148,7 @@ export function QuickLinks({ user, publicLinks }: QuickLinksProps) {
             })}
             {!isLoggedIn && (
               <CommandItem>
-                <Link href={`/sign-in`} className="flex items-center w-full">
+                <Link href={`/auth/sign-in`} className="flex items-center w-full">
                   <LogIn className="size-3 mr-3" />
                   <span>
                       <span className="text-sm">Sign In</span>

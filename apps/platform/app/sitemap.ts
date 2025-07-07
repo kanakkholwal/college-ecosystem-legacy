@@ -5,7 +5,7 @@ const BASE_URL = appConfig.url
 
 const staticRoutes = [
     { path: "/", },
-    { path: "/sign-in", },
+    { path: "/auth/sign-in", },
     { path: "/results", },
     { path: "/academic-calendar", },
     { path: "/classroom-availability", },

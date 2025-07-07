@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
 import { Session } from "~/lib/auth";
-import { checkAuthorization, dashboardRoutes, extractSubdomain, isHostelRoute, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
+import { Auth_SUBDOMAIN_TO_PATH_REWRITES_Map, checkAuthorization, dashboardRoutes, extractSubdomain, isHostelRoute, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, SUBDOMAIN_TO_PATH_REWRITES_Map, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
 import { appConfig } from "~/project.config";
 
 
@@ -20,14 +20,17 @@ export async function middleware(request: NextRequest) {
     }
 
     // For the root path on a subdomain, rewrite to the subdomain page
+    const subDomainPath = SUBDOMAIN_TO_PATH_REWRITES_Map.get(subdomain);
+    if (subDomainPath) {
+      // If the subdomain has a defined path, rewrite to that path
+      // console.log(`Rewriting request for subdomain: ${subdomain} to path: ${subDomainPath} :`,`/${subDomainPath}${pathname}`);
+      
+      return NextResponse.rewrite(new URL(`/${subDomainPath}${pathname}`, request.url));
+    }
+    // dynamically handle the root path for clubs
     if (pathname === '/') {
       return NextResponse.rewrite(new URL(`/clubs/${subdomain}`, request.url));
     }
-    // if (SUBDOMAIN_TO_PATH_REWRITES[subdomain]) {
-    //   // Rewrite the path based on the subdomain
-    //   const newPath = SUBDOMAIN_TO_PATH_REWRITES[subdomain];
-    //   return NextResponse.rewrite(new URL(`${newPath}${pathname}`, request.url));
-    // }
   }
   const searchParams = request.nextUrl.searchParams
   const isPrivateRoute = PRIVATE_ROUTES.some((route) => isRouteAllowed(pathname, route.pattern));
@@ -43,7 +46,14 @@ export async function middleware(request: NextRequest) {
       },
     }
   );
-
+  if (subdomain && session) {
+    const SubdomainRestricted = Auth_SUBDOMAIN_TO_PATH_REWRITES_Map.get(subdomain);
+    if (SubdomainRestricted && (SubdomainRestricted.roles.includes(session.user.role) || SubdomainRestricted.roles.some(role => session.user.other_roles.includes(role)))) {
+      // If the user is authenticated and has access to the subdomain, rewrite the path
+      console.log(`Rewriting request for subdomain: ${subdomain} to path: ${SubdomainRestricted.path}`);
+      return NextResponse.rewrite(new URL(`/${SubdomainRestricted.path}${pathname}`, request.url));
+    }
+  }
   // Exception for the error page : Production issue on Google Sign in
   if (pathname === "/api/auth/error" && session) {
     console.log(pathname, "is accessed by an authenticated user");
