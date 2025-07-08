@@ -106,6 +106,7 @@ const buttonVariants = cva(
       rounded: {
         default: "rounded-md",
         full: "rounded-full",
+        large: "rounded-lg",
         none: "rounded-none",
       },
       transition: {

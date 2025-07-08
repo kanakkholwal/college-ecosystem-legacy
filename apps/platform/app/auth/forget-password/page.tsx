@@ -1,38 +1,34 @@
 "use client";
 
+import { Icon } from "@/components/icons";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { CheckCircle2, LoaderCircleIcon } from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { LuMail } from "react-icons/lu";
 import { authClient } from "src/lib/auth-client";
 import * as z from "zod";
+import { emailSchema } from "~/constants";
 import { orgConfig } from "~/project.config";
 
 const FormSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "Invalid email format" })
-    .min(5, { message: "Email must be at least 5 characters long" })
-    .max(100, { message: "Email cannot exceed 100 characters" })
-    .refine((val) => val.endsWith(orgConfig.mailSuffix), {
-      message: `Email must end with ${orgConfig.mailSuffix}`,
-    }),
+  email: emailSchema,
 });
 
 export default function ForgotPassword() {
@@ -109,6 +105,9 @@ export default function ForgotPassword() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
+                    <FormLabel>
+                      Email address
+                    </FormLabel>
                     <div className="relative group">
                       <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
                         <LuMail className="w-4 h-4" />
@@ -134,16 +133,18 @@ export default function ForgotPassword() {
               <Button
                 className="mt-2 tracking-wide"
                 variant="default"
-                rounded="full"
                 type="submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting && <LoaderCircleIcon className="animate-spin" />}
+                {isSubmitting && <Icon name="loader-circle" className="animate-spin" />}
 
                 {isSubmitting ? "Sending..." : "Send reset link"}
               </Button>
             </form>
           </Form>
+          <div className="text-center text-sm text-muted-foreground">
+            Remember your password? <Link prefetch className="underline text-primary" href="sign-in">Sign in</Link>
+          </div>
         </div>
       </ConditionalRender>
     </div>

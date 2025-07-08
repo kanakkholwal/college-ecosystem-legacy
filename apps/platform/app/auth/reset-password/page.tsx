@@ -1,24 +1,25 @@
 "use client";
 
+import { Icon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { LoaderCircleIcon } from "lucide-react";
+import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -152,15 +153,17 @@ export default function ResetPassword() {
             <Button
               className="mt-2"
               variant="default"
-              rounded="full"
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting && <LoaderCircleIcon className="animate-spin" />}
+              {isSubmitting && <Icon name="loader-circle" className="animate-spin" />}
               {isSubmitting ? "Resetting..." : "Reset Password"}
             </Button>
           </form>
         </Form>
+          <div className="text-center text-sm text-muted-foreground">
+            Remember your password? <Link prefetch className="underline text-primary" href="sign-in">Sign in</Link>
+          </div>
       </CardContent>
     </div>
   );

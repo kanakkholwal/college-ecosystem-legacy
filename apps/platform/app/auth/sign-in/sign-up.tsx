@@ -28,10 +28,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { AiOutlineLoading } from "react-icons/ai";
 
+import { Icon } from "@/components/icons";
 import { AtSign } from "lucide-react";
-import { FcGoogle } from "react-icons/fc";
 import { getDepartmentName } from "src/constants/departments";
 import * as z from "zod";
 import { emailSchema } from "~/constants/user";
@@ -187,10 +186,8 @@ export default function SignUpForm() {
                 </FormItem>
               )}
             />
-            <p className="text-left mt-2 text-[8px] italic font-medium text-muted-foreground">
-              You must use your NITH email to sign up.(you{"'"}ll get a
-              verification link in your email if your email isn{"'"}t in the
-              database)
+            <p className="text-left mt-2 text-xs italic font-medium text-muted-foreground">
+              You must use your {orgConfig.mailSuffix} email to sign up.
             </p>
 
             <Button
@@ -198,10 +195,9 @@ export default function SignUpForm() {
               type="submit"
               className="mt-2 tracking-wide"
               variant="default"
-              rounded="full"
             >
               {isLoading && (
-                <AiOutlineLoading className="animate-spin" />
+                <Icon name="loader-circle" className="animate-spin" />
               )}
               Sign Up with Email
             </Button>
@@ -221,7 +217,6 @@ export default function SignUpForm() {
             type="button"
             disabled={isLoading}
             width="full"
-            rounded="full"
             onClick={async () => {
               setIsLoading(true);
               await authClient.signIn.social({
@@ -233,9 +228,9 @@ export default function SignUpForm() {
             }}
           >
             {isLoading ? (
-              <AiOutlineLoading className="animate-spin" />
+              <Icon name="loader-circle" className="animate-spin" />
             ) : (
-              <FcGoogle  />
+             <Icon name="google-fc" />
             )}
             {isLoading ? "Signing in..." : "Sign Up with Google"}
           </Button>

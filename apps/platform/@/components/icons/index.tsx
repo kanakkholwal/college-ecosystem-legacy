@@ -12,13 +12,15 @@ import {
     Instagram,
     LayoutTemplate,
     Linkedin,
+    LoaderCircleIcon,
     Mail,
     Phone,
     ShieldCheck,
     Terminal,
     Twitter,
-    Users
+    Users,
 } from 'lucide-react';
+import { FcGoogle } from 'react-icons/fc';
 import { GrArticle } from "react-icons/gr";
 import { MdHistoryEdu } from "react-icons/md";
 
@@ -43,9 +45,11 @@ export const IconComponent = {
     "shield": ShieldCheck,
     "terminal": Terminal,
     "twitter": Twitter,
+    "google-fc": FcGoogle,
     "users": Users,
     "arrow-up-right": ArrowUpRight,
-    "arrow-right": ArrowRight, // Alias for arrow-up-right
+    "arrow-right": ArrowRight,  
+    "loader-circle": LoaderCircleIcon,
     "layout": LayoutTemplate,
     "default": LayoutTemplate, // Fallback icon
     "unknown": LayoutTemplate, // Fallback for unknown icons
@@ -53,7 +57,12 @@ export const IconComponent = {
 
 export type IconType = keyof typeof IconComponent;
 
-export function Icon({ name, className }: { name: IconType; className?: string }) {
+interface IconProps extends React.SVGProps<SVGSVGElement> {
+    name: IconType;
+    className?: string;
+}
+
+export function Icon({ name, className }: IconProps) {
     const Icon = IconComponent[name];
     if (!Icon) {
         return null;

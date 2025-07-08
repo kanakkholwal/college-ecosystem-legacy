@@ -4,23 +4,22 @@ import { authClient } from "src/lib/auth-client";
 
 import { Button } from "@/components/ui/button";
 import {
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
 } from "@/components/ui/card";
 import { useState } from "react";
 import { BiLockOpenAlt } from "react-icons/bi";
-import { FcGoogle } from "react-icons/fc";
 import { LuMail } from "react-icons/lu";
 
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
@@ -29,9 +28,9 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { AiOutlineLoading } from "react-icons/ai";
 import { orgConfig } from "~/project.config";
 
+import { Icon } from "@/components/icons";
 import * as z from "zod";
 
 const FormSchema = z.object({
@@ -103,7 +102,7 @@ export default function SignInForm() {
         <CardTitle className="text-xl">Welcome back</CardTitle>
         <CardDescription>Log in for a seamless experience.</CardDescription>
       </CardHeader>
-      <CardContent className={cn("grid gap-6 w-full text-left p-4 ")}>
+      <CardContent className={cn("grid gap-6 w-full text-left p-4")}>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="grid gap-2">
             <FormField
@@ -161,8 +160,9 @@ export default function SignInForm() {
 
             <p className="text-right mt-2 text-sm font-medium">
               <Link
-                href="/auth/forget-password"
+                href="forget-password"
                 className="text-primary hover:underline text-xs"
+                prefetch
               >
                 Forgot Password?
               </Link>
@@ -173,10 +173,10 @@ export default function SignInForm() {
               type="submit"
               className="mt-2 tracking-wide"
               variant="default"
-              rounded="full"
+
             >
               {isLoading && (
-                <AiOutlineLoading className="mr-2 h-4 w-4 animate-spin" />
+                <Icon name="loader-circle" className="animate-spin" />
               )}
               Sign In with Email
             </Button>
@@ -190,13 +190,13 @@ export default function SignInForm() {
             <span className="px-2 text-muted-foreground">Or continue with</span>
           </div>
         </div>
-        <div className="grid  grid-cols-1">
+        <div className="grid grid-cols-1">
           <Button
             variant="light"
             type="button"
             disabled={isLoading}
             width={"full"}
-            rounded="full"
+
             onClick={async () => {
               setIsLoading(true);
               await authClient.signIn.social({
@@ -208,9 +208,9 @@ export default function SignInForm() {
             }}
           >
             {isLoading ? (
-              <AiOutlineLoading className="h-6 w-6 animate-spin" />
+              <Icon name="loader-circle" className="animate-spin" />
             ) : (
-              <FcGoogle className=" h-6 w-6" />
+              <Icon name="google-fc" />
             )}
             {isLoading ? "Signing in..." : "Sign in with Google"}
           </Button>

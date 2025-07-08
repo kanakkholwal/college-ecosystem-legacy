@@ -32,7 +32,8 @@ export const GENDER = {
 
 export const emailSchema = z
   .string()
-  .email()
+  .email({ message: "Invalid email address" })
+  .max(100, { message: "Email cannot exceed 100 characters" })
   .refine((val) => val.endsWith(`@${orgConfig.domain}`), {
     message: `Email must end with @${orgConfig.domain}`,
   });
