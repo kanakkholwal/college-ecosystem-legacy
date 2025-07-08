@@ -64,7 +64,7 @@ export function ClubCard({ club }: ClubCardProps) {
           <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
             <div className="flex items-center gap-1.5">
               <Users className="h-4 w-4" />
-              <span className='whitespace-nowrap'>{club.members} members</span>
+              <span className='whitespace-nowrap'>{club.members.length} members</span>
               {(new Date(club.establishedYear).getTime() - new Date().getTime()) < 1000 * 60 * 60 * 24 * 30 && (
                 <Badge variant="default" className="px-1.5 py-0.5">
                   <Sparkles className="size-3 mr-1" />
@@ -102,7 +102,7 @@ export function ClubCard({ club }: ClubCardProps) {
           </div>
         </CardContent>
 
-        <CardFooter className="px-6 pb-6 pt-0 gap-3">
+        <CardFooter className="px-6 pb-6 pt-0 gap-3 justify-around">
           <Dialog>
             <DialogTrigger asChild>
               <Button
@@ -181,13 +181,7 @@ export function ClubCard({ club }: ClubCardProps) {
 
           <ButtonLink
             href={`/clubs/${club.subDomain}`}
-            variant="outline"
-            className="w-full text-white group-hover:bg-primary/10 group-hover:border-primary/30 transition-colors"
-            style={{
-              backgroundColor: club.theme?.primaryColor ? club.theme?.primaryColor : 'hsl(var(--primary))',
-              borderColor: `${club.theme?.primaryColor ? club.theme?.primaryColor : 'hsl(var(--primary))'}30`,
-            }}
-
+            variant="default_light"
           >
             <Eye />
             View Club

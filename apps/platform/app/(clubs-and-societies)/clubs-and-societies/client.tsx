@@ -1,6 +1,6 @@
 'use client';
 
-import { AdminFab } from '@/components/clubs/admin-fab';
+import { NumberTicker } from '@/components/animation/number-ticker';
 import { ClubCard } from '@/components/clubs/club-card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -8,35 +8,29 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { clubCategories, clubsEventList, clubsList } from '@/constants/clubs';
+import { clubCategories, clubsEventList } from '@/constants/clubs';
 import { ChevronRight, Filter, Sparkles, Users } from 'lucide-react';
 import { parseAsString, useQueryState } from 'nuqs';
 import { useMemo, useState } from 'react';
 import { ClubTypeJson } from '~/models/clubs';
-import { orgConfig } from '~/project.config';
 
 interface ClubsAndSocietiesPageClientProps {
-    recentClubs: ClubTypeJson[]; // Replace with actual type if available
+    clubsList: ClubTypeJson[]; // Replace with actual type if available
 }
 
-export default function ClubsAndSocietiesPageClient({ recentClubs }: ClubsAndSocietiesPageClientProps) {
+export default function ClubsAndSocietiesPageClient({ clubsList }: ClubsAndSocietiesPageClientProps) {
   const [selectedCategory, setSelectedCategory] = useQueryState(
-    'all',
-    parseAsString.withDefault('all').withOptions({
-    })
+    'category',
+    parseAsString.withDefault('category')
   );
   const [activeTab, setActiveTab] = useState<'all' | 'featured' | 'new'>('all');
 
-  // Mock user state - in real app, this would come from auth context
-  const [user] = useState({
-    isAdmin: true, // Set to false to hide admin controls
-    name: 'John Doe',
-    email: 'john.doe@nith.ac.in'
-  });
+
 
   const stats = {
     totalClubs: clubsList.length,
-    totalMembers: clubsList.reduce((acc, club) => acc + club.members, 0),
+    totalMembers: clubsList.reduce((acc, club) => acc + club.members.length, 0),
+    recentClubs: clubsList.filter(club => new Date(club.establishedYear) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000)), // Last 30 days
     upcomingEvents: clubsEventList.length,
     categories: clubCategories.length
   };
@@ -75,8 +69,6 @@ export default function ClubsAndSocietiesPageClient({ recentClubs }: ClubsAndSoc
               <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
                 Clubs & Societies
               </span>
-              <br />
-              <span className="text-foreground">@{orgConfig.shortName}</span>
             </h1>
 
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
@@ -86,15 +78,15 @@ export default function ClubsAndSocietiesPageClient({ recentClubs }: ClubsAndSoc
             {/* Stats */}
             <div className="flex flex-wrap justify-center gap-6 mt-8">
               <div className="flex flex-col items-center">
-                <div className="text-3xl font-bold text-primary">{stats.totalClubs}</div>
+                <NumberTicker value={stats.totalClubs} className='text-3xl font-bold text-primary' />
                 <div className="text-sm text-muted-foreground">Active Clubs</div>
               </div>
               <div className="flex flex-col items-center">
-                <div className="text-3xl font-bold text-secondary">{stats.totalMembers}</div>
+                <NumberTicker value={stats.totalMembers} className='text-3xl font-bold text-secondary' />
                 <div className="text-sm text-muted-foreground">Members</div>
               </div>
               <div className="flex flex-col items-center">
-                <div className="text-3xl font-bold text-purple-500">{stats.upcomingEvents}</div>
+                <NumberTicker value={stats.upcomingEvents} className='text-3xl font-bold text-purple-500' />
                 <div className="text-sm text-muted-foreground">Upcoming Events</div>
               </div>
             </div>
@@ -161,9 +153,9 @@ export default function ClubsAndSocietiesPageClient({ recentClubs }: ClubsAndSoc
 
           <TabsContent value="all">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {/* {currentClubs.map((club) => (
-                <ClubCard key={club.id} club={club } />
-              ))} */}
+              {currentClubs.map((club) => (
+                <ClubCard key={club._id} club={club } />
+              ))}
             </div>
 
             {currentClubs.length === 0 && (
@@ -191,7 +183,7 @@ export default function ClubsAndSocietiesPageClient({ recentClubs }: ClubsAndSoc
 
           <TabsContent value="new">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {recentClubs?.map((club) => (
+              {stats.recentClubs?.map((club) => (
                 <ClubCard key={club._id} club={club} />
               ))}
             </div>
@@ -235,12 +227,12 @@ export default function ClubsAndSocietiesPageClient({ recentClubs }: ClubsAndSoc
       </div>
 
       {/* Admin Controls */}
-      <AdminFab
+      {/* <AdminFab
         isAdmin={user.isAdmin}
         onAddClub={() => console.log('Add club')}
         onAddEvent={() => console.log('Add event')}
         onManageMembers={() => console.log('Manage members')}
-      />
+      /> */}
     </div>
   );
 }

@@ -46,7 +46,7 @@ function AccountFormContent({ currentUser }: Props) {
       other_emails: currentUser.other_emails || [],
       gender: currentUser.gender as "male" | "female" | "not_specified",
     },
-  }); 
+  });
 
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     console.log(data);
@@ -64,7 +64,7 @@ function AccountFormContent({ currentUser }: Props) {
 
 
   return (<Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 grid gap-6 md:grid-cols-2">
       <FormField
         control={form.control}
         name="gender"
@@ -134,10 +134,11 @@ function AccountFormContent({ currentUser }: Props) {
           </FormItem>
         )}
       />
-
-      <Button type="submit" variant="default_light" size="sm" disabled={form.formState.isSubmitting}>
-        <Save /> Update Account
-      </Button>
+      <div>
+        <Button type="submit" variant="default_light" size="sm" disabled={form.formState.isSubmitting}>
+          <Save /> Update Account
+        </Button>
+      </div>
     </form>
   </Form>
   );

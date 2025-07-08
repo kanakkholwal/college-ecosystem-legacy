@@ -1,24 +1,26 @@
+import {
+    Activity,
+    ArrowRight,
+    ArrowUpRight,
+    BarChart2,
+    BookOpen,
+    Calendar,
+    Code,
+    Cpu,
+    Github,
+    Globe,
+    Instagram,
+    LayoutTemplate,
+    Linkedin,
+    Mail,
+    Phone,
+    ShieldCheck,
+    Terminal,
+    Twitter,
+    Users
+} from 'lucide-react';
 import { GrArticle } from "react-icons/gr";
 import { MdHistoryEdu } from "react-icons/md";
-import {
-  Activity,
-  BarChart2,
-  BookOpen,
-  Calendar,
-  Code,
-  Cpu,
-  Github,
-  Globe,
-  Instagram,
-  LayoutTemplate,
-  Linkedin,
-  Mail,
-  Phone,
-  ShieldCheck,
-  Terminal,
-  Twitter,
-  Users
-} from 'lucide-react';
 
 export type IconComponentType = {
     [key: string]: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -42,10 +44,12 @@ export const IconComponent = {
     "terminal": Terminal,
     "twitter": Twitter,
     "users": Users,
+    "arrow-up-right": ArrowUpRight,
+    "arrow-right": ArrowRight, // Alias for arrow-up-right
     "layout": LayoutTemplate,
     "default": LayoutTemplate, // Fallback icon
     "unknown": LayoutTemplate, // Fallback for unknown icons
-} as IconComponentType;
+} as const;
 
 export type IconType = keyof typeof IconComponent;
 

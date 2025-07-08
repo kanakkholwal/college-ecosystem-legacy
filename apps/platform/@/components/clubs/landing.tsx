@@ -85,12 +85,18 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
 
   return (
     <div
-      className={cn(`min-h-screen transition-colors duration-300 selection:text-white selection:bg-primary/50`, {
+      className={cn(`relative min-h-screen transition-colors duration-300 selection:text-white selection:bg-primary/50`, {
         'dark bg-gray-900': darkMode,
-        'bg-gradient-to-br from-[#f0f9ff] to-[#e0f2fe]': !darkMode
-      })}
+        'bg-gradient-to-br from-[#f0f9ff] to-[#e0f2fe]': !darkMode,
+        
+      },
+      "not-[>#pattern]:z-10"
+    )}
       style={styles}
     >
+      <div className="absolute inset-0 opacity-10 z-0" id='pattern'>
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8cGF0aCBkPSJNIDIwIDAgTCAwIDAgMCAyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEiLz4KICAgIDwvcGF0dGVybj4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPgo8L3N2Zz4=')]"></div>
+      </div>
       {/* Navigation */}
       <nav className="sticky top-0 z-50 bg-card backdrop-blur-sm border-b ">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -146,9 +152,7 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
         <div className="absolute bottom-[1rem] hidden sm:block right-[0.3rem] -rotate-[32deg]">
           <div className="border-[8px] border-primary rounded-t-full border-b-0 w-[13rem] h-[6.6rem] opacity-20 lg:opacity-60" />
         </div>
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICA8ZGVmcz4KICAgIDxwYXR0ZXJuIGlkPSJncmlkIiB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8cGF0aCBkPSJNIDIwIDAgTCAwIDAgMCAyMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEiLz4KICAgIDwvcGF0dGVybj4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPgo8L3N2Zz4=')]"></div>
-        </div>
+
         <div className="max-w-7xl mx-auto gap-3 flex flex-col w-fit h-full items-start justify-center z-10 sm:text-center lg:text-left">
           <Link className="text-xs text-muted-foreground hover:text-foreground  flex gap-1 items-center" target="_blank"
             href={"https://webstudio.is"}>
@@ -186,7 +190,7 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
         <div className="h-56 w-full bg-card rounded-bl-xl sm:h-72 md:h-96 lg:w-full lg:h-full" >
         </div>
       </div>
-      
+
 
       {/* Stats Section */}
       <div className="py-12 bg-accent">

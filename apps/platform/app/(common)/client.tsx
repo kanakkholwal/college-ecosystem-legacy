@@ -1,8 +1,7 @@
 "use client";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Icon } from "@/components/icons";
 import { ButtonLink } from "@/components/utils/link";
-import { RocketIcon } from "@radix-ui/react-icons";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "motion/react";
 import type { Session } from "~/lib/auth";
 import { appConfig } from "~/project.config";
@@ -25,7 +24,7 @@ export function HeroSection({ user }: HeroSection) {
       className="z-10 w-full max-w-7xl max-h-96 relative flex flex-col gap-4 items-center justify-center py-24 px-2 sm:px-4 rounded-lg text-center lg:text-left"
       suppressHydrationWarning={true}
     >
-      
+
       <script type="application/ld+json">
         {JSON.stringify({
           "@context": "https://schema.org",
@@ -48,13 +47,44 @@ export function HeroSection({ user }: HeroSection) {
           ]
         })}
       </script>
-      <h2 className="text-3xl font-semibold text-center mt-10">
-        {getGreeting()} <span className="bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-primary via-violet-500 to-pink-500">{user?.name}</span>
+      <h2 className="text-3xl font-bold tracking-tight sm:text-4xl md:text-6xl mb-4 max-w-5xl mt-10">
+        {getGreeting()} <br />
+        <span className="bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-primary via-violet-500 to-pink-500">{user?.name}</span>
       </h2>
-      <p className="mb-8 text-base text-muted-foreground text-center truncate line-clamp-3">
-        {appConfig.description.split(". ")[0] || "Welcome to the digital campus platform!"}
+      <p className="text-base text-muted-foreground text-center">
+        {appConfig.description.split(".")[0] || "Welcome to the digital campus platform!"}
       </p>
-      {(user?.other_roles.includes("student") || !user) && (
+      <p className="mb-8 text-base text-muted-foreground text-center truncate line-clamp-3">
+        {appConfig.description || "Welcome to the digital campus platform!"}
+      </p>
+      <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        {user ? (<ButtonLink
+          target="_blank"
+          variant="dark"
+          effect="shine"
+          href="/dashboard"
+        >
+          Dashboard <ArrowRight />
+        </ButtonLink>) : (
+          <ButtonLink
+            variant="dark"
+            target="_blank"
+            href="/auth/sign-in"
+          >
+            Sign In <ArrowRight />
+          </ButtonLink>
+        )}
+        <ButtonLink
+          variant="outline"
+          target="_blank"
+          href={`https://github.com/${appConfig.githubUri}/blob/main/CONTRIBUTING.md`}
+        >
+          <Icon name="github" />
+          Contribute Now
+          <Icon name="arrow-up-right" />
+        </ButtonLink>
+      </div>
+      {/* {(user?.other_roles.includes("student") || !user) && (
         <Alert variant="default" className="mt-4 max-w-4xl border bg-card/50 backdrop-blur-md" data-aos="fade-right">
           <RocketIcon className="h-4 w-4" />
           <AlertTitle className="text-left">
@@ -73,7 +103,7 @@ export function HeroSection({ user }: HeroSection) {
               Contribute Now <ArrowUpRight />
             </ButtonLink>
         </Alert>
-      )}
+      )} */}
     </motion.section>
   );
 }
