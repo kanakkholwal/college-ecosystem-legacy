@@ -28,7 +28,7 @@ import { useTheme } from 'next-themes';
 import Link from 'next/link';
 import { ClubTypeJson } from '~/models/clubs';
 import { appConfig } from '~/project.config';
-import { Icon } from '../icons';
+import { Icon, IconType } from '../icons';
 import { ButtonLink } from '../utils/link';
 
 
@@ -492,7 +492,7 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
                 {clubData.tagline}
               </p>
               <div className="mt-4 flex justify-start space-x-4">
-                {['twitter', 'github', 'linkedin', 'instagram'].map((platform) => {
+                {(['twitter', 'github', 'linkedin', 'instagram'] as IconType[]).map((platform) => {
                   return (
                     <a
                       key={platform}
