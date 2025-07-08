@@ -3,7 +3,7 @@ import GithubBanner from "@/components/common/github-banner";
 import Navbar from "@/components/common/navbar";
 import { BannerPanel } from "@/components/utils/banner";
 import ConditionalRender from "@/components/utils/conditional-render";
-import { GitBranch, RocketIcon, StarIcon, Users } from "lucide-react";
+import { RocketIcon } from "lucide-react";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { appConfig } from "~/project.config";
@@ -54,7 +54,7 @@ export default async function Layout({ children }: LayoutProps) {
         <div className="blur-[106px] h-32 bg-gradient-to-r from-secondary to-primary" />
       </div> */}
         {children}
-       <GithubBanner/>
+        <GithubBanner />
       </div>
       <Footer />
     </div>

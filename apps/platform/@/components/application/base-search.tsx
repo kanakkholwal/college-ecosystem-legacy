@@ -193,7 +193,7 @@ export default function BaseSearchBox({
           placeholder={searchPlaceholder}
           className={cn(
             "w-full rounded-full",
-            isDesktop ? "h-11 pr-18 pl-12" : "h-10 pl-10 pr-14",
+            isDesktop ? "h-11 px-18" : "h-10 pl-10 pr-14",
           )}
           defaultValue={searchParams.get(searchParamsKey)?.toString()}
           onChange={(e) => handleSearch(e.target.value)}
