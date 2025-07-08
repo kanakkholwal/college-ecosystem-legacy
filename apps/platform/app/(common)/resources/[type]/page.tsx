@@ -1,6 +1,6 @@
 import ResourceCard from '@/components/application/resource-card';
 import { ResponsiveContainer } from '@/components/common/container';
-import { Icon } from '@/components/icons';
+import { Icon, IconType } from '@/components/icons';
 import { ButtonLink } from '@/components/utils/link';
 import { cn } from '@/lib/utils';
 import { ArrowRight, Plus } from 'lucide-react';
@@ -42,7 +42,7 @@ export default async function ResourceList({ params }: PageProps) {
         <div className="max-w-6xl mx-auto p-4">
             <div
                 className={cn("w-full flex items-center flex-wrap p-4 py-2 mt-2 mb-4 gap-2 bg-card rounded-lg border")}>
-                <Icon name={resolvedParams.type} className="inline-block size-5 mr-2" />
+                <Icon name={resolvedParams.type as IconType} className="inline-block size-5 mr-2" />
                 <div>
                     <h3 className="text-sm font-semibold capitalize">
                         {resolvedParams.type}

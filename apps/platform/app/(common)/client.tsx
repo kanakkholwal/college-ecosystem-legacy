@@ -66,7 +66,7 @@ export function HeroSection({ user }: HeroSection) {
             className={cn(
               user ? "text-base sm:text-3xl" : "text-3xl sm:text-4xl md:text-5xl"
             )}
-   
+
           >{getGreeting()}
           </AnimatedGradientText> <br />
           <span className="text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-neutral-500 dark:from-foreground to-primary">

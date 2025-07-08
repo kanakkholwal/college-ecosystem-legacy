@@ -8,6 +8,7 @@ import { getAllResourcesGroupedByType, getResourceBySlug, ResourceType } from '~
 import { appConfig } from '~/project.config';
 import { changeCase } from '~/utils/string';
 import { ClientMdx, CommentSection } from './client';
+import Image from 'next/image';
 
 
 type PageProps = {
@@ -108,7 +109,9 @@ export default async function ResourcePage({ params }: PageProps) {
                     </ButtonLink>
                 </div>
                 <div className='container max-w-[900px] py-12 md:px-8 space-y-5 px-3 lg:px-0'>
-                    {appConfig.flags.enableOgImage && (<img
+                    {appConfig.flags.enableOgImage && (<Image
+                        width={1200}
+                        height={630}
                         src={`/og/resources/${resolvedParams.type}/${resolvedParams.slug}`}
                         alt={frontmatter.title}
                         className="w-full h-auto rounded-lg"

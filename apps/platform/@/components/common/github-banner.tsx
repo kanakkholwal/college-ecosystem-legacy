@@ -4,7 +4,7 @@ import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { GitBranch, StarIcon, Users } from 'lucide-react';
 import { getRepoStats } from '~/lib/github';
 import { appConfig } from '~/project.config';
-import { Icon } from '../icons';
+import { Icon, IconType } from '../icons';
 import { Badge } from '../ui/badge';
 
 interface GithubBannerProps {
@@ -115,7 +115,7 @@ export default async function GithubBanner({ className }: GithubBannerProps) {
             </div>
         </div>
         <div className="mt-8 flex justify-center gap-4 flex-wrap px-3">
-            {Object.entries(appConfig.socials).map(([key, value]) => {
+            {(Object.entries(appConfig.socials) as [IconType, string][]).map(([key, value]) => {
                 return (
                     <a
                         key={key}
@@ -125,7 +125,7 @@ export default async function GithubBanner({ className }: GithubBannerProps) {
                         className="flex w-24 flex-col items-center gap-2 rounded-xl border border-border bg-muted p-4 transition-all hover:shadow-md"
                     >
 
-                        <Icon name={key} className="h-6 w-6 icon" />
+                        <Icon name={key} className="size-6 icon" />
                         <span className="text-xs font-medium capitalize text-muted-foreground">
                             {key}
                         </span>

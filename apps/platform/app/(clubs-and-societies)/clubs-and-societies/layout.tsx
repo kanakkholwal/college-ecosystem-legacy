@@ -7,6 +7,7 @@ type LayoutProps = Readonly<{
     children: React.ReactNode;
 }>;
 
+export const dynamic = "force-dynamic";
 
 export default async function Layout({ children }: LayoutProps) {
     const session = await getSession();

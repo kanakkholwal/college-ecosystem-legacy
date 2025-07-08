@@ -75,7 +75,7 @@ export function ResourcesList({ resources }: { resources: ResourceFrontMatter[] 
             filteredResources = filteredResources.filter(resource => resource.type?.toLowerCase() === type.toLowerCase())
         }
         setResults(filteredResources)
-    }, [searchQuery, fuse,resources, category, tag,type])    
+    }, [searchQuery, fuse,resources, category, tag,type,resources])    
 
     return (<ResponsiveContainer
         className="px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3"
