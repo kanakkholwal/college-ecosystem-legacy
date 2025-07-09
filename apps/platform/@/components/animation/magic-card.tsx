@@ -27,9 +27,9 @@ export function MagicCard({
   gradientTo = "#FE8BBB",
   layerClassName = "bg-background",
 }: MagicCardProps) {
-  const {theme} = useTheme();
+  const {resolvedTheme } = useTheme();
   // Ensure the gradient colors are set based on the current theme
-  const isDarkTheme = theme === "dark";
+  const isDarkTheme = resolvedTheme  === "dark";
   const computedGradientColor = gradientColor ? gradientColor : isDarkTheme ? "#262626" : "#D9D9D955";
   const cardRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(-gradientSize);

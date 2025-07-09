@@ -30,6 +30,7 @@ import { ClubTypeJson } from '~/models/clubs';
 import { appConfig } from '~/project.config';
 import { Icon, IconType } from '../icons';
 import { ButtonLink } from '../utils/link';
+import EventsGrid from './layouts/blocks/events_grid';
 
 
 export interface ClubLandingClientProps {
@@ -49,8 +50,8 @@ export interface ClubLandingClientProps {
 }
 
 export default function ClubLandingClient({ clubData }: ClubLandingClientProps) {
-  const { theme } = useTheme();
-  const darkMode = theme === 'dark';
+  const { resolvedTheme } = useTheme();
+  const darkMode = resolvedTheme === 'dark';
   // Theme with dark mode adjustments
   const themeScheme = clubData.theme || {
     primaryColor: "#1e293b",
@@ -88,10 +89,10 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
       className={cn(`relative min-h-screen transition-colors duration-300 selection:text-white selection:bg-primary/50`, {
         'dark bg-gray-900': darkMode,
         'bg-gradient-to-br from-[#f0f9ff] to-[#e0f2fe]': !darkMode,
-        
+
       },
-      "not-[>#pattern]:z-10"
-    )}
+        "not-[>#pattern]:z-10"
+      )}
       style={styles}
     >
       <div className="absolute inset-0 opacity-10 z-0" id='pattern'>
@@ -431,44 +432,13 @@ export default function ClubLandingClient({ clubData }: ClubLandingClientProps) 
             </p>
           </div>
 
-          <div className="mt-10 grid gap-6 lg:grid-cols-3">
-            {clubData.upcomingEvents.map((event) => (
-              <Card
-                key={event.id}
-                className="transition-all hover:shadow-lg dark:bg-gray-700 border border-gray-200 dark:border-gray-600"
-              >
-                <CardHeader>
-                  <div className="flex justify-between items-start">
-                    <CardTitle className="text-(--primary) dark:text-(--text)">{event.name}</CardTitle>
-                    <Badge
-                      variant="outline"
-                      className="capitalize border-(--territory) text-(--territory)"
-                    >
-                      {event.type}
-                    </Badge>
-                  </div>
-                  <div className="flex items-center text-sm text-muted-foreground">
-                    <Calendar className="h-4 w-4 mr-1" />
-                    {new Date(event.date).toLocaleDateString('en-US', {
-                      year: 'numeric',
-                      month: 'long',
-                      day: 'numeric'
-                    })}
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground mb-4">
-                    Join us for our upcoming {event.type.toLowerCase()} where you can showcase your skills and learn from others.
-                  </p>
-                  <Button
-                    variant="outline"
-                    className="w-full border-(--primary) text-(--primary) hover:bg-(--primary)/10 dark:hover:bg-(--primary)/20"
-                  >
-                    Register Now
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="mt-10">
+            <EventsGrid events={clubData.upcomingEvents.map(event => ({
+              id: event.id.toString(),
+              title: event.name,
+              description: event.type,
+              date: event.date,
+            }))} />
           </div>
 
           <div className="mt-12 text-center">

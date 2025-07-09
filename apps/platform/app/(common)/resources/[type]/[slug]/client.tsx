@@ -9,8 +9,8 @@ export function ClientMdx({ mdxSource }: { mdxSource: MDXRemoteSerializeResult }
 
 
 export function CommentSection() {
-    const {theme} = useTheme();
-    const gDiscusTheme = theme !== 'light' ? 'dark_protanopia' : 'light';
+    const {resolvedTheme } = useTheme();
+    const gDiscusTheme = resolvedTheme  !== 'light' ? 'dark_protanopia' : 'light';
     return (
         <div className="comment-section w-full flex-auto">
             <GDiscus

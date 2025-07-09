@@ -62,7 +62,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
     className?: string;
 }
 
-export function Icon({ name, className }: IconProps) {
+export function Icon({ name, className }: IconProps): React.ReactElement | null {
     const Icon = IconComponent[name];
     if (!Icon) {
         return null;

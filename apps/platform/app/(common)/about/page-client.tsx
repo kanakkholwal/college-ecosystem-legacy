@@ -80,7 +80,7 @@ interface AboutPageProps {
     };
 }
 export default function AboutPage({ contributors, stats }: AboutPageProps) {
-    const { theme } = useTheme();
+    const { resolvedTheme  } = useTheme();
     const heroRef = useRef(null);
     const statsRef = useRef(null);
     const techRef = useRef(null);
@@ -164,7 +164,7 @@ export default function AboutPage({ contributors, stats }: AboutPageProps) {
                             {statsMapping.map((stat, index) => (
                                 <motion.div key={index} variants={fadeInUp} whileHover="hover">
                                     <motion.div variants={scaleOnHover}>
-                                        <MagicCard gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"} layerClassName="bg-card" className="rounded-lg text-center hover:shadow-lg transition-shadow" >
+                                        <MagicCard gradientColor={resolvedTheme  === "dark" ? "#262626" : "#D9D9D955"} layerClassName="bg-card" className="rounded-lg text-center hover:shadow-lg transition-shadow" >
                                             <CardContent className="pt-6">
                                                 <stat.icon className="h-12 w-12 mx-auto mb-4 text-primary" />
                                                 <div className="text-3xl font-bold mb-2 text-primary">
@@ -203,7 +203,7 @@ export default function AboutPage({ contributors, stats }: AboutPageProps) {
                                 <h3 className="text-2xl font-semibold mb-6">Technology Stack</h3>
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                     {techStack.map((tech, index) => (
-                                        <MagicCard key={index} gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"} layerClassName="bg-card" className="rounded-lg hover:shadow-lg transition-shadow" >
+                                        <MagicCard key={index} gradientColor={resolvedTheme  === "dark" ? "#262626" : "#D9D9D955"} layerClassName="bg-card" className="rounded-lg hover:shadow-lg transition-shadow" >
 
                                             <CardContent className="p-4 h-full">
                                                 <div className="flex items-center space-x-3">
@@ -260,7 +260,7 @@ export default function AboutPage({ contributors, stats }: AboutPageProps) {
                             <h3 className="text-2xl font-semibold mb-6 text-center">Top Contributors</h3>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-6">
                                 {contributors.map((contributor, index) => (
-                                    <MagicCard key={index} gradientColor={theme === "dark" ? "#262626" : "#D9D9D955"} layerClassName="bg-card" className="rounded-lg text-center hover:shadow-lg transition-shadow" >
+                                    <MagicCard key={index} gradientColor={resolvedTheme  === "dark" ? "#262626" : "#D9D9D955"} layerClassName="bg-card" className="rounded-lg text-center hover:shadow-lg transition-shadow" >
 
                                         <CardContent className="p-6 text-center">
                                             <Avatar className="h-16 w-16 mx-auto mb-4">
