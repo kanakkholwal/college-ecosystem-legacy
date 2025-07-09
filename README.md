@@ -6,7 +6,9 @@
 
 **College Ecosystem** is a monorepo for various projects aimed at creating a comprehensive platform for managing and interacting with different aspects of a college environment. It includes frontend applications built with Next.js and a backend server using Express and TypeScript.
 
-Learn more 
+[![ScreenShot](screenshot.png)](https://app.nith.eu.org)
+
+Learn more
 
 [![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/kanakkholwal/college-ecosystem)
 <!-- Welcome to the College Ecosystem monorepo, housing various projects related to college management and services. This repository utilizes Yarn Workspaces and Turbo Repo for efficient project management. -->
