@@ -29,28 +29,7 @@ export function HeroSection({ user }: HeroSection) {
       suppressHydrationWarning={true}
     >
 
-      <script type="application/ld+json">
-        {JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebApplication",
-          "name": appConfig.name,
-          "url": appConfig.url,
-          "applicationCategory": "Education",
-          "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "INR"
-          },
-          "operatingSystem": "Web",
-          "featureList": [
-            "Exam Results",
-            "Course Syllabus",
-            "Classroom Availability",
-            "Academic Schedules",
-            ...appConfig.keywords
-          ]
-        })}
-      </script>
+      
       <motion.div
         initial={{ opacity: 0.0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -80,7 +59,7 @@ export function HeroSection({ user }: HeroSection) {
 
           <ButtonLink
             variant="dark"
-            href={user ? "/dashboard" : "/auth/sign-in"}
+            href={user ? `/${user.other_roles[0]}` : "/auth/sign-in"}
             effect="shineHover"
           >
             {user ? "Dashboard" : "Sign In"} <Icon name="arrow-right" />

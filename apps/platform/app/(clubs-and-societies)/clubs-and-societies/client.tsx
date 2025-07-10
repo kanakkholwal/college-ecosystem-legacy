@@ -36,7 +36,7 @@ export default function ClubsAndSocietiesPageClient({ clubsList }: ClubsAndSocie
   };
 
   const filteredClubs = useMemo(() => {
-    if (selectedCategory === 'all') return clubsList;
+    if (selectedCategory === 'all' || !selectedCategory) return clubsList;
 
     return clubsList.filter(club => club.category === selectedCategory);
   }, [selectedCategory]);

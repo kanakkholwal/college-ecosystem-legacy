@@ -14,6 +14,7 @@ export type ComponentVariant<TSchema extends z.ZodTypeAny = z.ZodTypeAny> = {
   name: string;
   component: FC<SchemaProps<TSchema>>;
   schema: z.ZodType<TSchema>;
+  defaultValues:SchemaProps<TSchema>;
 };
 
 // 🔧 Generic: Definition holding all variants
@@ -44,7 +45,8 @@ export type ComponentInstance<
   id: string;
   type: TType;
   variant: TVariant;
-  props: SchemaProps<VariantMap<TType>[TVariant]['schema']>;
+  schema: SchemaProps<VariantMap<TType>[TVariant]['schema']>;
+  defaultValues: SchemaProps<VariantMap<TType>[TVariant]['schema']>;
 };
 
 

@@ -21,7 +21,7 @@ import { sidebar_links } from "@/constants/links";
 import Link from "next/link";
 import { appConfig, orgConfig } from "~/project.config";
 
-const getSideNavLinks = (role: string) => {
+const getSideNavLinks = (role: string,prefixPath?: string) => {
   return sidebar_links
     .filter(
       (link) =>
@@ -30,7 +30,7 @@ const getSideNavLinks = (role: string) => {
     .map((link) => ({
       title: link.title,
       icon: link.icon,
-      href: `/${role}${link.path}`,
+      href: prefixPath ? `/${prefixPath}${link.path}` : `/${role}${link.path}`,
       preserveParams: link?.preserveParams,
       items: link?.items
         ?.filter(
@@ -40,7 +40,9 @@ const getSideNavLinks = (role: string) => {
         )
         ?.map((item) => ({
           title: item.title,
-          href: `/${role}${link.path}${item.path}`,
+          href: prefixPath
+            ? `/${prefixPath}${link.path}${item.path}`
+            : `/${role}${link.path}${item.path}`,
         })),
     }));
 };
@@ -48,10 +50,11 @@ const getSideNavLinks = (role: string) => {
 interface SidebarProps extends React.ComponentProps<typeof Sidebar> {
   user: Session["user"];
   moderator: string;
+  prefixPath?: string; // Optional prefix path for links
 }
 
-export function AppSidebar({ user, moderator, ...props }: SidebarProps) {
-  const links = getSideNavLinks(moderator);
+export function AppSidebar({ user, moderator,prefixPath, ...props }: SidebarProps) {
+  const links = getSideNavLinks(moderator,prefixPath);
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border" {...props}>
@@ -60,10 +63,10 @@ export function AppSidebar({ user, moderator, ...props }: SidebarProps) {
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"
+              className="data-[slot=sidebar-menu-button]:!p-1.5"  
               size="lg"
             >
-              <Link href={`/${moderator}`}>
+              <Link href={`/${prefixPath ? prefixPath : moderator}`}>
                 <Avatar className="h-8 w-8 rounded-lg">
                   <AvatarImage
                     src="/logo-square.webp"

@@ -68,3 +68,28 @@ export function ApplicationInfo({
     </div>
   );
 }
+export function ApplicationSquareLogo({
+  className,
+}: {
+  className?: string;
+  children?: React.ReactNode;
+}) {
+  return (
+
+      <Avatar
+      className={cn(
+        "inline-flex gap-2 size-8 rounded-lg",
+        className
+      )}
+      >
+        <AvatarImage
+          src="/logo-square.webp"
+          alt={appConfig.name}
+        />
+        <AvatarFallback className="flex items-center justify-center rounded-lg text-3xl font-bold text-center relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary whitespace-nowrap">
+          {orgConfig.shortName.charAt(0).toUpperCase()}
+        </AvatarFallback>
+      </Avatar>
+
+  );
+}

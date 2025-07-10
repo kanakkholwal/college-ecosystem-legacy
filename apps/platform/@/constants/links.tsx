@@ -1,8 +1,8 @@
-import { Settings, Tickets, Users } from "lucide-react";
+import { ExternalLink, Settings, Tickets, Users } from "lucide-react";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuBookA, LuBuilding, LuGithub, LuSchool } from "react-icons/lu";
-import { RiTwitterXFill } from "react-icons/ri";
+import { RiCustomSize, RiTwitterXFill } from "react-icons/ri";
 import type { Session } from "~/lib/auth-client";
 // import { TbServer2 } from "react-icons/tb";
 
@@ -41,7 +41,7 @@ export const quick_links: RouterCardLink[] = [
     title: "Resources",
     description: "Explore resources like articles, experiences, and more.",
     allowed_roles: ["*"],
-    Icon: GrResources ,
+    Icon: GrResources,
   },
   {
     href: "/results",
@@ -128,8 +128,8 @@ export const sidebar_links: rawLinkType[] = [
   {
     title: "Dashboard",
     icon: TbDashboard,
-    path: "/",
-    allowed_roles: ["*"],
+    path: "",
+    allowed_roles: Object.values(ROLES),
   },
   {
     title: "Users",
@@ -169,12 +169,6 @@ export const sidebar_links: rawLinkType[] = [
     path: "/events",
     allowed_roles: [ROLES.ADMIN],
   },
-  // {
-  //   title: "Server",
-  //   icon: TbServer2,
-  //   path: "/server",
-  //   allowed_roles: [ROLES.ADMIN],
-  // },
   {
     title: "Courses",
     icon: LuBookA,
@@ -186,7 +180,7 @@ export const sidebar_links: rawLinkType[] = [
     icon: GrSchedules,
     path: "/schedules",
     // make it regex
-    allowed_roles: [ROLES.ADMIN, ROLES.FACULTY, ROLES.HOD,ROLES.CR],
+    allowed_roles: [ROLES.ADMIN, ROLES.FACULTY, ROLES.HOD, ROLES.CR],
   },
   {
     title: "Personal Attendance",
@@ -225,87 +219,58 @@ export const sidebar_links: rawLinkType[] = [
     icon: LuBuilding,
     path: "/hostels",
     allowed_roles: [
-      ROLES.CHIEF_WARDEN,
       ROLES.ADMIN,
+      ROLES.CHIEF_WARDEN,
       ROLES.ASSISTANT_WARDEN,
       ROLES.WARDEN,
       ROLES.MMCA,
     ],
     items: [],
   },
-  
-  // {
-  //   title: "Hostel",
-  //   icon: LuBuilding,
-  //   path: "/hostel",
-  //   preserveParams: true,
-  //   allowed_roles: [
-  //     ROLES.ADMIN,
-  //     ROLES.WARDEN,
-  //     ROLES.ASSISTANT_WARDEN,
-  //     ROLES.MMCA,
-  //   ],
-  //   items: [
-  //     {
-  //       title: "Out Pass",
-  //       path: "/out-pass/list",
-  //       allowed_roles: [
-  //         ROLES.ADMIN,
-  //         ROLES.WARDEN,
-  //         ROLES.ASSISTANT_WARDEN,
-  //         ROLES.MMCA,
-  //       ],
-  //     },
-  //     {
-  //       title: "Out Pass Requests",
-  //       path: "/out-pass/requests",
-  //       allowed_roles: [
-  //         ROLES.ADMIN,
-  //         ROLES.WARDEN,
-  //         ROLES.ASSISTANT_WARDEN,
-  //         ROLES.MMCA,
-  //       ],
-  //     },
-  //   ],
-  // },
-  // {
-  //   title: "Hosteler Students",
-  //   icon: PiStudentFill,
-  //   path: "/hostel/students",
-  //   allowed_roles: [
-  //     ROLES.WARDEN,
-  //     ROLES.ASSISTANT_WARDEN,
-  //     ROLES.MMCA,
-  //     ROLES.ADMIN,
-  //   ],
-  //   items: [
-  //     {
-  //       title: "Add Hostelers Student",
-  //       path: "/add",
-  //       allowed_roles: [
-  //         ROLES.WARDEN,
-  //         ROLES.ASSISTANT_WARDEN,
-  //         ROLES.MMCA,
-  //         ROLES.ADMIN,
-  //       ],
-  //     },
-  //   ],
-  // },
+ 
+  {
+    title:"Dashboard",
+    icon: TbDashboard,
+    path: "/dashboard",
+    allowed_roles: ["club"],
+    items: [],
+  },
+  {
+    title:"UI Customizer",
+    icon: RiCustomSize,
+    path: "/customizer",
+    allowed_roles: ["club"],
+    items: [],
+  },
+  {
+    title:"Go to Site",
+    icon: ExternalLink,
+    path: "",
+    allowed_roles: ["club"],
+    items: [],
+  },
+  {
+    title:"Settings",
+    icon: Settings,
+    path: "/settings",
+    allowed_roles: ["club"],
+    items: [],
+  },
   {
     title: "Settings",
     icon: Settings,
     path: "/settings",
-    allowed_roles: ["*"],
+    allowed_roles: Object.values(ROLES),
     items: [
       {
         title: "Account",
         path: "/account",
-        allowed_roles: ["*"],
+        allowed_roles: Object.values(ROLES),
       },
       {
         title: "Appearance",
         path: "/appearance",
-        allowed_roles: ["*"],
+        allowed_roles: Object.values(ROLES),
       },
     ],
   },
@@ -370,7 +335,7 @@ const checkRoleAccess = (userRole: string, allowedRoles: string[]): boolean => {
 
   // If only negation roles are specified, allow access if user's role is not negated
   return !allowedRoles.some(
-    (roles) =>  toRegex(roles).test(userRole)
+    (roles) => toRegex(roles).test(userRole)
   );
 };
 
@@ -405,27 +370,27 @@ export const getNavLinks = (user?: Session["user"]): NavLink[] => {
     ...linksByRole,
     ...(user ? user.other_roles?.length <= 1
       ? [
-          {
-            title: "Settings",
-            href: user.other_roles[0] + "/settings",
-            description: "Manage your account settings.",
-            Icon: Settings,
-          },
-        ]
+        {
+          title: "Settings",
+          href: user.other_roles[0] + "/settings",
+          description: "Manage your account settings.",
+          Icon: Settings,
+        },
+      ]
       : [
-          {
-            title: "Dashboard",
-            href: "/" + user.other_roles[0],
-            description: "Manage your account settings.",
+        {
+          title: "Dashboard",
+          href: "/" + user.other_roles[0],
+          description: "Manage your account settings.",
+          Icon: Settings,
+          items: user.other_roles.map((role) => ({
+            title:
+              role.charAt(0).toUpperCase() + role.slice(1) + " Dashboard",
+            href: `/${role}`,
+            description: `Manage your ${role} dashboard.`,
             Icon: Settings,
-            items: user.other_roles.map((role) => ({
-              title:
-                role.charAt(0).toUpperCase() + role.slice(1) + " Dashboard",
-              href: `/${role}`,
-              description: `Manage your ${role} dashboard.`,
-              Icon: Settings,
-            })),
-          },
-        ]: []),
+          })),
+        },
+      ] : []),
   ];
 };

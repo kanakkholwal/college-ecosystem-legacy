@@ -1,5 +1,4 @@
 
-import type { FC } from 'react';
 import { z } from 'zod';
 // components
 import EventsGrid from './blocks/events_grid';
@@ -19,6 +18,10 @@ export const componentMapper = {
           title: z.string().min(1),
           description: z.string().min(1),
         }),
+        defaultValues: {
+          title: 'Welcome to Our Club',
+          description: 'Join us for exciting events and activities!',
+        },
       },
 
     },
@@ -49,6 +52,21 @@ export const componentMapper = {
             })
           ),
         }),
+        defaultValues:{
+          events: [
+            {
+              id: '1',
+              title: 'Sample Event 1',
+              description: 'This is a sample event description.',
+            },
+            {
+              id: '2',
+              title: 'Sample Event 2',
+              description: 'This is another sample event description.',
+            },
+          ],
+
+        }
       },
     },
   },

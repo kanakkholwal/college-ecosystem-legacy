@@ -20,8 +20,10 @@ import {
     Twitter,
     Users,
 } from 'lucide-react';
+import { FaChrome, FaEdge, FaFirefoxBrowser, FaSafari } from "react-icons/fa";
 import { FcGoogle } from 'react-icons/fc';
 import { GrArticle } from "react-icons/gr";
+import { LuMonitor, LuMonitorSmartphone, LuSmartphone } from "react-icons/lu";
 import { MdHistoryEdu } from "react-icons/md";
 
 export type IconComponentType = {
@@ -36,8 +38,18 @@ export const IconComponent = {
     "calendar": Calendar,
     "code": Code,
     "cpu": Cpu,
-    "github": Github,
     "globe": Globe,
+    // browser icons
+    "safari": FaSafari,
+    "chrome": FaChrome,
+    "firefox": FaFirefoxBrowser,
+    "edge": FaEdge,
+    "browser": FaChrome, // Default browser icon
+    "monitor": LuMonitor,
+    "smartphone": LuSmartphone,
+    "monitor-smartphone": LuMonitorSmartphone,
+    // social media icons
+    "github": Github,
     "instagram": Instagram,
     "linkedin": Linkedin,
     "mail": Mail,

@@ -50,6 +50,9 @@ import { ROLES, emailSchema, genderSchema } from "~/constants/user";
 import type { users } from "~/db/schema";
 import { authClient } from "~/lib/auth-client";
 import type { HostelType } from "~/models/hostel_n_outpass";
+
+
+
 type UserType = InferSelectModel<typeof users>;
 
 interface Props {
@@ -288,6 +291,7 @@ export function UserSessions({ currentUser }: Props) {
     //   setSessions(cacheMap.get("sessions") || [])
     //   return;
     // }
+
     authClient.admin
       .listUserSessions({
         userId: currentUser.id,
@@ -332,8 +336,7 @@ export function UserSessions({ currentUser }: Props) {
         <TableCaption>A list of sessions of {currentUser.email}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">ID</TableHead>
-            <TableHead>User Agent</TableHead>
+            <TableHead>Device</TableHead>
             <TableHead>Created at</TableHead>
             <TableHead>Expires In</TableHead>
             <TableHead>Action</TableHead>
@@ -341,10 +344,12 @@ export function UserSessions({ currentUser }: Props) {
         </TableHeader>
         <TableBody>
           {sessions.map((session: SessionType) => {
+
             return (
               <TableRow key={session.id}>
-                <TableCell>{session.id}</TableCell>
-                <TableCell>{session.userAgent}</TableCell>
+                <TableCell>
+                  {session.userAgent}
+                </TableCell>
                 <TableCell>
                   {formatDistance(new Date(session.createdAt), new Date(), {
                     addSuffix: true,

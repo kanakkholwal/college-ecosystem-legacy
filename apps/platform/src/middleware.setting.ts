@@ -180,6 +180,7 @@ export const SUBDOMAIN_TO_PATH_REWRITES_Map = new Map<string, string>([
     ["resources", "resources"],
     ["community", "community"],
     ["auth", "auth"],
+    // ["dashboard", "dashboard"],
 ]);
 export const Auth_SUBDOMAIN_TO_PATH_REWRITES_Map = new Map<string, {
     path: string;

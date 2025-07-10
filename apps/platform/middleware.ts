@@ -31,6 +31,10 @@ export async function middleware(request: NextRequest) {
     if (pathname === '/') {
       return NextResponse.rewrite(new URL(`/clubs/${subdomain}`, request.url));
     }
+    if (pathname.startsWith('/dashboard')) {
+      // If the request is for a club's root path, rewrite to the club's dashboard
+      return NextResponse.rewrite(new URL(`/clubs/${subdomain}/dashboard`, request.url));
+    }
   }
   const searchParams = request.nextUrl.searchParams
   const isPrivateRoute = PRIVATE_ROUTES.some((route) => isRouteAllowed(pathname, route.pattern));
