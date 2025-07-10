@@ -2,8 +2,8 @@
 "use client"
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { ButtonLink } from "@/components/utils/link";
 import { Clock, Home, Mail, RefreshCw, Server } from "lucide-react";
-import Link from "next/link";
 import { useEffect } from "react";
 
 export default function ServerErrorPage({
@@ -43,26 +43,23 @@ export default function ServerErrorPage({
             </div>
           </div>
           <div className="flex flex-col gap-3">
-            <Button onClick={() => window.location.reload()} className="bg-red-600 hover:bg-red-700 text-white">
-              <RefreshCw className="mr-2 h-4 w-4" />
+            <Button onClick={() => window.location.reload()} variant="destructive">
+              <RefreshCw  />
               Refresh Page
             </Button>
-            <Button variant="outline" asChild className="border-red-300 text-red-700 hover:bg-red-50">
-              <Link href="/dashboard">
-                <Home className="mr-2 h-4 w-4" />
+            <ButtonLink variant="outline" href="/dashboard">
+                <Home  />
                 Go Home
-              </Link>
-            </Button>
+            </ButtonLink>
           </div>
           <div className="pt-4 border-t border-red-200 space-y-2">
             <p className="text-xs text-red-600 font-medium">Still having issues?</p>
             <div className="flex gap-2 justify-center">
-              <Button variant="ghost" size="sm" asChild className="text-red-600 hover:text-red-800 hover:bg-red-50">
-                <Link href="/dashboard/help">
-                  <Mail className="mr-2 h-4 w-4" />
+              <ButtonLink variant="ghost" size="sm" 
+               href="/dashboard/help">
+                  <Mail  />
                   Contact Support
-                </Link>
-              </Button>
+              </ButtonLink>
             </div>
           </div>
         </CardContent>

@@ -33,11 +33,11 @@ import toast from "react-hot-toast";
 import { GrAnnounce } from "react-icons/gr";
 import { VscSend } from "react-icons/vsc";
 import type { z } from "zod";
-import { createAnnouncement } from "~/lib/announcement/actions";
+import { createAnnouncement } from "~/actions/announcement";
 import {
   RELATED_FOR_TYPES,
   rawAnnouncementSchema,
-} from "~/models/announcement";
+} from "~/constants/announcement";
 
 export default function CreateAnnouncement() {
   const form = useForm<z.infer<typeof rawAnnouncementSchema>>({

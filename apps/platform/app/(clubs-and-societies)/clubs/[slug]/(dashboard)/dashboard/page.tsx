@@ -2,7 +2,7 @@ import { NumberTicker } from "@/components/animation/number-ticker";
 import { StatsCard } from "@/components/application/stats-card";
 import { ForbiddenPage } from "@/components/common/not-authorized";
 import { notFound } from "next/navigation";
-import { getClubBySubDomain } from "~/actions/clubs";
+import { getClubBySubDomain, getClubStats } from "~/actions/clubs";
 import { ROLES } from "~/constants";
 import type { Session } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
@@ -28,6 +28,7 @@ export default async function ClubDashboardPage({
     ) {
         return <ForbiddenPage />;
     }
+    const clubStats = await getClubStats(club._id.toString());
 
     return (
         <div className="space-y-6 my-5">
@@ -54,7 +55,7 @@ export default async function ClubDashboardPage({
                     }
                 >
                     <NumberTicker
-                        value={club.members.length}
+                        value={clubStats.members}
                         className="text-3xl font-bold text-primary"
                     />
 
@@ -62,8 +63,60 @@ export default async function ClubDashboardPage({
                         <span className="font-semibold">Members</span> in this club
                     </p>
                 </StatsCard>
-
-
+                <StatsCard
+                    title="Total Events"
+                    Icon={
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            className="h-4 w-4 text-muted-foreground"
+                        >
+                            <title>Events</title>
+                            <path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0z" />
+                            <path d="M12 6v6l4.5 2.25" />
+                        </svg>
+                    }
+                >
+                    <NumberTicker
+                        value={clubStats.events}
+                        className="text-3xl font-bold text-primary"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                        <span className="font-semibold">Events</span> organized by this club
+                    </p>
+                </StatsCard>
+                <StatsCard
+                    title="Total Projects"
+                    Icon={
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            className="h-4 w-4 text-muted-foreground"
+                        >
+                            <title>Projects</title>
+                            <path d="M12 2l9 5v10a7 7 0 1 1-14 0V7l5-3z" />
+                            <path d="M9 21v-6a3 3 0 1 1 6 0v6" />
+                        </svg>
+                    }
+                >
+                    <NumberTicker
+                        value={clubStats.projects}
+                        className="text-3xl font-bold text-primary"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                        <span className="font-semibold">Projects</span> initiated by this club
+                    </p>
+                </StatsCard>
             </div>
         </div>
     );

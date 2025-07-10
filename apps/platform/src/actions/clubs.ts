@@ -1,7 +1,7 @@
 "use server";
 import { ClubSchemaType } from "~/constants/clubs";
 import dbConnect from "~/lib/dbConnect";
-import { ClubModel, ClubTypeJson } from "~/models/clubs";
+import { ClubEventModel, ClubMemberModel, ClubModel, ClubTypeJson ,ClubProjectModel} from "~/models/clubs";
 
 export async function createClub(club: ClubSchemaType):Promise<ClubTypeJson> {
   try {
@@ -53,5 +53,44 @@ export async function updateClub(id: string, clubData: Partial<ClubSchemaType>):
   } catch (error) {
     console.error("Error updating club:", error);
     throw new Error("Error updating club");
+  }
+}
+
+// getClub Data
+export async function getClubStats(clubId: string):Promise<{
+  clubId: string | null;
+  events: number;
+  members: number;
+  projects: number;
+}> {
+  try {
+    await dbConnect();
+    const club = await ClubModel.findById(clubId);
+    if (!club) return {
+      clubId: null,
+      events: 0,
+      members: 0,
+      projects: 0
+    };
+    const statsPromises = [
+      ClubEventModel.countDocuments({ clubId }).lean(),
+      ClubMemberModel.countDocuments({ clubId }).lean(),
+      ClubProjectModel.countDocuments({ clubId }).lean()
+    ];
+    const [events, members, projects] = await Promise.all(statsPromises);
+    return Promise.resolve({
+      clubId: club._id.toString(),
+      events,
+      members,
+      projects
+    });
+  } catch (error) {
+    console.error("Error fetching club data:", error);
+    return {
+      clubId: null,
+      events: 0,
+      members: 0,
+      projects: 0
+    };
   }
 }

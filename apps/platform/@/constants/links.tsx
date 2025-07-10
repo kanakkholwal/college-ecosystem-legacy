@@ -12,9 +12,10 @@ import { ROLES } from "~/constants";
 
 import { AudioLines, CalendarRange } from "lucide-react";
 import { BiSpreadsheet } from "react-icons/bi";
+import { FaPeopleGroup } from "react-icons/fa6";
 import { GrAnnounce, GrResources, GrSchedules } from "react-icons/gr";
 import { HiOutlineUserGroup } from "react-icons/hi";
-import { MdOutlinePoll } from "react-icons/md";
+import { MdEmojiEvents, MdOutlinePoll } from "react-icons/md";
 import { appConfig, supportLinks } from "~/project.config";
 import { toRegex } from "~/utils/string";
 
@@ -227,30 +228,44 @@ export const sidebar_links: rawLinkType[] = [
     ],
     items: [],
   },
- 
+
   {
-    title:"Dashboard",
+    title: "Dashboard",
     icon: TbDashboard,
     path: "/dashboard",
     allowed_roles: ["club"],
     items: [],
   },
   {
-    title:"UI Customizer",
+    title: "Members",
+    icon: FaPeopleGroup,
+    path: "/members",
+    allowed_roles: ["club"],
+    items: [],
+  },
+  {
+    title: "Events",
+    icon: MdEmojiEvents,
+    path: "/events",
+    allowed_roles: ["club"],
+    items: [],
+  },
+  {
+    title: "UI Customizer",
     icon: RiCustomSize,
     path: "/customizer",
     allowed_roles: ["club"],
     items: [],
   },
   {
-    title:"Go to Site",
+    title: "Go to Site",
     icon: ExternalLink,
     path: "",
     allowed_roles: ["club"],
     items: [],
   },
   {
-    title:"Settings",
+    title: "Settings",
     icon: Settings,
     path: "/settings",
     allowed_roles: ["club"],
