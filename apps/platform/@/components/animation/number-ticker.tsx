@@ -58,8 +58,9 @@ export function NumberTicker({
   return (
     <span
       ref={ref}
+      data-suffix={suffix}
       className={cn(
-        "inline-block tabular-nums tracking-wider text-primary",
+        "inline-block tabular-nums tracking-wider text-primary after:content-[attr(data-suffix)]",
         className
       )}
       {...props}

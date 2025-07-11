@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import { PropsType } from "../clubs";
 
+import { SpinningLogos } from "@/components/animation/spinning-logos";
 import { BaseHeroSection } from "@/components/application/base-hero";
 import GithubStars from "@/components/common/github";
 import { SocialBar } from "@/components/common/navbar";
@@ -14,11 +15,16 @@ import { ThemeSwitcher } from "@/components/common/theme-switcher";
 import { Icon, IconType } from "@/components/icons";
 import { Separator } from "@/components/ui/separator";
 import { ButtonLink } from "@/components/utils/link";
+import activitiesImage from "./assets/images/activities.png";
+
 import Image from "next/image";
 import Link from "next/link";
 import { appConfig } from "~/project.config";
-import logo from "./assets/images/gdsc_logo.gif";
-import { productSans } from "./constants";
+
+import { InView } from "@/components/animation/in-view";
+import { InfiniteSlider } from "@/components/animation/infinite-slider";
+import { NumberTicker } from "@/components/animation/number-ticker";
+import { allTeamMembers, clubLogo, logos, productSans, themeVariables } from "./constants";
 import "./landing.css";
 
 const nav_list: LinkNavLinksType[] = [
@@ -38,6 +44,20 @@ const nav_list: LinkNavLinksType[] = [
         type: "link",
     },
 ];
+
+const variants = {
+    hidden: { opacity: 0, y: 100, filter: 'blur(4px)' },
+    visible: {
+        opacity: 1, y: 0, filter: 'blur(0px)',
+        transition: {
+            staggerChildren: 0.09,
+        },
+    },
+}
+const viewOptions = { margin: '0px 0px -200px 0px' };
+const transition = { duration: 0.3, ease: 'easeInOut' };
+
+
 export default function ClubLandingPage(props: PropsType["landing"]) {
     if (!props.club.connectedSocials) {
         props.club.connectedSocials = {
@@ -49,7 +69,10 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
         }
     }
     return (
-        <div className={cn(productSans.className)}>
+        <div
+            className={cn(productSans.className)}
+            style={themeVariables}
+        >
             <div className="w-full mt-6">
                 <Navbar>
                     <NavBody className="flex w-full">
@@ -61,10 +84,11 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
                                 height={40}
                                 width={280}
                                 className="h-10 w-auto"
-                                src={logo}
+                                src={clubLogo}
                                 alt="logo"
-                                priority
                                 loading="eager"
+                                priority
+                                unoptimized
                             />
                         </Link>
                         <NavItems items={nav_list} />
@@ -86,17 +110,28 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
             </div>
             <BaseHeroSection
                 title={props.club.name}
-                titleClassName="text-3xl lg:text-5xl font-bold"
+                titleClassName="text-3xl lg:text-5xl font-bold from-(--primary) via-50% via-(--secondary) to-(--quaternary) bg-gradient-to-r"
                 description={props.club.tagline}
                 descriptionClassName="text-lg"
                 className="text-center hero min-h-96 max-w-full"
             />
-            <section id="about" className="w-full mx-auto p-4 md:p-16 flex flex-col items-start md:flex-row gap-5">
-                <div className="flex-1 shrink-0 w-full md:w-3/5 md:p-3">
-                    <h2 className="text-4xl font-semibold mb-4 md:whitespace-nowrap">Who are we?</h2>
+            <section id="about" className="relative w-full mx-auto p-4 md:p-16 flex flex-col items-start md:grid md:grid-cols-12 gap-5">
+                <div className="flex-1 shrink-0 w-full md:col-span-5 md:p-3 md:pt-5 text-left md:text-center">
+                    <SpinningLogos logos={logos} appLogo={clubLogo} />
                 </div>
-                <div className="flex-auto w-full md:w-3/5 p-4 prose max-w-full dark:prose-invert">
-                    <p >
+                <InView
+
+                    variants={variants}
+                    viewOptions={{ margin: '0px 0px -200px 0px' }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+
+                    className="flex-auto w-full md:col-span-7 p-4 prose max-w-full dark:prose-invert">
+
+                    <h2 className="text-4xl font-semibold mb-4 md:whitespace-nowrap">
+                        Who are we?
+                        <Separator className="my-2 bg-(--quaternary) h-0.5 rounded-full max-w-[200px]" />
+                    </h2>
+                    <p>
                         Google Developer Student Clubs (<abbr>GDSC</abbr>) is a student-led community backed by Google Developers aimed at empowering undergraduate students from all disciplines to grow their knowledge in technology,
                         build solutions for their local communities, and connect with other members from the Google community.
                     </p>
@@ -108,9 +143,121 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
                     <p >
                         We will be hosting events and activities for all students throughout the academic year. We hope to see you there!
                     </p>
-                </div>
+                </InView>
             </section>
-            <footer
+            <InView
+                as="section"
+                variants={variants}
+                viewOptions={{ margin: '0px 0px -200px 0px' }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                id="what-we-do" className="w-full mx-auto p-4 md:p-16 flex flex-col items-start md:grid md:grid-cols-12 gap-5">
+                <InView
+
+                    variants={{
+                        hidden: { opacity: 0, y: 100, filter: 'blur(4px)' },
+                        visible: {
+                            opacity: 1, y: 0, filter: 'blur(0px)',
+                            transition: {
+                                staggerChildren: 0.09,
+                            },
+                        },
+                    }}
+                    viewOptions={{ margin: '0px 0px -200px 0px' }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+
+                    className="flex-auto w-full md:col-span-7 p-4 prose max-w-full dark:prose-invert">
+                    <h2 className="text-4xl font-semibold mb-4 md:whitespace-nowrap">What we do</h2>
+                    <Separator className="my-2 bg-(--secondary) h-0.5 rounded-full max-w-[200px]" />
+                    <p className="text-lg mt-5">
+                        We conducted workshops, seminars and other fun activities which help the students develop new skills and grow together as community to solve real world problems.
+
+                    </p>
+                    <h3>Creating impact and empowering students through technology</h3>
+                    <p >
+                        We will be hosting events and activities for all students throughout the academic year. We hope to see you there!
+                    </p>
+                    <div className="bg-card p-4 rounded-lg mt-6 grid grid-cols-1 md:grid-cols-4 place-items-center gap-4">
+                        <div>
+                            <NumberTicker
+                                className="text-5xl font-semibold text-(--primary)"
+                                value={props.club.members.length || 56} suffix="+" />
+                            <p className="text-base text-muted-foreground mt-0">
+                                Members and counting!
+                            </p>
+                        </div>
+                        <div>
+                            <NumberTicker
+                                className="text-5xl font-semibold text-(--secondary)"
+                                value={props.club.members.length || 33} suffix="+" />
+                            <p className="text-base text-muted-foreground mt-0">
+                                Events organized
+                            </p>
+                        </div>
+                        <div>
+                            <NumberTicker
+                                className="text-5xl font-semibold text-(--tertiary)"
+                                value={props.club.members.length || 77} suffix="+" />
+                            <p className="text-base text-muted-foreground mt-0">
+                                Projects built
+                            </p>
+                        </div>
+                        <div>
+                            <NumberTicker
+                                className="text-5xl font-semibold text-(--quaternary)"
+                                value={props.club.members.length || 25} suffix="+" />
+                            <p className="text-base text-muted-foreground mt-0">
+                                Workshops conducted
+                            </p>
+                        </div>
+                    </div>
+                </InView>
+                <div className="flex-1 shrink-0 w-full md:col-span-5 md:p-3 ">
+                    <Image className="pointer-events-none" src={activitiesImage} alt="What we do" height="7087" width="4912" unselectable="on" />
+                </div>
+            </InView>
+            <InView as="section"
+                variants={variants}
+                viewOptions={{ margin: '0px 0px -200px 0px' }}
+                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                id="members"
+                className="w-full mx-auto p-4 md:py-16 space-y-10 text-center">
+                <h2 className="text-4xl font-semibold mb-4">
+                    Our Members
+                </h2>
+                <Separator className="my-2 bg-(--tertiary) h-0.5 rounded-full max-w-[200px] mx-auto" />
+                <p className="text-lg max-w-4xl mx-auto text-muted-foreground">
+                    Meet our amazing members who are passionate about technology and innovation.
+                </p>
+                <InfiniteSlider speedOnHover={20} gap={24} direction="horizontal">
+                    {allTeamMembers.map((member, index) => {
+                        return (
+                            <img
+                                key={index}
+                                src={member}
+                                alt={`Member ${index + 1}`}
+                                className="aspect-square w-[120px] rounded-[4px]"
+                            />
+                        );
+                    })}
+                </InfiniteSlider>
+                <InfiniteSlider speedOnHover={20} gap={24} reverse={true} direction="horizontal">
+                    {allTeamMembers.map((member, index) => {
+                        return (
+                            <img
+                                key={index}
+                                src={member}
+                                alt={`Member ${index + 1}`}
+                                className="aspect-square w-[120px] rounded-[4px]"
+                            />
+                        );
+                    })}
+                </InfiniteSlider>
+            </InView>
+            <InView
+                as="footer"
+                    variants={variants}
+                    viewOptions={{ margin: '0px 0px -200px 0px' }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
                 className={cn(
                     "z-40 w-full transition-all pt-5 pb-8 mt-auto",
                     "bg-card border-b"
@@ -125,7 +272,7 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
                                 height={160}
                                 width={540}
                                 className="h-16 w-auto"
-                                src={logo}
+                                src={clubLogo}
                                 alt="logo"
                                 loading="lazy"
                             />
@@ -146,12 +293,12 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
                         </div>
                     </div>
                     <div className="mt-8 flex flex-col justify-between gap-4 border-t py-8 md:flex-row md:items-center md:text-left">
-                        <p className="order-2 lg:order-1 text-xs font-semibold text-muted-foreground">
+                        <p className="order-2 lg:order-1 text-xs font-medium text-muted-foreground">
                             Powered by
                             <Link href={appConfig.url} className="text-primary hover:underline mx-2">
                                 {appConfig.name}
                             </Link>
-                             © {new Date().getFullYear()}{" "}
+                            © {new Date().getFullYear()}{" "}
                             All rights reserved.
                         </p>
 
@@ -162,7 +309,7 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
                         <ThemeSwitcher className="order-1 md:order-2" />
                     </div>
                 </div>
-            </footer>
+            </InView>
         </div>
     );
 }

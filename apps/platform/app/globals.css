@@ -3,7 +3,6 @@
 @import 'tw-animate-css';
 @plugin "@tailwindcss/typography";
 
-
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 @custom-variant glass_dark (&:where([data-theme="glass_dark"], [data-theme="glass_dark"] *));
 
@@ -34,7 +33,6 @@
 
     --ring: hsl(262.1 83.3% 57.8%);
     --radius: 0.75rem;
-
 
     --sidebar: oklch(0.985 0 0);
 
@@ -223,10 +221,32 @@
     --animate-collapsible-down: collapsible-down 0.2s ease-out;
     --animate-collapsible-up: collapsible-up 0.2s ease-out;
     --animate-gradient: gradient 8s linear infinite;
+    --animate-spin-slow: spin-slow 20s linear infinite;
+    --animate-spin-reverse: spin-slow 20s linear infinite reverse;
 
     @keyframes gradient {
         to {
             background-position: var(--bg-size, 300%) 0;
+        }
+    }
+
+    @keyframes spin-slow {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin-reverse {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(-360deg);
         }
     }
 
@@ -556,5 +576,14 @@ body {
 
     body {
         @apply bg-background text-foreground selection:bg-primary/10 selection:text-primary;
+    }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+    }
+  body {
+    @apply bg-background text-foreground;
     }
 }

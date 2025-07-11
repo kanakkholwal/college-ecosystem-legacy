@@ -20,25 +20,25 @@ export default function ServerErrorPage({
     console.error(error);
   }, [error]);
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-red-50 to-orange-50">
-      <Card className="w-full max-w-md text-center border-red-200 shadow-lg">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-destructive/50 to-orange-100 dark:bg-gradient-to-br dark:from-red-900 dark:to-orange-900">
+      <Card className="w-full max-w-md text-center border-destructive shadow-lg">
         <CardHeader>
-          <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-red-100 border-4 border-red-200">
-            <Server className="h-12 w-12 text-red-500" />
+          <div className="mx-auto mb-4 flex h-24 w-24 items-center justify-center rounded-full bg-destructive/50 border-4 border-destructive">
+            <Server className="h-12 w-12 text-destructive" />
           </div>
-          <CardTitle className="text-2xl text-red-800">Server Error</CardTitle>
-          <CardDescription className="text-red-700">
+          <CardTitle className="text-2xl text-destructive">Server Error</CardTitle>
+          <CardDescription className="text-destructive/80">
             We&apos;re experiencing technical difficulties on our end. Our team has been notified and is working to fix the issue.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="text-sm text-red-600 bg-red-50 p-3 rounded-lg border border-red-200">
+          <div className="text-sm text-destructive bg-destructive/20 p-3 rounded-lg border border-destructive">
             <div className="flex items-center gap-2 justify-center mb-2">
-              <Server className="h-4 w-4" />
+              <Server className="size-4" />
               <span>Error 500 - Internal Server Error</span>
             </div>
             <div className="flex items-center gap-2 justify-center text-xs">
-              <Clock className="h-3 w-3" />
+              <Clock className="size-3" />
               <span>Please try again in a few minutes</span>
             </div>
           </div>
@@ -52,8 +52,8 @@ export default function ServerErrorPage({
                 Go Home
             </ButtonLink>
           </div>
-          <div className="pt-4 border-t border-red-200 space-y-2">
-            <p className="text-xs text-red-600 font-medium">Still having issues?</p>
+          <div className="pt-4 border-t border-destructive/20 space-y-2">
+            <p className="text-xs text-destructive font-medium">Still having issues?</p>
             <div className="flex gap-2 justify-center">
               <ButtonLink variant="ghost" size="sm" 
                href="/dashboard/help">
