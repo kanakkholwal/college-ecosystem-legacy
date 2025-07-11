@@ -1,5 +1,5 @@
 import mongoose, { Schema, type Document } from "mongoose";
-import { ClubSchemaType, clubEventSchemaType, clubMemberSchemaType,clubProjectSchemaType } from "~/constants/clubs";
+import { ClubSchemaType, clubEventSchemaType, clubMemberSchemaType, clubProjectSchemaType } from "~/constants/clubs";
 
 export type ClubTypeJson = ClubSchemaType & {
   _id: string;
@@ -74,6 +74,13 @@ const clubSchema = new Schema<IClub>(
         name: { type: String, required: true },
         email: { type: String, required: true, lowercase: true },
         phoneNumber: { type: String },
+    },
+    connectedSocials: {
+        github: { type: String, lowercase: true,default: null },
+        linkedin: { type: String, lowercase: true , default: null },
+        twitter: { type: String, lowercase: true , default: null },
+        instagram: { type: String, lowercase: true , default: null },
+        website: { type: String, lowercase: true , default: null },
     }
   },
   {

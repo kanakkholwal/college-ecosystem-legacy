@@ -100,6 +100,13 @@ export const clubSchema = z.object({
         email: z.string().email({ message: "Invalid president email" }),
         phoneNumber: z.string().optional(),
     }),
+    connectedSocials: z.object({
+        github: z.string().url({ message: "GitHub profile must be a valid URL" }).optional(),
+        linkedin: z.string().url({ message: "LinkedIn profile must be a valid URL" }).optional(),
+        twitter: z.string().url({ message: "Twitter profile must be a valid URL" }).optional(),
+        instagram: z.string().url({ message: "Instagram profile must be a valid URL" }).optional(),
+        website: z.string().url({ message: "Website must be a valid URL" }).optional(),
+    }),
 });
 
 export type ClubSchemaType = z.infer<typeof clubSchema>;

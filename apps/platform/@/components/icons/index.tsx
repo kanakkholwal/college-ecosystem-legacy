@@ -48,6 +48,7 @@ export const IconComponent = {
     "monitor": LuMonitor,
     "smartphone": LuSmartphone,
     "monitor-smartphone": LuMonitorSmartphone,
+    "website": Globe,
     // social media icons
     "github": Github,
     "instagram": Instagram,

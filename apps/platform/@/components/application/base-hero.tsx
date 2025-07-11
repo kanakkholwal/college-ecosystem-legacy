@@ -4,6 +4,8 @@ interface BaseHeroSectionProps {
     title?: string | React.ReactNode;
     description?: string;
     className?: string;
+    titleClassName?: string;
+    descriptionClassName?: string;
     children?: React.ReactNode;
 }
 function BaseHeroSection(props: BaseHeroSectionProps) {
@@ -11,10 +13,10 @@ function BaseHeroSection(props: BaseHeroSectionProps) {
         id="hero"
         className={cn("w-full max-w-6xl mx-auto relative flex flex-col items-center justify-center pt-20 pb-16 px-4 lg:px-8 max-h-80 text-center", props.className)}
     >
-        <h2 className="mb-2 text-2xl lg:text-4xl font-semibold text-center whitespace-nowrap bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary ">
+        <h2 className={cn("mb-2 text-2xl lg:text-4xl font-semibold text-center whitespace-nowrap bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary", props.titleClassName)}>
             {props.title}
         </h2>
-        <p className="text-base text-muted-foreground max-w-4xl mx-auto">
+        <p className={cn("text-base text-muted-foreground max-w-4xl mx-auto", props.descriptionClassName)}>
             {props.description}
         </p>
         <div
