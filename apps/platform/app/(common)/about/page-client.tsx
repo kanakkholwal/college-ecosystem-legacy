@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ButtonLink } from '@/components/utils/link';
-import { motion, useInView } from 'framer-motion';
+import { motion, useInView, Variants } from 'framer-motion';
 import {
     ArrowUpRight,
     BookOpen,
@@ -27,7 +27,8 @@ import { useTheme } from 'next-themes';
 import { useRef } from 'react';
 import { appConfig, orgConfig } from '~/project.config';
 import { content } from './content';
-const fadeInUp = {
+
+const fadeInUp:Variants = {
     hidden: { opacity: 0, y: 30 },
     visible: {
         opacity: 1,
@@ -36,7 +37,7 @@ const fadeInUp = {
     }
 };
 
-const staggerContainer = {
+const staggerContainer:Variants = {
     hidden: {},
     visible: {
         transition: {
