@@ -7,6 +7,7 @@ import {
   useScroll,
 } from "framer-motion";
 import { Menu as IconMenu, X as IconX } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 import React, { useRef, useState } from "react";
 
@@ -141,6 +142,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
 
 export const NavItems = ({ items, className }: NavItemsProps) => {
   const [hovered, setHovered] = useState<number | null>(null);
+  const pathname = usePathname();
 
   return (
     <motion.div
@@ -160,7 +162,7 @@ export const NavItems = ({ items, className }: NavItemsProps) => {
           return (
             <DefaultLink
               key={item.title}
-              active={idx === hovered}
+              active={idx === hovered || pathname.includes(item.href)}
               onMouseEnter={() => setHovered(idx)}
               href={item.href}
             >
@@ -245,12 +247,12 @@ export const MenuItem = ({
         <motion.div
           initial={{ opacity: 0, scale: 0.85, y: 10 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          transition={transition}
+          transition={{ duration: 0.3 }}
         >
           {/* {active === item && ( */}
           <div className="absolute top-[calc(100%_+_1.2rem)] left-1/2 transform -translate-x-1/2 pt-4">
             <motion.div
-              transition={transition}
+              transition={{ duration: 0.3 }}
               layoutId="active" // layoutId ensures smooth animation
               className="bg-popover/90 backdrop-blur-2xl rounded-lg overflow-hidden border shadow-xl"
             >

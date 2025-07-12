@@ -4,6 +4,7 @@ import type { Session } from "~/lib/auth";
 import type { RoutePattern } from "~/utils/string";
 import { toRegex } from "~/utils/string";
 import { appConfig } from "./project.config";
+export { clubSubPaths } from "~/constants/clubs";
 
 
 export const SIGN_IN_PATH = "/auth/sign-in";
@@ -182,7 +183,8 @@ export const SUBDOMAIN_TO_PATH_REWRITES_Map = new Map<string, string>([
     ["auth", "auth"],
     // ["dashboard", "dashboard"],
 ]);
-export const Auth_SUBDOMAIN_TO_PATH_REWRITES_Map = new Map<string, {
+
+export const auth_SUBDOMAIN_TO_PATH_REWRITES_Map = new Map<string, {
     path: string;
     roles: string[];
 }>([

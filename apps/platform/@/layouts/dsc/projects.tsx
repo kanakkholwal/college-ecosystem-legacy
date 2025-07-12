@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import { PropsType } from "../clubs";
 
-import { SpinningLogos } from "@/components/animation/spinning-logos";
 import { BaseHeroSection } from "@/components/application/base-hero";
 import GithubStars from "@/components/common/github";
 import { SocialBar } from "@/components/common/navbar";
@@ -21,11 +20,12 @@ import Link from "next/link";
 import { appConfig } from "~/project.config";
 
 import { CardCarousel } from "@/components/animation/card-carousel";
+import { FloatingElements } from "@/components/animation/floating-elements";
 import { InView } from "@/components/animation/in-view";
 import { InfiniteSlider } from "@/components/animation/infinite-slider";
 import { NumberTicker } from "@/components/animation/number-ticker";
-import { galleryImages } from "./constants";
-
+import heroImage from "./assets/images/hero-project.jpg";
+import { allTeamMembers } from "./constants";
 
 const variants = {
     hidden: { opacity: 0, y: 100, filter: 'blur(4px)' },
@@ -40,8 +40,8 @@ const variants = {
 // const transition = { duration: 0.3, ease: 'easeInOut' };
 
 
-export default function ClubLandingPage(props: PropsType["landing"]) {
-    const {navLinks,clubLogo,logos,} = props.clubSettings;
+export default function ClubTeamPage(props: PropsType["projects"]) {
+    const { navLinks, clubLogo, logos, } = props.clubSettings;
 
     return (<>
         <div className="w-full mt-6">
@@ -72,46 +72,46 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
                         })}
                     </div>
                 </NavBody>
-
-
             </Navbar>
 
         </div>
         <BaseHeroSection
-            title={props.club.name}
+            title="Projects - Google Developer Student Clubs"
+            description="Explore the innovative projects developed by our club members, showcasing their skills and creativity in technology."
             titleClassName="text-3xl lg:text-5xl font-bold from-(--primary) via-50% via-(--secondary) to-(--quaternary) bg-gradient-to-r"
-            description={props.club.tagline}
             descriptionClassName="text-lg"
             className="text-center hero min-h-96 max-w-full"
-        />
-        <section id="about" className="relative w-full mx-auto p-4 md:p-16 flex flex-col items-start md:grid md:grid-cols-12 gap-5">
-            <div className="flex-1 shrink-0 w-full md:col-span-5 md:p-3 md:pt-5 text-left md:text-center">
-                <SpinningLogos logos={logos} appLogo={clubLogo} />
-            </div>
+            style={{
+                '--bg-image': `url(${heroImage.src})`,
+                backgroundAttachment: "scroll",
+                backgroundPosition: "center",
+                backgroundSize: "cover",
+            } as React.CSSProperties}
+        >
+            <FloatingElements/>
+
+        </BaseHeroSection>
+        <section id="about" className="relative w-full max-w-7xl mx-auto p-4 md:p-16">
+
             <InView
 
                 variants={variants}
                 viewOptions={{ margin: '0px 0px -200px 0px' }}
                 transition={{ duration: 0.3, ease: 'easeInOut' }}
 
-                className="flex-auto w-full md:col-span-7 p-4 prose max-w-full dark:prose-invert">
+                className="flex-auto w-full p-4 prose max-w-full dark:prose-invert">
 
                 <h2 className="text-4xl font-semibold mb-4 md:whitespace-nowrap">
-                    Who are we?
+                    About Community Projects
                     <Separator className="my-2 bg-(--quaternary) h-0.5 rounded-full max-w-[200px]" />
                 </h2>
                 <p>
-                    Google Developer Student Clubs (<abbr>GDSC</abbr>) is a student-led community backed by Google Developers aimed at empowering undergraduate students from all disciplines to grow their knowledge in technology,
-                    build solutions for their local communities, and connect with other members from the Google community.
+                    Community Projects is a semester-long program where students create software-based solutions for a problem in their community.
+                    By being a part of a community project, you’ll gain industry-standard knowledge and experience of must-have skills such as
+                    Python, Java, Go lang, Javascript, Typescript, web development, backend/frontend development, databases, and much more!
+
                 </p>
-                <h3>Creating impact and empowering students through technology</h3>
-                <p>
-                    Whether you are new to software development or you’ve been developing for quite a while, GDSC is a place where you can learn new technologies, make your ideas a reality, and collaborate to solve real-world problems. In addition to solving problems, GDSC will allow you to connect with other technology enthusiasts from other GDSC chapters and the Google Developer Community.
-                </p>
-                <h3>Creating impact and empowering students through technology</h3>
-                <p >
-                    We will be hosting events and activities for all students throughout the academic year. We hope to see you there!
-                </p>
+
             </InView>
         </section>
         <InView
@@ -216,51 +216,15 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
                 </div>
             </div>
             <CardCarousel
-                images={galleryImages.map(member => ({ src: member, alt: "Member" }))}
+                images={allTeamMembers.map(member => ({ src: member.picture, alt: member.name }))}
                 autoplayDelay={2000}
                 showPagination={true}
                 showNavigation={true}
                 className="md:col-span-12"
             />
         </InView>
-        <InView as="section"
-            variants={variants}
-            viewOptions={{ margin: '0px 0px -200px 0px' }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
-            id="members"
-            className="w-full mx-auto p-4 md:py-16 space-y-10 text-center">
-            <h2 className="text-4xl font-semibold mb-4">
-                Gallery
-            </h2>
-            <Separator className="my-2 bg-(--tertiary) h-0.5 rounded-full max-w-[200px] mx-auto" />
-            <p className="text-lg max-w-4xl mx-auto text-muted-foreground">
-                Explore our gallery to see the amazing moments captured during our events and activities.
-            </p>
-            <InfiniteSlider speedOnHover={20} gap={24} direction="horizontal">
-                {galleryImages.map((member, index) => {
-                    return (
-                        <img
-                            key={index}
-                            src={member}
-                            alt={`Member ${index + 1}`}
-                            className="aspect-square w-[120px] rounded-[4px]"
-                        />
-                    );
-                })}
-            </InfiniteSlider>
-            <InfiniteSlider speedOnHover={20} gap={24} reverse={true} direction="horizontal">
-                {galleryImages.map((member, index) => {
-                    return (
-                        <img
-                            key={index}
-                            src={member}
-                            alt={`Member ${index + 1}`}
-                            className="aspect-square w-[120px] rounded-[4px]"
-                        />
-                    );
-                })}
-            </InfiniteSlider>
-        </InView>
+      
+                
         <InView
             as="footer"
             variants={variants}
@@ -273,10 +237,10 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
                 <div className="mx-auto p-4 flex gap-4 items-center justify-center flex-wrap">
                     {navLinks.map((link) => {
                         return (
-                            <ButtonLink key={link.href} 
-                            variant="default_light"
-                            className="font-medium text-sm pl-4" 
-                            effect="shineHover" size="sm" href={link.href!}>
+                            <ButtonLink key={link.href}
+                                variant="default_light"
+                                className="font-medium text-sm pl-4"
+                                effect="shineHover" size="sm" href={link.href!}>
                                 <span className="size-1 rounded-full bg-(--primary)" />
                                 {link.title}
                                 <Icon name="arrow-right" />

@@ -8,6 +8,7 @@ import {
     Camera,
     Code,
     Cpu,
+    Dot,
     Facebook,
     Gamepad2,
     Github,
@@ -20,6 +21,7 @@ import {
     Palette,
     Phone,
     ShieldCheck,
+    SparklesIcon,
     Terminal,
     Twitter,
     Users,
@@ -31,6 +33,7 @@ import { FcGoogle } from 'react-icons/fc';
 import { GrArticle } from "react-icons/gr";
 import { LuMonitor, LuMonitorSmartphone, LuSmartphone } from "react-icons/lu";
 import { MdHistoryEdu } from "react-icons/md";
+import { RiTwitterXFill } from 'react-icons/ri';
 
 export type IconComponentType = {
     [key: string]: React.ComponentType<React.SVGProps<SVGSVGElement>>;
@@ -42,7 +45,9 @@ export const IconComponent = {
     "barchart": BarChart2,
     "book": BookOpen,
     "calendar": Calendar,
+    "sparkles": SparklesIcon,
     "code": Code,
+    "dot":Dot,
     "camera": Camera,
     "facebook": Facebook,
     "gamepad2": Gamepad2,
@@ -69,7 +74,8 @@ export const IconComponent = {
     "phone": Phone,
     "shield": ShieldCheck,
     "terminal": Terminal,
-    "twitter": Twitter,
+    "twitter": RiTwitterXFill,
+    "twitter-bird": Twitter,
     "google-fc": FcGoogle,
     "users": Users,
     "arrow-up-right": ArrowUpRight,

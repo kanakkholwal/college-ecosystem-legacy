@@ -1,7 +1,8 @@
 import ClubLandingPageClient, { ClubLandingClientProps } from "@/components/clubs/landing";
-import { ClubsLandingUI } from "@/layouts/clubs";
+import { ClubsSettingsMap, ClubsUIMap } from "@/layouts/clubs";
 import { notFound } from "next/navigation";
 import { getClubBySubDomain } from "~/actions/clubs";
+import { clubSubPaths } from "~/constants/clubs";
 
 interface ClubLandingPageProps {
     params: Promise<{ slugs: string[] }>;
@@ -10,16 +11,32 @@ interface ClubLandingPageProps {
 
 export default async function ClubLandingPage({ params }: ClubLandingPageProps) {
     const slugs = await params;
-    const clubSubDomain = slugs.slugs[0];
-    if (!clubSubDomain) {
+    const [clubSubDomain, ...rest] = slugs.slugs;
+    const subPath = rest.length > 0 ? clubSubPaths.find(path => path === rest[0]) : "landing";
+    if (
+        !clubSubDomain || (rest.length > 0 && !subPath)
+
+    ) {
         return notFound();
     }
+
+
     const club = await getClubBySubDomain(clubSubDomain);
     if (!club) {
         return notFound();
     }
-    const LandingUI = ClubsLandingUI[clubSubDomain as keyof typeof ClubsLandingUI];
-    if (!LandingUI) {
+    // temporarily handle the case where club is not found
+    if (!club.connectedSocials) {
+        club.connectedSocials = {
+            github: "https://github.com/",
+            linkedin: "https://linkedin.com",
+            twitter: "https://twitter.com",
+            instagram: "https://instagram.com",
+            // website: "https://example.com",
+        }
+    }
+    const PageUI = ClubsUIMap[clubSubDomain as keyof typeof ClubsUIMap];
+    if (!PageUI) {
         const clubData: ClubLandingClientProps["clubData"] = {
             ...club,
             _id: club._id.toString(),
@@ -34,9 +51,13 @@ export default async function ClubLandingPage({ params }: ClubLandingPageProps) 
             <ClubLandingPageClient clubData={clubData} />
         );
     }
-    const LandingComponent = LandingUI.landing;
+    const PageComponent = PageUI[subPath as keyof typeof PageUI];
+    if (!PageComponent) {
+        return notFound();
+    }
+    const clubSettings = ClubsSettingsMap[clubSubDomain as keyof typeof ClubsSettingsMap];
 
     return (
-        <LandingComponent club={club} />
+        <PageComponent club={club} clubSettings={clubSettings} />
     );
 }

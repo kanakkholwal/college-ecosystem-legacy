@@ -48,6 +48,17 @@ export const restrictedSubDomains = [
     appConfig.appDomain.split('.')[0], // Extract subdomain from main app domain
 ];
 
+export const clubSubPaths = [
+    "events",
+    "team",
+    "about",
+    "dashboard",
+    "workshops",
+    "projects",
+    "resources",
+    "alumni",
+]
+
 export const clubSchema = z.object({
     name: z.string().min(1, { message: "Club name is required" }).describe("The name of the club"),
     tagline: z.string().min(1, { message: "Club tagline is required" }),

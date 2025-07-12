@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
 import { Session } from "~/lib/auth";
-import { Auth_SUBDOMAIN_TO_PATH_REWRITES_Map, checkAuthorization, dashboardRoutes, extractSubdomain, isHostelRoute, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, SUBDOMAIN_TO_PATH_REWRITES_Map, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
+import { auth_SUBDOMAIN_TO_PATH_REWRITES_Map, checkAuthorization, clubSubPaths, dashboardRoutes, extractSubdomain, isHostelRoute, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, SUBDOMAIN_TO_PATH_REWRITES_Map, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
 import { appConfig } from "~/project.config";
 
 
@@ -13,7 +13,9 @@ export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
   const pathname = request.nextUrl.pathname;
   const subdomain = extractSubdomain(request);
-  if (subdomain) {
+  const subdomainRestricted = auth_SUBDOMAIN_TO_PATH_REWRITES_Map.get(subdomain || "");
+  
+  if (subdomain && !subdomainRestricted) {
     // Block access to admin page from subdomains
     if (pathname.startsWith('/admin')) {
       return NextResponse.redirect(new URL('/', request.url));
@@ -24,17 +26,19 @@ export async function middleware(request: NextRequest) {
     if (subDomainPath) {
       // If the subdomain has a defined path, rewrite to that path
       // console.log(`Rewriting request for subdomain: ${subdomain} to path: ${subDomainPath} :`,`/${subDomainPath}${pathname}`);
-      
+
       return NextResponse.rewrite(new URL(`/${subDomainPath}${pathname}`, request.url));
     }
     // dynamically handle the root path for clubs
     if (pathname === '/') {
       return NextResponse.rewrite(new URL(`/clubs/${subdomain}`, request.url));
     }
-    if (pathname.startsWith('/dashboard')) {
-      // If the request is for a club's root path, rewrite to the club's dashboard
-      return NextResponse.rewrite(new URL(`/clubs/${subdomain}/dashboard`, request.url));
+    if (clubSubPaths.some((path) => pathname.startsWith(`/${path}`))) {
+      // If the request is for a club's sub-path, rewrite to the club's page
+      // console.log(`Rewriting request for subdomain: ${subdomain} to path: /clubs/${subdomain}${pathname}`);
+      return NextResponse.rewrite(new URL(`/clubs/${subdomain}${pathname}`, request.url));
     }
+
   }
   const searchParams = request.nextUrl.searchParams
   const isPrivateRoute = PRIVATE_ROUTES.some((route) => isRouteAllowed(pathname, route.pattern));
@@ -50,12 +54,11 @@ export async function middleware(request: NextRequest) {
       },
     }
   );
-  if (subdomain && session) {
-    const SubdomainRestricted = Auth_SUBDOMAIN_TO_PATH_REWRITES_Map.get(subdomain);
-    if (SubdomainRestricted && (SubdomainRestricted.roles.includes(session.user.role) || SubdomainRestricted.roles.some(role => session.user.other_roles.includes(role)))) {
+  if (subdomainRestricted && session) {
+    if (subdomainRestricted && (subdomainRestricted.roles.includes(session.user.role) || subdomainRestricted.roles.some(role => session.user.other_roles.includes(role)))) {
       // If the user is authenticated and has access to the subdomain, rewrite the path
-      // console.log(`Rewriting request for subdomain: ${subdomain} to path: ${SubdomainRestricted.path}`);
-      return NextResponse.rewrite(new URL(`/${SubdomainRestricted.path}${pathname}`, request.url));
+      // console.log(`Rewriting request for subdomain: ${subdomain} to path: ${subdomainRestricted.path}`);
+      return NextResponse.rewrite(new URL(`/${subdomainRestricted.path}${pathname}`, request.url));
     }
   }
   // Exception for the error page : Production issue on Google Sign in
