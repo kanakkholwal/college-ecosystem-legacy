@@ -6,7 +6,7 @@ import { FullScreenCalendar } from "@/components/ui/calendar-full";
 import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { ButtonLink } from "@/components/utils/link";
-import { startOfDay } from "date-fns";
+import { format } from "date-fns";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
 import { getEvents } from "~/actions/events";
@@ -77,6 +77,7 @@ export default async function AcademicCalenderPage(props: Props) {
           size="sm"
           variant="dark"
           target="_blank"
+          effect="shine"
 
           >
           <CalendarDays  />
@@ -97,7 +98,7 @@ export default async function AcademicCalenderPage(props: Props) {
               id: "list",
             },
           ]}
-
+          onTabChangeQuery="view_mode"
         />
         <TabsContent value="calendar">
           <FullScreenCalendar
@@ -117,12 +118,7 @@ export default async function AcademicCalenderPage(props: Props) {
             return <StaticStep
               key={group.day.toString()}
               step={idx + 1}
-              title={startOfDay(group.day).toLocaleString("en-IN", {
-                weekday: "long",
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
+              title={format(group.day, "EEEE, MMMM dd, yyyy")}
             >
               <ResponsiveContainer>
                 {group.events.map((event) => {

@@ -1,11 +1,16 @@
 "use server";
+import  PollModel  from '~/models/poll';
+import  CommunityPostModel  from '~/models/community';
 import type { InferSelectModel } from "drizzle-orm";
-import { asc, desc, eq, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, lte, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
 import { accounts, sessions, users } from "~/db/schema/auth-schema";
 import { auth } from "~/lib/auth";
 import { getSession } from "~/lib/auth-server";
 import { updateHostelStudent } from "./hostel";
+import ResultModel from "~/models/result";
+import dbConnect from "~/lib/dbConnect";
+import { EventModel } from '~/models/events';
 
 export async function users_CountAndGrowth(timeInterval: string): Promise<{
   count: number;
@@ -70,6 +75,7 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
   const totalUsers = await db
     .select({ count: sql<number>`COUNT(*)` })
     .from(users)
+
     .execute();
   const total = totalUsers[0]?.count ?? 0;
 
@@ -78,8 +84,12 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
     .select({ count: sql<number>`COUNT(*)` })
     .from(users)
     .where(
-      sql`"createdAt" >= ${prevStartTime} AND "createdAt" <= ${prevEndTime}`
+      and(
+        gte(users.createdAt, startTime),
+        lte(users.createdAt, endTime || new Date())
+      )
     );
+
   const periodCount = periodCountQuery[0]?.count || 0;
 
   // Calculate growth and growth percentage
@@ -96,6 +106,40 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
     growthPercent,
     trend: growth > 0 ? 1 : growth < 0 ? -1 : 0,
   };
+}
+
+interface PlatformDBStats{
+  results: number;
+  polls: number;
+  communityPosts: number;
+  events: number;
+}
+export async function getPlatformDBStats(): Promise<PlatformDBStats> {
+  try {
+    await dbConnect();
+    const promises = [
+      ResultModel.countDocuments(),
+      PollModel.countDocuments(),
+      CommunityPostModel.countDocuments(),
+      EventModel.countDocuments()
+    ];
+    const [resultsCount, pollsCount, communityPostsCount, eventsCount] = await Promise.all(promises);
+
+    return {
+      results: resultsCount,
+      polls: pollsCount,
+      communityPosts: communityPostsCount,
+      events: eventsCount
+    };
+  } catch (error) {
+    console.error("Error extracting visitor count:", error);
+    return {
+      results: 0,
+      polls: 0,
+      communityPosts: 0,
+      events: 0,
+    };
+  }
 }
 
 export async function flushCache() {

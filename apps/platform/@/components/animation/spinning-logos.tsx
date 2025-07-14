@@ -32,7 +32,7 @@ export const SpinningLogos: React.FC<SpinningLogosProps> = ({
 
 
     return (
-        <div className={cn("flex justify-center items-center bg-background p-8 overflow-hidden",className)}>
+        <div className={cn("flex justify-center items-center bg-background p-8 overflow-hidden ",className)}>
             <div
                 style={{
                     width: radiusToCenterOfIcons * 2 + iconWrapperWidth + ringPadding,

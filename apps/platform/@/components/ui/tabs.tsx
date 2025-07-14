@@ -82,7 +82,7 @@ const VercelTabsList = React.forwardRef<HTMLDivElement, TabsProps>(
     },
     ref
   ) => {
-    const [, setTabsState] = useQueryState(onTabChangeQuery || "tab", {
+    const [tabsState, setTabsState] = useQueryState(onTabChangeQuery || "tab", {
       defaultValue: activeTab || tabs[0]?.id,
     });
     const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);

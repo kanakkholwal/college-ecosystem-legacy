@@ -2,8 +2,12 @@
     animation: float-animation var(--duration, 10s) ease-in-out infinite;
 
     animation-delay: var(--delay, 0s);
+    animation-play-state: running;
     will-change: transform;
     transform-origin: center center
+}
+.float:hover{
+    animation-play-state: paused
 }
 
 @-webkit-keyframes float-animation {

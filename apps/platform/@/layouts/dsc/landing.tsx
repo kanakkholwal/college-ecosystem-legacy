@@ -85,7 +85,7 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
             className="text-center hero min-h-96 max-w-full"
         />
         <section id="about" className="relative w-full mx-auto p-4 md:p-16 flex flex-col items-start md:grid md:grid-cols-12 gap-5">
-            <div className="flex-1 shrink-0 w-full md:col-span-5 md:p-3 md:pt-5 text-left md:text-center">
+            <div className="flex-1 hidden lg:block shrink-0 w-full md:col-span-5 md:p-3 md:pt-5 text-left md:text-center">
                 <SpinningLogos logos={logos} appLogo={clubLogo} />
             </div>
             <InView
@@ -120,19 +120,19 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
             viewOptions={{ margin: '0px 0px -200px 0px' }}
             transition={{ duration: 0.3, ease: 'easeInOut' }}
             id="what-we-do" className="w-full mx-auto p-4 md:p-16 flex flex-col items-start md:grid md:grid-cols-12 gap-5">
-            <InView
+            <div
 
-                variants={{
-                    hidden: { opacity: 0, y: 100, filter: 'blur(4px)' },
-                    visible: {
-                        opacity: 1, y: 0, filter: 'blur(0px)',
-                        transition: {
-                            staggerChildren: 0.09,
-                        },
-                    },
-                }}
-                viewOptions={{ margin: '0px 0px -200px 0px' }}
-                transition={{ duration: 0.3, ease: 'easeInOut' }}
+                // variants={{
+                //     hidden: { opacity: 0, y: 100, filter: 'blur(4px)' },
+                //     visible: {
+                //         opacity: 1, y: 0, filter: 'blur(0px)',
+                //         transition: {
+                //             staggerChildren: 0.09,
+                //         },
+                //     },
+                // }}
+                // viewOptions={{ margin: '0px 0px -200px 0px' }}
+                // transition={{ duration: 0.3, ease: 'easeInOut' }}
 
                 className="flex-auto w-full md:col-span-7 p-4 prose max-w-full dark:prose-invert">
                 <h2 className="text-4xl font-semibold mb-4 md:whitespace-nowrap">What we do</h2>
@@ -179,7 +179,7 @@ export default function ClubLandingPage(props: PropsType["landing"]) {
                         </p>
                     </div>
                 </div>
-            </InView>
+            </div>
             <div className="flex-1 shrink-0 w-full md:col-span-5 md:p-3 ">
                 <Image className="pointer-events-none" src={activitiesImage} alt="What we do" height="7087" width="4912" unselectable="on" />
             </div>

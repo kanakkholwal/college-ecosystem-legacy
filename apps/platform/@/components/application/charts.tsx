@@ -1,21 +1,5 @@
 "use client";
 
-import * as React from "react";
-import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Label,
-  LabelList,
-  Pie,
-  PieChart,
-  PolarRadiusAxis,
-  RadialBar,
-  RadialBarChart,
-  XAxis,
-  YAxis,
-} from "recharts";
-
 import {
   ChartConfig,
   ChartContainer,
@@ -25,21 +9,33 @@ import {
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { cn } from "@/lib/utils";
 import { LoaderCircle } from "lucide-react";
+import { Cell, Pie, PieChart, ResponsiveContainer } from "recharts";
+
+import * as React from "react";
+import {
+  Bar,
+  BarChart,
+  CartesianGrid,
+  Label,
+  LabelList,
+  Line,
+  LineChart,
+  PolarRadiusAxis,
+  RadialBar,
+  RadialBarChart,
+  XAxis,
+  YAxis
+} from "recharts";
+
 import { changeCase } from "~/utils/string";
 
 /**
  * Base properties for chart components.
  * @template TData - The type of data used in the chart.
  * @template TConfig - The type of configuration for the chart.
- * @property {TData[]} data - The data to be displayed in the chart.
- * @property {TConfig} config - The configuration for the chart.
- * @property {keyof TData} dataKey - The key in the data that represents the value to be plotted.
- * @property {keyof TData} nameKey - The key in the data that represents the name or label for each data point.
- * @property {string=} [className] - Optional additional CSS class names for styling the chart container.
  */
-
-interface BaseProps<
-  TData extends Record<string, any>,
+interface BaseChartProps<
+  TData extends Record<string, unknown>,
   TConfig extends ChartConfig,
 > {
   data: TData[];
@@ -48,23 +44,60 @@ interface BaseProps<
   nameKey: keyof TData;
   className?: string;
 }
+
 interface ChartBarProps<
-  TData extends Record<string, any>,
+  TData extends Record<string, unknown>,
   TConfig extends ChartConfig,
-> extends BaseProps<TData, TConfig> {
+> extends BaseChartProps<TData, TConfig> {
   orientation?: "horizontal" | "vertical";
+  showLabel?: boolean;
 }
 
 interface ChartRadialProps<
-  TData extends Record<string, any>,
+  TData extends Record<string, unknown>,
   TConfig extends ChartConfig,
-> extends BaseProps<TData, TConfig> {
-  dataKey: keyof TData;
-  nameKey: keyof TData;
+> extends BaseChartProps<TData, TConfig> {
+  innerRadius?: number;
+  outerRadius?: number;
 }
 
+interface PieDonutTextProps<
+  TData extends Record<string, unknown>,
+  TConfig extends ChartConfig,
+> extends BaseChartProps<TData, TConfig> {
+  valueLabel?: string;
+  innerRadius?: number;
+  outerRadius?: number;
+  strokeWidth?: number;
+}
+
+interface ChartLineMultipleProps<
+  TData extends Record<string, unknown>,
+  TConfig extends ChartConfig,
+> extends BaseChartProps<TData, TConfig> {
+  lineKeys: Array<keyof TData>;
+  colors?: Record<string, string>;
+}
+
+const ChartErrorFallback = ({ className }: { className?: string }) => (
+  <div className={cn("flex h-full w-full flex-col items-center justify-center", className)}>
+    <h6 className="text-base text-destructive">Error loading chart</h6>
+    <p className="text-sm text-destructive/80">Please try again later.</p>
+  </div>
+);
+
+const ChartLoadingFallback = ({ className }: { className?: string }) => (
+  <div className={cn("flex h-full w-full flex-col items-center justify-center", className)}>
+    <LoaderCircle className="size-6 animate-spin text-primary" />
+    <p className="text-sm text-muted-foreground">Loading chart...</p>
+  </div>
+);
+
+/**
+ * Bar chart component with horizontal or vertical orientation
+ */
 export function ChartBar<
-  TData extends Record<string, any>,
+  TData extends Record<string, unknown>,
   TConfig extends ChartConfig,
 >({
   data,
@@ -72,254 +105,195 @@ export function ChartBar<
   dataKey,
   nameKey,
   orientation = "horizontal",
-  className = "mx-auto aspect-square max-h-[250px]",
+  className = "mx-auto h-[250px] w-full",
+  showLabel = true,
 }: ChartBarProps<TData, TConfig>) {
-  const chartData = data.map((item) => ({
-    ...item,
-    fill: `var(--color-${item[nameKey].replace(" ", "_").toLowerCase()})`, // Ensure the nameKey is formatted correctly for CSS variable
-  }));
+  const chartData = React.useMemo(() => (
+    data.map((item) => ({
+      ...item,
+      fill: `var(--color-${String(item[nameKey]).replace(/\s+/g, "_").toLowerCase()})`,
+    }))
+  ), [data, nameKey]);
 
   return (
     <ErrorBoundaryWithSuspense
-      fallback={
-        <div
-          className={cn(
-            "flex h-full w-full items-center justify-center",
-            className
-          )}
-        >
-          <h6 className="text-base text-destructive">Error loading chart</h6>
-          <p className="text-sm text-destructive/80">Please try again later.</p>
-        </div>
-      }
-      loadingFallback={
-        <div
-          className={cn(
-            "flex h-full w-full items-center justify-center",
-            className
-          )}
-        >
-          <LoaderCircle className="size-6 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground">Loading chart...</p>
-        </div>
-      }
+      fallback={<ChartErrorFallback className={className} />}
+      loadingFallback={<ChartLoadingFallback className={className} />}
     >
-      <ChartContainer
-        config={config}
-        className={cn("mx-auto w-full max-h-[250px]", className)}
-      >
-        {orientation === "vertical" ? (
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            layout="vertical"
-            margin={{
-              right: 5,
-            }}
-            compact={true}
-          >
-            <CartesianGrid horizontal={false} />
-            <YAxis
-              dataKey={nameKey.toString()}
-              type="category"
-              tickLine={false}
-              tickMargin={5}
-              axisLine={false}
-              tickFormatter={(value) => changeCase(value, "title")}
-            // hide
-            />
-            <XAxis dataKey={dataKey.toString()} type="number" hide />
-            <ChartTooltip
-              cursor={true}
-              content={
-                <ChartTooltipContent
-                  indicator="line"
-                  nameKey={nameKey.toString()}
-                  labelKey={dataKey.toString()}
-                  label={dataKey
-                    .toString()
-                    .replace(/([A-Z])/g, " $1")
-                    .trim()}
-                />
-              }
-            />
-            <Bar
-              dataKey={dataKey.toString()}
-              fill="var(--color-primary)"
-              radius={4}
+      <ChartContainer config={config} className={className}>
+        <ResponsiveContainer width="100%" height="100%">
+          {orientation === "vertical" ? (
+            <BarChart
+              data={chartData}
+              layout="vertical"
+              margin={{ right: 20, left: 20 }}
             >
-              <LabelList
+              <CartesianGrid horizontal={false} />
+              <YAxis
+                dataKey={nameKey.toString()}
+                type="category"
+                tickLine={false}
+                tickMargin={5}
+                axisLine={false}
+                tickFormatter={(value) => changeCase(value, "title")}
+              />
+              <XAxis dataKey={dataKey.toString()} type="number" hide />
+              <ChartTooltip
+                cursor={{ fill: 'rgba(0, 0, 0, 0.1)' }}
+                content={
+                  <ChartTooltipContent
+                    indicator="line"
+                    nameKey={nameKey.toString()}
+                    labelKey={dataKey.toString()}
+                    label={String(dataKey).replace(/([A-Z])/g, " $1").trim()}
+                  />
+                }
+              />
+              <Bar
                 dataKey={dataKey.toString()}
-                position="right"
-                offset={8}
-                className="fill-foreground"
-                fontSize={12}
+                fill="var(--color-primary)"
+                radius={[0, 4, 4, 0]}
+              >
+                {showLabel && (
+                  <LabelList
+                    dataKey={dataKey.toString()}
+                    position="right"
+                    offset={8}
+                    className="fill-foreground text-xs"
+                  />
+                )}
+              </Bar>
+            </BarChart>
+          ) : (
+            <BarChart data={chartData} margin={{ top: 20 }}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey={nameKey.toString()}
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+                tickFormatter={(value) => changeCase(value, "title")}
               />
-            </Bar>
-          </BarChart>
-        ) : (
-          <BarChart
-            accessibilityLayer
-            data={chartData}
-            margin={{
-              top: 20,
-            }}
-          >
-            <CartesianGrid vertical={false} />
-            <XAxis
-              dataKey={nameKey.toString()}
-              tickLine={false}
-              tickMargin={10}
-              axisLine={false}
-              tickFormatter={(value) => changeCase(value, "title")}
-            />
-            <ChartTooltip
-              cursor={true}
-              content={
-                <ChartTooltipContent
-                  indicator="line"
-                  nameKey={nameKey.toString()}
-                  labelKey={dataKey.toString()}
-                  label={dataKey
-                    .toString()
-                    .replace(/([A-Z])/g, " $1")
-                    .trim()}
-                />
-              }
-            />
-            <Bar
-              dataKey={dataKey.toString()}
-              fill="var(--color-primary)"
-              radius={8}
-            >
-              <LabelList
-                position="top"
-                offset={12}
-                className="fill-foreground"
-                fontSize={12}
+              <YAxis hide />
+              <ChartTooltip
+                cursor={{ fill: 'rgba(0, 0, 0, 0.1)' }}
+                content={
+                  <ChartTooltipContent
+                    indicator="line"
+                    nameKey={nameKey.toString()}
+                    labelKey={dataKey.toString()}
+                    label={String(dataKey).replace(/([A-Z])/g, " $1").trim()}
+                  />
+                }
               />
-            </Bar>
-          </BarChart>
-        )}
+              <Bar
+                dataKey={dataKey.toString()}
+                fill="var(--color-primary)"
+                radius={[4, 4, 0, 0]}
+              >
+                {showLabel && (
+                  <LabelList
+                    dataKey={dataKey.toString()}
+                    position="top"
+                    offset={12}
+                    className="fill-foreground text-xs"
+                  />
+                )}
+              </Bar>
+            </BarChart>
+          )}
+        </ResponsiveContainer>
       </ChartContainer>
     </ErrorBoundaryWithSuspense>
   );
 }
 
+/**
+ * Radial/Donut chart component
+ */
 export function ChartRadialStacked<
-  TData extends Record<string, any>,
+  TData extends Record<string, unknown>,
   TConfig extends ChartConfig,
 >({
   data,
   config,
   dataKey,
   nameKey,
-  className = "mx-auto aspect-square max-h-[250px]",
+  className = "mx-auto h-[250px] w-full",
+  innerRadius = 80,
+  outerRadius = 130,
 }: ChartRadialProps<TData, TConfig>) {
-  const totalValue = React.useMemo(() => {
-    return data.reduce((acc, curr) => acc + (curr[dataKey] as number), 0);
-  }, [data, dataKey]);
-  const chartData = data.map((item, idx) => ({
-    ...item,
-    fill: `var(--color-${idx + 1})`, // Ensure the nameKey is formatted correctly for CSS variable
-  }));
+  const totalValue = React.useMemo(() => (
+    data.reduce((acc, curr) => acc + (curr[dataKey] as number), 0)
+  ), [data, dataKey]);
+
+  const chartData = React.useMemo(() => (
+    data.map((item, idx) => ({
+      ...item,
+      fill: `var(--color-${idx + 1})`,
+    }))
+  ), [data]);
+
   return (
     <ErrorBoundaryWithSuspense
-      fallback={
-        <div
-          className={cn(
-            "flex h-full w-full items-center justify-center",
-            className
-          )}
-        >
-          <h6 className="text-base text-destructive">Error loading chart</h6>
-          <p className="text-sm text-destructive/80">Please try again later.</p>
-        </div>
-      }
-      loadingFallback={
-        <div
-          className={cn(
-            "flex h-full w-full items-center justify-center",
-            className
-          )}
-        >
-          <LoaderCircle className="size-6 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground">Loading chart...</p>
-        </div>
-      }
+      fallback={<ChartErrorFallback className={className} />}
+      loadingFallback={<ChartLoadingFallback className={className} />}
     >
-      <ChartContainer
-        config={config}
-        className={cn("mx-auto aspect-square max-h-[250px]", className)}
-      >
-        <RadialBarChart
-          data={chartData}
-          endAngle={180}
-          innerRadius={80}
-          outerRadius={130}
-        >
-          <ChartTooltip
-            cursor={false}
-            content={
-              <ChartTooltipContent
-                indicator="dot"
-                nameKey={nameKey.toString()}
-                labelKey={dataKey.toString()}
-              />
-            }
-          />
-          <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
-            <Label
-              content={({ viewBox }) => {
-                if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                  return (
-                    <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
-                      <tspan
-                        x={viewBox.cx}
-                        y={(viewBox.cy || 0) - 16}
-                        className="fill-foreground text-2xl font-bold"
-                      >
-                        {totalValue.toLocaleString()}
-                      </tspan>
-                      {/* <tspan
-                                            x={viewBox.cx}
-                                            y={(viewBox.cy || 0) + 4}
-                                            className="fill-muted-foreground"
-                                        >
-                                            {dataKey.toString().replace(/([A-Z])/g, ' $1').trim()}
-                                        </tspan> */}
-                    </text>
-                  );
-                }
-              }}
+      <ChartContainer config={config} className={className}>
+        <ResponsiveContainer width="100%" height="100%">
+          <RadialBarChart
+            data={chartData}
+            endAngle={180}
+            innerRadius={innerRadius}
+            outerRadius={outerRadius}
+          >
+            <ChartTooltip
+              cursor={false}
+              content={
+                <ChartTooltipContent
+                  indicator="dot"
+                  nameKey={nameKey.toString()}
+                  labelKey={dataKey.toString()}
+                />
+              }
             />
-          </PolarRadiusAxis>
-          <RadialBar
-            dataKey={nameKey.toString()}
-            stackId="a"
-            cornerRadius={5}
-            fill="var(--color-primary)"
-            className="stroke-transparent stroke-2"
-          />
-        </RadialBarChart>
+            <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
+              <Label
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    return (
+                      <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) - 16}
+                          className="fill-foreground text-2xl font-bold"
+                        >
+                          {totalValue.toLocaleString()}
+                        </tspan>
+                      </text>
+                    );
+                  }
+                }}
+              />
+            </PolarRadiusAxis>
+            <RadialBar
+              dataKey={dataKey.toString()}
+              stackId="a"
+              cornerRadius={5}
+              className="stroke-transparent stroke-2"
+            />
+          </RadialBarChart>
+        </ResponsiveContainer>
       </ChartContainer>
     </ErrorBoundaryWithSuspense>
   );
 }
 
-interface PieDonutTextProps<
-  TData extends Record<string, any>,
-  TConfig extends ChartConfig,
-> extends BaseProps<TData, TConfig> {
-  // Additional properties specific to Pie/Donut charts
-  valueLabel?: string;
-  innerRadius?: number;
-  strokeWidth?: number;
-  className?: string;
-}
-
+/**
+ * Pie/Donut chart with centered text
+ */
 export function ChartPieDonutText<
-  TData extends Record<string, any>,
+  TData extends Record<string, unknown>,
   TConfig extends ChartConfig,
 >({
   data,
@@ -328,250 +302,259 @@ export function ChartPieDonutText<
   nameKey,
   valueLabel = "Total",
   innerRadius = 60,
-  strokeWidth = 5,
-  className = "mx-auto aspect-square max-h-[250px]",
+  outerRadius = 80,
+  strokeWidth = 2,
+  className = "mx-auto h-[250px] w-full",
 }: PieDonutTextProps<TData, TConfig>) {
-  const totalValue = React.useMemo(() => {
-    return data.reduce((acc, curr) => acc + (curr[dataKey] as number), 0);
-  }, [data, dataKey]);
-  console.log(
-    config,
-    data.map((data) => {
-      return {
-        ...data,
-        fill: `var(--color-${data[nameKey].replace(" ", "_").toLowerCase()})`, // Ensure the nameKey is formatted correctly for CSS variable
-      };
-    })
-  );
+  const totalValue = React.useMemo(() => (
+    data.reduce((acc, curr) => acc + (curr[dataKey] as number), 0)
+  ), [data, dataKey]);
+
+  const processedData = React.useMemo(() => (
+    data.map((item) => ({
+      ...item,
+      // Use color prop if exists, otherwise fall back to CSS variable
+      fill: (item as any).color || `var(--color-${String(item[nameKey]).replace(/\s+/g, "_").toLowerCase()})`,
+    }))
+  ), [data, nameKey]);
+
   return (
-    <ChartContainer config={config} className={className}>
-      <PieChart>
-        <ChartTooltip
-          cursor={false}
-          content={<ChartTooltipContent hideLabel />}
-        />
-        <Pie
-          data={data.map((data) => {
-            return {
-              ...data,
-              fill: `var(--color-${data[nameKey].replace(" ", "_").toLowerCase()})`,
-            };
-          })}
-          dataKey={dataKey.toString()}
-          nameKey={nameKey.toString()}
-          innerRadius={innerRadius}
-          strokeWidth={strokeWidth}
-        >
-          <Label
-            content={({ viewBox }) => {
-              if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                return (
-                  <text
-                    x={viewBox.cx}
-                    y={viewBox.cy}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
-                  >
-                    <tspan
-                      x={viewBox.cx}
-                      y={viewBox.cy}
-                      className="fill-foreground text-3xl font-bold"
-                    >
-                      {totalValue.toLocaleString()}
-                    </tspan>
-                    <tspan
-                      x={viewBox.cx}
-                      y={(viewBox.cy || 0) + 24}
-                      className="fill-muted-foreground"
-                    >
-                      {valueLabel}
-                    </tspan>
-                  </text>
-                );
-              }
-            }}
-          />
-        </Pie>
-      </PieChart>
-    </ChartContainer>
+    <ErrorBoundaryWithSuspense
+      fallback={<ChartErrorFallback className={className} />}
+      loadingFallback={<ChartLoadingFallback className={className} />}
+    >
+      <ChartContainer config={config} className={className}>
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
+            <Pie
+              data={processedData}
+              dataKey={dataKey.toString()}
+              nameKey={nameKey.toString()}
+              innerRadius={innerRadius}
+              outerRadius={outerRadius}
+              strokeWidth={strokeWidth}
+              paddingAngle={2}
+            >
+              <Label
+                content={({ viewBox }) => {
+                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                    return (
+                      <text
+                        x={viewBox.cx}
+                        y={viewBox.cy}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                      >
+                        <tspan
+                          x={viewBox.cx}
+                          y={viewBox.cy}
+                          className="fill-foreground text-3xl font-bold"
+                        >
+                          {totalValue.toLocaleString()}
+                        </tspan>
+                        <tspan
+                          x={viewBox.cx}
+                          y={(viewBox.cy || 0) + 24}
+                          className="fill-muted-foreground text-sm"
+                        >
+                          {valueLabel}
+                        </tspan>
+                      </text>
+                    );
+                  }
+                }}
+              />
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </ChartContainer>
+    </ErrorBoundaryWithSuspense>
   );
 }
 
-// export function ChartPieLabelList<TData extends Record<string, any>, TConfig extends ChartConfig>({
-//     data,
-//     config,
-//     dataKey,
-//     nameKey,
-//     valueLabel = "Total",
-//     innerRadius = 60,
-//     strokeWidth = 5,
-//     className = "mx-auto aspect-square max-h-[250px]",
-// }: PieDonutTextProps<TData, TConfig>) {
 
-//     console.log("ChartPieLabelList", config, data.map((data) => {
-//         return {
-//             ...data,
-//             fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-//         }
-//     }))
-//     return (<ChartContainer
-//         config={config}
-//         className={cn("mx-auto aspect-square max-h-[250px]", className)}
-//     >
-//         <PieChart>
-//             <ChartTooltip
-//                 content={<ChartTooltipContent nameKey={nameKey.toString()} hideLabel />}
-//             />
-//             <Pie data={data.map((data) => {
-//                 return {
-//                     ...data,
-//                     fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-//                 }
-//             })} dataKey={dataKey.toString()}
-//                 nameKey={nameKey.toString()}
-//                 innerRadius={innerRadius}
-//                 strokeWidth={strokeWidth}
+interface BasePieChartProps<
+  TData extends Record<string, unknown>,
+  TConfig extends ChartConfig,
+> {
+  data: TData[];
+  config: TConfig;
+  dataKey: keyof TData;
+  nameKey: keyof TData;
+  className?: string;
+  showLabel?: boolean;
+  innerRadius?: number;
+  outerRadius?: number;
+}
 
-//             >
-//                 <LabelList
-//                     dataKey={dataKey.toString()}
-//                     className="fill-background"
-//                     stroke="none"
-//                     fontSize={12}
-//                     formatter={(value: keyof typeof config) =>
-//                         config[value]?.label
-//                     }
-//                 />
-//             </Pie>
-//         </PieChart>
-//     </ChartContainer>
+export function ChartPie<
+  TData extends Record<string, unknown>,
+  TConfig extends ChartConfig,
+>({
+  data,
+  config,
+  dataKey,
+  nameKey,
+  className = "mx-auto h-[300px] w-full",
+  showLabel = true,
+  innerRadius = 0,
+  outerRadius = 80,
+}: BasePieChartProps<TData, TConfig>) {
+  
+  const processedData = data.map((item) => ({
+    ...item,
+    fill: `var(--color-${String(item[nameKey]).replace(/\s+/g, "_").toLowerCase()}`,
+  }));
 
-//     )
-// }
+  return (
+    <ErrorBoundaryWithSuspense
+      fallback={<ChartErrorFallback className={className} />}
+      loadingFallback={<ChartLoadingFallback className={className} />}
+    >
+      <ChartContainer config={config} className={className}>
+        <ResponsiveContainer width="100%" height="100%">
+          <PieChart>
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  nameKey={nameKey.toString()}
+                  labelKey={dataKey.toString()}
+                />
+              }
+            />
+            <Pie
+              data={processedData}
+              dataKey={dataKey.toString()}
+              nameKey={nameKey.toString()}
+              innerRadius={innerRadius}
+              outerRadius={outerRadius}
+              paddingAngle={2}
+              label={showLabel ? ({
+                name,
+                percent
+              }) => `${name} ${(percent * 100).toFixed(0)}%` : false}
+            >
+              {processedData.map((entry, index) => (
+                <Cell key={`cell-${index}`} fill={entry.fill} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ResponsiveContainer>
+      </ChartContainer>
+    </ErrorBoundaryWithSuspense>
+  );
+}
+/**
+ * Single line chart component
+ */
+export function ChartLineSingle<
+  TData extends Record<string, unknown>,
+  TConfig extends ChartConfig,
+>({
+  data,
+  config,
+  dataKey,
+  nameKey,
+  className = "mx-auto h-[250px] w-full",
+}: BaseChartProps<TData, TConfig>) {
+  return (
+    <ErrorBoundaryWithSuspense
+      fallback={<ChartErrorFallback className={className} />}
+      loadingFallback={<ChartLoadingFallback className={className} />}
+    >
+      <ChartContainer config={config} className={className}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={data}>
+            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+            <XAxis
+              dataKey={nameKey.toString()}
+              tickLine={false}
+              axisLine={false}
+              tickMargin={10}
+            />
+            <YAxis hide />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  nameKey={nameKey.toString()}
+                  labelKey={dataKey.toString()}
+                />
+              }
+            />
+            <Line
+              type="monotone"
+              dataKey={dataKey.toString()}
+              stroke="var(--color-primary)"
+              strokeWidth={2}
+              dot={{ r: 4 }}
+              activeDot={{ r: 6 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </ChartContainer>
+    </ErrorBoundaryWithSuspense>
+  );
+}
 
-// export function ChartPieSimple<TData extends Record<string, any>, TConfig extends ChartConfig>({
-//     data,
-//     config,
-//     dataKey,
-//     nameKey,
-//     valueLabel = "Total",
-//     innerRadius = 60,
-//     strokeWidth = 5,
-//     className = "mx-auto aspect-square max-h-[250px]",
-// }: PieDonutTextProps<TData, TConfig>) {
-//     console.log("ChartPieSimple", config, data.map((data) => {
-//         return {
-//             ...data,
-//             fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-//         }
-//     }))
-
-//     return (
-//         <ChartContainer
-//             config={config}
-//             className={cn("mx-auto aspect-square max-h-[250px]", className)}
-//         >
-
-//             <PieChart>
-//                 <ChartTooltip
-//                     cursor={false}
-//                     content={<ChartTooltipContent hideLabel />}
-//                 />
-//                 <Pie data={data.map((data) => {
-//                     return {
-//                         ...data,
-//                         fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-//                     }
-//                 })} dataKey={dataKey.toString()} nameKey={nameKey.toString()}
-//                     innerRadius={innerRadius}
-//                     strokeWidth={strokeWidth}
-//                 />
-//             </PieChart>
-//         </ChartContainer>
-
-//     )
-// }
-// export function ChartRadar<TData extends Record<string, any>, TConfig extends ChartConfig>({
-//     data,
-//     config,
-//     dataKey,
-//     nameKey,
-//     valueLabel = "Total",
-//     innerRadius = 60,
-//     strokeWidth = 5,
-//     className = "mx-auto aspect-square max-h-[250px]",
-// }: PieDonutTextProps<TData, TConfig>) {
-//     console.log("ChartRadar", config, data.map((data) => {
-//         return {
-//             ...data,
-//             fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-//         }
-//     }))
-
-//     return (
-//         <ChartContainer
-//             config={config}
-//             className={cn("mx-auto aspect-square max-h-[250px]", className)}
-//         >
-//             <RadarChart data={data.map((data) => {
-//                 return {
-//                     ...data,
-//                     fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
-//                 }
-//             })}>
-//                 <ChartTooltip
-//                     cursor={false}
-//                     content={<ChartTooltipContent hideLabel />}
-//                 />
-
-//                 <PolarAngleAxis dataKey={nameKey.toString()} />
-//                 <Radar
-//                     dataKey={dataKey.toString()}
-//                     fill={`var(--color-primary)`}
-//                     fillOpacity={0.6}
-//                     dot={{
-//                         r: 4,
-//                         fillOpacity: 1,
-//                     }}
-//                 />
-//             </RadarChart>
-//         </ChartContainer>
-
-//     )
-// }
-
-// Example usage with the original data and config
-
-// const chartData = [
-//     { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-//     { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-//     { browser: "firefox", visitors: 287, fill: "var(--color-firefox)" },
-//     { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-//     { browser: "other", visitors: 190, fill: "var(--color-other)" },
-// ]
-
-// const chartConfig = {
-//     visitors: {
-//         label: "{dataKey.toLocaleString()} Visitors",
-//     },
-//     chrome: {
-//         label: "Chrome",
-//         color: "var(--chart-1)",
-//     },
-//     safari: {
-//         label: "Safari",
-//         color: "var(--chart-2)",
-//     },
-//     firefox: {
-//         label: "Firefox",
-//         color: "var(--chart-3)",
-//     },
-//     edge: {
-//         label: "Edge",
-//         color: "var(--chart-4)",
-//     },
-//     other: {
-//         label: "Other",
-//         color: "var(--chart-5)",
-//     },
-// } satisfies ChartConfig
+/**
+ * Multiple line chart component
+ */
+export function ChartLineMultiple<
+  TData extends Record<string, unknown>,
+  TConfig extends ChartConfig,
+>({
+  data,
+  config,
+  nameKey,
+  lineKeys,
+  colors,
+  className = "mx-auto h-[250px] w-full",
+}: ChartLineMultipleProps<TData, TConfig>) {
+  return (
+    <ErrorBoundaryWithSuspense
+      fallback={<ChartErrorFallback className={className} />}
+      loadingFallback={<ChartLoadingFallback className={className} />}
+    >
+      <ChartContainer config={config} className={className}>
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart
+            data={data}
+            margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
+          >
+            <CartesianGrid vertical={false} strokeDasharray="3 3" />
+            <XAxis
+              dataKey={nameKey.toString()}
+              tickLine={false}
+              axisLine={false}
+              tickMargin={10}
+            />
+            <YAxis hide />
+            <ChartTooltip
+              content={
+                <ChartTooltipContent
+                  nameKey={nameKey.toString()}
+                  labelFormatter={(value) => changeCase(value, "title")}
+                />
+              }
+            />
+            {lineKeys.map((key) => (
+              <Line
+                key={key.toString()}
+                type="monotone"
+                dataKey={key.toString()}
+                stroke={colors?.[key.toString()] || `var(--color-${key.toString().toLowerCase()})`}
+                strokeWidth={2}
+                dot={{ r: 4 }}
+                activeDot={{ r: 6 }}
+              />
+            ))}
+          </LineChart>
+        </ResponsiveContainer>
+      </ChartContainer>
+    </ErrorBoundaryWithSuspense>
+  );
+}
