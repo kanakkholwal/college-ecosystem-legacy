@@ -2,6 +2,7 @@
 import ResourceCard from '@/components/application/resource-card'
 import { ResponsiveContainer } from '@/components/common/container'
 import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 import Fuse from 'fuse.js'
 import { parseAsStringEnum, useQueryState } from 'nuqs'
 import { useEffect, useMemo, useState } from 'react'
@@ -29,7 +30,7 @@ export function CategoryFilter({ categories }: { categories: string[] }) {
     )
 }
 
-export function ResourcesList({ resources }: { resources: ResourceFrontMatter[] }) {
+export function ResourcesList({ resources, className }: { resources: ResourceFrontMatter[]; className?: string }) {
     const [category, _] = useQueryState('category', parseAsStringEnum(resources.map(r => r.category || '')))
     const [searchQuery, __] = useQueryState('q', {
         throttleMs: 500, // Debounce typing
@@ -78,7 +79,7 @@ export function ResourcesList({ resources }: { resources: ResourceFrontMatter[] 
     }, [searchQuery, fuse,resources, category, tag,type,resources])    
 
     return (<ResponsiveContainer
-        className="px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3"
+        className={cn("px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3",className)}
         role="list"
         aria-label="List of resources"
     >

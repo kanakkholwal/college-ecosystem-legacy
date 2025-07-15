@@ -27,7 +27,9 @@ import {
     Users,
     Youtube,
     Zap,
+    AlignLeft
 } from 'lucide-react';
+
 import { FaChrome, FaEdge, FaFirefoxBrowser, FaSafari } from "react-icons/fa";
 import { FcGoogle } from 'react-icons/fc';
 import { GrArticle } from "react-icons/gr";
@@ -56,6 +58,8 @@ export const IconComponent = {
     "zap": Zap,
     "cpu": Cpu,
     "globe": Globe,
+    "align-left": AlignLeft,
+    "toc": AlignLeft,
     // browser icons
     "safari": FaSafari,
     "chrome": FaChrome,

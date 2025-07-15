@@ -5,12 +5,15 @@ import { serialize } from 'next-mdx-remote/serialize';
 import path from 'path';
 import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import rehypeSlug from 'rehype-slug';
-import remarkFlexibleToc from "remark-flexible-toc";
+import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
 import { highlight } from 'remark-sugar-high';
-
+import { unified } from 'unified';
 import { calculateReadingTime } from '~/utils/string';
 
+import remarkFlexibleToc, { TocItem } from "remark-flexible-toc";
 
 export const resourcesTypes = ['guides', 'articles', 'experiences', 'misc'] as const;
 /**
@@ -43,15 +46,35 @@ export interface ResourceFrontMatter {
   featured?: boolean;
   category?: string;
 }
-export type Toc = TocItem[];
 
-type TocItem = {
-  depth: number;
-  value: string;
-  slug: string;
-  children: TocItem[];
-};
+export type CompliedResource = {
+  mdxSource: MDXRemoteSerializeResult; 
+  frontmatter: ResourceFrontMatter;
+  data: { toc: TocItem[] };
+}
 
+/**
+ * Extract Table of Contents from MDX content
+ * @param content - The MDX content as a string
+ * @returns A promise that resolves to the Table of Contents items
+ * This function uses remark-flexible-toc to parse the headings and generate a structured TOC.
+ */
+async function getTocFromMDX(content: string): Promise<TocItem[]> {
+  try {
+    const { content: mdxContentWithoutFrontmatter } = matter(content);
+    const file = await unified()
+      .use(remarkFlexibleToc, { tocName: "toc", maxDepth: 6, skipLevels: [1], skipParents: ["blockquote"] }) // Add TOC generation
+      .use(remarkParse) // Convert into markdown AST
+      .use(remarkRehype) // Transform to HTML AST
+      .use(rehypeStringify) // Convert AST into serialized HTML
+      .process(mdxContentWithoutFrontmatter); // Process the content without frontmatter
+
+    return file.data.toc as TocItem[];
+  } catch (error) {
+    console.log('Error processing MDX for Table of Contents:', error);
+    return [];
+  }
+}
 
 /**
  * Compile MDX content into a serializable format
@@ -62,6 +85,7 @@ type TocItem = {
 export const compileMdxSource = async (content: string): Promise<MDXRemoteSerializeResult> => {
   try {
 
+    // Serialize the MDX content with frontmatter parsing
     const mdxSource = await serialize(content, {
       parseFrontmatter: true, // Enable frontmatter parsing
       mdxOptions: {
@@ -72,15 +96,15 @@ export const compileMdxSource = async (content: string): Promise<MDXRemoteSerial
         rehypePlugins: [
           rehypeSlug,
           [rehypeAutolinkHeadings, { behavior: 'wrap', test: ['h2', 'h3', 'h4'] }],
-          [remarkFlexibleToc,{
-            skipParents: ["blockquote"]
-          }] // Add TOC generation
         ], // Add any rehype plugins if needed
       },
       scope: {
-        toc: []
+        toc: [] as TocItem[], // Initialize toc as an empty array
       }, // You can pass any additional scope variables here
     })
+    const toc = await getTocFromMDX(content);
+    // Add the generated TOC to the scope
+    mdxSource.scope.toc = toc;
     return mdxSource
   } catch (error) {
     console.error('Error compiling MDX:', error)
@@ -115,7 +139,7 @@ export function getMDXFiles(type: ResourceType): string[] {
 export async function getMDXBySlug(
   type: ResourceType,
   slug: string
-): Promise<{ mdxSource: MDXRemoteSerializeResult; frontmatter: ResourceFrontMatter }> {
+): Promise<CompliedResource> {
   assertResourceType(type);
   const filename = `${slug}.mdx`;
   const filePathMd = path.join(RESOURCE_DIR, type, filename);
@@ -140,7 +164,10 @@ export async function getMDXBySlug(
 
   return {
     mdxSource,
-    frontmatter: frontmatter.data as ResourceFrontMatter
+    data:{
+      toc: (mdxSource.scope.toc || []) as TocItem[],
+    },
+    frontmatter: frontmatter.data as ResourceFrontMatter,
   };
 }
 
@@ -258,15 +285,22 @@ export async function getAllResourcesGroupedByType(): Promise<Record<ResourceTyp
 export async function getResourceBySlug(
   type: ResourceType,
   slug: string
-): Promise<{
-  mdxSource: MDXRemoteSerializeResult;
-  frontmatter: ResourceFrontMatter;
-} | null> {
+): Promise<CompliedResource | null> {
   try {
     const response = await getMDXBySlug(type, slug);
     return response;
   } catch (e) {
     return null; // Return null if not found
+  }
+}
+export async function getResourceRelated(
+  slug: string,
+): Promise<ResourceFrontMatter[]> {
+  try {
+    const response = await getAllResources();
+    return response.filter(resource => resource.slug !== slug);
+  } catch (e) {
+    return []; // Return empty array if not found
   }
 }
 
@@ -287,5 +321,5 @@ export const resourceApi = {
   getResourcesByCategory,
   getRecentResources,
   getAllResourcePaths,
-  
+
 } as const

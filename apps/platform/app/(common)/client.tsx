@@ -47,7 +47,7 @@ export function HeroSection({ user }: HeroSection) {
         <p className="text-base text-muted-foreground text-center mb-5">
           {appConfig.description.split(".")[0] || "Welcome to the digital campus platform!"}
         </p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 items-center gap-4">
 
           <ButtonLink
             variant="dark"

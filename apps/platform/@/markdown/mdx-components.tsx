@@ -63,9 +63,11 @@ export const mdxComponents = {
     }
     if (href?.startsWith('#')) {
       return (
-        <a href={href} className={cn(
-          "underline-0 not-prose"
-        )} {...props}>
+        <a href={href}
+          data-suffix={"#"}
+          className={cn(
+            "underline-0 not-prose after:content-[attr(data-suffix)] after:ml-1 after:text-muted-foreground after:opacity-0 hover:after:opacity-100 after:transition-opacity after:duration-200",
+          )} {...props}>
           {children}
         </a>
       );
@@ -83,7 +85,10 @@ export const mdxComponents = {
     );
   },
   code: ({ ...props }: ComponentPropsWithoutRef<'code'>) => {
-    return <code {...props} />;
+    return <code {...props} className={cn(props.className, "font-mono no-scrollbar")} />;
+  },
+  pre: ({ ...props }: ComponentPropsWithoutRef<'pre'>) => {
+    return <pre {...props} className={cn(props.className, "font-mono")} />;
   },
   Table: ({ data }: { data: { headers: string[]; rows: string[][] } }) => (
     <table>

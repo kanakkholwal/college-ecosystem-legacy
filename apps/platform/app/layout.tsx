@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
-import { Inter as FontSans } from "next/font/google";
+import { Inter as FontSans, Space_Mono } from "next/font/google";
 import { appConfig, orgConfig } from "~/project.config";
 import { Provider } from "./client-provider";
 import "./globals.css";
@@ -89,6 +89,11 @@ const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
+const fontMono = Space_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  weight: "400"
+});
 
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;
@@ -105,7 +110,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <body
         className={cn(
           "min-h-screen min-w-screen w-full antialiased",
-          fontSans.variable
+          fontSans.variable,
+          fontMono.variable,
         )}
       >
         <script
