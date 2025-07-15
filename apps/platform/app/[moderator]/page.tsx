@@ -1,5 +1,5 @@
 import { Heading, Paragraph } from "@/components/ui/typography";
-import { getSession } from "~/lib/auth-server";
+import { getSession } from "~/auth/server";
 import { changeCase } from "~/utils/string";
 import { DashboardTemplate } from "./dashboards";
 

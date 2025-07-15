@@ -1,5 +1,5 @@
-import type { Session } from "~/lib/auth";
-import { getSession } from "~/lib/auth-server";
+import type { Session } from "~/auth";
+import { getSession } from "~/auth/server";
 import { AccountForm } from "./account-form";
 
 export default async function SettingsAccountPage() {

@@ -17,8 +17,8 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
-import type { Session } from "~/lib/auth-client";
-import { authClient } from "~/lib/auth-client";
+import type { Session } from "~/auth/client";
+import { authClient } from "~/auth/client";
 
 export function NavUser({ user }: { user: Session["user"] }) {
   const { isMobile } = useSidebar();

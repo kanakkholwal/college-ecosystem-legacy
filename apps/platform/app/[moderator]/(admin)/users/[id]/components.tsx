@@ -41,14 +41,14 @@ import type { InferSelectModel } from "drizzle-orm";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { DEPARTMENTS_LIST } from "src/constants/departments";
 import * as z from "zod";
 import { updateUser } from "~/actions/dashboard.admin";
-import { deleteUserResourcesById } from "~/actions/user";
+import { deleteUserResourcesById } from "~/actions/user.core";
+import { authClient } from "~/auth/client";
+import { emailSchema, genderSchema, ROLES } from "~/constants";
+import { DEPARTMENTS_LIST } from "~/constants/core.departments";
 import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
-import { ROLES, emailSchema, genderSchema } from "~/constants/user";
 import type { users } from "~/db/schema";
-import { authClient } from "~/lib/auth-client";
 import type { HostelType } from "~/models/hostel_n_outpass";
 
 

@@ -1,10 +1,9 @@
 import { NextRequest } from "next/server";
-import { ROLES } from "~/constants";
-import type { Session } from "~/lib/auth";
+import type { Session } from "~/auth";
 import type { RoutePattern } from "~/utils/string";
 import { toRegex } from "~/utils/string";
 import { appConfig } from "./project.config";
-export { clubSubPaths } from "~/constants/clubs";
+import { ROLES_ENUMS } from "./constants";
 
 
 export const SIGN_IN_PATH = "/auth/sign-in";
@@ -60,18 +59,18 @@ export const publicRouteHandleAbsolute = (route: string, pathname: string) => {
 
 
 export const dashboardRoutes = [
-    ROLES.ADMIN,
-    ROLES.FACULTY,
-    ROLES.CR,
-    ROLES.FACULTY,
-    ROLES.CHIEF_WARDEN,
-    ROLES.WARDEN,
-    ROLES.ASSISTANT_WARDEN,
-    ROLES.MMCA,
-    ROLES.HOD,
-    ROLES.GUARD,
-    ROLES.LIBRARIAN,
-    ROLES.STUDENT,
+    ROLES_ENUMS.ADMIN,
+    ROLES_ENUMS.FACULTY,
+    ROLES_ENUMS.CR,
+    ROLES_ENUMS.FACULTY,
+    ROLES_ENUMS.CHIEF_WARDEN,
+    ROLES_ENUMS.WARDEN,
+    ROLES_ENUMS.ASSISTANT_WARDEN,
+    ROLES_ENUMS.MMCA,
+    ROLES_ENUMS.HOD,
+    ROLES_ENUMS.GUARD,
+    ROLES_ENUMS.LIBRARIAN,
+    ROLES_ENUMS.STUDENT,
 ];
 
 export type DashboardRoute = (typeof dashboardRoutes)[number];
@@ -92,9 +91,9 @@ export const PRIVATE_ROUTES = RAW_PRIVATE_ROUTES.map((route) => ({
 }));
 
 export const HOSTEL_AUTHORIZED_ROUTES = [
-    ROLES.MMCA,
-    ROLES.ASSISTANT_WARDEN,
-    ROLES.WARDEN,
+    ROLES_ENUMS.MMCA,
+    ROLES_ENUMS.ASSISTANT_WARDEN,
+    ROLES_ENUMS.WARDEN,
 ];
 export const HOSTEL_ACCESSED_PATHS = [
     "outpass-requests",
@@ -190,11 +189,11 @@ export const auth_SUBDOMAIN_TO_PATH_REWRITES_Map = new Map<string, {
 }>([
     ["guard", {
         path: "guard",
-        roles: [ROLES.GUARD, ROLES.ADMIN],
+        roles: [ROLES_ENUMS.GUARD, ROLES_ENUMS.ADMIN],
     }],
     ["admin", {
         path: "admin",
-        roles: [ROLES.ADMIN],
+        roles: [ROLES_ENUMS.ADMIN],
     }],
 ]);
 

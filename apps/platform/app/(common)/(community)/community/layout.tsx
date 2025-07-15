@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { CATEGORIES } from "~/constants/community";
+import { CATEGORIES } from "~/constants/common.community";
 
 import { Button } from "@/components/ui/button";
 import { SortAsc, TrendingUpIcon } from "lucide-react";

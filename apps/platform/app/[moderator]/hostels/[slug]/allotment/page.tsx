@@ -7,8 +7,8 @@ import { LuBuilding } from "react-icons/lu";
 import {
   getAllotmentProcess,
   getHostelRooms,
-} from "~/actions/allotment-process";
-import { getHostel } from "~/actions/hostel";
+} from "~/actions/hostel.allotment-process";
+import { getHostel } from "~/actions/hostel.core";
 import {
   ChangeAllotmentProcessStatusButton,
   DistributeSlotsButton,
@@ -20,7 +20,7 @@ import {
   SLOT_CAPACITY,
   SLOT_DURATION,
   SLOT_TIME_GAP,
-} from "~/constants/allotment-process";
+} from "~/constants/hostel.allotment-process";
 
 export default async function HostelRoomAllotmentPage({
   params,

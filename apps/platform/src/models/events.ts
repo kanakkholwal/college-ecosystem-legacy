@@ -1,5 +1,5 @@
 import mongoose, { Schema, type Document } from "mongoose";
-import type { rawEventsSchemaType } from "~/constants/events";
+import type { rawEventsSchemaType } from "~/constants/common.events";
 
 interface IEvent extends Document, rawEventsSchemaType {}
 

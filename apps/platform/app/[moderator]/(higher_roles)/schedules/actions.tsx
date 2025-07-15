@@ -1,10 +1,10 @@
 "use server";
-import { getDepartmentCode } from "src/constants/departments";
-import { getSession } from "src/lib/auth-server";
 import dbConnect from "src/lib/dbConnect";
 import { getStudentInfo } from "src/lib/student/actions";
 import Timetable, { type TimeTableWithID } from "src/models/time-table";
 import type { studentInfoType } from "src/types/student";
+import { getSession } from "~/auth/server";
+import { getDepartmentCode } from "~/constants/core.departments";
 
 export async function getInfo(): Promise<{
   studentInfo: studentInfoType | null;

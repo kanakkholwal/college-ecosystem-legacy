@@ -1,4 +1,4 @@
-import type { RawEvent, RawTimetableType } from "src/constants/time-table";
+import type { RawEvent, RawTimetableType } from "~/constants/common.time-table";
 
 export const daysMap = new Map([
   [0, "Monday"],

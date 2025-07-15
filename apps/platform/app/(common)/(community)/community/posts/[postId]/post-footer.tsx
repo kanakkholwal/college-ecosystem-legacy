@@ -5,10 +5,10 @@ import { Button } from "@/components/ui/button";
 import { Bookmark, BookmarkCheck, Eye, Share, ThumbsUp } from "lucide-react";
 
 import { useState } from "react";
-import type { Session } from "src/lib/auth-client";
-import { updatePost } from "src/lib/community/actions";
+import { updatePost } from "src/actions/common.community";
 import type { CommunityPostTypeWithId } from "src/models/community";
 import { formatNumber } from "src/utils/number";
+import type { Session } from "~/auth/client";
 import { appConfig } from "~/project.config";
 
 export default function PostFooter({

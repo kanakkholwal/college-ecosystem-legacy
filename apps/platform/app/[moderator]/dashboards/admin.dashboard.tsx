@@ -20,9 +20,9 @@ import {
   getUsersByRole,
   users_CountAndGrowth,
 } from "~/actions/dashboard.admin";
-import { ROLES_LIST } from "~/constants";
-import { DEPARTMENTS_LIST, getDepartmentCode } from "~/constants/departments";
-import { extractVisitorCount } from '~/lib/github';
+import { ROLES } from "~/constants";
+import { DEPARTMENTS_LIST, getDepartmentCode } from "~/constants/core.departments";
+import { extractVisitorCount } from '~/lib/third-party/github';
 import { changeCase } from "~/utils/string";
 
 export default async function AdminDashboard() {
@@ -191,7 +191,7 @@ export default async function AdminDashboard() {
                   label: "Role",
                 },
 
-                ...ROLES_LIST.reduce<
+                ...ROLES.reduce<
                   Record<string, { label: string; color: string }>
                 >((acc, role, idx) => {
                   acc[role] = {

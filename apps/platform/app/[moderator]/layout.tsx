@@ -3,24 +3,24 @@ import { AppSidebar } from "@/components/common/sidebar/app-sidebar";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import { ROLES } from "~/constants";
-import type { Session } from "~/lib/auth";
-import { getSession } from "~/lib/auth-server";
+import type { Session } from "~/auth";
+import { getSession } from "~/auth/server";
+import { ROLES_ENUMS } from "~/constants";
 import { changeCase } from "~/utils/string";
 
 const ALLOWED_ROLES = [
-  ROLES.ADMIN,
-  ROLES.FACULTY,
-  ROLES.CR,
-  ROLES.FACULTY,
-  ROLES.CHIEF_WARDEN,
-  ROLES.WARDEN,
-  ROLES.ASSISTANT_WARDEN,
-  ROLES.MMCA,
-  ROLES.HOD,
-  ROLES.GUARD,
-  ROLES.LIBRARIAN,
-  ROLES.STUDENT,
+  ROLES_ENUMS.ADMIN,
+  ROLES_ENUMS.FACULTY,
+  ROLES_ENUMS.CR,
+  ROLES_ENUMS.FACULTY,
+  ROLES_ENUMS.CHIEF_WARDEN,
+  ROLES_ENUMS.WARDEN,
+  ROLES_ENUMS.ASSISTANT_WARDEN,
+  ROLES_ENUMS.MMCA,
+  ROLES_ENUMS.HOD,
+  ROLES_ENUMS.GUARD,
+  ROLES_ENUMS.LIBRARIAN,
+  ROLES_ENUMS.STUDENT,
 ];
 
 interface DashboardLayoutProps {

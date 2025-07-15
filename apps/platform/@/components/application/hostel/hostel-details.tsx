@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Heading, Paragraph } from "@/components/ui/typography";
-import type { Session } from "~/lib/auth";
-import { getSession } from "~/lib/auth-server";
+import type { Session } from "~/auth";
+import { getSession } from "~/auth/server";
 import type { HostelType } from "~/models/hostel_n_outpass";
 
 export async function HostelDetail({ hostel }: { hostel: HostelType }) {

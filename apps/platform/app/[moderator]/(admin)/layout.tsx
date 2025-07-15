@@ -1,5 +1,5 @@
 import Page403 from "@/components/utils/403";
-import { getSession } from "~/lib/auth-server";
+import { getSession } from "~/auth/server";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

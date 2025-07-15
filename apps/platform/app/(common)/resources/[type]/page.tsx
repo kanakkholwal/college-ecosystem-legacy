@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import { ArrowRight, Plus } from 'lucide-react';
 import { Metadata, ResolvingMetadata } from 'next';
 import { notFound } from 'next/navigation';
-import { getAllMDXMeta, ResourceType } from '~/lib/mdx';
+import { getAllMDXMeta, ResourceType } from '~/lib/markdown/mdx';
 import { appConfig } from '~/project.config';
 import { changeCase } from '~/utils/string';
 

@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 import { GrSchedules } from "react-icons/gr";
-import { getDepartmentShort } from "~/constants/departments";
-import { getAllTimeTables } from "~/lib/time-table/actions";
+import { getAllTimeTables } from "~//actions/common.time-table";
+import { getDepartmentShort } from "~/constants/core.departments";
 
 import { BaseHeroSection } from "@/components/application/base-hero";
 import ScheduleSearchBox from "@/components/application/schedule-search";

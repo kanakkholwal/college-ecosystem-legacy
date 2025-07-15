@@ -3,7 +3,7 @@ import { getUser } from "~/actions/dashboard.admin";
 import { UserDisplay, UserSessions, UserUpdate } from "./components";
 
 import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
-import { getHostels } from "~/actions/hostel";
+import { getHostels } from "~/actions/hostel.core";
 
 interface PageProps {
   params: Promise<{

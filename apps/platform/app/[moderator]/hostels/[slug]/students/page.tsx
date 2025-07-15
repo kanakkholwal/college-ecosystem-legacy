@@ -6,7 +6,7 @@ import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { LuBuilding } from "react-icons/lu";
-import { getEligibleStudentsForHostel, getHostel, getStudentsByHostelId, importStudentsWithCgpi } from "~/actions/hostel";
+import { getEligibleStudentsForHostel, getHostel, getStudentsByHostelId, importStudentsWithCgpi } from "~/actions/hostel.core";
 import { ImportStudents } from "./client";
 
 export default async function HostelPage({

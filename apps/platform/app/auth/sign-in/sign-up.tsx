@@ -1,6 +1,6 @@
 "use client";
 
-import { authClient } from "src/lib/auth-client";
+import { authClient } from "~/auth/client";
 
 import {
   CardContent,
@@ -31,9 +31,9 @@ import toast from "react-hot-toast";
 
 import { Icon } from "@/components/icons";
 import { AtSign } from "lucide-react";
-import { getDepartmentName } from "src/constants/departments";
 import * as z from "zod";
-import { emailSchema } from "~/constants/user";
+import { emailSchema } from "~/constants";
+import { getDepartmentName } from "~/constants/core.departments";
 import { orgConfig } from "~/project.config";
 
 const FormSchema = z.object({

@@ -3,9 +3,9 @@ import { formatDistanceToNow } from "date-fns";
 import { notFound } from "next/navigation";
 import Markdown from 'react-markdown';
 import remarkGfm from "remark-gfm";
-import { CATEGORY_IMAGES } from "src/constants/community";
-import { getSession } from "src/lib/auth-server";
-import { getPostById } from "src/lib/community/actions";
+import { getPostById } from "src/actions/common.community";
+import { getSession } from "~/auth/server";
+import { CATEGORY_IMAGES } from "~/constants/common.community";
 import PostFooter from "./post-footer";
 
 interface Props {

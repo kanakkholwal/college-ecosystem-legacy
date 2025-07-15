@@ -7,7 +7,7 @@ import { ButtonLink } from "@/components/utils/link";
 import { LoaderCircle, Plus, User2Icon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { authClient } from "~/lib/auth-client";
+import { authClient } from "~/auth/client";
 import { orgConfig } from "~/project.config";
 import { columns } from "./columns";
 import SearchBar from "./search";

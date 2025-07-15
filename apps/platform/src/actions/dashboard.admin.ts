@@ -1,16 +1,16 @@
 "use server";
-import  PollModel  from '~/models/poll';
-import  CommunityPostModel  from '~/models/community';
 import type { InferSelectModel } from "drizzle-orm";
 import { and, asc, desc, eq, gte, lte, sql } from "drizzle-orm";
+import { auth } from "~/auth";
+import { getSession } from "~/auth/server";
 import { db } from "~/db/connect";
 import { accounts, sessions, users } from "~/db/schema/auth-schema";
-import { auth } from "~/lib/auth";
-import { getSession } from "~/lib/auth-server";
-import { updateHostelStudent } from "./hostel";
-import ResultModel from "~/models/result";
 import dbConnect from "~/lib/dbConnect";
+import CommunityPostModel from '~/models/community';
 import { EventModel } from '~/models/events';
+import PollModel from '~/models/poll';
+import ResultModel from "~/models/result";
+import { updateHostelStudent } from "./hostel.core";
 
 export async function users_CountAndGrowth(timeInterval: string): Promise<{
   count: number;

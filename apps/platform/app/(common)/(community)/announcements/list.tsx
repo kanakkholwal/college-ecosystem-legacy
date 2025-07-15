@@ -5,7 +5,7 @@ import Link from "next/link";
 import { GrAnnounce } from "react-icons/gr";
 import Markdown from 'react-markdown';
 import type { AnnouncementTypeWithId } from "src/models/announcement";
-import { Session } from "~/lib/auth-client";
+import { Session } from "~/auth/client";
 import DeleteButton from "./delete-btn";
 
 export default function AnnouncementsList({

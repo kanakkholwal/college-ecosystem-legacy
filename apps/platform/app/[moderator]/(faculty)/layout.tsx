@@ -1,10 +1,10 @@
 import Page403 from "@/components/utils/403";
-import { getSession } from "src/lib/auth-server";
-import { ROLES } from "~/constants";
+import { getSession } from "~/auth/server";
+import { ROLES_ENUMS } from "~/constants";
 
 const ALLOWED_ROLES = [
-  ROLES.FACULTY,
-  ROLES.HOD,
+  ROLES_ENUMS.FACULTY,
+  ROLES_ENUMS.HOD,
 
 ];
 
@@ -28,7 +28,7 @@ export default async function DashboardLayout({
         ALLOWED_ROLES.includes(role as (typeof ALLOWED_ROLES)[number])
       ) &&
         ALLOWED_ROLES.includes(moderator)) ||
-      session?.user?.role === ROLES.ADMIN
+      session?.user?.role === ROLES_ENUMS.ADMIN
     )
   ) {
     return <Page403 />;

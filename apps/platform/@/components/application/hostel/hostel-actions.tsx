@@ -17,8 +17,8 @@ import { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import * as z from "zod";
-import { updateHostel } from "~/actions/hostel";
-import { isValidRollNumber } from "~/constants/departments";
+import { updateHostel } from "~/actions/hostel.core";
+import { isValidRollNumber } from "~/constants/core.departments";
 import { emailSchema, updateHostelSchema } from "~/constants/hostel_n_outpass";
 import { orgConfig } from "~/project.config";
 

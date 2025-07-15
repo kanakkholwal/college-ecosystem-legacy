@@ -4,7 +4,7 @@ import SearchBox from "@/components/application/result-search";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Suspense } from "react";
 import { BiSpreadsheet } from "react-icons/bi";
-import { getCachedLabels, getResults } from "~/actions/result";
+import { getCachedLabels, getResults } from "~/actions/common.result";
 
 import { BaseHeroSection } from "@/components/application/base-hero";
 import EmptyArea from "@/components/common/empty-area";

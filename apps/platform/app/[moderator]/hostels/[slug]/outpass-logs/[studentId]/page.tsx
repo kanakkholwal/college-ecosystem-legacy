@@ -9,7 +9,7 @@ import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
 
-import { getOutPassByIdForHosteler } from "~/actions/hostel_outpass";
+import { getOutPassByIdForHosteler } from "~/actions/hostel.outpass";
 
 interface PageProps {
   params: Promise<{

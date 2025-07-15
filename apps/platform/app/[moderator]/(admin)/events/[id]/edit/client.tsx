@@ -2,29 +2,29 @@
 import { DateTimePicker } from "@/components/extended/date-n-time";
 import { Button } from "@/components/ui/button";
 import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import z from "zod";
-import { updateEvent } from "~/actions/events";
-import { eventTypes, rawEventsSchema } from "~/constants/events";
+import { updateEvent } from "~/actions/common.events";
+import { eventTypes, rawEventsSchema } from "~/constants/common.events";
 import { EventJSONType } from "~/models/events";
 
 export default function EditEventEvent({ eventId, event }: { eventId: string, event: EventJSONType }) {

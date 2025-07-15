@@ -1,7 +1,7 @@
 import EmptyArea from "@/components/common/empty-area";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { LuBuilding } from "react-icons/lu";
-import { getHostel } from "~/actions/hostel";
+import { getHostel } from "~/actions/hostel.core";
 
 import ImportRooms from "./client";
 

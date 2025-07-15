@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, Clock, Info } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getSession } from "src/lib/auth-server";
-import { getPollById, updateVotes } from "src/lib/poll/actions";
+import { getPollById, updateVotes } from "src//actions/common.poll";
+import { getSession } from "~/auth/server";
 import { PollRender } from "../components/poll-component";
 import Polling from "./polling";
 

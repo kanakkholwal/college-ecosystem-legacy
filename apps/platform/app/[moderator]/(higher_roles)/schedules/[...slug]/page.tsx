@@ -1,9 +1,9 @@
 import { HeaderBar } from "@/components/common/header-bar";
 import { TimeTableEditor } from "@/components/custom/time-table";
-import { ButtonLink, PreviousPageLink } from "@/components/utils/link";
+import { ButtonLink } from "@/components/utils/link";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
 import { notFound } from "next/navigation";
-import { getTimeTable } from "src/lib/time-table/actions";
+import { getTimeTable } from "src//actions/common.time-table";
 
 interface Props {
   params: Promise<{

@@ -3,7 +3,7 @@ import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { BookUser } from "lucide-react";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { getAttendanceRecords } from "~/actions/record.personal";
+import { getAttendanceRecords } from "~/actions/student.record_personal";
 import AttendanceAnalytics from "./attendance-analytics";
 import CreateAttendanceRecord from "./create-record";
 import AttendanceRecord from "./record";

@@ -1,7 +1,7 @@
 import { HostelDetailsForNonAdmins } from "@/components/application/hostel/hostel-details";
 import EmptyArea from "@/components/common/empty-area";
 import { LuBuilding } from "react-icons/lu";
-import { getHostelForStudent } from "~/actions/hostel";
+import { getHostelForStudent } from "~/actions/hostel.core";
 
 export default async function HostelPageLayout(props: {
   children: React.ReactNode;

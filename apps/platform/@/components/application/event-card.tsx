@@ -1,9 +1,9 @@
 "use client";
+import { cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { rawEventsSchemaType } from "~/constants/common.events";
 import type { EventJSONType } from "~/models/events";
 import { Badge } from "../ui/badge";
-import { rawEventsSchemaType } from "~/constants/events";
-import { cn } from "@/lib/utils";
 
 function EventCard({ event,className }: { event: EventJSONType | rawEventsSchemaType, className?: string }) {
     const time = new Date(event.time);

@@ -4,7 +4,7 @@ import { ErrorBoundary } from "@/components/utils/error-boundary";
 import { LoaderCircle } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getOutPassHistoryForHostel } from "~/actions/hostel_outpass";
+import { getOutPassHistoryForHostel } from "~/actions/hostel.outpass";
 import type { OutPassType } from "~/models/hostel_n_outpass";
 import { columns } from "./columns";
 import SearchBar from "./search";

@@ -23,10 +23,10 @@ import NexoMdxEditor from "nexo-mdx";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "src/constants/community";
-import { createPost } from "src/lib/community/actions";
+import { createPost } from "src/actions/common.community";
 import { rawCommunityPostSchema } from "src/models/community";
 import type { z } from "zod";
+import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "~/constants/common.community";
 
 export default function CreateCommunityPost() {
   const searchParams = useSearchParams();

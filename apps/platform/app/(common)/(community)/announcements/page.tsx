@@ -2,7 +2,7 @@ import EmptyArea from "@/components/common/empty-area";
 import Link from "next/link";
 import { GrAnnounce } from "react-icons/gr";
 
-import { getAnnouncements } from "~/actions/announcement";
+import { getAnnouncements } from "~/actions/common.announcement";
 import AnnouncementsList from "./list";
 
 import { Badge } from "@/components/ui/badge";
@@ -10,9 +10,9 @@ import { Tabs, VercelTabsList } from "@/components/ui/tabs";
 import { AuthButtonLink } from "@/components/utils/link";
 import { X } from "lucide-react";
 import type { Metadata } from "next";
-import { RELATED_FOR_TYPES } from "~/constants/announcement";
-import { Session } from "~/lib/auth";
-import { getSession } from "~/lib/auth-server";
+import { Session } from "~/auth";
+import { getSession } from "~/auth/server";
+import { RELATED_FOR_TYPES } from "~/constants/common.announcement";
 import { changeCase } from "~/utils/string";
 
 export const metadata: Metadata = {

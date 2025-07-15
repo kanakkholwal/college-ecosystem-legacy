@@ -1,12 +1,12 @@
 "use server";
-import { Session } from "~/lib/auth";
-import { getSession } from "~/lib/auth-server";
+import { Session } from "~/auth";
+import { getSession } from "~/auth/server";
 import { HostelStudentType } from "~/models/hostel_n_outpass";
 import { ResultTypeWithId } from "~/models/result";
-import { getHostelForStudent } from "./hostel";
-import { getOutPassHistoryByRollNo } from "./hostel_outpass";
-import { getResultByRollNo } from "./result";
-import { getUserPlatformActivities } from "./user";
+import { getResultByRollNo } from "./common.result";
+import { getHostelForStudent } from "./hostel.core";
+import { getOutPassHistoryByRollNo } from "./hostel.outpass";
+import { getUserPlatformActivities } from "./user.core";
 
 interface StudentDashboardData {
     success: boolean,

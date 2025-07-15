@@ -1,6 +1,6 @@
 import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
-import { getTimeTable } from "~/lib/time-table/actions";
+import { getTimeTable } from "~//actions/common.time-table";
 
 import TimeTableViewer from "@/components/custom/time-table/viewer";
 import { PreviousPageLink } from "@/components/utils/link";

@@ -4,8 +4,8 @@ import Navbar from "@/components/common/navbar";
 import { BannerPanel } from "@/components/utils/banner";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { RocketIcon } from "lucide-react";
-import type { Session } from "~/lib/auth";
-import { getSession } from "~/lib/auth-server";
+import type { Session } from "~/auth";
+import { getSession } from "~/auth/server";
 import { appConfig } from "~/project.config";
 
 export const dynamic = "force-dynamic";
@@ -22,7 +22,7 @@ const PROMO = {
   getRedirectUrl: (role: string) =>
     appConfig.url + "/" + role + "/settings/account",
   getConditionByUser: (user: Session["user"]) =>
-    // user?.other_roles.includes(ROLES.STUDENT) &&
+    // user?.other_roles.includes(ROLES_ENUMS.STUDENT) &&
     user?.gender === "not_specified",
   // && new Date() < new Date(PROMO.showTill),
 };

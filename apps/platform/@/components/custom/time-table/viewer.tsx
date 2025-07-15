@@ -9,8 +9,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
-import { getDepartmentName } from "src/constants/departments";
 import type { TimeTableWithID } from "src/models/time-table";
+import { getDepartmentName } from "~/constants/core.departments";
 import { Event } from "./components";
 import { daysMap, timeMap } from "./constants";
 

@@ -1,12 +1,11 @@
 import RequestOutPassForm from "@/components/application/hostel/outpass-request-form";
 import EmptyArea from "@/components/common/empty-area";
-import { Heading } from "@/components/ui/typography";
 import { ButtonLink } from "@/components/utils/link";
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import { LuBuilding } from "react-icons/lu";
-import { getHostelForStudent } from "~/actions/hostel";
-import { createOutPass } from "~/actions/hostel_outpass";
+import { getHostelForStudent } from "~/actions/hostel.core";
+import { createOutPass } from "~/actions/hostel.outpass";
 
 interface PageProps {
   searchParams: Promise<{

@@ -2,7 +2,7 @@ import CourseCard from "@/components/application/course-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata } from "next";
 import { Suspense } from "react";
-import { getCourses } from "~/actions/course";
+import { getCourses } from "~/actions/common.course";
 
 import { BaseHeroSection } from "@/components/application/base-hero";
 import Pagination from "@/components/application/course-pagination";

@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import mongoose, { type Document, Schema } from "mongoose";
-import type { OUTPASS_STATUS, REASONS } from "~/constants/outpass";
+import type { OUTPASS_STATUS, REASONS } from "~/constants/hostel.outpass";
 import { db } from "~/db/connect";
 import { users } from "~/db/schema/auth-schema";
 import ResultModel from "./result";

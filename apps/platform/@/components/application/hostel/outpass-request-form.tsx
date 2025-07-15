@@ -23,7 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import type z from "zod";
-import { REASONS, requestOutPassSchema } from "~/constants/outpass";
+import { REASONS, requestOutPassSchema } from "~/constants/hostel.outpass";
 import type { HostelStudentType } from "~/models/hostel_n_outpass";
 
 interface RequestOutPassFormProps<T> {

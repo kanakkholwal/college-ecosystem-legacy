@@ -2,12 +2,12 @@ import { ResponsiveContainer } from "@/components/common/container";
 import EmptyArea from "@/components/common/empty-area";
 import { HeaderBar } from "@/components/common/header-bar";
 import {
-  RouterCard
+    RouterCard
 } from "@/components/common/router-card";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/utils/link";
 import { CalendarDays, Plus } from "lucide-react";
-import { getAllTimeTables } from "~/lib/time-table/actions";
+import { getAllTimeTables } from "~//actions/common.time-table";
 
 export default async function Schedules(props: {
   params: Promise<{

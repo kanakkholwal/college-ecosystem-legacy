@@ -23,9 +23,9 @@ import NexoMdxEditor from "nexo-mdx";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "src/constants/community";
 import type { z } from "zod";
-import { deletePost, updatePost } from "~/lib/community/actions";
+import { deletePost, updatePost } from "~/actions/common.community";
+import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "~/constants/common.community";
 import {
   CommunityPostTypeWithId,
   rawCommunityPostSchema,

@@ -42,7 +42,7 @@ export default function ResourceCard({
                 )}
                 <CardContent className="p-4 space-y-2">
                     <div className="flex justify-between items-center text-xs text-muted-foreground">
-                        <span>{new Date(date).toLocaleDateString('en-IN',{
+                        <span>{new Date(date).toLocaleDateString('en-IN', {
                             year: 'numeric',
                             month: 'long',
                             day: 'numeric',

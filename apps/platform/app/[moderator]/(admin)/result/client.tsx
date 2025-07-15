@@ -21,7 +21,7 @@ import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import { LoaderCircleIcon } from "lucide-react";
 import toast from "react-hot-toast";
 import z from "zod";
-import { emailSchema } from "~/constants/user";
+import { emailSchema } from "~/constants";
 import serverApis from "~/lib/server-apis/client";
 import type {
   AbNormalResult,

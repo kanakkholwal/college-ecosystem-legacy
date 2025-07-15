@@ -12,8 +12,8 @@ import { HeaderBar } from "@/components/common/header-bar";
 import { Badge } from "@/components/ui/badge";
 import { ButtonLink } from "@/components/utils/link";
 import { MdRoom } from "react-icons/md";
-import { getRoomsInfo, listAllRoomsWithHistory } from "~/actions/room";
-import { getSession } from "~/lib/auth-server";
+import { getRoomsInfo, listAllRoomsWithHistory } from "~/actions/common.room";
+import { getSession } from "~/auth/server";
 
 type Props = {
   params: Promise<{

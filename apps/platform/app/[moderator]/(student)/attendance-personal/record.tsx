@@ -16,7 +16,7 @@ import type { ViewBox } from "recharts/types/util/types";
 import {
   deleteAttendanceRecord,
   updateAttendanceRecord,
-} from "~/actions/record.personal";
+} from "~/actions/student.record_personal";
 import type { PersonalAttendanceWithRecords } from "~/db/schema/attendance_record";
 import UpdateAttendanceRecord from "./update-record";
 

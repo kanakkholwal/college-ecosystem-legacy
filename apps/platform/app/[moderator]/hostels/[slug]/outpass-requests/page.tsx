@@ -9,7 +9,7 @@ import { LoaderCircle } from "lucide-react";
 import { useParams } from "next/navigation";
 import { LuBuilding } from "react-icons/lu";
 import useSWR, { type Fetcher } from "swr";
-import { OUTPASS_STATUS } from "~/constants/outpass";
+import { OUTPASS_STATUS } from "~/constants/hostel.outpass";
 import type { OutPassType } from "~/models/hostel_n_outpass";
 import { changeCase } from "~/utils/string";
 

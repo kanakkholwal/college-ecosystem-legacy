@@ -5,7 +5,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { Metadata } from "next";
-import { createRoom } from "~/actions/room";
+import { createRoom } from "~/actions/common.room";
 import CreateRoomForm from "./form";
 
 export const metadata: Metadata = {

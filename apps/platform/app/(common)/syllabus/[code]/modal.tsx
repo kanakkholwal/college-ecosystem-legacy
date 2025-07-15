@@ -28,7 +28,7 @@ import { useRouter } from "next/navigation";
 import {
   updateBooksAndRefPublic,
   updatePrevPapersPublic,
-} from "~/actions/course";
+} from "~/actions/common.course";
 
 const yearOptions: readonly string[] = Array.from({ length: 6 }, (_, index) =>
   (new Date().getFullYear() - index).toString()

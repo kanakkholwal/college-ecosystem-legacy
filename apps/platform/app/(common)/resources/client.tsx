@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import Fuse from 'fuse.js'
 import { parseAsStringEnum, useQueryState } from 'nuqs'
 import { useEffect, useMemo, useState } from 'react'
-import { ResourceFrontMatter } from '~/lib/mdx'
+import { ResourceFrontMatter } from '~/lib/markdown/mdx'
 
 
 export function CategoryFilter({ categories }: { categories: string[] }) {

@@ -1,6 +1,6 @@
 import mongoose, { Document, Schema, Types } from "mongoose";
-import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "src/constants/community";
 import * as z from "zod";
+import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "~/constants/common.community";
 
 export const rawCommunityPostSchema = z.object({
   title: z.string().min(5, "Title must be atleast 5 characters long."),

@@ -13,7 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import * as z from "zod";
-import { createAttendance } from "~/actions/record.personal";
+import { createAttendance } from "~/actions/student.record_personal";
 
 export const rawAttendanceRecordSchema = z.object({
   subjectCode: z.string().regex(/^[A-Z]{2}-\d{3}$/, {

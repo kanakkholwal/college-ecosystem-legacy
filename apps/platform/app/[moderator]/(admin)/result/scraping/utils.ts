@@ -1,4 +1,4 @@
-import { serverFetch } from "~/lib/client-fetch";
+import { serverFetch } from "~/lib/fetch-client";
 import { EVENTS, type taskDataType } from "./types";
 
 export const scrapingApi = {

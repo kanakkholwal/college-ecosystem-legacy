@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { getEventById } from "~/actions/events";
+import { getEventById } from "~/actions/common.events";
 import EditEventEvent from "./client";
 
 export default async function EditEventPage(props: {

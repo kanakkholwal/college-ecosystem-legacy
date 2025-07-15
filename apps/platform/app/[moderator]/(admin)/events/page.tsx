@@ -8,7 +8,7 @@ import { ButtonLink } from "@/components/utils/link";
 import { format } from "date-fns";
 import { ArrowUpRight, CalendarDays, Plus } from "lucide-react";
 import Link from "next/link";
-import { getEvents } from "~/actions/events";
+import { getEvents } from "~/actions/common.events";
 
 type Props = {
   params: Promise<{

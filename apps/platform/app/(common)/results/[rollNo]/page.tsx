@@ -13,7 +13,7 @@ import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { ResultTypeWithId, Semester } from "src/models/result";
-import { getResultByRollNo } from "~/actions/result";
+import { getResultByRollNo } from "~/actions/common.result";
 import { orgConfig } from "~/project.config";
 import type { Course } from "~/types/result";
 import { CGPIChart } from "./components/chart";

@@ -1,5 +1,5 @@
 import mongoose, { type Document, Schema } from "mongoose";
-import { RELATED_FOR_TYPES, RawAnnouncementType } from "~/constants/announcement";
+import { RELATED_FOR_TYPES, RawAnnouncementType } from "~/constants/common.announcement";
 
 
 export type AnnouncementTypeWithId = RawAnnouncementType & {

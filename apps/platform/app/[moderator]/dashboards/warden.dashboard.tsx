@@ -6,7 +6,7 @@ import { RouterCard, RouterCardLink } from "@/components/common/router-card";
 import { FolderKanban, HistoryIcon, Tickets } from "lucide-react";
 import { LuBuilding } from "react-icons/lu";
 import { PiStudentFill } from "react-icons/pi";
-import { getHostelByUser } from "~/actions/hostel";
+import { getHostelByUser } from "~/actions/hostel.core";
 
 
 export default async function WardenDashboard({ role }: { role: string }) {

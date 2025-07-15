@@ -30,9 +30,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import z from "zod";
-import { DEPARTMENTS_LIST } from "~/constants/departments";
-import { ROLES } from "~/constants/user";
-import { authClient } from "~/lib/auth-client";
+import { authClient } from "~/auth/client";
+import { ROLES } from "~/constants";
+import { DEPARTMENTS_LIST } from "~/constants/core.departments";
 import { orgConfig } from "~/project.config";
 
 const userSchema = z.object({

@@ -25,8 +25,8 @@ import toast from "react-hot-toast";
 import { BiLockOpenAlt } from "react-icons/bi";
 import * as z from "zod";
 import { changeUserPassword, updateUser } from "~/actions/dashboard.admin";
+import type { Session } from "~/auth/client";
 import { emailSchema } from "~/constants";
-import type { Session } from "~/lib/auth-client";
 
 interface Props {
   currentUser: Session["user"];

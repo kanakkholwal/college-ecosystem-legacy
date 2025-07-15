@@ -1,8 +1,8 @@
-import mongoose, { Document, Schema, Types } from "mongoose";
-import { DEPARTMENTS_LIST } from "~/constants/departments";
+import mongoose, { Document, Schema } from "mongoose";
+import { DEPARTMENTS_LIST } from "~/constants/core.departments";
 
 
-import type { RawTimeSlot,RawEvent,RawTimetableType } from "~/constants/time-table";
+import type { RawEvent, RawTimeSlot, RawTimetableType } from "~/constants/common.time-table";
 
 
 

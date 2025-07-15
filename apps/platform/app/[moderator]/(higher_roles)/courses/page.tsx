@@ -11,7 +11,7 @@ import { ArrowUpRight, Plus } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import { Suspense } from "react";
 import { LuBookA } from "react-icons/lu";
-import { getCourses } from "~/actions/course";
+import { getCourses } from "~/actions/common.course";
 
 type Props = {
   params: Promise<{

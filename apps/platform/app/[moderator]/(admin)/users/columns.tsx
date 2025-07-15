@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
 import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
-import type { authClient } from "~/lib/auth-client";
+import type { authClient } from "~/auth/client";
 
 export type UserType = Awaited<
   ReturnType<typeof authClient.admin.listUsers>

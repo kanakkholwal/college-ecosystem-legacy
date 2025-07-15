@@ -14,7 +14,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
-import type { Session } from "~/lib/auth-client";
+import type { Session } from "~/auth/client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { sidebar_links } from "@/constants/links";

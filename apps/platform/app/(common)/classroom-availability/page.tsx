@@ -8,8 +8,8 @@ import ConditionalRender from "@/components/utils/conditional-render";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { Search } from "lucide-react";
 import type { Metadata } from "next";
-import { listAllRoomsWithHistory } from "~/actions/room";
-import { getSession } from "~/lib/auth-server";
+import { listAllRoomsWithHistory } from "~/actions/common.room";
+import { getSession } from "~/auth/server";
 
 import { BaseHeroSection } from "@/components/application/base-hero";
 

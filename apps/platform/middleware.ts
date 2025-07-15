@@ -1,9 +1,9 @@
 import { betterFetch } from "@better-fetch/fetch";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
+import { Session } from "~/auth";
 import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
-import { Session } from "~/lib/auth";
-import { auth_SUBDOMAIN_TO_PATH_REWRITES_Map, checkAuthorization, clubSubPaths, dashboardRoutes, extractSubdomain, isHostelRoute, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, SUBDOMAIN_TO_PATH_REWRITES_Map, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
+import { auth_SUBDOMAIN_TO_PATH_REWRITES_Map, checkAuthorization, dashboardRoutes, extractSubdomain, isHostelRoute, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, SUBDOMAIN_TO_PATH_REWRITES_Map, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
 import { appConfig } from "~/project.config";
 
 
@@ -32,11 +32,6 @@ export async function middleware(request: NextRequest) {
     // dynamically handle the root path for clubs
     if (pathname === '/') {
       return NextResponse.rewrite(new URL(`/clubs/${subdomain}`, request.url));
-    }
-    if (clubSubPaths.some((path) => pathname.startsWith(`/${path}`))) {
-      // If the request is for a club's sub-path, rewrite to the club's page
-      // console.log(`Rewriting request for subdomain: ${subdomain} to path: /clubs/${subdomain}${pathname}`);
-      return NextResponse.rewrite(new URL(`/clubs/${subdomain}${pathname}`, request.url));
     }
 
   }

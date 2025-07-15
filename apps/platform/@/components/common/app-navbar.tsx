@@ -5,7 +5,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { getNavLinks } from "@/constants/links";
 import { titlesMap } from "@/constants/titles";
 import { usePathname } from "next/navigation";
-import type { Session } from "~/lib/auth-client";
+import type { Session } from "~/auth/client";
 import { QuickLinks } from "./navbar";
 import { ThemeSwitcher } from "./theme-switcher";
 

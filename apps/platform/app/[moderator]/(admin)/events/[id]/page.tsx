@@ -2,7 +2,7 @@ import { ActionButton } from "@/components/application/action-bar";
 import { ButtonLink } from "@/components/utils/link";
 import { format } from "date-fns";
 import { notFound } from "next/navigation";
-import { deleteEvent, getEventById } from "~/actions/events";
+import { deleteEvent, getEventById } from "~/actions/common.events";
 
 export default async function EventPage(props: {
   params: Promise<{

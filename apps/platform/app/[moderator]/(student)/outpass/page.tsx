@@ -8,8 +8,8 @@ import { format } from "date-fns";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { LuBuilding } from "react-icons/lu";
-import { getHostelForStudent } from "~/actions/hostel";
-import { getOutPassForHosteler } from "~/actions/hostel_outpass";
+import { getHostelForStudent } from "~/actions/hostel.core";
+import { getOutPassForHosteler } from "~/actions/hostel.outpass";
 
 interface PageProps {
   searchParams: Promise<{

@@ -22,8 +22,8 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { LuMail } from "react-icons/lu";
-import { authClient } from "src/lib/auth-client";
 import * as z from "zod";
+import { authClient } from "~/auth/client";
 import { emailSchema } from "~/constants";
 import { orgConfig } from "~/project.config";
 

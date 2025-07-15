@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { Star } from "lucide-react";
 import Link from "next/link";
-import { getRepoStarGazers } from "~/lib/github";
+import { getRepoStarGazers } from "~/lib/third-party/github";
 import { appConfig } from "~/project.config";
 import { NumberTicker } from "../animation/number-ticker";
 import { Button } from "../ui/button";

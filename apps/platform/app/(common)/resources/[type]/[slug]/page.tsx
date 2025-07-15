@@ -3,12 +3,12 @@ import { Badge } from '@/components/ui/badge';
 import { ButtonLink } from '@/components/utils/link';
 import { ArrowLeftIcon, Edit, Plus } from 'lucide-react';
 import { Metadata, ResolvingMetadata } from 'next';
+import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { getAllResourcesGroupedByType, getResourceBySlug, ResourceType } from '~/lib/mdx';
+import { getAllResourcesGroupedByType, getResourceBySlug, ResourceType } from '~/lib/markdown/mdx';
 import { appConfig } from '~/project.config';
 import { changeCase } from '~/utils/string';
 import { ClientMdx, CommentSection } from './client';
-import Image from 'next/image';
 
 
 type PageProps = {

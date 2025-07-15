@@ -1,21 +1,19 @@
-import { ExternalLink, Settings, Tickets, Users } from "lucide-react";
+import { Settings, Tickets, Users } from "lucide-react";
 import { BsInstagram } from "react-icons/bs";
 import { FiLinkedin } from "react-icons/fi";
 import { LuBookA, LuBuilding, LuGithub, LuSchool } from "react-icons/lu";
-import { RiCustomSize, RiTwitterXFill } from "react-icons/ri";
-import type { Session } from "~/lib/auth-client";
+import { RiTwitterXFill } from "react-icons/ri";
+import type { Session } from "~/auth/client";
 // import { TbServer2 } from "react-icons/tb";
 
 import { IoCalendarOutline } from "react-icons/io5";
 import { TbDashboard } from "react-icons/tb";
-import { ROLES } from "~/constants";
+import { ROLES, ROLES_ENUMS } from "~/constants";
 
 import { AudioLines, CalendarRange } from "lucide-react";
 import { BiSpreadsheet } from "react-icons/bi";
-import { FaPeopleGroup } from "react-icons/fa6";
 import { GrAnnounce, GrResources, GrSchedules } from "react-icons/gr";
-import { HiOutlineUserGroup } from "react-icons/hi";
-import { MdEmojiEvents, MdOutlinePoll } from "react-icons/md";
+import { MdOutlinePoll } from "react-icons/md";
 import { appConfig, supportLinks } from "~/project.config";
 import { toRegex } from "~/utils/string";
 
@@ -136,12 +134,12 @@ export const sidebar_links: rawLinkType[] = [
     title: "Users",
     icon: Users,
     path: "/users",
-    allowed_roles: [ROLES.ADMIN],
+    allowed_roles: [ROLES_ENUMS.ADMIN],
     items: [
       {
         title: "Create User",
         path: "/new",
-        allowed_roles: [ROLES.ADMIN],
+        allowed_roles: [ROLES_ENUMS.ADMIN],
       },
     ],
   },
@@ -149,17 +147,17 @@ export const sidebar_links: rawLinkType[] = [
     title: "Result",
     icon: BiSpreadsheet,
     path: "/result",
-    allowed_roles: [ROLES.ADMIN],
+    allowed_roles: [ROLES_ENUMS.ADMIN],
     items: [
       {
         title: "Scraping",
         path: "/scraping",
-        allowed_roles: [ROLES.ADMIN],
+        allowed_roles: [ROLES_ENUMS.ADMIN],
       },
       {
         title: "Import from Excel",
         path: "/import",
-        allowed_roles: [ROLES.ADMIN],
+        allowed_roles: [ROLES_ENUMS.ADMIN],
       },
     ],
   },
@@ -168,109 +166,60 @@ export const sidebar_links: rawLinkType[] = [
     title: "Academic Events",
     icon: IoCalendarOutline,
     path: "/events",
-    allowed_roles: [ROLES.ADMIN],
+    allowed_roles: [ROLES_ENUMS.ADMIN],
   },
   {
     title: "Courses",
     icon: LuBookA,
     path: "/courses",
-    allowed_roles: [ROLES.ADMIN],
+    allowed_roles: [ROLES_ENUMS.ADMIN],
   },
   {
     title: "Schedules",
     icon: GrSchedules,
     path: "/schedules",
     // make it regex
-    allowed_roles: [ROLES.ADMIN, ROLES.FACULTY, ROLES.HOD, ROLES.CR],
+    allowed_roles: [ROLES_ENUMS.ADMIN, ROLES_ENUMS.FACULTY, ROLES_ENUMS.HOD, ROLES_ENUMS.CR],
   },
   {
     title: "Personal Attendance",
     icon: CalendarRange,
     path: "/attendance-personal",
-    allowed_roles: [ROLES.STUDENT],
+    allowed_roles: [ROLES_ENUMS.STUDENT],
   },
   {
     title: "Out Pass",
     icon: Tickets,
     path: "/outpass",
-    allowed_roles: [ROLES.STUDENT],
+    allowed_roles: [ROLES_ENUMS.STUDENT],
   },
   {
     title: "Rooms",
     icon: LuSchool,
     path: "/rooms",
-    allowed_roles: [ROLES.ADMIN],
+    allowed_roles: [ROLES_ENUMS.ADMIN],
     items: [
       {
         title: "Add Room",
         path: "/new",
-        allowed_roles: [ROLES.ADMIN],
+        allowed_roles: [ROLES_ENUMS.ADMIN],
       },
     ],
-  },
-  {
-    title: "Clubs",
-    icon: HiOutlineUserGroup,
-    path: "/clubs",
-    allowed_roles: [ROLES.ADMIN],
-    items: [],
   },
   {
     title: "Hostels",
     icon: LuBuilding,
     path: "/hostels",
     allowed_roles: [
-      ROLES.ADMIN,
-      ROLES.CHIEF_WARDEN,
-      ROLES.ASSISTANT_WARDEN,
-      ROLES.WARDEN,
-      ROLES.MMCA,
+      ROLES_ENUMS.ADMIN,
+      ROLES_ENUMS.CHIEF_WARDEN,
+      ROLES_ENUMS.ASSISTANT_WARDEN,
+      ROLES_ENUMS.WARDEN,
+      ROLES_ENUMS.MMCA,
     ],
     items: [],
   },
 
-  {
-    title: "Dashboard",
-    icon: TbDashboard,
-    path: "/dashboard",
-    allowed_roles: ["club"],
-    items: [],
-  },
-  {
-    title: "Members",
-    icon: FaPeopleGroup,
-    path: "/members",
-    allowed_roles: ["club"],
-    items: [],
-  },
-  {
-    title: "Events",
-    icon: MdEmojiEvents,
-    path: "/events",
-    allowed_roles: ["club"],
-    items: [],
-  },
-  {
-    title: "UI Customizer",
-    icon: RiCustomSize,
-    path: "/customizer",
-    allowed_roles: ["club"],
-    items: [],
-  },
-  {
-    title: "Go to Site",
-    icon: ExternalLink,
-    path: "",
-    allowed_roles: ["club"],
-    items: [],
-  },
-  {
-    title: "Settings",
-    icon: Settings,
-    path: "/settings",
-    allowed_roles: ["club"],
-    items: [],
-  },
   {
     title: "Settings",
     icon: Settings,
@@ -328,7 +277,7 @@ const normalizeRoles = (
   roles: AllowedRoleType | AllowedRoleType[]
 ): string[] => {
   return Array.isArray(roles)
-    ? roles.map((role) => String(role))
+    ? ROLES.map((role) => String(role))
     : [String(roles)];
 };
 // Helper function to check role access with negation support

@@ -1,13 +1,13 @@
-import { type NextRequest, NextResponse } from "next/server";
-import { getSession } from "~/lib/auth-server";
-import { isValidRollNumber } from "~/constants/departments";
 import { Types } from "mongoose";
-import { ROLES } from "~/constants";
-import dbConnect from "~/lib/dbConnect";
+import { type NextRequest, NextResponse } from "next/server";
 import {
-  getOutPassHistoryByRollNo,
   getOutPassById,
-} from "~/actions/hostel_outpass";
+  getOutPassHistoryByRollNo,
+} from "~/actions/hostel.outpass";
+import { getSession } from "~/auth/server";
+import { ROLES_ENUMS } from "~/constants";
+import { isValidRollNumber } from "~/constants/core.departments";
+import dbConnect from "~/lib/dbConnect";
 
 export async function GET(request: NextRequest) {
   try {
@@ -26,8 +26,8 @@ export async function GET(request: NextRequest) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     if (
-      session.user.role !== ROLES.ADMIN ||
-      !session.user.other_roles.includes(ROLES.GUARD)
+      session.user.role !== ROLES_ENUMS.ADMIN ||
+      !session.user.other_roles.includes(ROLES_ENUMS.GUARD)
     ) {
       return new NextResponse("You are not authorized to access this feature", {
         status: 403,

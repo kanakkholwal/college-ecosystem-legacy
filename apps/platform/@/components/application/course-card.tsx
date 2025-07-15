@@ -11,8 +11,8 @@ import { cn } from "@/lib/utils";
 import type { InferSelectModel } from "drizzle-orm";
 import Link from "next/link";
 import type { courses } from "src/db/schema";
-import { getDepartmentCode } from "~/constants/departments";
-import type { Session } from "~/lib/auth-client";
+import type { Session } from "~/auth/client";
+import { getDepartmentCode } from "~/constants/core.departments";
 
 // Infer types for courses
 type CourseSelect = InferSelectModel<typeof courses>;

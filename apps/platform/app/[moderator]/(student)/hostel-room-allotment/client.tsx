@@ -8,8 +8,8 @@ import { Lock, X as RemoveIcon, Unlock } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { MdOutlineChair } from "react-icons/md";
-import { addRoomMembers, joinRoom } from "~/actions/allotment-process";
-import { isValidRollNumber } from "~/constants/departments";
+import { addRoomMembers, joinRoom } from "~/actions/hostel.allotment-process";
+import { isValidRollNumber } from "~/constants/core.departments";
 import type { HostelRoomJson } from "~/models/allotment";
 import { orgConfig } from "~/project.config";
 

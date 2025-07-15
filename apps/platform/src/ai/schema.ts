@@ -1,5 +1,5 @@
 import z from "zod";
-import { eventTypesEnums } from "../constants/events";
+import { eventTypesEnums } from "../constants/common.events";
 
 export const eventsSchema = z.object({
     title: z

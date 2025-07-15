@@ -5,7 +5,7 @@ import { Icon } from "@/components/icons";
 import { ButtonLink } from "@/components/utils/link";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
-import type { Session } from "~/lib/auth";
+import type { Session } from "~/auth";
 import { appConfig } from "~/project.config";
 
 

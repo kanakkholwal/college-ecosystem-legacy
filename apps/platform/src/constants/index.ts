@@ -2,7 +2,7 @@ import { z } from "zod";
 import { orgConfig } from "~/project.config";
 import { formatNumberOrdinal } from "~/utils/number";
 
-export const ROLES = {
+export const ROLES_ENUMS = {
   ADMIN: "admin",
   STUDENT: "student",
   CR: "cr",
@@ -18,7 +18,7 @@ export const ROLES = {
   GUARD: "guard",
 } as const;
 
-export const ROLES_LIST: readonly string[] = Object.values(ROLES);
+export const ROLES: readonly string[] = Object.values(ROLES_ENUMS);
 
 export const ROLES_MAP = Object.fromEntries(
   Object.entries(ROLES).map(([key, value]) => [value, key])
@@ -29,6 +29,7 @@ export const GENDER = {
   FEMALE: "female",
   NOT_SPECIFIED: "not_specified",
 };
+export const genderSchema = z.enum(["male", "female", "not_specified"]);
 
 export const emailSchema = z
   .string()
@@ -37,6 +38,7 @@ export const emailSchema = z
   .refine((val) => val.endsWith(`@${orgConfig.domain}`), {
     message: `Email must end with @${orgConfig.domain}`,
   });
+
 export const rollNoSchema = z
   .string()
   .regex(/^\d{2}[a-z]{3}\d{3}$/i)
@@ -64,10 +66,9 @@ const passwordSettings = {
   uppercaseRegex: /[A-Z]/g,
   lowercaseRegex: /[a-z]/g,
   numbersRegex: /[0-9]/g,
-
 }
 
-export   const passwordSchema = z
+export const passwordSchema = z
     .string()
     .min(passwordSettings.minLength)
     .refine(
@@ -98,6 +99,7 @@ export   const passwordSchema = z
         message: `Password must contain at least ${passwordSettings.minSpecialChars} special character`,
       }
     );
+
 export const Programmes = {
   "dual_degree": {
     name: "Dual Degree",
@@ -124,6 +126,7 @@ export const Programmes = {
     duration: 2,
   },
 }
+
 export const getProgrammeByIdentifier = (identifier: string, defaultBTech: boolean): typeof Programmes[keyof typeof Programmes] => {
   for (const programme of Object.values(Programmes)) {
     if (programme.identifiers.includes(identifier)) {

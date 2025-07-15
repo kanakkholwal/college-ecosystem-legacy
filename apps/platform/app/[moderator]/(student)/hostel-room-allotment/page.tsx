@@ -11,8 +11,8 @@ import {
   getHostRoom,
   getHostelRooms,
   getUpcomingSlots,
-} from "~/actions/allotment-process";
-import { getHostelForStudent } from "~/actions/hostel";
+} from "~/actions/hostel.allotment-process";
+import { getHostelForStudent } from "~/actions/hostel.core";
 
 import type { HostelRoomJson } from "~/models/allotment";
 import { ViewRoomButton } from "./client";

@@ -2,7 +2,7 @@
 import { cn } from '@/lib/utils';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { GitBranch, StarIcon, Users } from 'lucide-react';
-import { getRepoStats } from '~/lib/github';
+import { getRepoStats } from '~/lib/third-party/github';
 import { appConfig } from '~/project.config';
 import { Icon, IconType } from '../icons';
 import { Badge } from '../ui/badge';

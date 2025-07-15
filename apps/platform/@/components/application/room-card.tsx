@@ -14,9 +14,9 @@ import type { InferSelectModel } from "drizzle-orm";
 import { Trash2 } from "lucide-react";
 import type React from "react";
 import toast from "react-hot-toast";
-import { deleteRoom, updateRoom } from "~/actions/room";
+import { deleteRoom, updateRoom } from "~/actions/common.room";
+import type { Session } from "~/auth/client";
 import type { roomUsageHistory, rooms } from "~/db/schema/room";
-import type { Session } from "~/lib/auth-client";
 
 type RoomSelect = InferSelectModel<typeof rooms>;
 type UsageHistorySelect = InferSelectModel<typeof roomUsageHistory>;

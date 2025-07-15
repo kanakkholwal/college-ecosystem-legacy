@@ -6,7 +6,7 @@ import { Paragraph } from "@/components/ui/typography";
 import { FolderKanban, HistoryIcon, Tickets } from "lucide-react";
 import { LuBuilding } from "react-icons/lu";
 import { PiStudentFill } from "react-icons/pi";
-import { getHostel } from "~/actions/hostel";
+import { getHostel } from "~/actions/hostel.core";
 
 export default async function HostelPage({
   params,

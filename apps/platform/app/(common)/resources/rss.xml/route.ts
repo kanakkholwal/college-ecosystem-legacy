@@ -1,4 +1,4 @@
-import { getAllResources } from '~/lib/mdx'
+import { getAllResources } from '~/lib/markdown/mdx'
 import { appConfig } from '~/project.config'
 
 export async function GET() {

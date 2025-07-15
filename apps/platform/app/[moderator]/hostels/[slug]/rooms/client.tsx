@@ -11,10 +11,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useState } from "react";
-import wordsToNumbers from "words-to-numbers";
-import { filterColumnsByCallback, filterRowsByCallback } from "~/utils/xlsx";
-import { addHostelRooms } from "~/actions/allotment-process";
 import toast from "react-hot-toast";
+import wordsToNumbers from "words-to-numbers";
+import { addHostelRooms } from "~/actions/hostel.allotment-process";
+import { filterColumnsByCallback, filterRowsByCallback } from "~/utils/xlsx";
 
 export default function ImportRooms({ hostelId }: { hostelId: string }) {
   const [extractedKeys, setExtractedKeys] = useState<string[]>([]);

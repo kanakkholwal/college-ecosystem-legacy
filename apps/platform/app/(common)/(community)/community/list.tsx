@@ -11,7 +11,7 @@ import { BiUpvote } from "react-icons/bi";
 import { GrAnnounce } from "react-icons/gr";
 import Markdown from 'react-markdown';
 import type { CommunityPostTypeWithId } from "src/models/community";
-import { CATEGORY_IMAGES } from "~/constants/community";
+import { CATEGORY_IMAGES } from "~/constants/common.community";
 import { appConfig } from "~/project.config";
 import { formatNumber } from "~/utils/number";
 

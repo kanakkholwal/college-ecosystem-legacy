@@ -8,8 +8,8 @@ import { ArrowTopRightIcon } from "@radix-ui/react-icons";
 import { Home, LogOut, UserRound } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import type { Session } from "~/lib/auth-client";
-import { authClient } from "~/lib/auth-client";
+import type { Session } from "~/auth/client";
+import { authClient } from "~/auth/client";
 import { changeCase } from "~/utils/string";
 import { NoteSeparator } from "./note-separator";
 

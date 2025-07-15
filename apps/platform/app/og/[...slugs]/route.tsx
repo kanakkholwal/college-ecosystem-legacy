@@ -3,7 +3,7 @@ import { ImageResponse } from 'next/og'
 import { readFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { ComponentProps } from 'react'
-import { getResourceBySlug, ResourceType } from '~/lib/mdx'
+import { getResourceBySlug, ResourceType } from '~/lib/markdown/mdx'
 import { appConfig } from '~/project.config'
 import { changeCase } from '~/utils/string'
 

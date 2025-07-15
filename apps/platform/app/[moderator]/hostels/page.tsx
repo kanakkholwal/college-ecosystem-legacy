@@ -4,12 +4,12 @@ import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { LuBuilding } from "react-icons/lu";
-import { getHostels } from "~/actions/hostel";
+import { getHostels } from "~/actions/hostel.core";
 
 import { HeaderBar } from "@/components/common/header-bar";
 import { Badge } from "@/components/ui/badge";
 import { MdRoom } from "react-icons/md";
-import { getSession } from "~/lib/auth-server";
+import { getSession } from "~/auth/server";
 import { CreateHostelForm, ImportFromSiteButton } from "./client";
 
 export default async function ChiefWardenPage({

@@ -9,7 +9,7 @@ import { CheckCircle2, LoaderCircle } from "lucide-react";
 import { redirect, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { authClient } from "src/lib/auth-client";
+import { authClient } from "~/auth/client";
 
 
 

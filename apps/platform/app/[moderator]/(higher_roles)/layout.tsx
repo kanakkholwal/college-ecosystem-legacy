@@ -1,8 +1,7 @@
 import Page403 from "@/components/utils/403";
-// import { getSession } from "~/lib/auth-server";
-import { ROLES } from "~/constants";
+import { ROLES_ENUMS } from "~/constants";
 
-const NOT_ALLOWED_ROLES = [ROLES.STUDENT, ROLES.GUARD];
+const NOT_ALLOWED_ROLES = [ROLES_ENUMS.STUDENT, ROLES_ENUMS.GUARD];
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

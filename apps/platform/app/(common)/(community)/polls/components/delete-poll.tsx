@@ -5,8 +5,8 @@ import { ref, remove } from "firebase/database";
 import { Trash2 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { deletePoll } from "src//actions/common.poll";
 import { database } from "src/lib/firebase";
-import { deletePoll } from "src/lib/poll/actions";
 import type { PollType } from "src/models/poll";
 
 export default function DeletePoll({ pollId }: { pollId: PollType["_id"] }) {

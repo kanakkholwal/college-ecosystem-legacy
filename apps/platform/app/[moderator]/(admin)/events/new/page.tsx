@@ -30,9 +30,9 @@ import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { createNewEvent, saveNewEvents } from "~/actions/events";
+import { createNewEvent, saveNewEvents } from "~/actions/common.events";
 import { generateEventsByDoc } from "~/ai/actions";
-import { eventTypes, rawEventsSchema, rawEventsSchemaType } from "~/constants/events";
+import { eventTypes, rawEventsSchema, rawEventsSchemaType } from "~/constants/common.events";
 
 export default function CreateNewEvent() {
   const searchParams = useSearchParams();

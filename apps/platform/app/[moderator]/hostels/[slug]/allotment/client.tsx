@@ -26,7 +26,7 @@ import {
   distributeSlots,
   lockToggleRoom,
   updateAllotmentProcess,
-} from "~/actions/allotment-process";
+} from "~/actions/hostel.allotment-process";
 import type { HostelRoomJson } from "~/models/allotment";
 
 const statusSchema = [

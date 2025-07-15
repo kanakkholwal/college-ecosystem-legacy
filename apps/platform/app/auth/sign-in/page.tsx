@@ -1,4 +1,4 @@
-import { getSession } from "~/lib/auth-server";
+import { getSession } from "~/auth/server";
 import { changeCase } from "~/utils/string";
 import SignInForm from "./sign-in";
 import SignUpForm from "./sign-up";

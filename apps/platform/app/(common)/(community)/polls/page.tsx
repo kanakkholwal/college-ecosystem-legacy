@@ -4,7 +4,7 @@ import {
   getClosedPolls,
   getOpenPolls,
   getPollsCreatedByLoggedInUser,
-} from "~/lib/poll/actions";
+} from "~//actions/common.poll";
 import type { PollType } from "~/models/poll";
 import CreatePoll from "./components/create-poll";
 import PollComponent from "./components/poll-component";
@@ -14,7 +14,7 @@ import { AuthButtonLink } from "@/components/utils/link";
 import { LogIn } from "lucide-react";
 import type { Metadata } from "next";
 import { CgPoll } from "react-icons/cg";
-import { getSession } from "~/lib/auth-server";
+import { getSession } from "~/auth/server";
 
 export const metadata: Metadata = {
   title: `Polls`,

@@ -9,8 +9,8 @@ import { ButtonLink } from "@/components/utils/link";
 import { format } from "date-fns";
 import { ArrowUpRight, CalendarDays } from "lucide-react";
 import type { Metadata } from "next";
-import { getEvents } from "~/actions/events";
-import { getSession } from "~/lib/auth-server";
+import { getEvents } from "~/actions/common.events";
+import { getSession } from "~/auth/server";
 
 type Props = {
   params: Promise<{

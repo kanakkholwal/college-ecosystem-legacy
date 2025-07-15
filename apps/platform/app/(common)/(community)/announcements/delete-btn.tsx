@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
-import { deleteAnnouncement } from "~/actions/announcement";
+import { deleteAnnouncement } from "~/actions/common.announcement";
 
 
 export default function DeleteButton({ announcementId }:{ announcementId: string }) {

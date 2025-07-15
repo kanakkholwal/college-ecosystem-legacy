@@ -2,7 +2,7 @@
 export const getEnvironment = () => {
     if (typeof window !== 'undefined' && typeof document !== 'undefined') {
         return 'browser';
-    } else if (typeof process !== 'undefined' && typeof process.versions !== 'undefined') {
+    } else if (typeof process !== 'undefined' && typeof process?.versions !== 'undefined') {
         return 'node';
     } else {
         return 'unknown';

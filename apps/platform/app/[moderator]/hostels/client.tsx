@@ -24,7 +24,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
 import type z from "zod";
-import { createHostel, importHostelsFromSite } from "~/actions/hostel";
+import { createHostel, importHostelsFromSite } from "~/actions/hostel.core";
 import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
 
 import { createHostelSchema } from "~/constants/hostel_n_outpass";

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { Check, LoaderCircle, X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { approveRejectOutPass } from "~/actions/hostel_outpass";
+import { approveRejectOutPass } from "~/actions/hostel.outpass";
 
 interface OutpassActionFooterProps {
   className?: string;

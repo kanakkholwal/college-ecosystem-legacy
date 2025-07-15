@@ -3,8 +3,8 @@
 import z from "zod";
 import { emailSchema } from "~/constants";
 import dbConnect from "~/lib/dbConnect";
+import { mailFetch } from "~/lib/fetch-server";
 import serverApis from "~/lib/server-apis/server";
-import { mailFetch } from "~/lib/server-fetch";
 import ResultModel from "~/models/result";
 
 export async function getBasicInfo() {

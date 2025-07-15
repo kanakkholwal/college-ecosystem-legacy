@@ -1,5 +1,5 @@
 
-import { getRepoContributors, getRepoStats } from '~/lib/github';
+import { getRepoContributors, getRepoStats } from '~/lib/third-party/github';
 import { appConfig } from '~/project.config';
 import PageClient from './page-client';
 

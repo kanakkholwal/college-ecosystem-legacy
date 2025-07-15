@@ -1,12 +1,12 @@
 import Link from "next/link";
-import { CATEGORIES } from "~/constants/community";
+import { CATEGORIES } from "~/constants/common.community";
 
 import { Badge } from "@/components/ui/badge";
 import { AuthButtonLink } from "@/components/utils/link";
 import { ArrowRight, X } from "lucide-react";
 import type { Metadata } from "next";
-import { getSession } from "~/lib/auth-server";
-import { getPostsByCategory } from "~/lib/community/actions";
+import { getPostsByCategory } from "~/actions/common.community";
+import { getSession } from "~/auth/server";
 import CommunityPostList from "./list";
 
 export const metadata: Metadata = {

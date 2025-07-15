@@ -3,7 +3,7 @@ import BaseSearchBox from "@/components/application/base-search";
 import { ButtonLink } from "@/components/utils/link";
 import { ArrowUpRight, Plus, RssIcon } from "lucide-react";
 import { Metadata } from "next";
-import { getAllResources } from "~/lib/mdx";
+import { getAllResources } from "~/lib/markdown/mdx";
 import { appConfig } from "~/project.config";
 import { CategoryFilter, ResourcesList } from "./client";
 

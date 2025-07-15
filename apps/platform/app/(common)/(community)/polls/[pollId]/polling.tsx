@@ -6,8 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { database } from "src/lib/firebase";
 
-import type { Session } from "src/lib/auth-client";
 import type { PollType } from "src/models/poll";
+import type { Session } from "~/auth/client";
 
 interface PollingProps {
   poll: PollType;

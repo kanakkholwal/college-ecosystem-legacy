@@ -6,9 +6,9 @@ import { ArrowLeft } from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Session } from "~/lib/auth";
-import { getSession } from "~/lib/auth-server";
-import { getPostById } from "~/lib/community/actions";
+import { getPostById } from "~/actions/common.community";
+import { Session } from "~/auth";
+import { getSession } from "~/auth/server";
 
 interface Props {
   searchParams: Promise<{

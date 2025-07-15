@@ -15,12 +15,12 @@ import { useExternalBarcodeScanner } from "@/hooks/useBarcodeScanner";
 import { CircleCheckBig, LogIn, LogOut, ScanSearch } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { allowEntryExit } from "~/actions/hostel_outpass";
+import { allowEntryExit } from "~/actions/hostel.outpass";
 
 import { format } from "date-fns";
 import { parseAsString, useQueryState } from "nuqs";
 import { MdClear } from "react-icons/md";
-import { apiFetch } from "~/lib/client-fetch";
+import { apiFetch } from "~/lib/fetch-client";
 import OutpassList from "./outpass-list";
 import OutpassRender from "./outpass-render";
 

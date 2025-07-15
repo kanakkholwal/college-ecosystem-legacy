@@ -7,7 +7,7 @@ import { ArrowUp, ArrowUpRight, LayoutDashboard, LogIn } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import type { Session } from "~/lib/auth";
+import type { Session } from "~/auth";
 import { ApplicationInfo } from "../logo";
 import { ButtonLink } from "../utils/link";
 import { NavTabs } from "./nav-tabs";

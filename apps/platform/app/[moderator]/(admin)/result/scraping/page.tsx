@@ -3,22 +3,22 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
 } from "@/components/ui/select";
 import { LoaderCircle } from "lucide-react";
 
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
 } from "@/components/ui/table";
 import { useEffect, useRef, useState } from "react";
 
@@ -34,7 +34,7 @@ import toast from "react-hot-toast";
 import { scrapingApi } from "./utils";
 
 import { NumberTicker } from "@/components/animation/number-ticker";
-import { authHeaders } from "~/lib/client-fetch";
+import { authHeaders } from "~/lib/fetch-client";
 import type { taskDataType } from "./types";
 import { EVENTS, LIST_TYPE, TASK_STATUS } from "./types";
 

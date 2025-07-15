@@ -3,8 +3,8 @@ import { cn } from "@/lib/utils";
 import { ArrowRight, Clock } from "lucide-react";
 import Link from "next/link";
 import { BiUpvote } from "react-icons/bi";
-import type { Session } from "src/lib/auth-client";
 import type { PollType } from "src/models/poll";
+import type { Session } from "~/auth/client";
 import DeletePoll from "./delete-poll";
 import { ClosingBadge } from "./poll-timer";
 

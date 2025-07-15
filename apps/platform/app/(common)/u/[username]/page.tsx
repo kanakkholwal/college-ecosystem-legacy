@@ -5,9 +5,9 @@ import { ButtonLink } from "@/components/utils/link";
 import { ArrowRight } from "lucide-react";
 import { Metadata } from "next";
 import { PiSmileySad } from "react-icons/pi";
-import { getHostelById } from "~/actions/hostel";
-import { getUserByUsername } from "~/actions/user";
-import { getSession } from "~/lib/auth-server";
+import { getHostelById } from "~/actions/hostel.core";
+import { getUserByUsername } from "~/actions/user.core";
+import { getSession } from "~/auth/server";
 import { ProfileHeader } from "./components/header";
 
 interface UserPageProps {

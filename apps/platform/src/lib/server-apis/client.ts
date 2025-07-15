@@ -1,4 +1,4 @@
-import { mailFetch, serverFetch } from "~/lib/client-fetch";
+import { mailFetch, serverFetch } from "~/lib/fetch-client";
 import { createApiInstance } from "./base-api";
 import endpoints from "./endpoints";
 /*
