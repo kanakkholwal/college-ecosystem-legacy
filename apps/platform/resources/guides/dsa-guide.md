@@ -5,19 +5,18 @@ tags: ["dsa roadmap", "data structures", "algorithms", "coding interviews", "tec
 category: "career"
 date: "2025-07-16"
 updated: "2025-07-16"
-summary: "One guide to rule them all — a deeply practical, emotional, and strategic walkthrough combining NeetCode, Striver, and Kunal Kushwaha’s DSA content into the perfect roadmap."
-keywords: ["neetcode roadmap", "striver a2z sheet", "kunal kushwaha dsa", "dsa preparation", "leetcode strategy", "coding interview prep", "data structures guide"]
-description: "Struggling with where to start or what to follow in your DSA prep? This guide combines the best of Striver, NeetCode, and Kunal Kushwaha into a single human-centric roadmap for cracking coding interviews."
+summary: "One guide to rule them all — a deeply practical, emotional, and strategic walkthrough combining NeetCode, Striver, and Greg Hogg’s DSA content into the perfect roadmap."
+keywords: ["neetcode roadmap", "striver a2z sheet", "Greg Hogg dsa", "dsa preparation", "leetcode strategy", "coding interview prep", "data structures guide"]
+description: "Struggling with where to start or what to follow in your DSA prep? This guide combines the best of Striver, NeetCode, and Greg Hogg into a single human-centric roadmap for cracking coding interviews."
 author:
   name: "Kanak Kholwal"
-  url: "https://kanakkholwal.eu.org"
+  url: "https://kanak.eu.org"
   image: "https://github.com/kanakkholwal.png"
   handle: "@kanakkholwal"
 featured: false
-draft: true
+draft: false
 ---
-
-# The Last DSA Guide You'll Ever Need 🚀  
+ 
 *A painfully honest roadmap for mastering Data Structures and Algorithms (DSA), without the fluff.*
 
 ---
@@ -32,7 +31,7 @@ You're not alone. The DSA prep journey is brutal. You waste time switching from 
 **This blog changes that.** It combines the best of:
 - [NeetCode Roadmap](https://neetcode.io/roadmap)
 - [Striver's A2Z DSA Sheet](https://takeuforward.org/strivers-a2z-dsa-course)
-- [Kunal Kushwaha's DSA Playlist](https://www.youtube.com/playlist?list=PLKYEe2WisBTFEr6laH5bR2J19j7sl5O8R)
+- [Greg Hogg's Data Structures & Algorithms in Python Playlist](https://www.youtube.com/playlist?list=PLKYEe2WisBTFEr6laH5bR2J19j7sl5O8R)
 
 into **one cohesive roadmap**, with reasoning, emotions, and a human touch. No gatekeeping. Just strategy.
 
@@ -46,10 +45,10 @@ Each of these resources excels at something:
 |---------|----------|
 | **Striver A2Z** | Most structured sheet. Step-by-step from basic to advanced, like building a skyscraper from scratch. |
 | **NeetCode Roadmap** | Clean and focused on *real interview problems*. Amazing once you've got the basics. |
-| **Kunal Kushwaha's Playlist** | Crystal clear beginner explanations with visuals. Pure gold if you're new to coding or DSA. |
+| **Greg Hogg's Playlist** | Crystal clear beginner explanations with visuals. Pure gold if you're new to coding or DSA. |
 
 By **merging their strengths**, we get:
-- The theory and motivation from Kunal ✔️  
+- The theory and motivation from Greg Hogg ✔️  
 - The foundational flow from Striver ✔️  
 - The battle-tested questions from NeetCode ✔️
 
@@ -65,26 +64,28 @@ Before touching DSA, **you MUST** have:
 - Know what **time and space complexity** is (Big O notation)
 
 📺 *Watch*:  
-🎥 [Kunal Kushwaha’s Java + DSA Bootcamp (first few videos)](https://www.youtube.com/playlist?list=PLKYEe2WisBTFEr6laH5bR2J19j7sl5O8R)
+🎥 [Greg Hogg’s Python course](https://www.youtube.com/watch?v=NakyjvSrTIQ&list=PLKYEe2WisBTFEr6laH5bR2J19j7sl5O8R&index=2&pp=iAQB)
 
 💡 *Why*: This helps you stop feeling stupid when people talk about recursion or pointers like they’re first-grade topics.
 
 ---
 
-## 🪜 PHASE 1: Cracking the Basics (A2Z Step 1–9 + Kunal)
+## 🪜 PHASE 1: Cracking the Basics (A2Z Step 1–9 + Greg Hogg)
 
 **Goal**: Build comfort with syntax, loops, and problem-solving  
 **Time**: 7–10 days if consistent
 
-### Topics
+Topics
+
 - Input/Output
 - Variables, data types
 - Loops & conditionals
 - Arrays + Patterns
 - Functions, Recursion basics
 
-📺 *Watch*: Kunal's playlist until recursion  
+📺 *Watch*: [Greg Hogg's playlist](https://www.youtube.com/playlist?list=PLKYEe2WisBTFEr6laH5bR2J19j7sl5O8R)  
 📝 *Solve*:  
+
 - Print patterns (pyramids, triangles)  
 - Reverse arrays, find min/max, sum  
 - Factorial with recursion
@@ -98,7 +99,8 @@ Before touching DSA, **you MUST** have:
 **Goal**: Become deadly with arrays and number problems  
 **Time**: 2–3 weeks
 
-### Topics
+Topics
+
 - Number theory (GCD, Sieve, Prime)
 - Arrays (search, frequency maps)
 - 2-pointers, sliding window
@@ -106,6 +108,7 @@ Before touching DSA, **you MUST** have:
 - Prefix sums
 
 📝 *Solve*:
+
 - Majority Element  
 - Two Sum, 3Sum  
 - Longest Subarray with K Sum  
@@ -124,13 +127,15 @@ Before touching DSA, **you MUST** have:
 **Goal**: Enter the algorithm zone. Learn to **think recursively**.  
 **Time**: 2–3 weeks
 
-### Topics
+Topics
+
 - Binary Search (on answer!)
 - Recursion (factorial, Fibonacci, permutations)
 - Backtracking (N-Queens, Sudoku)
 - Search Space problems
 
 🧠 *Mind-bending Qs*:
+
 - Koko Eating Bananas  
 - N-th Root of M  
 - Generate Parentheses  
@@ -146,16 +151,19 @@ Before touching DSA, **you MUST** have:
 **Time**: 3 weeks total. This is the “core” data structure zone.
 
 ### Sorting
+
 - Bubble, Selection, Insertion
 - Merge, Quick, Count Sort (🧠 optional)
 - Cyclic Sort (for tricky number Qs)
 
 ### Linked Lists (Start with Striver)
+
 - Reversal, Cycle detection (Floyd's)
 - Intersection point, Middle element
 - Clone a list with random pointers
 
 ### Stacks & Queues
+
 - Next Greater Element
 - Valid Parentheses
 - Largest Rect. in Histogram
@@ -163,7 +171,7 @@ Before touching DSA, **you MUST** have:
 
 🧠 *Why*: These are literal **favorites in FAANG**. If you’re bad at LLs or stacks — you’ll fumble big time.
 
-🎯 *Use*: Striver + NeetCode + add Kunal’s illustrations if stuck
+🎯 *Use*: Striver + NeetCode + add Greg Hogg’s illustrations if stuck
 
 ---
 
@@ -173,6 +181,7 @@ Before touching DSA, **you MUST** have:
 **Tip**: Don’t rush. This is the real growth arc.
 
 ### Trees (Binary + BST)
+
 - Traversals (Inorder, Preorder, Level-order)
 - Diameter of tree
 - Symmetric, Balanced Tree
@@ -180,11 +189,13 @@ Before touching DSA, **you MUST** have:
 - Serialize & Deserialize
 
 ### Heaps + Priority Queue
+
 - Kth Largest, Top K Frequent
 - Merge K Sorted Lists
 - Median in Stream
 
 ### Graphs (🔑 Most underrated)
+
 - BFS/DFS
 - Topo Sort (Kahn’s Algo)
 - Cycle Detection
@@ -225,7 +236,7 @@ These aren’t always needed for freshers, but helpful for:
 - Scaling problems
 - Edge-case optimization
 
-### Topics:
+Topics:
 - Tries (Insert/Search/Prefix)
 - Bit Manipulation (XOR tricks, Set Bit count)
 - LRU Cache (LinkedHashMap or custom DLL+Map)

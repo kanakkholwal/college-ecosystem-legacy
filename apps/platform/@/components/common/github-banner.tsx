@@ -111,7 +111,7 @@ export default async function GithubBanner({ className }: GithubBannerProps) {
                         href={value}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex w-24 flex-col items-center gap-2 rounded-xl border border-border bg-muted p-4 transition-all hover:shadow-md"
+                        className="flex w-24 flex-col items-center gap-2 rounded-xl border border-border bg-muted p-4 transition-all hover:shadow-md hover:bg-muted/80 hover:border-muted/80 active:scale-95 active:bg-muted/90 active:border-muted/90"
                     >
 
                         <Icon name={key} className="size-6 icon" />

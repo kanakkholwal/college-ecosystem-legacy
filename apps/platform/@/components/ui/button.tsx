@@ -111,6 +111,7 @@ const buttonVariants = cva(
       },
       transition: {
         none: "",
+        damp:"active:scale-95",
         damped:
           "transition-transform hover:scale-105 active:duration-75 active:scale-95 duration-200 ease-in-out transition duration-300 hover:scale-105 active:duration-75 active:before:scale-95",
       },

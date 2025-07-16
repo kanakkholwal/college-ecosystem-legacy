@@ -1,12 +1,10 @@
 import {
-    Activity,
-    ArrowRight,
+    Activity, AlignLeft, ArrowRight,
     ArrowUpRight,
     BarChart2,
     BookOpen,
     Calendar,
-    Camera,
-    Code,
+    Camera, ChartBarBig, ChartCandlestick, Code,
     Cpu,
     Dot,
     Facebook,
@@ -26,8 +24,7 @@ import {
     Twitter,
     Users,
     Youtube,
-    Zap,
-    AlignLeft
+    Zap
 } from 'lucide-react';
 
 import { FaChrome, FaEdge, FaFirefoxBrowser, FaSafari } from "react-icons/fa";
@@ -60,6 +57,8 @@ export const IconComponent = {
     "globe": Globe,
     "align-left": AlignLeft,
     "toc": AlignLeft,
+    "chart-bar-big": ChartBarBig,
+    "chart-candlestick": ChartCandlestick,
     // browser icons
     "safari": FaSafari,
     "chrome": FaChrome,

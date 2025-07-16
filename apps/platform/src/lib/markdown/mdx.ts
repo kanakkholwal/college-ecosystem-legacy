@@ -97,6 +97,7 @@ export const compileMdxSource = async (content: string): Promise<MDXRemoteSerial
         rehypePlugins: [
           rehypeSlug,
           [rehypeAutolinkHeadings, { behavior: 'wrap', test: ['h2', 'h3', 'h4'] }],
+          // rehypeMermaid
         ], // Add any rehype plugins if needed
       },
       scope: {
