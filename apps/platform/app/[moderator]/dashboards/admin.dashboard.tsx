@@ -37,7 +37,7 @@ export default async function AdminDashboard() {
   const usersByRole = await getUsersByRole();
   const usersByDepartment = await getUsersByDepartment();
   const activeSessions = await getActiveSessions();
-  const visitors = await extractVisitorCount()
+  const count = await extractVisitorCount()
   const platformDBStats = await getPlatformDBStats();
 
   return (
@@ -91,53 +91,53 @@ export default async function AdminDashboard() {
               Currently active sessions
             </p>
           </StatsCard>
-          {/* Total Visitors Card */}
+          {/* Total count Card */}
           <StatsCard
             className="col-span-1 sm:col-span-2 md:col-span-4"
-            title="Total Visitors"
+            title="Total count"
             Icon={<Eye className="inline-block mr-2 size-4" />}
           >
             <NumberTicker
-              value={visitors}
+              value={count}
               className="text-3xl font-bold text-primary"
             />
             <p className="text-xs text-muted-foreground">
-              Total visitors to the portal
+              Total count to the portal
             </p>
           </StatsCard>
           {/* platformDBStats */}
           <StatsCard
             className="col-span-1 sm:col-span-2 md:col-span-12 max-h-96"
             title="Platform DB Stats"
-            
+
             Icon={<Network className="inline-block mr-2 size-4" />}
           >
             <ChartBar
               data={Object.entries(platformDBStats).map(([key, value]) => {
                 return {
-                  name: changeCase(key, "title"),
+                  key,
                   count: value,
                 };
               })}
               config={
                 {
                   count: {
-                    label: "Count",
+                    label: "count",
                   },
                   ...Object.keys(platformDBStats).reduce<
-                  Record<string, { label: string; color: string }>
-                >((acc, key, idx) => {
-                  acc[key] = {
-                    label: changeCase(key, "title"),
-                    color: `var(--chart-${idx + 1})`,
-                  };
-                  return acc;
-                }, {})
+                    Record<string, { label: string; color: string }>
+                  >((acc, key, idx) => {
+                    acc[key] = {
+                      label: changeCase(key.toString(), "camel_to_title"),
+                      color: `var(--chart-${idx + 1})`,
+                    };
+                    return acc;
+                  }, {})
                 }}
               orientation="horizontal"
 
               dataKey="count"
-              nameKey="name"
+              nameKey="key"
 
             />
           </StatsCard>
@@ -148,8 +148,11 @@ export default async function AdminDashboard() {
             Icon={<Transgender className="inline-block mr-2 size-4" />}
 
           >
+          
             <ChartBar
-              data={usersByGender}
+              data={Object.entries(usersByGender).map(([key, value]) => {
+                return { key, count: value };
+              })}
               orientation="vertical"
               config={{
                 count: {
@@ -170,8 +173,9 @@ export default async function AdminDashboard() {
                 },
               }}
               dataKey="count"
-              nameKey="gender"
+              nameKey="key"
             />
+
             <p className="text-xs text-muted-foreground">
               Total Users by Gender
             </p>
@@ -221,9 +225,7 @@ export default async function AdminDashboard() {
                 count: dept.count,
               }))}
               config={{
-                count: {
-                  label: "Department",
-                },
+
                 staff: {
                   label: "Staff",
                   color: "var(--chart-1)",
@@ -233,11 +235,14 @@ export default async function AdminDashboard() {
                   Record<string, { label: string; color: string }>
                 >((acc, dept, idx) => {
                   acc[dept.code] = {
-                    label: changeCase(dept.name, "title"),
+                    label: dept.name,
                     color: `var(--chart-${idx + 1})`,
                   };
                   return acc;
                 }, {}),
+                count: {
+                  label: "count",
+                },
               }}
               dataKey="count"
               nameKey="department"

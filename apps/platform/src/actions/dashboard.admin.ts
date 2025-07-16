@@ -308,7 +308,7 @@ export async function getUsersByDepartment(): Promise<
 }
 
 export async function getUsersByGender(): Promise<
-  { gender: string; count: number }[]
+  Record<string, number>
 > {
   const result = await db
     .select({
@@ -318,7 +318,10 @@ export async function getUsersByGender(): Promise<
     .from(users)
     .groupBy(users.gender)
     .execute();
-  return result;
+  return result.reduce((acc, curr) => {
+    acc[curr.gender] = curr.count;
+    return acc;
+  }, {} as Record<string, number>);
 }
 
 /**

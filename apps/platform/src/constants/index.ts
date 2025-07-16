@@ -29,6 +29,7 @@ export const GENDER = {
   FEMALE: "female",
   NOT_SPECIFIED: "not_specified",
 };
+export const GENDER_ENUMS = Object.values(GENDER);
 export const genderSchema = z.enum(["male", "female", "not_specified"]);
 
 export const emailSchema = z
