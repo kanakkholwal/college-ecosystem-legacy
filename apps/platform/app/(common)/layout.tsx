@@ -6,7 +6,8 @@ import ConditionalRender from "@/components/utils/conditional-render";
 import { RocketIcon } from "lucide-react";
 import type { Session } from "~/auth";
 import { getSession } from "~/auth/server";
-import { appConfig } from "~/project.config";
+// import { ROLES_ENUMS } from "~/constants";
+// import { appConfig } from "~/project.config";
 
 export const dynamic = "force-dynamic";
 
@@ -14,17 +15,17 @@ type LayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
 const PROMO = {
-  title: "Complete Your Profile",
+  title: "Share your Personal Guide, Experiences",
   description:
-    "Please complete your profile. It'll take a moment to fill in your details to enhance your experience.",
+    "Personal career experiences, articles, and case studies. You can also promote your articles on the site if they are valuable reads",
   label: "Update Now!",
-  showTill: "2022-01-19T19:00:00",
-  getRedirectUrl: (role: string) =>
-    appConfig.url + "/" + role + "/settings/account",
+  showTill: "2025-12-31T19:00:00",
+  getRedirectUrl: () =>
+    "https://forms.gle/NWAfkZngLozRjRJZ6",
   getConditionByUser: (user: Session["user"]) =>
     // user?.other_roles.includes(ROLES_ENUMS.STUDENT) &&
-    user?.gender === "not_specified",
-  // && new Date() < new Date(PROMO.showTill),
+    // user?.gender === "not_specified",
+    new Date() < new Date(PROMO.showTill),
 };
 export default async function Layout({ children }: LayoutProps) {
   const session = await getSession();
@@ -37,7 +38,7 @@ export default async function Layout({ children }: LayoutProps) {
           icon={<RocketIcon className="size-4 text-muted-foreground" />}
           title={PROMO.title}
           description={PROMO.description}
-          redirectUrl={session?.user && PROMO.getRedirectUrl(session?.user?.other_roles[0])}
+          redirectUrl={PROMO.getRedirectUrl()}
           btnProps={{
             children: PROMO.label,
             variant: "default_light",
