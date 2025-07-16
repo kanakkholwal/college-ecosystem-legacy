@@ -43,8 +43,9 @@ export interface ResourceFrontMatter {
   coverImage?: string;
   readingTime?: string;
   published?: boolean;
-  featured?: boolean;
   category?: string;
+  featured?: boolean;
+  draft?: boolean;
 }
 
 export type CompliedResource = {
@@ -185,7 +186,7 @@ export async function getAllMDXMeta(type: ResourceType): Promise<ResourceFrontMa
   }));
 
   return meta
-    .filter(item => item.published !== false) // Hide unpublished
+    .filter(item => item?.published !== false && item?.draft !== true) // Filter out unpublished or draft items
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 }
 

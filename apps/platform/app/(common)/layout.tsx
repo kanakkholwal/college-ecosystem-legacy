@@ -18,7 +18,7 @@ const PROMO = {
   title: "Share your Personal Guide, Experiences",
   description:
     "Personal career experiences, articles, and case studies. You can also promote your articles on the site if they are valuable reads",
-  label: "Update Now!",
+  label: "Share Now!",
   showTill: "2025-12-31T19:00:00",
   getRedirectUrl: () =>
     "https://forms.gle/NWAfkZngLozRjRJZ6",
