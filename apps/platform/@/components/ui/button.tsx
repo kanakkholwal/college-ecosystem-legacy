@@ -125,6 +125,9 @@ const buttonVariants = cva(
         success_light: "shadow-md shadow-green-500/10",
         warning: "shadow-md shadow-yellow-500/50",
         warning_light: "shadow-md shadow-yellow-500/10",
+        dark: "shadow-lg shadow-neutral-900/50",
+        light: "shadow-md shadow-gray-200/50",
+        glass: "shadow-lg shadow-white/20 dark:shadow-black/20",
       }
     },
     defaultVariants: {

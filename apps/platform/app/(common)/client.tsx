@@ -54,6 +54,7 @@ export function HeroSection({ user }: HeroSection) {
             href={user ? `/${user.other_roles[0]}` : "/auth/sign-in"}
             effect="shineHover"
             transition="damped"
+            shadow="dark"
           >
             <Icon name="chart-candlestick" />
             {user ? "Dashboard" : "Sign In"} <Icon name="arrow-right" />
