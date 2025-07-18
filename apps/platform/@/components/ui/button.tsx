@@ -112,7 +112,7 @@ const buttonVariants = cva(
       },
       transition: {
         none: "",
-        damp: "active:scale-95",
+        damped: "active:scale-95",
         scale: "hover:scale-105 active:scale-95",
       },
       shadow: {
