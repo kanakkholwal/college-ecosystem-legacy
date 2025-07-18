@@ -45,8 +45,8 @@ export default async function Layout({ children }: LayoutProps) {
           redirectUrl={PROMO.getRedirectUrl()}
           btnProps={{
             children: PROMO.label,
-            variant: "default_light",
-            shadow:"default_light",
+            variant: "default",
+            shadow:"default",
             transition:"damped",
             effect:"none",
           }}
