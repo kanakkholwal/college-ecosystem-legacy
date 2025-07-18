@@ -1,4 +1,4 @@
-import { SocialBar } from "@/components/common/navbar";
+import { GoToTopButton, SocialBar } from "@/components/common/navbar";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { appConfig, supportLinks } from "~/project.config";
@@ -8,7 +8,7 @@ import { ThemeSwitcher } from "./theme-switcher";
 
 
 const sectionLinks = [
-    {
+  {
     title: "Support",
     links: supportLinks,
   },
@@ -41,13 +41,13 @@ export default async function Footer() {
               <Link href="/">
                 <ApplicationInfo />
               </Link>
-              
+
             </div>
             <p className="text-pretty text-sm text-muted-foreground">
               {appConfig.description}
             </p>
             <div>
-            <GithubStars />
+              <GithubStars />
             </div>
             <SocialBar className="ml-0 my-2" />
           </div>
@@ -78,8 +78,10 @@ export default async function Footer() {
               </li>
             ))}
           </ul> */}
-          <ThemeSwitcher className="order-1 md:order-2" />
-          {/* <GoToTopButton className="order-3 md:order-3" /> */}
+          <div className="order-1 md:order-2 flex items-center gap-2">
+            <ThemeSwitcher />
+            <GoToTopButton />
+          </div>
         </div>
       </div>
     </footer>

@@ -1,6 +1,7 @@
 import Footer from "@/components/common/footer";
 import GithubBanner from "@/components/common/github-banner";
 import Navbar from "@/components/common/navbar";
+import { Icon } from "@/components/icons";
 import { BannerPanel } from "@/components/utils/banner";
 import ConditionalRender from "@/components/utils/conditional-render";
 import { RocketIcon } from "lucide-react";
@@ -18,7 +19,10 @@ const PROMO = {
   title: "Share your Personal Guide, Experiences",
   description:
     "Personal career experiences, articles, and case studies. You can also promote your articles on the site if they are valuable reads",
-  label: "Share Now!",
+  label: <>
+  Share Now
+  <Icon name="arrow-up-right" />
+  </>,
   showTill: "2025-12-31T19:00:00",
   getRedirectUrl: () =>
     "https://forms.gle/NWAfkZngLozRjRJZ6",
@@ -35,13 +39,16 @@ export default async function Layout({ children }: LayoutProps) {
       <Navbar user={session?.user} />
       <ConditionalRender condition={PROMO.getConditionByUser(session?.user!)}>
         <BannerPanel
-          icon={<RocketIcon className="size-4 text-muted-foreground" />}
+          icon={<RocketIcon className="size-4 text-primary" />}
           title={PROMO.title}
           description={PROMO.description}
           redirectUrl={PROMO.getRedirectUrl()}
           btnProps={{
             children: PROMO.label,
             variant: "default_light",
+            shadow:"default_light",
+            transition:"damp",
+            effect:"none",
           }}
         />
       </ConditionalRender>

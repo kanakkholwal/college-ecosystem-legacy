@@ -7,11 +7,11 @@ import { cn } from "@/lib/utils";
 
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium capitalize transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-all relative cursor-pointer group",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium capitalize transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-all relative cursor-pointer group",
   {
     variants: {
       variant: {
-        default: "bg-primary dark:bg-primary text-white hover:bg-primary/90 shadow-[2px_3px_6px_var(--primary/20)]",
+        default: "bg-primary dark:bg-primary text-white hover:bg-primary/90 shadow-lg shadow-primary/50",
         default_light:
           "bg-primary/10 text-primary hover:bg-primary/20 dark:bg-primary/10 dark:text-primary hover:dark:bg-primary/5 hover:dark:text-primary",
         secondary:
@@ -38,7 +38,6 @@ const buttonVariants = cva(
           "bg-white shadow text-gray-700 hover:text-gray-700 border border-border",
         glass:
           "bg-white/90 dark:bg-white/5 backdrop-blur-xl border-slate-600/10 dark:border-border/70",
-
         rainbow:
           "animate-rainbow border-0 bg-[linear-gradient(#121213,#121213),linear-gradient(#121213_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] bg-[length:200%] text-primary-foreground dark:text-black [background-clip:padding-box,border-box,border-box] [background-origin:border-box] [border:calc(0.125rem)_solid_transparent] before:absolute before:bottom-[-20%] before:left-1/2 before:z-0 before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#fff,#fff),linear-gradient(#fff_50%,rgba(255,255,255,0.6)_80%,rgba(0,0,0,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))]",
         rainbow_outline:
@@ -69,11 +68,13 @@ const buttonVariants = cva(
         lg: "px-5 py-3 h-11 [&>svg]:size-6",
         xl: "px-6 py-3.5 h-14 text-base [&>svg]:size-8",
         icon: "size-10 p-3 [&>svg]:size-5",
+        icon_xs: "size-5 rounded-md [&>svg]:size-4",
         icon_sm: "size-8 p-2 [&>svg]:size-4",
         icon_lg: "size-12 p-3.5 [&>svg]:size-6",
         icon_xl: "size-14 p-4 [&>svg]:size-8",
       },
       effect: {
+        none: "",
         expandIcon: "group relative group-hover:gap-4 [&>svg.icon]:transition-transform [&>svg.icon]:group-hover:translate-x-1",
         ringHover:
           "transition-all duration-300 hover:ring-2 hover:ring-primary/90 hover:ring-offset-2",
@@ -111,16 +112,29 @@ const buttonVariants = cva(
       },
       transition: {
         none: "",
-        damp:"active:scale-95",
-        damped:
-          "transition-transform hover:scale-105 active:duration-75 active:scale-95 duration-200 ease-in-out transition duration-300 hover:scale-105 active:duration-75 active:before:scale-95",
+        damp: "active:scale-95",
+        scale: "hover:scale-105 active:scale-95",
       },
+      shadow: {
+        none: "",
+        default: "shadow-lg shadow-primary/50",
+        default_light: "shadow-md shadow-primary/20",
+        destructive: "shadow-lg shadow-destructive/50",
+        destructive_light: "shadow-md shadow-destructive/10",
+        success: "shadow-md shadow-green-500/50",
+        success_light: "shadow-md shadow-green-500/10",
+        warning: "shadow-md shadow-yellow-500/50",
+        warning_light: "shadow-md shadow-yellow-500/10",
+      }
     },
     defaultVariants: {
       variant: "default",
       size: "default",
       transition: "none",
       hoverEffect: "none",
+      effect: "none",
+      rounded: "default",
+      shadow: "none",
     },
   }
 );
@@ -136,7 +150,7 @@ interface IconRefProps {
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
   asChild?: boolean;
 }

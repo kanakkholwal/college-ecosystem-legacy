@@ -1,5 +1,6 @@
 import {
     Activity, AlignLeft, ArrowRight,
+    ArrowUp,
     ArrowUpRight,
     BarChart2,
     BookOpen,
@@ -83,6 +84,7 @@ export const IconComponent = {
     "users": Users,
     "arrow-up-right": ArrowUpRight,
     "arrow-right": ArrowRight,  
+    "arrow-up": ArrowUp,
     "loader-circle": LoaderCircleIcon,
     "layout": LayoutTemplate,
     "default": LayoutTemplate, // Fallback icon

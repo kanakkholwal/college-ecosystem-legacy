@@ -19,6 +19,8 @@ import {
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -47,14 +49,15 @@ interface BaseProps<
   dataKey: keyof TData;
   nameKey: keyof TData;
   className?: string;
+  tooltipProps?: React.ComponentProps<typeof ChartTooltip>;
+  tooltipContentProps?: React.ComponentProps<typeof ChartTooltipContent>;
 }
 interface ChartBarProps<
   TData extends Record<string, any>,
   TConfig extends ChartConfig,
 > extends BaseProps<TData, TConfig> {
   orientation?: "horizontal" | "vertical";
-  tooltipProps?: React.ComponentProps<typeof ChartTooltip>;
-  tooltipContentProps?: React.ComponentProps<typeof ChartTooltipContent>;
+
 }
 
 interface ChartRadialProps<
@@ -63,6 +66,11 @@ interface ChartRadialProps<
 > extends BaseProps<TData, TConfig> {
   dataKey: keyof TData;
   nameKey: keyof TData;
+
+  textLabel?: string;
+  textValue: string | number;
+
+
 }
 
 export function ChartBar<
@@ -78,10 +86,8 @@ export function ChartBar<
   tooltipProps,
   tooltipContentProps,
 }: ChartBarProps<TData, TConfig>) {
-  const chartData = data.map((item) => ({
-    ...item,
-    fill: item?.fill || `var(--color-${item[nameKey].replace(" ", "_").toLowerCase()})`, // Ensure the nameKey is formatted correctly for CSS variable
-  }));
+
+
 
   return (
     <ErrorBoundaryWithSuspense
@@ -115,7 +121,10 @@ export function ChartBar<
         {orientation === "vertical" ? (
           <BarChart
             accessibilityLayer
-            data={chartData}
+            data={data.map((item,idx) => ({
+              ...item,
+              fill: item?.fill || `var(--chart-${idx + 1})`, // Ensure the nameKey is formatted correctly for CSS variable
+            }))}
             layout="vertical"
             margin={{
               right: 5,
@@ -151,7 +160,7 @@ export function ChartBar<
             />
             <Bar
               dataKey={dataKey.toString()}
-              fill="var(--color-primary)"
+              fill="var(--chart-primary)"
               radius={4}
             >
               <LabelList
@@ -166,7 +175,10 @@ export function ChartBar<
         ) : (
           <BarChart
             accessibilityLayer
-            data={chartData}
+            data={data.map((item,idx) => ({
+              ...item,
+              fill: item?.fill || `var(--chart-${idx + 1})`, // Ensure the nameKey is formatted correctly for CSS variable
+            }))}
             margin={{
               top: 20,
             }}
@@ -197,7 +209,7 @@ export function ChartBar<
             />
             <Bar
               dataKey={dataKey.toString()}
-              fill="var(--color-primary)"
+              fill="var(--primary)"
               radius={8}
             >
               <LabelList
@@ -223,14 +235,12 @@ export function ChartRadialStacked<
   dataKey,
   nameKey,
   className = "mx-auto aspect-square max-h-[250px]",
+  textLabel = "Total",
+  textValue = "0000",
 }: ChartRadialProps<TData, TConfig>) {
-  const totalValue = React.useMemo(() => {
-    return data.reduce((acc, curr) => acc + (curr[dataKey] as number), 0);
-  }, [data, dataKey]);
-  const chartData = data.map((item, idx) => ({
-    ...item,
-    fill: `var(--color-${idx + 1})`, // Ensure the nameKey is formatted correctly for CSS variable
-  }));
+
+
+
   return (
     <ErrorBoundaryWithSuspense
       fallback={
@@ -261,7 +271,10 @@ export function ChartRadialStacked<
         className={cn("mx-auto aspect-square max-h-[250px]", className)}
       >
         <RadialBarChart
-          data={chartData}
+          data={data.map((item, idx) => ({
+            ...item,
+            fill: item?.fill || `var(--chart-${idx + 1})`, // Ensure the nameKey is formatted correctly for CSS variable
+          }))}
           endAngle={180}
           innerRadius={80}
           outerRadius={130}
@@ -287,15 +300,15 @@ export function ChartRadialStacked<
                         y={(viewBox.cy || 0) - 16}
                         className="fill-foreground text-2xl font-bold"
                       >
-                        {totalValue.toLocaleString()}
+                        {textValue}
                       </tspan>
-                      {/* <tspan
-                                            x={viewBox.cx}
-                                            y={(viewBox.cy || 0) + 4}
-                                            className="fill-muted-foreground"
-                                        >
-                                            {dataKey.toString().replace(/([A-Z])/g, ' $1').trim()}
-                                        </tspan> */}
+                      <tspan
+                        x={viewBox.cx}
+                        y={(viewBox.cy || 0) + 4}
+                        className="fill-muted-foreground"
+                      >
+                        {textLabel}
+                      </tspan>
                     </text>
                   );
                 }
@@ -303,30 +316,39 @@ export function ChartRadialStacked<
             />
           </PolarRadiusAxis>
           <RadialBar
-            dataKey={nameKey.toString()}
+            dataKey={dataKey.toString()}
             stackId="a"
             cornerRadius={5}
-            fill="var(--color-primary)"
-            className="stroke-transparent stroke-2"
+            fill="var(--chart-1)"
+            className="stroke-2"
           />
+
         </RadialBarChart>
       </ChartContainer>
     </ErrorBoundaryWithSuspense>
   );
 }
 
-interface PieDonutTextProps<
+interface PieBaseProps<
   TData extends Record<string, any>,
   TConfig extends ChartConfig,
 > extends BaseProps<TData, TConfig> {
+  showLabelList?: boolean;
+  showLegend?: boolean;
+  /** * The inner radius of the pie chart, used for creating donut charts.
+   * @default 60
+   */
+  innerRadius?: number;
+  strokeWidth?: number;
+}
+
+interface PieDonutTextProps<
+  TData extends Record<string, any>,
+  TConfig extends ChartConfig,
+> extends BaseProps<TData, TConfig>, PieBaseProps<TData, TConfig> {
   // Additional properties specific to Pie/Donut charts
   textLabel?: string;
   textValue: string | number;
-  innerRadius?: number;
-  strokeWidth?: number;
-  className?: string;
-  tooltipProps?: React.ComponentProps<typeof ChartTooltip>;
-  tooltipContentProps?: React.ComponentProps<typeof ChartTooltipContent>;
 }
 
 export function ChartPieDonutText<
@@ -338,14 +360,14 @@ export function ChartPieDonutText<
   dataKey,
   nameKey,
   textLabel = "Total",
-  textValue = "Total",
+  textValue = "000",
   innerRadius = 60,
   strokeWidth = 5,
   className = "mx-auto aspect-square max-h-[250px]",
   tooltipProps,
   tooltipContentProps,
 }: PieDonutTextProps<TData, TConfig>) {
-  
+
 
 
   return (
@@ -354,23 +376,23 @@ export function ChartPieDonutText<
         <ChartTooltip
           cursor={false}
           {...tooltipProps}
-              content={
-                <ChartTooltipContent
-                  indicator="dot"
-                  nameKey={nameKey.toString()}
-                  labelKey={nameKey.toString()}
-                  label={nameKey
-                    .toString()
-                    .replace(/([A-Z])/g, " $1")
-                    .trim()}
-                  {...tooltipContentProps}
-                />
-              }
+          content={
+            <ChartTooltipContent
+              indicator="dot"
+              nameKey={nameKey.toString()}
+              labelKey={nameKey.toString()}
+              label={nameKey
+                .toString()
+                .replace(/([A-Z])/g, " $1")
+                .trim()}
+              {...tooltipContentProps}
+            />
+          }
         />
         <Pie
-          data={data.map((item,idx) => ({
+          data={data.map((item, idx) => ({
             ...item,
-            fill: item?.fill || `var(--color-${idx + 1})`, // Ensure the nameKey is formatted correctly for CSS variable
+            fill: item?.fill || `var(--chart-${idx + 1})`, // Ensure the nameKey is formatted correctly for CSS variable
           }))}
           dataKey={dataKey.toString()}
           nameKey={nameKey.toString()}
@@ -411,7 +433,72 @@ export function ChartPieDonutText<
     </ChartContainer>
   );
 }
+export function ChartPie<
+  TData extends Record<string, any>,
+  TConfig extends ChartConfig,
+>({
+  data,
+  config,
+  dataKey,
+  nameKey,
+  innerRadius = 60,
+  strokeWidth = 5,
+  className = "mx-auto aspect-square max-h-[250px]",
+  showLabelList = true,
+  tooltipProps,
+  tooltipContentProps,
+ showLegend = true,
+}: PieBaseProps<TData, TConfig>) {
 
+
+
+  return (
+    <ChartContainer config={config} className={cn("[&_.recharts-text]:fill-background",className)}>
+      <PieChart>
+        <ChartTooltip
+          cursor={false}
+          {...tooltipProps}
+          content={
+            <ChartTooltipContent
+              indicator="dot"
+              nameKey={nameKey.toString()}
+              labelKey={nameKey.toString()}
+              label={nameKey
+                .toString()
+                .replace(/([A-Z])/g, " $1")
+                .trim()}
+              {...tooltipContentProps}
+            />
+          }
+        />
+        <Pie
+          data={data.map((item, idx) => ({
+            ...item,
+            fill: item?.fill || `var(--chart-${idx + 1})`, // Ensure the nameKey is formatted correctly for CSS variable
+          }))}
+          dataKey={dataKey.toString()}
+          nameKey={nameKey.toString()}
+          innerRadius={innerRadius}
+          strokeWidth={strokeWidth}
+        >
+          {showLabelList && (<LabelList
+            dataKey={dataKey.toString()}
+            className="fill-background"
+            stroke="none"
+            fontSize={12}
+            formatter={(value: keyof typeof config) =>
+              config[value]?.label
+            }
+          />)}
+        </Pie>
+        {showLegend && (<ChartLegend
+              content={<ChartLegendContent nameKey={nameKey.toString()} />}
+              className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
+            />)}
+      </PieChart>
+    </ChartContainer>
+  );
+}
 // export function ChartPieLabelList<TData extends Record<string, any>, TConfig extends ChartConfig>({
 //     data,
 //     config,
@@ -426,7 +513,7 @@ export function ChartPieDonutText<
 //     console.log("ChartPieLabelList", config, data.map((data) => {
 //         return {
 //             ...data,
-//             fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//             fill: `var(--chart-${data[nameKey].replace(" ", '_').toLowerCase()})`,
 //         }
 //     }))
 //     return (<ChartContainer
@@ -440,7 +527,7 @@ export function ChartPieDonutText<
 //             <Pie data={data.map((data) => {
 //                 return {
 //                     ...data,
-//                     fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//                     fill: `var(--chart-${data[nameKey].replace(" ", '_').toLowerCase()})`,
 //                 }
 //             })} dataKey={dataKey.toString()}
 //                 nameKey={nameKey.toString()}
@@ -477,7 +564,7 @@ export function ChartPieDonutText<
 //     console.log("ChartPieSimple", config, data.map((data) => {
 //         return {
 //             ...data,
-//             fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//             fill: `var(--chart-${data[nameKey].replace(" ", '_').toLowerCase()})`,
 //         }
 //     }))
 
@@ -495,7 +582,7 @@ export function ChartPieDonutText<
 //                 <Pie data={data.map((data) => {
 //                     return {
 //                         ...data,
-//                         fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//                         fill: `var(--chart-${data[nameKey].replace(" ", '_').toLowerCase()})`,
 //                     }
 //                 })} dataKey={dataKey.toString()} nameKey={nameKey.toString()}
 //                     innerRadius={innerRadius}
@@ -519,7 +606,7 @@ export function ChartPieDonutText<
 //     console.log("ChartRadar", config, data.map((data) => {
 //         return {
 //             ...data,
-//             fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//             fill: `var(--chart-${data[nameKey].replace(" ", '_').toLowerCase()})`,
 //         }
 //     }))
 
@@ -531,7 +618,7 @@ export function ChartPieDonutText<
 //             <RadarChart data={data.map((data) => {
 //                 return {
 //                     ...data,
-//                     fill: `var(--color-${data[nameKey].replace(" ", '_').toLowerCase()})`,
+//                     fill: `var(--chart-${data[nameKey].replace(" ", '_').toLowerCase()})`,
 //                 }
 //             })}>
 //                 <ChartTooltip
@@ -542,7 +629,7 @@ export function ChartPieDonutText<
 //                 <PolarAngleAxis dataKey={nameKey.toString()} />
 //                 <Radar
 //                     dataKey={dataKey.toString()}
-//                     fill={`var(--color-primary)`}
+//                     fill={`var(--chart-primary)`}
 //                     fillOpacity={0.6}
 //                     dot={{
 //                         r: 4,

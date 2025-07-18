@@ -3,7 +3,7 @@ import ProfileDropdown from "@/components/common/profile-dropdown";
 import { Button } from "@/components/ui/button";
 import { NavLink, SUPPORT_LINKS, getNavLinks, socials } from "@/constants/links";
 import { cn } from "@/lib/utils";
-import { ArrowUp, ArrowUpRight, LayoutDashboard, LogIn } from "lucide-react";
+import { ArrowUpRight, LayoutDashboard, LogIn } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -15,6 +15,7 @@ import { ThemeSwitcher } from "./theme-switcher";
 
 import { Search, Settings, User } from "lucide-react";
 
+import { Icon } from "@/components/icons";
 import {
   CommandDialog,
   CommandEmpty,
@@ -51,6 +52,7 @@ export default function Navbar({ user }: NavbarProps) {
 
   return (
     <header
+    id="navbar"
       className={cn("z-50 w-full pb-2 transition-all", "bg-card border-b")}
     >
       <div className="w-full max-w-(--max-app-width) mx-auto flex items-center justify-between px-4 py-2">
@@ -239,12 +241,17 @@ export function SupportBar() {
 
 export function GoToTopButton({ className }: { className?: string }) {
   return (
-    <Link
-      href="#top"
-      className={cn("relative bottom-4 right-4 z-50 p-2 bg-primary text-white rounded-full shadow-lg hover:bg-primary/90 transition-colors", className)}
+    <ButtonLink
+      role="anchor"
+      href="#navbar"
       title="Go to top"
+      variant="ghost"
+      transition="damp"
+      size="sm"
+      className={cn(className)}
     >
-      <ArrowUp className="size-4" />
-    </Link>
+      Go to Top
+      <Icon name="arrow-up" />
+    </ButtonLink>
   );
 }

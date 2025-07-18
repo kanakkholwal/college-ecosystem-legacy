@@ -47,11 +47,15 @@ export function BannerPanel({
     "sessionStorage"
   );
 
-  if (isBannerPanelClosed) return null;
+  // if (isBannerPanelClosed) return null;
 
   return (
     <div
-      className={cn("bg-muted px-4 py-3 md:py-2 relative shadow", className)}
+      className={cn(
+        "bg-muted px-4 py-3 md:py-2 relative shadow transition-all duration-300 ease-in-out",
+        isBannerPanelClosed ? "-translate-y-full opacity-0" : "translate-y-0 opacity-100",
+        className
+      )}
     >
       <div className="mx-auto max-w-(--max-app-width) w-full flex grow gap-3 flex-wrap md:items-center justify-between px-3 lg:px-6 z-50 relative ">
         <div className="flex grow gap-3 md:items-center">
@@ -93,9 +97,10 @@ export function BannerPanel({
           )}
           {isClosable && (
             <Button
-              variant="raw"
-              size="icon_sm"
-              className="group size-8 shrink-0 p-0 -mr-2 absolute right-2 left-auto top-1/2 -translate-y-1/2 hover:bg-transparent"
+              variant="ghost"
+              size="icon_xs"
+              rounded="full"
+              className="group shrink-0 p-0 -mr-2 absolute right-2 left-auto top-1/2 -translate-y-1/2 hover:bg-transparent"
               onClick={() => {
                 setIsBannerPanelClosed(true);
                 onClose?.();

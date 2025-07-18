@@ -40,7 +40,7 @@ export function HeroSection({ user }: HeroSection) {
 
           >{getGreeting()}
           </AnimatedGradientText> <br />
-          <span className="text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-neutral-500 dark:from-foreground to-primary">
+          <span className="text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-black/30 dark:from-foreground to-primary">
             {user?.name}
           </span>
         </h2>
@@ -53,6 +53,7 @@ export function HeroSection({ user }: HeroSection) {
             variant="dark"
             href={user ? `/${user.other_roles[0]}` : "/auth/sign-in"}
             effect="shineHover"
+            transition="damp"
           >
             <Icon name="chart-candlestick" />
             {user ? "Dashboard" : "Sign In"} <Icon name="arrow-right" />
@@ -60,6 +61,7 @@ export function HeroSection({ user }: HeroSection) {
           <ButtonLink
             variant="outline"
             target="_blank"
+            transition="scale"
             href={`https://github.com/${appConfig.githubUri}/blob/main/CONTRIBUTING.md`}
           >
             <Icon name="github" />

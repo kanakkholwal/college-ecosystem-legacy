@@ -1,5 +1,5 @@
 import { NumberTicker } from "@/components/animation/number-ticker";
-import { ChartBar } from "@/components/application/charts";
+import { ChartBar, ChartPie, ChartRadialStacked } from "@/components/application/charts";
 import { StatsCard } from "@/components/application/stats-card";
 import { Icon } from "@/components/icons";
 import {
@@ -23,6 +23,7 @@ import {
 import { ROLES } from "~/constants";
 import { DEPARTMENTS_LIST, getDepartmentCode } from "~/constants/core.departments";
 import { extractVisitorCount } from '~/lib/third-party/github';
+import { formatNumber } from "~/utils/number";
 import { changeCase } from "~/utils/string";
 
 export default async function AdminDashboard() {
@@ -148,17 +149,14 @@ export default async function AdminDashboard() {
             Icon={<Transgender className="inline-block mr-2 size-4" />}
 
           >
-          
-            <ChartBar
+            <ChartRadialStacked
               data={Object.entries(usersByGender).map(([key, value]) => {
                 return { key, count: value };
               })}
-              orientation="vertical"
               config={{
                 count: {
                   label: "Gender",
                 },
-
                 male: {
                   label: "Male",
                   color: "var(--chart-1)",
@@ -174,6 +172,9 @@ export default async function AdminDashboard() {
               }}
               dataKey="count"
               nameKey="key"
+              textLabel="Total Users"
+              textValue={formatNumber(totalUsers)}
+              className="mt-auto max-h-96"
             />
 
             <p className="text-xs text-muted-foreground">
@@ -187,9 +188,9 @@ export default async function AdminDashboard() {
             title="Users by Role"
             Icon={<Briefcase className="inline-block mr-2 size-4" />}
           >
-            <ChartBar
+            <ChartPie
               data={usersByRole}
-              orientation="vertical"
+              className="max-h-96 mt-auto"
               config={{
                 count: {
                   label: "Role",
@@ -207,6 +208,8 @@ export default async function AdminDashboard() {
               }}
               dataKey="count"
               nameKey="role"
+              innerRadius={0}
+              showLabelList={true}
             />
             <p className="text-xs text-muted-foreground">
               Total Users per Role
@@ -220,6 +223,7 @@ export default async function AdminDashboard() {
             Icon={<Network className="inline-block mr-2 size-4" />}
           >
             <ChartBar
+              className="max-h-96"
               data={usersByDepartment.map((dept) => ({
                 department: getDepartmentCode(dept.department),
                 count: dept.count,
