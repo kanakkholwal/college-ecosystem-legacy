@@ -246,7 +246,7 @@ export function GoToTopButton({ className }: { className?: string }) {
       href="#navbar"
       title="Go to top"
       variant="ghost"
-      transition="damp"
+      transition="damped"
       size="sm"
       className={cn(className)}
     >

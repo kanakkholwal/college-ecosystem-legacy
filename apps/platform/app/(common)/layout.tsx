@@ -47,7 +47,7 @@ export default async function Layout({ children }: LayoutProps) {
             children: PROMO.label,
             variant: "default_light",
             shadow:"default_light",
-            transition:"damp",
+            transition:"damped",
             effect:"none",
           }}
         />
