@@ -51,6 +51,7 @@ const FormSchema = z.object({
       message:
         "Password must contain at least one uppercase letter, one lowercase letter, and one number",
     }),
+  rememberMe: z.boolean().optional().default(false),
 });
 
 export default function SignInForm() {
@@ -63,6 +64,7 @@ export default function SignInForm() {
     defaultValues: {
       email: "",
       password: "",
+      rememberMe: false,
     },
   });
   async function onSubmit(data: z.infer<typeof FormSchema>) {
@@ -73,6 +75,7 @@ export default function SignInForm() {
         email: data.email,
         password: data.password,
         callbackURL: redirect,
+        rememberMe: data.rememberMe,
       },
       {
         onRequest: () => {

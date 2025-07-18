@@ -26,6 +26,7 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "/auth/sign-in",
+    
   },
 };
 
@@ -67,7 +68,6 @@ export default async function SignInPage({ searchParams }: Props) {
   return (
     <>
       <Tabs defaultValue={defaultTab} className="mb-6 pt-6">
-
         <TabsList className="flex justify-around gap-4 flex-wrap mx-4 h-auto">
           {tabs.map((tab) => (
             <TabsTrigger

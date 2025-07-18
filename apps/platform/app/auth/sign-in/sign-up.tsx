@@ -46,7 +46,10 @@ const FormSchema = z.object({
       message:
         "Password must contain at least one uppercase letter, one lowercase letter, and one number",
     }),
-  name: z.string(),
+  name: z.string()
+  .min(3, { message: "Name must be at least 3 characters long" })
+  .max(100, { message: "Name cannot exceed 100 characters" }),
+
 });
 
 export default function SignUpForm() {
