@@ -81,9 +81,9 @@ export async function middleware(request: NextRequest) {
       new RegExp(route.replace(/\*/g, ".*")).test(request.nextUrl.pathname)
     )) {
       // if the user is authenticated and tries to access a private route, allow it to pass through
-      const protectedPaths = dashboardRoutes.map((role) => `/${role.toLowerCase()}`);
+      const protectedPaths = dashboardRoutes.map((role) => `/${role}`);
       const matchedRole = protectedPaths.find((path) =>
-        request.nextUrl.pathname.toLowerCase().startsWith(path)
+        request.nextUrl.pathname.startsWith(path)
       )?.slice(1) as (typeof dashboardRoutes)[number];
       if (matchedRole) {
         const authCheck = checkAuthorization(matchedRole, session);

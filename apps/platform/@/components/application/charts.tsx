@@ -121,7 +121,7 @@ export function ChartBar<
         {orientation === "vertical" ? (
           <BarChart
             accessibilityLayer
-            data={data.map((item,idx) => ({
+            data={data.map((item, idx) => ({
               ...item,
               fill: item?.fill || `var(--chart-${idx + 1})`, // Ensure the nameKey is formatted correctly for CSS variable
             }))}
@@ -175,7 +175,7 @@ export function ChartBar<
         ) : (
           <BarChart
             accessibilityLayer
-            data={data.map((item,idx) => ({
+            data={data.map((item, idx) => ({
               ...item,
               fill: item?.fill || `var(--chart-${idx + 1})`, // Ensure the nameKey is formatted correctly for CSS variable
             }))}
@@ -333,6 +333,7 @@ interface PieBaseProps<
   TData extends Record<string, any>,
   TConfig extends ChartConfig,
 > extends BaseProps<TData, TConfig> {
+  pieClassName?: string;
   showLabelList?: boolean;
   showLegend?: boolean;
   /** * The inner radius of the pie chart, used for creating donut charts.
@@ -447,13 +448,14 @@ export function ChartPie<
   showLabelList = true,
   tooltipProps,
   tooltipContentProps,
- showLegend = true,
+  showLegend = true,
+  pieClassName
 }: PieBaseProps<TData, TConfig>) {
 
 
 
   return (
-    <ChartContainer config={config} className={cn("[&_.recharts-text]:fill-background",className)}>
+    <ChartContainer config={config} className={cn("[&_.recharts-text]:fill-background", className)}>
       <PieChart>
         <ChartTooltip
           cursor={false}
@@ -480,6 +482,7 @@ export function ChartPie<
           nameKey={nameKey.toString()}
           innerRadius={innerRadius}
           strokeWidth={strokeWidth}
+          className={cn(pieClassName)}
         >
           {showLabelList && (<LabelList
             dataKey={dataKey.toString()}
@@ -492,9 +495,9 @@ export function ChartPie<
           />)}
         </Pie>
         {showLegend && (<ChartLegend
-              content={<ChartLegendContent nameKey={nameKey.toString()} />}
-              className="-translate-y-2 flex-wrap gap-2 *:basis-1/4 *:justify-center"
-            />)}
+          content={<ChartLegendContent nameKey={nameKey.toString()} />}
+          className="-translate-y-2 flex-wrap gap-2 basis-4/5 lg:*:basis-1/4 *:justify-center"
+        />)}
       </PieChart>
     </ChartContainer>
   );

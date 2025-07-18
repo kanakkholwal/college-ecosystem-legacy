@@ -133,7 +133,7 @@ const buttonVariants = cva(
     defaultVariants: {
       variant: "default",
       size: "default",
-      transition: "none",
+      transition: "damped",
       hoverEffect: "none",
       effect: "none",
       rounded: "default",

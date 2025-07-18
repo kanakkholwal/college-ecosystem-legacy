@@ -2,8 +2,8 @@ import { NextRequest } from "next/server";
 import type { Session } from "~/auth";
 import type { RoutePattern } from "~/utils/string";
 import { toRegex } from "~/utils/string";
-import { appConfig } from "./project.config";
 import { ROLES_ENUMS } from "./constants";
+import { appConfig } from "./project.config";
 
 
 export const SIGN_IN_PATH = "/auth/sign-in";
@@ -104,7 +104,7 @@ export const HOSTEL_ACCESSED_PATHS = [
     "allotment-by-excel"
 ];
 export const isHostelRoute = (pathname: string) => {
-    if (pathname.split("/").length < 2 || !HOSTEL_AUTHORIZED_ROUTES.some((role) => pathname.slice(1).toLowerCase().startsWith(role.toLowerCase()))) {
+    if (pathname.split("/").length < 2 || !HOSTEL_AUTHORIZED_ROUTES.some((role) => pathname.slice(1).startsWith(role))) {
         return {
             isHostelRoute: false,
             route: ""
@@ -112,7 +112,7 @@ export const isHostelRoute = (pathname: string) => {
     }
     const [,,route] = pathname.split("/");
     const path = HOSTEL_ACCESSED_PATHS.find((path) => {
-            return route.toLowerCase() === path.toLowerCase();
+            return route === path;
         })
     return {
         isHostelRoute: !!path,

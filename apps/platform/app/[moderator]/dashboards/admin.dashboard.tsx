@@ -2,6 +2,7 @@ import { NumberTicker } from "@/components/animation/number-ticker";
 import { ChartBar, ChartPie, ChartRadialStacked } from "@/components/application/charts";
 import { StatsCard } from "@/components/application/stats-card";
 import { Icon } from "@/components/icons";
+import { cn } from "@/lib/utils";
 import {
   Briefcase,
   CircleDashed,
@@ -54,7 +55,12 @@ export default async function AdminDashboard() {
           >
             <NumberTicker
               value={totalUsers}
-              className="text-3xl font-bold text-primary"
+              className={cn("text-3xl font-bold text-primary after:text-xs",userTrend === 1
+                  ? "after:text-green-500"
+                  : userTrend === -1
+                    ? "after:text-red-500"
+                    : "after:text-primary/80")}
+              suffix={userTrend === 1 ? "↑" + growth : userTrend === -1 ? "↓" + growth : ""}
             />
 
             <p className="text-xs text-muted-foreground">
