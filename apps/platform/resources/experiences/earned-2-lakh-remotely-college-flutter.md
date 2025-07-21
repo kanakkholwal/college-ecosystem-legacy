@@ -80,8 +80,7 @@ This experience taught me that:
 - Remote work is the future
 - Specialization pays better than generalization
 
-I'm now building [ProjectName], a Flutter template store to create passive income while finishing my degree.
-
+[Read Originally published Full Post on Medium](https://bit.ly/my-dev-story-medium)
 ---
 
 **Enjoyed this story?**  
@@ -92,4 +91,3 @@ Let me know what you'd like to hear more about:
 
 Reply on [Twitter @hardik17771](https://twitter.com/HardikSach1771) or [visit my blog](https://medium.com/@hardiksachdeva52) for more Flutter content or [Connect on  LinkedIn](https://www.linkedin.com/in/hardik-sachdeva-a69987217/) and [Checkout my Portfolio](http://hardik17771.github.io/)
 
-[Originally published on Medium](https://bit.ly/my-dev-story-medium)
