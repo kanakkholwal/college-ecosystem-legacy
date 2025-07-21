@@ -83,6 +83,7 @@ export default async function ResourceList({ params }: PageProps) {
                 {resources.map(frontmatter => {
                     return (
                         <ResourceCard key={frontmatter.slug}
+                            {...frontmatter}
                             type={frontmatter.type}
                             title={frontmatter.title}
                             slug={frontmatter.slug}

@@ -45,11 +45,11 @@ export default function ResourceCard({
                 )}
                 <CardContent className="p-4 space-y-2">
                     <div className="flex justify-between items-center text-xs text-muted-foreground">
-                        <span>By 
+                        {frontmatter?.author?.name && (<span>By 
                             <span className="text-primary ml-1">
                                 {frontmatter?.author?.name}
                             </span>
-                        </span>
+                        </span>)}
                         <span>{new Date(date).toLocaleDateString('en-IN', {
                             year: 'numeric',
                             month: 'long',
