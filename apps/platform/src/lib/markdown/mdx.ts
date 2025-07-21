@@ -46,6 +46,7 @@ export interface ResourceFrontMatter {
   category?: string;
   featured?: boolean;
   draft?: boolean;
+  alternate_reads?: string[]; // Array of URLs for alternate reads
 }
 
 export type CompliedResource = {
@@ -109,8 +110,13 @@ export const compileMdxSource = async (content: string): Promise<MDXRemoteSerial
     mdxSource.scope.toc = toc;
     return mdxSource
   } catch (error) {
-    console.error('Error compiling MDX:', error)
-    throw new Error('Failed to compile MDX')
+    console.warn('Error compiling MDX:', error)
+    return Promise.reject({
+      name: 'Failed to compile MDX content',
+      message: error instanceof Error ? error.message : String(error),
+      stack: error instanceof Error ? error.stack : undefined,
+      error: error instanceof Error ? error.message : String(error),
+    } as Error);
   }
 }
 const RESOURCE_DIR = path.join(process.cwd(), 'resources');

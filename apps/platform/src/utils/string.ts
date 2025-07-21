@@ -1,5 +1,6 @@
 import { customAlphabet } from "nanoid";
 import { passwordSchema } from "~/constants";
+import { appConfig } from "~/project.config";
 
 export function generateSlug(length = 8): string {
   return customAlphabet(
@@ -37,7 +38,14 @@ export function changeCase(
       return str;
   }
 }
-
+export function marketwiseLink(link: string, path: string = "/resources") {
+    const url = new URL(link);
+    url.searchParams.append("ref", appConfig.url + path);
+    url.searchParams.append("utm_source", appConfig.url);
+    url.searchParams.append("utm_medium", "referral");
+    url.searchParams.append("utm_campaign", appConfig.url + path);
+    return url.toString();
+}
 export function validatePassword(password: string) {
 
   const result = passwordSchema.safeParse(password);

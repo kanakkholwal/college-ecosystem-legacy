@@ -1,5 +1,6 @@
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { CardContent } from "@/components/ui/card";
+import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 import { appConfig } from "~/project.config";
@@ -28,8 +29,9 @@ export default function ResourceCard({
     category,
 }: ResourceCardProps) {
     return (
-        <Link href={`/resources/${type}/${slug}`} className="block group">
-            <Card className="overflow-hidden rounded-2xl shadow-md hover:shadow-xl hover:border-primary/50 hover:-translate-y-1 transition-all duration-500 ease-in-out">
+        <Link href={`/resources/${type}/${slug}`} className="block group active:scale-95 hover:scale-101 transition-transform duration-300 ease-in-out">
+            <motion.div
+            className="border text-card-foreground bg-card overflow-hidden rounded-2xl shadow-md hover:shadow-xl hover:border-primary/50 hover:-translate-y-1 transition-all duration-500 ease-in-out">
                 {(coverImage || appConfig.flags.enableOgImage) && (
                     <div className="relative h-52 w-full aspect-video overflow-hidden">
                         <Image
@@ -66,7 +68,7 @@ export default function ResourceCard({
                         ))}
                     </div>
                 </CardContent>
-            </Card>
+            </motion.div>
         </Link>
     );
 }

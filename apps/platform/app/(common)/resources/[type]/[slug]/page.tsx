@@ -1,3 +1,4 @@
+import { Icon } from '@/components/icons';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { ButtonLink } from '@/components/utils/link';
@@ -7,7 +8,7 @@ import Image from 'next/image';
 import { notFound } from 'next/navigation';
 import { getAllResourcesGroupedByType, getResourceBySlug, getResourceRelated, ResourceType } from '~/lib/markdown/mdx';
 import { appConfig } from '~/project.config';
-import { changeCase } from '~/utils/string';
+import { changeCase, marketwiseLink } from '~/utils/string';
 import { ResourcesList } from '../../client';
 import { ClientMdx, CommentSection, TableOfContents } from './client';
 
@@ -120,8 +121,19 @@ export default async function ResourcePage({ params }: PageProps) {
                             itemProp="image"
                             itemType="https://schema.org/ImageObject"
                             loading="lazy"
-
                         />)}
+                        {frontmatter.coverImage && (
+                            <Image
+                                src={frontmatter.coverImage}
+                                alt={frontmatter.title}
+                                width={1200}
+                                height={630}
+                                className="w-full h-auto rounded-lg"
+                                itemProp="image"
+                                itemType="https://schema.org/ImageObject"
+                                loading="lazy"
+                            />
+                        )}
                         <h1 className="mb-4 text-3xl font-bold text-foreground sm:text-5xl text-pretty" itemProp="headline">
                             {frontmatter.title}
                         </h1>
@@ -132,7 +144,7 @@ export default async function ResourcePage({ params }: PageProps) {
                         <div className="flex gap-4 px-4 text-sm items-center justify-between lg:px-8">
                             <a
                                 href={frontmatter.author?.url || appConfig.authors[0].url}
-                                className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-foreground/5"
+                                className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-foreground/5 active:scale-95"
                                 target='_blank'
                                 rel="noopener noreferrer"
                                 aria-description="Author"
@@ -189,6 +201,28 @@ export default async function ResourcePage({ params }: PageProps) {
                             </Badge>
 
                         </div>
+                        {frontmatter?.alternate_reads?.length  && (
+                            <div>
+                                <p className='text-sm font-medium mb-1'>
+                                    Alternate reads:
+                                </p>
+                                {frontmatter.alternate_reads?.length ? (
+                                    frontmatter.alternate_reads.map((url, index) => (
+                                    <ButtonLink
+                                        key={index}
+                                        size="xs"
+                                        variant="link"
+                                        className="ml-2 group gap-1"
+                                        href={marketwiseLink(url, `/resources/${frontmatter.type}/${frontmatter.slug}`)} target="_blank" rel="noopener noreferrer" itemProp="alternateName"
+                                    >
+                                        {new URL(url).hostname.replace('www.', '')}
+                                        <Icon name='arrow-right' className='group-hover:-rotate-45 transition-all duration-200' />
+                                    </ButtonLink>
+                                ))
+                            ) : (
+                                <span className="text-muted-foreground">No alternate reads available</span>
+                            )}
+                        </div>)}
                         <hr className="mt-4" />
 
                     </div>
@@ -198,7 +232,7 @@ export default async function ResourcePage({ params }: PageProps) {
                         itemProp="articleBody"
                     >
                         <ClientMdx mdxSource={mdxSource} />
-                        <p className='text-sm text-muted-foreground mt-4 pt-4 border-t'>
+                        <p className='text-sm text-muted-foreground mt-4 pt-4 border-t' itemProp="keywords">
                             Tags:
                             {frontmatter.tags?.length ? (
                                 frontmatter.tags.map((tag, index) => (
@@ -252,12 +286,12 @@ export default async function ResourcePage({ params }: PageProps) {
                 </aside>
                 {otherResources.length > 0 && (
                     <section id='related-resources' className="col-span-1 lg:col-span-12 mt-12">
-                    <h2 className="text-xl font-semibold mb-4 text-foreground pl-5">
-                        Related Resources
-                    </h2>
-                    <ResourcesList resources={otherResources} className='items-stretch' />
+                        <h2 className="text-xl font-semibold mb-4 text-foreground pl-5">
+                            Related Resources
+                        </h2>
+                        <ResourcesList resources={otherResources} className='items-stretch' />
 
-                </section>)}
+                    </section>)}
             </div>
         </>
     );
