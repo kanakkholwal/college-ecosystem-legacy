@@ -15,7 +15,7 @@ export async function createPoll(pollData: RawPollType) {
     // Validate the poll data
     const poll = new Poll({
       ...pollData,
-      createdBy: session.user.id,
+      createdBy: session.user.username,
     });
     await poll.save();
     revalidatePath("/polls");
@@ -150,7 +150,7 @@ export async function getPollsCreatedByLoggedInUser(): Promise<PollType[]> {
       return Promise.reject("You need to be logged in to view your polls");
     }
     await dbConnect();
-    const polls = await Poll.find({ createdBy: session.user.id });
+    const polls = await Poll.find({ createdBy: session.user.username });
     return Promise.resolve(JSON.parse(JSON.stringify(polls)));
   } catch (err) {
     console.error(err);

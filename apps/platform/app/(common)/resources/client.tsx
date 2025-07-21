@@ -87,6 +87,7 @@ export function ResourcesList({ resources, className }: { resources: ResourceFro
             .map((frontmatter) => (
                 <div key={frontmatter.slug} role="listitem">
                     <ResourceCard
+                        {...frontmatter}
                         type={frontmatter.type}
                         title={frontmatter.title}
                         slug={frontmatter.slug}

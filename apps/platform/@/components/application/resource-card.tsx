@@ -3,19 +3,20 @@ import { CardContent } from "@/components/ui/card";
 import { motion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
+import { type ResourceFrontMatter } from "~/lib/markdown/mdx";
 import { appConfig } from "~/project.config";
 
-export interface ResourceCardProps {
+export type ResourceCardProps = {
     type: string;
     title: string;
     slug: string;
+    date: string;
     summary?: string;
     tags?: string[];
     coverImage?: string;
-    date: string;
     readingTime?: string;
     category?: string;
-}
+} & Partial<ResourceFrontMatter>;
 
 export default function ResourceCard({
     type,
@@ -27,6 +28,7 @@ export default function ResourceCard({
     date,
     readingTime,
     category,
+    ...frontmatter
 }: ResourceCardProps) {
     return (
         <Link href={`/resources/${type}/${slug}`} className="block group active:scale-95 hover:scale-101 transition-transform duration-300 ease-in-out">
@@ -44,6 +46,11 @@ export default function ResourceCard({
                 )}
                 <CardContent className="p-4 space-y-2">
                     <div className="flex justify-between items-center text-xs text-muted-foreground">
+                        <span>By 
+                            <span className="text-primary ml-1">
+                                {frontmatter?.author?.name}
+                            </span>
+                        </span>
                         <span>{new Date(date).toLocaleDateString('en-IN', {
                             year: 'numeric',
                             month: 'long',
