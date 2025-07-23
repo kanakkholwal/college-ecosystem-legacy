@@ -61,7 +61,7 @@ export default async function DashboardLayout({
     <SidebarProvider>
       <AppSidebar user={session.user} moderator={moderator} />
       <SidebarInset className="flex flex-col flex-1 w-full relative z-0">
-        <Navbar user={session.user} />
+        <Navbar user={session.user} impersonatedBy={session.session.impersonatedBy} />
         {/* <div
           aria-hidden="true"
           className="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20 -z-[1]"
@@ -73,7 +73,6 @@ export default async function DashboardLayout({
         <main className="content  p-4 px-2 md:p-6 z-2 @container space-y-10 min-h-screen h-full">
           {children}
         </main>
-
         {process.env.NODE_ENV !== "production" && (
           <div className="fixed bottom-0 right-auto left-auto mx-auto p-2 text-xs text-muted-foreground">
             <span className="font-semibold">Environment:</span>{" "}

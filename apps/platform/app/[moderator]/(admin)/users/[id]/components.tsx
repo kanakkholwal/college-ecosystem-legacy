@@ -390,6 +390,51 @@ export function UserSessions({ currentUser }: Props) {
 }
 
 export function UserDisplay({ currentUser: user }: Props) {
+
+  const handleImpersonate = async () => {
+    try {
+      const { data, error } = await authClient.admin.impersonateUser({
+        userId: user.id,
+      });
+      if (error) {
+        console.log("Failed to impersonate user:", error);
+        toast.error("Failed to impersonate user");
+        return;
+      }
+      if (!data) {
+        console.log("No data returned from impersonation");
+        toast.error("No data returned from impersonation");
+        return;
+      }
+      toast.success(`Impersonating user: ${user.email}`);
+    } catch (error) {
+      console.error("Failed to impersonate user:", error);
+      toast.error("Failed to impersonate user");
+    }
+  }
+  const handleDelete = async () => {
+    const confirm = window.confirm("Are you sure you want to delete this user?");
+    if (!confirm) return;
+    toast.promise(
+      deleteUserResourcesById(user.id),
+      {
+        loading: "Deleting user resources...",
+        success: "User resources deleted successfully",
+        error: "Failed to delete user resources",
+      }
+    ).then(() => {
+      toast.promise(
+        authClient.admin.removeUser({
+          userId: user.id,
+        }),
+        {
+          loading: "Deleting user...",
+          success: "User deleted successfully",
+          error: "Failed to delete user",
+        }
+      );
+    });
+  }
   return (
     <div className="container mx-auto px-2">
       <table className="w-full">
@@ -420,32 +465,15 @@ export function UserDisplay({ currentUser: user }: Props) {
       </table>
       <div className="flex gap-4 mt-5">
         <Button
-          variant="destructive"
-          onClick={() => {
-            const confirm = window.confirm(
-              "Are you sure you want to delete this user?"
-            );
-            if (!confirm) return;
-            toast.promise(
-              deleteUserResourcesById(user.id),
-              {
-                loading: "Deleting user resources...",
-                success: "User resources deleted successfully",
-                error: "Failed to delete user resources",
-              }
-            ).then(() => {
-              toast.promise(
-                authClient.admin.removeUser({
-                  userId: user.id,
-                }),
-                {
-                  loading: "Deleting user...",
-                  success: "User deleted successfully",
-                  error: "Failed to delete user",
-                }
-              )
-            });
-          }}
+          variant="success_light"
+          onClick={handleImpersonate}
+          size="sm"
+        >
+          Impersonate User
+        </Button>
+        <Button
+          variant="destructive_light"
+          onClick={handleDelete}
           size="sm"
         >
           Delete User

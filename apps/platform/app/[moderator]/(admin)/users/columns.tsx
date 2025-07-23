@@ -1,10 +1,9 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { DataTableColumnHeader } from "@/components/ui/data-table";
+import { ButtonLink } from "@/components/utils/link";
 import type { ColumnDef } from "@tanstack/react-table";
-import Link from "next/link";
 import type { authClient } from "~/auth/client";
 
 export type UserType = Awaited<
@@ -158,9 +157,9 @@ export const columns: ColumnDef<UserType>[] = [
     cell: ({ row }) => {
       return (
         <div className="text-left font-medium whitespace-nowrap">
-          <Button variant="link" asChild>
-            <Link href={`/admin/users/${row.original.id}`}>View user</Link>
-          </Button>
+          <ButtonLink variant="link" href={`/admin/users/${row.original.id}`}>
+            View user
+          </ButtonLink>
         </div>
       );
     },

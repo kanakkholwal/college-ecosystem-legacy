@@ -1,17 +1,36 @@
 "use client";
 
 import ProfileDropdown from "@/components/common/profile-dropdown";
+import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { getNavLinks } from "@/constants/links";
 import { titlesMap } from "@/constants/titles";
 import { usePathname } from "next/navigation";
-import type { Session } from "~/auth/client";
+import toast from "react-hot-toast";
+import { authClient, type Session } from "~/auth/client";
+import { Icon } from "../icons";
+import { Badge } from "../ui/badge";
 import { QuickLinks } from "./navbar";
 import { ThemeSwitcher } from "./theme-switcher";
 
-export default function Navbar({ user }: { user: Session["user"] }) {
+export default function Navbar({ user, impersonatedBy }: { user: Session["user"], impersonatedBy?: string | null }) {
   const pathname = usePathname();
   const navLinks = getNavLinks(user);
+
+  const handleStopImpersonation = async () => {
+    toast.promise(
+      authClient.admin.stopImpersonating(),
+      {
+        loading: "Stopping impersonation...",
+        success: "Impersonation stopped successfully",
+        error: "Failed to stop impersonation",
+      },
+      {
+        position: "top-right",
+        duration: 3000,
+      }
+    )
+  };
 
   return (
     <nav className="w-full p-4 backdrop-blur border-b border-solid flex items-center lg:px-6 z-2">
@@ -25,8 +44,30 @@ export default function Navbar({ user }: { user: Session["user"] }) {
         </p>
       </div>
       <div className="ml-auto inline-flex gap-2 items-center">
-        <QuickLinks user={user} publicLinks={navLinks} />
+        {impersonatedBy && (
+          <div
 
+            className="flex items-center bg-background border rounded-md py-1 h-8 px-2"
+          >
+            <Badge size="sm">
+              <Icon name="eye" />
+              <span className="font-medium">
+                Viewing as <span className="text-primary">{user.name}</span>
+              </span>
+            </Badge>
+
+            <Button
+              variant="warning_light"
+              size="icon_xs"
+              onClick={handleStopImpersonation}
+              title="Stop impersonation"
+            >
+              <Icon name="X" />
+            </Button>
+          </div>
+        )}
+
+        <QuickLinks user={user} publicLinks={navLinks} />
         <ThemeSwitcher />
         <ProfileDropdown user={user} />
       </div>

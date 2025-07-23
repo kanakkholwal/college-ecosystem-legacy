@@ -103,7 +103,7 @@ export const orgConfig = {
 export const appConfig = {
   name: "College Platform",
   appDomain: "nith.eu.org",
-  otherAppDomains : ["app.nith.eu.org",'platform.nith.eu.org','nith-app.vercel.app', 'nith-app.pages.dev',],
+  otherAppDomains : ["app.nith.eu.org",'platform.nith.eu.org','nith-app.vercel.app','os.nith.eu.org', 'nith-app.pages.dev',],
   url: "https://app.nith.eu.org",
   logoSquare: "/logo-square.svg",
   logo: "/logo.svg",
@@ -115,7 +115,7 @@ export const appConfig = {
   keywords: [
     // Primary terms
     "NITH portal", "NIT Hamirpur", "campus management",
-    "student portal", "college ecosystem", "academic platform",
+    "student portal", "college ecosystem", "academic platform","college os",
 
     // Feature-specific
     "NITH results", "semester results", "exam grades",
@@ -133,7 +133,7 @@ export const appConfig = {
   ].join(', '),
   creator: "Kanak Kholwal",
   authors: [
-    { name: "Kanak Kholwal", url: "https://kanakkholwal.eu.org", image: "https://github.com/kanakkholwal.png" },
+    { name: "Kanak Kholwal", url: "https://kanak.eu.org", image: "https://github.com/kanakkholwal.png",email:"me@kanak.eu.org" },
     {
       name: "NITH Administration",
       url: "https://nith.ac.in",
@@ -147,6 +147,7 @@ export const appConfig = {
     linkedin: "https://linkedin.com/in/kanak-kholwal",
     instagram: "https://instagram.com/kanakkholwal",
     github: "https://github.com/kanakkholwal",
+    website: "https://kanak.eu.org",
   },
   verifications: {
     google_adsense: "ca-pub-6988693445063744",

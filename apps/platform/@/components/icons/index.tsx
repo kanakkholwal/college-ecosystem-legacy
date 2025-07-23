@@ -8,6 +8,7 @@ import {
     Camera, ChartBarBig, ChartCandlestick, Code,
     Cpu,
     Dot,
+    Eye,
     Facebook,
     Gamepad2,
     Github,
@@ -24,6 +25,7 @@ import {
     Terminal,
     Twitter,
     Users,
+    X,
     Youtube,
     Zap
 } from 'lucide-react';
@@ -48,6 +50,7 @@ export const IconComponent = {
     "sparkles": SparklesIcon,
     "code": Code,
     "dot":Dot,
+    "eye":Eye,
     "camera": Camera,
     "facebook": Facebook,
     "gamepad2": Gamepad2,
@@ -56,6 +59,7 @@ export const IconComponent = {
     "zap": Zap,
     "cpu": Cpu,
     "globe": Globe,
+    "X":X,
     "align-left": AlignLeft,
     "toc": AlignLeft,
     "chart-bar-big": ChartBarBig,

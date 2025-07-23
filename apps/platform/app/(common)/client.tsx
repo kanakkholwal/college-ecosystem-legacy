@@ -41,7 +41,7 @@ export function HeroSection({ user }: HeroSection) {
 
           >{getGreeting()}
           </AnimatedGradientText> <br />
-          <span className="text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-black/30 dark:from-foreground to-primary">
+          <span className="text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-secondary dark:from-foreground to-primary">
             {user?.name}
           </span>
         </motion.h2>

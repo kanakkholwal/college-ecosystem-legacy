@@ -68,6 +68,7 @@ export const sessions = pgTable("sessions", {
   userId: text("userId")
     .notNull()
     .references(() => users.id),
+  impersonatedBy: text("impersonatedBy")
 });
 
 export const accounts = pgTable("accounts", {
