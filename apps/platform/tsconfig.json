@@ -7,7 +7,8 @@
       "webworker"
     ],
     "types": [
-      "@serwist/next/typings"
+      "@serwist/next/typings",
+      "@types/canvas-confetti",
     ],
     "allowJs": true,
     "skipLibCheck": true,
