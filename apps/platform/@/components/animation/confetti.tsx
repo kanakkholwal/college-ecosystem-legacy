@@ -11,7 +11,7 @@ import {
     DialogTitle
 } from "@/components/ui/dialog";
 import useStorage from "@/hooks/useLocalStorage";
-import confetti from "canvas-confetti";
+// import confetti from "canvas-confetti";
 import { useEffect, useState } from "react";
 import { AnimatedGradientText } from "./animated-shiny-text";
 
@@ -42,25 +42,25 @@ export function CelebrationDialog() {
 
             const particleCount = 60 * (timeLeft / duration);
             // Left side
-            confetti({
-                ...defaults,
-                particleCount,
-                origin: {
-                    x: randomInRange(0.1, 0.3),
-                    y: Math.random() - 0.2
-                },
-                angle: randomInRange(55, 125)
-            });
-            // Right side
-            confetti({
-                ...defaults,
-                particleCount,
-                origin: {
-                    x: randomInRange(0.7, 0.9),
-                    y: Math.random() - 0.2
-                },
-                angle: randomInRange(55, 125)
-            });
+            // confetti({
+            //     ...defaults,
+            //     particleCount,
+            //     origin: {
+            //         x: randomInRange(0.1, 0.3),
+            //         y: Math.random() - 0.2
+            //     },
+            //     angle: randomInRange(55, 125)
+            // });
+            // // Right side
+            // confetti({
+            //     ...defaults,
+            //     particleCount,
+            //     origin: {
+            //         x: randomInRange(0.7, 0.9),
+            //         y: Math.random() - 0.2
+            //     },
+            //     angle: randomInRange(55, 125)
+            // });
         }, 250);
     };
 
@@ -112,7 +112,7 @@ export function CelebrationDialog() {
                 </DialogHeader>
 
                 <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center relative z-10">
-                    <Button
+                    {/* <Button
                         onClick={fireConfetti}
                         size="lg"
                         rounded="large"
@@ -120,11 +120,12 @@ export function CelebrationDialog() {
                         variant="gradient_purple"
                     >
                         Celebrate Again!
-                    </Button>
+                    </Button> */}
 
                     <DialogClose asChild>
                         <Button
                             variant="default_light"
+                            width="full"
                             size="lg"
                             rounded="large"
                             className="px-8 py-6"
