@@ -198,7 +198,8 @@ export default function SignInForm() {
             variant="light"
             type="button"
             disabled={isLoading}
-            width={"full"}
+            width="full"
+            shadow="light"
 
             onClick={async () => {
               setIsLoading(true);
