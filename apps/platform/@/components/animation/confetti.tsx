@@ -1,5 +1,6 @@
 "use client";
 
+import { Icon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
     Dialog,
@@ -12,7 +13,6 @@ import {
 import useStorage from "@/hooks/useLocalStorage";
 import confetti from "canvas-confetti";
 import { useEffect, useState } from "react";
-import { Icon } from "../icons";
 import { AnimatedGradientText } from "./animated-shiny-text";
 
 export function CelebrationDialog() {
