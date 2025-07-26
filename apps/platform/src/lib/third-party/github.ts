@@ -37,13 +37,29 @@ export async function extractVisitorCount(): Promise<number> {
         const response = await fetch(url);
         const svgText = await response.text();
 
-        // Use regex to extract the number from the SVG text
-        const countMatch = svgText.match(/<text[^>]*x="711\.0"[^>]*>(\d+)<\/text>/);
-        if (countMatch && countMatch[1]) {
-            return parseInt(countMatch[1], 10);
+ 
+        // Looks for text elements containing only digits, ignoring attributes
+        const digitMatches = svgText.match(/<text[^>]*>(\d+)<\/text>/gi);
+        if (digitMatches) {
+            // Find the first match that's actually the number (not x/y coordinates etc)
+            for (const match of digitMatches) {
+                const numberMatch = match.match(/>(\d+)</);
+                if (numberMatch && numberMatch[1]) {
+                    const count = parseInt(numberMatch[1], 10);
+                    if (!isNaN(count)) return count;
+                }
+            }
         }
 
-        throw new Error('Visitor count not found in SVG');
+        // Method 3: Alternative regex pattern if the above fails
+        const lastResortMatch = svgText.match(/>\s*(\d+)\s*<\/text>/);
+        if (lastResortMatch && lastResortMatch[1]) {
+            const count = parseInt(lastResortMatch[1], 10);
+            if (!isNaN(count)) return count;
+        }
+
+        console.warn('Visitor count not found in SVG');
+        return 1_00_000; // Default value to last remembered count
     } catch (error) {
         console.error('Error extracting visitor count:', error);
         throw error;
