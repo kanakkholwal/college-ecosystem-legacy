@@ -1,3 +1,4 @@
+import { CelebrationDialog } from "@/components/animation/confetti";
 import Footer from "@/components/common/footer";
 import GithubBanner from "@/components/common/github-banner";
 import Navbar from "@/components/common/navbar";
@@ -52,7 +53,7 @@ export default async function Layout({ children }: LayoutProps) {
           }}
         />
       </ConditionalRender>
-
+      <CelebrationDialog />
       <div className="relative flex-1 mx-auto max-w-(--max-app-width) w-full h-full min-h-screen @container flex-col items-center justify-start space-y-4 pb-8">
         {/* <div
         aria-hidden="true"

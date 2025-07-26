@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { ButtonLink } from "@/components/utils/link";
 import { Clock, Home, Mail, RefreshCw, Server } from "lucide-react";
 import { useEffect } from "react";
+import { appConfig } from "~/project.config";
 
 export default function ServerErrorPage({
   error,
@@ -56,7 +57,7 @@ export default function ServerErrorPage({
             <p className="text-xs text-destructive font-medium">Still having issues?</p>
             <div className="flex gap-2 justify-center">
               <ButtonLink variant="ghost" size="sm" 
-               href="/dashboard/help">
+               href={appConfig.contact}>
                   <Mail  />
                   Contact Support
               </ButtonLink>

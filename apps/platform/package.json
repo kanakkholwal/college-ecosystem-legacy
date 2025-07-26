@@ -56,6 +56,7 @@
     "axios": "^1.9.0",
     "barcode-react": "^1.0.5",
     "better-auth": "^1.2.12",
+    "canvas-confetti": "^1.9.3",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
@@ -121,6 +122,7 @@
     "zustand": "^5.0.5"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^22",
     "serwist": "^9.0.11",
     "typescript": "^5.7.3"

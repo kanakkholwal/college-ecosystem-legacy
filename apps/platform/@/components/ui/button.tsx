@@ -59,6 +59,10 @@ const buttonVariants = cva(
           "text-white bg-gradient-to-r from-pink-400 via-pink-600 to-pink-700 hover:bg-gradient-to-br",
         gradient_purple:
           "text-white bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br",
+        gradient_emerald:
+          "text-white bg-gradient-to-r from-emerald-500 via-emerald-600 to-emerald-700 hover:bg-gradient-to-br",
+        gradient_yellow:
+          "text-white bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 hover:bg-gradient-to-br",
         raw: "",
       },
       size: {
