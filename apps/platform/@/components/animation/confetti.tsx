@@ -82,28 +82,30 @@ export function CelebrationDialog() {
             }
         }}>
             <DialogContent
-                className="rounded-xl max-w-md bg-gradient-to-br from-indigo-50 to-rose-50 shadow-2xl p-8 border-0 overflow-hidden"
+                className="rounded-xl max-w-md shadow-2xl p-8 border-0 overflow-hidden"
                 onInteractOutside={(e) => e.preventDefault()}
             >
                 {/* Decorative elements */}
-                <div className="absolute top-0 right-0 w-32 h-32 bg-yellow-300 rounded-full opacity-20 blur-3xl -translate-y-1/2 translate-x-1/2"></div>
-                <div className="absolute bottom-0 left-0 w-48 h-48 bg-indigo-300 rounded-full opacity-20 blur-3xl translate-y-1/2 -translate-x-1/2"></div>
+                <div className="absolute top-0 left-0 w-32 h-32 bg-tertiary rounded-full opacity-20 blur-3xl -translate-y-1/2 translate-x-1/2 z-0"/>
+                <div className="absolute top-0 right-0 w-32 h-32 bg-secondary rounded-full opacity-20 blur-3xl -translate-y-1/2 translate-x-1/2 z-0"/>
+                <div className="absolute bottom-0 left-0 w-48 h-48 bg-tertiary rounded-full opacity-20 blur-3xl translate-y-1/2 -translate-x-1/2 z-0"/>
+                <div className="absolute bottom-0 right-0 w-48 h-48 bg-secondary rounded-full opacity-20 blur-3xl translate-y-1/2 -translate-x-1/2 z-0"/>
 
 
                 <DialogHeader className="relative z-10">
-                    <div className="mx-auto text-7xl flex items-center justify-center size-32 rounded-full  bg-gradient-to-r from-purple-100 to-primary/10 mb-6">
+                    <div className="mx-auto text-7xl flex items-center justify-center size-32 rounded-full bg-primary/10 mb-6">
                         <span className="animate-bounce">🎉</span>
                     </div>
 
-                    <DialogTitle className="text-2xl font-bold text-center text-gray-900">
+                    <DialogTitle className="text-2xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-secondary to-tertiary">
                         Amazing Milestone Reached!
                     </DialogTitle>
 
-                    <DialogDescription className="mt-4 text-center text-gray-600">
-                        <AnimatedGradientText className="block text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-600 mb-2">
+                    <DialogDescription className="mt-4 text-center ">
+                        <AnimatedGradientText className="block text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-tertiary to-secondary mb-2">
                             100,000+ Impressions
                         </AnimatedGradientText>
-                        <p className="mt-3 text-base">
+                        <p className="mt-3 text-sm text-muted-foreground">
                             Thank you for being part of this incredible journey! Your support means everything to us.
                         </p>
                     </DialogDescription>
