@@ -1,3 +1,5 @@
+declare module 'canvas-confetti';
+
 declare function confetti(options?: confetti.Options): Promise<undefined> | null;
 
 declare namespace confetti {
