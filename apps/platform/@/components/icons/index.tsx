@@ -6,6 +6,8 @@ import {
     BookOpen,
     Calendar,
     Camera, ChartBarBig, ChartCandlestick, Code,
+    CopyCheckIcon,
+    CopyIcon,
     Cpu,
     Dot,
     Eye,
@@ -74,6 +76,8 @@ export const IconComponent = {
     "smartphone": LuSmartphone,
     "monitor-smartphone": LuMonitorSmartphone,
     "website": Globe,
+    "copy":CopyIcon,
+    "copy-check":CopyCheckIcon,
     // social media icons
     "github": Github,
     "instagram": Instagram,

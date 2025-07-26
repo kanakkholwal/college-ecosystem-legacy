@@ -68,7 +68,7 @@ export default function PostFooter({
         <ShareButton
           data={{
             title: post.title,
-            text: post.content,
+            text: post.content.slice(0, 100) + "...",
             url: appConfig.url + `/community/posts/${post._id}`,
           }}
           variant="ghost"

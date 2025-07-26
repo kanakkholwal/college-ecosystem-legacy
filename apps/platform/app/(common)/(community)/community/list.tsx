@@ -100,7 +100,7 @@ export default function CommunityPostList({
                 <ShareButton
                   data={{
                     title: post.title,
-                    text: post.content,
+                    text: post.content.slice(0, 100) + "...",
                     url: appConfig.url + `/community/posts/${post._id}`,
                   }}
                   variant="ghost"
@@ -111,7 +111,7 @@ export default function CommunityPostList({
                 </ShareButton>
               </div>
               <div className="ml-auto">
-                <Button variant="dark" size="xs" effect="shineHover" asChild>
+                <Button variant="dark" size="sm" effect="shineHover" asChild>
                   <Link href={`/community/posts/${post._id}`}>
                     View Post
                     <ArrowRight />

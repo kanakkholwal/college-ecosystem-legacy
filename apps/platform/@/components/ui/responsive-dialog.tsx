@@ -31,6 +31,7 @@ export type ResponsiveDialogProps = {
   defaultOpen?: boolean;
   onOpenChange?(open: boolean): void;
   className?: string;
+  showCloseButton?: boolean;
 };
 
 const ResponsiveDialog = React.memo(
@@ -42,6 +43,7 @@ const ResponsiveDialog = React.memo(
     className,
     defaultOpen,
     onOpenChange,
+    showCloseButton = true,
   }: ResponsiveDialogProps) => {
     const [open, setOpen] = useState(defaultOpen || false);
     const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -63,8 +65,8 @@ const ResponsiveDialog = React.memo(
               className={cn("sm:max-w-[425px] @container/dialog", className)}
             >
               <DialogHeader>
-                <DialogTitle>{title}</DialogTitle>
-                <DialogDescription>{description}</DialogDescription>
+                <DialogTitle className="text-pretty">{title}</DialogTitle>
+                <DialogDescription className="text-pretty">{description}</DialogDescription>
               </DialogHeader>
               {children}
             </DialogContent>
@@ -85,17 +87,19 @@ const ResponsiveDialog = React.memo(
           </DrawerTrigger>
           <DrawerContent>
             <DrawerHeader className="text-left">
-              <DrawerTitle>{title}</DrawerTitle>
-              <DrawerDescription>{description}</DrawerDescription>
+              <DrawerTitle className="text-pretty">{title}</DrawerTitle>
+              <DrawerDescription className="text-pretty">{description}</DrawerDescription>
             </DrawerHeader>
             <div className={cn("px-4 w-full @container/dialog", className)}>
               {children}
             </div>
-            <DrawerFooter className="pt-2 justify-end">
-              <DrawerClose asChild>
-                <Button size="sm" variant="outline">Cancel</Button>
-              </DrawerClose>
-            </DrawerFooter>
+            {showCloseButton && (
+              <DrawerFooter className="pt-2 justify-end">
+                <DrawerClose asChild>
+                  <Button size="sm" variant="outline">Cancel</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            )}
           </DrawerContent>
         </Drawer>
       );

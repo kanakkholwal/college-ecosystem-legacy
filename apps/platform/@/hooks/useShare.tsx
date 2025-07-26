@@ -12,6 +12,7 @@ import { IoLogoReddit, IoMailOutline } from "react-icons/io5";
 import { LuFacebook } from "react-icons/lu";
 import { TbBrandTelegram } from "react-icons/tb";
 
+import toast from "react-hot-toast";
 import { FaPinterestP, FaXTwitter } from "react-icons/fa6";
 
 type Social = {
@@ -31,15 +32,19 @@ export const useShare = (data: {
       try {
         await navigator.share(data);
       } catch (error) {
+        toast.error("Failed to share content");
         console.error(error);
       }
     } else {
+      toast.error("Web Share API not supported in your browser");
       console.error("Web Share API not supported in your browser");
     }
   };
+  const isNativeShareSupported = !!navigator.share;
 
   return {
     share,
+    isNativeShareSupported,
     socials: [
       {
         name: "facebook",
