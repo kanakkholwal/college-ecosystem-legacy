@@ -45,8 +45,8 @@ export default function Home() {
               develop their skills, and build a portfolio that stands out.
             </p>
           </div>
-          <div className="bg-gray-100 rounded-xl h-80 border-2 border-dashed flex items-center justify-center">
-            <span className="text-gray-500">Project Showcase Visual</span>
+          <div className="bg-gray-100 rounded-xl h-80 shadow-2xl  flex items-center justify-center bg-no-repeat bg-cover"
+               style={{ backgroundImage: "url('/team.png')" }}>
           </div>
         </div>
       </section>
