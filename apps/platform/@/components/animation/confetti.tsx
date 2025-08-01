@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { AnimatedGradientText } from "./animated-shiny-text";
 
 export function CelebrationDialog() {
-    const [celebrated, setCelebrated] = useStorage("impressions-celebrated", false,"sessionStorage");
+    const [celebrated, setCelebrated] = useStorage("impressions-celebrated", false,"localStorage");
     const [isOpen, setIsOpen] = useState(true);
 
     const fireConfetti = () => {
@@ -73,7 +73,7 @@ export function CelebrationDialog() {
             fireConfetti();
         }
     }, [isOpen]);
-
+    if (celebrated) return null
     return (
         <Dialog open={isOpen} onOpenChange={(open) => {
             setIsOpen(open);
