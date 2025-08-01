@@ -28,7 +28,6 @@
     "apps/*"
   ],
   "dependencies": {
-    "@ai-sdk/react": "^1.2.12",
     "dotenv": "^16.4.7",
     "tsup": "^8.3.5"
   }
