@@ -5,6 +5,7 @@ export const applicationSchema = z.object({
   collegeId: z.string().email("Invalid email").refine(email => email.endsWith("@nith.ac.in"), {
     message: "Must be a valid NITH email"
   }),
+  mobile: z.string().regex(/^\d{10}$/, "Mobile number must be 10 digits").optional(),
   collegeYear: z.enum(["1st", "2nd", "3rd", "4th"]),
   workLinks: z.array(
     z.string().url("Invalid URL format")

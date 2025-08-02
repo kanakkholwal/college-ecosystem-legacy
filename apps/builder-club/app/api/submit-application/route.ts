@@ -22,6 +22,9 @@ export async function POST(request: Request) {
                 Name: { title: [{ text: { content: validated.name } }] },
                 Email: { email: validated.collegeId },
                 Year: { select: { name: validated.collegeYear } },
+                Mobile:{
+                    phone_number: validated.mobile || ""
+                },
                 'Work Links': {
                     rich_text: validated.workLinks.map(link => ({
                         text: { content: link, link: { url: link } }

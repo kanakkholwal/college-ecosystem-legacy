@@ -2,21 +2,21 @@
 
 import { Button } from "@/components/ui/button";
 import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { ApplicationFormData, applicationSchema } from "@/lib/validation";
@@ -62,6 +62,7 @@ export function ApplicationForm() {
       name: "",
       collegeId: "",
       collegeYear: "1st",
+      mobile: "",
       workLinks: [""],
       bestProject: "",
       bestHack: ""
@@ -155,6 +156,20 @@ export function ApplicationForm() {
             </FormItem>
           )}
         />
+        <FormField
+          control={control}
+          name="mobile"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Mobile Number</FormLabel>
+              <FormControl>
+                <Input placeholder="1234567890" {...field} />
+              </FormControl>
+              <FormDescription>Must be a 10-digit mobile number</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
         <FormField
           control={control}
@@ -169,7 +184,7 @@ export function ApplicationForm() {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  {["1st", "2nd", "3rd", "4th", "M.Tech", "Ph.D"].map(year => (
+                  {["1st", "2nd", "3rd", "4th"].map(year => (
                     <SelectItem key={year} value={year}>{year}</SelectItem>
                   ))}
                 </SelectContent>
