@@ -24,15 +24,12 @@ function ShareButton({ data, ...props }: ShareButtonProps) {
     url: data.url,
     image: data.image,
   });
+  
   const [copied, setCopied] = useState(false);
   if (!data.url) {
     toast.error("No URL provided for sharing");
     return null;
   }
-
-
-  if (isNativeShareSupported)
-    return <Button {...props} onClick={() => share()} />;
 
 
   return (<ResponsiveDialog
@@ -59,6 +56,14 @@ function ShareButton({ data, ...props }: ShareButtonProps) {
           <social.icon className="icon" />
         </ButtonLink>;
       })}
+      {isNativeShareSupported && (<Button
+        size="icon"
+        variant="ghost"
+        transition="damped"
+        onClick={() => share()}
+        className="flex items-center gap-2">
+        <Icon name="share"  className="icon"/>
+      </Button>)}
     </div>
     <p className="text-sm text-muted-foreground">
       Or copy the link to share manually

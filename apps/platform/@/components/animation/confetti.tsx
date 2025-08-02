@@ -77,7 +77,7 @@ export function CelebrationDialog() {
     return (
         <Dialog open={isOpen} onOpenChange={(open) => {
             setIsOpen(open);
-            if (!open) {
+            if (open === false) {
                 handleExit();
             }
         }}>
