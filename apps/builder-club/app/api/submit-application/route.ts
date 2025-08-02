@@ -27,7 +27,7 @@ export async function POST(request: Request) {
                 },
                 'Work Links': {
                     rich_text: validated.workLinks.map(link => ({
-                        text: { content: link, link: { url: link } }
+                        text: { content: link.url, link: { url: link.url } }
                     }))
                 },
                 'Best Project': {

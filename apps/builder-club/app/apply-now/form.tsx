@@ -21,41 +21,14 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { ApplicationFormData, applicationSchema } from "@/lib/validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Minus } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 import * as React from "react";
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
-
-interface LinkInputProps {
-  index: number;
-  value: string;
-  onChange: (index: number, value: string) => void;
-  onRemove: (index: number) => void;
-}
-
-const LinkInput: React.FC<LinkInputProps> = ({ index, value, onChange, onRemove }) => (
-  <div className="flex gap-2 items-center">
-    <Input
-      type="url"
-      placeholder="https://example.com"
-      value={value}
-      onChange={(e) => onChange(index, e.target.value)}
-    />
-    <Button
-      type="button"
-      variant="outline"
-      size="icon"
-      onClick={() => onRemove(index)}
-    >
-      <span className="text-lg">
-        <Minus className="h-4 w-4" />
-      </span>
-    </Button>
-  </div>
-);
 
 export function ApplicationForm() {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+
   const form = useForm<ApplicationFormData>({
     resolver: zodResolver(applicationSchema),
     defaultValues: {
@@ -63,13 +36,20 @@ export function ApplicationForm() {
       collegeId: "",
       collegeYear: "1st",
       mobile: "",
-      workLinks: [""],
+      workLinks: [{
+        url: ""
+      }],
       bestProject: "",
       bestHack: ""
     }
   });
 
   const { control, handleSubmit, formState: { errors } } = form;
+
+  const { fields, append, remove } = useFieldArray<ApplicationFormData>({
+    control,
+    name: "workLinks",
+  });
 
   const onSubmit = async (data: ApplicationFormData) => {
     setIsSubmitting(true);
@@ -81,11 +61,7 @@ export function ApplicationForm() {
       });
 
       if (response.ok) {
-        // toast({
-        //   title: "Application Submitted!",
-        //   description: "We've received your application successfully.",
-        // });
-        toast.success("Application Submitted! ", {
+        toast.success("Application Submitted!", {
           description: "We've received your application successfully.",
           duration: 3000,
         });
@@ -93,41 +69,22 @@ export function ApplicationForm() {
         toast.error("Error", {
           description: "There was an issue submitting your application. Please try again.",
         });
-       
       }
     } catch (error) {
-        toast.error("Error", {
-            description: "There was an issue submitting your application. Please try again.",
-        })
-        console.error("Submission error:", error);
+      toast.error("Error", {
+        description: "There was an issue submitting your application. Please try again.",
+      });
+      console.error("Submission error:", error);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const workLinks = form.watch("workLinks");
-
-  const addLink = () => {
-    form.setValue("workLinks", [...workLinks, ""]);
-  };
-
-  const removeLink = (index: number) => {
-    if (workLinks.length > 1) {
-      const newLinks = [...workLinks];
-      newLinks.splice(index, 1);
-      form.setValue("workLinks", newLinks);
-    }
-  };
-
-  const updateLink = (index: number, value: string) => {
-    const newLinks = [...workLinks];
-    newLinks[index] = value;
-    form.setValue("workLinks", newLinks);
-  };
-
   return (
     <Form {...form}>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+
+        {/* Name */}
         <FormField
           control={control}
           name="name"
@@ -142,6 +99,7 @@ export function ApplicationForm() {
           )}
         />
 
+        {/* College Email */}
         <FormField
           control={control}
           name="collegeId"
@@ -156,6 +114,8 @@ export function ApplicationForm() {
             </FormItem>
           )}
         />
+
+        {/* Mobile Number */}
         <FormField
           control={control}
           name="mobile"
@@ -171,6 +131,7 @@ export function ApplicationForm() {
           )}
         />
 
+        {/* College Year */}
         <FormField
           control={control}
           name="collegeYear"
@@ -194,36 +155,50 @@ export function ApplicationForm() {
           )}
         />
 
-        <div>
-          <FormLabel>Work Links</FormLabel>
-          <div className="space-y-4">
-            {workLinks.map((link, index) => (
-              <LinkInput
-                key={index}
-                index={index}
-                value={link}
-                onChange={updateLink}
-                onRemove={removeLink}
-              />
-            ))}
-            <Button
-              type="button"
-              variant="outline"
-              onClick={addLink}
-            >
-              Add Another Link
-            </Button>
-          </div>
-          <FormDescription className="mt-2">
-            Portfolio, GitHub, LinkedIn, Resume, or project ideas
-          </FormDescription>
-          {errors.workLinks && (
-            <p className="text-sm font-medium text-destructive">
-              {errors.workLinks.message}
-            </p>
-          )}
-        </div>
+        {/* Work Links */}
+        <FormField
+          control={control}
+          name="workLinks"
+          render={({  }) => (
+            <FormItem>
+              <FormLabel>Work Links</FormLabel>
+              <div className="space-y-4 mt-2">
+                {fields.map((field, index) => (
+                  <FormField
+                    key={field.id}
+                    control={control}
+                    name={`workLinks.${index}.url`}
+                    render={({ field }) => (
+                      <FormItem className="items-center grid gap-2 grid-cols-[1fr_auto]">
+                        <FormControl>
+                          <Input placeholder="https://example.com" {...field} />
+                        </FormControl>
+                        <Button type="button" variant="outline" size="icon" onClick={() => remove(index)} disabled={fields.length === 1}>
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
 
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => append({ url: "" })}
+                >
+                  <Plus className="h-4 w-4 mr-2" /> Add Another Link
+                </Button>
+              </div>
+              <FormDescription className="mt-2">
+                Portfolio, GitHub, LinkedIn, Resume, or project links.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* Best Project */}
         <FormField
           control={control}
           name="bestProject"
@@ -242,6 +217,7 @@ export function ApplicationForm() {
           )}
         />
 
+        {/* Best Hack */}
         <FormField
           control={control}
           name="bestHack"
@@ -263,9 +239,11 @@ export function ApplicationForm() {
           )}
         />
 
+        {/* Submit Button */}
         <Button type="submit" disabled={isSubmitting}>
           {isSubmitting ? "Submitting..." : "Submit Application"}
         </Button>
+
       </form>
     </Form>
   );

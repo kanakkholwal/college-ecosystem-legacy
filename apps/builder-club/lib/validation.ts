@@ -11,8 +11,11 @@ export const applicationSchema = z.object({
   }).optional(),
   collegeYear: z.enum(["1st", "2nd", "3rd", "4th"]),
   workLinks: z.array(
-    z.string().url("Invalid URL format")
-  ).min(1, "At least one work link is required"),
+  z.object({
+    url: z.string().url("Invalid URL format")
+  })
+).min(1, "At least one work link is required"),
+
   bestProject: z.string().optional(),
   bestHack: z.string().optional()
 });
