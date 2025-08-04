@@ -2,7 +2,7 @@ import PerkCard from "@/components/PerkCard";
 import TimelineCard from "@/components/TimelineCard";
 import { Button } from "@/components/ui/button";
 import { appConfig } from "@/project.config";
-import { ArrowRight, BrainCircuit, Calendar, Code, Network } from "lucide-react";
+import { ArrowRight, ArrowUpRight, BrainCircuit, Calendar, Code, Network } from "lucide-react";
 
 export default function Home() {
   const timeline = [
@@ -23,14 +23,14 @@ export default function Home() {
     <div className="w-full mx-auto flex flex-col items-center justify-start space-y-4 pb-8">
       {/* Hero Section */}
       <section className="min-h-[80vh] relative custom w-full z-0">
-          <video
-            className="object-cover absolute inset-0 aspect-video z-1 w-full max-h-[80vh] rounded-lg"
-            autoPlay
-            loop
-            muted
-            playsInline
-            src={appConfig.heroVideo}
-          />
+        <video
+          className="object-cover absolute inset-0 aspect-video z-1 w-full max-h-[80vh] rounded-lg"
+          autoPlay
+          loop
+          muted
+          playsInline
+          src={appConfig.heroVideo}
+        />
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center py-20 z-5">
 
           <h1 className="text-5xl md:text-7xl font-bold mb-6">Welcome to Build House</h1>
@@ -39,8 +39,8 @@ export default function Home() {
           </p>
           <Button size="lg" asChild>
             <a href="/apply-now">
-            Apply Now
-            <ArrowRight className="ml-2" />
+              Apply Now
+              <ArrowRight className="ml-2" />
             </a>
           </Button>
         </div>
@@ -52,7 +52,7 @@ export default function Home() {
           <div>
             <h2 className="text-3xl font-bold mb-6">About Build House</h2>
             <p className="text-lg text-gray-700 mb-4">
-              Build House is a 1-month intensive sprint where 15 selected students collaborate to build real-world projects.
+              Build House is a 10-month intensive sprint where 15 selected students collaborate to build real-world projects.
               We provide the resources, mentorship, and environment to turn ideas into tangible products.
             </p>
             <p className="text-lg text-gray-700">
@@ -92,7 +92,17 @@ export default function Home() {
         <Button size="lg" asChild>
           <a href="/apply-now">Apply Now</a>
         </Button>
+        <p className="text-lg text-gray-600 mt-4">
+          Contact us if you have any queries
+          <Button variant="link" asChild>
+            <a href="https://www.linkedin.com/in/kanak-kholwal/" target="_blank" className="text-blue-600 hover:underline">
+              Contact Here.
+              <ArrowUpRight />
+            </a>
+          </Button>
+        </p>
       </section>
+
     </div>
   );
 }
