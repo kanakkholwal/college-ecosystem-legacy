@@ -2,7 +2,6 @@ import { UserPreview } from "@/components/application/user-preview";
 import EmptyArea from "@/components/common/empty-area";
 import ShareButton from "@/components/common/share-button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDistanceToNow } from "date-fns";
 import { ArrowRight, Bookmark, Dot, Eye, Share } from "lucide-react";
@@ -85,26 +84,38 @@ export default function CommunityPostList({
             </article>
             <div className="flex items-center gap-3">
               <div className="flex items-center justify-between gap-2">
-                <Badge size="sm">
+                <div className="flex items-center gap-1 rounded-2xl bg-background px-3 py-1.5 [&>svg]:size-4 h-full">
                   <Eye />
-                  {formatNumber(post.views)}
-                </Badge>
-                <Badge size="sm">
+                  <span className="text-xs font-medium text-muted-foreground">
+                    {formatNumber(post.views)}
+                    {post.views < 1 ? " View" : " Views"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 rounded-2xl bg-background px-3 py-1.5 [&>svg]:size-4 h-full">
                   <BiUpvote />
-                  {post.likes.length}
-                </Badge>
-                <Badge size="sm">
+                  <span className="text-xs font-medium text-muted-foreground">
+                    {formatNumber(post.likes.length)}
+                    {post.likes.length < 1 ? " Like" : " Likes"}
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 rounded-2xl bg-background px-3 py-1.5 [&>svg]:size-4 h-full">
                   <Bookmark />
-                  {post.savedBy.length}
-                </Badge>
+                  <span className="text-xs font-medium text-muted-foreground">
+                    {formatNumber(post.savedBy.length)}
+                    {post.savedBy.length < 1 ? " Saved" : " Saves"}
+                  </span>
+                </div>
                 <ShareButton
                   data={{
                     title: post.title,
-                    text: post.content.slice(0, 100) + "...",
+                    text: "Check out this post on our community platform!",
                     url: appConfig.url + `/community/posts/${post._id}`,
                   }}
+
                   variant="ghost"
                   size="xs"
+                  className="rounded-2xl bg-background flex items-center gap-1.5 h-full hover:ring-1 hover:ring-primary transition-all"
+
                 >
                   <Share />
                   Share

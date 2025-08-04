@@ -51,7 +51,7 @@ function ShareButton({ data, ...props }: ShareButtonProps) {
           rel="noopener noreferrer"
           size="icon"
           transition="damped"
-          variant="ghost"
+          variant="glass"
         >
           <social.icon className="icon" />
         </ButtonLink>;
