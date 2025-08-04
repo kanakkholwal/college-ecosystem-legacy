@@ -22,19 +22,27 @@ export default function Home() {
   return (
     <div className="w-full mx-auto flex flex-col items-center justify-start space-y-4 pb-8">
       {/* Hero Section */}
-      <section className="min-h-[80vh] relative custom w-full z-0">
+      <section className="relative min-h-[80vh] w-full overflow-hidden shadow-xl max-w-screen-2xl mx-auto">
+        {/* Video Background */}
         <video
-          className="object-cover absolute inset-0 aspect-video z-1 w-full max-h-[80vh] rounded-lg"
+          className="absolute top-0 left-0 w-full h-full object-cover z-10"
           autoPlay
           loop
           muted
           playsInline
           src={appConfig.heroVideo}
         />
-        <div className="absolute inset-0 flex flex-col justify-center items-center text-center py-20 z-5">
 
-          <h1 className="text-5xl md:text-7xl font-bold mb-6">Welcome to Build House</h1>
-          <p className="text-xl md:text-2xl text-gray-600 mb-10 max-w-2xl">
+        {/* Overlay */}
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-black/70 to-black/30 z-20"></div>
+
+        {/* Content */}
+        <div className="relative z-30 text-center text-white px-5 py-20 md:py-28 lg:py-32 max-w-7xl mx-auto flex flex-col items-center justify-center min-h-[80vh]">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold mb-6 leading-tight drop-shadow-lg">
+            Welcome to Build House
+          </h1>
+
+          <p className="text-lg sm:text-xl md:text-2xl text-white/90 max-w-2xl mx-auto mb-10 drop-shadow-sm">
             Build fast. Learn fast. Launch real things.
           </p>
           <Button size="lg" asChild>
