@@ -21,7 +21,7 @@ export default function ApplyNowPage() {
         <div>
           <p className="text-red-500 mb-4">Applications are currently closed.</p>
           <p className="text-gray-600 mb-6">
-            Stay tuned for the next round! Follow us on social media for updates.
+            We{`' `} will send an email for the screening process .
           </p>
         </div>
         {/* <ApplicationForm /> */}
