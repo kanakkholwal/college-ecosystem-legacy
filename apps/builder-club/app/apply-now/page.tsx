@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import {ApplicationForm} from "./form";
+// import { ApplicationForm } from "./form";
 
 export default function ApplyNowPage() {
   return (
@@ -11,14 +11,20 @@ export default function ApplyNowPage() {
           <ArrowLeft className="mr-2 h-4 w-4" /> Back to Home
         </Link>
       </Button>
-      
+
       <div className="border rounded-xl p-6 md:p-10 shadow-sm">
         <h1 className="text-3xl font-bold mb-2">Build House Application</h1>
         <p className="text-gray-600 mb-8">
           Join our 1-month sprint to build real projects with peers. Fill out this form to apply.
         </p>
-        
-        <ApplicationForm />
+        {/* closed forms */}
+        <div>
+          <p className="text-red-500 mb-4">Applications are currently closed.</p>
+          <p className="text-gray-600 mb-6">
+            Stay tuned for the next round! Follow us on social media for updates.
+          </p>
+        </div>
+        {/* <ApplicationForm /> */}
       </div>
     </div>
   );

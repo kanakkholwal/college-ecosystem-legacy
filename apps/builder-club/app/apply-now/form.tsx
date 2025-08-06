@@ -44,7 +44,7 @@ export function ApplicationForm() {
     }
   });
 
-  const { control, handleSubmit, formState: { errors } } = form;
+  const { control, handleSubmit } = form;
 
   const { fields, append, remove } = useFieldArray<ApplicationFormData>({
     control,
