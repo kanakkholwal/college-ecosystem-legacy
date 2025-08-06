@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 export default async function CreateAnnouncementPage() {
   return (
     <>
-      <div className="bg-card rounded-lg py-2 px-3 mx-2 max-w-3xl w-full md:mx-auto">
+      <div className="bg-card rounded-lg py-2 px-3 mx-2 max-w-3xl w-full md:mx-auto mt-8">
         <Button variant="ghost" size="sm" asChild>
           <Link href="/announcements">
             <ArrowLeft />
