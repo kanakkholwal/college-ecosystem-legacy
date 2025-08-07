@@ -21,7 +21,7 @@ export default function ApplyNowPage() {
         {closed ? <div className="p-4 bg-muted">
           <p className="text-red-500 mb-4">Applications are currently closed.</p>
           <p className="text-muted-foreground mb-6">
-            We{`' `} will send an email for the screening process .
+            We will send an email for the screening process .
           </p>
         </div>:<ApplicationForm /> }
       </div>
