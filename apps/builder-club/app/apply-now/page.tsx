@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 // import { ApplicationForm } from "./form";
-
+const closed = false;
 export default function ApplyNowPage() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-12">
@@ -18,13 +18,12 @@ export default function ApplyNowPage() {
           Join our 1-month sprint to build real projects with peers. Fill out this form to apply.
         </p>
         {/* closed forms */}
-        <div>
+        {closed ? <div className="p-4 bg-muted">
           <p className="text-red-500 mb-4">Applications are currently closed.</p>
-          <p className="text-gray-600 mb-6">
+          <p className="text-muted-foreground mb-6">
             We{`' `} will send an email for the screening process .
           </p>
-        </div>
-        {/* <ApplicationForm /> */}
+        </div>:<ApplicationForm /> }
       </div>
     </div>
   );
