@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-// import { ApplicationForm } from "./form";
+import { ApplicationForm } from "./form";
 const closed = false;
 export default function ApplyNowPage() {
   return (
