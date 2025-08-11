@@ -161,7 +161,7 @@ export const auth = betterAuth({
     cookiePrefix: "nith",
 
   },
-  trustedOrigins: [appConfig.url, `https://${appConfig.appDomain}`,`https://*.nith.eu.org`],
+  trustedOrigins: [appConfig.url, `https://${appConfig.appDomain}`,'nith.eu.org',`https://*.nith.eu.org`],
   user: {
     additionalFields: {
       role: {
