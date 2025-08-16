@@ -32,17 +32,21 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { createNewEvent, saveNewEvents } from "~/actions/common.events";
 import { generateEventsByDoc } from "~/ai/actions";
-import { eventTypes, rawEventsSchema, rawEventsSchemaType } from "~/constants/common.events";
+import {
+  eventTypes,
+  rawEventsSchema,
+  rawEventsSchemaType,
+} from "~/constants/common.events";
 
 export default function CreateNewEvent() {
   const searchParams = useSearchParams();
-  const [fileReference, setFileReference] = useState<string | ArrayBuffer | null>(null);
+  const [fileReference, setFileReference] = useState<
+    string | ArrayBuffer | null
+  >(null);
   const [generatedEvents, setGeneratedEvents] = useState<
     rawEventsSchemaType[] | null
   >(null);
-  const [acceptedIndices, setAcceptedIndices] = useState<
-    number[]
-  >([]);
+  const [acceptedIndices, setAcceptedIndices] = useState<number[]>([]);
   const [generatingEvents, setGeneratingEvents] = useState<boolean>(false);
   const [savingEvents, setSavingEvents] = useState<boolean>(false);
 
@@ -79,11 +83,11 @@ export default function CreateNewEvent() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setFileReference(reader.result);
-        console.log("Reference Image loaded")
+        console.log("Reference Image loaded");
       };
       reader.readAsDataURL(selectedFile);
     }
-  }
+  };
   const generateEvents = async () => {
     if (fileReference) {
       console.log("File to upload:", !!fileReference);
@@ -106,13 +110,17 @@ export default function CreateNewEvent() {
         setAcceptedIndices([]);
         toast.success(response.message);
       } catch (error) {
-        console.error(error)
-        toast.error(error instanceof Error ? error.message : "Error occurred while generating events")
+        console.error(error);
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Error occurred while generating events"
+        );
       } finally {
         setGeneratingEvents(false);
       }
     }
-  }
+  };
 
   const saveAcceptedEvents = async () => {
     if (acceptedIndices.length === 0) {
@@ -128,11 +136,13 @@ export default function CreateNewEvent() {
     }
     try {
       setSavingEvents(true);
-      toast.promise(saveNewEvents(acceptedEvents), {
-        loading: "Adding accepted events to calendar",
-        success: "Accepted events added to calendar successfully",
-        error: "Error occurred while adding events to calendar",
-      }).finally(() => setSavingEvents(false));
+      toast
+        .promise(saveNewEvents(acceptedEvents), {
+          loading: "Adding accepted events to calendar",
+          success: "Accepted events added to calendar successfully",
+          error: "Error occurred while adding events to calendar",
+        })
+        .finally(() => setSavingEvents(false));
       // setAcceptedIndices([]);
       // setGeneratedEvents(null);
     } catch (error) {
@@ -141,7 +151,7 @@ export default function CreateNewEvent() {
     } finally {
       setSavingEvents(false);
     }
-  }
+  };
   return (
     <Tabs className="w-full" defaultValue="create-event">
       <VercelTabsList
@@ -158,7 +168,6 @@ export default function CreateNewEvent() {
         defaultValue="create-event"
       />
       <TabsContent value="create-event">
-
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(handleSubmit)}
@@ -304,7 +313,12 @@ export default function CreateNewEvent() {
               />
             </div>
 
-            <Button type="submit" variant="rainbow" className="mt-4" disabled={form.formState.isSubmitting}>
+            <Button
+              type="submit"
+              variant="rainbow"
+              className="mt-4"
+              disabled={form.formState.isSubmitting}
+            >
               Create Event
             </Button>
           </form>
@@ -322,7 +336,9 @@ export default function CreateNewEvent() {
               Upload a reference image or document
             </Label>
             <Input
-              type="file" accept="image/*" name="file-upload"
+              type="file"
+              accept="image/*"
+              name="file-upload"
               id="file-upload"
               onChange={handleInputChange}
               placeholder="Upload an image"
@@ -334,91 +350,107 @@ export default function CreateNewEvent() {
             </p>
           </div>
           <div className="inline-flex items-center gap-2 mb-4">
-            <Button size="sm" variant="rainbow"
+            <Button
+              size="sm"
+              variant="rainbow"
               transition="damped"
               disabled={!fileReference || generatingEvents}
-              onClick={() => generateEvents()}>
+              onClick={() => generateEvents()}
+            >
               {generatingEvents ? <Loader2 className="animate-spin" /> : null}
               {generatingEvents ? " Generating..." : "Generate Events"}
             </Button>
-            <Button size="sm" variant="ghost" disabled={!fileReference} onClick={() => setFileReference(null)}>
+            <Button
+              size="sm"
+              variant="ghost"
+              disabled={!fileReference}
+              onClick={() => setFileReference(null)}
+            >
               Remove Reference
             </Button>
           </div>
-          {generatedEvents && <div className="space-y-3 @container">
-            <div className="w-full flex items-center justify-between gap-2">
-              <Label className="text-sm font-semibold">Generated Events</Label>
+          {generatedEvents && (
+            <div className="space-y-3 @container">
+              <div className="w-full flex items-center justify-between gap-2">
+                <Label className="text-sm font-semibold">
+                  Generated Events
+                </Label>
+                <Button
+                  variant="rainbow"
+                  size="xs"
+                  disabled={acceptedIndices.length === generatedEvents.length}
+                  onClick={() => {
+                    // accept all events
+                    if (acceptedIndices.length === generatedEvents.length) {
+                      toast.error("All events already accepted");
+                      return;
+                    }
+                    setAcceptedIndices(
+                      Array.from(
+                        { length: generatedEvents.length },
+                        (_, i) => i
+                      )
+                    );
+                  }}
+                >
+                  Accept All Events
+                </Button>
+              </div>
+              <ResponsiveContainer>
+                {generatedEvents.map((event, index) => {
+                  return (
+                    <div key={index} className="p-3 space-y-1">
+                      <EventCard event={event} />
+                      <div className="flex items-center gap-2 p-2">
+                        <Button
+                          variant="rainbow"
+                          size="xs"
+                          disabled={acceptedIndices.includes(index)}
+                          onClick={() => {
+                            // insert the event into accepted events
+                            if (acceptedIndices.includes(index)) {
+                              toast.error("Event already accepted");
+                              return;
+                            }
+                            setAcceptedIndices((prev) => [...prev, index]);
+                          }}
+                        >
+                          Accept Event
+                        </Button>
+                        <Button
+                          variant="destructive"
+                          size="xs"
+                          disabled={!acceptedIndices.includes(index)}
+                          onClick={() => {
+                            // remove the event from accepted events
+                            setAcceptedIndices((prev) =>
+                              prev.filter((i) => i !== index)
+                            );
+                          }}
+                        >
+                          Remove Event
+                        </Button>
+                      </div>
+                    </div>
+                  );
+                })}
+              </ResponsiveContainer>
               <Button
                 variant="rainbow"
-                size="xs"
-                disabled={acceptedIndices.length === generatedEvents.length}
-                onClick={() => {
-                  // accept all events
-                  if (acceptedIndices.length === generatedEvents.length) {
-                    toast.error("All events already accepted");
-                    return;
-                  }
-                  setAcceptedIndices(
-                    Array.from({ length: generatedEvents.length }, (_, i) => i)
-                  );
-                }}
+                className="mt-4"
+                onClick={() => saveAcceptedEvents()}
+                transition="damped"
+                disabled={
+                  generatingEvents ||
+                  acceptedIndices.length === 0 ||
+                  savingEvents
+                }
               >
-                Accept All Events
+                {savingEvents ? <Loader2 className="animate-spin" /> : null}
+                {savingEvents ? " Saving..." : "Save Accepted Events"}
               </Button>
             </div>
-            <ResponsiveContainer>
-              {generatedEvents.map((event, index) => {
-                return (
-                  <div key={index} className="p-3 space-y-1">
-                    <EventCard
-                      event={event}
-                    />
-                    <div className="flex items-center gap-2 p-2">
-                      <Button
-                        variant="rainbow"
-                        size="xs"
-                        disabled={acceptedIndices.includes(index)}
-                        onClick={() => {
-                          // insert the event into accepted events
-                          if (acceptedIndices.includes(index)) {
-                            toast.error("Event already accepted");
-                            return;
-                          }
-                          setAcceptedIndices((prev) => [...prev, index]);
-
-                        }}
-                      >
-                        Accept Event
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="xs"
-                        disabled={!acceptedIndices.includes(index)}
-                        onClick={() => {
-                          // remove the event from accepted events
-                          setAcceptedIndices((prev) =>
-                            prev.filter((i) => i !== index)
-                          );
-                        }}
-                      >
-                        Remove Event
-                      </Button>
-                    </div>
-                  </div>
-                )
-              })}
-            </ResponsiveContainer>
-            <Button
-              variant="rainbow"
-              className="mt-4"
-              onClick={() => saveAcceptedEvents()}
-              transition="damped"
-              disabled={generatingEvents || acceptedIndices.length === 0 || savingEvents}
-            >
-              {savingEvents ? <Loader2 className="animate-spin" /> : null}
-              {savingEvents ? " Saving..." : "Save Accepted Events"}
-            </Button>
-          </div>}
+          )}
         </div>
       </TabsContent>
     </Tabs>

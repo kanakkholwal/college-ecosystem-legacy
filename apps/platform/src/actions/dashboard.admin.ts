@@ -6,9 +6,9 @@ import { getSession } from "~/auth/server";
 import { db } from "~/db/connect";
 import { accounts, sessions, users } from "~/db/schema/auth-schema";
 import dbConnect from "~/lib/dbConnect";
-import CommunityPostModel from '~/models/community';
-import { EventModel } from '~/models/events';
-import PollModel from '~/models/poll';
+import CommunityPostModel from "~/models/community";
+import { EventModel } from "~/models/events";
+import PollModel from "~/models/poll";
 import ResultModel from "~/models/result";
 import { updateHostelStudent } from "./hostel.core";
 
@@ -108,7 +108,7 @@ export async function users_CountAndGrowth(timeInterval: string): Promise<{
   };
 }
 
-interface PlatformDBStats{
+interface PlatformDBStats {
   results: number;
   polls: number;
   communityPosts: number;
@@ -121,15 +121,16 @@ export async function getPlatformDBStats(): Promise<PlatformDBStats> {
       ResultModel.countDocuments(),
       PollModel.countDocuments(),
       CommunityPostModel.countDocuments(),
-      EventModel.countDocuments()
+      EventModel.countDocuments(),
     ];
-    const [resultsCount, pollsCount, communityPostsCount, eventsCount] = await Promise.all(promises);
+    const [resultsCount, pollsCount, communityPostsCount, eventsCount] =
+      await Promise.all(promises);
 
     return {
       results: resultsCount,
       polls: pollsCount,
       communityPosts: communityPostsCount,
-      events: eventsCount
+      events: eventsCount,
     };
   } catch (error) {
     console.error("Error extracting visitor count:", error);
@@ -186,10 +187,10 @@ export async function updateUser(
   try {
     await db.update(users).set(data).where(eq(users.id, userId)).execute();
     const user = await getUser(userId);
-    if(data.hostelId && user){
+    if (data.hostelId && user) {
       console.log("Hostel updating for user:", user.email);
       await updateHostelStudent(user.email, {
-        hostelId: data.hostelId
+        hostelId: data.hostelId,
       });
       console.log("Hostel updated for user:", user.email);
     }
@@ -206,7 +207,11 @@ export async function changeUserPassword(
 ): Promise<boolean> {
   try {
     const session = await getSession();
-    if (!session || session.user.id !== userId || session.user.role !== "admin") {
+    if (
+      !session ||
+      session.user.id !== userId ||
+      session.user.role !== "admin"
+    ) {
       throw new Error("Unauthorized: You can only change your own password.");
     }
     const ctx = await auth.$context;
@@ -307,9 +312,7 @@ export async function getUsersByDepartment(): Promise<
   return result;
 }
 
-export async function getUsersByGender(): Promise<
-  Record<string, number>
-> {
+export async function getUsersByGender(): Promise<Record<string, number>> {
   const result = await db
     .select({
       gender: users.gender,
@@ -318,10 +321,13 @@ export async function getUsersByGender(): Promise<
     .from(users)
     .groupBy(users.gender)
     .execute();
-  return result.reduce((acc, curr) => {
-    acc[curr.gender] = curr.count;
-    return acc;
-  }, {} as Record<string, number>);
+  return result.reduce(
+    (acc, curr) => {
+      acc[curr.gender] = curr.count;
+      return acc;
+    },
+    {} as Record<string, number>
+  );
 }
 
 /**

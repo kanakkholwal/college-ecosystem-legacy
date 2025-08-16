@@ -47,10 +47,13 @@ export default async function EventPage(props: {
             : "No end date specified"}
         </p>
         <div className="mt-4 space-x-2">
-          <ButtonLink variant="rainbow" size="sm" href={`/admin/events/${event.id}/edit`}>
+          <ButtonLink
+            variant="rainbow"
+            size="sm"
+            href={`/admin/events/${event.id}/edit`}
+          >
             Edit Event
           </ButtonLink>
-
         </div>
       </div>
     </div>

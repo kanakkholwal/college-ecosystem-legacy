@@ -24,7 +24,7 @@ export const metadata: Metadata = {
   title: `Rooms`,
   description: "Search for rooms based on their availability and type.",
   alternates: {
-    canonical: '/classroom-availability',
+    canonical: "/classroom-availability",
   },
   keywords: [
     "NITH",
@@ -57,14 +57,13 @@ export default async function RoomsPage(props: Props) {
             Rooms <span className="text-primary">Search</span>
           </>
         }
-        description="Search for rooms based on their availability and type.">
+        description="Search for rooms based on their availability and type."
+      >
         <SearchBox />
-
       </BaseHeroSection>
 
       <NoteSeparator label={`${rooms.length} Rooms found`} />
       <ErrorBoundaryWithSuspense
-
         loadingFallback={
           <ResponsiveContainer>
             {[...Array(8)].map((_, i) => (

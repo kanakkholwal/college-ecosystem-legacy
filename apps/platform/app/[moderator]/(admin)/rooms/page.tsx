@@ -67,18 +67,25 @@ export default async function RoomsPage(props: Props) {
     {
       label: "Occupied Rooms",
       value: totalOccupiedRooms,
-    }
-  ]
+    },
+  ];
   return (
     <div className="w-full space-y-6">
       <HeaderBar
         Icon={MdRoom}
         titleNode={
-          <>Manage Rooms <Badge size="sm">{rooms.length} found</Badge></>
+          <>
+            Manage Rooms <Badge size="sm">{rooms.length} found</Badge>
+          </>
         }
         descriptionNode="Here you can create new rooms or view existing ones."
         actionNode={
-          <ButtonLink variant="dark" size="sm" effect="shineHover" href={`/admin/rooms/new`}>
+          <ButtonLink
+            variant="dark"
+            size="sm"
+            effect="shineHover"
+            href={`/admin/rooms/new`}
+          >
             <Plus />
             New Room
           </ButtonLink>
@@ -102,9 +109,9 @@ export default async function RoomsPage(props: Props) {
             Rooms <span className="text-primary">Search</span>
           </>
         }
-        description="Search for rooms based on their availability and type.">
+        description="Search for rooms based on their availability and type."
+      >
         <SearchBox />
-
       </BaseHeroSection>
       <ResponsiveContainer className="mb-32 max-w-[144rem] @md:grid-cols-1 @lg:grid-cols-2  @3xl:grid-cols-4 @7xl:grid-cols-5">
         <ErrorBoundaryWithSuspense

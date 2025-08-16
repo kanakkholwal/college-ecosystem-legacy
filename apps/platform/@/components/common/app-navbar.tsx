@@ -13,7 +13,13 @@ import { Badge } from "../ui/badge";
 import { QuickLinks } from "./navbar";
 import { ThemeSwitcher } from "./theme-switcher";
 
-export default function Navbar({ user, impersonatedBy }: { user: Session["user"], impersonatedBy?: string | null }) {
+export default function Navbar({
+  user,
+  impersonatedBy,
+}: {
+  user: Session["user"];
+  impersonatedBy?: string | null;
+}) {
   const pathname = usePathname();
   const navLinks = getNavLinks(user);
 
@@ -29,7 +35,7 @@ export default function Navbar({ user, impersonatedBy }: { user: Session["user"]
         position: "top-right",
         duration: 3000,
       }
-    )
+    );
   };
 
   return (
@@ -45,10 +51,7 @@ export default function Navbar({ user, impersonatedBy }: { user: Session["user"]
       </div>
       <div className="ml-auto inline-flex gap-2 items-center">
         {impersonatedBy && (
-          <div
-
-            className="flex items-center bg-background border rounded-md py-1 h-8 px-2"
-          >
+          <div className="flex items-center bg-background border rounded-md py-1 h-8 px-2">
             <Badge size="sm">
               <Icon name="eye" />
               <span className="font-medium">

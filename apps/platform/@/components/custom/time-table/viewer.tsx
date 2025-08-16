@@ -27,7 +27,9 @@ export default async function TimeTableViewer({
     <div className="flex flex-col items-center justify-center gap-4 ml-3 mr-4">
       <div className="p-4 lg:p-6 bg-card rounded-lg shadow w-full">
         <div className="space-y-1">
-          <h4 className="text-sm leading-none font-medium">{timetableData?.sectionName}</h4>
+          <h4 className="text-sm leading-none font-medium">
+            {timetableData?.sectionName}
+          </h4>
           <p className="text-muted-foreground text-sm">
             {getDepartmentName(timetableData?.department_code)}
           </p>
@@ -61,9 +63,7 @@ export default async function TimeTableViewer({
                       : " text-muted-foreground"
                   )}
                 >
-                  <p className="text-sm font-medium">
-                    {day}
-                  </p>
+                  <p className="text-sm font-medium">{day}</p>
                   {currentDayIndex === index && (
                     <p className="text-primary text-xs italic">(Today)</p>
                   )}
@@ -84,10 +84,7 @@ export default async function TimeTableViewer({
                   id={`day-${dayIndex}-${index}`}
                   className={cn(
                     "border-x text-center p-2",
-                    currentDayIndex === dayIndex 
-                    ? "bg-primary/2"
-                    : "",
-            
+                    currentDayIndex === dayIndex ? "bg-primary/2" : ""
                   )}
                 >
                   {timetableData.schedule[dayIndex]?.timeSlots[
@@ -100,10 +97,10 @@ export default async function TimeTableViewer({
                   ))}
                   {timetableData.schedule[dayIndex]?.timeSlots[index]?.events
                     .length === 0 && (
-                      <Badge variant="default" size="sm">
-                        Free Time
-                      </Badge>
-                    )}
+                    <Badge variant="default" size="sm">
+                      Free Time
+                    </Badge>
+                  )}
                 </TableCell>
               ))}
             </TableRow>

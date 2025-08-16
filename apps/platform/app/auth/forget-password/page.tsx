@@ -105,9 +105,7 @@ export default function ForgotPassword() {
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>
-                      Email address
-                    </FormLabel>
+                    <FormLabel>Email address</FormLabel>
                     <div className="relative group">
                       <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
                         <LuMail className="w-4 h-4" />
@@ -136,14 +134,19 @@ export default function ForgotPassword() {
                 type="submit"
                 disabled={isSubmitting}
               >
-                {isSubmitting && <Icon name="loader-circle" className="animate-spin" />}
+                {isSubmitting && (
+                  <Icon name="loader-circle" className="animate-spin" />
+                )}
 
                 {isSubmitting ? "Sending..." : "Send reset link"}
               </Button>
             </form>
           </Form>
           <div className="text-center text-sm text-muted-foreground">
-            Remember your password? <Link prefetch className="underline text-primary" href="sign-in">Sign in</Link>
+            Remember your password?{" "}
+            <Link prefetch className="underline text-primary" href="sign-in">
+              Sign in
+            </Link>
           </div>
         </div>
       </ConditionalRender>

@@ -5,7 +5,7 @@ import {
 } from "@/components/common/router-card";
 import { getInfo } from "~/actions/dashboard.cr";
 
-export default async function CRDashboard({role}: { role: string })  {
+export default async function CRDashboard({ role }: { role: string }) {
   const { studentInfo, timetables } = await getInfo();
 
   const quick_links: RouterCardLink[] = [

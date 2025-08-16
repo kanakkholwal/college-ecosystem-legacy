@@ -3,19 +3,16 @@ import { PreviousPageLink } from "@/components/utils/link";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Create Time Table",
-    description: "Create or edit a time table for a department.",
-}
-
+  title: "Create Time Table",
+  description: "Create or edit a time table for a department.",
+};
 
 export default function CreateTimeTablePage() {
+  return (
+    <>
+      <PreviousPageLink variant="light" size="sm" />
 
-
-    return (
-        <>
-            <PreviousPageLink variant="light" size="sm" />
-
-            <TimeTableEditor mode="create" />
-        </>
-    );
+      <TimeTableEditor mode="create" />
+    </>
+  );
 }

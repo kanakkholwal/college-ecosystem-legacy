@@ -26,15 +26,17 @@ export function ActionBar({
   const handleAction = async () => {
     try {
       setLoading(true);
-      await toast.promise(action(), {
-        loading: "Taking action...",
-        success: (msg: string | undefined) => {
-          return msg || "Action completed successfully";
-        },
-        error: (msg: string | undefined) => {
-          return msg || "An error occurred while taking action";
-        },
-      }).finally(() => setLoading(false));
+      await toast
+        .promise(action(), {
+          loading: "Taking action...",
+          success: (msg: string | undefined) => {
+            return msg || "Action completed successfully";
+          },
+          error: (msg: string | undefined) => {
+            return msg || "An error occurred while taking action";
+          },
+        })
+        .finally(() => setLoading(false));
     } catch (err) {
       console.error(err);
       toast.error("An error occurred while taking action");
@@ -78,15 +80,17 @@ export function ActionButton({
   const handleAction = async () => {
     try {
       setLoading(true);
-      await toast.promise(action(), {
-        loading: loadingLabel,
-        success: (msg: string | undefined) => {
-          return msg || actionName + " completed successfully";
-        },
-        error: (msg: string | undefined) => {
-          return msg || "An error occurred while " + loadingLabel;
-        },
-      }).finally(() => setLoading(false));
+      await toast
+        .promise(action(), {
+          loading: loadingLabel,
+          success: (msg: string | undefined) => {
+            return msg || actionName + " completed successfully";
+          },
+          error: (msg: string | undefined) => {
+            return msg || "An error occurred while " + loadingLabel;
+          },
+        })
+        .finally(() => setLoading(false));
     } catch (err) {
       console.error("ActionButton error:", err);
       toast.error("An error occurred while " + loadingLabel);

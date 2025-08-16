@@ -6,7 +6,6 @@ import { ApplicationInfo } from "../logo";
 import GithubStars from "./github";
 import { ThemeSwitcher } from "./theme-switcher";
 
-
 const sectionLinks = [
   {
     title: "Support",
@@ -15,8 +14,7 @@ const sectionLinks = [
   {
     title: "About",
     links: [
-      { title: "About Us", 
-        href: "/about" },
+      { title: "About Us", href: "/about" },
       {
         href: "/contact",
         title: "Contact us",
@@ -31,7 +29,6 @@ const sectionLinks = [
       },
     ],
   },
-
 ];
 
 export default async function Footer() {
@@ -50,7 +47,6 @@ export default async function Footer() {
               <Link href="/">
                 <ApplicationInfo />
               </Link>
-
             </div>
             <p className="text-pretty text-sm text-muted-foreground">
               {appConfig.description}
@@ -79,7 +75,9 @@ export default async function Footer() {
           </div>
         </div>
         <div className="mt-8 flex flex-col justify-between gap-4 border-t py-8 text-xs font-medium text-muted-foreground md:flex-row md:items-center md:text-left">
-          <p className="order-2 lg:order-1">© {new Date().getFullYear()} {appConfig.name}. All rights reserved.</p>
+          <p className="order-2 lg:order-1">
+            © {new Date().getFullYear()} {appConfig.name}. All rights reserved.
+          </p>
           {/* <ul className="order-1 flex flex-col gap-2 md:order-2 md:flex-row">
             {productLinks.links.map((link, idx) => (
               <li key={idx} className="hover:text-primary">

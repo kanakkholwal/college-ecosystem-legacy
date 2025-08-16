@@ -22,8 +22,11 @@ import { ResponsiveContainer } from "@/components/common/container";
 export default async function HostelRoomAllotmentPage() {
   const hostelResponse = await getHostelForStudent();
 
-
-  if (!hostelResponse.success || !hostelResponse.hosteler || !hostelResponse.hostel) {
+  if (
+    !hostelResponse.success ||
+    !hostelResponse.hosteler ||
+    !hostelResponse.hostel
+  ) {
     console.log(hostelResponse);
     return (
       <div className="w-full">
@@ -64,7 +67,6 @@ export default async function HostelRoomAllotmentPage() {
   return (
     <div className="space-y-5 my-2">
       <ErrorBoundaryWithSuspense
-
         loadingFallback={<SkeletonCardArea className="mx-auto" />}
       >
         <ConditionalRender condition={allotmentProcess?.status === "closed"}>

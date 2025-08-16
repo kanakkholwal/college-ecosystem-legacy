@@ -1,39 +1,37 @@
 /* eslint-disable @next/next/no-img-element */
-import { notFound } from 'next/navigation'
-import { ImageResponse } from 'next/og'
-import { readFile } from 'node:fs/promises'
-import { join } from 'node:path'
-import { ComponentProps } from 'react'
-import { getResourceBySlug, ResourceType } from '~/lib/markdown/mdx'
-import { appConfig } from '~/project.config'
-import { changeCase } from '~/utils/string'
+import { notFound } from "next/navigation";
+import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
+import { ComponentProps } from "react";
+import { getResourceBySlug, ResourceType } from "~/lib/markdown/mdx";
+import { appConfig } from "~/project.config";
+import { changeCase } from "~/utils/string";
 
 // Image metadata
 const size = {
   width: 1200,
-  height: 675
-}
-const contentType = 'image/png'
-export const dynamic = 'force-static'
+  height: 675,
+};
+const contentType = "image/png";
+export const dynamic = "force-static";
 
-const { fonts, images } = await loadResources()
-
-
+const { fonts, images } = await loadResources();
 
 // Image generation
 export async function GET(
   request: Request,
   { params }: { params: Promise<{ slugs: string[] }> }
 ) {
-  const slugs = (await params).slugs
+  const slugs = (await params).slugs;
   if (slugs.length < 2) {
-    return notFound()
+    return notFound();
   }
-  const type = slugs[1] as ResourceType
-  const slug = slugs.slice(2).join('/')
-  const page = await getResourceBySlug(type, slug)
-  if (!page) notFound()
-  const customImage = await getCustomImage(slug)
+  const type = slugs[1] as ResourceType;
+  const slug = slugs.slice(2).join("/");
+  const page = await getResourceBySlug(type, slug);
+  if (!page) notFound();
+  const customImage = await getCustomImage(slug);
   if (customImage) {
     return new ImageResponse(
       (
@@ -41,31 +39,31 @@ export async function GET(
           src={customImage}
           alt="Open Graph Image"
           style={{
-            position: 'absolute',
-            inset: 0
+            position: "absolute",
+            inset: 0,
           }}
         />
       ),
       size
-    )
+    );
   }
   // Fallback to generated image
-  const title = page.frontmatter.title
-  const description = page.frontmatter.summary?.slice(0, 50) + "..."
+  const title = page.frontmatter.title;
+  const description = page.frontmatter.summary?.slice(0, 50) + "...";
   return new ImageResponse(
     (
       <div
         style={{
-          background: 'linear-gradient(to bottom right, #000, #000, #35353A)',
-          width: '100%',
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          padding: '50px 0 0',
-          gap: '20px',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontFamily: 'Inter'
+          background: "linear-gradient(to bottom right, #000, #000, #35353A)",
+          width: "100%",
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          padding: "50px 0 0",
+          gap: "20px",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "Inter",
         }}
       >
         {/* <img
@@ -76,30 +74,30 @@ export async function GET(
 
         <header
           style={{
-            position: 'absolute',
+            position: "absolute",
             left: 0,
-            top: '32px',
-            display: 'flex',
-            alignItems: 'center',
-            gap: '20px',
-            margin: '0 0 40px',
-            width: '100%',
-            padding: '0 40px'
+            top: "32px",
+            display: "flex",
+            alignItems: "center",
+            gap: "20px",
+            margin: "0 0 40px",
+            width: "100%",
+            padding: "0 40px",
           }}
         >
           <img
             src={images.logo}
             alt={appConfig.name}
             style={{
-              height: '53px',
+              height: "53px",
             }}
           />
           <p
             style={{
-              fontSize: '28px',
-              color: 'white',
-              marginLeft: 'auto',
-              fontWeight: 500
+              fontSize: "28px",
+              color: "white",
+              marginLeft: "auto",
+              fontWeight: 500,
             }}
           >
             {changeCase(type, "title")}
@@ -107,13 +105,13 @@ export async function GET(
         </header>
         <h1
           style={{
-            fontSize: getFontSize(title) + 'px',
-            color: 'white',
+            fontSize: getFontSize(title) + "px",
+            color: "white",
             fontWeight: 700,
-            textAlign: 'center',
+            textAlign: "center",
             lineHeight: 1.1,
-            margin: '0 16px 20px 16px',
-            textWrap: title.length > 20 ? 'balance' : 'wrap'
+            margin: "0 16px 20px 16px",
+            textWrap: title.length > 20 ? "balance" : "wrap",
           }}
         >
           {title}
@@ -122,11 +120,11 @@ export async function GET(
           <p
             style={{
               fontWeight: 300,
-              fontSize: '48px',
-              color: '#CBCBD2',
-              textAlign: 'center',
-              textWrap: description.length > 50 ? 'balance' : 'wrap',
-              margin: 0
+              fontSize: "48px",
+              color: "#CBCBD2",
+              textAlign: "center",
+              textWrap: description.length > 50 ? "balance" : "wrap",
+              margin: 0,
             }}
           >
             {description}
@@ -138,38 +136,38 @@ export async function GET(
       ...size,
       fonts: [
         {
-          name: 'Inter',
+          name: "Inter",
           data: fonts.inter.light,
-          style: 'normal',
-          weight: 300
+          style: "normal",
+          weight: 300,
         },
         {
-          name: 'Inter',
+          name: "Inter",
           data: fonts.inter.regular,
-          style: 'normal',
-          weight: 400
+          style: "normal",
+          weight: 400,
         },
         {
-          name: 'Inter',
+          name: "Inter",
           data: fonts.inter.medium,
-          style: 'normal',
-          weight: 500
+          style: "normal",
+          weight: 500,
         },
         {
-          name: 'Inter',
+          name: "Inter",
           data: fonts.inter.semibold,
-          style: 'normal',
-          weight: 600
+          style: "normal",
+          weight: 600,
         },
         {
-          name: 'Inter',
+          name: "Inter",
           data: fonts.inter.bold,
-          style: 'normal',
-          weight: 700
-        }
-      ]
+          style: "normal",
+          weight: 700,
+        },
+      ],
     }
-  )
+  );
 }
 
 // --
@@ -177,27 +175,27 @@ export async function GET(
 function getFont(weight: string) {
   return readFile(
     join(process.cwd(), `src/assets/fonts/Inter_24pt-${weight}.ttf`)
-  )
+  );
 }
 
 async function loadResources() {
   const [light, regular, medium, semibold, bold] = await Promise.all([
-    getFont('Light'),
-    getFont('Regular'),
-    getFont('Medium'),
-    getFont('SemiBold'),
-    getFont('Bold')
-  ])
+    getFont("Light"),
+    getFont("Regular"),
+    getFont("Medium"),
+    getFont("SemiBold"),
+    getFont("Bold"),
+  ]);
   const bg =
-    'data:image/png;base64,' +
+    "data:image/png;base64," +
     (
-      await readFile(join(process.cwd(), 'src/assets/images/og-bg.png'))
-    ).toString('base64')
+      await readFile(join(process.cwd(), "src/assets/images/og-bg.png"))
+    ).toString("base64");
   const logo =
-    'data:image/png;base64,' +
+    "data:image/png;base64," +
     (
-      await readFile(join(process.cwd(), 'src/assets/images/og-logo.png'))
-    ).toString('base64')
+      await readFile(join(process.cwd(), "src/assets/images/og-logo.png"))
+    ).toString("base64");
   return {
     fonts: {
       inter: {
@@ -205,24 +203,24 @@ async function loadResources() {
         regular,
         medium,
         semibold,
-        bold
-      }
+        bold,
+      },
     },
     images: {
       bg,
-      logo
-    }
-  }
+      logo,
+    },
+  };
 }
 
 function getFontSize(text: string) {
-  if (text.length < 30) return 128
-  if (text.length < 50) return 85
-  if (text.length < 70) return 64
-  return 48
+  if (text.length < 30) return 128;
+  if (text.length < 50) return 85;
+  if (text.length < 70) return 64;
+  return 48;
 }
 
-function Logo(props: ComponentProps<'svg'>) {
+function Logo(props: ComponentProps<"svg">) {
   return (
     <svg
       viewBox="0 0 1912 351"
@@ -263,15 +261,15 @@ function Logo(props: ComponentProps<'svg'>) {
         fill="#fff"
       />
     </svg>
-  )
+  );
 }
 
 async function getCustomImage(slug: string) {
-  const filePath = join(process.cwd(), 'content/blog/' + slug + '.og.png')
+  const filePath = join(process.cwd(), "content/blog/" + slug + ".og.png");
   try {
-    const imageBuffer = await readFile(filePath)
-    return 'data:image/png;base64,' + imageBuffer.toString('base64')
+    const imageBuffer = await readFile(filePath);
+    return "data:image/png;base64," + imageBuffer.toString("base64");
   } catch {
-    return null
+    return null;
   }
 }

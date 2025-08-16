@@ -7,7 +7,10 @@ export const rawEvent = z.object({
   title: z.string(),
   description: z.string().optional(),
   heldBy: z.string().optional(),
-  _id: z.string().default(() => nanoid()).optional(),
+  _id: z
+    .string()
+    .default(() => nanoid())
+    .optional(),
 });
 
 export type RawEvent = z.infer<typeof rawEvent>;

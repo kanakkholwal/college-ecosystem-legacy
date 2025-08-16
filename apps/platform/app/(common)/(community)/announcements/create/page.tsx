@@ -21,7 +21,7 @@ export default async function CreateAnnouncementPage() {
           </Link>
         </Button>
       </div>
-        <CreateAnnouncement />
+      <CreateAnnouncement />
     </>
   );
 }

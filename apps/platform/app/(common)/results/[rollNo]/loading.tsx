@@ -8,8 +8,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { ArrowDownUp, TrendingUp, Undo2 } from "lucide-react";
 import Link from "next/link";
-import {PreviousPageLink} from "@/components/utils/link";
-
+import { PreviousPageLink } from "@/components/utils/link";
 
 export default function Loading() {
   return (

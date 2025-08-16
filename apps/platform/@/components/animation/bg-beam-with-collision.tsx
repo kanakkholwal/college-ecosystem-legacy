@@ -10,8 +10,12 @@ export const BackgroundBeamsWithCollision = ({
   children: React.ReactNode;
   className?: string;
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
-  const parentRef = useRef<HTMLDivElement>(null) as React.RefObject<HTMLDivElement>;
+  const containerRef = useRef<HTMLDivElement>(
+    null
+  ) as React.RefObject<HTMLDivElement>;
+  const parentRef = useRef<HTMLDivElement>(
+    null
+  ) as React.RefObject<HTMLDivElement>;
 
   const beams = [
     {

@@ -78,9 +78,6 @@ export async function getResults(
       filterQuery.batch = filter.batch;
     }
 
-
-
-
     const results = await ResultModel.find({
       ...filterQuery,
       $expr: { $gt: [{ $size: "$semesters" }, 0] },
@@ -102,8 +99,7 @@ export async function getResults(
         cacheKey,
         JSON.stringify(response),
         "EX",
-        60 * 60 * 24// 1 week
-
+        60 * 60 * 24 // 1 week
       );
       console.log("Results cached successfully");
     } catch (redisSetErr) {
@@ -186,7 +182,6 @@ export async function getResultByRollNo(
   update?: boolean,
   is_new?: boolean
 ): Promise<ResultTypeWithId | null> {
-
   const cacheKey = `result_r_${rollNo}`;
   try {
     let cachedResult: ResultTypeWithId | null = null;
@@ -243,7 +238,6 @@ export async function getResultByRollNo(
       return JSON.parse(JSON.stringify(null));
     }
     await assignRanks();
-
 
     return JSON.parse(JSON.stringify(response.data.data));
   }

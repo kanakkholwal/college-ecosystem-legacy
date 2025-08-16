@@ -41,7 +41,6 @@ export async function generateMetadata(
   return {
     title: `${course.name} | ${course.code}`,
     description: `Syllabus of ${course.name} (${course.code})`,
-
   };
 }
 
@@ -63,22 +62,24 @@ export default async function CoursePage(props: Props) {
     <div className="max-w-6xl mx-auto px-6 md:px-6 xl:px-12">
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "Course",
-          name: course.name,
-          description: `Syllabus of ${course.name} (${course.code})`,
-          courseMode: course.type,
-          provider: {
-            "@type": "EducationalOrganization",
-            name: orgConfig.name,
-            url: orgConfig.website,
-            logo: orgConfig.logoSquare,
-          },
-          courseCode: course.code,
-          department: course.department,
-          credits: course.credits,
-        }) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Course",
+            name: course.name,
+            description: `Syllabus of ${course.name} (${course.code})`,
+            courseMode: course.type,
+            provider: {
+              "@type": "EducationalOrganization",
+              name: orgConfig.name,
+              url: orgConfig.website,
+              logo: orgConfig.logoSquare,
+            },
+            courseCode: course.code,
+            department: course.department,
+            credits: course.credits,
+          }),
+        }}
         id="json-ld-course"
       />
       <section
@@ -101,7 +102,10 @@ export default async function CoursePage(props: Props) {
           <Badge>{course.credits} Credits</Badge>
         </div>
       </section>
-      <Tabs defaultValue={tab} className="w-full max-w-6xl mx-auto grid grid-cols-1 justify-center gap-4 p-3 md:px-6 xl:px-12">
+      <Tabs
+        defaultValue={tab}
+        className="w-full max-w-6xl mx-auto grid grid-cols-1 justify-center gap-4 p-3 md:px-6 xl:px-12"
+      >
         <VercelTabsList
           tabs={[
             {
@@ -118,7 +122,6 @@ export default async function CoursePage(props: Props) {
             },
           ]}
           onTabChangeQuery="tab"
-
         />
         <TabsContent value="chapters">
           <div className="w-full xl:px-6 grid gap-4 grid-cols-1">
@@ -154,25 +157,24 @@ export default async function CoursePage(props: Props) {
               {booksAndReferences.map((ref) => {
                 const iconsSrc = IconMap.has(
                   ref.type as
-                  | "book"
-                  | "reference"
-                  | "drive"
-                  | "youtube"
-                  | "others"
-                )
-                  ? IconMap.get(
-                    ref.type as
                     | "book"
                     | "reference"
                     | "drive"
                     | "youtube"
                     | "others"
-                  )
+                )
+                  ? IconMap.get(
+                      ref.type as
+                        | "book"
+                        | "reference"
+                        | "drive"
+                        | "youtube"
+                        | "others"
+                    )
                   : OthersPng;
                 return (
                   <div className="bg-card p-3 rounded-lg" key={ref.link}>
                     <div className="flex items-center gap-2">
-
                       <div className="size-12 aspect-square rounded-full flex justify-center items-center bg-muted shrink-0">
                         {iconsSrc ? (
                           <Image

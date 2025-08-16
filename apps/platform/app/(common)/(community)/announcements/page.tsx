@@ -19,7 +19,7 @@ export const metadata: Metadata = {
   title: `Announcements`,
   description: "Check the latest announcements here.",
   alternates: {
-    canonical: '/announcements',
+    canonical: "/announcements",
   },
   keywords: [
     "NITH",
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 export default async function AnnouncementsPage(props: {
   searchParams: Promise<{ category?: string }>;
 }) {
-  const session = await getSession() as Session;
+  const session = (await getSession()) as Session;
   const searchParams = await props.searchParams;
   const category = searchParams.category || "all"; // Default to 'all' if no category is provided
   const announcements = await getAnnouncements();
@@ -81,8 +81,8 @@ export default async function AnnouncementsPage(props: {
             {
               (RELATED_FOR_TYPES.includes(category as any)
                 ? announcements.filter(
-                  (announcement) => announcement.relatedFor === category
-                )
+                    (announcement) => announcement.relatedFor === category
+                  )
                 : announcements
               ).length
             }
@@ -90,7 +90,10 @@ export default async function AnnouncementsPage(props: {
         </h3>
         <AuthButtonLink
           authorized={!!session?.user}
-          variant="ghost" size="sm" href="/announcements/create">
+          variant="ghost"
+          size="sm"
+          href="/announcements/create"
+        >
           Create Announcement
         </AuthButtonLink>
       </div>
@@ -106,8 +109,8 @@ export default async function AnnouncementsPage(props: {
             announcements={
               RELATED_FOR_TYPES.includes(category as any)
                 ? announcements.filter(
-                  (announcement) => announcement.relatedFor === category
-                )
+                    (announcement) => announcement.relatedFor === category
+                  )
                 : announcements
             }
             user={session?.user}

@@ -67,145 +67,146 @@ export default function CreateAnnouncement() {
     });
   }
 
-  return (<div className="bg-card rounded-lg p-4 mx-2 max-w-3xl w-full md:mx-auto">
-    <h3 className="text-lg font-semibold">
-      <GrAnnounce className="size-5 mr-2 inline-block align-middle" />
-      Create Announcement
-    </h3>
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-3">
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="A short title for the announcement."
-                  {...field}
-                />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="content"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>The content of the announcement.</FormLabel>
-              <FormControl>
-                <NexoMdxEditor
-                  rows={10}
-                  placeholder="Write the announcement content here..."
-                  {...field}
-                  disabled={form.formState.isSubmitting}
-                // renderHtml={(md) => <article className='prose prose-sm dark:prose-invert max-w-full'>
-                //   <MDXRemote source={md} parseFrontmatter />
-                // </article>}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+  return (
+    <div className="bg-card rounded-lg p-4 mx-2 max-w-3xl w-full md:mx-auto">
+      <h3 className="text-lg font-semibold">
+        <GrAnnounce className="size-5 mr-2 inline-block align-middle" />
+        Create Announcement
+      </h3>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mt-3">
           <FormField
             control={form.control}
-            name="relatedFor"
+            name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>The type of announcement.</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                  disabled={form.formState.isSubmitting}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a related category" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {RELATED_FOR_TYPES.map((type) => {
-                      return (
-                        <SelectItem key={type} value={type}>
-                          {type}
-                        </SelectItem>
-                      );
-                    })}
-                  </SelectContent>
-                </Select>
+                <FormLabel>Title</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="A short title for the announcement."
+                    {...field}
+                  />
+                </FormControl>
+
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
             control={form.control}
-            name="expiresAt"
+            name="content"
             render={({ field }) => (
-              <FormItem className="flex flex-col">
-                <FormLabel>
-                  The date at which the announcement will expire.
-                </FormLabel>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-[240px] pl-3 text-left font-normal",
-                          !field.value && "text-muted-foreground"
-                        )}
-                        disabled={form.formState.isSubmitting}
-                      >
-                        {field.value ? (
-                          format(field.value, "PPP")
-                        ) : (
-                          <span>Pick a date</span>
-                        )}
-                        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <Calendar
-                      mode="single"
-                      selected={field.value}
-                      onSelect={field.onChange}
-                      disabled={(date) =>
-                        date < new Date() ||
-                        date < new Date("1900-01-01") ||
-                        form.formState.isSubmitting
-                      }
-                      initialFocus
-                    />
-                  </PopoverContent>
-                </Popover>
+              <FormItem>
+                <FormLabel>The content of the announcement.</FormLabel>
+                <FormControl>
+                  <NexoMdxEditor
+                    rows={10}
+                    placeholder="Write the announcement content here..."
+                    {...field}
+                    disabled={form.formState.isSubmitting}
+                    // renderHtml={(md) => <article className='prose prose-sm dark:prose-invert max-w-full'>
+                    //   <MDXRemote source={md} parseFrontmatter />
+                    // </article>}
+                  />
+                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
-        </div>
-        <Button
-          type="submit"
-          width="content"
-          variant="dark"
-          className="ml-4"
-          disabled={form.formState.isSubmitting}
-        >
-          {form.formState.isSubmitting ? (
-            <span className="animate-pulse">Publishing...</span>
-          ) : (
-            <span>Publish Announcement</span>
-          )}
-          <VscSend />
-        </Button>
-      </form>
-    </Form>
-  </div>
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+            <FormField
+              control={form.control}
+              name="relatedFor"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>The type of announcement.</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                    disabled={form.formState.isSubmitting}
+                  >
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a related category" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {RELATED_FOR_TYPES.map((type) => {
+                        return (
+                          <SelectItem key={type} value={type}>
+                            {type}
+                          </SelectItem>
+                        );
+                      })}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="expiresAt"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>
+                    The date at which the announcement will expire.
+                  </FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-[240px] pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                          disabled={form.formState.isSubmitting}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date < new Date() ||
+                          date < new Date("1900-01-01") ||
+                          form.formState.isSubmitting
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+          <Button
+            type="submit"
+            width="content"
+            variant="dark"
+            className="ml-4"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? (
+              <span className="animate-pulse">Publishing...</span>
+            ) : (
+              <span>Publish Announcement</span>
+            )}
+            <VscSend />
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }

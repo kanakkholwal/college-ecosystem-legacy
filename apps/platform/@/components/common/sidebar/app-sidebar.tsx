@@ -21,7 +21,7 @@ import { sidebar_links } from "@/constants/links";
 import Link from "next/link";
 import { appConfig, orgConfig } from "~/project.config";
 
-const getSideNavLinks = (role: string,prefixPath?: string) => {
+const getSideNavLinks = (role: string, prefixPath?: string) => {
   return sidebar_links
     .filter(
       (link) =>
@@ -53,8 +53,13 @@ interface SidebarProps extends React.ComponentProps<typeof Sidebar> {
   prefixPath?: string; // Optional prefix path for links
 }
 
-export function AppSidebar({ user, moderator,prefixPath, ...props }: SidebarProps) {
-  const links = getSideNavLinks(moderator,prefixPath);
+export function AppSidebar({
+  user,
+  moderator,
+  prefixPath,
+  ...props
+}: SidebarProps) {
+  const links = getSideNavLinks(moderator, prefixPath);
 
   return (
     <Sidebar collapsible="icon" className="border-r border-border" {...props}>
@@ -63,24 +68,24 @@ export function AppSidebar({ user, moderator,prefixPath, ...props }: SidebarProp
           <SidebarMenuItem>
             <SidebarMenuButton
               asChild
-              className="data-[slot=sidebar-menu-button]:!p-1.5"  
+              className="data-[slot=sidebar-menu-button]:!p-1.5"
               size="lg"
             >
               <Link href={`/${prefixPath ? prefixPath : moderator}`}>
                 <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage
-                    src="/logo-square.webp"
-                    alt={appConfig.name}
-                  />
+                  <AvatarImage src="/logo-square.webp" alt={appConfig.name} />
                   <AvatarFallback className="flex items-center justify-center rounded-lg text-3xl font-bold text-center relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary whitespace-nowrap">
                     {orgConfig.shortName.charAt(0).toUpperCase()}
                   </AvatarFallback>
                 </Avatar>
                 <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-semibold">{appConfig.name}</span>
-                  <span className="truncate text-xs">{orgConfig.mailSuffix}</span>
+                  <span className="truncate font-semibold">
+                    {appConfig.name}
+                  </span>
+                  <span className="truncate text-xs">
+                    {orgConfig.mailSuffix}
+                  </span>
                 </div>
-
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

@@ -15,11 +15,11 @@ export default function AboutPage() {
       <article className="prose prose-zinc dark:prose-invert max-w-none">
         <h1>About & Contact</h1>
         <p>
-          <strong>nith.eu.org</strong> and{" "}
-          <strong>app.nith.eu.org</strong> are student-run platforms built for
-          the <strong>NIT Hamirpur</strong> community. Our mission is to provide
-          resources, tools, and community features that help students access
-          information and collaborate more easily.
+          <strong>nith.eu.org</strong> and <strong>app.nith.eu.org</strong> are
+          student-run platforms built for the <strong>NIT Hamirpur</strong>{" "}
+          community. Our mission is to provide resources, tools, and community
+          features that help students access information and collaborate more
+          easily.
         </p>
 
         <h2>Unofficial Project</h2>
@@ -32,9 +32,14 @@ export default function AboutPage() {
 
         <h2>Our Mission</h2>
         <ul>
-          <li>Provide a central hub for academic resources, results, and guides.</li>
+          <li>
+            Provide a central hub for academic resources, results, and guides.
+          </li>
           <li>Enable student collaboration and communication.</li>
-          <li>Offer open-source, transparent tools to improve the student experience.</li>
+          <li>
+            Offer open-source, transparent tools to improve the student
+            experience.
+          </li>
         </ul>
 
         <h2>Transparency & Community</h2>

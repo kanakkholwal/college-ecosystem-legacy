@@ -34,7 +34,11 @@ export async function saveNewEvents(
     await dbConnect();
     const events = await EventModel.insertMany(newEvents);
     return Promise.resolve(
-      JSON.parse(JSON.stringify(events.map((event) => ({ ...event, id: event._id.toString() }))))
+      JSON.parse(
+        JSON.stringify(
+          events.map((event) => ({ ...event, id: event._id.toString() }))
+        )
+      )
     );
   } catch (err) {
     console.log(err);
@@ -144,7 +148,6 @@ export async function getEvents({
         },
       },
       { $sort: { day: 1 } }
-
     );
 
     // Execute aggregation
@@ -222,5 +225,5 @@ export async function deleteEvent(eventId: string) {
     return Promise.reject(
       err instanceof Error ? err.message : "Something went wrong"
     );
-  } 
+  }
 }

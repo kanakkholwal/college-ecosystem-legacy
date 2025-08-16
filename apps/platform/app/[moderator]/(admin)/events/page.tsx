@@ -36,25 +36,41 @@ export default async function ManageEventsPage(props: Props) {
 
   return (
     <>
-    <HeaderBar
-            Icon={CalendarDays}
-            titleNode={
-              <>Manage Events <Badge size="sm">{groupedEvents.flatMap(group => group.events).length} found</Badge></>
-            }
-            descriptionNode="Here you can create new events or view existing ones."
-            actionNode={
-              <>
-                <ButtonLink variant="dark" size="sm" effect="shineHover" href={`/admin/events/new`}>
-                  <Plus />
-                  New Event
-                </ButtonLink>
-                <ButtonLink variant="light" size="sm" effect="shineHover" href="/academic-calendar" target="_blank">
-                  View Calendar
-                  <ArrowUpRight />
-                </ButtonLink>
-              </>
-            }
-          />
+      <HeaderBar
+        Icon={CalendarDays}
+        titleNode={
+          <>
+            Manage Events{" "}
+            <Badge size="sm">
+              {groupedEvents.flatMap((group) => group.events).length} found
+            </Badge>
+          </>
+        }
+        descriptionNode="Here you can create new events or view existing ones."
+        actionNode={
+          <>
+            <ButtonLink
+              variant="dark"
+              size="sm"
+              effect="shineHover"
+              href={`/admin/events/new`}
+            >
+              <Plus />
+              New Event
+            </ButtonLink>
+            <ButtonLink
+              variant="light"
+              size="sm"
+              effect="shineHover"
+              href="/academic-calendar"
+              target="_blank"
+            >
+              View Calendar
+              <ArrowUpRight />
+            </ButtonLink>
+          </>
+        }
+      />
 
       <div className="px-3">
         {groupedEvents.length > 0 ? (

@@ -3,9 +3,19 @@ import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 import { Session } from "~/auth";
 import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
-import { auth_SUBDOMAIN_TO_PATH_REWRITES_Map, checkAuthorization, dashboardRoutes, extractSubdomain, isHostelRoute, isRouteAllowed, PRIVATE_ROUTES, SIGN_IN_PATH, SUBDOMAIN_TO_PATH_REWRITES_Map, UN_PROTECTED_API_ROUTES } from "~/middleware.setting";
+import {
+  auth_SUBDOMAIN_TO_PATH_REWRITES_Map,
+  checkAuthorization,
+  dashboardRoutes,
+  extractSubdomain,
+  isHostelRoute,
+  isRouteAllowed,
+  PRIVATE_ROUTES,
+  SIGN_IN_PATH,
+  SUBDOMAIN_TO_PATH_REWRITES_Map,
+  UN_PROTECTED_API_ROUTES,
+} from "~/middleware.setting";
 import { appConfig } from "~/project.config";
-
 
 // Middleware to handle authentication and authorization for the platform
 
@@ -13,12 +23,14 @@ export async function middleware(request: NextRequest) {
   const url = new URL(request.url);
   const pathname = request.nextUrl.pathname;
   const subdomain = extractSubdomain(request);
-  const subdomainRestricted = auth_SUBDOMAIN_TO_PATH_REWRITES_Map.get(subdomain || "");
-  
+  const subdomainRestricted = auth_SUBDOMAIN_TO_PATH_REWRITES_Map.get(
+    subdomain || ""
+  );
+
   if (subdomain && !subdomainRestricted) {
     // Block access to admin page from subdomains
-    if (pathname.startsWith('/admin')) {
-      return NextResponse.redirect(new URL('/', request.url));
+    if (pathname.startsWith("/admin")) {
+      return NextResponse.redirect(new URL("/", request.url));
     }
 
     // For the root path on a subdomain, rewrite to the subdomain page
@@ -27,16 +39,19 @@ export async function middleware(request: NextRequest) {
       // If the subdomain has a defined path, rewrite to that path
       // console.log(`Rewriting request for subdomain: ${subdomain} to path: ${subDomainPath} :`,`/${subDomainPath}${pathname}`);
 
-      return NextResponse.rewrite(new URL(`/${subDomainPath}${pathname}`, request.url));
+      return NextResponse.rewrite(
+        new URL(`/${subDomainPath}${pathname}`, request.url)
+      );
     }
     // dynamically handle the root path for clubs
-    if (pathname === '/') {
+    if (pathname === "/") {
       return NextResponse.rewrite(new URL(`/clubs/${subdomain}`, request.url));
     }
-
   }
-  const searchParams = request.nextUrl.searchParams
-  const isPrivateRoute = PRIVATE_ROUTES.some((route) => isRouteAllowed(pathname, route.pattern));
+  const searchParams = request.nextUrl.searchParams;
+  const isPrivateRoute = PRIVATE_ROUTES.some((route) =>
+    isRouteAllowed(pathname, route.pattern)
+  );
 
   // if the request is for the sign-in page, allow it to pass through
   const { data: session } = await betterFetch<Session>(
@@ -50,10 +65,18 @@ export async function middleware(request: NextRequest) {
     }
   );
   if (subdomainRestricted && session) {
-    if (subdomainRestricted && (subdomainRestricted.roles.includes(session.user.role) || subdomainRestricted.roles.some(role => session.user.other_roles.includes(role)))) {
+    if (
+      subdomainRestricted &&
+      (subdomainRestricted.roles.includes(session.user.role) ||
+        subdomainRestricted.roles.some((role) =>
+          session.user.other_roles.includes(role)
+        ))
+    ) {
       // If the user is authenticated and has access to the subdomain, rewrite the path
       // console.log(`Rewriting request for subdomain: ${subdomain} to path: ${subdomainRestricted.path}`);
-      return NextResponse.rewrite(new URL(`/${subdomainRestricted.path}${pathname}`, request.url));
+      return NextResponse.rewrite(
+        new URL(`/${subdomainRestricted.path}${pathname}`, request.url)
+      );
     }
   }
   // Exception for the error page : Production issue on Google Sign in
@@ -73,30 +96,37 @@ export async function middleware(request: NextRequest) {
       return NextResponse.redirect(url);
       // Handle other specific error cases
     }
-
   }
   if (isPrivateRoute) {
     // console.log("Private route accessed:", pathname);
-    if (session && !UN_PROTECTED_API_ROUTES.some((route) =>
-      new RegExp(route.replace(/\*/g, ".*")).test(request.nextUrl.pathname)
-    )) {
+    if (
+      session &&
+      !UN_PROTECTED_API_ROUTES.some((route) =>
+        new RegExp(route.replace(/\*/g, ".*")).test(request.nextUrl.pathname)
+      )
+    ) {
       // if the user is authenticated and tries to access a private route, allow it to pass through
       const protectedPaths = dashboardRoutes.map((role) => `/${role}`);
-      const matchedRole = protectedPaths.find((path) =>
-        request.nextUrl.pathname.startsWith(path)
-      )?.slice(1) as (typeof dashboardRoutes)[number];
+      const matchedRole = protectedPaths
+        .find((path) => request.nextUrl.pathname.startsWith(path))
+        ?.slice(1) as (typeof dashboardRoutes)[number];
       if (matchedRole) {
         const authCheck = checkAuthorization(matchedRole, session);
 
         if (!authCheck.authorized) {
           if (request.method === "GET") {
             return NextResponse.redirect(
-              new URL(`/unauthorized?target=${encodeURIComponent(request.nextUrl.pathname)}`,
-                request.nextUrl.origin)
+              new URL(
+                `/unauthorized?target=${encodeURIComponent(request.nextUrl.pathname)}`,
+                request.nextUrl.origin
+              )
             );
           }
           if (request.method === "POST") {
-            console.log("Unauthorized POST request to:", request.nextUrl.pathname);
+            console.log(
+              "Unauthorized POST request to:",
+              request.nextUrl.pathname
+            );
             return NextResponse.json(
               {
                 status: "error",
@@ -139,10 +169,14 @@ export async function middleware(request: NextRequest) {
         }
         const hostelRoute = isHostelRoute(pathname);
         // console.log("Hostel Route Check:", hostelRoute, pathname);
-        if (hostelRoute.isHostelRoute && session.user.hostelId && searchParams.get("hostel_slug")) {
+        if (
+          hostelRoute.isHostelRoute &&
+          session.user.hostelId &&
+          searchParams.get("hostel_slug")
+        ) {
           // Temporary fix for the hostel slug issue
           // This should be replaced with a proper slug to ID mapping in the future
-          const hostelSlug = searchParams.get("hostel_slug") || ""
+          const hostelSlug = searchParams.get("hostel_slug") || "";
           // console.log("Hostel slug Check:", hostelSlug);
           const hostel = IN_CHARGES_EMAILS.find(
             (hostel) => hostel.slug === hostelSlug
@@ -150,12 +184,12 @@ export async function middleware(request: NextRequest) {
           if (hostel) {
             // request.headers.set("hostelSlug", hostelSlug);
             return NextResponse.rewrite(
-              new URL(`/${matchedRole}/hostels/${hostel.slug}/${hostelRoute.route}`, request.url)
+              new URL(
+                `/${matchedRole}/hostels/${hostel.slug}/${hostelRoute.route}`,
+                request.url
+              )
             );
           }
-
-
-
         }
       }
       return NextResponse.next();

@@ -1,9 +1,7 @@
 "use server";
 
 import dbConnect from "src/lib/dbConnect";
-import Timetable, {
-    type TimeTableWithID,
-} from "src/models/time-table";
+import Timetable, { type TimeTableWithID } from "src/models/time-table";
 import { getSession } from "~/auth/server";
 import type { RawTimetableType as RawTimetable } from "~/constants/common.time-table";
 
@@ -111,7 +109,9 @@ export async function deleteTimeTable(timetableId: string) {
   try {
     if (
       !timetable_authorization.includes(session.user.role) &&
-      !session.user.other_roles.some(role => timetable_authorization.includes(role))
+      !session.user.other_roles.some((role) =>
+        timetable_authorization.includes(role)
+      )
     ) {
       return Promise.reject("Student can't delete a timetable");
     }
@@ -134,12 +134,7 @@ export async function deleteTimeTable(timetableId: string) {
   }
 }
 
-const timetable_authorization = [
-  "admin",
-  "moderator",
-  "faculty",
-  "cr",
-]
+const timetable_authorization = ["admin", "moderator", "faculty", "cr"];
 export async function updateTimeTable(
   timetableId: string,
   timetableData: Partial<TimeTableWithID>
@@ -153,9 +148,13 @@ export async function updateTimeTable(
   try {
     if (
       !timetable_authorization.includes(session.user.role) &&
-      !session.user.other_roles.some(role => timetable_authorization.includes(role))
+      !session.user.other_roles.some((role) =>
+        timetable_authorization.includes(role)
+      )
     ) {
-      return Promise.reject(session.user.other_roles[0] + " can't update a timetable");
+      return Promise.reject(
+        session.user.other_roles[0] + " can't update a timetable"
+      );
     }
     await dbConnect();
 

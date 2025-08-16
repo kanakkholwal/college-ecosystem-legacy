@@ -17,13 +17,13 @@ export type ResultType = rawResultSchemaType & {
 };
 
 export interface AbNormalResult {
-    _id:              string;
-    name:             string;
-    rollNo:           string;
-    batch:            number;
-    programme:        string;
-    semesterCount:    number;
-    avgSemesterCount: number;
+  _id: string;
+  name: string;
+  rollNo: string;
+  batch: number;
+  programme: string;
+  semesterCount: number;
+  avgSemesterCount: number;
 }
 
 export type FunctionaryType = {
@@ -60,7 +60,6 @@ export type Department = {
   course_prefix: string;
   page: string;
 };
-
 
 /*
  **  APIs Payload types
@@ -173,7 +172,7 @@ export type APITypes = {
       response: Department[];
     };
   };
-  mail:{
+  mail: {
     sendResultUpdate: {
       payload: {
         template_key: "result_update";
@@ -188,5 +187,5 @@ export type APITypes = {
         rejected: string[];
       };
     };
-  }
+  };
 };

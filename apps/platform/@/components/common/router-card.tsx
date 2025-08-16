@@ -47,7 +47,10 @@ function RouterCard({
         <div className="flex-auto">
           <h5 className="not-prose mb-1 text-sm font-medium">{title}</h5>
           {disabled ? (
-            <Badge size="sm" className="text-xs text-muted-foreground prose-no-margin">
+            <Badge
+              size="sm"
+              className="text-xs text-muted-foreground prose-no-margin"
+            >
               Maintenance
             </Badge>
           ) : null}

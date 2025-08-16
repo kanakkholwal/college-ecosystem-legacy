@@ -16,11 +16,11 @@ interface UserPageProps {
   }>;
 }
 
-export const metadata:Metadata = {
+export const metadata: Metadata = {
   title: "User Profile",
   description: "View user profile and details.",
   alternates: {
-    canonical: '/u/[username]',
+    canonical: "/u/[username]",
   },
   robots: {
     index: false,
@@ -34,7 +34,7 @@ export const metadata:Metadata = {
     "User Details",
     "NITH User Details",
   ],
-}
+};
 export default async function PublicUserPage({ params }: UserPageProps) {
   // Extract username from params
   const { username } = await params;
@@ -50,11 +50,19 @@ export default async function PublicUserPage({ params }: UserPageProps) {
               </div>
             </div>
             <div className="flex flex-col justify-center items-start ml-4">
-              <CardTitle className="text-2xl font-bold"> User not found</CardTitle>
+              <CardTitle className="text-2xl font-bold">
+                {" "}
+                User not found
+              </CardTitle>
               <p className="text-sm text-muted-foreground">
                 @{username} does not exist or has been deleted.
               </p>
-              <ButtonLink href="/" size="sm" variant="default_light" className="mt-4">
+              <ButtonLink
+                href="/"
+                size="sm"
+                variant="default_light"
+                className="mt-4"
+              >
                 Go to home
                 <ArrowRight />
               </ButtonLink>
@@ -79,7 +87,11 @@ export default async function PublicUserPage({ params }: UserPageProps) {
 
   return (
     <div className="max-w-6xl mx-auto h-full space-y-6 space-x-5 p-4">
-      <ProfileHeader user={user} authenticated={isAuthenticated} isCurrentUser={isCurrentUser} />
+      <ProfileHeader
+        user={user}
+        authenticated={isAuthenticated}
+        isCurrentUser={isCurrentUser}
+      />
       <Tabs defaultValue="academics" className="w-full">
         <VercelTabsList
           className="w-full justify-start"
@@ -94,7 +106,7 @@ export default async function PublicUserPage({ params }: UserPageProps) {
               title="Academics"
               description="This section is under development. Stay tuned for updates!"
               icons={[PiSmileySad]}
-              />
+            />
           </TabsContent>
           <TabsContent value="posts">
             <EmptyArea
@@ -105,7 +117,6 @@ export default async function PublicUserPage({ params }: UserPageProps) {
           </TabsContent>
         </div>
       </Tabs>
-
     </div>
   );
 }

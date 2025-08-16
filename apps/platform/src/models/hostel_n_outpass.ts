@@ -99,7 +99,11 @@ const HostelStudentSchema = new Schema<IHostelStudentType>(
     rollNumber: { type: String, required: true },
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    gender: { type: String, required: true, enum: ["male", "female","not_specified"] },
+    gender: {
+      type: String,
+      required: true,
+      enum: ["male", "female", "not_specified"],
+    },
     position: { type: String, default: "none" },
     cgpi: { type: Number, default: 0 },
     userId: { type: String, default: null },

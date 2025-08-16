@@ -51,8 +51,6 @@ import { IN_CHARGES_EMAILS } from "~/constants/hostel_n_outpass";
 import type { users } from "~/db/schema";
 import type { HostelType } from "~/models/hostel_n_outpass";
 
-
-
 type UserType = InferSelectModel<typeof users>;
 
 interface Props {
@@ -344,12 +342,9 @@ export function UserSessions({ currentUser }: Props) {
         </TableHeader>
         <TableBody>
           {sessions.map((session: SessionType) => {
-
             return (
               <TableRow key={session.id}>
-                <TableCell>
-                  {session.userAgent}
-                </TableCell>
+                <TableCell>{session.userAgent}</TableCell>
                 <TableCell>
                   {formatDistance(new Date(session.createdAt), new Date(), {
                     addSuffix: true,
@@ -390,7 +385,6 @@ export function UserSessions({ currentUser }: Props) {
 }
 
 export function UserDisplay({ currentUser: user }: Props) {
-
   const handleImpersonate = async () => {
     try {
       const { data, error } = await authClient.admin.impersonateUser({
@@ -411,30 +405,31 @@ export function UserDisplay({ currentUser: user }: Props) {
       console.error("Failed to impersonate user:", error);
       toast.error("Failed to impersonate user");
     }
-  }
+  };
   const handleDelete = async () => {
-    const confirm = window.confirm("Are you sure you want to delete this user?");
+    const confirm = window.confirm(
+      "Are you sure you want to delete this user?"
+    );
     if (!confirm) return;
-    toast.promise(
-      deleteUserResourcesById(user.id),
-      {
+    toast
+      .promise(deleteUserResourcesById(user.id), {
         loading: "Deleting user resources...",
         success: "User resources deleted successfully",
         error: "Failed to delete user resources",
-      }
-    ).then(() => {
-      toast.promise(
-        authClient.admin.removeUser({
-          userId: user.id,
-        }),
-        {
-          loading: "Deleting user...",
-          success: "User deleted successfully",
-          error: "Failed to delete user",
-        }
-      );
-    });
-  }
+      })
+      .then(() => {
+        toast.promise(
+          authClient.admin.removeUser({
+            userId: user.id,
+          }),
+          {
+            loading: "Deleting user...",
+            success: "User deleted successfully",
+            error: "Failed to delete user",
+          }
+        );
+      });
+  };
   return (
     <div className="container mx-auto px-2">
       <table className="w-full">
@@ -464,18 +459,10 @@ export function UserDisplay({ currentUser: user }: Props) {
         </tbody>
       </table>
       <div className="flex gap-4 mt-5">
-        <Button
-          variant="success_light"
-          onClick={handleImpersonate}
-          size="sm"
-        >
+        <Button variant="success_light" onClick={handleImpersonate} size="sm">
           Impersonate User
         </Button>
-        <Button
-          variant="destructive_light"
-          onClick={handleDelete}
-          size="sm"
-        >
+        <Button variant="destructive_light" onClick={handleDelete} size="sm">
           Delete User
         </Button>
       </div>

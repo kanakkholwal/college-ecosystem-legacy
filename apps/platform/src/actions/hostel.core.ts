@@ -162,7 +162,7 @@ export async function updateHostelStudent(
 
     // Update the hostel student
     Object.assign(hostelStudent, data);
-    if(data.hostelId) {
+    if (data.hostelId) {
       hostelStudent.hostelId = data.hostelId;
     }
     await hostelStudent.save();
@@ -260,12 +260,12 @@ async function syncHostelStudents(hostelId: string, studentEmails: string[]) {
 export async function getHostel(slug: string): Promise<{
   success: boolean;
   hostel:
-  | (HostelType & {
-    students: {
-      count: number;
-    };
-  })
-  | null;
+    | (HostelType & {
+        students: {
+          count: number;
+        };
+      })
+    | null;
   error?: object;
 }> {
   try {
@@ -488,7 +488,10 @@ export async function getHostelForStudent(
       });
     }
     // Check if user has access to hostel features
-    if (!session?.user?.other_roles?.includes(ROLES_ENUMS.STUDENT) && session?.user?.role !== ROLES_ENUMS.ADMIN) {
+    if (
+      !session?.user?.other_roles?.includes(ROLES_ENUMS.STUDENT) &&
+      session?.user?.role !== ROLES_ENUMS.ADMIN
+    ) {
       return Promise.resolve({
         success: false,
         hostel: null,
@@ -520,7 +523,11 @@ export async function getHostelForStudent(
       });
     }
 
-    if (session?.user?.hostelId === "not_specified" || !session?.user?.hostelId || !session?.user?.hostelId?.length) {
+    if (
+      session?.user?.hostelId === "not_specified" ||
+      !session?.user?.hostelId ||
+      !session?.user?.hostelId?.length
+    ) {
       return Promise.resolve({
         success: false,
         hostel: null,
@@ -529,7 +536,6 @@ export async function getHostelForStudent(
         inCharge: false,
       });
     }
-
 
     const hostel = (await HostelModel.findOne({
       _id: new mongoose.Types.ObjectId(session?.user?.hostelId as string),
@@ -540,7 +546,8 @@ export async function getHostelForStudent(
       return Promise.resolve({
         success: false,
         hostel: null,
-        message: "Hostel not found for the student (" + session.user.email + ")",
+        message:
+          "Hostel not found for the student (" + session.user.email + ")",
         hosteler: null,
         inCharge: false,
       });
@@ -549,7 +556,10 @@ export async function getHostelForStudent(
     const hostelerStudent = await HostelStudentModel.findOne({
       email: session.user.email,
     });
-    if (session.user.hostelId !== hostel._id.toString() && !hostelerStudent?.hostelId) {
+    if (
+      session.user.hostelId !== hostel._id.toString() &&
+      !hostelerStudent?.hostelId
+    ) {
       hostelerStudent.hostelId = hostel._id;
       await hostelerStudent.save();
     }
@@ -562,7 +572,10 @@ export async function getHostelForStudent(
         return Promise.resolve({
           success: false,
           hostel: null,
-          message: "Assigned hostel not found for the hosteler (" + session.user.email + ")",
+          message:
+            "Assigned hostel not found for the hosteler (" +
+            session.user.email +
+            ")",
           hosteler: JSON.parse(JSON.stringify(hostelerStudent)),
           inCharge: false,
         });
@@ -749,18 +762,16 @@ export async function getEligibleStudentsForHostel(
 ): Promise<HostelStudentJson[]> {
   try {
     await dbConnect();
-    const hostel = (await HostelModel.findById(hostelId).lean()) as IHostelType | null;
+    const hostel = (await HostelModel.findById(
+      hostelId
+    ).lean()) as IHostelType | null;
     if (!hostel) {
       return Promise.reject("Hostel not found");
     }
     const students = await HostelStudentModel.find({
       gender: hostel.gender,
-      $or: [
-        { hostelId: null },
-      ],
-      $nor: [
-        { _id: hostel._id }
-      ]
+      $or: [{ hostelId: null }],
+      $nor: [{ _id: hostel._id }],
     })
       .sort({ createdAt: -1 })
       .lean();

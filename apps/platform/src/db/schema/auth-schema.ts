@@ -53,9 +53,7 @@ export const users = pgTable("users", {
   department: departmentNameEnum("department").notNull(),
 });
 
-export type UserType = InferSelectModel<
-  typeof users
->;
+export type UserType = InferSelectModel<typeof users>;
 
 export const sessions = pgTable("sessions", {
   id: text("id").primaryKey(),
@@ -68,7 +66,7 @@ export const sessions = pgTable("sessions", {
   userId: text("userId")
     .notNull()
     .references(() => users.id),
-  impersonatedBy: text("impersonatedBy")
+  impersonatedBy: text("impersonatedBy"),
 });
 
 export const accounts = pgTable("accounts", {
@@ -100,7 +98,9 @@ export const verifications = pgTable("verifications", {
 
 export const emailVerifications = pgTable("email_verifications", {
   id: text("id").primaryKey().default(nanoid(21)),
-  userId: text("userId").notNull().references(() => users.id),
+  userId: text("userId")
+    .notNull()
+    .references(() => users.id),
   email: text("email").notNull(),
   expiresAt: timestamp("expiresAt").notNull(),
   verified: boolean("verified").notNull().default(false),

@@ -47,7 +47,7 @@ export function AddPrevModal({
   code: string;
   courseId: string;
 }) {
-    const router = useRouter();
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -69,7 +69,7 @@ export function AddPrevModal({
       }),
       {
         loading: "Adding Previous Paper",
-        success: () =>{
+        success: () => {
           form.reset();
           router.refresh();
           // Optionally, you can also navigate to the course page or show a success message
@@ -80,108 +80,116 @@ export function AddPrevModal({
     );
   };
 
-  return <ResponsiveDialog
-    title={`Add Previous Paper for ${code}`}
-    description="Fill the form below to add a previous paper."
-    btnProps={{
-      children: "Add Previous Paper",
-      type: "submit",
-      variant: "dark",
-      size: "sm",
-    }}
-  >
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-2">
-        <FormField
-          control={form.control}
-          name="year"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Year</FormLabel>
-              <FormControl>
-                <Select required onValueChange={field.onChange}>
+  return (
+    <ResponsiveDialog
+      title={`Add Previous Paper for ${code}`}
+      description="Fill the form below to add a previous paper."
+      btnProps={{
+        children: "Add Previous Paper",
+        type: "submit",
+        variant: "dark",
+        size: "sm",
+      }}
+    >
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-1 gap-2"
+        >
+          <FormField
+            control={form.control}
+            name="year"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Year</FormLabel>
+                <FormControl>
+                  <Select required onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select Year" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {yearOptions.map((year) => (
+                        <SelectItem key={year} value={year}>
+                          {year}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormDescription>
+                  This is the name of the paper.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="link"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Link</FormLabel>
+                <FormControl>
+                  <Input
+                    variant="outline"
+                    type="url"
+                    placeholder="Enter Link"
+                    required
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  This is the link to the paper.(drive link with public access)
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="exam"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Exam Type</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                  required
+                >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select Year" />
+                      <SelectValue placeholder="Select Exam Type" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    {yearOptions.map((year) => (
-                      <SelectItem key={year} value={year}>
-                        {year}
-                      </SelectItem>
-                    ))}
+                    <SelectItem value="midsem">Midterm Exam</SelectItem>
+                    <SelectItem value="endsem">End Semester Exam</SelectItem>
+                    <SelectItem value="others">Others</SelectItem>
                   </SelectContent>
                 </Select>
-              </FormControl>
-              <FormDescription>
-                This is the name of the paper.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+                <FormDescription>This is the type of exam.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="link"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Link</FormLabel>
-              <FormControl>
-                <Input
-                  variant="outline"
-                  type="url"
-                  placeholder="Enter Link"
-                  required
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                This is the link to the paper.(drive link with public
-                access)
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="exam"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Exam Type</FormLabel>
-              <Select
-                onValueChange={field.onChange}
-                defaultValue={field.value}
-                required
-              >
-                <FormControl>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Select Exam Type" />
-                  </SelectTrigger>
-                </FormControl>
-                <SelectContent>
-                  <SelectItem value="midsem">Midterm Exam</SelectItem>
-                  <SelectItem value="endsem">End Semester Exam</SelectItem>
-                  <SelectItem value="others">Others</SelectItem>
-                </SelectContent>
-              </Select>
-              <FormDescription>This is the type of exam.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <Button type="submit" width="content" size="sm" variant="dark" className="ml-2 md:mx-auto my-3">
-          Submit Paper
-          <TbSend />
-        </Button>
-      </form>
-    </Form>
-  </ResponsiveDialog>;
-
-
+          <Button
+            type="submit"
+            width="content"
+            size="sm"
+            variant="dark"
+            className="ml-2 md:mx-auto my-3"
+          >
+            Submit Paper
+            <TbSend />
+          </Button>
+        </form>
+      </Form>
+    </ResponsiveDialog>
+  );
 }
 const typeOptions = [
   "book",
@@ -228,106 +236,114 @@ export function AddRefsModal({
     });
   };
 
-  return <ResponsiveDialog
-    title={`Add new reference or book for ${code}`}
-    description="Fill the form below to add a new reference."
-    btnProps={{
-      children: "Submit Resources",
-      type: "submit",
-      variant: "dark",
-      size: "sm",
-    }}
-  >
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="grid grid-cols-1 gap-2">
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <FormControl>
-                <Input
-                  variant="outline"
-                  type="text"
-                  placeholder="Enter Name of the resource"
-                  required
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                This is the name of the resource.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+  return (
+    <ResponsiveDialog
+      title={`Add new reference or book for ${code}`}
+      description="Fill the form below to add a new reference."
+      btnProps={{
+        children: "Submit Resources",
+        type: "submit",
+        variant: "dark",
+        size: "sm",
+      }}
+    >
+      <Form {...form}>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="grid grid-cols-1 gap-2"
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input
+                    variant="outline"
+                    type="text"
+                    placeholder="Enter Name of the resource"
+                    required
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  This is the name of the resource.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="link"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Link</FormLabel>
-              <FormControl>
-                <Input
-                  variant="outline"
-                  type="url"
-                  placeholder="Enter Link"
-                  required
-                  {...field}
-                />
-              </FormControl>
-              <FormDescription>
-                This is the link to the reference.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="link"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Link</FormLabel>
+                <FormControl>
+                  <Input
+                    variant="outline"
+                    type="url"
+                    placeholder="Enter Link"
+                    required
+                    {...field}
+                  />
+                </FormControl>
+                <FormDescription>
+                  This is the link to the reference.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type</FormLabel>
-              <FormControl>
-                <Select required onValueChange={field.onChange}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select ref type" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {typeOptions.map((type) => (
-                      <SelectItem
-                        key={type}
-                        value={type}
-                        className="capitalize"
-                      >
-                        {type}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormDescription>
-                This is the type of reference.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Type</FormLabel>
+                <FormControl>
+                  <Select required onValueChange={field.onChange}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select ref type" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      {typeOptions.map((type) => (
+                        <SelectItem
+                          key={type}
+                          value={type}
+                          className="capitalize"
+                        >
+                          {type}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormControl>
+                <FormDescription>
+                  This is the type of reference.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button type="submit" width="content" size="sm" variant="dark" className="ml-2 md:mx-auto my-3">
-          Submit Resources
-          <TbSend />
-        </Button>
-      </form>
-    </Form>
-
-  </ResponsiveDialog>;
-
-
+          <Button
+            type="submit"
+            width="content"
+            size="sm"
+            variant="dark"
+            className="ml-2 md:mx-auto my-3"
+          >
+            Submit Resources
+            <TbSend />
+          </Button>
+        </form>
+      </Form>
+    </ResponsiveDialog>
+  );
 }

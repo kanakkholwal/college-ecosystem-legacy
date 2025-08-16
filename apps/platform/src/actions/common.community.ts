@@ -93,8 +93,11 @@ type UpdateAction =
   | { type: "toggleLike" }
   | { type: "toggleSave" }
   | { type: "incrementViews" }
-  | { type: "edit"; data: Partial<Pick<CommunityPostTypeWithId, "title" | "content">> };
-  
+  | {
+      type: "edit";
+      data: Partial<Pick<CommunityPostTypeWithId, "title" | "content">>;
+    };
+
 export async function updatePost(id: string, action: UpdateAction) {
   const session = await getSession();
   if (!session) throw new Error("You need to be logged in to update a post");
@@ -131,10 +134,7 @@ export async function updatePost(id: string, action: UpdateAction) {
     }
 
     case "edit": {
-      if (
-        post.author.id !== session.user.id &&
-        session.user.role !== "admin"
-      ) {
+      if (post.author.id !== session.user.id && session.user.role !== "admin") {
         throw new Error("You are not authorized to edit this post");
       }
       Object.assign(post, action.data);
@@ -152,9 +152,7 @@ export async function updatePost(id: string, action: UpdateAction) {
 
   return JSON.parse(JSON.stringify(post)) as CommunityPostTypeWithId;
 }
-export async function deletePost(
-  id: string,
-) {
+export async function deletePost(id: string) {
   const session = await getSession();
   if (!session) {
     return Promise.reject("You need to be logged in to update a post");

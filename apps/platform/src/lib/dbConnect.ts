@@ -5,8 +5,8 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 declare const global: {
   mongoose: { conn: Mongoose | null; promise: Promise<Mongoose> | null };
-  mongoClient: { 
-    client: MongoClient | null; 
+  mongoClient: {
+    client: MongoClient | null;
     promise: Promise<MongoClient> | null;
   };
 };
@@ -33,8 +33,8 @@ if (!mongoClientCache) {
 // Shared MongoDB connection options
 const mongoOptions: ConnectOptions = {
   retryWrites: true,
-  w: 'majority',
-  appName: 'nith',
+  w: "majority",
+  appName: "nith",
 };
 
 async function dbConnect(dbName: string = defaultDb): Promise<Mongoose> {
@@ -50,7 +50,8 @@ async function dbConnect(dbName: string = defaultDb): Promise<Mongoose> {
 
     try {
       mongoose.set("strictQuery", false);
-      mongooseCache.promise = mongoose.connect(MONGODB_URI, opts)
+      mongooseCache.promise = mongoose
+        .connect(MONGODB_URI, opts)
         .then((mongoose) => {
           console.log("Connected to MongoDB to database:", dbName);
           return mongoose;
@@ -65,22 +66,23 @@ async function dbConnect(dbName: string = defaultDb): Promise<Mongoose> {
   return mongooseCache.conn;
 }
 
-async function getMongoClient(dbName: string = defaultDb): Promise<{ client: MongoClient; db: Db }> {
+async function getMongoClient(
+  dbName: string = defaultDb
+): Promise<{ client: MongoClient; db: Db }> {
   if (mongoClientCache.client) {
     return {
       client: mongoClientCache.client,
-      db: mongoClientCache.client.db(dbName)
+      db: mongoClientCache.client.db(dbName),
     };
   }
 
   if (!mongoClientCache.promise) {
     try {
       const client = new MongoClient(MONGODB_URI, mongoOptions);
-      mongoClientCache.promise = client.connect()
-        .then((connectedClient) => {
-          console.log("Connected to MongoDB via native client");
-          return connectedClient;
-        });
+      mongoClientCache.promise = client.connect().then((connectedClient) => {
+        console.log("Connected to MongoDB via native client");
+        return connectedClient;
+      });
     } catch (err) {
       console.error("Native client connection error:", err);
       throw err;
@@ -90,7 +92,7 @@ async function getMongoClient(dbName: string = defaultDb): Promise<{ client: Mon
   mongoClientCache.client = await mongoClientCache.promise;
   return {
     client: mongoClientCache.client,
-    db: mongoClientCache.client.db(dbName)
+    db: mongoClientCache.client.db(dbName),
   };
 }
 

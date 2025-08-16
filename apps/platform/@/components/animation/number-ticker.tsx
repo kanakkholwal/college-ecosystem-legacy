@@ -14,7 +14,6 @@ interface NumberTickerProps extends ComponentPropsWithoutRef<"span"> {
   suffix?: string;
 }
 
-
 export function NumberTicker({
   value,
   startValue = 0,

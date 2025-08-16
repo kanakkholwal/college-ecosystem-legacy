@@ -176,7 +176,6 @@ export default function SignInForm() {
               type="submit"
               className="mt-2 tracking-wide"
               variant="default"
-
             >
               {isLoading && (
                 <Icon name="loader-circle" className="animate-spin" />
@@ -200,7 +199,6 @@ export default function SignInForm() {
             disabled={isLoading}
             width="full"
             shadow="light"
-
             onClick={async () => {
               setIsLoading(true);
               await authClient.signIn.social({

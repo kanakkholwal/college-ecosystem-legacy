@@ -66,7 +66,9 @@ const ResponsiveDialog = React.memo(
             >
               <DialogHeader>
                 <DialogTitle className="text-pretty">{title}</DialogTitle>
-                <DialogDescription className="text-pretty">{description}</DialogDescription>
+                <DialogDescription className="text-pretty">
+                  {description}
+                </DialogDescription>
               </DialogHeader>
               {children}
             </DialogContent>
@@ -88,7 +90,9 @@ const ResponsiveDialog = React.memo(
           <DrawerContent>
             <DrawerHeader className="text-left">
               <DrawerTitle className="text-pretty">{title}</DrawerTitle>
-              <DrawerDescription className="text-pretty">{description}</DrawerDescription>
+              <DrawerDescription className="text-pretty">
+                {description}
+              </DrawerDescription>
             </DrawerHeader>
             <div className={cn("px-4 w-full @container/dialog", className)}>
               {children}
@@ -96,7 +100,9 @@ const ResponsiveDialog = React.memo(
             {showCloseButton && (
               <DrawerFooter className="pt-2 justify-end">
                 <DrawerClose asChild>
-                  <Button size="sm" variant="outline">Cancel</Button>
+                  <Button size="sm" variant="outline">
+                    Cancel
+                  </Button>
                 </DrawerClose>
               </DrawerFooter>
             )}

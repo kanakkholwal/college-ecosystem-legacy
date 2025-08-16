@@ -6,8 +6,6 @@ import { appConfig, orgConfig } from "~/project.config";
 import { Provider } from "./client-provider";
 import "./globals.css";
 
-
-
 export const metadata: Metadata = {
   title: {
     default: `${appConfig.name} | ${orgConfig.name}`,
@@ -45,14 +43,14 @@ export const metadata: Metadata = {
     siteName: appConfig.name,
     images: [
       {
-        url: new URL('/social/og-image.jpg', appConfig.url).toString(),
+        url: new URL("/social/og-image.jpg", appConfig.url).toString(),
         width: 1200,
         height: 630,
         alt: `${appConfig.name} - ${orgConfig.shortName}`,
       },
     ],
     phoneNumbers: [orgConfig.contact.phone],
-    countryName: "India"
+    countryName: "India",
   },
   twitter: {
     card: "summary_large_image",
@@ -73,16 +71,15 @@ export const metadata: Metadata = {
   appLinks: {
     web: {
       url: appConfig.url,
-      should_fallback: true
-    }
+      should_fallback: true,
+    },
   },
   other: {
     "geo.position": appConfig.seo.geo.position,
     "geo.placename": appConfig.seo.geo.placename,
     "geo.region": appConfig.seo.geo.region,
-    "og:locale:alternate": "hi_IN"
-  }
-
+    "og:locale:alternate": "hi_IN",
+  },
 };
 
 const fontSans = FontSans({
@@ -92,31 +89,34 @@ const fontSans = FontSans({
 const fontMono = Space_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
-  weight: "400"
+  weight: "400",
 });
 
 type RootLayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
 
-
-
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
-      <head >
-        <meta name="google-adsense-account" content={appConfig.verifications.google_adsense} />
+      <head>
+        <meta
+          name="google-adsense-account"
+          content={appConfig.verifications.google_adsense}
+        />
       </head>
       <body
         className={cn(
           "min-h-screen min-w-screen w-full antialiased",
           fontSans.variable,
-          fontMono.variable,
+          fontMono.variable
         )}
       >
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(orgConfig.jsonLds.EducationalOrganization) }}
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(orgConfig.jsonLds.EducationalOrganization),
+          }}
           id="json-ld-educational-organization"
           suppressHydrationWarning
         />
@@ -124,7 +124,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
         {process.env.NODE_ENV === "production" && (
           <GoogleAnalytics gaId={appConfig.verifications.google_analytics} />
         )}
-
       </body>
     </html>
   );

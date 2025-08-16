@@ -36,12 +36,12 @@ export default function PollComponent({
           <p className="text-sm text-muted-foreground">
             {poll?.createdAt
               ? new Date(poll.createdAt).toLocaleString("default", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "2-digit",
-                minute: "2-digit",
-              })
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
               : ""}
           </p>
         </div>
@@ -71,39 +71,46 @@ export default function PollComponent({
     </div>
   );
 }
-export function PollRender({ poll, user }: { poll: PollType, user?: Session["user"] }) {
+export function PollRender({
+  poll,
+  user,
+}: {
+  poll: PollType;
+  user?: Session["user"];
+}) {
   return (
     <div className="grid gap-2 mt-5 w-full">
-      {poll.options
-        .map((option, index) => {
-          const { percent, count } = parseVotes(poll.votes, option);
-          const { disabled, message, btnText, voted } = notAllowed(
-            poll.votes,
-            poll.multipleChoice,
-            option,
-            user
-          );
-          return (
-            <Button
-              aria-label={`Vote for ${option}`}
-              disabled={disabled}
-              variant="outline"
-              key={index}
-              transition="none"
-              className="cursor-default disabled:opacity-80 flex gap-2 items-center justify-between relative z-10 bg-none after:rounded-md after:h-full after:absolute after:bottom-0 after:left-0 after:-z-10 after:bg-secondary after:text-secondary-foreground after:w-[var(--vote-width)]"
-              style={{
+      {poll.options.map((option, index) => {
+        const { percent, count } = parseVotes(poll.votes, option);
+        const { disabled, message, btnText, voted } = notAllowed(
+          poll.votes,
+          poll.multipleChoice,
+          option,
+          user
+        );
+        return (
+          <Button
+            aria-label={`Vote for ${option}`}
+            disabled={disabled}
+            variant="outline"
+            key={index}
+            transition="none"
+            className="cursor-default disabled:opacity-80 flex gap-2 items-center justify-between relative z-10 bg-none after:rounded-md after:h-full after:absolute after:bottom-0 after:left-0 after:-z-10 after:bg-secondary after:text-secondary-foreground after:w-[var(--vote-width)]"
+            style={
+              {
                 "--vote-width": `${count > 0 ? Math.max(1, percent) : 0}%`,
-              } as React.CSSProperties}
-            >
-              <div className="flex items-center gap-2">
-                {voted && <Check className="h-4 w-4" />}
-                <p className="text-sm">{option}</p>
-              </div>
+              } as React.CSSProperties
+            }
+          >
+            <div className="flex items-center gap-2">
+              {voted && <Check className="h-4 w-4" />}
+              <p className="text-sm">{option}</p>
+            </div>
 
-              <p className="text-sm opacity-80">{percent.toFixed(2)}%</p>
-            </Button>
-          );
-        })}
+            <p className="text-sm opacity-80">{percent.toFixed(2)}%</p>
+          </Button>
+        );
+      })}
     </div>
   );
 }
@@ -111,7 +118,7 @@ function notAllowed(
   voteData: PollType["votes"],
   multipleChoice: boolean,
   option: string,
-  user?: Session["user"],
+  user?: Session["user"]
 ) {
   if (!user) {
     return {

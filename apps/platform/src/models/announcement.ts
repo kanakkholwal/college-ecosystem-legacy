@@ -1,6 +1,8 @@
 import mongoose, { type Document, Schema } from "mongoose";
-import { RELATED_FOR_TYPES, RawAnnouncementType } from "~/constants/common.announcement";
-
+import {
+  RELATED_FOR_TYPES,
+  RawAnnouncementType,
+} from "~/constants/common.announcement";
 
 export type AnnouncementTypeWithId = RawAnnouncementType & {
   _id: string;
@@ -13,8 +15,7 @@ export type AnnouncementTypeWithId = RawAnnouncementType & {
   };
 };
 
-interface IAnnouncement extends Document ,RawAnnouncementType{
-
+interface IAnnouncement extends Document, RawAnnouncementType {
   expiresAt: Date;
   createdBy: {
     id: string;

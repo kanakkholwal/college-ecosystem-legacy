@@ -38,15 +38,19 @@ export default async function HostelPage({
           <div className="w-1/2">
             <h4 className="text-lg font-semibold">{hostel.name}</h4>
             <Badge className="mt-1" size="sm">
-              {hostel.gender === "female" ? "Girls" : hostel.gender === "male" ? "Boys" : hostel.gender}
-              {" "}Hostel
+              {hostel.gender === "female"
+                ? "Girls"
+                : hostel.gender === "male"
+                  ? "Boys"
+                  : hostel.gender}{" "}
+              Hostel
             </Badge>
           </div>
         </div>
         <div className="grid grid-cols-1 gap-3 mt-2">
           <div>
             <h5 className="text-sm font-medium">Warden</h5>
-            <Paragraph  className="!mt-0 text-sm text-muted-foreground">
+            <Paragraph className="!mt-0 text-sm text-muted-foreground">
               {hostel.warden.name} ({hostel.warden.email})
             </Paragraph>
           </div>

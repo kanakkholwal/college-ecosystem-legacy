@@ -11,7 +11,6 @@ interface Props {
   }>;
 }
 
-
 export async function generateMetadata(
   { params }: Props,
   parent: ResolvingMetadata

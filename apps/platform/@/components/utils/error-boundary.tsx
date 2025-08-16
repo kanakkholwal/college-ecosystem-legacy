@@ -36,11 +36,13 @@ export class GracefullyDegradingErrorBoundary extends Component<
 
   render() {
     if (this.state.hasError) {
-      return this.props.fallback ?? (
-        <ErrorBanner
-          title="Something went wrong"
-          description="An error occurred while rendering this component. Please try again later."
-        />
+      return (
+        this.props.fallback ?? (
+          <ErrorBanner
+            title="Something went wrong"
+            description="An error occurred while rendering this component. Please try again later."
+          />
+        )
       );
     }
 

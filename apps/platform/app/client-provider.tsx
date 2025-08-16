@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { Next13ProgressBar } from "next13-progressbar";
-import { NuqsAdapter } from 'nuqs/adapters/next/app';
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import type React from "react";
 import { Toaster as HotToaster } from "react-hot-toast";
 
@@ -21,7 +21,6 @@ const queryClient = new QueryClient({
 });
 
 export function Provider({ children }: { children: React.ReactNode }) {
-
   return (
     <QueryClientProvider client={queryClient}>
       <Next13ProgressBar
@@ -42,10 +41,7 @@ export function Provider({ children }: { children: React.ReactNode }) {
           <div className="blur-[106px] h-32 bg-gradient-to-r from-primary via-violet-500 to-pink-500" />
         </div>
         <div className={cn("min-h-screen w-full h-full")}>
-          <NuqsAdapter>
-
-            {children}
-          </NuqsAdapter>
+          <NuqsAdapter>{children}</NuqsAdapter>
         </div>
       </NextThemesProvider>
       <HotToaster

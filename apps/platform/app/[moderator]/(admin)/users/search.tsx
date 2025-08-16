@@ -53,7 +53,7 @@ export default function SearchBar() {
     searchParamsType["sortDirection"]
   >(
     (searchParams.get("sortDirection") as searchParamsType["sortDirection"]) ||
-    "desc"
+      "desc"
   );
 
   const [offset, setOffset] = useState<searchParamsType["offset"]>(
@@ -70,7 +70,7 @@ export default function SearchBar() {
   useEffect(() => {
     setSearchField(
       (searchParams.get("searchField") as searchParamsType["filterField"]) ||
-      "name"
+        "name"
     );
     setSearchOperator(
       (searchParams.get(
@@ -152,7 +152,6 @@ export default function SearchBar() {
             <Select
               value={searchField}
               onValueChange={(value) => setSearchField(value)}
-
             >
               <SelectTrigger className="w-full" size="sm">
                 <SelectValue placeholder="Field" className="h-6 text-sm" />

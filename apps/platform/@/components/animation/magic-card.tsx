@@ -27,10 +27,14 @@ export function MagicCard({
   gradientTo = "#FE8BBB",
   layerClassName = "bg-background",
 }: MagicCardProps) {
-  const {resolvedTheme } = useTheme();
+  const { resolvedTheme } = useTheme();
   // Ensure the gradient colors are set based on the current theme
-  const isDarkTheme = resolvedTheme  === "dark";
-  const computedGradientColor = gradientColor ? gradientColor : isDarkTheme ? "#262626" : "#D9D9D955";
+  const isDarkTheme = resolvedTheme === "dark";
+  const computedGradientColor = gradientColor
+    ? gradientColor
+    : isDarkTheme
+      ? "#262626"
+      : "#D9D9D955";
   const cardRef = useRef<HTMLDivElement>(null);
   const mouseX = useMotionValue(-gradientSize);
   const mouseY = useMotionValue(-gradientSize);
@@ -45,7 +49,7 @@ export function MagicCard({
         mouseY.set(clientY - top);
       }
     },
-    [mouseX, mouseY],
+    [mouseX, mouseY]
   );
 
   const handleMouseOut = useCallback(
@@ -56,7 +60,7 @@ export function MagicCard({
         mouseY.set(-gradientSize);
       }
     },
-    [handleMouseMove, mouseX, gradientSize, mouseY],
+    [handleMouseMove, mouseX, gradientSize, mouseY]
   );
 
   const handleMouseEnter = useCallback(() => {
@@ -99,7 +103,12 @@ export function MagicCard({
           `,
         }}
       />
-      <div className={cn("absolute inset-px rounded-[inherit] bg-background" ,layerClassName)}/>
+      <div
+        className={cn(
+          "absolute inset-px rounded-[inherit] bg-background",
+          layerClassName
+        )}
+      />
       <motion.div
         className="pointer-events-none absolute inset-px rounded-[inherit] opacity-0 transition-opacity duration-300 group-hover:opacity-100"
         style={{

@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Communities",
   description: "Explore different communities",
   alternates: {
-    canonical: '/community',
+    canonical: "/community",
   },
   keywords: [
     "NITH",
@@ -65,7 +65,12 @@ export default async function CommunitiesPage(props: {
               {posts.length}
             </Badge>
           </h3>
-          <AuthButtonLink authorized={!!session?.user} variant="ghost" size="sm" href="/community/create">
+          <AuthButtonLink
+            authorized={!!session?.user}
+            variant="ghost"
+            size="sm"
+            href="/community/create"
+          >
             Create Post
             <ArrowRight />
           </AuthButtonLink>

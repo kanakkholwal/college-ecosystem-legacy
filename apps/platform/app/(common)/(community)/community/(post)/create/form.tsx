@@ -20,14 +20,17 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Content, JSONContent } from "@tiptap/react";
 import { Loader2, SendHorizontal } from "lucide-react";
-import { defaultExtensions, NexoEditor, renderToMarkdown } from 'nexo-editor';
+import { defaultExtensions, NexoEditor, renderToMarkdown } from "nexo-editor";
 import "nexo-editor/index.css";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type { z } from "zod";
 import { createPost } from "~/actions/common.community";
-import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "~/constants/common.community";
+import {
+  CATEGORY_TYPES,
+  SUB_CATEGORY_TYPES,
+} from "~/constants/common.community";
 import { rawCommunityPostSchema } from "~/models/community";
 
 export default function CreateCommunityPost() {
@@ -45,11 +48,11 @@ export default function CreateCommunityPost() {
             content: [
               {
                 type: "text",
-                text: "Hello, this is a simple editor built with Nexo Editor!"
-              }
-            ]
-          }
-        ]
+                text: "Hello, this is a simple editor built with Nexo Editor!",
+              },
+            ],
+          },
+        ],
       } as Content,
       category: CATEGORY_TYPES[0],
       subCategory: SUB_CATEGORY_TYPES[0],
@@ -121,11 +124,14 @@ export default function CreateCommunityPost() {
                 <NexoEditor
                   content={field.value as Content}
                   onChange={(content) => {
-                    field.onChange(content)
-                    form.setValue("content", renderToMarkdown({
-                      content: form.getValues("content_json") as JSONContent,
-                      extensions: defaultExtensions,
-                    }));
+                    field.onChange(content);
+                    form.setValue(
+                      "content",
+                      renderToMarkdown({
+                        content: form.getValues("content_json") as JSONContent,
+                        extensions: defaultExtensions,
+                      })
+                    );
                   }}
                 />
               </FormControl>
@@ -153,7 +159,11 @@ export default function CreateCommunityPost() {
                 <SelectContent>
                   {CATEGORY_TYPES.map((type) => {
                     return (
-                      <SelectItem key={type} value={type} className="capitalize">
+                      <SelectItem
+                        key={type}
+                        value={type}
+                        className="capitalize"
+                      >
                         {type}
                       </SelectItem>
                     );

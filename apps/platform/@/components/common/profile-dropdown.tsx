@@ -51,9 +51,10 @@ export default function ProfileDropdown({ user }: ProfileDropdownProps) {
               alt={user.username}
               width={32}
               height={32}
-              
               src={
-                (user.image && user.image !== "null" && user.image.trim().length > 0)
+                user.image &&
+                user.image !== "null" &&
+                user.image.trim().length > 0
                   ? user.image
                   : `https://api.dicebear.com/5.x/initials/svg?seed=${user.name}`
               }

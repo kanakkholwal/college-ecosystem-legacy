@@ -18,7 +18,6 @@ const toggleVariants = cva(
           "border border-border bg-card hover:bg-card/80 dark:bg-muted text-foreground hover:border-primary",
         ghost:
           "bg-slate-100/20 hover:bg-slate-100/80 text-muted-foreground hover:text-accent-foreground dark:bg-accent dark:text-muted-foreground dark:hover:bg-accent/80 dark:hover:text-white",
-
       },
       size: {
         default: "h-10 px-3 min-w-10",
@@ -36,7 +35,7 @@ const toggleVariants = cva(
 const Toggle = React.forwardRef<
   React.ElementRef<typeof TogglePrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof TogglePrimitive.Root> &
-  VariantProps<typeof toggleVariants>
+    VariantProps<typeof toggleVariants>
 >(({ className, variant, size, ...props }, ref) => (
   <TogglePrimitive.Root
     ref={ref}

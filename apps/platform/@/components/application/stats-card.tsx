@@ -8,9 +8,16 @@ export type StatsCardProps = {
   className?: string;
 };
 
-export function StatsCard({ title, children, Icon,className }: StatsCardProps) {
+export function StatsCard({
+  title,
+  children,
+  Icon,
+  className,
+}: StatsCardProps) {
   return (
-    <Card className={cn("hover:border-primary hover-shadow-primary",className)}>
+    <Card
+      className={cn("hover:border-primary hover-shadow-primary", className)}
+    >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 @2xl:p-4">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>
         {Icon}

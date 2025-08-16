@@ -2,18 +2,18 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import axios from "axios";
 import type { InferSelectModel } from "drizzle-orm";
@@ -85,7 +85,9 @@ export default function UserList({
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users?.map((user) => <UserRow user={user} key={user.id} />)}
+            {users?.map((user) => (
+              <UserRow user={user} key={user.id} />
+            ))}
           </TableBody>
         </Table>
       </div>

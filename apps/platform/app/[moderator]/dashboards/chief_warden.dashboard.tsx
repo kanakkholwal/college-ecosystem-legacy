@@ -7,12 +7,9 @@ import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { LuBuilding } from "react-icons/lu";
 import { getHostels } from "~/actions/hostel.core";
 
-import {
-  CreateHostelForm,
-  ImportFromSiteButton,
-} from "../hostels/client";
+import { CreateHostelForm, ImportFromSiteButton } from "../hostels/client";
 
-export default async function ChiefWardenPage({role}: { role: string })  {
+export default async function ChiefWardenPage({ role }: { role: string }) {
   const response = await getHostels();
   console.log(response);
   const { success, data: hostels } = response;

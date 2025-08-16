@@ -1,7 +1,12 @@
 "use client";
 import ProfileDropdown from "@/components/common/profile-dropdown";
 import { Button } from "@/components/ui/button";
-import { NavLink, SUPPORT_LINKS, getNavLinks, socials } from "@/constants/links";
+import {
+  NavLink,
+  SUPPORT_LINKS,
+  getNavLinks,
+  socials,
+} from "@/constants/links";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight, LayoutDashboard, LogIn } from "lucide-react";
 import Link from "next/link";
@@ -40,11 +45,9 @@ const loggedInList = [
   },
 ];
 
-
 interface NavbarProps {
   user?: Session["user"];
 }
-
 
 export default function Navbar({ user }: NavbarProps) {
   const navLinks = getNavLinks(user);
@@ -52,27 +55,29 @@ export default function Navbar({ user }: NavbarProps) {
 
   return (
     <header
-    id="navbar"
+      id="navbar"
       className={cn("z-50 w-full pb-2 transition-all", "bg-card border-b")}
     >
       <div className="w-full max-w-(--max-app-width) mx-auto flex items-center justify-between px-4 py-2">
-        <Link
-          href="/"
-        >
+        <Link href="/">
           <ApplicationInfo />
         </Link>
         <div className="ml-auto flex gap-2 items-center">
           <QuickLinks user={user} publicLinks={navLinks} />
           <ThemeSwitcher />
-          {user ? <ProfileDropdown user={user} /> :
+          {user ? (
+            <ProfileDropdown user={user} />
+          ) : (
             <ButtonLink
-              size="sm" rounded="full"
+              size="sm"
+              rounded="full"
               href={`/auth/sign-in?next=${pathname}`}
-              variant="rainbow">
+              variant="rainbow"
+            >
               Log In
               <LogIn />
             </ButtonLink>
-          }
+          )}
         </div>
       </div>
       <div className="w-full max-w-(--max-app-width) mx-auto">
@@ -136,7 +141,10 @@ export function QuickLinks({ user, publicLinks }: QuickLinksProps) {
             {publicLinks.map((item, index) => {
               return (
                 <CommandItem key={`command-item-${index}`} asChild>
-                  <Link href={item.href} className="flex items-center w-full flex-wrap cursor-pointer group">
+                  <Link
+                    href={item.href}
+                    className="flex items-center w-full flex-wrap cursor-pointer group"
+                  >
                     {item.Icon && <item.Icon className="size-3 mr-2" />}
                     <span>
                       <span className="text-sm">{item.title}</span>
@@ -150,14 +158,17 @@ export function QuickLinks({ user, publicLinks }: QuickLinksProps) {
             })}
             {!isLoggedIn && (
               <CommandItem>
-                <Link href={`/auth/sign-in`} className="flex items-center w-full">
+                <Link
+                  href={`/auth/sign-in`}
+                  className="flex items-center w-full"
+                >
                   <LogIn className="size-3 mr-3" />
                   <span>
-                      <span className="text-sm">Sign In</span>
-                      <span className="block text-xs  opacity-75 w-full">
-                        Sign in to your account
-                      </span>
+                    <span className="text-sm">Sign In</span>
+                    <span className="block text-xs  opacity-75 w-full">
+                      Sign in to your account
                     </span>
+                  </span>
                 </Link>
               </CommandItem>
             )}
@@ -197,7 +208,12 @@ export function SocialBar({ className }: { className?: string }) {
     return null;
   }
   return (
-    <div className={cn("inline-flex flex-row items-center empty:hidden gap-3 mx-auto", className)}>
+    <div
+      className={cn(
+        "inline-flex flex-row items-center empty:hidden gap-3 mx-auto",
+        className
+      )}
+    >
       {socials.map((link) => {
         return (
           <Link

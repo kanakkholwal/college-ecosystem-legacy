@@ -21,7 +21,10 @@ export default async function UpdateUserPage({ params }: PageProps) {
 
   return (
     <div className="space-y-6 my-5">
-      <Tabs defaultValue="user_details" className="w-full max-w-(--max-app-width) mx-auto">
+      <Tabs
+        defaultValue="user_details"
+        className="w-full max-w-(--max-app-width) mx-auto"
+      >
         <VercelTabsList
           tabs={[
             { label: "User Details", id: "user_details" },
@@ -31,18 +34,17 @@ export default async function UpdateUserPage({ params }: PageProps) {
           onTabChangeQuery="tab"
         />
         <div className="w-full max-w-(--max-app-width) mx-auto bg-card p-4 rounded-lg shadow mt-4">
-        <TabsContent value="user_details">
-          <UserDisplay currentUser={user} />
-        </TabsContent>
-        <TabsContent value="user_sessions">
-          <UserSessions currentUser={user} />
-        </TabsContent>
-        <TabsContent value="user_update">
-          <UserUpdate currentUser={user} hostels={data} />
-        </TabsContent>
+          <TabsContent value="user_details">
+            <UserDisplay currentUser={user} />
+          </TabsContent>
+          <TabsContent value="user_sessions">
+            <UserSessions currentUser={user} />
+          </TabsContent>
+          <TabsContent value="user_update">
+            <UserUpdate currentUser={user} hostels={data} />
+          </TabsContent>
         </div>
       </Tabs>
-
     </div>
   );
 }

@@ -56,7 +56,7 @@ export async function assignRank() {
   try {
     const { data: response } = await serverApis.results.assignRank(undefined);
     if (response?.error) {
-      console.log(response)
+      console.log(response);
       return Promise.reject(response.message || "Failed to assign rank");
     }
     return Promise.resolve("Rank assigned successfully");
@@ -66,8 +66,11 @@ export async function assignRank() {
   }
 }
 export async function sendMailUpdate(targets: string[]) {
-  const validTargets = targets.filter((target) => emailSchema.safeParse(target.trim()).success ||
-    z.string().email().safeParse(target.trim()).success);
+  const validTargets = targets.filter(
+    (target) =>
+      emailSchema.safeParse(target.trim()).success ||
+      z.string().email().safeParse(target.trim()).success
+  );
   if (validTargets.length === 0) {
     return Promise.reject("Invalid email addresses provided");
   }
@@ -85,11 +88,14 @@ export async function sendMailUpdate(targets: string[]) {
         targets: validTargets.map((email) => email.toLowerCase()),
         subject: `NITH Semester Results for ${new Date().getFullYear() - 1}-${new Date().getFullYear()} Batch Now Available`,
         payload: {
-          batch: "Academic Year " + (new Date().getFullYear() - 1) + "-" + new Date().getFullYear(),
+          batch:
+            "Academic Year " +
+            (new Date().getFullYear() - 1) +
+            "-" +
+            new Date().getFullYear(),
         },
       }),
     });
-
 
     if (response?.error || !response?.data) {
       console.log(response);
@@ -121,7 +127,9 @@ export async function getAbnormalResults() {
 
     if (response?.error) {
       console.error(response);
-      return Promise.reject(response.message || "Failed to fetch abnormal results");
+      return Promise.reject(
+        response.message || "Failed to fetch abnormal results"
+      );
     }
     if (!response?.data) {
       console.log("No abnormal results found", response);
@@ -141,31 +149,29 @@ const availableMethods = [
   "updateResultByRollNo",
 ] as const;
 
-export async function getResultByRollNo(rollNo: string, method: typeof availableMethods[number]) {
+export async function getResultByRollNo(
+  rollNo: string,
+  method: (typeof availableMethods)[number]
+) {
   try {
     if (method === "getResultByRollNoFromSite") {
-      const res =
-        await serverApis.results.getResultByRollNoFromSite(rollNo);
+      const res = await serverApis.results.getResultByRollNoFromSite(rollNo);
       console.log("Response from getResultByRollNoFromSite:", res);
       return Promise.resolve(res.data);
     } else if (method === "getResultByRollNo") {
       const { data: response } =
         await serverApis.results.getResultByRollNo(rollNo);
       return Promise.resolve(response);
-
     } else if (method === "addResultByRollNo") {
       const { data: response } =
         await serverApis.results.addResultByRollNo(rollNo);
       return Promise.resolve(response);
-
     } else if (method === "updateResultByRollNo") {
-      const { data: response } =
-        await serverApis.results.updateResultByRollNo([
-          rollNo,
-          {},
-        ]);
+      const { data: response } = await serverApis.results.updateResultByRollNo([
+        rollNo,
+        {},
+      ]);
       return Promise.resolve(response);
-
     }
   } catch (err) {
     console.log(err);

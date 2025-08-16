@@ -12,14 +12,14 @@ if (!serverIdentity) {
 if (!baseServerUrl) {
   throw new Error("Missing environment variables for base server URL");
 }
-export const baseUrl = getWindowOrigin()
+export const baseUrl = getWindowOrigin();
 
 export const authHeaders = {
   "Content-Type": "application/json",
   "X-Authorization": serverIdentity,
   "X-Identity-Key": serverIdentity,
   Origin: getWindowOrigin(),
-};/**
+}; /**
  *  a fetch instance to communicate with the server with the necessary headers
  */
 
@@ -53,5 +53,3 @@ export const mailFetch = createFetch({
     Origin: getWindowOrigin(),
   },
 });
-
-

@@ -15,11 +15,14 @@ import type { Metadata } from "next";
 import { appConfig, orgConfig } from "~/project.config";
 
 export const metadata: Metadata = {
-  title: orgConfig.shortName + " Results Portal - Check Semester Results Online",
-  description: orgConfig.shortName + " result portal. Search semester results by roll number, name, or course. Access academic records, grades, and transcripts for all programs.",
+  title:
+    orgConfig.shortName + " Results Portal - Check Semester Results Online",
+  description:
+    orgConfig.shortName +
+    " result portal. Search semester results by roll number, name, or course. Access academic records, grades, and transcripts for all programs.",
   applicationName: orgConfig.shortName + " Result Portal",
   alternates: {
-    canonical: '/results',
+    canonical: "/results",
   },
   keywords: [
     orgConfig.shortName,
@@ -55,29 +58,31 @@ export const metadata: Metadata = {
     // Technical Terms
     "NITH Result 2024",
     "NITH Odd Semester Results",
-    "NITH Even Semester Results"
+    "NITH Even Semester Results",
   ],
   openGraph: {
     title: `NITH Results Portal | ${orgConfig.shortName}`,
-    description: "Access exam results, grade cards and academic records for all programs at NIT Hamirpur",
+    description:
+      "Access exam results, grade cards and academic records for all programs at NIT Hamirpur",
     url: `${appConfig.url}/results`,
     images: [
       {
-        url: new URL('/og-results.jpg', appConfig.url).toString(),
+        url: new URL("/og-results.jpg", appConfig.url).toString(),
         width: 1200,
         height: 630,
-        alt: 'NITH Results Portal Interface',
-      }
+        alt: "NITH Results Portal Interface",
+      },
     ],
 
-    locale: 'en_IN',
-    type: 'website',
+    locale: "en_IN",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: `Check NITH Results Online | ${orgConfig.shortName}`,
-    description: "Instant access to semester exam results for NIT Hamirpur students",
-    images: [new URL('/logo.png', appConfig.url).toString()]
+    description:
+      "Instant access to semester exam results for NIT Hamirpur students",
+    images: [new URL("/logo.png", appConfig.url).toString()],
   },
   // robots: {
   //     index: true,
@@ -88,7 +93,6 @@ export const metadata: Metadata = {
   //       follow: true,
   //     }
   //   },
-    
 };
 
 export default async function ResultPage(props: {
@@ -140,10 +144,10 @@ and track academic performance"
           {JSON.stringify({
             "@context": "https://schema.org",
             "@type": "SearchResultsPage",
-            "name": "NITH Results Portal",
-            "description": "Official examination results portal for NIT Hamirpur",
-            "url": `${appConfig.url}/results`,
-            "publisher": orgConfig.jsonLds.EducationalOrganization
+            name: "NITH Results Portal",
+            description: "Official examination results portal for NIT Hamirpur",
+            url: `${appConfig.url}/results`,
+            publisher: orgConfig.jsonLds.EducationalOrganization,
           })}
         </script>
       </BaseHeroSection>

@@ -13,35 +13,35 @@ export const orgConfig = {
     twitter: {
       url: "https://twitter.com/nithamirpur",
       handle: "@nithamirpur",
-      publisher: "@nithamirpur"
+      publisher: "@nithamirpur",
     },
     linkedin: "https://linkedin.com/company/nithamirpur",
     instagram: "https://instagram.com/nithamirpur",
     facebook: "https://facebook.com/NITHamirpur",
-    youtube: "https://youtube.com/@NITHamirpur"
+    youtube: "https://youtube.com/@NITHamirpur",
   },
   // Enhanced organization details
   foundingDate: "1986-01-01",
   location: {
     address: {
       "@type": "PostalAddress",
-      "streetAddress": "NIT Hamirpur Campus, Anu",
-      "addressLocality": "Hamirpur",
-      "addressRegion": "Himachal Pradesh",
-      "postalCode": "177005",
-      "addressCountry": "IN"
+      streetAddress: "NIT Hamirpur Campus, Anu",
+      addressLocality: "Hamirpur",
+      addressRegion: "Himachal Pradesh",
+      postalCode: "177005",
+      addressCountry: "IN",
     },
     geo: {
       "@type": "GeoCoordinates",
-      "latitude": "31.7087",
-      "longitude": "76.5270"
-    }
+      latitude: "31.7087",
+      longitude: "76.5270",
+    },
   },
 
   contact: {
     email: "registrar@nith.ac.in",
     phone: "+91-1972-254001",
-    fax: "+91-1972-223834"
+    fax: "+91-1972-223834",
   },
 
   socialProfiles: [
@@ -49,61 +49,65 @@ export const orgConfig = {
     "https://twitter.com/NITHamirpurHP",
     "https://www.instagram.com/nithamirpur/",
     "https://www.linkedin.com/school/nithamirpur/",
-    "https://www.youtube.com/@NITHamirpur"
+    "https://www.youtube.com/@NITHamirpur",
   ],
 
   // Enhanced structured data
   jsonLds: {
-
     EducationalOrganization: {
       "@context": "https://schema.org",
       "@type": ["CollegeOrUniversity", "GovernmentOrganization"],
-      "name": "National Institute of Technology, Hamirpur",
-      "url": "https://nith.ac.in",
-      "logo": "https://nith.ac.in/uploads/settings/15795036012617.png",
-      "foundingDate": "1986",
-      "address": {
+      name: "National Institute of Technology, Hamirpur",
+      url: "https://nith.ac.in",
+      logo: "https://nith.ac.in/uploads/settings/15795036012617.png",
+      foundingDate: "1986",
+      address: {
         "@type": "PostalAddress",
-        "streetAddress": "NIT Hamirpur Campus, Anu",
-        "addressLocality": "Hamirpur",
-        "addressRegion": "Himachal Pradesh",
-        "postalCode": "177005",
-        "addressCountry": "IN"
+        streetAddress: "NIT Hamirpur Campus, Anu",
+        addressLocality: "Hamirpur",
+        addressRegion: "Himachal Pradesh",
+        postalCode: "177005",
+        addressCountry: "IN",
       },
-      "contactPoint": {
+      contactPoint: {
         "@type": "ContactPoint",
-        "contactType": "Admissions",
-        "telephone": "+91-1972-254001",
-        "email": "registrar@nith.ac.in"
+        contactType: "Admissions",
+        telephone: "+91-1972-254001",
+        email: "registrar@nith.ac.in",
       },
-      "sameAs": [
+      sameAs: [
         "https://www.facebook.com/NITHamirpur",
         "https://twitter.com/NITHamirpurHP",
         "https://www.instagram.com/nithamirpur/",
         "https://www.linkedin.com/school/nithamirpur/",
-        "https://www.youtube.com/@NITHamirpur"
+        "https://www.youtube.com/@NITHamirpur",
       ],
-      "department": [
+      department: [
         {
           "@type": "CollegeDepartment",
-          "name": "Computer Science and Engineering"
+          name: "Computer Science and Engineering",
         },
         {
           "@type": "CollegeDepartment",
-          "name": "Electronics and Communication Engineering"
+          name: "Electronics and Communication Engineering",
         },
         // Add all departments
-      ]
-    }
-  }
+      ],
+    },
+  },
 } as const;
-
 
 // This file contains the configuration for the app and college
 export const appConfig = {
   name: "College Platform",
   appDomain: "nith.eu.org",
-  otherAppDomains : ["app.nith.eu.org",'platform.nith.eu.org','nith-app.vercel.app','os.nith.eu.org', 'nith-app.pages.dev',],
+  otherAppDomains: [
+    "app.nith.eu.org",
+    "platform.nith.eu.org",
+    "nith-app.vercel.app",
+    "os.nith.eu.org",
+    "nith-app.pages.dev",
+  ],
   url: "https://app.nith.eu.org",
   logoSquare: "/logo-square.svg",
   logo: "/logo.svg",
@@ -114,33 +118,57 @@ export const appConfig = {
     "NIT Hamirpur student portal for academic results, campus resources, and community collaboration. Manage your college ecosystem in one platform.",
   keywords: [
     // Primary terms
-    "NITH portal", "NIT Hamirpur", "campus management",
-    "student portal", "college ecosystem", "academic platform","college os",
+    "NITH portal",
+    "NIT Hamirpur",
+    "campus management",
+    "student portal",
+    "college ecosystem",
+    "academic platform",
+    "college os",
 
     // Feature-specific
-    "NITH results", "semester results", "exam grades",
-    "course materials", "faculty collaboration", "campus resources",
+    "NITH results",
+    "semester results",
+    "exam grades",
+    "course materials",
+    "faculty collaboration",
+    "campus resources",
 
     // Program-specific
-    "BTech portal", "MTech portal", "MCA portal", "BArch portal", "PhD portal",
+    "BTech portal",
+    "MTech portal",
+    "MCA portal",
+    "BArch portal",
+    "PhD portal",
 
     // Location-based
-    "Hamirpur colleges", "Himachal Pradesh colleges", "NIT Hamirpur portal",
+    "Hamirpur colleges",
+    "Himachal Pradesh colleges",
+    "NIT Hamirpur portal",
 
     // Action-oriented
-    "check results online", "download marksheet", "academic records",
-    "connect with faculty", "campus announcements"
-  ].join(', '),
+    "check results online",
+    "download marksheet",
+    "academic records",
+    "connect with faculty",
+    "campus announcements",
+  ].join(", "),
   creator: "Kanak Kholwal",
   authors: [
-    { name: "Kanak Kholwal", url: "https://kanak.eu.org", image: "https://github.com/kanakkholwal.png",email:"me@kanak.eu.org" },
+    {
+      name: "Kanak Kholwal",
+      url: "https://kanak.eu.org",
+      image: "https://github.com/kanakkholwal.png",
+      email: "me@kanak.eu.org",
+    },
     {
       name: "NITH Administration",
       url: "https://nith.ac.in",
-      role: "EducationalInstitution"
+      role: "EducationalInstitution",
     },
   ],
-  githubRepo: "https://github.com/kanakkholwal/college-ecosystem?utm_source=app.nith.eu.org&utm_medium=referral&utm_campaign=repo_link",
+  githubRepo:
+    "https://github.com/kanakkholwal/college-ecosystem?utm_source=app.nith.eu.org&utm_medium=referral&utm_campaign=repo_link",
   githubUri: "kanakkholwal/college-ecosystem",
   socials: {
     twitter: "https://twitter.com/kanakkholwal",
@@ -160,35 +188,33 @@ export const appConfig = {
     geo: {
       placename: "Hamirpur",
       region: "Himachal Pradesh",
-      position: "31.7087° N, 76.5270° E"
+      position: "31.7087° N, 76.5270° E",
     },
     category: "Education",
     publisher: orgConfig.name,
-    schemaType: "WebApplication"
+    schemaType: "WebApplication",
   },
   contact: "https://forms.gle/PXbaDm9waeJWYWUP8",
   // Structured data templates
   jsonLds: {
     WebApplication: {
       "@type": "WebApplication",
-      "name": "NITH Campus Portal",
-      "url": "https://app.nith.eu.org",
-      "applicationCategory": "Education",
-      "operatingSystem": "Web",
-      "offers": {
+      name: "NITH Campus Portal",
+      url: "https://app.nith.eu.org",
+      applicationCategory: "Education",
+      operatingSystem: "Web",
+      offers: {
         "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "INR"
-      }
-    }
+        price: "0",
+        priceCurrency: "INR",
+      },
+    },
   },
 
   flags: {
     enableOgImage: false, // Enable Open Graph image generation
-  }
+  },
 };
-
-
 
 export const supportLinks = [
   {
@@ -208,7 +234,6 @@ export const supportLinks = [
     href: "https://forms.gle/v8Angn9VCbt9oVko7",
     title: "Suggest a feature",
   },
-
 ] as const;
 
 export default {

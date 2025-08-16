@@ -58,22 +58,36 @@ export default async function CoursesPage(props: Props) {
       <HeaderBar
         Icon={LuBookA}
         titleNode={
-          <>Manage Courses <Badge size="sm">{courses.length} found</Badge></>
+          <>
+            Manage Courses <Badge size="sm">{courses.length} found</Badge>
+          </>
         }
         descriptionNode={
           <>Here you can create new courses or view existing ones.</>
         }
-        actionNode={<>
-
-          <ButtonLink variant="dark" size="sm" effect="shineHover" disabled href={`/${params.moderator}/courses/create`}>
-            <Plus />
-            New Course
-          </ButtonLink>
-          <ButtonLink variant="light" size="sm" effect="shineHover" href={`/syllabus`} target="_blank">
-            View Course
-            <ArrowUpRight />
-          </ButtonLink>
-        </>
+        actionNode={
+          <>
+            <ButtonLink
+              variant="dark"
+              size="sm"
+              effect="shineHover"
+              disabled
+              href={`/${params.moderator}/courses/create`}
+            >
+              <Plus />
+              New Course
+            </ButtonLink>
+            <ButtonLink
+              variant="light"
+              size="sm"
+              effect="shineHover"
+              href={`/syllabus`}
+              target="_blank"
+            >
+              View Course
+              <ArrowUpRight />
+            </ButtonLink>
+          </>
         }
       />
       <BaseHeroSection

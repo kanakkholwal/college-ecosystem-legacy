@@ -21,7 +21,9 @@ interface BannerActionPropsBase {
 }
 
 interface BannerActionWithBtnProps extends BannerActionPropsBase {
-  btnProps: React.ComponentProps<typeof Button> |  React.ComponentProps<typeof ButtonLink>
+  btnProps:
+    | React.ComponentProps<typeof Button>
+    | React.ComponentProps<typeof ButtonLink>;
   actionComponent?: never;
 }
 
@@ -31,7 +33,6 @@ interface BannerActionWithComponent extends BannerActionPropsBase {
 }
 
 type BannerPanelProps = BannerActionWithBtnProps | BannerActionWithComponent;
-
 
 export function BannerPanel({
   className,
@@ -51,14 +52,13 @@ export function BannerPanel({
     "sessionStorage"
   );
 
-
   return (
     <AnimatePresence>
       {!isBannerPanelClosed && (
         <motion.div
-          initial={{ opacity: 0, y: -50 ,height: "auto"}}
+          initial={{ opacity: 0, y: -50, height: "auto" }}
           animate={{ opacity: 1, y: 0, height: "auto" }}
-          exit={{ opacity: 0, y: -50,height: 0 }}
+          exit={{ opacity: 0, y: -50, height: 0 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
           className={cn(
             "bg-muted px-4 py-3 md:py-2 relative shadow",
@@ -84,7 +84,9 @@ export function BannerPanel({
                 transition={{ delay: 0.3 }}
                 className="text-sm flex space-y-0.5 flex-col"
               >
-                <div className="font-medium whitespace-nowrap text-sm">{title}</div>
+                <div className="font-medium whitespace-nowrap text-sm">
+                  {title}
+                </div>
                 {typeof description === "string"
                   ? description.length > 0 && (
                       <p className="text-xs text-muted-foreground text-pretty truncate line-clamp-2">

@@ -30,7 +30,10 @@ export default function CommunityPostList({
 }) {
   const [optimisticPosts, setOptimisticPosts] = useOptimistic(
     posts,
-    (state, action: { type: "toggleLike" | "toggleSave"; id: string; userId: string }) => {
+    (
+      state,
+      action: { type: "toggleLike" | "toggleSave"; id: string; userId: string }
+    ) => {
       return state.map((p) => {
         if (p._id !== action.id) return p;
 
@@ -128,7 +131,7 @@ export default function CommunityPostList({
             <h3 className="text-base font-medium">{post.title}</h3>
             <Badge size="sm">
               <Icon name="trend-up" />
-              {formatNumber(post.views)} {" "}impressions
+              {formatNumber(post.views)} impressions
             </Badge>
           </div>
           <article className="max-w-full prose prose-sm dark:prose-invert text-muted-foreground pl-2 w-full rounded-lg whitespace-pre-wrap truncate">
@@ -144,7 +147,17 @@ export default function CommunityPostList({
                 onClick={() => handleToggle(post._id, "toggleLike")}
                 className="flex grow items-center justify-center gap-3 rounded-md px-4 py-2 transition hover:bg-accent"
               >
-                <Icon name={user && post.likes.includes(user.id) ? "heart" : "heart-empty"} className={cn("size-4", user && post.likes.includes(user.id) && "text-red-500")} />
+                <Icon
+                  name={
+                    user && post.likes.includes(user.id)
+                      ? "heart"
+                      : "heart-empty"
+                  }
+                  className={cn(
+                    "size-4",
+                    user && post.likes.includes(user.id) && "text-red-500"
+                  )}
+                />
                 <span className="inline font-medium opacity-90 text-[14px] transition hover:opacity-100">
                   {formatNumber(post.likes.length)}
                   <span className="max-sm:hidden">
@@ -157,8 +170,16 @@ export default function CommunityPostList({
                 onClick={() => handleToggle(post._id, "toggleSave")}
                 className="flex grow items-center justify-center gap-3 rounded-md px-4 py-2 transition hover:bg-accent"
               >
-                <Icon name={user && post.savedBy.includes(user.id) ? "bookmark-check" : "bookmark"}
-                  className={cn("size-4", user && post.savedBy.includes(user.id) && "text-emerald-500")}
+                <Icon
+                  name={
+                    user && post.savedBy.includes(user.id)
+                      ? "bookmark-check"
+                      : "bookmark"
+                  }
+                  className={cn(
+                    "size-4",
+                    user && post.savedBy.includes(user.id) && "text-emerald-500"
+                  )}
                 />
                 <span className="inline font-medium opacity-90 text-[14px] transition hover:opacity-100">
                   {formatNumber(post.savedBy.length)}

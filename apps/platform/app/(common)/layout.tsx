@@ -20,13 +20,14 @@ const PROMO = {
   title: "Share your Personal Guide, Experiences",
   description:
     "Personal career experiences, articles, and case studies. You can also promote your articles on the site if they are valuable reads",
-  label: <>
-  Share Now
-  <Icon name="arrow-up-right" />
-  </>,
+  label: (
+    <>
+      Share Now
+      <Icon name="arrow-up-right" />
+    </>
+  ),
   showTill: "2025-12-31T19:00:00",
-  getRedirectUrl: () =>
-    "https://forms.gle/NWAfkZngLozRjRJZ6",
+  getRedirectUrl: () => "https://forms.gle/NWAfkZngLozRjRJZ6",
   getConditionByUser: (user: Session["user"]) =>
     // user?.other_roles.includes(ROLES_ENUMS.STUDENT) &&
     // user?.gender === "not_specified",
@@ -47,9 +48,9 @@ export default async function Layout({ children }: LayoutProps) {
           btnProps={{
             children: PROMO.label,
             variant: "default",
-            shadow:"default",
-            transition:"damped",
-            effect:"none",
+            shadow: "default",
+            transition: "damped",
+            effect: "none",
           }}
         />
       </ConditionalRender>
@@ -65,7 +66,7 @@ export default async function Layout({ children }: LayoutProps) {
         {children}
         <GithubBanner />
       </div>
-       <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 -z-10">
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" />
         <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-blue-500/20 rounded-full blur-3xl animate-pulse delay-700" />
       </div>

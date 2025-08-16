@@ -26,18 +26,18 @@ import OutpassRender from "./outpass-render";
 
 type responseType =
   | {
-    identifier: "rollNo";
-    history: OutPassType[];
-  }
+      identifier: "rollNo";
+      history: OutPassType[];
+    }
   | {
-    identifier: "id";
-    outpass: OutPassType | null;
-  }
+      identifier: "id";
+      outpass: OutPassType | null;
+    }
   | {
-    identifier: "unknown";
-    message: string;
-    error?: string | unknown;
-  };
+      identifier: "unknown";
+      message: string;
+      error?: string | unknown;
+    };
 
 async function fetchByIdentifier(identifier: string) {
   return await apiFetch<responseType>(
@@ -56,14 +56,14 @@ function isActionAllowed(outpass: OutPassType) {
     new Date(outpass.validTill).getTime() < new Date().getTime();
 
   if (isExpired) return false;
-  if(outpass?.actualInTime) return true
+  if (outpass?.actualInTime) return true;
   return true;
 }
 
 export default function OutpassVerifier() {
   const { currentCode, scanHistory, clearHistory } =
     useExternalBarcodeScanner();
-  const [rollNo, setRollNo] = useQueryState<string>("rollNo", parseAsString)
+  const [rollNo, setRollNo] = useQueryState<string>("rollNo", parseAsString);
   // const [rollNo, setRollNo] = useState("");
   const [outpassHistory, setOutpassHistory] = useState<OutPassType[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -168,7 +168,7 @@ export default function OutpassVerifier() {
             variant="glass"
             rounded="full"
           >
-              <LuScanBarcode/>
+            <LuScanBarcode />
           </Button>
         </div>
         <Input
@@ -230,9 +230,9 @@ export default function OutpassVerifier() {
               <span className="font-medium text-left">
                 {currentOutpass?.actualOutTime
                   ? format(
-                    new Date(currentOutpass.actualOutTime || ""),
-                    "dd/MM/yyyy hh:mm a"
-                  )
+                      new Date(currentOutpass.actualOutTime || ""),
+                      "dd/MM/yyyy hh:mm a"
+                    )
                   : "Not exited yet"}
               </span>
             </div>
@@ -244,9 +244,9 @@ export default function OutpassVerifier() {
               <span className="font-medium text-left">
                 {currentOutpass?.actualInTime
                   ? format(
-                    new Date(currentOutpass.actualInTime || ""),
-                    "dd/MM/yyyy hh:mm a"
-                  )
+                      new Date(currentOutpass.actualInTime || ""),
+                      "dd/MM/yyyy hh:mm a"
+                    )
                   : "Not entered yet"}
               </span>
             </div>
@@ -276,11 +276,8 @@ export default function OutpassVerifier() {
               onClick={handleEntryExit}
               disabled={
                 updating ||
-                (currentOutpass ? isActionAllowed(currentOutpass) : false)
-                || (
-                  !updating &&
-                  !!currentOutpass?.actualInTime
-                )
+                (currentOutpass ? isActionAllowed(currentOutpass) : false) ||
+                (!updating && !!currentOutpass?.actualInTime)
               }
               variant={currentOutpass?.actualInTime ? "glass" : "default_light"}
               effect="shineHover"
@@ -311,7 +308,7 @@ export default function OutpassVerifier() {
               variant="outline"
               size="sm"
               onClick={() => {
-                setRollNo("");  
+                setRollNo("");
                 setOutpassHistory([]);
                 setCurrentOutpass(null);
                 clearHistory();
@@ -321,7 +318,7 @@ export default function OutpassVerifier() {
               <MdClear />
             </Button>
           </div>
-          </div>
+        </div>
         <ErrorBoundary
           fallback={
             <EmptyArea

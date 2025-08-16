@@ -7,8 +7,6 @@ import { appConfig } from "~/project.config";
 import { NumberTicker } from "../animation/number-ticker";
 import { Button } from "../ui/button";
 
-
-
 export default async function GithubStars({
   className,
 }: {

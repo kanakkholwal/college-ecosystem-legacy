@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { notFound } from "next/navigation";
-import Markdown from 'react-markdown';
+import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import { getPostById } from "src/actions/common.community";
 import { getSession } from "~/auth/server";
@@ -34,9 +34,7 @@ export async function generateMetadata(
     title: `${post.title} `,
     description: post.content.slice(0, 100),
     openGraph: {
-      images: [
-        `${process.env.BASE_URL}/${CATEGORY_IMAGES[post.category]}`,
-      ],
+      images: [`${process.env.BASE_URL}/${CATEGORY_IMAGES[post.category]}`],
     },
   };
 }
@@ -73,7 +71,7 @@ export default async function CommunityPost(props: Props) {
             datePublished: post.createdAt,
             about: post.category,
             image: `${appConfig.url}/${CATEGORY_IMAGES[post.category]}`,
-          })
+          }),
         }}
         id="json-ld-blog-post"
       />
@@ -125,14 +123,7 @@ export default async function CommunityPost(props: Props) {
         </div>
         <h3 className="text-lg font-medium">{post.title}</h3>
         <article className="border-l py-4  max-w-full prose prose-sm dark:prose-invert pl-2 bg-muted/10">
-
-          <Markdown
-          remarkPlugins={[
-            remarkGfm,
-          ]}
-          >
-            {post.content}
-          </Markdown>
+          <Markdown remarkPlugins={[remarkGfm]}>{post.content}</Markdown>
         </article>
         <PostFooter post={post} user={session?.user!} />
         <div id="comments-section" className="mt-4">

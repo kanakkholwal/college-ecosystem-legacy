@@ -38,13 +38,11 @@ export function DashboardTemplate({ user_role }: { user_role: string }) {
               title="Suggest a Feature"
               description=" We are changing the way you interact with the platform and adding new features."
               redirectUrl="https://forms.gle/v8Angn9VCbt9oVko7"
-
               btnProps={{
                 children: "Suggest a feature here",
                 variant: "default_light",
               }}
             />
-
           </ConditionalRender>
           <ErrorBoundaryWithSuspense
             loadingFallback={

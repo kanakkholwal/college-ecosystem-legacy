@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   title: `Polls`,
   description: "Check the latest polls here.",
   alternates: {
-    canonical: '/polls',
+    canonical: "/polls",
   },
   keywords: [
     "NITH",
@@ -59,7 +59,7 @@ export default async function PollsPage(props: {
 
   return (
     <Tabs defaultValue={activeTab} className="w-full grid gap-4">
-      <VercelTabsList tabs={tabs} onTabChangeQuery="tab" className=" mt-5"/>
+      <VercelTabsList tabs={tabs} onTabChangeQuery="tab" className=" mt-5" />
 
       <div className="rounded-lg p-4 @container/polls max-w-6xl mx-auto w-full">
         {tabs.map((tab, idx) => {
@@ -72,7 +72,7 @@ export default async function PollsPage(props: {
                   actionProps={{
                     asChild: true,
                     variant: "raw",
-                    children:
+                    children: (
                       <AuthButtonLink
                         authorized={!!session?.user}
                         variant="rainbow"
@@ -80,11 +80,13 @@ export default async function PollsPage(props: {
                         href="/polls?tab=opened-polls"
                       >
                         Login
-                        <LogIn/>
+                        <LogIn />
                       </AuthButtonLink>
+                    ),
                   }}
                 />
-              </TabsContent>)
+              </TabsContent>
+            );
           }
           return (
             <TabsContent value={tab.id} key={tab.id}>
@@ -98,7 +100,7 @@ export default async function PollsPage(props: {
                 </h3>
                 {tab.id === "your-polls" && <CreatePoll />}
               </div>
-              
+
               {polls[idx].length === 0 ? (
                 <EmptyArea
                   title={`No ${tab.label.toLowerCase()}`}
@@ -107,7 +109,11 @@ export default async function PollsPage(props: {
               ) : (
                 <div className="grid grid-cols-1 @2xl/polls:grid-cols-2 gap-3">
                   {polls[idx].map((poll: PollType) => (
-                    <PollComponent poll={poll} key={poll._id} user={session?.user} />
+                    <PollComponent
+                      poll={poll}
+                      key={poll._id}
+                      user={session?.user}
+                    />
                   ))}
                 </div>
               )}

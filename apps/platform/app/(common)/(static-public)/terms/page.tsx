@@ -36,8 +36,8 @@ export default function TermsPage() {
         <h2>1. Acceptance of Terms</h2>
         <p>
           By accessing or using the Site or App, you agree to be bound by these
-          Terms, our Privacy Policy, and any other guidelines or policies we
-          may post. If you do not agree, do not use our services.
+          Terms, our Privacy Policy, and any other guidelines or policies we may
+          post. If you do not agree, do not use our services.
         </p>
 
         <h2>2. Unofficial Platform</h2>
@@ -71,9 +71,9 @@ export default function TermsPage() {
         <p>
           We may provide access to academic resources (e.g., syllabus,
           results-related tools). This data is provided solely for convenience
-          and informational purposes. We do not guarantee accuracy, completeness,
-          or timely updates. You are responsible for verifying official data with
-          the institute.
+          and informational purposes. We do not guarantee accuracy,
+          completeness, or timely updates. You are responsible for verifying
+          official data with the institute.
         </p>
 
         <h2>5. No Guarantee of Accuracy</h2>
@@ -111,8 +111,8 @@ export default function TermsPage() {
         <p>
           Content we create (e.g., original guides, articles, tools, and
           designs) is protected by intellectual property laws. You may not
-          reproduce, modify, or distribute our content without permission, except
-          as allowed by law or fair use.
+          reproduce, modify, or distribute our content without permission,
+          except as allowed by law or fair use.
         </p>
 
         <h2>10. Service Changes & Termination</h2>

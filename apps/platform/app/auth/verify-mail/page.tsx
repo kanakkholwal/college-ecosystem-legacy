@@ -11,8 +11,6 @@ import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { authClient } from "~/auth/client";
 
-
-
 export default function VerifyEmail() {
   const searchParams = useSearchParams();
   const [isVerifying, setIsVerifying] = useState(false);

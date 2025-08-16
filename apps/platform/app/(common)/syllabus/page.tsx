@@ -54,7 +54,6 @@ export default async function CoursesPage(props: {
     <div className="px-3 md:px-6 xl:px-12 @container">
       <BaseHeroSection
         title="Syllabus Search"
-
         description={`Search for syllabus of any course in ${orgConfig.shortName}.`}
       >
         <Suspense fallback={<Skeleton className="h-12 w-full" />}>

@@ -36,8 +36,8 @@ export async function generateMetadata(
     title: `${rollNo} | Results`,
     description: `Check the results of ${rollNo}`,
     alternates: {
-      canonical: '/results/' + rollNo,
-    }
+      canonical: "/results/" + rollNo,
+    },
   };
 }
 

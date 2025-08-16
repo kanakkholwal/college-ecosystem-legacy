@@ -8,7 +8,6 @@ import { LuBuilding } from "react-icons/lu";
 import { PiStudentFill } from "react-icons/pi";
 import { getHostelByUser } from "~/actions/hostel.core";
 
-
 export default async function WardenDashboard({ role }: { role: string }) {
   const { success, message, hostel, hosteler } = await getHostelByUser();
 
@@ -25,10 +24,7 @@ export default async function WardenDashboard({ role }: { role: string }) {
   return (
     <div className="space-y-5 my-2">
       <HostelDetailsForNonAdmins hostel={hostel} />
-      <NoteSeparator
-        label={"Actions for " + role}
-        className="p-0"
-      />
+      <NoteSeparator label={"Actions for " + role} className="p-0" />
       <ResponsiveContainer>
         {routes.map((route) => (
           <RouterCard

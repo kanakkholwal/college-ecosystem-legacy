@@ -1,5 +1,9 @@
 import { NumberTicker } from "@/components/animation/number-ticker";
-import { ChartBar, ChartPie, ChartRadialStacked } from "@/components/application/charts";
+import {
+  ChartBar,
+  ChartPie,
+  ChartRadialStacked,
+} from "@/components/application/charts";
 import { StatsCard } from "@/components/application/stats-card";
 import { Icon } from "@/components/icons";
 import { cn } from "@/lib/utils";
@@ -22,8 +26,11 @@ import {
   users_CountAndGrowth,
 } from "~/actions/dashboard.admin";
 import { ROLES } from "~/constants";
-import { DEPARTMENTS_LIST, getDepartmentCode } from "~/constants/core.departments";
-import { extractVisitorCount } from '~/lib/third-party/github';
+import {
+  DEPARTMENTS_LIST,
+  getDepartmentCode,
+} from "~/constants/core.departments";
+import { extractVisitorCount } from "~/lib/third-party/github";
 import { formatNumber } from "~/utils/number";
 import { changeCase } from "~/utils/string";
 
@@ -39,7 +46,7 @@ export default async function AdminDashboard() {
   const usersByRole = await getUsersByRole();
   const usersByDepartment = await getUsersByDepartment();
   const activeSessions = await getActiveSessions();
-  const count = await extractVisitorCount()
+  const count = await extractVisitorCount();
   const platformDBStats = await getPlatformDBStats();
 
   return (
@@ -55,22 +62,32 @@ export default async function AdminDashboard() {
           >
             <NumberTicker
               value={totalUsers}
-              className={cn("text-3xl font-bold text-primary after:text-xs",userTrend === 1
+              className={cn(
+                "text-3xl font-bold text-primary after:text-xs",
+                userTrend === 1
                   ? "after:text-green-500"
                   : userTrend === -1
                     ? "after:text-red-500"
-                    : "after:text-primary/80")}
-              suffix={userTrend === 1 ? "↑" + growth : userTrend === -1 ? "↓" + growth : ""}
+                    : "after:text-primary/80"
+              )}
+              suffix={
+                userTrend === 1
+                  ? "↑" + growth
+                  : userTrend === -1
+                    ? "↓" + growth
+                    : ""
+              }
             />
 
             <p className="text-xs text-muted-foreground">
               <span
-                className={`${userTrend === 1
-                  ? "text-green-500"
-                  : userTrend === -1
-                    ? "text-red-500"
-                    : "text-primary/80"
-                  } text-base`}
+                className={`${
+                  userTrend === 1
+                    ? "text-green-500"
+                    : userTrend === -1
+                      ? "text-red-500"
+                      : "text-primary/80"
+                } text-base`}
               >
                 {userTrend === 1 ? (
                   <TrendingUp className="inline-block mr-2 size-4" />
@@ -116,7 +133,6 @@ export default async function AdminDashboard() {
           <StatsCard
             className="col-span-1 sm:col-span-2 md:col-span-12 max-h-96"
             title="Platform DB Stats"
-
             Icon={<Network className="inline-block mr-2 size-4" />}
           >
             <ChartBar
@@ -126,26 +142,23 @@ export default async function AdminDashboard() {
                   count: value,
                 };
               })}
-              config={
-                {
-                  count: {
-                    label: "count",
-                  },
-                  ...Object.keys(platformDBStats).reduce<
-                    Record<string, { label: string; color: string }>
-                  >((acc, key, idx) => {
-                    acc[key] = {
-                      label: changeCase(key.toString(), "camel_to_title"),
-                      color: `var(--chart-${idx + 1})`,
-                    };
-                    return acc;
-                  }, {})
-                }}
+              config={{
+                count: {
+                  label: "count",
+                },
+                ...Object.keys(platformDBStats).reduce<
+                  Record<string, { label: string; color: string }>
+                >((acc, key, idx) => {
+                  acc[key] = {
+                    label: changeCase(key.toString(), "camel_to_title"),
+                    color: `var(--chart-${idx + 1})`,
+                  };
+                  return acc;
+                }, {}),
+              }}
               orientation="horizontal"
-
               dataKey="count"
               nameKey="key"
-
             />
           </StatsCard>
           {/* Users by Gender Card */}
@@ -153,7 +166,6 @@ export default async function AdminDashboard() {
             className="col-span-1 sm:col-span-2 md:col-span-6"
             title="Users by Gender"
             Icon={<Transgender className="inline-block mr-2 size-4" />}
-
           >
             <ChartRadialStacked
               data={Object.entries(usersByGender).map(([key, value]) => {
@@ -235,7 +247,6 @@ export default async function AdminDashboard() {
                 count: dept.count,
               }))}
               config={{
-
                 staff: {
                   label: "Staff",
                   color: "var(--chart-1)",
@@ -263,8 +274,6 @@ export default async function AdminDashboard() {
           </StatsCard>
           {/* Account Creation Trends */}
         </div>
-
-
       </div>
     </div>
   );

@@ -85,7 +85,7 @@ export async function GET(request: Request) {
         // excelBuffer, // Uncomment this line if you want to return the buffer directly
       },
       { status: 200 }
-    )
+    );
     // return new NextResponse(excelBuffer, {
     //   headers: {
     //     "Content-Type":

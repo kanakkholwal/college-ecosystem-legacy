@@ -20,7 +20,7 @@ const containerVariants = {
   },
 };
 
-const textVariants:Variants = {
+const textVariants: Variants = {
   hidden: { y: 40, opacity: 0 },
   visible: {
     y: 0,
@@ -178,7 +178,15 @@ export default function HeroUI({
               <span className="text-foreground mt-2 block">
                 {subtitle.includes("Interactions") ? (
                   <>
-                    Where <LustreText text="Interactions" speed={8} className="inline" /> <span className="border-b-4 border-cyan-400/50">Spark Joy</span>
+                    Where{" "}
+                    <LustreText
+                      text="Interactions"
+                      speed={8}
+                      className="inline"
+                    />{" "}
+                    <span className="border-b-4 border-cyan-400/50">
+                      Spark Joy
+                    </span>
                   </>
                 ) : (
                   subtitle
@@ -191,8 +199,13 @@ export default function HeroUI({
               variants={textVariants}
             >
               Animated, accessible, and customizable components built with
-              <Badge variant="default" className="mx-1">Framer Motion</Badge> and
-              <Badge variant="default" className="mx-1">Tailwind CSS</Badge>
+              <Badge variant="default" className="mx-1">
+                Framer Motion
+              </Badge>{" "}
+              and
+              <Badge variant="default" className="mx-1">
+                Tailwind CSS
+              </Badge>
             </motion.div>
 
             <motion.div

@@ -1,12 +1,24 @@
 import EmptyArea from "@/components/common/empty-area";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
 import { Heading, Paragraph } from "@/components/ui/typography";
 import { ErrorBoundaryWithSuspense } from "@/components/utils/error-boundary";
 import { LuBuilding } from "react-icons/lu";
-import { getEligibleStudentsForHostel, getHostel, getStudentsByHostelId, importStudentsWithCgpi } from "~/actions/hostel.core";
+import {
+  getEligibleStudentsForHostel,
+  getHostel,
+  getStudentsByHostelId,
+  importStudentsWithCgpi,
+} from "~/actions/hostel.core";
 import { ImportStudents } from "./client";
 
 export default async function HostelPage({
@@ -60,7 +72,7 @@ export default async function HostelPage({
               <Badge size="sm" className="ml-2">
                 {students.length} Student(s)
               </Badge>
-              </h6>
+            </h6>
             <p className="text-xs text-muted-foreground">
               Here you can view the list of students in the hostel.
             </p>
@@ -86,12 +98,18 @@ export default async function HostelPage({
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead className="whitespace-nowrap">Roll No</TableHead>
+                      <TableHead className="whitespace-nowrap">
+                        Roll No
+                      </TableHead>
                       <TableHead className="whitespace-nowrap">Name</TableHead>
                       <TableHead className="whitespace-nowrap">Email</TableHead>
                       <TableHead className="whitespace-nowrap">CGPI</TableHead>
-                      <TableHead className="whitespace-nowrap">Banned</TableHead>
-                      <TableHead className="whitespace-nowrap">Actions</TableHead>
+                      <TableHead className="whitespace-nowrap">
+                        Banned
+                      </TableHead>
+                      <TableHead className="whitespace-nowrap">
+                        Actions
+                      </TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -110,13 +128,16 @@ export default async function HostelPage({
                           {student.cgpi || "N/A"}
                         </TableCell>
                         <TableCell className="whitespace-nowrap">
-                          {student.banned ?
-                            `${student.bannedReason} (Until ${new Date(student.bannedTill || "").toLocaleDateString()})`
+                          {student.banned
+                            ? `${student.bannedReason} (Until ${new Date(student.bannedTill || "").toLocaleDateString()})`
                             : "No"}
                         </TableCell>
                         <TableCell className="whitespace-nowrap">
                           {/* Add action buttons here if needed */}
-                          <button className="text-primary hover:underline"  disabled>
+                          <button
+                            className="text-primary hover:underline"
+                            disabled
+                          >
                             View Details
                           </button>
                         </TableCell>
@@ -126,14 +147,12 @@ export default async function HostelPage({
                 </Table>
               </div>
             </ErrorBoundaryWithSuspense>
-
           </TabsContent>
           <TabsContent value="assign_students">
-            <h6 className="text-sm font-medium">
-              Assign Students to Hostel
-            </h6>
+            <h6 className="text-sm font-medium">Assign Students to Hostel</h6>
             <p className="text-xs text-muted-foreground">
-              Assign students to the hostel by manually adding them or importing from an Excel file.
+              Assign students to the hostel by manually adding them or importing
+              from an Excel file.
             </p>
             <ErrorBoundaryWithSuspense
               fallback={
@@ -149,11 +168,15 @@ export default async function HostelPage({
                   title="Loading Assignable Students..."
                   description={`Fetching assignable students for ${hostel.name}`}
                 />
-              }>
+              }
+            >
               <div className="mt-4">
                 {assignableStudents.map((student) => {
                   return (
-                    <div key={student._id} className="p-2 border-b last:border-0">
+                    <div
+                      key={student._id}
+                      className="p-2 border-b last:border-0"
+                    >
                       <div className="flex justify-between items-center">
                         <span className="font-medium">{student.name}</span>
                         <span className="text-xs text-muted-foreground">

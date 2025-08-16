@@ -11,7 +11,6 @@ const TABS = [
   ["sign-up", <SignUpForm key="sign-up" />],
 ] as [string, React.ReactNode][];
 
-
 export const metadata: Metadata = {
   title: "Sign In ",
   description: "Sign in to your account",
@@ -26,7 +25,6 @@ export const metadata: Metadata = {
   ],
   alternates: {
     canonical: "/auth/sign-in",
-    
   },
 };
 
@@ -57,11 +55,8 @@ export default async function SignInPage({ searchParams }: Props) {
 
   const { tab } = await searchParams;
 
-
   // Determine default tab
-  const defaultTab = tab && tabs.some(t => t.id === tab)
-    ? tab
-    : tabs[0].id;
+  const defaultTab = tab && tabs.some((t) => t.id === tab) ? tab : tabs[0].id;
 
   // Check if we should show the tabs list (not showing for hidden tabs)
 

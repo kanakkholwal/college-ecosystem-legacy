@@ -34,12 +34,13 @@ interface Props {
 
 const formSchema = z.object({
   gender: z.enum(["male", "female", "not_specified"]),
-  other_emails: z.array(z.union([emailSchema, z.string().email()])).optional().default([]),
-
+  other_emails: z
+    .array(z.union([emailSchema, z.string().email()]))
+    .optional()
+    .default([]),
 });
 
 function AccountFormContent({ currentUser }: Props) {
-
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -62,85 +63,91 @@ function AccountFormContent({ currentUser }: Props) {
     );
   };
 
+  return (
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="space-y-8 grid gap-6 md:grid-cols-2"
+      >
+        <FormField
+          control={form.control}
+          name="gender"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Gender</FormLabel>
+              <FormControl>
+                <ToggleGroup
+                  defaultValue={"not_specified"}
+                  value={field.value}
+                  onValueChange={(value) =>
+                    currentUser.gender !== "not_specified" &&
+                    field.onChange(value)
+                  }
+                  className="justify-start"
+                  type="single"
+                  disabled={currentUser.gender === "not_specified"}
+                >
+                  {["male", "female", "not_specified"].map((item) => (
+                    <ToggleGroupItem
+                      value={item}
+                      key={item}
+                      size="sm"
+                      className="capitalize"
+                      disabled={currentUser.gender !== "not_specified"}
+                    >
+                      {item.replace("_", " ")}
+                    </ToggleGroupItem>
+                  ))}
+                </ToggleGroup>
+              </FormControl>
 
-  return (<Form {...form}>
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 grid gap-6 md:grid-cols-2">
-      <FormField
-        control={form.control}
-        name="gender"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Gender</FormLabel>
-            <FormControl>
-              <ToggleGroup
-                defaultValue={"not_specified"}
-                value={field.value}
-                onValueChange={(value) =>
-                  currentUser.gender !== "not_specified" &&
-                  field.onChange(value)
-                }
-                className="justify-start"
-                type="single"
-                disabled={currentUser.gender === "not_specified"}
-              >
-                {["male", "female", "not_specified"].map((item) => (
-                  <ToggleGroupItem
-                    value={item}
-                    key={item}
-                    size="sm"
-                    className="capitalize"
-                    disabled={currentUser.gender !== "not_specified"}
-                  >
-                    {item.replace("_", " ")}
-                  </ToggleGroupItem>
-                ))}
-              </ToggleGroup>
-            </FormControl>
+              <FormDescription>
+                {currentUser.gender === "not_specified"
+                  ? "You can set your gender here."
+                  : "You cannot change your gender."}
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-            <FormDescription>
-              {currentUser.gender === "not_specified"
-                ? "You can set your gender here."
-                : "You cannot change your gender."}
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-      <FormField
-        control={form.control}
-        name="other_emails"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Other Emails</FormLabel>
-            <FormControl>
-              <Input
-                type="text"
-                placeholder="Enter other emails separated by commas"
-                value={field.value?.join(", ")}
-                onChange={(e) =>
-                  field.onChange(
-                    e.target.value
-                      .split(",")
-                      .map((email) => email.trim())
-                  )
-                }
-              />
-            </FormControl>
-            <FormDescription>
-              You can add multiple emails separated by commas.
-            </FormDescription>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-      <div>
-        <Button type="submit" variant="default_light" size="sm" disabled={form.formState.isSubmitting}>
-          <Save /> Update Account
-        </Button>
-      </div>
-    </form>
-  </Form>
+        <FormField
+          control={form.control}
+          name="other_emails"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Other Emails</FormLabel>
+              <FormControl>
+                <Input
+                  type="text"
+                  placeholder="Enter other emails separated by commas"
+                  value={field.value?.join(", ")}
+                  onChange={(e) =>
+                    field.onChange(
+                      e.target.value.split(",").map((email) => email.trim())
+                    )
+                  }
+                />
+              </FormControl>
+              <FormDescription>
+                You can add multiple emails separated by commas.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <div>
+          <Button
+            type="submit"
+            variant="default_light"
+            size="sm"
+            disabled={form.formState.isSubmitting}
+          >
+            <Save /> Update Account
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }
 const passwordSchema = z.object({
@@ -151,8 +158,8 @@ const passwordSchema = z.object({
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d@$!%*?&]{8,}$/, {
       message:
         "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-    })
-})
+    }),
+});
 function ChangePasswordForm({ currentUser }: Props) {
   const passwordForm = useForm<z.infer<typeof passwordSchema>>({
     resolver: zodResolver(passwordSchema),
@@ -162,71 +169,63 @@ function ChangePasswordForm({ currentUser }: Props) {
   });
 
   const changePassword = async (data: z.infer<typeof passwordSchema>) => {
-
     toast
-      .promise(
-        changeUserPassword(currentUser.id, data.password),
-        {
-          loading: "Updating password..",
-          success: "Password updated successfully",
-          error: "Something went wrong",
-        }
-      )
+      .promise(changeUserPassword(currentUser.id, data.password), {
+        loading: "Updating password..",
+        success: "Password updated successfully",
+        error: "Something went wrong",
+      })
       .finally(() => {
         passwordForm.reset();
       });
   };
 
-  return <Form {...passwordForm}>
-    <form onSubmit={passwordForm.handleSubmit(changePassword)} className="space-y-4 mt-2">
-
-      <FormField
-        control={passwordForm.control}
-        name="password"
-        render={({ field }) => (
-          <FormItem>
-            <Label htmlFor={field.name}>
-              New Password
-            </Label>
-            <div className="relative group">
-              <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
-                <BiLockOpenAlt className="w-4 h-4 group-focus-within:text-primary" />
-              </FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="*********"
-                  type="password"
-                  autoCapitalize="none"
-                  autoComplete="password"
-                  autoCorrect="off"
-                  className="pl-10 pr-5 !mt-0"
-                  {...field}
-                />
-              </FormControl>
-            </div>
-            <FormMessage />
-          </FormItem>
-        )}
-      />
-
-
-
-      <Button
-        variant="default_light"
-        type="submit"
-        size="sm"
-
-        disabled={passwordForm.formState.isSubmitting}
+  return (
+    <Form {...passwordForm}>
+      <form
+        onSubmit={passwordForm.handleSubmit(changePassword)}
+        className="space-y-4 mt-2"
       >
-        <Save />
-        Update Password
-      </Button>
+        <FormField
+          control={passwordForm.control}
+          name="password"
+          render={({ field }) => (
+            <FormItem>
+              <Label htmlFor={field.name}>New Password</Label>
+              <div className="relative group">
+                <FormLabel className="absolute top-1/2 -translate-y-1/2 left-4 z-50">
+                  <BiLockOpenAlt className="w-4 h-4 group-focus-within:text-primary" />
+                </FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="*********"
+                    type="password"
+                    autoCapitalize="none"
+                    autoComplete="password"
+                    autoCorrect="off"
+                    className="pl-10 pr-5 !mt-0"
+                    {...field}
+                  />
+                </FormControl>
+              </div>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
 
-    </form>
-  </Form>
+        <Button
+          variant="default_light"
+          type="submit"
+          size="sm"
+          disabled={passwordForm.formState.isSubmitting}
+        >
+          <Save />
+          Update Password
+        </Button>
+      </form>
+    </Form>
+  );
 }
-
-
 
 const panels = [
   {
@@ -244,17 +243,20 @@ const panels = [
 ];
 
 export function AccountForm({ currentUser }: Props) {
-
-
-
   return (
     <>
       <Accordion type="single" collapsible className="space-y-4">
         {panels.map((panel) => {
           return (
-            <AccordionItem key={panel.value} value={panel.value} className="bg-card rounded-lg border-b-0">
+            <AccordionItem
+              key={panel.value}
+              value={panel.value}
+              className="bg-card rounded-lg border-b-0"
+            >
               <AccordionTrigger className="flex-col items-start">
-                <span className="text-base font-medium text-left">{panel.label}</span>
+                <span className="text-base font-medium text-left">
+                  {panel.label}
+                </span>
                 <span className="text-xs text-muted-foreground font-normal">
                   {panel.description}
                 </span>
@@ -266,7 +268,6 @@ export function AccountForm({ currentUser }: Props) {
           );
         })}
       </Accordion>
-
     </>
   );
 }

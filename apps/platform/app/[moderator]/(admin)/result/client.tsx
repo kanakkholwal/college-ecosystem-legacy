@@ -26,7 +26,7 @@ import serverApis from "~/lib/server-apis/client";
 import type {
   AbNormalResult,
   ResultType,
-  rawResultSchemaType
+  rawResultSchemaType,
 } from "~/lib/server-apis/types";
 import { orgConfig } from "~/project.config";
 import { changeCase } from "~/utils/string";
@@ -39,33 +39,27 @@ const availableMethods = [
   "updateResultByRollNo",
 ] as const;
 
-
-
-async function getResultByRollNo(rollNo: string, method: typeof availableMethods[number]) {
+async function getResultByRollNo(
+  rollNo: string,
+  method: (typeof availableMethods)[number]
+) {
   try {
     if (method === "getResultByRollNoFromSite") {
-      const res =
-        await serverApis.results.getResultByRollNoFromSite(rollNo);
+      const res = await serverApis.results.getResultByRollNoFromSite(rollNo);
       console.log("Response from getResultByRollNoFromSite:", res);
       return Promise.resolve(res);
     } else if (method === "getResultByRollNo") {
-      const response =
-        await serverApis.results.getResultByRollNo(rollNo);
+      const response = await serverApis.results.getResultByRollNo(rollNo);
       return Promise.resolve(response);
-
     } else if (method === "addResultByRollNo") {
-      const response =
-        await serverApis.results.addResultByRollNo(rollNo);
+      const response = await serverApis.results.addResultByRollNo(rollNo);
       return Promise.resolve(response);
-
     } else if (method === "updateResultByRollNo") {
-      const response =
-        await serverApis.results.updateResultByRollNo([
-          rollNo,
-          {},
-        ]);
+      const response = await serverApis.results.updateResultByRollNo([
+        rollNo,
+        {},
+      ]);
       return Promise.resolve(response);
-
     }
   } catch (err) {
     console.log(err);
@@ -91,13 +85,18 @@ export function GetResultDiv() {
       toast.error("Please select a method");
       return;
     }
-    if (!availableMethods.includes(method as typeof availableMethods[number])) {
+    if (
+      !availableMethods.includes(method as (typeof availableMethods)[number])
+    ) {
       toast.error("Invalid method selected");
       return;
     }
     setLoading(true);
     try {
-      const response = await getResultByRollNo(rollNo, method as typeof availableMethods[number]);
+      const response = await getResultByRollNo(
+        rollNo,
+        method as (typeof availableMethods)[number]
+      );
       if (response?.error || !response?.data) {
         toast.error(response?.message || "Failed to fetch result");
         return;
@@ -123,7 +122,9 @@ export function GetResultDiv() {
   return (
     <div className="w-full flex flex-col gap-4">
       <div>
-        <Label className="text-xs" htmlFor="rollNo">Enter Roll No to Get Result</Label>
+        <Label className="text-xs" htmlFor="rollNo">
+          Enter Roll No to Get Result
+        </Label>
         <Input
           type="text"
           id="rollNo"
@@ -198,8 +199,7 @@ export function DeleteResultDiv() {
     }
     setLoading(true);
     try {
-      const response =
-        await serverApis.results.deleteResultByRollNo(rollNo);
+      const response = await serverApis.results.deleteResultByRollNo(rollNo);
       if (response?.error || !response?.data) {
         toast.error(response?.message || "Failed to delete result by Roll No");
         return;
@@ -219,7 +219,9 @@ export function DeleteResultDiv() {
   return (
     <div className="w-full flex flex-col gap-4 @3xl:p-3">
       <div>
-        <Label className="text-xs" htmlFor="rollNoDel">Enter Roll No to Delete Result</Label>
+        <Label className="text-xs" htmlFor="rollNoDel">
+          Enter Roll No to Delete Result
+        </Label>
         <Input
           type="text"
           id="rollNoDel"
@@ -264,7 +266,6 @@ export function DeleteResultDiv() {
   );
 }
 
-
 export function MailResultUpdateDiv() {
   const [targets, setTargets] = useState<string>("");
   // Batches is a comma-separated list of batches to send the mail to
@@ -278,12 +279,13 @@ export function MailResultUpdateDiv() {
     setLoading(true);
     // Validate email addresses
     const emailList = targets.split(",").map((email) => {
-        if (z.string().email().safeParse(email.trim()).success) {
-          return email.trim();
-        }
-        return email.trim() + orgConfig.mailSuffix;
-      })
-      const emailListValid = emailList.filter((email) => 
+      if (z.string().email().safeParse(email.trim()).success) {
+        return email.trim();
+      }
+      return email.trim() + orgConfig.mailSuffix;
+    });
+    const emailListValid = emailList.filter(
+      (email) =>
         emailSchema.safeParse(email.trim()).success ||
         z.string().email().safeParse(email.trim()).success
     );
@@ -298,11 +300,14 @@ export function MailResultUpdateDiv() {
     }
 
     try {
-      toast.promise(sendMailUpdate(emailListValid), {
-        loading: "Sending mail...",
-        success: "Mail sent successfully",
-        error: (error) => `Failed to send mail: ${error.message || "Unknown error"}`,
-      }).finally(() => setLoading(false));
+      toast
+        .promise(sendMailUpdate(emailListValid), {
+          loading: "Sending mail...",
+          success: "Mail sent successfully",
+          error: (error) =>
+            `Failed to send mail: ${error.message || "Unknown error"}`,
+        })
+        .finally(() => setLoading(false));
       setTargets(""); // Clear the input after successful mail
     } catch (error) {
       console.log("Error sending mail:", error);
@@ -328,12 +333,15 @@ export function MailResultUpdateDiv() {
           aria-label="Email Addresses"
         />
         <p className="text-xs text-muted-foreground">
-          {targets.split(",").map((email) => {
-            if (z.string().email().safeParse(email.trim()).success) {
-              return email.trim();
-            }
-            return email.trim() + orgConfig.mailSuffix;
-          }).join(", ")}
+          {targets
+            .split(",")
+            .map((email) => {
+              if (z.string().email().safeParse(email.trim()).success) {
+                return email.trim();
+              }
+              return email.trim() + orgConfig.mailSuffix;
+            })
+            .join(", ")}
         </p>
       </div>
       <Button
@@ -349,56 +357,79 @@ export function MailResultUpdateDiv() {
   );
 }
 
-
-export function AbnormalResultsDiv({ abnormalsResults }: { abnormalsResults: AbNormalResult[] }) {
+export function AbnormalResultsDiv({
+  abnormalsResults,
+}: {
+  abnormalsResults: AbNormalResult[];
+}) {
   const [loading, setLoading] = useState<boolean>(false);
 
   return (
     <div className="w-full p-3 lg:p-6 bg-card rounded-lg col-span-3">
       <div className=" flex flex-wrap gap-3 justify-between mb-4">
         <h4 className="text-base font-medium mb-4">Abnormal Results</h4>
-        {abnormalsResults.length > 0 && (<div className="flex items-center justify-between gap-2">
-          <LoaderCircleIcon className={`animate-spin ${loading ? "inline-block" : "hidden"}`} />
-          <Button
-            variant="dark"
-            disabled={loading}
-            onClick={() => {
-              // Handle update all logic here
-              setLoading(true);
-              toast.promise(
-                serverApis.results.bulkUpdateResults(abnormalsResults.map(result => result.rollNo)),
-                {
-                  loading: "Updating all abnormal results...",
-                  success: "All abnormal results updated successfully",
-                  error: (error) => `Failed to update all abnormal results: ${error.message || "Unknown error"}`,
+        {abnormalsResults.length > 0 && (
+          <div className="flex items-center justify-between gap-2">
+            <LoaderCircleIcon
+              className={`animate-spin ${loading ? "inline-block" : "hidden"}`}
+            />
+            <Button
+              variant="dark"
+              disabled={loading}
+              onClick={() => {
+                // Handle update all logic here
+                setLoading(true);
+                toast
+                  .promise(
+                    serverApis.results.bulkUpdateResults(
+                      abnormalsResults.map((result) => result.rollNo)
+                    ),
+                    {
+                      loading: "Updating all abnormal results...",
+                      success: "All abnormal results updated successfully",
+                      error: (error) =>
+                        `Failed to update all abnormal results: ${error.message || "Unknown error"}`,
+                    }
+                  )
+                  .finally(() => setLoading(false));
+              }}
+              size="sm"
+            >
+              Update All
+            </Button>
+            <Button
+              disabled={loading}
+              variant="ghost"
+              onClick={() => {
+                // Handle delete all logic here
+                if (
+                  !confirm(
+                    "Are you sure you want to delete all abnormal results? This action cannot be undone."
+                  )
+                ) {
+                  return;
                 }
-              ).finally(() => setLoading(false));
-            }}
-            size="sm">
-            Update All
-          </Button>
-          <Button
-            disabled={loading}
-            variant="ghost"
-            onClick={() => {
-              // Handle delete all logic here
-              if (!confirm("Are you sure you want to delete all abnormal results? This action cannot be undone.")) {
-                return;
-              }
-              setLoading(true);
-              toast.promise(
-                serverApis.results.bulkDeleteResults(abnormalsResults.map(result => result.rollNo)),
-                {
-                  loading: "Deleting all abnormal results...",
-                  success: "All abnormal results deleted successfully",
-                  error: (error) => `Failed to delete all abnormal results: ${error.message || "Unknown error"}`,
-                }
-              ).finally(() => setLoading(false));
-            }}
-            size="sm">
-            Delete All
-          </Button>
-        </div>)}
+                setLoading(true);
+                toast
+                  .promise(
+                    serverApis.results.bulkDeleteResults(
+                      abnormalsResults.map((result) => result.rollNo)
+                    ),
+                    {
+                      loading: "Deleting all abnormal results...",
+                      success: "All abnormal results deleted successfully",
+                      error: (error) =>
+                        `Failed to delete all abnormal results: ${error.message || "Unknown error"}`,
+                    }
+                  )
+                  .finally(() => setLoading(false));
+              }}
+              size="sm"
+            >
+              Delete All
+            </Button>
+          </div>
+        )}
       </div>
       {abnormalsResults.length === 0 ? (
         <EmptyArea
@@ -411,14 +442,10 @@ export function AbnormalResultsDiv({ abnormalsResults }: { abnormalsResults: AbN
             <div key={result._id} className="border-b pb-2">
               <h5 className="font-medium text-xs">
                 {result.name}
-                <Badge size="sm">
-                  {result.rollNo}
-                </Badge>
+                <Badge size="sm">{result.rollNo}</Badge>
               </h5>
               <p className="text-sm text-muted-foreground">
-                <Badge size="sm">
-                  sem - {result.semesterCount}
-                </Badge>
+                <Badge size="sm">sem - {result.semesterCount}</Badge>
                 <Badge size="sm">
                   avg - {result.avgSemesterCount.toFixed(1)}
                 </Badge>

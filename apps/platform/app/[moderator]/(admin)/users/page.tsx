@@ -106,11 +106,18 @@ export default function DashboardPage(props: PageProps) {
       <HeaderBar
         Icon={User2Icon}
         titleNode={
-          <>Manage Users <Badge size="sm">{users.length} found</Badge></>
+          <>
+            Manage Users <Badge size="sm">{users.length} found</Badge>
+          </>
         }
         descriptionNode="Here you can create new users or view existing ones."
         actionNode={
-          <ButtonLink variant="dark" size="sm" effect="shineHover" href={`/admin/users/new`}>
+          <ButtonLink
+            variant="dark"
+            size="sm"
+            effect="shineHover"
+            href={`/admin/users/new`}
+          >
             <Plus />
             New User
           </ButtonLink>

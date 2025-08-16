@@ -49,4 +49,3 @@ interface IAnnouncement extends Document {
   updatedAt: Date;
   createdAt: Date;
 }
-

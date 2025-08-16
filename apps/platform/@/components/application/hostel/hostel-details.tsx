@@ -62,8 +62,12 @@ export function HostelDetailsForNonAdmins({ hostel }: { hostel: HostelType }) {
         <div className="w-1/2">
           <h4 className="text-lg font-semibold">{hostel.name}</h4>
           <Badge className="mt-1" size="sm">
-            {hostel.gender === "female" ? "Girls" : hostel.gender === "male" ? "Boys" : hostel.gender}
-            {" "}Hostel
+            {hostel.gender === "female"
+              ? "Girls"
+              : hostel.gender === "male"
+                ? "Boys"
+                : hostel.gender}{" "}
+            Hostel
           </Badge>
         </div>
       </div>

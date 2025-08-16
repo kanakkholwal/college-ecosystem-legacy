@@ -3,17 +3,17 @@ import EmptyArea from "@/components/common/empty-area";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
 import { GrAnnounce } from "react-icons/gr";
-import Markdown from 'react-markdown';
+import Markdown from "react-markdown";
 import type { AnnouncementTypeWithId } from "src/models/announcement";
 import { Session } from "~/auth/client";
 import DeleteButton from "./delete-btn";
 
 export default function AnnouncementsList({
   announcements,
-  user
+  user,
 }: {
   announcements: AnnouncementTypeWithId[];
-  user?: Session["user"]
+  user?: Session["user"];
 }) {
   if (announcements.length === 0) {
     return (
@@ -57,14 +57,14 @@ export default function AnnouncementsList({
               </p>
             </div>
 
-            {(announcement.createdBy.id === user?.id || user?.role === "admin") && (
+            {(announcement.createdBy.id === user?.id ||
+              user?.role === "admin") && (
               <div className="absolute top-2 right-2">
                 <DeleteButton announcementId={announcement._id} />
-              </div>)}
+              </div>
+            )}
             <article className="prose prose-sm dark:prose-invert text-muted-foreground">
-              <Markdown>
-                {announcement.content}
-              </Markdown>
+              <Markdown>{announcement.content}</Markdown>
             </article>
           </div>
         );

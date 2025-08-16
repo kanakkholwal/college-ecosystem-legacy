@@ -284,7 +284,7 @@ const ChartLegendContent = React.forwardRef<
           className
         )}
       >
-        {payload.map((item,idx) => {
+        {payload.map((item, idx) => {
           const key = `${nameKey || item.dataKey || "value"}`;
           const itemConfig = getPayloadConfigFromPayload(config, item, key);
 
@@ -360,6 +360,5 @@ export {
   ChartLegendContent,
   ChartStyle,
   ChartTooltip,
-  ChartTooltipContent
+  ChartTooltipContent,
 };
-

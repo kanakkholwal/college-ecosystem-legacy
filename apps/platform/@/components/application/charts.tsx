@@ -57,7 +57,6 @@ interface ChartBarProps<
   TConfig extends ChartConfig,
 > extends BaseProps<TData, TConfig> {
   orientation?: "horizontal" | "vertical";
-
 }
 
 interface ChartRadialProps<
@@ -69,8 +68,6 @@ interface ChartRadialProps<
 
   textLabel?: string;
   textValue: string | number;
-
-
 }
 
 export function ChartBar<
@@ -86,9 +83,6 @@ export function ChartBar<
   tooltipProps,
   tooltipContentProps,
 }: ChartBarProps<TData, TConfig>) {
-
-
-
   return (
     <ErrorBoundaryWithSuspense
       fallback={
@@ -139,7 +133,7 @@ export function ChartBar<
               tickMargin={5}
               axisLine={false}
               tickFormatter={(value) => changeCase(value, "title")}
-            // hide
+              // hide
             />
             <XAxis dataKey={dataKey.toString()} type="number" hide />
             <ChartTooltip
@@ -207,11 +201,7 @@ export function ChartBar<
                 />
               }
             />
-            <Bar
-              dataKey={dataKey.toString()}
-              fill="var(--primary)"
-              radius={8}
-            >
+            <Bar dataKey={dataKey.toString()} fill="var(--primary)" radius={8}>
               <LabelList
                 position="top"
                 offset={12}
@@ -238,9 +228,6 @@ export function ChartRadialStacked<
   textLabel = "Total",
   textValue = "0000",
 }: ChartRadialProps<TData, TConfig>) {
-
-
-
   return (
     <ErrorBoundaryWithSuspense
       fallback={
@@ -322,7 +309,6 @@ export function ChartRadialStacked<
             fill="var(--chart-1)"
             className="stroke-2"
           />
-
         </RadialBarChart>
       </ChartContainer>
     </ErrorBoundaryWithSuspense>
@@ -346,7 +332,8 @@ interface PieBaseProps<
 interface PieDonutTextProps<
   TData extends Record<string, any>,
   TConfig extends ChartConfig,
-> extends BaseProps<TData, TConfig>, PieBaseProps<TData, TConfig> {
+> extends BaseProps<TData, TConfig>,
+    PieBaseProps<TData, TConfig> {
   // Additional properties specific to Pie/Donut charts
   textLabel?: string;
   textValue: string | number;
@@ -368,9 +355,6 @@ export function ChartPieDonutText<
   tooltipProps,
   tooltipContentProps,
 }: PieDonutTextProps<TData, TConfig>) {
-
-
-
   return (
     <ChartContainer config={config} className={className}>
       <PieChart>
@@ -449,13 +433,13 @@ export function ChartPie<
   tooltipProps,
   tooltipContentProps,
   showLegend = true,
-  pieClassName
+  pieClassName,
 }: PieBaseProps<TData, TConfig>) {
-
-
-
   return (
-    <ChartContainer config={config} className={cn("[&_.recharts-text]:fill-background", className)}>
+    <ChartContainer
+      config={config}
+      className={cn("[&_.recharts-text]:fill-background", className)}
+    >
       <PieChart>
         <ChartTooltip
           cursor={false}
@@ -484,23 +468,30 @@ export function ChartPie<
           strokeWidth={strokeWidth}
           className={cn(pieClassName)}
         >
-          {showLabelList && (<LabelList
-            dataKey={dataKey.toString()}
-            className="fill-background"
-            stroke="none"
-            fontSize={12}
-            formatter={(label: React.ReactNode) => {
-              const key = label as keyof typeof config;
-              return config[key]?.label;
-            }}
-          />)}
-        </Pie>
-        {showLegend && (<ChartLegend
-          content={({ payload }) => (
-            <ChartLegendContent nameKey={nameKey.toString()} payload={payload} />
+          {showLabelList && (
+            <LabelList
+              dataKey={dataKey.toString()}
+              className="fill-background"
+              stroke="none"
+              fontSize={12}
+              formatter={(label: React.ReactNode) => {
+                const key = label as keyof typeof config;
+                return config[key]?.label;
+              }}
+            />
           )}
-          className="-translate-y-2 flex-wrap gap-2 basis-4/5 lg:*:basis-1/4 *:justify-center"
-        />)}
+        </Pie>
+        {showLegend && (
+          <ChartLegend
+            content={({ payload }) => (
+              <ChartLegendContent
+                nameKey={nameKey.toString()}
+                payload={payload}
+              />
+            )}
+            className="-translate-y-2 flex-wrap gap-2 basis-4/5 lg:*:basis-1/4 *:justify-center"
+          />
+        )}
       </PieChart>
     </ChartContainer>
   );
@@ -647,4 +638,3 @@ export function ChartPie<
 
 //     )
 // }
-

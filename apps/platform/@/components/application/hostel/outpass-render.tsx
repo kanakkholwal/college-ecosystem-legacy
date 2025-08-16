@@ -102,7 +102,7 @@ export default function OutpassRender({
                 outpass.status === "approved"
                   ? "success_light"
                   : outpass.status === "rejected" ||
-                    outpass.status === "processed"
+                      outpass.status === "processed"
                     ? "destructive_light"
                     : outpass.status === "pending"
                       ? "warning_light"
@@ -136,7 +136,12 @@ export default function OutpassRender({
                 </>
               )}
             </Button>
-            <ButtonLink variant="link" effect="hoverUnderline" size="sm" href="outpass/request">
+            <ButtonLink
+              variant="link"
+              effect="hoverUnderline"
+              size="sm"
+              href="outpass/request"
+            >
               Request Outpass
               <ArrowRight />
             </ButtonLink>
@@ -169,7 +174,7 @@ export default function OutpassRender({
                       outpass.status === "approved"
                         ? "success_light"
                         : outpass.status === "rejected" ||
-                          outpass.status === "processed"
+                            outpass.status === "processed"
                           ? "destructive_light"
                           : outpass.status === "pending"
                             ? "warning_light"
@@ -239,23 +244,23 @@ export default function OutpassRender({
                   {format(
                     new Date(
                       outpass.validTill ||
-                      new Date(
-                        new Date().getFullYear(),
-                        new Date().getMonth(),
-                        new Date().getDate(),
-                        23,
-                        59,
-                        59,
-                        999
-                      )
+                        new Date(
+                          new Date().getFullYear(),
+                          new Date().getMonth(),
+                          new Date().getDate(),
+                          23,
+                          59,
+                          59,
+                          999
+                        )
                     ),
                     "dd/MM/yyyy hh:mm a"
                   )}
                 </strong>
                 {new Date(outpass.validTill || "").getTime() <
                   new Date().getTime() && (
-                    <span className="text-red-500 italic"> (Expired)</span>
-                  )}
+                  <span className="text-red-500 italic"> (Expired)</span>
+                )}
               </p>
             </section>
             <footer className={classNames.footer}>

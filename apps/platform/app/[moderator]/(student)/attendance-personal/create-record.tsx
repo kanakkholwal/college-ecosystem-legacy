@@ -17,11 +17,12 @@ import { createAttendance } from "~/actions/student.record_personal";
 
 export const rawAttendanceRecordSchema = z.object({
   subjectCode: z.string().regex(/^[A-Z]{2}-\d{3}$/, {
-    message: "Subject code must be in the format 'EC-234' (2 letters followed by a hyphen and 3 digits).",
+    message:
+      "Subject code must be in the format 'EC-234' (2 letters followed by a hyphen and 3 digits).",
   }),
   subjectName: z.string().min(3, {
     message: "Subject name must be at least 3 characters long.",
-  })
+  }),
 });
 
 export default function CreateAttendanceRecord() {

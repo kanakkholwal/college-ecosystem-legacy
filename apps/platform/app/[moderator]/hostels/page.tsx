@@ -27,11 +27,12 @@ export default async function ChiefWardenPage({
 
   return (
     <div className="space-y-5 my-2">
-     
       <HeaderBar
         Icon={MdRoom}
         titleNode={
-          <>Manage Hostels <Badge size="sm">{hostels.length} found</Badge></>
+          <>
+            Manage Hostels <Badge size="sm">{hostels.length} found</Badge>
+          </>
         }
         descriptionNode="Here you can create new hostels or view existing ones."
         actionNode={

@@ -5,7 +5,7 @@ import { useCallback } from "react";
 import type { EventTypeWithID } from "src/models/time-table";
 import type { RawEvent } from "~/constants/common.time-table";
 import { DEPARTMENTS_LIST } from "~/constants/core.departments";
-import { FormattedTimetable, } from "./store";
+import { FormattedTimetable } from "./store";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -43,7 +43,8 @@ export const EditTimetableDialog: React.FC = () => {
     deleteEvent,
   } = useTimeTableStore();
 
-  const [newEvent, setNewEvent] = useState<FormattedTimetable["schedule"][number]["timeSlots"][number]["events"][number]
+  const [newEvent, setNewEvent] = useState<
+    FormattedTimetable["schedule"][number]["timeSlots"][number]["events"][number]
   >({
     _id: nanoid(),
     title: "",
@@ -113,8 +114,8 @@ export const EditTimetableDialog: React.FC = () => {
                   ...editingEvent,
                   eventIndex: checked
                     ? timetableData.schedule[editingEvent.dayIndex]?.timeSlots[
-                      editingEvent.timeSlotIndex
-                    ]?.events.length
+                        editingEvent.timeSlotIndex
+                      ]?.events.length
                     : 0,
                 });
               }}
@@ -154,8 +155,7 @@ export const EditTimetableDialog: React.FC = () => {
         </div>
         <div className="grid gap-4 py-4">
           <h6 className="text-sm font-medium text-muted-foreground">
-            Events in{" "}
-            {daysMap.get(editingEvent.dayIndex)} :{" "}
+            Events in {daysMap.get(editingEvent.dayIndex)} :{" "}
             {timeMap.get(editingEvent.timeSlotIndex)}
           </h6>
           {timetableData.schedule[editingEvent.dayIndex]?.timeSlots[
@@ -191,9 +191,9 @@ export const EditTimetableDialog: React.FC = () => {
   );
 };
 
-
-
-export const TimeTableMetaData = ({ className }: React.ComponentProps<"form">) => {
+export const TimeTableMetaData = ({
+  className,
+}: React.ComponentProps<"form">) => {
   const timetableData = useTimeTableStore((state) => state.timetableData);
   const setTimetableData = useTimeTableStore((state) => state.setTimetableData);
 
@@ -201,7 +201,7 @@ export const TimeTableMetaData = ({ className }: React.ComponentProps<"form">) =
   const handleChange = useCallback(
     <T extends keyof typeof timetableData>(
       field: T,
-      value: typeof timetableData[T]
+      value: (typeof timetableData)[T]
     ) => {
       setTimetableData({
         ...timetableData,
@@ -298,7 +298,9 @@ export function Event({ event }: { event: EventTypeWithID | RawEvent }) {
         <HoverCardContent className="max-w-80 text-left">
           <div className="space-y-1">
             <h4 className="text-sm font-medium">{event.title}</h4>
-            <p className="text-xs text-muted-foreground">{event?.description}</p>
+            <p className="text-xs text-muted-foreground">
+              {event?.description}
+            </p>
           </div>
         </HoverCardContent>
       </HoverCard>

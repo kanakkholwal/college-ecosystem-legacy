@@ -11,22 +11,24 @@ import { CategoryFilter, ResourcesList } from "./client";
 
 export const metadata: Metadata = {
   title: "Resources ",
-  description: "Explore our comprehensive collection of articles, experiences, and case studies.",
+  description:
+    "Explore our comprehensive collection of articles, experiences, and case studies.",
   alternates: {
-    canonical: '/resources',
+    canonical: "/resources",
   },
   openGraph: {
     title: "Resources  ",
-    description: "Explore our comprehensive collection of articles, experiences, and case studies.",
+    description:
+      "Explore our comprehensive collection of articles, experiences, and case studies.",
     url: `${appConfig.url}/resources`,
-    type: 'website',
+    type: "website",
     siteName: appConfig.name,
-
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: "Resources ",
-    description: "Explore our comprehensive collection of articles, experiences, and case studies.",
+    description:
+      "Explore our comprehensive collection of articles, experiences, and case studies.",
     creator: appConfig.socials.twitter,
   },
   robots: {
@@ -48,31 +50,34 @@ export default async function Page() {
   const structuredData = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Resources",
-    "description": "Explore our comprehensive collection of articles, experiences, and case studies.",
-    "url": `${appConfig.url}/resources`,
-    "mainEntity": {
+    name: "Resources",
+    description:
+      "Explore our comprehensive collection of articles, experiences, and case studies.",
+    url: `${appConfig.url}/resources`,
+    mainEntity: {
       "@type": "ItemList",
-      "itemListElement": resources.map((resource, index) => ({
+      itemListElement: resources.map((resource, index) => ({
         "@type": "ListItem",
-        "position": index + 1,
-        "item": {
-          "@type": resource.type === 'articles' ? 'Article' : 'CreativeWork',
-          "name": resource.title,
-          "url": `${appConfig.url}/resources/${resource.type}/${resource.slug}`,
-          "description": resource.summary,
-          "datePublished": new Date(resource.date).toISOString(),
-          "image": resource.coverImage ? {
-            "@type": "ImageObject",
-            "url": resource.coverImage
-          } : undefined,
-          "articleSection": resource.category,
-          "keywords": resource.tags?.join(', ') || '',
-        }
-      }))
-    }
+        position: index + 1,
+        item: {
+          "@type": resource.type === "articles" ? "Article" : "CreativeWork",
+          name: resource.title,
+          url: `${appConfig.url}/resources/${resource.type}/${resource.slug}`,
+          description: resource.summary,
+          datePublished: new Date(resource.date).toISOString(),
+          image: resource.coverImage
+            ? {
+                "@type": "ImageObject",
+                url: resource.coverImage,
+              }
+            : undefined,
+          articleSection: resource.category,
+          keywords: resource.tags?.join(", ") || "",
+        },
+      })),
+    },
   };
-  const allCategories = [...new Set(resources.map(r => r.type))] as string[]
+  const allCategories = [...new Set(resources.map((r) => r.type))] as string[];
   return (
     <>
       {/* Structured Data */}
@@ -94,34 +99,34 @@ export default async function Page() {
           // disabled={true}
           filterOptions={[
             {
-              key: 'type',
-              label: 'Type',
+              key: "type",
+              label: "Type",
               values: [
-                { value: 'article', label: 'Articles' },
-                { value: 'experience', label: 'Experiences' },
-                { value: 'misc', label: 'Miscellaneous' },
+                { value: "article", label: "Articles" },
+                { value: "experience", label: "Experiences" },
+                { value: "misc", label: "Miscellaneous" },
               ],
             },
             {
-              key: 'category',
-              label: 'Category',
+              key: "category",
+              label: "Category",
               values: [
-                { value: 'all', label: 'All Categories' },
-                { value: 'open-source', label: 'Open Source' },
-                { value: 'career', label: 'Career Development' },
-                { value: 'case-study', label: 'Case Studies' },
+                { value: "all", label: "All Categories" },
+                { value: "open-source", label: "Open Source" },
+                { value: "career", label: "Career Development" },
+                { value: "case-study", label: "Case Studies" },
               ],
             },
             {
-              key: 'tags',
-              label: 'Tags',
+              key: "tags",
+              label: "Tags",
               values: [
-                { value: 'all', label: 'All Tags' },
-                { value: 'web-development', label: 'Web Development' },
-                { value: 'design', label: 'Design' },
-                { value: 'ux-ui', label: 'UX/UI Design' },
+                { value: "all", label: "All Tags" },
+                { value: "web-development", label: "Web Development" },
+                { value: "design", label: "Design" },
+                { value: "ux-ui", label: "UX/UI Design" },
               ],
-            }
+            },
           ]}
         />
         <ButtonLink
@@ -152,7 +157,7 @@ export default async function Page() {
         </ButtonLink>
       </BaseHeroSection>
       <div className="max-w-(--max-app-width) mx-auto px-4 lg:px-6 mb-8">
-          <CategoryFilter categories={allCategories} />
+        <CategoryFilter categories={allCategories} />
       </div>
       <ResourcesList resources={resources} />
     </>

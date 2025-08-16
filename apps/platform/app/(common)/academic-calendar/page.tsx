@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   title: "Academic Calender",
   description: "Check the academic calender here.",
   alternates: {
-    canonical: '/academic-calendar',
+    canonical: "/academic-calendar",
   },
   keywords: [
     "NITH",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     "Academic Events",
     "College Events",
     "NITH College Events",
-  ]
+  ],
 };
 
 export default async function AcademicCalenderPage(props: Props) {
@@ -78,9 +78,8 @@ export default async function AcademicCalenderPage(props: Props) {
           variant="dark"
           target="_blank"
           effect="shine"
-
-          >
-          <CalendarDays  />
+        >
+          <CalendarDays />
           View Official Calendar
           <ArrowUpRight />
         </ButtonLink>
@@ -103,7 +102,9 @@ export default async function AcademicCalenderPage(props: Props) {
         <TabsContent value="calendar">
           <FullScreenCalendar
             data={groupedEvents}
-            onNewEventRedirectPath={session?.user?.role === "admin" ? "/admin/events/new" : undefined}
+            onNewEventRedirectPath={
+              session?.user?.role === "admin" ? "/admin/events/new" : undefined
+            }
           />
         </TabsContent>
         <TabsContent value="list">
@@ -115,21 +116,19 @@ export default async function AcademicCalenderPage(props: Props) {
             />
           </ConditionalRender>
           {groupedEvents.map((group, idx) => {
-            return <StaticStep
-              key={group.day.toString()}
-              step={idx + 1}
-              title={format(group.day, "EEEE, MMMM dd, yyyy")}
-            >
-              <ResponsiveContainer>
-                {group.events.map((event) => {
-                  return <EventCard
-                    key={event.id}
-                    event={event}
-                  />;
-                })}
-
-              </ResponsiveContainer>
-            </StaticStep>;
+            return (
+              <StaticStep
+                key={group.day.toString()}
+                step={idx + 1}
+                title={format(group.day, "EEEE, MMMM dd, yyyy")}
+              >
+                <ResponsiveContainer>
+                  {group.events.map((event) => {
+                    return <EventCard key={event.id} event={event} />;
+                  })}
+                </ResponsiveContainer>
+              </StaticStep>
+            );
           })}
         </TabsContent>
       </Tabs>

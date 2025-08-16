@@ -18,10 +18,10 @@ export const authHeaders = {
 };
 export const serverFetch = createFetch({
   baseURL: baseServerUrl,
-  headers: {...authHeaders },
+  headers: { ...authHeaders },
 });
 
 export const mailFetch = createFetch({
   baseURL: baseMailServerUrl,
-  headers: {...authHeaders },
+  headers: { ...authHeaders },
 });

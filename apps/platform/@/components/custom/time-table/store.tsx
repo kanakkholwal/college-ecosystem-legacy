@@ -59,31 +59,31 @@ export const useTimeTableStore = create<TimeTableStore>((set) => ({
     set((state) => {
       const { dayIndex, timeSlotIndex, eventIndex } = state.editingEvent;
       const updatedSchedule = [...state.timetableData.schedule];
-      
+
       if (updatedSchedule[dayIndex]) {
         const updatedTimeSlots = [...updatedSchedule[dayIndex].timeSlots];
-        
+
         if (updatedTimeSlots[timeSlotIndex]) {
           const updatedEvents = [...updatedTimeSlots[timeSlotIndex].events];
-          
+
           if (eventIndex !== -1) {
             updatedEvents[eventIndex] = newEvent;
           } else {
             updatedEvents.push(newEvent);
           }
-          
+
           updatedTimeSlots[timeSlotIndex] = {
             ...updatedTimeSlots[timeSlotIndex],
             events: updatedEvents,
           };
         }
-        
+
         updatedSchedule[dayIndex] = {
           ...updatedSchedule[dayIndex],
           timeSlots: updatedTimeSlots,
         };
       }
-      
+
       return {
         timetableData: {
           ...state.timetableData,
@@ -96,27 +96,27 @@ export const useTimeTableStore = create<TimeTableStore>((set) => ({
     set((state) => {
       const { dayIndex, timeSlotIndex, eventIndex } = state.editingEvent;
       const updatedSchedule = [...state.timetableData.schedule];
-      
+
       if (updatedSchedule[dayIndex]) {
         const updatedTimeSlots = [...updatedSchedule[dayIndex].timeSlots];
-        
+
         if (updatedTimeSlots[timeSlotIndex]) {
           const updatedEvents = updatedTimeSlots[timeSlotIndex].events.filter(
             (_, index) => index !== eventIndex
           );
-          
+
           updatedTimeSlots[timeSlotIndex] = {
             ...updatedTimeSlots[timeSlotIndex],
             events: updatedEvents,
           };
         }
-        
+
         updatedSchedule[dayIndex] = {
           ...updatedSchedule[dayIndex],
           timeSlots: updatedTimeSlots,
         };
       }
-      
+
       return {
         timetableData: {
           ...state.timetableData,

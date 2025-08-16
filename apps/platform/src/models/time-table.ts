@@ -1,15 +1,15 @@
 import mongoose, { Document, Schema } from "mongoose";
 import { DEPARTMENTS_LIST } from "~/constants/core.departments";
 
-
-import type { RawEvent, RawTimeSlot, RawTimetableType } from "~/constants/common.time-table";
-
-
+import type {
+  RawEvent,
+  RawTimeSlot,
+  RawTimetableType,
+} from "~/constants/common.time-table";
 
 export type EventTypeWithID = RawEvent;
 
 export interface IEvent extends Document, Omit<RawEvent, "_id"> {}
-
 
 export type TimeSlotWithID = RawTimeSlot & { _id: string };
 
@@ -19,8 +19,6 @@ export interface RawDaySchedule {
 }
 export type DayScheduleWithID = RawDaySchedule & { _id: string };
 export interface IDaySchedule extends Document, RawDaySchedule {}
-
-
 
 export interface PublicTimetable extends RawTimetableType {
   author: string;
@@ -64,7 +62,7 @@ const timetableSchema = new Schema<ITimetable>(
                 title: { type: String, required: true },
                 description: { type: String },
                 heldBy: { type: String },
-                _id: { type: String}, // Unique identifier for the event
+                _id: { type: String }, // Unique identifier for the event
               },
             ],
           },

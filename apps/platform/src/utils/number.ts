@@ -1,4 +1,3 @@
-
 /**
  * Expected frontmatter schema for resource MDX files
  * @param num - The number to format

@@ -28,7 +28,6 @@ export default async function Dashboard(props: Props) {
 
   return (
     <>
-
       <HeaderBar
         Icon={CalendarDays}
         titleNode={
@@ -41,7 +40,12 @@ export default async function Dashboard(props: Props) {
         }
         descriptionNode="Here you can edit the timetable details and manage the schedule."
         actionNode={
-          <ButtonLink variant="dark" size="sm" href={`/schedules/${params.slug.join("/")}`} target="_blank">
+          <ButtonLink
+            variant="dark"
+            size="sm"
+            href={`/schedules/${params.slug.join("/")}`}
+            target="_blank"
+          >
             View Timetable
             <ArrowUpRight />
           </ButtonLink>

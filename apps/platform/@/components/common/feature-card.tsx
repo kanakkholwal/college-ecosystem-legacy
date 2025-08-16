@@ -9,9 +9,9 @@ const FeatureCard = ({ feature }: { feature: FeatureItem }) => {
     <div>
       <div
         className={cn(
-          'relative rounded-2xl px-4 pt-4 pb-4 text-sm',
-          'bg-card ring-border ring',
-          feature.cornerStyle,
+          "relative rounded-2xl px-4 pt-4 pb-4 text-sm",
+          "bg-card ring-border ring",
+          feature.cornerStyle
         )}
       >
         <div className="text-primary mb-3 text-[2rem]">

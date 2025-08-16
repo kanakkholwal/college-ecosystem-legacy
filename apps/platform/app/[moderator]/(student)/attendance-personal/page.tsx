@@ -34,7 +34,6 @@ export default async function PersonalAttendanceManager() {
           icons={[BookUser]}
           title="No attendance records"
           description="There are no attendance records at the moment."
-    
         />
       )}
 

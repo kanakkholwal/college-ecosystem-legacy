@@ -1,11 +1,6 @@
 import EmptyArea from "@/components/common/empty-area";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardFooter,
-  CardHeader,
-  CardTitle
-} from "@/components/ui/card";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 import { GrSchedules } from "react-icons/gr";
 import { getAllTimeTables } from "~//actions/common.time-table";
@@ -22,8 +17,8 @@ export const metadata: Metadata = {
   title: "Timetables",
   description: "Check your schedules here.",
   alternates: {
-    canonical: '/schedules',
-  }
+    canonical: "/schedules",
+  },
 };
 
 export default async function TimeTables() {
@@ -37,14 +32,15 @@ export default async function TimeTables() {
 
   return (
     <>
-    <BaseHeroSection
-      title={
-        <>
-          Timetables <span className="text-primary">Search</span>
-        </>
-      }
-      description="View your own timetable by selecting your department, year, and semester.">
-          <ScheduleSearchBox branches={branches} years={years} />
+      <BaseHeroSection
+        title={
+          <>
+            Timetables <span className="text-primary">Search</span>
+          </>
+        }
+        description="View your own timetable by selecting your department, year, and semester."
+      >
+        <ScheduleSearchBox branches={branches} years={years} />
       </BaseHeroSection>
 
       <NoteSeparator label={`${timeTables.length} Timetables found`} />
@@ -73,7 +69,6 @@ export default async function TimeTables() {
                     {timetable.sectionName}
                   </CardTitle>
                   <div className="inline-flex items-center gap-2 flex-wrap">
-                  
                     <Badge size="sm">
                       {timetable.year}
                       <sup>

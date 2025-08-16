@@ -24,7 +24,10 @@ export default function PostFooterOptimistic({
   // Optimistic state — toggles instantly on UI
   const [optimisticPost, setOptimisticPost] = useOptimistic(
     post,
-    (current, action: { type: "toggleLike" | "toggleSave"; userId: string }) => {
+    (
+      current,
+      action: { type: "toggleLike" | "toggleSave"; userId: string }
+    ) => {
       if (action.type === "toggleLike") {
         const liked = current.likes.includes(action.userId);
         return {
@@ -51,11 +54,10 @@ export default function PostFooterOptimistic({
     if (!user?.id) return;
     startTransition(() => {
       setOptimisticPost({ type: "toggleLike", userId: user.id });
-      void updatePost(post._id, { type: "toggleLike" })
-        .catch((error) => {
-          toast.error("Failed to update post: " + error.message);
-          console.error("Failed to update post:", error);
-        });
+      void updatePost(post._id, { type: "toggleLike" }).catch((error) => {
+        toast.error("Failed to update post: " + error.message);
+        console.error("Failed to update post:", error);
+      });
     });
   };
 
@@ -63,11 +65,10 @@ export default function PostFooterOptimistic({
     if (!user?.id) return;
     startTransition(() => {
       setOptimisticPost({ type: "toggleSave", userId: user.id });
-      void updatePost(post._id, { type: "toggleSave" })
-        .catch((error) => {
-          toast.error("Failed to update post: " + error.message);
-          console.error("Failed to update post:", error);
-        })
+      void updatePost(post._id, { type: "toggleSave" }).catch((error) => {
+        toast.error("Failed to update post: " + error.message);
+        console.error("Failed to update post:", error);
+      });
     });
   };
 
@@ -93,14 +94,16 @@ export default function PostFooterOptimistic({
             onClick={handleLike}
             className={cn(
               user?.id &&
-              optimisticPost.likes.includes(user.id) &&
-              "text-primary bg-primary/10"
+                optimisticPost.likes.includes(user.id) &&
+                "text-primary bg-primary/10"
             )}
             disabled={isPending}
           >
-            {isPending && optimisticPost.likes.includes(user?.id ?? "")
-              ? <Icon name="loader-circle" className="animate-spin" />
-              : <ThumbsUp />}
+            {isPending && optimisticPost.likes.includes(user?.id ?? "") ? (
+              <Icon name="loader-circle" className="animate-spin" />
+            ) : (
+              <ThumbsUp />
+            )}
           </button>
           <span className="text-xs pr-2 font-medium text-muted-foreground">
             {formatNumber(optimisticPost.likes.length)}{" "}
@@ -120,8 +123,8 @@ export default function PostFooterOptimistic({
               "flex items-center gap-1 aspect-square h-full p-2 rounded-full text-xs [&>svg]:size-4 transition-all",
               "hover:text-primary hover:bg-primary/10 active:scale-95",
               user?.id &&
-              optimisticPost.savedBy.includes(user.id) &&
-              "text-primary bg-primary/10"
+                optimisticPost.savedBy.includes(user.id) &&
+                "text-primary bg-primary/10"
             )}
             disabled={isPending}
           >

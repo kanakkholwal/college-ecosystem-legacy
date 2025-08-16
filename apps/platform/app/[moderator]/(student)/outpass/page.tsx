@@ -44,16 +44,17 @@ export default async function HostelPage(props: PageProps) {
         </p>
       </div>
       <Tabs defaultValue="outpass_list" className="w-full">
-        <VercelTabsList tabs={[
-          {
-            id: "requested_outpass",
-            label: "Requested Outpass",
-          },
-          {
-            id: "outpass_list",
-            label: "Outpass List",
-          },
-        ]}
+        <VercelTabsList
+          tabs={[
+            {
+              id: "requested_outpass",
+              label: "Requested Outpass",
+            },
+            {
+              id: "outpass_list",
+              label: "Outpass List",
+            },
+          ]}
         />
         <div className="mt-4">
           <TabsContent value="requested_outpass">
@@ -66,9 +67,9 @@ export default async function HostelPage(props: PageProps) {
             </ConditionalRender>
 
             {/* <ConditionalRender condition={!hosteler?.banned}> */}
-              <ConditionalRender condition={outPasses.length > 0}>
-                <OutpassRender outpass={outPasses[0]} />
-              </ConditionalRender>
+            <ConditionalRender condition={outPasses.length > 0}>
+              <OutpassRender outpass={outPasses[0]} />
+            </ConditionalRender>
             {/* </ConditionalRender> */}
           </TabsContent>
           <TabsContent value="outpass_list">

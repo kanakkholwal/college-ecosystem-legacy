@@ -15,7 +15,6 @@ import { appConfig } from "~/project.config";
 import type { ResultType } from "~/types/result";
 import { mailFetch, serverFetch } from "../lib/fetch-server";
 
-
 const VERIFY_EMAIL_PATH_PREFIX = "/auth/verify-mail?token=";
 const RESET_PASSWORD_PATH_PREFIX = "/auth/reset-password?token=";
 
@@ -149,8 +148,8 @@ export const auth = betterAuth({
       mapProfileToUser: async (profile) => {
         return {
           image: profile.picture,
-        }
-      }
+        };
+      },
     },
   },
   advanced: {
@@ -159,13 +158,12 @@ export const auth = betterAuth({
       domain: appConfig.appDomain,
     },
     cookiePrefix: "nith",
-
   },
   // trustedOrigins: [appConfig.url, `https://${appConfig.appDomain}`,`https://*.nith.eu.org`],
   trustedOrigins: [
-    "*.nith.eu.org",             // Trust all subdomains of nith.eu.org
-    "https://*.nith.eu.org",     // Trust only HTTPS subdomains
-    "https://*.dev.nith.eu.org",   // Trust HTTPS subdomains of dev.nith.eu.org
+    "*.nith.eu.org", // Trust all subdomains of nith.eu.org
+    "https://*.nith.eu.org", // Trust only HTTPS subdomains
+    "https://*.dev.nith.eu.org", // Trust HTTPS subdomains of dev.nith.eu.org
   ],
   user: {
     additionalFields: {
@@ -219,7 +217,7 @@ export const auth = betterAuth({
     accountLinking: {
       enabled: true,
       trustedProviders: ["google", "github", "email-password"],
-      allowDifferentEmails: false
+      allowDifferentEmails: false,
     },
   },
 
@@ -231,13 +229,13 @@ export const auth = betterAuth({
       defaultBanExpiresIn: 60 * 60 * 24 * 7, // 1 week
     }),
     haveIBeenPwned({
-      customPasswordCompromisedMessage: "Please choose a more secure password."
+      customPasswordCompromisedMessage: "Please choose a more secure password.",
     }),
     nextCookies(),
   ], // make sure this is the last plugin (nextCookies) in the array
-   telemetry: {
+  telemetry: {
     enabled: false,
-  }
+  },
 });
 
 type getUserInfoReturnType = {

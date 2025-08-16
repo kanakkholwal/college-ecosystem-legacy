@@ -32,20 +32,21 @@ export const formSchema = z.object({
     .array(
       z.object({
         id: z.string().default(() => nanoid()),
-        value: z.string().min(1, "Option cannot be empty.").max(200, "Option cannot exceed 200 characters."),
+        value: z
+          .string()
+          .min(1, "Option cannot be empty.")
+          .max(200, "Option cannot exceed 200 characters."),
       })
     )
     .min(2, "At least two options are required."),
   multipleChoice: z.boolean().default(false),
   votes: z.array(z.string()).default([]),
-  closesAt: z
-    .iso
+  closesAt: z.iso
     .datetime({
       message: "Invalid date and time format.",
     })
     .default(() => new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString()),
 });
-
 
 export default function CreatePoll() {
   return (
@@ -174,9 +175,7 @@ function PollForm({ className }: { className?: string }) {
                   Add Option
                 </Button>
               </div>
-              <FormDescription>
-                Add the options for the poll
-              </FormDescription>
+              <FormDescription>Add the options for the poll</FormDescription>
               {fields.map((field, index) => (
                 <FormField
                   key={field.id}
@@ -255,7 +254,11 @@ function PollForm({ className }: { className?: string }) {
           className="ml-2"
           disabled={form.formState.isSubmitting}
         >
-          {form.formState.isSubmitting ? <Loader2 className="animate-spin" /> : <CgPoll />}
+          {form.formState.isSubmitting ? (
+            <Loader2 className="animate-spin" />
+          ) : (
+            <CgPoll />
+          )}
           {form.formState.isSubmitting ? "Creating Poll..." : "Create new Poll"}
         </Button>
       </form>

@@ -29,14 +29,17 @@ const list = [
   // },
 ] as const;
 
-export default async function SettingsPage({params}: { params: Promise<{ moderator: string }> }) {
+export default async function SettingsPage({
+  params,
+}: {
+  params: Promise<{ moderator: string }>;
+}) {
   const { moderator } = await params;
   return (
     <ResponsiveContainer className="p-3 @3xl:grid-cols-2  @5xl:grid-cols-3">
       {list.map((link, index) => {
         return (
           <RouterCard
-
             key={link.href}
             href={`/${moderator}/${link.href}`}
             data-aos="fade-up"

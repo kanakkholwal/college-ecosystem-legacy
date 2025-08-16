@@ -2,8 +2,18 @@ import { NumberTicker } from "@/components/animation/number-ticker";
 import { ActionBar } from "@/components/application/action-bar";
 import { StatsCard } from "@/components/application/stats-card";
 import { NotepadText } from "lucide-react";
-import { assignBranchChange, assignRank, getAbnormalResults, getBasicInfo } from "./actions";
-import { AbnormalResultsDiv, DeleteResultDiv, GetResultDiv, MailResultUpdateDiv } from "./client";
+import {
+  assignBranchChange,
+  assignRank,
+  getAbnormalResults,
+  getBasicInfo,
+} from "./actions";
+import {
+  AbnormalResultsDiv,
+  DeleteResultDiv,
+  GetResultDiv,
+  MailResultUpdateDiv,
+} from "./client";
 
 export default async function AdminResultPage() {
   const { counts, asOf } = await getBasicInfo();
@@ -71,7 +81,7 @@ export default async function AdminResultPage() {
           <MailResultUpdateDiv />
         </StatsCard>
       </div>
-        <AbnormalResultsDiv abnormalsResults={abnormalsResults} />
+      <AbnormalResultsDiv abnormalsResults={abnormalsResults} />
     </>
   );
 }

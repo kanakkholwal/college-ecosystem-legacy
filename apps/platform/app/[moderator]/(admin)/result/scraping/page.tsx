@@ -3,22 +3,22 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { LoaderCircle } from "lucide-react";
 
 import {
-    Table,
-    TableBody,
-    TableCaption,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { useEffect, useRef, useState } from "react";
 
@@ -89,10 +89,10 @@ export default function ScrapeResultPage() {
     if (eventSourceRef.current) {
       setStreaming(false);
 
-      eventSourceRef.current?.removeEventListener("task_status", () => { });
-      eventSourceRef.current?.removeEventListener("task_list", () => { });
-      eventSourceRef.current?.removeEventListener("task_completed", () => { });
-      eventSourceRef.current?.removeEventListener("error", () => { });
+      eventSourceRef.current?.removeEventListener("task_status", () => {});
+      eventSourceRef.current?.removeEventListener("task_list", () => {});
+      eventSourceRef.current?.removeEventListener("task_completed", () => {});
+      eventSourceRef.current?.removeEventListener("error", () => {});
       eventSourceRef.current?.close();
       eventSourceRef.current = null;
       console.log("SSE connection closed");
@@ -101,10 +101,10 @@ export default function ScrapeResultPage() {
   const handleStartScraping = (
     payload?:
       | {
-        listType: (typeof LIST_TYPE)[keyof typeof LIST_TYPE];
-        actionType: string;
-        task_resume_id: string;
-      }
+          listType: (typeof LIST_TYPE)[keyof typeof LIST_TYPE];
+          actionType: string;
+          task_resume_id: string;
+        }
       | undefined
   ) => {
     if (eventSourceRef.current) {
@@ -200,9 +200,7 @@ export default function ScrapeResultPage() {
         if (!response || response.error) {
           console.log("Error fetching task list", response);
           setError(response?.error || "Failed to fetch task list.");
-          toast.error(
-            response?.error || "Failed to fetch task list."
-          );
+          toast.error(response?.error || "Failed to fetch task list.");
           return;
         }
         console.log("Fetched task list", response);
@@ -499,7 +497,11 @@ function DisplayTask({
                 size="sm"
                 variant="default_light"
                 onClick={() =>
-                  actionFunction(task._id, EVENTS.TASK_RETRY_FAILED, task.list_type)
+                  actionFunction(
+                    task._id,
+                    EVENTS.TASK_RETRY_FAILED,
+                    task.list_type
+                  )
                 }
               >
                 Retry failed

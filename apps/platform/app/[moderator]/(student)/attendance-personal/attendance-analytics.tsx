@@ -51,20 +51,16 @@ const AttendanceAnalytics: React.FC<AttendanceAnalyticsProps> = ({
           <h5 className="text-sm font-medium whitespace-nowrap">
             Attendance Percentage
           </h5>
-          <p
-            className={cn(
-              "text-xl font-semibold",
-
-            )}
-          >
-            <NumberTicker value={parseFloat(attendancePercentage)} suffix="%"
-              className={cn(
-                {
-                  "text-red-500": parseFloat(attendancePercentage) < 50,
-                  "text-yellow-500": parseFloat(attendancePercentage) < 75,
-                  "text-green-500": parseFloat(attendancePercentage) >= 75,
-                }
-              )} />
+          <p className={cn("text-xl font-semibold")}>
+            <NumberTicker
+              value={parseFloat(attendancePercentage)}
+              suffix="%"
+              className={cn({
+                "text-red-500": parseFloat(attendancePercentage) < 50,
+                "text-yellow-500": parseFloat(attendancePercentage) < 75,
+                "text-green-500": parseFloat(attendancePercentage) >= 75,
+              })}
+            />
           </p>
         </div>
       </div>

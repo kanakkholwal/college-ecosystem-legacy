@@ -17,7 +17,7 @@ const envVariables = z.object({
   NEXT_PUBLIC_BASE_URL: z.string().url(),
   BASE_URL: z.string().url(),
 
-  // ai 
+  // ai
   DEEPSEEK_API_KEY: z.string(),
   GOOGLE_GENERATIVE_AI_API_KEY: z.string(),
 
@@ -29,12 +29,9 @@ const envVariables = z.object({
 
   REDIS_URL: z.string(),
 
-  
-
   // Client Side
   NEXT_PUBLIC_SUPABASE_URL: z.string(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
-
 });
 
 envVariables.parse(process.env);

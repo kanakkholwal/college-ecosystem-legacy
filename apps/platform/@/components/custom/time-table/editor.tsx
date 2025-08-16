@@ -14,24 +14,34 @@ import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 import React, { useRef } from "react";
 import toast from "react-hot-toast";
-import { createTimeTable, deleteTimeTable, updateTimeTable } from "~//actions/common.time-table";
-import { rawTimetableSchema, type RawTimetableType } from "~/constants/common.time-table";
+import {
+  createTimeTable,
+  deleteTimeTable,
+  updateTimeTable,
+} from "~//actions/common.time-table";
+import {
+  rawTimetableSchema,
+  type RawTimetableType,
+} from "~/constants/common.time-table";
 import { getDepartmentName } from "~/constants/core.departments";
 import type { TimeTableWithID } from "~/models/time-table";
 import { EditTimetableDialog, Event, TimeTableMetaData } from "./components";
 import { daysMap, rawTimetableData, timeMap } from "./constants";
 import { useTimeTableStore } from "./store";
 
+export type TimeTableEditorProps =
+  | {
+      timetableData: TimeTableWithID;
+      mode: "edit";
+    }
+  | {
+      timetableData?: RawTimetableType;
+      mode: "create";
+    };
 
-export type TimeTableEditorProps = {
-  timetableData: TimeTableWithID,
-  mode: "edit";
-} | {
-  timetableData?: RawTimetableType;
-  mode: "create";
-};
-
-export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => {
+export const TimeTableEditor: React.FC<TimeTableEditorProps> = (
+  editorProps
+) => {
   const isInitialized = useRef<boolean>(false);
   const setEditingEvent = useTimeTableStore((state) => state.setEditingEvent);
   const setIsEditing = useTimeTableStore((state) => state.setIsEditing);
@@ -67,14 +77,11 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
       }
 
       toast
-        .promise(
-          updateTimeTable(data.timetableData._id, data.timetableData),
-          {
-            loading: "Updating Timetable",
-            success: "Timetable updated successfully",
-            error: "Failed to update timetable",
-          }
-        )
+        .promise(updateTimeTable(data.timetableData._id, data.timetableData), {
+          loading: "Updating Timetable",
+          success: "Timetable updated successfully",
+          error: "Failed to update timetable",
+        })
         .finally(() => {
           setDisabled(false);
         });
@@ -103,7 +110,6 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
       .promise(deleteTimeTable(timetableId), {
         loading: "Deleting Timetable",
         success: () => {
-          
           return "Timetable deleted successfully";
         },
         error: "Failed to delete timetable",
@@ -111,7 +117,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
       .finally(() => {
         setDisabled(false);
       });
-  }
+  };
   const currentDayIndex = new Date().getDay() - 1;
 
   return (
@@ -119,11 +125,13 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
       <div className="flex items-center justify-between gap-2 flex-col md:flex-row mx-auto max-w-7xl w-full">
         <div className="p-4 lg:p-6 bg-card rounded-lg shadow w-full relative">
           <div className="space-y-1">
-            <h4 className="text-sm leading-none font-medium">{timetableData?.sectionName || "Name Not Provided"}</h4>
+            <h4 className="text-sm leading-none font-medium">
+              {timetableData?.sectionName || "Name Not Provided"}
+            </h4>
             <p className="text-muted-foreground text-sm">
-              {getDepartmentName(timetableData?.department_code) || "Unknown Department"}
+              {getDepartmentName(timetableData?.department_code) ||
+                "Unknown Department"}
             </p>
-
           </div>
           <Separator className="my-2" />
           <div className="flex items-center space-x-3 text-sm text-muted-foreground">
@@ -133,35 +141,39 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
             <Separator orientation="vertical" />
           </div>
           <div className="flex gap-3 items-center justify-end mt-4">
-
             <Button
               size="sm"
               onClick={(e) => {
                 e.stopPropagation();
                 e.preventDefault();
-                handleSaveTimetable(
-                  { timetableData, mode: editorProps.mode } as TimeTableEditorProps
-                );
+                handleSaveTimetable({
+                  timetableData,
+                  mode: editorProps.mode,
+                } as TimeTableEditorProps);
               }}
             >
               {editorProps.mode === "create" ? "Save" : "Update"} TimeTable
             </Button>
-            {editorProps.mode === "edit" && (<Button
-              size="sm"
-              variant="destructive_light"
-              disabled={disabled}
-              onClick={(e) => {
-                e.stopPropagation();
-                e.preventDefault();
-                if (!editorProps.timetableData?._id) {
-                  toast.error("You cannot delete a timetable that is not created yet.");
-                  return;
-                }
-                handleDeleteTimetable(editorProps.timetableData._id);
-              }}
-            >
-              Delete TimeTable
-            </Button>)}
+            {editorProps.mode === "edit" && (
+              <Button
+                size="sm"
+                variant="destructive_light"
+                disabled={disabled}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
+                  if (!editorProps.timetableData?._id) {
+                    toast.error(
+                      "You cannot delete a timetable that is not created yet."
+                    );
+                    return;
+                  }
+                  handleDeleteTimetable(editorProps.timetableData._id);
+                }}
+              >
+                Delete TimeTable
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -180,10 +192,8 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
           ]}
         />
         <div className="bg-card p-4 mx-auto max-w-7xl w-full mt-5 rounded-lg">
-
           <TabsContent value="metadata">
             <TimeTableMetaData />
-
           </TabsContent>
           <TabsContent value="timetable">
             <EditTimetableDialog />
@@ -209,9 +219,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
                             : " text-muted-foreground"
                         )}
                       >
-                        <p className="text-sm font-medium">
-                          {day}
-                        </p>
+                        <p className="text-sm font-medium">{day}</p>
                         {currentDayIndex === index && (
                           <p className="text-primary text-xs italic">(Today)</p>
                         )}
@@ -232,10 +240,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
                         id={`day-${dayIndex}-${index}`}
                         className={cn(
                           "border-x text-center p-2",
-                          currentDayIndex === dayIndex
-                            ? "bg-primary/2"
-                            : "",
-
+                          currentDayIndex === dayIndex ? "bg-primary/2" : ""
                         )}
                         role="button"
                         tabIndex={0}
@@ -257,15 +262,15 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
                             key={`${index}-${dayIndex}-event-${
                               // biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
                               eventIndex
-                              }`}
+                            }`}
                           />
                         ))}
-                        {timetableData.schedule[dayIndex]?.timeSlots[index]?.events
-                          .length === 0 && (
-                            <Badge variant="default" size="sm">
-                              Free Time
-                            </Badge>
-                          )}
+                        {timetableData.schedule[dayIndex]?.timeSlots[index]
+                          ?.events.length === 0 && (
+                          <Badge variant="default" size="sm">
+                            Free Time
+                          </Badge>
+                        )}
                       </TableCell>
                     ))}
                   </TableRow>
@@ -274,7 +279,6 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
             </Table>
           </TabsContent>
         </div>
-
       </Tabs>
     </>
   );

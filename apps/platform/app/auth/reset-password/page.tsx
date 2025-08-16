@@ -62,7 +62,7 @@ export default function ResetPassword() {
       toast.error("Invalid or missing token");
       return;
     }
-    if(!data.newPassword || !data.confirmNewPassword) {
+    if (!data.newPassword || !data.confirmNewPassword) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -156,14 +156,19 @@ export default function ResetPassword() {
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting && <Icon name="loader-circle" className="animate-spin" />}
+              {isSubmitting && (
+                <Icon name="loader-circle" className="animate-spin" />
+              )}
               {isSubmitting ? "Resetting..." : "Reset Password"}
             </Button>
           </form>
         </Form>
-          <div className="text-center text-sm text-muted-foreground">
-            Remember your password? <Link prefetch className="underline text-primary" href="sign-in">Sign in</Link>
-          </div>
+        <div className="text-center text-sm text-muted-foreground">
+          Remember your password?{" "}
+          <Link prefetch className="underline text-primary" href="sign-in">
+            Sign in
+          </Link>
+        </div>
       </CardContent>
     </div>
   );

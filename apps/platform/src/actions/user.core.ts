@@ -2,7 +2,11 @@
 import type { InferSelectModel } from "drizzle-orm";
 import { eq, or, sql } from "drizzle-orm";
 import { db } from "~/db/connect";
-import { personalAttendance, personalAttendanceRecords, roomUsageHistory } from "~/db/schema";
+import {
+  personalAttendance,
+  personalAttendanceRecords,
+  roomUsageHistory,
+} from "~/db/schema";
 import { accounts, sessions, users } from "~/db/schema/auth-schema";
 import dbConnect from "~/lib/dbConnect";
 import Announcement from "~/models/announcement";
@@ -40,10 +44,12 @@ export async function getUserByUsername(
   const user = await db
     .select()
     .from(users)
-    .where(or(
-      eq(users.username, username),
-      eq(users.id, username) // Allow ID as username for legacy support
-    ))
+    .where(
+      or(
+        eq(users.username, username),
+        eq(users.id, username) // Allow ID as username for legacy support
+      )
+    )
     .limit(1);
   return user.length > 0 ? user[0] : null;
 }
@@ -81,26 +87,25 @@ export async function getUsersByOtherRoles(role: string): Promise<User[]> {
     .where(sql`${role} = ANY(${users.other_roles})`);
 }
 
-// delete user resources 
+// delete user resources
 export async function deleteUserResourcesById(userId: string): Promise<void> {
   try {
     await db.transaction(async (tx) => {
       // Delete user sessions if any
-      await tx.delete(personalAttendanceRecords)
+      await tx
+        .delete(personalAttendanceRecords)
         .where(eq(personalAttendanceRecords.userId, userId));
-      await tx.delete(personalAttendance)
+      await tx
+        .delete(personalAttendance)
         .where(eq(personalAttendance.userId, userId));
-      await tx.delete(roomUsageHistory)
+      await tx
+        .delete(roomUsageHistory)
         .where(eq(roomUsageHistory.userId, userId));
-      await tx.delete(sessions)
-        .where(eq(sessions.userId, userId));
-      await tx.delete(accounts)
-        .where(eq(accounts.userId, userId));
-      await tx.delete(users)
-        .where(eq(users.id, userId));
+      await tx.delete(sessions).where(eq(sessions.userId, userId));
+      await tx.delete(accounts).where(eq(accounts.userId, userId));
+      await tx.delete(users).where(eq(users.id, userId));
       // mongoose models
       try {
-
         await dbConnect();
         await Announcement.deleteMany({
           "createdBy.id": userId,
@@ -115,24 +120,27 @@ export async function deleteUserResourcesById(userId: string): Promise<void> {
         });
         console.log("Deleted CommunityComment for user:", userId);
         await HostelStudentModel.deleteMany({
-          "userId": userId,
+          userId: userId,
         });
         console.log("Deleted HostelStudentModel for user:", userId);
         await PollModel.deleteMany({
-          "createdBy": userId,
+          createdBy: userId,
         });
         console.log("Deleted PollModel for user:", userId);
       } catch (error) {
         console.log("Error deleting mongoose models:", error);
       }
-    })
+    });
   } catch (error) {
     console.error("Error deleting user:", error);
     return Promise.reject("Failed to delete user resources");
   }
 }
 
-export async function getUserPlatformActivities(userId: string, username: string) {
+export async function getUserPlatformActivities(
+  userId: string,
+  username: string
+) {
   try {
     await dbConnect();
     const activitiesPromise = [
@@ -140,7 +148,7 @@ export async function getUserPlatformActivities(userId: string, username: string
       Announcement.countDocuments({ createdBy: userId }),
       CommunityPost.countDocuments({ "author.id": userId }),
       CommunityComment.countDocuments({ "author.id": userId }),
-    ];  
+    ];
     const [
       pollsCount,
       announcementsCount,
@@ -153,7 +161,7 @@ export async function getUserPlatformActivities(userId: string, username: string
       communityPostsCount,
       communityCommentsCount,
       // resourcesCount
-    }
+    };
   } catch (error) {
     console.error("Failed to fetch user activities:", error);
     return {
@@ -162,6 +170,6 @@ export async function getUserPlatformActivities(userId: string, username: string
       communityPostsCount: 0,
       communityCommentsCount: 0,
       // resourcesCount: 0,
-    }
+    };
   }
 }

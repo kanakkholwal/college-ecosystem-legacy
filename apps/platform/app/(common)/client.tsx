@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import { AnimatedGradientText } from "@/components/animation/animated-shiny-text";
 import { FloatingElements } from "@/components/animation/floating-elements";
@@ -9,26 +9,26 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ButtonLink } from "@/components/utils/link";
 import { featuresSectionContent } from "@/constants/landing";
 import { cn } from "@/lib/utils";
-import { spring } from 'framer-motion';
+import { spring } from "framer-motion";
 import {
   ArrowUpRight,
   BookOpen,
   FileText,
   Globe,
-  GraduationCap, Home,
+  GraduationCap,
+  Home,
   MoreHorizontal,
   Sparkles,
   Star,
   User,
-  Users
-} from 'lucide-react';
+  Users,
+} from "lucide-react";
 import { motion } from "motion/react";
 import Link from "next/link";
 import type { Session } from "~/auth";
 import { PublicStatsType } from "~/lib/third-party/github";
 import { appConfig, orgConfig } from "~/project.config";
 import { getGreeting } from "~/utils/misc";
-
 
 interface HeroSection {
   user: Session["user"];
@@ -41,36 +41,47 @@ export function HeroSection({ user }: HeroSection) {
       className="z-10 w-full max-w-7xl max-h-96 relative flex flex-col gap-4 items-center justify-center py-24 px-2 sm:px-4 rounded-lg text-center lg:text-left"
       suppressHydrationWarning={true}
     >
-
-
       <motion.div
         initial={{ opacity: 0.0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ type: "spring", damping: 20, stiffness: 300, delay: 0.1 }}
         viewport={{ once: true, amount: 0.2 }}
-        className="relative z-30 flex w-full items-center justify-center flex-col px-4 py-8 bg-background/30 border-muted/30 max-w-xl rounded-3xl border backdrop-blur">
-
+        className="relative z-30 flex w-full items-center justify-center flex-col px-4 py-8 bg-background/30 border-muted/30 max-w-xl rounded-3xl border backdrop-blur"
+      >
         <motion.h2
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.3 }}
-          className="font-bold tracking-tight mb-4 max-w-5xl mt-10 group relative">
+          className="font-bold tracking-tight mb-4 max-w-5xl mt-10 group relative"
+        >
           <AnimatedGradientText
             className={cn(
-              user ? "text-base sm:text-3xl" : "text-3xl sm:text-4xl md:text-5xl"
+              user
+                ? "text-base sm:text-3xl"
+                : "text-3xl sm:text-4xl md:text-5xl"
             )}
-
-          >{getGreeting()}
-          </AnimatedGradientText> <br />
+          >
+            {getGreeting()}
+          </AnimatedGradientText>{" "}
+          <br />
           <span className="text-3xl sm:text-4xl md:text-5xl bg-clip-text text-transparent bg-no-repeat bg-gradient-to-r from-secondary dark:from-foreground to-primary">
             {user?.name}
           </span>
         </motion.h2>
-        <motion.p initial={{ opacity: 0, x: -10 }}
+        <motion.p
+          initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.35, type: "spring", damping: 20, stiffness: 300, delayChildren: 0.1 }}
-          className="text-base text-muted-foreground text-center mb-5">
-          {appConfig.description.split(".")[0] || "Welcome to the digital campus platform!"}
+          transition={{
+            delay: 0.35,
+            type: "spring",
+            damping: 20,
+            stiffness: 300,
+            delayChildren: 0.1,
+          }}
+          className="text-base text-muted-foreground text-center mb-5"
+        >
+          {appConfig.description.split(".")[0] ||
+            "Welcome to the digital campus platform!"}
         </motion.p>
         <motion.div
           initial={{ opacity: 0, y: 10 }}
@@ -78,7 +89,6 @@ export function HeroSection({ user }: HeroSection) {
           transition={{ delay: 0.5 }}
           className="grid grid-cols-1 sm:grid-cols-2 items-center gap-4"
         >
-
           <ButtonLink
             variant="dark"
             href={user ? `/${user.other_roles[0]}` : "/auth/sign-in"}
@@ -106,8 +116,6 @@ export function HeroSection({ user }: HeroSection) {
   );
 }
 
-
-
 const bentoVariants = {
   hidden: { opacity: 0, y: 40 },
   show: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -131,9 +139,13 @@ const itemVariants = {
   },
 };
 
-
-
-export function IntroSection({ user, stats }: { user: Session["user"]; stats: PublicStatsType }) {
+export function IntroSection({
+  user,
+  stats,
+}: {
+  user: Session["user"];
+  stats: PublicStatsType;
+}) {
   return (
     <section
       className="z-10 relative mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-8 rounded-lg py-24 lg:text-left"
@@ -149,7 +161,12 @@ export function IntroSection({ user, stats }: { user: Session["user"]; stats: Pu
       >
         {/* LEFT: value prop, CTAs, badges, stats */}
         <motion.div
-          transition={{ type: "spring", damping: 20, stiffness: 300, delay: 0.05 }}
+          transition={{
+            type: "spring",
+            damping: 20,
+            stiffness: 300,
+            delay: 0.05,
+          }}
           className="relative z-30 flex w-full max-w-xl flex-1 flex-col items-start justify-center rounded-3xl border border-muted/40 bg-background/60 px-6 py-8 backdrop-blur"
         >
           {/* Pill */}
@@ -172,11 +189,17 @@ export function IntroSection({ user, stats }: { user: Session["user"]; stats: Pu
           </motion.h1>
 
           {/* Subheadline + personal greeting (kept, but secondary) */}
-          <motion.p variants={itemVariants} className="mb-2 text-sm text-muted-foreground font-semibold">
-            {getGreeting()} {user?.name ? (
+          <motion.p
+            variants={itemVariants}
+            className="mb-2 text-sm text-muted-foreground font-semibold"
+          >
+            {getGreeting()}{" "}
+            {user?.name ? (
               <>
                 <span className="mx-1">•</span>
-                <AnimatedGradientText className="font-semibold">{user.name}</AnimatedGradientText>
+                <AnimatedGradientText className="font-semibold">
+                  {user.name}
+                </AnimatedGradientText>
               </>
             ) : null}
           </motion.p>
@@ -189,7 +212,10 @@ export function IntroSection({ user, stats }: { user: Session["user"]; stats: Pu
           </motion.p>
 
           {/* Primary + secondary CTAs (anchors & props preserved) */}
-          <motion.div variants={itemVariants} className="mt-2 flex flex-wrap items-center gap-4">
+          <motion.div
+            variants={itemVariants}
+            className="mt-2 flex flex-wrap items-center gap-4"
+          >
             <ButtonLink size="lg" href="#quick-links">
               Explore Features <Icon name="arrow-right" />
             </ButtonLink>
@@ -211,7 +237,9 @@ export function IntroSection({ user, stats }: { user: Session["user"]; stats: Pu
             variants={itemVariants}
             className="mb-6 mt-5 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
           >
-            <span className="text-sm font-semibold text-muted-foreground">Popular Features</span>
+            <span className="text-sm font-semibold text-muted-foreground">
+              Popular Features
+            </span>
 
             <Link
               href="/results"
@@ -254,7 +282,11 @@ export function IntroSection({ user, stats }: { user: Session["user"]; stats: Pu
             <div className="rounded-2xl border border-border bg-card p-4 shadow-sm backdrop-blur flex-auto">
               <div className="mb-1 inline-flex items-center gap-2">
                 <User className="h-5 w-5 text-cyan-500" />
-                <NumberTicker value={stats.userCount} className="text-xl font-bold" suffix="+" />
+                <NumberTicker
+                  value={stats.userCount}
+                  className="text-xl font-bold"
+                  suffix="+"
+                />
               </div>
               <p className="text-xs text-muted-foreground">Users on platform</p>
             </div>
@@ -306,7 +338,8 @@ export function IntroSection({ user, stats }: { user: Session["user"]; stats: Pu
               shadow="dark"
             >
               <Icon name="chart-candlestick" />
-              {user ? "Go to Your Dashboard" : "Sign In to Your Account"} <Icon name="arrow-right" />
+              {user ? "Go to Your Dashboard" : "Sign In to Your Account"}{" "}
+              <Icon name="arrow-right" />
             </ButtonLink>
           </motion.div>
 
@@ -333,8 +366,12 @@ export function IntroSection({ user, stats }: { user: Session["user"]; stats: Pu
               ))}
             </div>
             <span className="text-xs text-muted-foreground">
-              <NumberTicker value={stats.sessionCount} className="font-semibold" suffix="+" /> active
-              users right now
+              <NumberTicker
+                value={stats.sessionCount}
+                className="font-semibold"
+                suffix="+"
+              />{" "}
+              active users right now
             </span>
             <ArrowUpRight className="h-3 w-3 text-primary" />
           </motion.div>
@@ -351,10 +388,6 @@ export function IntroSection({ user, stats }: { user: Session["user"]; stats: Pu
   );
 }
 
-
-
-
-
 export function HeroBentoMockup() {
   return (
     <motion.div
@@ -363,7 +396,7 @@ export function HeroBentoMockup() {
       animate="show"
       className="grid w-full max-w-lg grid-cols-2 gap-4"
     >
-       <div className="absolute -top-4 right-0 z-10 bg-gradient-to-r from-primary to-primary/60 px-3 py-1 text-xs font-semibold text-white rounded-full shadow-md animate-pulse">
+      <div className="absolute -top-4 right-0 z-10 bg-gradient-to-r from-primary to-primary/60 px-3 py-1 text-xs font-semibold text-white rounded-full shadow-md animate-pulse">
         Preview / Demo Only
       </div>
 
@@ -376,7 +409,9 @@ export function HeroBentoMockup() {
           </CardTitle>
         </CardHeader>
         <CardContent className="text-sm">
-          <p className="font-medium">CGPI: <span className="text-primary">9.2</span></p>
+          <p className="font-medium">
+            CGPI: <span className="text-primary">9.2</span>
+          </p>
           <div className="mt-2 h-2 w-full rounded-full bg-muted">
             <div className="h-2 w-[80%] rounded-full bg-primary"></div>
           </div>
@@ -392,7 +427,7 @@ export function HeroBentoMockup() {
           </CardTitle>
         </CardHeader>
         <CardContent className="text-xs text-muted-foreground">
-          Room 204 · 3 Seater  
+          Room 204 · 3 Seater
           <p className="text-foreground font-semibold">Allotted ✅</p>
         </CardContent>
       </Card>
@@ -406,7 +441,7 @@ export function HeroBentoMockup() {
           </CardTitle>
         </CardHeader>
         <CardContent className="text-xs">
-          Hackathon 2025  
+          Hackathon 2025
           <p className="text-muted-foreground">Starts in 3 days</p>
         </CardContent>
       </Card>
@@ -425,7 +460,6 @@ export function HeroBentoMockup() {
   );
 }
 
-
 export function FeatureSection() {
   return (
     <section className="pt-20 pb-8" id="features">
@@ -442,7 +476,8 @@ export function FeatureSection() {
           <div className="order-[1] mb-6 self-center sm:order-[0] md:mb-0">
             <div className="bg-bard text-foreground ring-border relative mx-auto mb-4.5 w-fit rounded-full rounded-bl-[2px] px-4 py-2 text-sm ring">
               <AnimatedGradientText className="relative z-1 flex items-center gap-2 font-semibold">
-                <Sparkles className="size-3 text-yellow-400 animate-spin animation-duration-3000" /> Features
+                <Sparkles className="size-3 text-yellow-400 animate-spin animation-duration-3000" />{" "}
+                Features
               </AnimatedGradientText>
               <span className="from-primary/0 via-primary to-primary/0 absolute -bottom-px left-1/2 h-px w-2/5 -translate-x-1/2 bg-gradient-to-r"></span>
               <span className="absolute inset-0 bg-[radial-gradient(30%_40%_at_50%_100%,hsl(var(--primary)/0.25)_0%,transparent_100%)]"></span>
@@ -451,11 +486,11 @@ export function FeatureSection() {
               Why Use College Ecosystem?
             </h2>
             <p className="text-muted-foreground mx-auto max-w-[22rem] text-center text-pretty">
-              Your one-stop platform for academic results, hostel allotments, club
-              activities, and everything that makes campus life simpler and smarter.
+              Your one-stop platform for academic results, hostel allotments,
+              club activities, and everything that makes campus life simpler and
+              smarter.
             </p>
           </div>
-
 
           {/* Right column */}
           <div className="flex flex-col gap-6">
@@ -468,6 +503,3 @@ export function FeatureSection() {
     </section>
   );
 }
-
-
-

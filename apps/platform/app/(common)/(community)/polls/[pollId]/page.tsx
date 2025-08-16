@@ -55,7 +55,6 @@ export default async function Dashboard({ params }: Props) {
 
   return (
     <div className="max-w-6xl mx-auto w-full grid justify-start items-start gap-4 grid-cols-1 px-2 lg:px-4 pr-4">
-
       <div className="md:sticky md:top-4 mt-4 z-50 w-full mx-1.5 lg:mx-auto flex justify-between items-center gap-2 bg-card px-2 lg:px-4 py-1 lg:py-2 rounded-lg border">
         <Button variant="ghost" size="sm" asChild>
           <Link href="/polls">
@@ -84,14 +83,13 @@ export default async function Dashboard({ params }: Props) {
         </div>
         {closesAlready ? (
           <PollRender poll={poll} />
+        ) : session?.user ? (
+          <Polling
+            poll={poll}
+            user={session.user}
+            updateVotes={updateVotes.bind(null, poll._id)}
+          />
         ) : (
-          session?.user ? (
-            <Polling
-              poll={poll}
-              user={session.user}
-              updateVotes={updateVotes.bind(null, poll._id)}
-            />
-          ):
           <EmptyArea
             title="You need to be logged in to vote on this poll"
             description="Please login to cast your vote."
@@ -99,7 +97,12 @@ export default async function Dashboard({ params }: Props) {
               asChild: true,
               variant: "raw",
               children: (
-                <AuthButtonLink href={"/polls/" + poll._id} authorized={!!session?.user} variant="rainbow" size="sm">
+                <AuthButtonLink
+                  href={"/polls/" + poll._id}
+                  authorized={!!session?.user}
+                  variant="rainbow"
+                  size="sm"
+                >
                   Login
                 </AuthButtonLink>
               ),

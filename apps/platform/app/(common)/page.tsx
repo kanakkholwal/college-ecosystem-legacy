@@ -29,7 +29,7 @@ export default async function HomePage() {
   ) {
     return redirect(`/${ROLES_ENUMS.GUARD}`);
   }
-  const publicStats = await getPublicStats()
+  const publicStats = await getPublicStats();
   const resources = await getAllResources(RESOURCES_LIMIT);
 
   return (
@@ -39,16 +39,16 @@ export default async function HomePage() {
         {JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebApplication",
-          "name": appConfig.name,
-          "url": appConfig.url,
-          "applicationCategory": "Education",
-          "offers": {
+          name: appConfig.name,
+          url: appConfig.url,
+          applicationCategory: "Education",
+          offers: {
             "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "INR",
+            price: "0",
+            priceCurrency: "INR",
           },
-          "operatingSystem": "Web",
-          "featureList": [
+          operatingSystem: "Web",
+          featureList: [
             "Exam Results",
             "Course Syllabus",
             "Classroom Availability",
@@ -65,7 +65,9 @@ export default async function HomePage() {
 
       {/* Quick Links */}
       <section id="quick-links" className="space-y-6">
-        <h2 className="text-xl font-semibold">Explore Results, Room Allotment, and More</h2>
+        <h2 className="text-xl font-semibold">
+          Explore Results, Room Allotment, and More
+        </h2>
         <div className="grid grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 gap-4">
           {links.map((link, i) => (
             <RouterCard
@@ -76,8 +78,6 @@ export default async function HomePage() {
           ))}
         </div>
       </section>
-
-
 
       {/* Feed Placeholder */}
       <section className="space-y-4" id="feed">
@@ -98,15 +98,11 @@ export default async function HomePage() {
           What Students Are Saying
         </h2>
         <p className="text-sm text-muted-foreground text-center mb-6">
-          Hear from your peers about how the College Ecosystem is transforming campus life.
+          Hear from your peers about how the College Ecosystem is transforming
+          campus life.
         </p>
-        <AnimatedTestimonials
-          data={testimonialsContent}
-        />
-
+        <AnimatedTestimonials data={testimonialsContent} />
       </section>
-
-
     </div>
   );
 }

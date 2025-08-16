@@ -80,10 +80,7 @@ export default function EmptyArea({
       {actionProps && (
         <Button
           {...actionProps}
-          className={cn(
-            "shadow-sm active:shadow-none",
-            actionProps.className
-          )}
+          className={cn("shadow-sm active:shadow-none", actionProps.className)}
         />
       )}
     </div>

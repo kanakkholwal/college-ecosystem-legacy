@@ -36,9 +36,14 @@ export default async function RequestOutPassPage(props: PageProps) {
 
   return (
     <div className="space-y-3 my-2">
-      <ButtonLink variant="outline" size="sm" effect="shineHover"  href="/student/outpass">
-          <ArrowLeft />
-          Go Back
+      <ButtonLink
+        variant="outline"
+        size="sm"
+        effect="shineHover"
+        href="/student/outpass"
+      >
+        <ArrowLeft />
+        Go Back
       </ButtonLink>
       <RequestOutPassForm student={hosteler} onSubmit={createOutPass} />
     </div>

@@ -2,12 +2,8 @@
 import { revalidatePath } from "next/cache";
 import dbConnect from "src/lib/dbConnect";
 import { getSession } from "~/auth/server";
-import {
-  RawAnnouncementType,
-} from "~/constants/common.announcement";
-import Announcement, {
-  AnnouncementTypeWithId,
-} from "~/models/announcement";
+import { RawAnnouncementType } from "~/constants/common.announcement";
+import Announcement, { AnnouncementTypeWithId } from "~/models/announcement";
 
 export async function createAnnouncement(
   announcementData: RawAnnouncementType
@@ -75,7 +71,9 @@ export async function deleteAnnouncement(id: string) {
   try {
     const session = await getSession();
     if (!session) {
-      return Promise.reject("You need to be logged in to delete an announcement");
+      return Promise.reject(
+        "You need to be logged in to delete an announcement"
+      );
     }
     await dbConnect();
     // Check if the announcement exists
@@ -84,8 +82,13 @@ export async function deleteAnnouncement(id: string) {
       return Promise.reject("Announcement not found");
     }
     // Check if the user is the author of the announcement
-    if (announcement.createdBy.id !== session.user.id && session.user.role !== "admin") {
-      return Promise.reject("You are not authorized to delete this announcement");
+    if (
+      announcement.createdBy.id !== session.user.id &&
+      session.user.role !== "admin"
+    ) {
+      return Promise.reject(
+        "You are not authorized to delete this announcement"
+      );
     }
     await announcement.deleteOne();
     // Revalidate the announcements page

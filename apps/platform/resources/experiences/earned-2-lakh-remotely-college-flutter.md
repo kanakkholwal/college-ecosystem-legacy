@@ -3,7 +3,15 @@ title: "How I Earned ₹2 Lakh+ Remotely in College Using Flutter"
 slug: "earned-2-lakh-remotely-college-flutter"
 category: "career"
 summary: "Discover how I built a profitable freelance career in college with Flutter—lessons on remote work, client projects, and earning ₹2L+ as a student developer."
-tags: ["flutter", "freelancing", "remote work", "college", "mobile development", "passive income"]
+tags:
+  [
+    "flutter",
+    "freelancing",
+    "remote work",
+    "college",
+    "mobile development",
+    "passive income",
+  ]
 date: "2025-07-22"
 coverImage: "https://miro.medium.com/v2/resize:fit:875/1*Uijg3XOheDpmKJIVczU30A.jpeg"
 author:
@@ -12,8 +20,10 @@ author:
   image: "https://github.com/hardik17771.png"
   handle: "@hardik17771"
   handleUrl: "https://hardik17771.github.io"
-alternate_reads: ["https://medium.com/@hardiksachdeva52/the-story-of-how-i-earned-2-lakh-remotely-in-college-with-just-flutter-2bf9b50ba948"]
-
+alternate_reads:
+  [
+    "https://medium.com/@hardiksachdeva52/the-story-of-how-i-earned-2-lakh-remotely-in-college-with-just-flutter-2bf9b50ba948",
+  ]
 ---
 
 ## From Classroom to Cashflow: My Flutter Journey
@@ -31,6 +41,7 @@ When I first experimented with Flutter in 2024, I immediately recognized three k
 3. **Growing demand** - Startups loved the cost-effectiveness
 
 I spent my summer break mastering Flutter through:
+
 - The official Flutter documentation
 - Andrea Bizzotto's YouTube tutorials
 - Building 5 practice apps (published on GitHub)
@@ -47,14 +58,15 @@ My first paid project came via Reddit - a local restaurant needed a basic app fo
 
 ## Scaling to ₹2 Lakh+
 
-| Project Type       | Clients | Average Earnings | Time Required |
-|--------------------|---------|------------------|---------------|
-| Restaurant Apps    | 4       | ₹12,000          | 2-3 weeks     |
-| E-commerce MVP     | 2       | ₹35,000          | 4-5 weeks     |
-| UI Overhauls       | 3       | ₹18,000          | 1-2 weeks     |
-| Firebase Integration| 5      | ₹9,000           | 3-5 days      |
+| Project Type         | Clients | Average Earnings | Time Required |
+| -------------------- | ------- | ---------------- | ------------- |
+| Restaurant Apps      | 4       | ₹12,000          | 2-3 weeks     |
+| E-commerce MVP       | 2       | ₹35,000          | 4-5 weeks     |
+| UI Overhauls         | 3       | ₹18,000          | 1-2 weeks     |
+| Firebase Integration | 5       | ₹9,000           | 3-5 days      |
 
 **Key strategies that worked:**
+
 - Specializing in Firebase-Flutter combinations
 - Offering "app-in-a-week" packages for small businesses
 - Creating reusable component libraries
@@ -76,18 +88,18 @@ My first paid project came via Reddit - a local restaurant needed a basic app fo
 ## Where I'm Headed Next
 
 This experience taught me that:
+
 - Skills > Degrees in tech
 - Remote work is the future
 - Specialization pays better than generalization
 
-[Read Originally published Full Post on Medium](https://bit.ly/my-dev-story-medium)
----
+## [Read Originally published Full Post on Medium](https://bit.ly/my-dev-story-medium)
 
 **Enjoyed this story?**  
 Let me know what you'd like to hear more about:
+
 - [ ] Detailed client acquisition strategies
 - [ ] My Flutter learning roadmap
 - [ ] Time management tips for student freelancers
 
-Reply on [Twitter @hardik17771](https://twitter.com/HardikSach1771) or [visit my blog](https://medium.com/@hardiksachdeva52) for more Flutter content or [Connect on  LinkedIn](https://www.linkedin.com/in/hardik-sachdeva-a69987217/) and [Checkout my Portfolio](http://hardik17771.github.io/)
-
+Reply on [Twitter @hardik17771](https://twitter.com/HardikSach1771) or [visit my blog](https://medium.com/@hardiksachdeva52) for more Flutter content or [Connect on LinkedIn](https://www.linkedin.com/in/hardik-sachdeva-a69987217/) and [Checkout my Portfolio](http://hardik17771.github.io/)

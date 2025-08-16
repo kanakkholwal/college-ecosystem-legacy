@@ -12,36 +12,37 @@ import { usePathname } from "next/navigation";
 import React, { useRef, useState } from "react";
 
 type MegaMenuLinks = {
-    title: string;
-    href: string;
-    image?: string;
-    Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
-    description: string;
+  title: string;
+  href: string;
+  image?: string;
+  Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
+  description: string;
 };
 
 export type MegaMenuNavLinksType = {
-    title: string;
-    type: "mega_menu";
-    href?: string;
-    items: MegaMenuLinks[];
-}
+  title: string;
+  type: "mega_menu";
+  href?: string;
+  items: MegaMenuLinks[];
+};
 export type DropdownNavLinksType = {
+  title: string;
+  type: "dropdown";
+  href?: string;
+  items: {
     title: string;
-    type: "dropdown";
-    href?: string;
-    items: {
-        title: string;
-        href: string;
-    }[];
-}
-export type LinkNavLinksType = {
-    title: string;
-    type: "link";
     href: string;
-
-
-}
-export type NavLinksType = MegaMenuNavLinksType | DropdownNavLinksType | LinkNavLinksType;
+  }[];
+};
+export type LinkNavLinksType = {
+  title: string;
+  type: "link";
+  href: string;
+};
+export type NavLinksType =
+  | MegaMenuNavLinksType
+  | DropdownNavLinksType
+  | LinkNavLinksType;
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -102,10 +103,10 @@ export const Navbar = ({ children, className }: NavbarProps) => {
       {React.Children.map(children, (child) =>
         React.isValidElement(child)
           ? React.cloneElement(
-            child as React.ReactElement<{ visible?: boolean }>,
-            { visible },
-          )
-          : child,
+              child as React.ReactElement<{ visible?: boolean }>,
+              { visible }
+            )
+          : child
       )}
     </motion.div>
   );
@@ -127,12 +128,11 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         stiffness: 200,
         damping: 50,
       }}
- 
       className={cn(
         "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-transparent px-4 py-2 sm:flex",
         "min-w-[calc(100%_-_theme(spacing.4))] md:min-w-[800px]",
         visible && "bg-card",
-        className,
+        className
       )}
     >
       {children}
@@ -148,15 +148,14 @@ export const NavItems = ({ items, className }: NavItemsProps) => {
     <motion.div
       onMouseLeave={() => setHovered(null)}
       style={{
-        paddingBottom: hovered !== null ? '300px' : '0px',
-        marginBottom: hovered !== null ? '-300px' : '0px',
+        paddingBottom: hovered !== null ? "300px" : "0px",
+        marginBottom: hovered !== null ? "-300px" : "0px",
       }}
       className={cn(
         "relative inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-muted-foreground transition duration-200 hover:text-foreground lg:flex lg:space-x-2 px-3",
         className
       )}
     >
-
       {items.map((item, idx) => {
         if (item.type === "link") {
           return (
@@ -177,25 +176,31 @@ export const NavItems = ({ items, className }: NavItemsProps) => {
             active={hovered === idx ? item.title : null}
             item={item.title}
           >
-            <div className={(item.type === "mega_menu" ? "text-sm grid grid-cols-2 gap-10 p-4" : "flex flex-col gap-0 text-sm p-2")}>
-              {item.type === "dropdown" && item.items.map((subItem) => (
-                <DropDownLink
-                  key={subItem.title}
-                  href={subItem.href}
-                >
-                  {subItem.title}
-                </DropDownLink>
-              ))}
-              {item.type === "mega_menu" && item.items.map((subItem) => {
-                return (<MegaMenuLink
-                  key={subItem.title}
-                  title={subItem.title}
-                  description={subItem.description}
-                  href={subItem.href}
-                  image={subItem.image}
-                />);
+            <div
+              className={
+                item.type === "mega_menu"
+                  ? "text-sm grid grid-cols-2 gap-10 p-4"
+                  : "flex flex-col gap-0 text-sm p-2"
               }
-              )}
+            >
+              {item.type === "dropdown" &&
+                item.items.map((subItem) => (
+                  <DropDownLink key={subItem.title} href={subItem.href}>
+                    {subItem.title}
+                  </DropDownLink>
+                ))}
+              {item.type === "mega_menu" &&
+                item.items.map((subItem) => {
+                  return (
+                    <MegaMenuLink
+                      key={subItem.title}
+                      title={subItem.title}
+                      description={subItem.description}
+                      href={subItem.href}
+                      image={subItem.image}
+                    />
+                  );
+                })}
             </div>
           </MenuItem>
         );
@@ -214,7 +219,7 @@ const transition = {
     type: "spring",
     damping: 20,
     stiffness: 300,
-  }
+  },
 };
 export const MenuItem = ({
   onMouseEnter,
@@ -239,9 +244,7 @@ export const MenuItem = ({
             className="absolute inset-0 h-full w-full rounded-full bg-accent/40 backdrop-blur dark:border"
           />
         )}
-        <span className="relative z-20 whitespace-nowrap">
-          {item}
-        </span>
+        <span className="relative z-20 whitespace-nowrap">{item}</span>
       </motion.div>
       {active !== null && (
         <motion.div
@@ -276,7 +279,7 @@ export const MegaMenuLink = ({
   description,
   href,
   image,
-  Icon
+  Icon,
 }: {
   title: string;
   description: string;
@@ -285,15 +288,22 @@ export const MegaMenuLink = ({
   Icon?: React.FC<React.SVGProps<SVGSVGElement>>;
 }) => {
   return (
-    <a href={href} className="flex space-x-2 group hover:bg-background p-4 rounded-lg">
-      {image && (<img
-        src={image}
-        width={140}
-        height={70}
-        alt={title}
-        className="shrink-0 rounded-md shadow-2xl object-cover w-36 h-20"
-      />)}
-      {Icon && <Icon className="size-6 shrink-0 text-neutral-700 dark:text-neutral-300" />}
+    <a
+      href={href}
+      className="flex space-x-2 group hover:bg-background p-4 rounded-lg"
+    >
+      {image && (
+        <img
+          src={image}
+          width={140}
+          height={70}
+          alt={title}
+          className="shrink-0 rounded-md shadow-2xl object-cover w-36 h-20"
+        />
+      )}
+      {Icon && (
+        <Icon className="size-6 shrink-0 text-neutral-700 dark:text-neutral-300" />
+      )}
       <div>
         <h4 className="text-lg font-semibold mb-1 text-black dark:text-white">
           {title}
@@ -321,7 +331,7 @@ export const DefaultLink = ({
   href,
   className,
   active,
-  onMouseEnter
+  onMouseEnter,
 }: {
   children: React.ReactNode;
   href: string;
@@ -329,22 +339,27 @@ export const DefaultLink = ({
   active?: boolean;
   onMouseEnter?: () => void;
 }) => {
-  return <motion.div
-    transition={{ duration: 0.3 }}
-    onMouseEnter={onMouseEnter}
-    className="cursor-pointer relative px-4 py-2 text-muted-foreground hover:text-foreground"
-  >
-    {active && (
-      <motion.div
-        layoutId="hovered"
-        className="absolute inset-0 h-full w-full rounded-full bg-accent/40 backdrop-blur dark:border"
-      />
-    )}
-    <a href={href} className={cn("relative z-20 whitespace-nowrap", className)}>
-      {children}
-    </a>
-  </motion.div>
-}
+  return (
+    <motion.div
+      transition={{ duration: 0.3 }}
+      onMouseEnter={onMouseEnter}
+      className="cursor-pointer relative px-4 py-2 text-muted-foreground hover:text-foreground"
+    >
+      {active && (
+        <motion.div
+          layoutId="hovered"
+          className="absolute inset-0 h-full w-full rounded-full bg-accent/40 backdrop-blur dark:border"
+        />
+      )}
+      <a
+        href={href}
+        className={cn("relative z-20 whitespace-nowrap", className)}
+      >
+        {children}
+      </a>
+    </motion.div>
+  );
+};
 export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
   return (
     <motion.div
@@ -367,7 +382,7 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
       className={cn(
         "relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between bg-transparent px-0 py-2 sm:hidden rounded-2xl",
         visible && "bg-popover",
-        className,
+        className
       )}
     >
       {children}
@@ -383,7 +398,7 @@ export const MobileNavHeader = ({
     <div
       className={cn(
         "flex w-full flex-row items-center justify-between",
-        className,
+        className
       )}
     >
       {children}
@@ -406,7 +421,7 @@ export const MobileNavMenu = ({
           exit={{ opacity: 0 }}
           className={cn(
             "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white px-4 py-8 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] dark:bg-neutral-950",
-            className,
+            className
           )}
         >
           {children}
@@ -429,4 +444,3 @@ export const MobileNavToggle = ({
     <IconMenu className="text-black dark:text-white" onClick={onClick} />
   );
 };
-

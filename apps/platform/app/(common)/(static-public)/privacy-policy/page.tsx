@@ -62,7 +62,9 @@ export default function PrivacyPolicyPage() {
             personalize content, and serve ads (where enabled).
           </li>
           <li>
-            <strong>Account & submissions (if you sign in or submit data):</strong>{" "}
+            <strong>
+              Account & submissions (if you sign in or submit data):
+            </strong>{" "}
             name, email, roll number or identifiers you choose to provide,
             community posts, forms, feedback, uploaded files, and preferences.
           </li>
@@ -75,12 +77,16 @@ export default function PrivacyPolicyPage() {
         <h2>How We Use Information</h2>
         <ul>
           <li>Operate, maintain, and improve the Site and App.</li>
-          <li>Provide features (e.g., results lookup, resources, communities).</li>
+          <li>
+            Provide features (e.g., results lookup, resources, communities).
+          </li>
           <li>Personalize content and remember settings.</li>
           <li>Measure performance and analyze product usage.</li>
           <li>Detect, prevent, and respond to security incidents or abuse.</li>
           <li>Comply with legal obligations.</li>
-          <li>Monetize via advertising and/or affiliate links (where enabled).</li>
+          <li>
+            Monetize via advertising and/or affiliate links (where enabled).
+          </li>
         </ul>
 
         <h2>Cookies & Online Advertising</h2>

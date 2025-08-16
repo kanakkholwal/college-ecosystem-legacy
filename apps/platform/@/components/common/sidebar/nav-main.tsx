@@ -69,9 +69,7 @@ export function NavMain({
                       <SidebarMenuSub>
                         {item.items?.map((subItem) => {
                           // combine search params with the item.href and subItem.href to create a new URL
-                          const url = new URL(
-                            subItem.href,  getWindowOrigin()
-                          );
+                          const url = new URL(subItem.href, getWindowOrigin());
                           if (item?.preserveParams && pathname === item.href) {
                             // if the item is active, preserve the search params
                             const preservedParams = new URLSearchParams(
@@ -83,7 +81,6 @@ export function NavMain({
                               if (value !== null)
                                 url.searchParams.set(key, value.toString());
                             }
-
                           }
                           return (
                             <SidebarMenuSubItem key={subItem.title}>

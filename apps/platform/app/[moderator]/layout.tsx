@@ -61,7 +61,10 @@ export default async function DashboardLayout({
     <SidebarProvider>
       <AppSidebar user={session.user} moderator={moderator} />
       <SidebarInset className="flex flex-col flex-1 w-full relative z-0">
-        <Navbar user={session.user} impersonatedBy={session.session.impersonatedBy} />
+        <Navbar
+          user={session.user}
+          impersonatedBy={session.session.impersonatedBy}
+        />
         {/* <div
           aria-hidden="true"
           className="absolute inset-0 grid grid-cols-2 -space-x-52 opacity-40 dark:opacity-20 -z-[1]"

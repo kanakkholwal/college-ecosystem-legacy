@@ -25,7 +25,10 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type { z } from "zod";
 import { deletePost, updatePost } from "~/actions/common.community";
-import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "~/constants/common.community";
+import {
+  CATEGORY_TYPES,
+  SUB_CATEGORY_TYPES,
+} from "~/constants/common.community";
 import {
   CommunityPostTypeWithId,
   rawCommunityPostSchema,
@@ -52,18 +55,21 @@ export default function EditCommunityPost({
 
   function onSubmit(values: z.infer<typeof rawCommunityPostSchema>) {
     console.log(values);
-    toast.promise(updatePost(postId, {
-      type: "edit",
-      data: values,
-    }), {
-      loading: "Updating Post",
-      success: (data) => {
-        console.log(data);
-        router.refresh();
-        return "Post Updated";
-      },
-      error: "Failed to update Post",
-    });
+    toast.promise(
+      updatePost(postId, {
+        type: "edit",
+        data: values,
+      }),
+      {
+        loading: "Updating Post",
+        success: (data) => {
+          console.log(data);
+          router.refresh();
+          return "Post Updated";
+        },
+        error: "Failed to update Post",
+      }
+    );
   }
   function onDelete() {
     toast.promise(deletePost(postId), {

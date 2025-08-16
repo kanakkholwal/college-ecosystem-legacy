@@ -39,15 +39,14 @@ export function changeCase(
   }
 }
 export function marketwiseLink(link: string, path: string = "/resources") {
-    const url = new URL(link);
-    url.searchParams.append("ref", appConfig.url + path);
-    url.searchParams.append("utm_source", appConfig.url);
-    url.searchParams.append("utm_medium", "referral");
-    url.searchParams.append("utm_campaign", appConfig.url + path);
-    return url.toString();
+  const url = new URL(link);
+  url.searchParams.append("ref", appConfig.url + path);
+  url.searchParams.append("utm_source", appConfig.url);
+  url.searchParams.append("utm_medium", "referral");
+  url.searchParams.append("utm_campaign", appConfig.url + path);
+  return url.toString();
 }
 export function validatePassword(password: string) {
-
   const result = passwordSchema.safeParse(password);
   if (!result.success) {
     return {
@@ -61,7 +60,10 @@ export function validatePassword(password: string) {
     message: "Password is strong",
   };
 }
-export function calculateReadingTime(text: string, wordsPerMinute = 200): string {
+export function calculateReadingTime(
+  text: string,
+  wordsPerMinute = 200
+): string {
   if (!text) return "0 min read";
 
   const words = text.trim().split(/\s+/).length;
@@ -70,22 +72,19 @@ export function calculateReadingTime(text: string, wordsPerMinute = 200): string
   return `${minutes} min read`;
 }
 
-
 export type RoutePattern = string | RegExp;
 
 export const toRegex = (route: RoutePattern): RegExp => {
   if (route instanceof RegExp) return route;
   if (route === "/") return /^\/?$/; // Special case for root
 
-  const parts = route
-    .split("/")
-    .filter(part => part !== ""); // Remove empty parts
+  const parts = route.split("/").filter((part) => part !== ""); // Remove empty parts
 
   if (parts.length === 0) return /^\/?$/; // Handle cases like empty string
   // handle "!" as a negation
 
   const regexStr = parts
-    .map(part => {
+    .map((part) => {
       if (part === "*") return ".*";
       if (part.startsWith(":")) return "[a-z0-9-_]+";
       return part.replace(/[-[\]{}()+?.,\\^$|#\s]/g, "\\$&");
@@ -99,7 +98,7 @@ export const toRegex = (route: RoutePattern): RegExp => {
 
 //   let negate = false;
 //   let pattern = route;
-  
+
 //   // Handle negation prefix
 //   if (typeof pattern === 'string' && pattern.startsWith("!")) {
 //     negate = true;
@@ -108,7 +107,7 @@ export const toRegex = (route: RoutePattern): RegExp => {
 
 //   // Handle empty pattern after negation
 //   if (pattern === "/") return negate ? /^(?!\/?$).*$/i : /^\/?$/i;
-  
+
 //   const parts = pattern
 //     .split("/")
 //     .filter(part => part !== ""); // Remove empty parts
@@ -124,7 +123,7 @@ export const toRegex = (route: RoutePattern): RegExp => {
 //     .join("\\/");
 
 //   const baseRegex = new RegExp(`^\\/${regexStr}\\/?$`, "i");
-  
+
 //   // Convert to negative match if needed
 //   if (negate) {
 //     const innerPattern = baseRegex.source
@@ -132,6 +131,6 @@ export const toRegex = (route: RoutePattern): RegExp => {
 //       .replace("\\/", "/"); // Unescape slashes for clean lookahead
 //     return new RegExp(`^(?!/${innerPattern}$).*$`, "i");
 //   }
-  
+
 //   return baseRegex;
 // };

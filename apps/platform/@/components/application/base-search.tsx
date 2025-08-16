@@ -90,7 +90,7 @@ export default function BaseSearchBox({
         variant === "expanded"
           ? "grid gap-4"
           : "relative flex items-stretch rounded-full",
-        className,
+        className
       )}
       aria-disabled={disabled}
       data-disabled={disabled ? "true" : "false"}
@@ -132,8 +132,6 @@ export default function BaseSearchBox({
                     disabled: disabled,
                   }}
                 >
-
-
                   {filterOptions.map((option) => (
                     <div key={option.key} className="mb-4">
                       <p className="text-muted-foreground mb-2">
@@ -193,7 +191,7 @@ export default function BaseSearchBox({
           placeholder={searchPlaceholder}
           className={cn(
             "w-full rounded-full",
-            isDesktop ? "h-11 px-18" : "h-10 pl-10 pr-14",
+            isDesktop ? "h-11 px-18" : "h-10 pl-10 pr-14"
           )}
           defaultValue={searchParams.get(searchParamsKey)?.toString()}
           onChange={(e) => handleSearch(e.target.value)}

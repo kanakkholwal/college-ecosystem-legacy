@@ -14,7 +14,7 @@ export default async function EditEventPage(props: {
   }
   return (
     <>
-    <EditEventEvent eventId={event.id} event={event} />
+      <EditEventEvent eventId={event.id} event={event} />
     </>
   );
 }

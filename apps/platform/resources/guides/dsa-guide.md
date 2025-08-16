@@ -1,12 +1,28 @@
 ---
 title: "The Last DSA Guide You'll Ever Need 🚀"
 slug: "dsa-guide"
-tags: ["dsa roadmap", "data structures", "algorithms", "coding interviews", "tech career"]
+tags:
+  [
+    "dsa roadmap",
+    "data structures",
+    "algorithms",
+    "coding interviews",
+    "tech career",
+  ]
 category: "career"
 date: "2025-07-16"
 updated: "2025-07-16"
 summary: "One guide to rule them all — a deeply practical, emotional, and strategic walkthrough combining NeetCode, Striver, and Greg Hogg’s DSA content into the perfect roadmap."
-keywords: ["neetcode roadmap", "striver a2z sheet", "Greg Hogg dsa", "dsa preparation", "leetcode strategy", "coding interview prep", "data structures guide"]
+keywords:
+  [
+    "neetcode roadmap",
+    "striver a2z sheet",
+    "Greg Hogg dsa",
+    "dsa preparation",
+    "leetcode strategy",
+    "coding interview prep",
+    "data structures guide",
+  ]
 description: "Struggling with where to start or what to follow in your DSA prep? This guide combines the best of Striver, NeetCode, and Greg Hogg into a single human-centric roadmap for cracking coding interviews."
 author:
   name: "Kanak Kholwal"
@@ -16,19 +32,21 @@ author:
 featured: false
 draft: false
 ---
- 
-*A painfully honest roadmap for mastering Data Structures and Algorithms (DSA), without the fluff.*
+
+_A painfully honest roadmap for mastering Data Structures and Algorithms (DSA), without the fluff._
 
 ---
 
 ## 🤯 “Where do I even start?”
 
-If you've ever stared at a screen full of Leetcode problems and thought,  
-> *"Am I even doing this right?"*
+If you've ever stared at a screen full of Leetcode problems and thought,
+
+> _"Am I even doing this right?"_
 
 You're not alone. The DSA prep journey is brutal. You waste time switching from one playlist to another, jumping between topics you’re not ready for, and solving random problems with no real confidence.
 
 **This blog changes that.** It combines the best of:
+
 - [NeetCode Roadmap](https://neetcode.io/roadmap)
 - [Striver's A2Z DSA Sheet](https://takeuforward.org/strivers-a2z-dsa-course)
 - [Greg Hogg's Data Structures & Algorithms in Python Playlist](https://www.youtube.com/playlist?list=PLKYEe2WisBTFEr6laH5bR2J19j7sl5O8R)
@@ -41,32 +59,34 @@ into **one cohesive roadmap**, with reasoning, emotions, and a human touch. No g
 
 Each of these resources excels at something:
 
-| Resource | Strength |
-|---------|----------|
-| **Striver A2Z** | Most structured sheet. Step-by-step from basic to advanced, like building a skyscraper from scratch. |
-| **NeetCode Roadmap** | Clean and focused on *real interview problems*. Amazing once you've got the basics. |
-| **Greg Hogg's Playlist** | Crystal clear beginner explanations with visuals. Pure gold if you're new to coding or DSA. |
+| Resource                 | Strength                                                                                             |
+| ------------------------ | ---------------------------------------------------------------------------------------------------- |
+| **Striver A2Z**          | Most structured sheet. Step-by-step from basic to advanced, like building a skyscraper from scratch. |
+| **NeetCode Roadmap**     | Clean and focused on _real interview problems_. Amazing once you've got the basics.                  |
+| **Greg Hogg's Playlist** | Crystal clear beginner explanations with visuals. Pure gold if you're new to coding or DSA.          |
 
 By **merging their strengths**, we get:
-- The theory and motivation from Greg Hogg ✔️  
-- The foundational flow from Striver ✔️  
+
+- The theory and motivation from Greg Hogg ✔️
+- The foundational flow from Striver ✔️
 - The battle-tested questions from NeetCode ✔️
 
-Let’s dive in.  
+Let’s dive in.
 
 ---
 
 ## 📚 PHASE 0: The Warm-up Zone (Prerequisites)
 
 Before touching DSA, **you MUST** have:
+
 - **Basic programming syntax** in Java/C++/Python
 - Understanding of **loops, arrays, functions, OOP**
 - Know what **time and space complexity** is (Big O notation)
 
-📺 *Watch*:  
+📺 _Watch_:  
 🎥 [Greg Hogg’s Python course](https://www.youtube.com/watch?v=NakyjvSrTIQ&list=PLKYEe2WisBTFEr6laH5bR2J19j7sl5O8R&index=2&pp=iAQB)
 
-💡 *Why*: This helps you stop feeling stupid when people talk about recursion or pointers like they’re first-grade topics.
+💡 _Why_: This helps you stop feeling stupid when people talk about recursion or pointers like they’re first-grade topics.
 
 ---
 
@@ -83,14 +103,14 @@ Topics
 - Arrays + Patterns
 - Functions, Recursion basics
 
-📺 *Watch*: [Greg Hogg's playlist](https://www.youtube.com/playlist?list=PLKYEe2WisBTFEr6laH5bR2J19j7sl5O8R)  
-📝 *Solve*:  
+📺 _Watch_: [Greg Hogg's playlist](https://www.youtube.com/playlist?list=PLKYEe2WisBTFEr6laH5bR2J19j7sl5O8R)  
+📝 _Solve_:
 
-- Print patterns (pyramids, triangles)  
-- Reverse arrays, find min/max, sum  
+- Print patterns (pyramids, triangles)
+- Reverse arrays, find min/max, sum
 - Factorial with recursion
 
-👀 *Why*: It builds muscle memory. Solving patterns isn’t pointless — it tunes your logical brain.
+👀 _Why_: It builds muscle memory. Solving patterns isn’t pointless — it tunes your logical brain.
 
 ---
 
@@ -107,18 +127,18 @@ Topics
 - HashMaps/Sets (Java) / dicts (Python)
 - Prefix sums
 
-📝 *Solve*:
+📝 _Solve_:
 
-- Majority Element  
-- Two Sum, 3Sum  
-- Longest Subarray with K Sum  
-- Kadane's Algorithm  
-- Prefix Sum problems  
+- Majority Element
+- Two Sum, 3Sum
+- Longest Subarray with K Sum
+- Kadane's Algorithm
+- Prefix Sum problems
 - Set-based logic (Longest Consecutive Subsequence)
 
-📚 *From*: Striver A2Z + NeetCode Easy
+📚 _From_: Striver A2Z + NeetCode Easy
 
-💡 *Tip*: Revisit **Math patterns** for interviews like finding missing number, checking palindromes.
+💡 _Tip_: Revisit **Math patterns** for interviews like finding missing number, checking palindromes.
 
 ---
 
@@ -134,15 +154,15 @@ Topics
 - Backtracking (N-Queens, Sudoku)
 - Search Space problems
 
-🧠 *Mind-bending Qs*:
+🧠 _Mind-bending Qs_:
 
-- Koko Eating Bananas  
-- N-th Root of M  
-- Generate Parentheses  
-- Subsets, Permutations  
+- Koko Eating Bananas
+- N-th Root of M
+- Generate Parentheses
+- Subsets, Permutations
 - Combination Sum variants
 
-🎯 *Why*: These sharpen your intuition. Most DP questions evolve from recursion problems.
+🎯 _Why_: These sharpen your intuition. Most DP questions evolve from recursion problems.
 
 ---
 
@@ -169,9 +189,9 @@ Topics
 - Largest Rect. in Histogram
 - Sliding Window Max (Deque)
 
-🧠 *Why*: These are literal **favorites in FAANG**. If you’re bad at LLs or stacks — you’ll fumble big time.
+🧠 _Why_: These are literal **favorites in FAANG**. If you’re bad at LLs or stacks — you’ll fumble big time.
 
-🎯 *Use*: Striver + NeetCode + add Greg Hogg’s illustrations if stuck
+🎯 _Use_: Striver + NeetCode + add Greg Hogg’s illustrations if stuck
 
 ---
 
@@ -202,17 +222,18 @@ Topics
 - Dijkstra, Prim, Kruskal (MST)
 - Disjoint Set Union (Union-Find)
 
-💡 *Why*: You can't fake understanding in Trees and Graphs. You either get it or don’t — and interviews WILL test this.
+💡 _Why_: You can't fake understanding in Trees and Graphs. You either get it or don’t — and interviews WILL test this.
 
 ---
 
 ## 📦 PHASE 6: Dynamic Programming & Greedy
 
-**Time**: 1–2 months. *This separates the coders from the real deal.*
+**Time**: 1–2 months. _This separates the coders from the real deal._
 
 ### DP Progression (Striver’s 2D/1D → NeetCode Patterns)
 
 🧠 Start with:
+
 - Fibonacci (rec → memo → tab → space optimized)
 - Climbing Stairs
 - House Robber
@@ -221,22 +242,25 @@ Topics
 - Partition Equal Subset Sum
 
 🎯 NeetCode:
-- Word Break  
-- Edit Distance  
+
+- Word Break
+- Edit Distance
 - Regular Expression Matching
 
-💡 *Why*: Most people give up here. You won't, because you took the time to build the right foundation.
+💡 _Why_: Most people give up here. You won't, because you took the time to build the right foundation.
 
 ---
 
 ## ⚔️ Final Boss: System Design, Bit Manipulation, Tries, and More
 
 These aren’t always needed for freshers, but helpful for:
+
 - Product-based companies (post 1–2 YOE)
 - Scaling problems
 - Edge-case optimization
 
 Topics:
+
 - Tries (Insert/Search/Prefix)
 - Bit Manipulation (XOR tricks, Set Bit count)
 - LRU Cache (LinkedHashMap or custom DLL+Map)
@@ -247,12 +271,13 @@ Topics:
 ## 📈 When to Start Leetcode Blind 75 / 150?
 
 Once you’ve cleared:
+
 - Arrays, Hashing
 - Recursion + Backtracking
 - Trees + Graphs
 - Basic DP
 
-🔥 *Then do Blind 75 + NeetCode 150*. You’ll feel **in control**, not overwhelmed.
+🔥 _Then do Blind 75 + NeetCode 150_. You’ll feel **in control**, not overwhelmed.
 
 ---
 
@@ -269,6 +294,7 @@ Once you’ve cleared:
 ## 🏁 Conclusion: It’s Not Just About Getting the Job
 
 DSA isn’t just about cracking interviews. It’s about:
+
 - Learning to **think critically**
 - Becoming a better **engineer**
 - Building the **confidence** that you can break down any problem
@@ -283,5 +309,4 @@ Good luck. And stay unbreakable. 💪
 ---
 
 > **Save this blog. Share it with friends. Come back when you lose motivation.**  
-Because this journey isn't easy — but it's worth it.
-
+> Because this journey isn't easy — but it's worth it.
