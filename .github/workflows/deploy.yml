@@ -42,7 +42,7 @@ jobs:
 
       - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
-        if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true'
+        if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true' ||  steps.changed.outputs.mail_server_changed == 'true'
         with:
           node-version: 20.x
           cache: "npm"
