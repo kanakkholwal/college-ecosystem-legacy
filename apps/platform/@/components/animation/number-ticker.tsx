@@ -65,7 +65,7 @@ export function NumberTicker({
       )}
       {...props}
     >
-      {startValue} {suffix}
+      {startValue}
     </span>
   );
 }

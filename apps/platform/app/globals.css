@@ -617,7 +617,7 @@ body {
     }
 
     body {
-        @apply bg-background text-foreground selection:bg-primary/10 selection:text-primary;
+        @apply bg-background text-foreground selection:bg-primary/75 selection:text-white selection:rounded-2xl;
     }
 }
 

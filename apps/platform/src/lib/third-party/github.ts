@@ -107,11 +107,16 @@ export async function getRepoContributors(repoUri = appConfig.githubUri): Promis
     }
 }
 
-type StatsData = {
+export type StatsData = {
     stars: number;
     forks: number;
     contributors: number;
     visitors: number
+}
+export type PublicStatsType = {
+    sessionCount: number;
+    userCount: number;
+    githubStats: StatsData;
 }
 
 export interface RepoData {
