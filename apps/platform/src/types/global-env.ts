@@ -32,14 +32,8 @@ const envVariables = z.object({
   
 
   // Client Side
-  NEXT_PUBLIC_FIREBASE_API_KEY: z.string(),
-  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: z.string(),
-  NEXT_PUBLIC_FIREBASE_PROJECT_ID: z.string(),
-  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: z.string(),
-  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: z.string(),
-  NEXT_PUBLIC_FIREBASE_APP_ID: z.string(),
-  NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID: z.string(),
-  NEXT_PUBLIC_FIREBASE_DB_URL: z.string(),
+  NEXT_PUBLIC_SUPABASE_URL: z.string(),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
 
 });
 
