@@ -10,7 +10,8 @@ export default function ErrorBoundary({
   reset: () => void;
 }) {
   useEffect(() => {
-    // Log the error to an error reporting service
+    // Log the error to an error reporting service ? posthog, sentry, etc.
+    // This is a good place to send the error to your error tracking service
     console.error(error);
   }, [error]);
   return (
