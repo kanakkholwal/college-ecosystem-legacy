@@ -40,7 +40,7 @@ const classNames = {
   label: "font-semibold",
   value: "text-right",
   note: "mt-6 text-muted-foreground italic text-xs",
-  footer: "flex justify-between",
+  footer: "flex justify-between flex-wrap",
   qr_code: "mt-6 flex-0",
   signature: "mt-6 text-gray-800 font-semibold text-right text-xs",
   signature_value:

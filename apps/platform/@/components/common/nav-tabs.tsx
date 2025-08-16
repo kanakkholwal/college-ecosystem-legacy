@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-// import { AnimatePresence, motion } from "motion/react"
+// import { AnimatePresence, motion } from "framer-motion"
 import Link, { type LinkProps } from "next/link";
 import { usePathname } from "next/navigation";
 import * as React from "react";
@@ -185,3 +185,4 @@ const NavTabs = React.forwardRef<HTMLDivElement, NavTabsProps>(
 NavTabs.displayName = "NavTabs";
 
 export { NavTabs };
+

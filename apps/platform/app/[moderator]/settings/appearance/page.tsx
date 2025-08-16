@@ -3,7 +3,7 @@
 import { DarkTheme, LightTheme, SystemTheme } from "@/components/common/theme";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { cn } from "@/lib/utils";
-import { motion } from "motion/react";
+import { motion } from "framer-motion";
 import { useTheme } from "next-themes";
 import * as React from "react";
 

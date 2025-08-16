@@ -9,21 +9,20 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ButtonLink } from "@/components/utils/link";
 import { featuresSectionContent } from "@/constants/landing";
 import { cn } from "@/lib/utils";
-import { spring } from "framer-motion";
+import { motion, spring } from "framer-motion";
 import {
-  ArrowUpRight,
-  BookOpen,
-  FileText,
-  Globe,
-  GraduationCap,
-  Home,
-  MoreHorizontal,
-  Sparkles,
-  Star,
-  User,
-  Users,
+    ArrowUpRight,
+    BookOpen,
+    FileText,
+    Globe,
+    GraduationCap,
+    Home,
+    MoreHorizontal,
+    Sparkles,
+    Star,
+    User,
+    Users,
 } from "lucide-react";
-import { motion } from "motion/react";
 import Link from "next/link";
 import type { Session } from "~/auth";
 import { PublicStatsType } from "~/lib/third-party/github";

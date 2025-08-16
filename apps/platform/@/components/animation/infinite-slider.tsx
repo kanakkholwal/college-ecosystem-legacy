@@ -1,7 +1,7 @@
 "use client";
 import { cn } from "@/lib/utils";
-import { useMotionValue, animate, motion } from "motion/react";
-import { useState, useEffect } from "react";
+import { animate, motion, useMotionValue } from "framer-motion";
+import { useEffect, useState } from "react";
 import useMeasure from "react-use-measure";
 
 export type InfiniteSliderProps = {
