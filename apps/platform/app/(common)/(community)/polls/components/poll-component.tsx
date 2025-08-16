@@ -100,7 +100,7 @@ export function PollRender({ poll, user }: { poll: PollType, user?: Session["use
                 <p className="text-sm">{option}</p>
               </div>
 
-              <p className="text-sm opacity-80">{percent}%</p>
+              <p className="text-sm opacity-80">{percent.toFixed(2)}%</p>
             </Button>
           );
         })}

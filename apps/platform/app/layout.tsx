@@ -103,7 +103,7 @@ type RootLayoutProps = Readonly<{
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning data-scroll-behavior="smooth">
       <head >
         <meta name="google-adsense-account" content={appConfig.verifications.google_adsense} />
       </head>

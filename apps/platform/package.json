@@ -47,6 +47,7 @@
     "@radix-ui/react-tooltip": "^1.2.7",
     "@react-spring/web": "^10.0.1",
     "@serwist/next": "^9.0.14",
+    "@supabase/supabase-js": "^2.55.0",
     "@tailwindcss/postcss": "^4.1.8",
     "@tailwindcss/typography": "^0.5.16",
     "@tanstack/react-query": "^5.80.5",

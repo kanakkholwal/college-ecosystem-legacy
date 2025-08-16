@@ -144,7 +144,7 @@ export function IntroSection({ user, stats }: { user: Session["user"]; stats: Pu
         initial="hidden"
         animate="visible"
         className={cn(
-          "relative z-[100] flex w-full flex-col items-center justify-center px-4 text-center sm:px-8 lg:flex-row lg:items-start lg:justify-between lg:text-left"
+          "relative z-[100] flex w-full flex-col items-center justify-center px-4 text-center lg:flex-row lg:items-start lg:justify-between lg:text-left"
         )}
       >
         {/* LEFT: value prop, CTAs, badges, stats */}

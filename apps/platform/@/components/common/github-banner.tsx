@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { GitBranch, StarIcon, Users } from 'lucide-react';
 import Link from 'next/link';
-import { getRepoStats } from '~/lib/third-party/github';
+import { getRepoStats, StatsData } from '~/lib/third-party/github';
 import { appConfig } from '~/project.config';
 import { Icon, IconType } from '../icons';
 import { Badge } from '../ui/badge';
@@ -13,8 +13,18 @@ interface GithubBannerProps {
 }
 
 export default async function GithubBanner({ className }: GithubBannerProps) {
-    const stats = await getRepoStats(appConfig.githubUri)
-
+    let stats: StatsData;
+    try {
+        stats = await getRepoStats(appConfig.githubUri);
+    } catch (error) {
+        console.warn("Error fetching GitHub repository stats:", error);
+        stats = {
+            stars: 9,
+            forks: 2,
+            contributors: 1,
+            visitors: 1_40_000, // Fallback value
+        };
+    }
 
     return (<div className={cn("flex flex-col items-center pt-5 px-3 pb-10 md:pb-14 xl:pb-[60px]", className)}>
         <Badge variant="default" >

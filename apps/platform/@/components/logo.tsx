@@ -2,7 +2,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import { appConfig, orgConfig } from "~/project.config";
 
-export function AppLogo({ className }: { className?: string }) {
+export function AppLogo({ className,showLogo= false }: { className?: string,showLogo?: boolean }) {
   return (
     <div
       className={cn(
@@ -10,9 +10,18 @@ export function AppLogo({ className }: { className?: string }) {
         className
       )}
     >
-      <h1 className="text-2xl md:text-7xl font-bold text-center relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary whitespace-nowrap">
+       {showLogo ? <Avatar className="h-8 w-8 rounded-lg">
+        <AvatarImage
+          src="/logo-square.webp"
+          alt={appConfig.name}
+        />
+        <AvatarFallback className="flex items-center justify-center rounded-lg text-3xl font-bold text-center relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary whitespace-nowrap">
+          {orgConfig.shortName.charAt(0).toUpperCase()}
+        </AvatarFallback>
+      </Avatar>
+      :(<h1 className="text-2xl md:text-7xl font-bold text-center relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary whitespace-nowrap">
         {orgConfig.shortName}
-      </h1>
+      </h1>)}
       <h2 className="text-md md:text-xl font-semibold capitalize text-muted-foreground text-center">
         {appConfig.name}
       </h2>

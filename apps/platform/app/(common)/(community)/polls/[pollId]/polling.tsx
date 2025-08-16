@@ -1,13 +1,17 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { onValue, ref, set } from "firebase/database";
+import { createClient } from "@supabase/supabase-js";
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
-import { database } from "src/lib/firebase";
 
 import type { PollType } from "src/models/poll";
 import type { Session } from "~/auth/client";
+
+const supabase = createClient(
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+);
 
 interface PollingProps {
   poll: PollType;
@@ -18,28 +22,40 @@ interface PollingProps {
 export default function Polling({ poll, user, updateVotes }: PollingProps) {
   const [voteData, setVoteData] = useState<PollType["votes"]>(poll.votes);
 
-  const handleVote = (option: string) => {
-    if (voteData) {
-      let updatedVotes = [...voteData];
-      const existingVoteIndex = updatedVotes.findIndex(
-        (vote) => vote.userId === user.id && vote.option === option
-      );
+  const handleVote = async (option: string) => {
+    if (!voteData) return;
 
-      if (existingVoteIndex > -1) {
-        if (!poll.multipleChoice) {
-          updatedVotes.splice(existingVoteIndex, 1);
-        }
-      } else {
-        if (!poll.multipleChoice) {
-          updatedVotes = updatedVotes.filter((vote) => vote.userId !== user.id);
-        }
-        updatedVotes.push({ option, userId: user.id });
+    let updatedVotes = [...voteData];
+    const existingVoteIndex = updatedVotes.findIndex(
+      (vote) => vote.userId === user.id && vote.option === option
+    );
+
+    if (existingVoteIndex > -1) {
+      if (!poll.multipleChoice) {
+        updatedVotes.splice(existingVoteIndex, 1);
       }
-
-      set(ref(database, `polls/${poll._id}/votes`), updatedVotes);
-      setVoteData(updatedVotes);
+    } else {
+      if (!poll.multipleChoice) {
+        updatedVotes = updatedVotes.filter((vote) => vote.userId !== user.id);
+      }
+      updatedVotes.push({ option, userId: user.id });
     }
+
+    // Update in Supabase
+    const { error } = await supabase
+      .from("polls")
+      .update({ votes: updatedVotes })
+      .eq("id", poll._id);
+
+    if (error) {
+      toast.error("Failed to submit vote");
+      console.error(error);
+      return;
+    }
+
+    setVoteData(updatedVotes);
   };
+
   const handleSync = useCallback(async () => {
     try {
       await updateVotes(voteData);
@@ -48,20 +64,32 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
       console.error("Error updating poll:", error);
     }
   }, [updateVotes, voteData]);
+
   useEffect(() => {
-    const pollRef = ref(database, `polls/${poll._id}`);
-    const unsubscribe = onValue(pollRef, (snapshot) => {
-      const data = snapshot.val();
-      if (data) {
-        setVoteData(data.votes || []);
-      }
-    });
+    // Realtime subscription
+    const channel = supabase
+      .channel(`polls-${poll._id}`)
+      .on(
+        "postgres_changes",
+        {
+          event: "*",
+          schema: "public",
+          table: "polls",
+          filter: `id=eq.${poll._id}`,
+        },
+        (payload) => {
+          const newData = payload.new as PollType;
+          setVoteData(newData?.votes || []);
+        }
+      )
+      .subscribe();
 
     return () => {
       handleSync();
-      unsubscribe();
+      supabase.removeChannel(channel);
     };
   }, [handleSync, poll._id]);
+
   useEffect(() => {
     if (poll.votes.length !== voteData.length) {
       handleSync();
@@ -81,15 +109,14 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
 
         return (
           <div
-            key={`${option}-${index.toString()}`}
+            key={`${option}-${index}`}
             className="relative bg-muted rounded-lg"
           >
             <div
-              // className="z-[-1] h-full bg-primary/20 rounded-lg absolute top-0 bottom-0 left-0 right-auto transition-all bg-opacity-40 dark:bg-dark-primary/20"
               className="flex items-center rounded transition-all h-full bg-primary/5 dark:bg-primary/10 absolute inset-0"
               style={{ width: `${percent}%` }}
             />
-            <div className="grid gap-2  p-4 w-full h-full">
+            <div className="grid gap-2 p-4 w-full h-full">
               <h3 className="text-lg font-semibold">{option}</h3>
               <div className="flex justify-between items-center">
                 <p className="text-sm font-medium text-muted-foreground">
@@ -107,7 +134,6 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
                 disabled={disabled}
                 onClick={() => {
                   if (disabled) {
-                    toast.error(message);
                     message?.trim().length > 0 && toast.error(message);
                     return;
                   }
@@ -124,6 +150,7 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
   );
 }
 
+// utils
 function notAllowed(
   voteData: PollType["votes"],
   multipleChoice: boolean,
@@ -139,14 +166,6 @@ function notAllowed(
           ? "Voted"
           : "Vote",
       };
-    case !multipleChoice && voteData?.some((vote) => vote.userId === user.id):
-      return {
-        disabled: true,
-        message: "You can only vote once",
-        btnText: voteData?.some((vote) => vote.userId === user.id)
-          ? "Voted"
-          : "Vote",
-      };
     case multipleChoice &&
       voteData?.some(
         (vote) => vote.userId === user.id && vote.option === option
@@ -154,11 +173,7 @@ function notAllowed(
       return {
         disabled: true,
         message: "You have already voted",
-        btnText: voteData?.some(
-          (vote) => vote.userId === user.id && vote.option === option
-        )
-          ? "Voted"
-          : "Vote",
+        btnText: "Voted",
       };
     default:
       return {
