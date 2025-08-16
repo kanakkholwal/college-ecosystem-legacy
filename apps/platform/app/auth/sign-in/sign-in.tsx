@@ -59,7 +59,7 @@ export default function SignInForm() {
   const redirect = searchParams?.get("next") || "/";
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const form = useForm<z.infer<typeof FormSchema>>({
+  const form = useForm({
     resolver: zodResolver(FormSchema),
     defaultValues: {
       email: "",

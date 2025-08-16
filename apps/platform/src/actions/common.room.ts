@@ -168,7 +168,7 @@ export async function createRoom(
   const response = roomSchema.safeParse(roomData);
   if (!response.success) {
     throw new Error(
-      `Invalid room data: ${response.error.errors.map((issue) => issue.message).join(", ")}`
+      `Invalid room data: ${response.error.issues.map((issue) => issue.message).join(", ")}`
     );
   }
 

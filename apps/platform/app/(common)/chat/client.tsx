@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import ConditionalRender from '@/components/utils/conditional-render';
 import { cn } from '@/lib/utils';
-import { useChat } from '@ai-sdk/react';
+import { useChat, useCompletion } from '@ai-sdk/react';
 import { ArrowRight, Edit2, HistoryIcon, Plus, Share, X } from 'lucide-react';
 import { nanoid } from 'nanoid';
 import { parseAsBoolean, parseAsString, useQueryState } from 'nuqs';
@@ -37,9 +37,12 @@ export default function ChatArea({ chatId, chatData }: ChatAreaProps) {
         defaultValue: chatId || 'chat-' + nanoid(32),
     });
     const [isNewChat] = useQueryState('new_chat', parseAsBoolean);
-    const { messages, input, handleInputChange, handleSubmit } = useChat({
+    const { input, handleInputChange, handleSubmit } = useCompletion({
         id: chat_id,
-        keepLastMessageOnError: true,
+        
+    })
+    const { messages } = useChat({
+        id: chat_id,
     });
     const [editingChatName, setEditingChatName] = useState(false);
 
@@ -120,7 +123,9 @@ export default function ChatArea({ chatId, chatData }: ChatAreaProps) {
                             </AvatarFallback>
                         </Avatar>
                         <div className=" p-2 text-sm rounded-md bg-muted text-muted-foreground whitespace-pre-wrap break-words prose prose-sm max-w-full prose-green dark:prose-invert">
-                            {m.content}
+                            {m.parts.map((part, index) => (
+                                <span key={index} className="block">{part.type}</span>
+                            ))}
                         </div>
                     </div>
                 ))}

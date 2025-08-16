@@ -71,7 +71,7 @@ export function UserUpdate({
   currentUser,
   hostels,
 }: Props & { hostels: HostelType[] }) {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       department: currentUser.department,

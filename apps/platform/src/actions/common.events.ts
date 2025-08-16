@@ -9,7 +9,7 @@ export async function createNewEvent(newEvent: rawEventsSchemaType) {
   try {
     const validatedEvent = rawEventsSchema.safeParse(newEvent);
     if (!validatedEvent.success) {
-      return Promise.reject(validatedEvent.error.errors[0].message);
+      return Promise.reject(validatedEvent.error.issues[0].message);
     }
     await dbConnect();
     const event = new EventModel(newEvent);
@@ -29,7 +29,7 @@ export async function saveNewEvents(
   try {
     const validatedEvents = rawEventsSchema.array().safeParse(newEvents);
     if (!validatedEvents.success) {
-      return Promise.reject(validatedEvents.error.errors[0].message);
+      return Promise.reject(validatedEvents.error.issues[0].message);
     }
     await dbConnect();
     const events = await EventModel.insertMany(newEvents);
@@ -191,7 +191,7 @@ export async function updateEvent(
   try {
     const validatedEvent = rawEventsSchema.safeParse(updatedData);
     if (!validatedEvent.success) {
-      return Promise.reject(validatedEvent.error.errors[0].message);
+      return Promise.reject(validatedEvent.error.issues[0].message);
     }
     await dbConnect();
     const result = await EventModel.findByIdAndUpdate(eventId, updatedData, {

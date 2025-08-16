@@ -10,7 +10,7 @@ export async function POST(request: Request) {
         const response = applicationSchema.safeParse(body);
         if (!response.success) {
             return NextResponse.json(
-                { error: response.error.errors.map(err => err.message) },
+                { error: response.error.issues.map(err => err.message) },
                 { status: 400 }
             );
         }

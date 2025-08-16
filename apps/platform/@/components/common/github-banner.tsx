@@ -2,6 +2,7 @@
 import { cn } from '@/lib/utils';
 import { GitHubLogoIcon } from '@radix-ui/react-icons';
 import { GitBranch, StarIcon, Users } from 'lucide-react';
+import Link from 'next/link';
 import { getRepoStats } from '~/lib/third-party/github';
 import { appConfig } from '~/project.config';
 import { Icon, IconType } from '../icons';
@@ -17,14 +18,18 @@ export default async function GithubBanner({ className }: GithubBannerProps) {
 
     return (<div className={cn("flex flex-col items-center pt-5 px-3 pb-10 md:pb-14 xl:pb-[60px]", className)}>
         <Badge variant="default" >
-            <GitHubLogoIcon className="mr-1 h-4 w-4" />
-            GitHub Community
+            <Link href={appConfig.githubRepo} target="_blank" rel="noopener noreferrer" className="flex items-center gap-1">
+                <GitHubLogoIcon className="mr-1 h-4 w-4" />
+                GitHub Community
+            </Link>
         </Badge>
         <h5 className="mt-4 text-xl leading-7 font-semibold tracking-tight text-foreground md:text-center xl:text-3xl">
-            Contribute to our community
+            About This Project
         </h5>
-        <p className="mt-2 text-lg text-muted-foreground md:text-center xl:mt-3 xl:text-lg">
-            Dive into our code, contribute, and join a thriving open-source community.
+        <p className="mt-2 text-lg text-muted-foreground md:text-center xl:mt-3 xl:text-lg max-w-5xl">
+            This platform was created by students for students. It is completely
+            free and aims to make academic and campus resources accessible in one
+            place. Dive into our code, contribute, and join a thriving open-source community.
         </p>
         <div className="mx-auto mt-10 flex w-full max-w-2xl flex-col items-center">
             <div
@@ -64,7 +69,7 @@ export default async function GithubBanner({ className }: GithubBannerProps) {
                         target="_blank"
                         rel="noopener noreferrer"
                     >
-                        <Icon name="github" className="mb-2 h-16 w-16 text-foreground"/>
+                        <Icon name="github" className="mb-2 h-16 w-16 text-foreground" />
                     </a>
                     <span className="text-xl font-semibold text-foreground">
                         {appConfig.name}

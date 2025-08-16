@@ -272,11 +272,14 @@ export async function getRecentResources(
   return allResources.slice(0, count);
 }
 
-export async function getAllResources(): Promise<ResourceFrontMatter[]> {
+export async function getAllResources(limit?: number): Promise<ResourceFrontMatter[]> {
   const types = getResourceTypes();
   const allResources: ResourceFrontMatter[] = [];
   for await (const type of types) {
     allResources.push(...(await getAllMDXMeta(type)));
+  }
+  if (limit) {
+    return allResources.slice(0, limit);
   }
   return allResources;
 }

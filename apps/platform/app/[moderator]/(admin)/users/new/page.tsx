@@ -47,7 +47,7 @@ const userSchema = z.object({
 });
 
 export default function CreateNewUser() {
-  const form = useForm<z.infer<typeof userSchema>>({
+  const form = useForm({
     resolver: zodResolver(userSchema),
     defaultValues: {
       name: "",
@@ -231,7 +231,7 @@ export default function CreateNewUser() {
                   <FormLabel>Roles</FormLabel>
                   <FormControl>
                     <MultiSelector
-                      values={field.value}
+                      values={field.value || []}
                       onValuesChange={field.onChange}
                       loop
                       className="max-w-xs"

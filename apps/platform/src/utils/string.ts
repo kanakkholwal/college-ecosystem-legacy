@@ -52,7 +52,7 @@ export function validatePassword(password: string) {
   if (!result.success) {
     return {
       valid: false,
-      message: result.error.errors[0].message,
+      message: result.error.issues[0].message,
     };
   }
 

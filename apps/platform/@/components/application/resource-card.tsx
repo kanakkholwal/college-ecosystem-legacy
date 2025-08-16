@@ -15,6 +15,7 @@ export type ResourceCardProps = {
     coverImage?: string;
     readingTime?: string;
     category?: string;
+    showImage?: boolean;
 } & Partial<ResourceFrontMatter>;
 
 export default function ResourceCard({
@@ -27,13 +28,14 @@ export default function ResourceCard({
     date,
     readingTime,
     category,
+    showImage = true,
     ...frontmatter
 }: ResourceCardProps) {
     return (
         <Link href={`/resources/${type}/${slug}`} className="block group active:scale-95 hover:scale-101 transition-transform duration-300 ease-in-out">
             <div
             className="border text-card-foreground bg-card overflow-hidden rounded-2xl shadow-md hover:shadow-xl hover:border-primary/50 hover:-translate-y-1 transition-all duration-500 ease-in-out">
-                {(coverImage || appConfig.flags.enableOgImage) && (
+                {(coverImage || appConfig.flags.enableOgImage) && showImage && (
                     <div className="relative h-52 w-full aspect-video overflow-hidden">
                         <Image
                             src={coverImage || `/og/resources/${type}/${slug}`}

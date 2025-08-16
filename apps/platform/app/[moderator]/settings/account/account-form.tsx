@@ -40,7 +40,7 @@ const formSchema = z.object({
 
 function AccountFormContent({ currentUser }: Props) {
 
-  const form = useForm<z.infer<typeof formSchema>>({
+  const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       other_emails: currentUser.other_emails || [],
@@ -117,7 +117,7 @@ function AccountFormContent({ currentUser }: Props) {
               <Input
                 type="text"
                 placeholder="Enter other emails separated by commas"
-                value={field.value.join(", ")}
+                value={field.value?.join(", ")}
                 onChange={(e) =>
                   field.onChange(
                     e.target.value

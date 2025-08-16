@@ -15,10 +15,19 @@ const sectionLinks = [
   {
     title: "About",
     links: [
-      { title: "About Us", href: "/about" },
+      { title: "About Us", 
+        href: "/about" },
       {
-        href: appConfig.contact,
+        href: "/contact",
         title: "Contact us",
+      },
+      {
+        href: "/privacy-policy",
+        title: "Privacy Policy",
+      },
+      {
+        href: "/terms",
+        title: "Terms of Service",
       },
     ],
   },

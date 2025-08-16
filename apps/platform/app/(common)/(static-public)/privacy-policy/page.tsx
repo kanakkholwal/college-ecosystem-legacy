@@ -2,7 +2,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | nith.eu.org",
+  title: "Privacy Policy",
   description:
     "How nith.eu.org and app.nith.eu.org collect, use, and protect your data, including cookies, analytics, ads, and user-submitted information.",
   robots: { index: true, follow: true },

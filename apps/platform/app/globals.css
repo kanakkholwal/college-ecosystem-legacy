@@ -227,7 +227,29 @@
     --animate-gradient: gradient 8s linear infinite;
     --animate-spin-slow: spin-slow 20s linear infinite;
     --animate-spin-reverse: spin-slow 20s linear infinite reverse;
+    --animate-canopy-horizontal: canopy-x var(--duration) infinite linear;
+    --animate-canopy-vertical: canopy-y var(--duration) infinite linear;
 
+
+    
+    @keyframes canopy-x{
+        from {
+           transform: translateX(0);
+        }
+
+        to {
+            transform:translateX(calc(-100% - var(--gap)))
+        }
+    }
+    @keyframes canopy-y{
+        from {
+           transform: translateY(0);
+        }
+
+        to {
+            transform:translateY(calc(-100% - var(--gap)))
+        }
+    }
     @keyframes gradient {
         to {
             background-position: var(--bg-size, 300%) 0;

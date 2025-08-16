@@ -1,3 +1,4 @@
+"use client";
 import { cn } from "@/lib/utils";
 import { Home } from "lucide-react";
 import { ButtonLink, PreviousPageLink } from "../utils/link";

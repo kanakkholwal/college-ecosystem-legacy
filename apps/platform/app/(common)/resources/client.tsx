@@ -30,7 +30,7 @@ export function CategoryFilter({ categories }: { categories: string[] }) {
     )
 }
 
-export function ResourcesList({ resources, className }: { resources: ResourceFrontMatter[]; className?: string }) {
+export function ResourcesList({ resources, className, showImage = true }: { resources: ResourceFrontMatter[]; className?: string; showImage?: boolean }) {
     const [category, _] = useQueryState('category', parseAsStringEnum(resources.map(r => r.category || '')))
     const [searchQuery, __] = useQueryState('q', {
         throttleMs: 500, // Debounce typing
@@ -97,6 +97,7 @@ export function ResourcesList({ resources, className }: { resources: ResourceFro
                         date={frontmatter.date}
                         readingTime={frontmatter.readingTime}
                         category={frontmatter.category}
+                        showImage={showImage}
                     />
                 </div>
             ))}

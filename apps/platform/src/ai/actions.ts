@@ -1,7 +1,7 @@
 "use server";
-import { CoreMessage, generateObject, NoObjectGeneratedError } from "ai";
+import { google } from '@ai-sdk/google';
+import { generateObject, ModelMessage, NoObjectGeneratedError } from "ai";
 import z from "zod";
-import { model } from "./api";
 import { eventArraySchema } from "./schema";
 
 export async function generateEventsByDoc(images: (string | ArrayBuffer)[]):Promise<{
@@ -9,7 +9,7 @@ export async function generateEventsByDoc(images: (string | ArrayBuffer)[]):Prom
     events:z.infer<typeof eventArraySchema>,
     message:string
 }> {
-    const prompt: Array<CoreMessage> = [
+    const prompt: Array<ModelMessage> = [
         {
             role: "user",
             content: [
@@ -26,7 +26,7 @@ export async function generateEventsByDoc(images: (string | ArrayBuffer)[]):Prom
     ];
     try {
         const response = await generateObject({
-            model: model,
+            model: google('gemini-1.5-pro-latest') ,
             schema: eventArraySchema,
             schemaName: "events",
             schemaDescription: "Array of events extracted from the document, each event must follow the events schema.",
@@ -35,7 +35,6 @@ export async function generateEventsByDoc(images: (string | ArrayBuffer)[]):Prom
             messages: prompt,
             mode: "json"
         });
-        // console.dir(response, { depth: null, colors: true });
         return Promise.resolve({
             error: null,
             events: response.object,

@@ -95,7 +95,7 @@ export const updateResult = async (req: Request, res: Response) => {
     res.status(400).json({
       message: "Invalid custom attributes",
       error: true,
-      data: custom_attributes.error.errors,
+      data: custom_attributes.error.issues,
     });
     return;
   }
@@ -465,7 +465,7 @@ export const importFreshers = async (req: Request, res: Response) => {
       return res.status(400).json({
         error: true,
         message: "Invalid data",
-        data: parsedData.error.errors,
+        data: parsedData.error.issues,
       });
     }
 
