@@ -66,7 +66,7 @@ const TestimonialCard = ({
 }) => (
   <div
     className={cn(
-      "group mx-2 flex h-32 w-80 shrink-0 cursor-pointer overflow-hidden rounded-xl border border-transparent p-3 transition-all hover:border-primary hover:shadow-[0_0_10px_#60a5fa] dark:hover:border-primary",
+      "group mx-2 flex h-32 w-80 shrink-0 cursor-pointer overflow-hidden rounded-xl bg-card border border-transparent p-3 transition-all hover:border-primary hover:shadow-[0_0_10px_#60a5fa] dark:hover:border-primary",
       className
     )}
   >
@@ -83,7 +83,7 @@ const TestimonialCard = ({
           <span className="text-sm font-bold text-foreground">
             {testimonial.name}
           </span>
-          <span className="text-xs text-muted-foreground">
+          <span className="text-xs text-muted-foreground sr-only">
             {testimonial.handle}
           </span>
         </div>

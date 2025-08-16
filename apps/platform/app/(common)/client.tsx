@@ -2,12 +2,12 @@
 import { AnimatedGradientText } from "@/components/animation/animated-shiny-text";
 import { FloatingElements } from "@/components/animation/floating-elements";
 import { Icon } from "@/components/icons";
+import Globe from "@/components/ui/globe";
 import { ButtonLink } from "@/components/utils/link";
 import { cn } from "@/lib/utils";
 import { motion } from "motion/react";
 import type { Session } from "~/auth";
 import { appConfig } from "~/project.config";
-
 
 interface HeroSection {
   user: Session["user"];
@@ -47,7 +47,7 @@ export function HeroSection({ user }: HeroSection) {
         </motion.h2>
         <motion.p initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.35 , type: "spring", damping: 20, stiffness: 300,delayChildren: 0.1}}
+          transition={{ delay: 0.35, type: "spring", damping: 20, stiffness: 300, delayChildren: 0.1 }}
           className="text-base text-muted-foreground text-center mb-5">
           {appConfig.description.split(".")[0] || "Welcome to the digital campus platform!"}
         </motion.p>
@@ -106,6 +106,62 @@ export function HeroSection({ user }: HeroSection) {
   );
 }
 
+
+
+
+
+
+export function IntroSection() {
+  return (
+    <section className="relative overflow-hidden py-20 md:py-28 px-4 md:px-8 lg:px-12">
+      {/* Background gradients */}
+
+
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        {/* Left: Text content */}
+        <motion.div
+          initial={{ opacity: 0, x: -40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <h2 className="text-3xl md:text-5xl font-bold tracking-tight leading-tight">
+            The{" "}
+            <span className="bg-gradient-to-r from-primary to-primary bg-clip-text text-transparent">
+              College Ecosystem
+            </span>
+          </h2>
+
+          <p className="mt-6 text-lg md:text-xl text-muted-foreground leading-relaxed">
+            An all-in-one platform built for{" "}
+            <span className="font-semibold text-foreground">students of NITH</span>.
+            From checking your academic results to exploring{" "}
+            <span className="font-medium">clubs, societies, and hostel allotment</span> –
+            everything you need is in one place.
+          </p>
+
+          <div className="mt-8">
+            <ButtonLink size="lg" shadow="default" href="#quick-links" >
+              Explore Features
+            </ButtonLink>
+          </div>
+        </motion.div>
+
+        {/* Right: Animated illustration / glass card */}
+        <motion.div
+          initial={{ opacity: 0, x: 40 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="relative justify-center hidden md:flex"
+        >
+          <Globe />
+
+        </motion.div>
+      </div>
+    </section>
+  );
+}
 
 
 

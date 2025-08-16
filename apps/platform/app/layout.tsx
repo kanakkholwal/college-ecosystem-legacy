@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   },
   manifest: "/manifest.json",
   openGraph: {
-   type: "website",
+    type: "website",
     locale: appConfig.seo.locale,
     url: appConfig.url,
     title: `${appConfig.name} | ${orgConfig.name}`,
@@ -67,7 +67,7 @@ export const metadata: Metadata = {
     shortcut: "/favicon-16x16.png",
     apple: "/apple-touch-icon.png",
   },
-// New SEO fields
+  // New SEO fields
   category: appConfig.seo.category,
   publisher: appConfig.seo.publisher,
   appLinks: {
@@ -105,7 +105,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head >
-        <meta name="google-adsense-account" content={appConfig.verifications.google_adsense}/>
+        <meta name="google-adsense-account" content={appConfig.verifications.google_adsense} />
       </head>
       <body
         className={cn(

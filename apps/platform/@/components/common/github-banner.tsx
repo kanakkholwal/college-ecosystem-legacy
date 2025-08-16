@@ -29,7 +29,7 @@ export default async function GithubBanner({ className }: GithubBannerProps) {
         <p className="mt-2 text-lg text-muted-foreground md:text-center xl:mt-3 xl:text-lg max-w-5xl">
             This platform was created by students for students. It is completely
             free and aims to make academic and campus resources accessible in one
-            place. Dive into our code, contribute, and join a thriving open-source community.
+            place. 
         </p>
         <div className="mx-auto mt-10 flex w-full max-w-2xl flex-col items-center">
             <div
@@ -85,6 +85,7 @@ export default async function GithubBanner({ className }: GithubBannerProps) {
                 <div className="z-10 flex flex-1 flex-col items-start">
                     <p className="mb-4 text-left text-muted-foreground">
                         Your contributions help us improve and expand our platform for everyone.
+                        {/* Dive into our code, contribute, and join a thriving open-source community. */}
                     </p>
                     <div className="flex flex-col gap-4 text-sm md:flex-row md:gap-6">
                         <div className="flex items-center gap-1">
