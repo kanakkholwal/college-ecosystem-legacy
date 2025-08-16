@@ -28,7 +28,7 @@
         "express-rate-limit": "^7.5.0",
         "ioredis": "5.4.2",
         "mongoose": "^8.9.7",
-        "multer": "^2.0.1",
+        "multer": "^2.0.2",
         "node-html-parser": "^7.0.1",
         "read-excel-file": "^5.8.6",
         "socket.io": "^4.8.1",
