@@ -16,7 +16,7 @@ import { useEffect, useState } from "react";
 import { AnimatedGradientText } from "./animated-shiny-text";
 
 export function CelebrationDialog() {
-    const [celebrated, setCelebrated] = useStorage("impressions-celebrated", false,"localStorage");
+    const [celebrated, setCelebrated] = useStorage("impressions-celebrated", true,"localStorage");
     const [isOpen, setIsOpen] = useState(true);
 
     const fireConfetti = () => {

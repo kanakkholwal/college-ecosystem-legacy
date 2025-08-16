@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { notFound } from 'next/navigation'
 import { ImageResponse } from 'next/og'
 import { readFile } from 'node:fs/promises'

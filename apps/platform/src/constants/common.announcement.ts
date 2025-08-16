@@ -14,8 +14,9 @@ export const rawAnnouncementSchema = z.object({
   title: z.string().min(5, "Title must be atleast 5 characters long."),
   content: z.string().min(10, "Content must be atleast 10 characters long."),
   expiresAt: z
-    .date({
-      required_error: "A expiry Date is required.",
+    .date()
+    .refine((date) => date !== null, {
+      message: "An expiry Date is required.",
     })
     .default(
       new Date(Date.now() + 2 * 24 * 60 * 60 * 1000) // Default to 2 days from now

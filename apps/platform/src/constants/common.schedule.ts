@@ -27,11 +27,11 @@ export const scheduleEventSchema = z.object({
 export const scheduleSchema = z.object({
   title: z.string(),
   description: z.string(),
-  startTime: z.date({
-    required_error: "A date and time is required.",
+  startTime: z.date().refine((date) => date !== null, {
+    message: "A date and time is required.",
   }),
-  endTime: z.date({
-    required_error: "A date and time is required.",
+  endTime: z.date().refine((date) => date !== null, {
+    message: "A date and time is required.",
   }),
   mode: z.enum(modeEnums),
   events: z.array(scheduleEventSchema),

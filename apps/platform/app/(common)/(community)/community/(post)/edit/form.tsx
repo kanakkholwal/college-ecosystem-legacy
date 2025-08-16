@@ -52,7 +52,10 @@ export default function EditCommunityPost({
 
   function onSubmit(values: z.infer<typeof rawCommunityPostSchema>) {
     console.log(values);
-    toast.promise(updatePost(postId, values), {
+    toast.promise(updatePost(postId, {
+      type: "edit",
+      data: values,
+    }), {
       loading: "Updating Post",
       success: (data) => {
         console.log(data);

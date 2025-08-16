@@ -3,6 +3,8 @@ import {
     ArrowUp,
     ArrowUpRight,
     BarChart2,
+    Bookmark,
+    BookmarkCheck,
     BookOpen,
     Calendar,
     Camera, ChartBarBig, ChartCandlestick, Code,
@@ -26,6 +28,7 @@ import {
     ShieldCheck,
     SparklesIcon,
     Terminal,
+    TrendingUp,
     Twitter,
     Users,
     X,
@@ -33,7 +36,7 @@ import {
     Zap
 } from 'lucide-react';
 
-import { FaChrome, FaEdge, FaFirefoxBrowser, FaSafari } from "react-icons/fa";
+import { FaChrome, FaEdge, FaFirefoxBrowser, FaHeart, FaRegHeart, FaSafari } from "react-icons/fa";
 import { FcGoogle } from 'react-icons/fc';
 import { GrArticle } from "react-icons/gr";
 import { LuMonitor, LuMonitorSmartphone, LuSmartphone } from "react-icons/lu";
@@ -63,6 +66,7 @@ export const IconComponent = {
     "cpu": Cpu,
     "globe": Globe,
     "share": Share,
+    "trend-up": TrendingUp,
     "X":X,
     "align-left": AlignLeft,
     "toc": AlignLeft,
@@ -80,6 +84,11 @@ export const IconComponent = {
     "website": Globe,
     "copy":CopyIcon,
     "copy-check":CopyCheckIcon,
+    "send": Share, // Share icon for sending
+    "bookmark": Bookmark,
+    "bookmark-check": BookmarkCheck,
+    "heart":FaHeart,
+    "heart-empty": FaRegHeart,
     // social media icons
     "github": Github,
     "instagram": Instagram,

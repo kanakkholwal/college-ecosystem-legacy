@@ -150,10 +150,10 @@ export function ChartBar<
                   indicator="dot"
                   nameKey={dataKey.toString()}
                   labelKey={nameKey.toString()}
-                  label={nameKey
-                    .toString()
-                    .replace(/([A-Z])/g, " $1")
-                    .trim()}
+                  // label={nameKey
+                  //   .toString()
+                  //   .replace(/([A-Z])/g, " $1")
+                  //   .trim()}
                   {...tooltipContentProps}
                 />
               }
@@ -199,10 +199,10 @@ export function ChartBar<
                   indicator="dot"
                   nameKey={dataKey.toString()}
                   labelKey={nameKey.toString()}
-                  label={nameKey
-                    .toString()
-                    .replace(/([A-Z])/g, " $1")
-                    .trim()}
+                  // label={nameKey
+                  //   .toString()
+                  //   .replace(/([A-Z])/g, " $1")
+                  //   .trim()}
                   {...tooltipContentProps}
                 />
               }
@@ -382,10 +382,10 @@ export function ChartPieDonutText<
               indicator="dot"
               nameKey={nameKey.toString()}
               labelKey={nameKey.toString()}
-              label={nameKey
-                .toString()
-                .replace(/([A-Z])/g, " $1")
-                .trim()}
+              // label={nameKey
+              //   .toString()
+              //   .replace(/([A-Z])/g, " $1")
+              //   .trim()}
               {...tooltipContentProps}
             />
           }
@@ -465,10 +465,10 @@ export function ChartPie<
               indicator="dot"
               nameKey={nameKey.toString()}
               labelKey={nameKey.toString()}
-              label={nameKey
-                .toString()
-                .replace(/([A-Z])/g, " $1")
-                .trim()}
+              // label={nameKey
+              //   .toString()
+              //   .replace(/([A-Z])/g, " $1")
+              //   .trim()}
               {...tooltipContentProps}
             />
           }
@@ -489,13 +489,16 @@ export function ChartPie<
             className="fill-background"
             stroke="none"
             fontSize={12}
-            formatter={(value: keyof typeof config) =>
-              config[value]?.label
-            }
+            formatter={(label: React.ReactNode) => {
+              const key = label as keyof typeof config;
+              return config[key]?.label;
+            }}
           />)}
         </Pie>
         {showLegend && (<ChartLegend
-          content={<ChartLegendContent nameKey={nameKey.toString()} />}
+          content={({ payload }) => (
+            <ChartLegendContent nameKey={nameKey.toString()} payload={payload} />
+          )}
           className="-translate-y-2 flex-wrap gap-2 basis-4/5 lg:*:basis-1/4 *:justify-center"
         />)}
       </PieChart>

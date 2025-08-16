@@ -70,7 +70,7 @@ export default async function CommunitiesPage(props: {
             <ArrowRight />
           </AuthButtonLink>
         </div>
-        <CommunityPostList posts={posts} />
+        <CommunityPostList posts={posts} user={session?.user} />
       </main>
       {/* Active Feed Details */}
       {activePopularCategory ? (

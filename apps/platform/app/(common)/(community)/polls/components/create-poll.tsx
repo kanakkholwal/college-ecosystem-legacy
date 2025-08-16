@@ -1,13 +1,13 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
-    Form,
-    FormControl,
-    FormDescription,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+  Form,
+  FormControl,
+  FormDescription,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { ResponsiveDialog } from "@/components/ui/responsive-dialog";
@@ -18,37 +18,35 @@ import { useRouter } from "next/navigation";
 import { type Control, useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { CgPoll } from "react-icons/cg";
-import { createPoll } from "src//actions/common.poll";
-import * as z from "zod";
+import z from "zod";
+import { createPoll } from "~/actions/common.poll";
 
 import { DateTimePicker } from "@/components/extended/date-n-time";
 import { Loader2 } from "lucide-react";
 import { nanoid } from "nanoid";
 
-export const rawPollSchema = z.object({
+export const formSchema = z.object({
   question: z.string().min(3, "A question is required."),
   description: z.string().optional(),
   options: z
     .array(
       z.object({
         id: z.string().default(() => nanoid()),
-        value: z.string().min(1, "Option cannot be empty."),
+        value: z.string().min(1, "Option cannot be empty.").max(200, "Option cannot exceed 200 characters."),
       })
     )
-    .min(2, "At least two options are required.")
-    .default(() => [
-      { id: nanoid(), value: "" },
-      { id: nanoid(), value: "" },
-    ]),
+    .min(2, "At least two options are required."),
   multipleChoice: z.boolean().default(false),
   votes: z.array(z.string()).default([]),
   closesAt: z
-    .string()
+    .iso
     .datetime({
       message: "Invalid date and time format.",
     })
     .default(() => new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString()),
 });
+
+
 export default function CreatePoll() {
   return (
     <ResponsiveDialog
@@ -64,18 +62,23 @@ export default function CreatePoll() {
     </ResponsiveDialog>
   );
 }
-type PollFormData = z.infer<typeof rawPollSchema>;
+
+type PollFormData = z.infer<typeof formSchema>;
 
 function PollForm({ className }: { className?: string }) {
   const router = useRouter();
-  const form = useForm<PollFormData>({
-    resolver: zodResolver(rawPollSchema),
+  const form = useForm({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       question: "",
       description: "",
       options: [
         {
-          id: String(Date.now()),
+          id: nanoid(),
+          value: "",
+        },
+        {
+          id: nanoid(),
           value: "",
         },
       ],
@@ -88,7 +91,7 @@ function PollForm({ className }: { className?: string }) {
     name: "options",
   });
 
-  async function onSubmit(values: z.infer<typeof rawPollSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log("Form submitted with values:", values);
 
     toast
@@ -219,7 +222,7 @@ function PollForm({ className }: { className?: string }) {
               <FormLabel>Closes At</FormLabel>
 
               <DateTimePicker
-                value={field.value}
+                value={field.value ?? ""}
                 onChange={field.onChange}
                 disabled={form.formState.isSubmitting}
               />

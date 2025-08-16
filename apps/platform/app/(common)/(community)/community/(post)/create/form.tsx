@@ -18,23 +18,39 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
+import type { Content, JSONContent } from "@tiptap/react";
 import { Loader2, SendHorizontal } from "lucide-react";
-import NexoMdxEditor from "nexo-mdx";
+import { defaultExtensions, NexoEditor, renderToMarkdown } from 'nexo-editor';
+import "nexo-editor/index.css";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import { createPost } from "src/actions/common.community";
-import { rawCommunityPostSchema } from "src/models/community";
 import type { z } from "zod";
+import { createPost } from "~/actions/common.community";
 import { CATEGORY_TYPES, SUB_CATEGORY_TYPES } from "~/constants/common.community";
+import { rawCommunityPostSchema } from "~/models/community";
 
 export default function CreateCommunityPost() {
   const searchParams = useSearchParams();
   const form = useForm<z.infer<typeof rawCommunityPostSchema>>({
     resolver: zodResolver(rawCommunityPostSchema),
     defaultValues: {
-      title: "",
+      title: searchParams.get("title") || "",
       content: "",
+      content_json: {
+        type: "doc",
+        content: [
+          {
+            type: "paragraph",
+            content: [
+              {
+                type: "text",
+                text: "Hello, this is a simple editor built with Nexo Editor!"
+              }
+            ]
+          }
+        ]
+      } as Content,
       category: CATEGORY_TYPES[0],
       subCategory: SUB_CATEGORY_TYPES[0],
     },
@@ -48,6 +64,20 @@ export default function CreateCommunityPost() {
         form.reset({
           title: "",
           content: "",
+          content_json: {
+            type: "doc",
+            content: [
+              {
+                type: "paragraph",
+                content: [
+                  {
+                    type: "text",
+                    text: "Hello, this is a simple editor built with Nexo Editor!",
+                  },
+                ],
+              },
+            ],
+          } as Content,
           category: CATEGORY_TYPES[0],
           subCategory: SUB_CATEGORY_TYPES[0],
         });
@@ -83,22 +113,20 @@ export default function CreateCommunityPost() {
         />
         <FormField
           control={form.control}
-          name="content"
+          name="content_json"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Content</FormLabel>
               <FormControl>
-                <NexoMdxEditor
-                  placeholder="Write your post content here..."
-                  className="!h-auto p-0"
-                  rows={12}
-                  disabled={form.formState.isSubmitting}
-                  // renderHtml={(md) => (
-                  //   <div className="prose w-full prose-sm dark:prose-invert">
-                  //     <MDXRemote source={md} parseFrontmatter />
-                  //   </div>
-                  // )}
-                  {...field}
+                <NexoEditor
+                  content={field.value as Content}
+                  onChange={(content) => {
+                    field.onChange(content)
+                    form.setValue("content", renderToMarkdown({
+                      content: form.getValues("content_json") as JSONContent,
+                      extensions: defaultExtensions,
+                    }));
+                  }}
                 />
               </FormControl>
               <FormDescription>The content of the post.</FormDescription>
@@ -125,7 +153,7 @@ export default function CreateCommunityPost() {
                 <SelectContent>
                   {CATEGORY_TYPES.map((type) => {
                     return (
-                      <SelectItem key={type} value={type}>
+                      <SelectItem key={type} value={type} className="capitalize">
                         {type}
                       </SelectItem>
                     );

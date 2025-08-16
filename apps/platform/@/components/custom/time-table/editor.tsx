@@ -60,7 +60,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
     if (data.mode === "edit") {
       const validatedData = rawTimetableSchema.safeParse(data.timetableData);
       if (!validatedData.success) {
-        toast.error(validatedData.error.errors[0].message);
+        toast.error(validatedData.error.issues[0].message);
         console.error("Validation error:", validatedData.error);
         setDisabled(false);
         return;
@@ -81,7 +81,7 @@ export const TimeTableEditor: React.FC<TimeTableEditorProps> = (editorProps) => 
     } else {
       const validatedData = rawTimetableSchema.safeParse(data.timetableData);
       if (!validatedData.success) {
-        toast.error(validatedData.error.errors[0].message);
+        toast.error(validatedData.error.issues[0].message);
         console.error("Validation error:", validatedData.error);
         setDisabled(false);
         return;

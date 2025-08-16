@@ -53,7 +53,7 @@ export function ResourcesList({ resources, className }: { resources: ResourceFro
             distance: 100,
             ignoreLocation: true,
         })
-    }, [])
+    }, [resources])
     useEffect(() => {
         let filteredResources: ResourceFrontMatter[] = []
         if (searchQuery && searchQuery.trim().length > 2) {
@@ -76,10 +76,10 @@ export function ResourcesList({ resources, className }: { resources: ResourceFro
             filteredResources = filteredResources.filter(resource => resource.type?.toLowerCase() === type.toLowerCase())
         }
         setResults(filteredResources)
-    }, [searchQuery, fuse,resources, category, tag,type,resources])    
+    }, [searchQuery, fuse, resources, category, tag, type])
 
     return (<ResponsiveContainer
-        className={cn("px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3",className)}
+        className={cn("px-3 pr-4 lg:px-6 @md:grid-cols-1 @5xl:grid-cols-3", className)}
         role="list"
         aria-label="List of resources"
     >

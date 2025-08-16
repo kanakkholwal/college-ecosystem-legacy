@@ -64,7 +64,7 @@ export const auth = betterAuth({
   },
   onAPIError: {
     throw: true,
-    onError: (error,ctx) => {
+    onError: (error, ctx) => {
       console.log("Auth error:", error);
       console.log("Auth error , context:", ctx);
     },
@@ -153,7 +153,7 @@ export const auth = betterAuth({
       }
     },
   },
-  advanced:{
+  advanced: {
     crossSubDomainCookies: {
       enabled: process.env.NODE_ENV === "production",
       domain: appConfig.appDomain,
@@ -161,7 +161,12 @@ export const auth = betterAuth({
     cookiePrefix: "nith",
 
   },
-  trustedOrigins: [appConfig.url, `https://${appConfig.appDomain}`,`https://*.nith.eu.org`],
+  // trustedOrigins: [appConfig.url, `https://${appConfig.appDomain}`,`https://*.nith.eu.org`],
+  trustedOrigins: [
+    "*.nith.eu.org",             // Trust all subdomains of nith.eu.org
+    "https://*.nith.eu.org",     // Trust only HTTPS subdomains
+    "https://*.dev.nith.eu.org",   // Trust HTTPS subdomains of dev.nith.eu.org
+  ],
   user: {
     additionalFields: {
       role: {
@@ -204,11 +209,17 @@ export const auth = betterAuth({
       },
     },
   },
-
+  session: {
+    expiresIn: 604800, // 7 days
+    updateAge: 86400, // 1 day
+  },
   account: {
+    encryptOAuthTokens: true, // Encrypt OAuth tokens before storing them in the database
+
     accountLinking: {
       enabled: true,
-      trustedProviders: ["google"],
+      trustedProviders: ["google", "github", "email-password"],
+      allowDifferentEmails: false
     },
   },
 
@@ -224,6 +235,9 @@ export const auth = betterAuth({
     }),
     nextCookies(),
   ], // make sure this is the last plugin (nextCookies) in the array
+   telemetry: {
+    enabled: false,
+  }
 });
 
 type getUserInfoReturnType = {

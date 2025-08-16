@@ -41,7 +41,7 @@ export default function CreateRoomForm({
     updatedAt: Date | null;
   }>;
 }) {
-  const form = useForm<RoomType>({
+  const form = useForm({
     resolver: zodResolver(roomSchema),
     defaultValues: {
       roomNumber: "",
@@ -81,6 +81,7 @@ export default function CreateRoomForm({
                     autoComplete="name"
                     autoCorrect="off"
                     {...field}
+                    value={field.value as string | number | undefined}
                     disabled={form.formState.isSubmitting}
                   />
                 </FormControl>
@@ -134,6 +135,7 @@ export default function CreateRoomForm({
                     autoCapitalize="none"
                     autoCorrect="off"
                     {...field}
+                    value={field.value as string | number | undefined}
                     disabled={form.formState.isSubmitting}
                   />
                 </FormControl>

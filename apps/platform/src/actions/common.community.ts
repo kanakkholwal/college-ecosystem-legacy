@@ -5,10 +5,10 @@ import { z } from "zod";
 import { getSession } from "~/auth/server";
 import dbConnect from "~/lib/dbConnect";
 import CommunityPost, {
-    CommunityComment,
-    CommunityPostTypeWithId,
-    rawCommunityCommentSchema,
-    RawCommunityPostType,
+  CommunityComment,
+  CommunityPostTypeWithId,
+  rawCommunityCommentSchema,
+  RawCommunityPostType,
 } from "~/models/community";
 
 // Create a new post
@@ -89,38 +89,68 @@ export async function getPostById(
 }
 
 // Update post (likes, saves, views)
-export async function updatePost(
-  id: string,
-  updates: Partial<CommunityPostTypeWithId>
-) {
+type UpdateAction =
+  | { type: "toggleLike" }
+  | { type: "toggleSave" }
+  | { type: "incrementViews" }
+  | { type: "edit"; data: Partial<Pick<CommunityPostTypeWithId, "title" | "content">> };
+  
+export async function updatePost(id: string, action: UpdateAction) {
   const session = await getSession();
-  if (!session) {
-    return Promise.reject("You need to be logged in to update a post");
-  }
+  if (!session) throw new Error("You need to be logged in to update a post");
 
-  try {
-    await dbConnect();
-    const post = await CommunityPost.findById(id);
-    if (!post) {
-      return Promise.reject("Post not found");
+  await dbConnect();
+
+  const post = await CommunityPost.findById(id);
+  if (!post) throw new Error("Post not found");
+
+  switch (action.type) {
+    case "toggleLike": {
+      const idx = post.likes.indexOf(session.user.id);
+      if (idx === -1) {
+        post.likes.push(session.user.id);
+      } else {
+        post.likes.splice(idx, 1);
+      }
+      break;
     }
 
-    // Check if the user is the author of the post
-    if (
-      ("title" in updates || "content" in updates) &&
-      (post.author.id !== session.user.id || session.user.role !== "admin")
-    ) {
-      return Promise.reject("You are not authorized to update this post");
+    case "toggleSave": {
+      const idx = post.savedBy.indexOf(session.user.id);
+      if (idx === -1) {
+        post.savedBy.push(session.user.id);
+      } else {
+        post.savedBy.splice(idx, 1);
+      }
+      break;
     }
 
-    Object.assign(post, updates);
-    await post.save();
-    revalidatePath(`/community/posts/${id}`);
-    return Promise.resolve(JSON.parse(JSON.stringify(post)));
-  } catch (err) {
-    console.error(err);
-    return Promise.reject("Failed to update post");
+    case "incrementViews": {
+      post.views += 1;
+      break;
+    }
+
+    case "edit": {
+      if (
+        post.author.id !== session.user.id &&
+        session.user.role !== "admin"
+      ) {
+        throw new Error("You are not authorized to edit this post");
+      }
+      Object.assign(post, action.data);
+      break;
+    }
+
+    default:
+      throw new Error("Unknown update action");
   }
+
+  await post.save();
+
+  revalidatePath(`/community/posts/${id}`);
+  revalidatePath(`/community`);
+
+  return JSON.parse(JSON.stringify(post)) as CommunityPostTypeWithId;
 }
 export async function deletePost(
   id: string,

@@ -147,7 +147,7 @@ export default async function ResourcePage({ params }: PageProps) {
                                 className="flex items-center gap-3 rounded-lg px-2 py-1 hover:bg-foreground/5 active:scale-95"
                                 target='_blank'
                                 rel="noopener noreferrer"
-                                aria-description="Author"
+                                aria-label="Author"
                                 title='Author Profile'
                                 itemProp="author"
                                 itemScope
