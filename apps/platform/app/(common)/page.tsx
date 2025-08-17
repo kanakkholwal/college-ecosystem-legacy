@@ -16,6 +16,7 @@ import { getAllResources } from "~/lib/markdown/mdx";
 import { appConfig } from "~/project.config";
 import { FeatureSection, IntroSection } from "./client";
 import { ResourcesList } from "./resources/client";
+import { StaggerChildrenContainer } from "@/components/animation/motion";
 
 const RESOURCES_LIMIT = 6; // Limit the number of resources fetched
 
@@ -64,7 +65,7 @@ export default async function HomePage() {
       </BackgroundBeamsWithCollision>
 
       {/* Quick Links */}
-      <section id="quick-links" className="space-y-6">
+      <StaggerChildrenContainer id="quick-links" className="space-y-6">
         <h2 className="text-xl font-semibold">
           Explore Results, Room Allotment, and More
         </h2>
@@ -77,7 +78,7 @@ export default async function HomePage() {
             />
           ))}
         </div>
-      </section>
+      </StaggerChildrenContainer>
 
       {/* Feed Placeholder */}
       <section className="space-y-4" id="feed">

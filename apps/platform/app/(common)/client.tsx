@@ -11,17 +11,17 @@ import { featuresSectionContent } from "@/constants/landing";
 import { cn } from "@/lib/utils";
 import { motion, spring } from "framer-motion";
 import {
-    ArrowUpRight,
-    BookOpen,
-    FileText,
-    Globe,
-    GraduationCap,
-    Home,
-    MoreHorizontal,
-    Sparkles,
-    Star,
-    User,
-    Users,
+  ArrowUpRight,
+  BookOpen,
+  FileText,
+  Globe,
+  GraduationCap,
+  Home,
+  MoreHorizontal,
+  Sparkles,
+  Star,
+  User,
+  Users,
 } from "lucide-react";
 import Link from "next/link";
 import type { Session } from "~/auth";
@@ -138,6 +138,64 @@ const itemVariants = {
   },
 };
 
+const popular_features = [
+  {
+    name: "Results",
+    icon: FileText,
+    href: "/results",
+    color: "text-blue-500",
+  },
+  {
+    name: "Resources",
+    icon: BookOpen,
+    href: "/resources",
+    color: "text-purple-500",
+  },
+  {
+    name: "Communities",
+    icon: Users,
+    href: "/communities",
+    color: "text-green-500",
+  },
+  {
+    name: "+5 more",
+    icon: MoreHorizontal,
+    href: "#quick-links",
+    color: "text-yellow-500",
+  },
+];
+
+const statsMapping = [
+  {
+    label: "Users on platform",
+    icon: User,
+    key: "userCount",
+    value: 0,
+    color: "text-cyan-500",
+  },
+  {
+    label: "Visitors on platform",
+    icon: Globe,
+    key: "githubStats.visitors",
+    value: 0,
+    color: "text-emerald-500",
+  },
+  {
+    label: "Stars on GitHub",
+    icon: Star,
+    key: "githubStats.stars",
+    value: 0,
+    color: "text-yellow-500",
+  },
+] as Array<{
+  label: string;
+  icon: React.ComponentType<{ className?: string }>;
+  key: keyof PublicStatsType | `githubStats.${keyof PublicStatsType["githubStats"]}`;
+  value: number;
+  color: string;
+}>
+
+
 export function IntroSection({
   user,
   stats,
@@ -145,6 +203,18 @@ export function IntroSection({
   user: Session["user"];
   stats: PublicStatsType;
 }) {
+  statsMapping.forEach((stat) => {
+    const [mainKey, subKey] = stat.key.split(".").length > 1
+      ? stat.key.split(".")
+      : [stat.key];
+
+    const mainValue = stats[mainKey as keyof PublicStatsType];
+    if (typeof mainValue === "object" && mainValue !== null) {
+      stat.value = mainValue[subKey as keyof PublicStatsType["githubStats"]];
+    } else {
+      stat.value = mainValue as number;
+    }
+  });
   return (
     <section
       className="z-10 relative mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-8 rounded-lg py-24 lg:text-left"
@@ -239,38 +309,19 @@ export function IntroSection({
             <span className="text-sm font-semibold text-muted-foreground">
               Popular Features
             </span>
+            {popular_features.map((feature) => (
+              <Link
+                key={feature.name}
+                href={feature.href}
+                className="group flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-card-foreground shadow-sm transition-all hover:border-primary hover:bg-primary/5 active:scale-95 hover:scale-101"
+              >
+                <feature.icon
+                  className={cn(feature.color, "size-4 transition-colors group-hover:text-primary")}
+                />
+                {feature.name}
+              </Link>
+            ))}
 
-            <Link
-              href="/results"
-              className="group flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-card-foreground shadow-sm transition-all hover:border-primary hover:bg-primary/5"
-            >
-              <FileText className="h-4 w-4 text-blue-500 transition-colors group-hover:text-primary" />
-              Results
-            </Link>
-
-            <Link
-              href="/resources"
-              className="group flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-card-foreground shadow-sm transition-all hover:border-primary hover:bg-primary/5"
-            >
-              <BookOpen className="h-4 w-4 text-purple-500 transition-colors group-hover:text-primary" />
-              Resources
-            </Link>
-
-            <Link
-              href="/communities"
-              className="group flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-card-foreground shadow-sm transition-all hover:border-primary hover:bg-primary/5"
-            >
-              <Users className="h-4 w-4 text-green-500 transition-colors group-hover:text-primary" />
-              Communities
-            </Link>
-
-            <Link
-              href="#quick-links"
-              className="group flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1.5 text-sm font-medium text-card-foreground shadow-sm transition-all hover:border-primary hover:bg-primary/5"
-            >
-              <MoreHorizontal className="h-4 w-4 text-yellow-500 transition-colors group-hover:text-primary" />
-              +5 more
-            </Link>
           </motion.div>
 
           {/* Bento stats (kept props, upgraded layout) */}
@@ -278,41 +329,26 @@ export function IntroSection({
             variants={itemVariants}
             className="flex flex-wrap w-full max-w-lg gap-3"
           >
-            <div className="rounded-2xl border border-border bg-card p-4 shadow-sm backdrop-blur flex-auto">
-              <div className="mb-1 inline-flex items-center gap-2">
-                <User className="h-5 w-5 text-cyan-500" />
-                <NumberTicker
-                  value={stats.userCount}
-                  className="text-xl font-bold"
-                  suffix="+"
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">Users on platform</p>
-            </div>
-
-            <div className="rounded-2xl border border-border bg-card p-4 shadow-sm backdrop-blur flex-auto">
-              <div className="mb-1 inline-flex items-center gap-2">
-                <Globe className="h-5 w-5 text-emerald-500" />
-                <NumberTicker
-                  value={stats.githubStats.visitors}
-                  className="text-xl font-bold"
-                  suffix="+"
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">Total Visitors</p>
-            </div>
-
-            <div className="rounded-2xl border border-border bg-card p-4 shadow-sm backdrop-blur sm:col-span-1 flex-auto">
-              <div className="mb-1 inline-flex items-center gap-2">
-                <Star className="h-5 w-5 text-yellow-500" />
-                <NumberTicker
-                  value={stats.githubStats.stars}
-                  className="text-xl font-bold"
-                  suffix="+"
-                />
-              </div>
-              <p className="text-xs text-muted-foreground">Stars on Github</p>
-            </div>
+            {statsMapping.map((stat) => {
+              return (
+                <div
+                  key={stat.label + stat.value}
+                  className="rounded-2xl border border-border bg-card p-4 shadow-sm backdrop-blur flex-auto"
+                >
+                  <div className="mb-1 inline-flex items-center gap-2">
+                    <stat.icon className={cn(stat.color, "size-5")} />
+                    <NumberTicker
+                      value={stat.value}
+                      className="text-xl font-bold"
+                      suffix="+"
+                    />
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    {stat.label}
+                  </p>
+                </div>
+              );
+            })}
           </motion.div>
         </motion.div>
 
@@ -326,6 +362,13 @@ export function IntroSection({
             <HeroBentoMockup />
           </motion.div>
 
+
+          <motion.p
+            variants={itemVariants}
+            className="mb-6 max-w-md px-2 text-center text-lg leading-relaxed text-pretty text-muted-foreground lg:text-right"
+          >
+            {appConfig.description}
+          </motion.p>
           <motion.div variants={itemVariants} className="mb-6">
             <ButtonLink
               variant="dark"
@@ -341,13 +384,6 @@ export function IntroSection({
               <Icon name="arrow-right" />
             </ButtonLink>
           </motion.div>
-
-          <motion.p
-            variants={itemVariants}
-            className="mb-6 max-w-md px-2 text-center text-lg leading-relaxed text-pretty text-muted-foreground lg:text-right"
-          >
-            {appConfig.description}
-          </motion.p>
 
           {/* Social proof */}
           <motion.div
