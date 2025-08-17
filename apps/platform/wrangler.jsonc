@@ -57,5 +57,9 @@
       "binding": "NEXT_INC_CACHE_R2_BUCKET",
       "bucket_name": "next-inc-cache"
     }
+    // ,{
+    //   "bucket_name": "next-inc-cache",
+    //   "binding": "next_inc_cache"
+    // }
   ]
 }
