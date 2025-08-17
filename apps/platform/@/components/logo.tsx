@@ -1,6 +1,10 @@
+import logoSquareSvg from "@/assets/logo-square.svg";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import Image from "next/image";
 import { appConfig, orgConfig } from "~/project.config";
+
+
 
 export function AppLogo({
   className,
@@ -55,14 +59,16 @@ export function ResponsiveAppLogo({ className }: { className?: string }) {
 export function ApplicationInfo({
   className,
   children,
+  imgClassName,
 }: {
   className?: string;
   children?: React.ReactNode;
+  imgClassName?: string;
 }) {
   return (
     <div className={cn("inline-flex gap-2", className)}>
-      <Avatar className="h-8 w-8 rounded-lg">
-        <AvatarImage src="/logo-square.webp" alt={appConfig.name} />
+      <Avatar className={cn("size-8 rounded-lg", imgClassName)}>
+        <Image src={logoSquareSvg} alt={appConfig.name} className={cn("size-8", imgClassName)} />
         <AvatarFallback className="flex items-center justify-center rounded-lg text-3xl font-bold text-center relative bg-gradient-to-r from-primary to-sky-500 bg-clip-text text-transparent hover:from-sky-500 hover:to-primary whitespace-nowrap">
           {orgConfig.shortName.charAt(0).toUpperCase()}
         </AvatarFallback>
