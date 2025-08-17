@@ -1,4 +1,4 @@
-// import CreateAnnouncement from "./form";
+import CreateAnnouncement from "./form";
 
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "Create an announcement here",
 };
 
-export default async function CreateAnnouncementPage() {
+export default function CreateAnnouncementPage() {
   return (
     <>
       <div className="bg-card rounded-lg py-2 px-3 mx-2 max-w-3xl w-full md:mx-auto mt-8">
@@ -21,7 +21,7 @@ export default async function CreateAnnouncementPage() {
           </Link>
         </Button>
       </div>
-      {/* <CreateAnnouncement /> */}
+      <CreateAnnouncement />
     </>
   );
 }
