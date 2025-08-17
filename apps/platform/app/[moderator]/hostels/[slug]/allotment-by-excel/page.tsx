@@ -38,6 +38,21 @@ const FIELD_ROLES = [
   "program",
 ] as const;
 type FieldRole = (typeof FIELD_ROLES)[number];
+type Student = {
+  name: string;
+  rollNo: string;
+  soe: string;
+  gender: string;
+  [key: string]: string;
+};
+
+type RoomDistribution = Record<number, number>;
+
+
+type AllottedRoom = {
+  capacity: number;
+  students: Student[];
+};
 
 export default function AllotmentPage() {
   const [file, setFile] = useState<File | null>(null);
@@ -152,7 +167,7 @@ export default function AllotmentPage() {
       .then(async (res) => {
         if (!res.ok) throw new Error("Server Error");
 
-        const data = await res.json();
+        const data = (await res.json()) as { success: boolean; message?: string; allocation: AllottedRoom[] };
         if (!data.success)
           throw new Error(data.message || "Failed to allot rooms");
         console.log(data);
