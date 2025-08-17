@@ -1,4 +1,4 @@
-import CreateAnnouncement from "./form";
+// import CreateAnnouncement from "./form";
 
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -21,7 +21,7 @@ export default async function CreateAnnouncementPage() {
           </Link>
         </Button>
       </div>
-      <CreateAnnouncement />
+      {/* <CreateAnnouncement /> */}
     </>
   );
 }
