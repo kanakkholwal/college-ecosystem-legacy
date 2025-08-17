@@ -58,7 +58,9 @@ const nextConfig = {
 };
 
 export default withSerWist(nextConfig);
-import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare';
 
+if (process.env.NODE_ENV !== "development") return;
+import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare';
+// This is a workaround to ensure that the OpenNext Cloudflare context is initialized
 // added by create cloudflare to enable calling `getCloudflareContext()` in `next dev`
 initOpenNextCloudflareForDev();
