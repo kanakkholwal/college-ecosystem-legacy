@@ -2,7 +2,7 @@ import { ButtonLink, PreviousPageLink } from "@/components/utils/link";
 import { Home } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
-import NotFoundImg from "./404.svg";
+import NotFoundImg from "@/assets/404.svg";
 
 export const metadata: Metadata = {
   title: "Not Authorized",

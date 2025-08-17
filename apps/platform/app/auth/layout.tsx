@@ -3,9 +3,11 @@ import { ApplicationInfo } from "@/components/logo";
 import Link from "next/link";
 
 export const dynamic = "force-dynamic"; // Force dynamic rendering for this layout
+
 type LayoutProps = Readonly<{
   children: React.ReactNode;
 }>;
+
 export default function Layout({ children }: LayoutProps) {
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 bg-muted p-6 md:p-10 @container space-y-4">

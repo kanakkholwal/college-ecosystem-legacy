@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import { Inter as FontSans, Space_Mono } from "next/font/google";
 import { appConfig, orgConfig } from "~/project.config";
 import { Provider } from "./client-provider";
-import "./globals.css";
+import "./global.css";
 
 export const metadata: Metadata = {
   title: {

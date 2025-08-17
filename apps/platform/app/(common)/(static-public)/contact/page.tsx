@@ -69,7 +69,7 @@ export default function AboutPage() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              github.com/college-ecosystem
+              @github.com/college-ecosystem
             </a>
           </li>
         </ul>

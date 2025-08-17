@@ -28,7 +28,7 @@ export default function GlobalError({
   console.error(error);
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning  data-scroll-behavior="smooth">
       <body className={`${font.className} min-h-screen antialiased relative`}>
         <Provider>
           <div className="min-h-screen w-full relative overflow-hidden">
