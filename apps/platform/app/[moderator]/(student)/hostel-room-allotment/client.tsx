@@ -13,7 +13,24 @@ import { isValidRollNumber } from "~/constants/core.departments";
 import type { HostelRoomJson } from "~/models/allotment";
 import { orgConfig } from "~/project.config";
 
-const fetchRoomDetails = async (roomId: string) => {
+type RoomResponse = {
+  roomNumber: string;
+  capacity: number;
+  occupied_seats: number;
+  isLocked: boolean;
+  hostel: string;
+  hostStudent: {
+    name: string;
+    rollNumber: string;
+    email: string;
+  };
+  members: Array<{
+    name: string;
+    rollNumber: string;
+    email: string;
+  }>
+}
+const fetchRoomDetails = async (roomId: string): Promise<RoomResponse> => {
   const response = await fetch(`/api/hostel/room-members?roomId=${roomId}`, {
     method: "GET",
     cache: "no-store",
@@ -21,7 +38,7 @@ const fetchRoomDetails = async (roomId: string) => {
   if (!response.ok) {
     throw new Error("Failed to fetch room details");
   }
-  const data = await response.json();
+  const data = (await response.json()) as RoomResponse;
   return data;
 };
 
@@ -116,7 +133,7 @@ export function ViewRoomButton({
                       {member.rollNumber} ({member.name})
                     </span>
                     {room.hostStudent === hostId &&
-                      member.email === roomInfo.data.hostStudent.email && (
+                      member.email === roomInfo?.data?.hostStudent.email && (
                         <button
                           aria-label={`Remove ${member.name}`}
                           aria-roledescription="button to remove option"
