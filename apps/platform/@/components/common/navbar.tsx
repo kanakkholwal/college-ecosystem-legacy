@@ -56,7 +56,7 @@ export default function Navbar({ user }: NavbarProps) {
   return (
     <header
       id="navbar"
-      className={cn("z-50 w-full pb-2 transition-all", "bg-card border-b")}
+      className={cn("z-50 w-full pb-2 transition-all", "bg-card/10 backdrop-blur-lg border-b")}
     >
       <div className="w-full max-w-(--max-app-width) mx-auto flex items-center justify-between px-4 py-2">
         <Link href="/">

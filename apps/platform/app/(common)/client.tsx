@@ -249,7 +249,7 @@ export function IntroSection({
           {/* Headline — value-first */}
           <motion.h1
             variants={itemVariants}
-            className="mb-3 bg-gradient-to-r from-foreground via-foreground to-muted-foreground/80 bg-clip-text text-3xl font-extrabold leading-tight text-transparent sm:text-4xl"
+            className="mb-3 bg-linear-to-l from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% bg-clip-text text-transparent text-3xl font-extrabold leading-tight sm:text-4xl"
           >
             All-in-One Ecosystem for {orgConfig.shortName} Students
           </motion.h1>
@@ -398,7 +398,7 @@ export function IntroSection({
                 className="font-semibold"
                 suffix="+"
               />{" "}
-              active users right now
+              active sessions right now
             </span>
             <ArrowUpRight className="h-3 w-3 text-primary" />
           </StaggerChildrenItem>
@@ -423,8 +423,8 @@ export function HeroBentoMockup() {
       animate="show"
       className="grid w-full max-w-lg grid-cols-2 gap-4"
     >
-      <div className="absolute -top-4 right-0 z-10 bg-gradient-to-r from-primary to-primary/60 px-3 py-1 text-xs font-semibold text-white rounded-full shadow-md animate-pulse">
-        Preview / Demo Only
+      <div className="absolute -top-4 right-0 z-10 bg-gradient-to-r from-primary/80 to-primary/50 px-3 py-1 text-xs font-semibold text-white rounded-full shadow-md animate-pulse">
+        Place Your Event / Ads Here (Preview Only)
       </div>
 
       {/* Result Card */}
@@ -489,7 +489,9 @@ export function HeroBentoMockup() {
 
 export function FeatureSection() {
   return (
-    <section className="pt-20 pb-8" id="features">
+    <motion.section   variants={containerVariants}
+            initial="hidden"
+            animate="visible" className="pt-20 pb-8" id="features">
       <div className="mx-6 max-w-[1120px] pt-2 pb-16 max-[300px]:mx-4 min-[1150px]:mx-auto">
         <div className="flex flex-col-reverse gap-6 md:grid md:grid-cols-3">
           {/* Left column */}
@@ -500,10 +502,10 @@ export function FeatureSection() {
           </div>
 
           {/* Center column */}
-          <div className="order-[1] mb-6 self-center sm:order-[0] md:mb-0">
+          <StaggerChildrenItem className="order-[1] mb-6 self-center sm:order-[0] md:mb-0">
             <div className="bg-bard text-foreground ring-border relative mx-auto mb-4.5 w-fit rounded-full rounded-bl-[2px] px-4 py-2 text-sm ring">
               <AnimatedGradientText className="relative z-1 flex items-center gap-2 font-semibold">
-                <Sparkles className="size-3 text-yellow-400 animate-spin animation-duration-3000" />{" "}
+                <Sparkles className="size-3 text-yellow-500 animate-spin animation-duration-3000" />{" "}
                 Features
               </AnimatedGradientText>
               <span className="from-primary/0 via-primary to-primary/0 absolute -bottom-px left-1/2 h-px w-2/5 -translate-x-1/2 bg-gradient-to-r"></span>
@@ -517,7 +519,7 @@ export function FeatureSection() {
               club activities, and everything that makes campus life simpler and
               smarter.
             </p>
-          </div>
+          </StaggerChildrenItem>
 
           {/* Right column */}
           <div className="flex flex-col gap-6">
@@ -527,6 +529,6 @@ export function FeatureSection() {
           </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 }

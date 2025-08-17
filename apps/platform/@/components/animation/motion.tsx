@@ -13,10 +13,11 @@ const containerVariants = {
     },
 };
 
-type StaggerChildrenContainerProps = React.ButtonHTMLAttributes<HTMLDivElement> & HTMLMotionProps<"div"> & {
-    children: React.ReactNode;
-    className?: string;
-};
+type StaggerChildrenContainerProps = React.ButtonHTMLAttributes<HTMLDivElement> &
+    HTMLMotionProps<"div"> & {
+        children: React.ReactNode;
+        className?: string;
+    };
 
 export function StaggerChildrenContainer({
     children,
@@ -28,25 +29,30 @@ export function StaggerChildrenContainer({
             className={cn(className)}
             variants={containerVariants}
             initial="hidden"
-            animate="visible"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }} // animate once
             {...props}
         >
             {children}
         </motion.div>
     );
 }
+
 const itemVariants = {
-  hidden: { y: 20, opacity: 0 },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: { type: spring, stiffness: 100 },
-  },
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+        y: 0,
+        opacity: 1,
+        transition: { type: spring, stiffness: 100 },
+    },
 };
-type StaggerChildrenItemProps = React.HTMLAttributes<HTMLDivElement> & HTMLMotionProps<"div"> & {
-    children: React.ReactNode;
-    className?: string;
-}
+
+type StaggerChildrenItemProps = React.HTMLAttributes<HTMLDivElement> &
+    HTMLMotionProps<"div"> & {
+        children: React.ReactNode;
+        className?: string;
+    };
+
 export function StaggerChildrenItem({
     children,
     className = "",

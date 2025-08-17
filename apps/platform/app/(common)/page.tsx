@@ -34,7 +34,7 @@ export default async function HomePage() {
   const resources = await getAllResources(RESOURCES_LIMIT);
 
   return (
-    <div className="flex flex-col w-full flex-1 gap-12 px-4 md:px-6 pt-4 md:pt-6 xl:px-12 xl:mx-auto max-w-6xl max-sm:pb-16">
+    <div className="flex flex-col w-full flex-1 gap-12 px-4 md:px-6 pt-4 md:pt-6 xl:px-12 xl:mx-auto max-w-(--max-app-width) max-sm:pb-16">
       {/* SEO Schema */}
       <script type="application/ld+json">
         {JSON.stringify({

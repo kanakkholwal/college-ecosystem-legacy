@@ -1,12 +1,13 @@
 import { FeatureItem } from "@/constants/landing";
 import { cn } from "@/lib/utils";
+import { StaggerChildrenItem } from "../animation/motion";
 
 // Feature card component
 const FeatureCard = ({ feature }: { feature: FeatureItem }) => {
   const Icon = feature.icon;
 
   return (
-    <div>
+    <StaggerChildrenItem>
       <div
         className={cn(
           "relative rounded-2xl px-4 pt-4 pb-4 text-sm",
@@ -25,7 +26,7 @@ const FeatureCard = ({ feature }: { feature: FeatureItem }) => {
         <span className="from-primary/0 via-primary to-primary/0 absolute -bottom-px left-1/2 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r opacity-60"></span>
         <span className="absolute inset-0 bg-[radial-gradient(30%_5%_at_50%_100%,hsl(var(--primary)/0.15)_0%,transparent_100%)] opacity-60"></span>
       </div>
-    </div>
+    </StaggerChildrenItem>
   );
 };
 

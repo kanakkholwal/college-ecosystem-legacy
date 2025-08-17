@@ -1,4 +1,4 @@
-import logoSquareSvg from "@/assets/logo-square.svg";
+import logoSquareSvg from "@/assets/logo-square.webp";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
