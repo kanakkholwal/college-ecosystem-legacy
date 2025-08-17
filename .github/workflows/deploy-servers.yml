@@ -1,4 +1,4 @@
-name: 🚀 Deployments Servers
+name: 🚀 Deployments of Microservices
 
 env:
   SERVICE_NAME_SERVER: "college-ecosystem-server"
@@ -17,12 +17,9 @@ concurrency:
   group:  ${{ github.workflow }}-${{ github.ref }}-servers-deploy
   cancel-in-progress: true
   
-jobs:
-  # lint:
-  #   uses: ./.github/workflows/lint-project.yml
-  
+jobs:  
 
-  deploy-frontend-to-vercel:
+  deploy-mail-server:
     # needs: lint
     runs-on: ubuntu-latest
     steps:
