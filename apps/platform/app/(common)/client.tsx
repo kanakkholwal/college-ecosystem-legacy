@@ -286,7 +286,7 @@ export function IntroSection({
             </ButtonLink>
             <ButtonLink
               size="lg"
-              variant="outline"
+              variant="rainbow_outline"
               target="_blank"
               transition="damped"
               href={`https://github.com/${appConfig.githubUri}/blob/main/CONTRIBUTING.md`}
@@ -364,7 +364,7 @@ export function IntroSection({
           </motion.p>
           <StaggerChildrenItem className="mb-6">
             <ButtonLink
-              variant="dark"
+              variant="rainbow"
               size="lg"
               href={user ? `/${user.other_roles[0]}` : "/auth/sign-in"}
               effect="shineHover"
