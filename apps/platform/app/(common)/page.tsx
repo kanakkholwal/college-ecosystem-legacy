@@ -1,5 +1,6 @@
 import { AnimatedTestimonials } from "@/components/animation/animated-testimonials";
 import { BackgroundBeamsWithCollision } from "@/components/animation/bg-beam-with-collision";
+import { StaggerChildrenContainer, StaggerChildrenItem } from "@/components/animation/motion";
 import { HeaderBar } from "@/components/common/header-bar";
 import { RouterCard } from "@/components/common/router-card";
 import { SkeletonCardArea } from "@/components/utils/skeleton-cards";
@@ -16,7 +17,6 @@ import { getAllResources } from "~/lib/markdown/mdx";
 import { appConfig } from "~/project.config";
 import { FeatureSection, IntroSection } from "./client";
 import { ResourcesList } from "./resources/client";
-import { StaggerChildrenContainer } from "@/components/animation/motion";
 
 const RESOURCES_LIMIT = 6; // Limit the number of resources fetched
 
@@ -69,7 +69,7 @@ export default async function HomePage() {
         <h2 className="text-xl font-semibold">
           Explore Results, Room Allotment, and More
         </h2>
-        <div className="grid grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 gap-4">
+        <StaggerChildrenItem className="grid grid-cols-1 @md:grid-cols-2 @4xl:grid-cols-4 gap-4">
           {links.map((link, i) => (
             <RouterCard
               key={link.href}
@@ -77,11 +77,11 @@ export default async function HomePage() {
               style={{ animationDelay: `${i * 500}ms` }}
             />
           ))}
-        </div>
+        </StaggerChildrenItem>
       </StaggerChildrenContainer>
 
       {/* Feed Placeholder */}
-      <section className="space-y-4" id="feed">
+      <StaggerChildrenContainer className="space-y-4" id="feed">
         <HeaderBar
           Icon={Newspaper}
           titleNode="Latest Updates"
@@ -91,10 +91,10 @@ export default async function HomePage() {
         <Suspense fallback={<SkeletonCardArea count={RESOURCES_LIMIT} />}>
           <ResourcesList resources={resources} showImage={false} />
         </Suspense>
-      </section>
+      </StaggerChildrenContainer>
 
       <FeatureSection />
-      <section className="space-y-4" id="testimonials">
+      <StaggerChildrenContainer className="space-y-4" id="testimonials">
         <h2 className="text-xl font-semibold text-center">
           What Students Are Saying
         </h2>
@@ -103,7 +103,7 @@ export default async function HomePage() {
           campus life.
         </p>
         <AnimatedTestimonials data={testimonialsContent} />
-      </section>
+      </StaggerChildrenContainer>
     </div>
   );
 }

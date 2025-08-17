@@ -1,6 +1,6 @@
 "use client"
 import { cn } from "@/lib/utils";
-import { HTMLMotionProps, motion } from "framer-motion";
+import { HTMLMotionProps, motion, spring } from "framer-motion";
 
 const containerVariants = {
     hidden: { opacity: 0 },
@@ -29,6 +29,33 @@ export function StaggerChildrenContainer({
             variants={containerVariants}
             initial="hidden"
             animate="visible"
+            {...props}
+        >
+            {children}
+        </motion.div>
+    );
+}
+const itemVariants = {
+  hidden: { y: 20, opacity: 0 },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: { type: spring, stiffness: 100 },
+  },
+};
+type StaggerChildrenItemProps = React.HTMLAttributes<HTMLDivElement> & HTMLMotionProps<"div"> & {
+    children: React.ReactNode;
+    className?: string;
+}
+export function StaggerChildrenItem({
+    children,
+    className = "",
+    ...props
+}: StaggerChildrenItemProps) {
+    return (
+        <motion.div
+            className={cn(className)}
+            variants={itemVariants}
             {...props}
         >
             {children}

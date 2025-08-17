@@ -2,6 +2,7 @@
 
 import { AnimatedGradientText } from "@/components/animation/animated-shiny-text";
 import { FloatingElements } from "@/components/animation/floating-elements";
+import { StaggerChildrenContainer, StaggerChildrenItem } from "@/components/animation/motion";
 import { NumberTicker } from "@/components/animation/number-ticker";
 import FeatureCard from "@/components/common/feature-card";
 import { Icon } from "@/components/icons";
@@ -220,10 +221,7 @@ export function IntroSection({
       className="z-10 relative mx-auto flex w-full max-w-7xl flex-col items-center justify-center gap-8 rounded-lg py-24 lg:text-left"
       suppressHydrationWarning
     >
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+      <StaggerChildrenContainer
         className={cn(
           "relative z-[100] flex w-full flex-col items-center justify-center px-4 text-center lg:flex-row lg:items-start lg:justify-between lg:text-left"
         )}
@@ -240,7 +238,6 @@ export function IntroSection({
         >
           {/* Pill */}
           <motion.div
-            variants={itemVariants}
             className="mb-3 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-medium text-primary"
           >
             <span className="rounded-full bg-primary px-2 py-0.5 text-[10px] font-semibold text-white">
@@ -281,8 +278,7 @@ export function IntroSection({
           </motion.p>
 
           {/* Primary + secondary CTAs (anchors & props preserved) */}
-          <motion.div
-            variants={itemVariants}
+          <StaggerChildrenItem
             className="mt-2 flex flex-wrap items-center gap-4"
           >
             <ButtonLink size="lg" href="#quick-links">
@@ -299,11 +295,10 @@ export function IntroSection({
               Contribute Now
               <Icon name="arrow-up-right" />
             </ButtonLink>
-          </motion.div>
+          </StaggerChildrenItem>
 
           {/* Popular badges (kept) */}
-          <motion.div
-            variants={itemVariants}
+          <StaggerChildrenItem
             className="mb-6 mt-5 flex flex-wrap items-center justify-center gap-3 lg:justify-start"
           >
             <span className="text-sm font-semibold text-muted-foreground">
@@ -322,11 +317,10 @@ export function IntroSection({
               </Link>
             ))}
 
-          </motion.div>
+          </StaggerChildrenItem>
 
           {/* Bento stats (kept props, upgraded layout) */}
-          <motion.div
-            variants={itemVariants}
+          <StaggerChildrenItem
             className="flex flex-wrap w-full max-w-lg gap-3"
           >
             {statsMapping.map((stat) => {
@@ -349,18 +343,17 @@ export function IntroSection({
                 </div>
               );
             })}
-          </motion.div>
+          </StaggerChildrenItem>
         </motion.div>
 
         {/* RIGHT: visual anchor + dashboard/sign-in + social proof (anchors & props preserved) */}
         <div className="mt-6 flex flex-1 flex-col items-center lg:items-end">
           {/* Screenshot / preview placeholder */}
-          <motion.div
-            variants={itemVariants}
+          <StaggerChildrenItem
             className="mb-6 w-full max-w-md rounded-2xl border border-border bg-card shadow-xl backdrop-blur-sm"
           >
             <HeroBentoMockup />
-          </motion.div>
+          </StaggerChildrenItem>
 
 
           <motion.p
@@ -369,7 +362,7 @@ export function IntroSection({
           >
             {appConfig.description}
           </motion.p>
-          <motion.div variants={itemVariants} className="mb-6">
+          <StaggerChildrenItem className="mb-6">
             <ButtonLink
               variant="dark"
               size="lg"
@@ -383,11 +376,10 @@ export function IntroSection({
               {user ? "Go to Your Dashboard" : "Sign In to Your Account"}{" "}
               <Icon name="arrow-right" />
             </ButtonLink>
-          </motion.div>
+          </StaggerChildrenItem>
 
           {/* Social proof */}
-          <motion.div
-            variants={itemVariants}
+          <StaggerChildrenItem
             className="mx-auto flex items-center gap-3 rounded-full border border-border bg-card/60 px-3 py-1 backdrop-blur-sm lg:mx-0"
           >
             <div className="flex -space-x-2">
@@ -409,9 +401,9 @@ export function IntroSection({
               active users right now
             </span>
             <ArrowUpRight className="h-3 w-3 text-primary" />
-          </motion.div>
+          </StaggerChildrenItem>
         </div>
-      </motion.div>
+      </StaggerChildrenContainer>
 
       <FloatingElements />
 
