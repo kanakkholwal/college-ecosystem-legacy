@@ -1,4 +1,4 @@
-name: 🚀 Deployments
+name: 🚀 Deployments Servers
 
 env:
   SERVICE_NAME_SERVER: "college-ecosystem-server"
@@ -14,7 +14,7 @@ on:
   # workflow_dispatch:
 
 concurrency:
-  group:  ${{ github.workflow }}-${{ github.ref }}-deploy
+  group:  ${{ github.workflow }}-${{ github.ref }}-servers-deploy
   cancel-in-progress: true
   
 jobs:
@@ -34,22 +34,20 @@ jobs:
       - name: 🔍 Detect changed projects
         id: changed
         run: |
-              git diff --quiet HEAD^ HEAD ./apps/platform || echo "platform_changed=true" >> $GITHUB_OUTPUT
-              git diff --quiet HEAD^ HEAD ./apps/website || echo "website_changed=true" >> $GITHUB_OUTPUT
               git diff --quiet HEAD^ HEAD ./apps/mail-server || echo "mail_server_changed=true" >> $GITHUB_OUTPUT
       
       # - uses: pnpm/action-setup@v4
 
       - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
-        if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true' ||  steps.changed.outputs.mail_server_changed == 'true'
+        if: steps.changed.outputs.mail_server_changed == 'true'
         with:
           node-version: 20.x
           cache: "npm"
 
       - name: 💾 Cache Vercel CLI
         uses: actions/cache@v4
-        if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true' ||  steps.changed.outputs.mail_server_changed == 'true'
+        if: steps.changed.outputs.mail_server_changed == 'true'
         with:
           path: ~/.vercel
           key: ${{ runner.os }}-vercel-${{ hashFiles('**/package-lock.json') }}
@@ -57,30 +55,9 @@ jobs:
             ${{ runner.os }}-vercel-
 
       - name: 📦 Install Vercel CLI
-        if: steps.changed.outputs.platform_changed == 'true' || steps.changed.outputs.website_changed == 'true'
+        if: steps.changed.outputs.mail_server_changed == 'true'
         run: npm install -g vercel
 
-
-      - name: 🎯 Deploy Platform to Staging
-        if: github.ref == 'refs/heads/staging' && steps.changed.outputs.platform_changed == 'true'
-        run: vercel --token ${{ secrets.VERCEL_TOKEN }} ./apps/platform
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PLATFORM_PROJECT_ID }}
-
-      - name: 🚀 Deploy Platform to Production
-        if: github.ref == 'refs/heads/main' && steps.changed.outputs.platform_changed == 'true'
-        run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod ./apps/platform
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PLATFORM_PROJECT_ID }}
-
-      - name: 🌐 Deploy Website to Production
-        if: github.ref == 'refs/heads/main' && steps.changed.outputs.website_changed == 'true'
-        run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod ./apps/website
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_WEBSITE_PROJECT_ID }}
       - name: 📭 Deploy Mail Server to Production
         if: github.ref == 'refs/heads/main' && steps.changed.outputs.mail_server_changed == 'true'
         run: vercel --token ${{ secrets.VERCEL_TOKEN }} --prod ./apps/mail-server
@@ -117,7 +94,7 @@ jobs:
             password:  ${{ secrets.CREDENTIALS_JSON }}
       
       - name: 🐳 Build and Push Docker Image
-        if:  steps.server-changed.outputs.server_changed == 'true'
+        if:  steps.server-changed.outputs.dockerfile_changed == 'true'
         run: |
           IMAGE_NAME="gcr.io/${{ secrets.GCP_PROJECT_ID }}/${{ env.SERVICE_NAME_SERVER }}:latest"
           docker build --pull --rm -f "apps/server/Dockerfile" -t "${IMAGE_NAME}" "apps/server"
