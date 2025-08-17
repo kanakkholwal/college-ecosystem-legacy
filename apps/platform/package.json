@@ -4,10 +4,15 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "lint": "next lint",
+    "start": "next start",
     "dev": "next dev",
     "build": "next build --experimental-build-mode compile",
-    "start": "next start",
-    "lint": "next lint",
+    "opennext:build": "opennextjs-cloudflare build",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+      "cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts",
     "format": "npx prettier --write \"**/*.{ts,tsx,js,jsx,md}\""
   },
   "dependencies": {
@@ -122,7 +127,9 @@
   "devDependencies": {
     "@types/node": "^22",
     "serwist": "^9.0.11",
-    "typescript": "^5.7.3"
+    "typescript": "^5.7.3",
+    "wrangler": "^4.30.0",
+      "@opennextjs/cloudflare": "^1.6.5",
   },
   "packageManager": "npm@11.4.1"
 }

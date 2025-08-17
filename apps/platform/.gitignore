@@ -7,6 +7,7 @@ public/sw*
 public/swe-worker*
 # next.js
 /.next/
+.open-next
 /out/
 .turbo
 

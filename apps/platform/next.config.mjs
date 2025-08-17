@@ -58,3 +58,7 @@ const nextConfig = {
 };
 
 export default withSerWist(nextConfig);
+import { initOpenNextCloudflareForDev } from '@opennextjs/cloudflare';
+
+// added by create cloudflare to enable calling `getCloudflareContext()` in `next dev`
+initOpenNextCloudflareForDev();
