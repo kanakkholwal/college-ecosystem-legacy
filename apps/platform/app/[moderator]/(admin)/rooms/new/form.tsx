@@ -31,7 +31,9 @@ type RoomType = z.infer<typeof roomSchema>;
 export default function CreateRoomForm({
   onSubmit,
 }: {
-  onSubmit: (room: RoomType) => Promise<RoomSelect>;
+  onSubmit: (room: RoomType) => Promise<Omit<RoomSelect,"currentStatus"> & {
+    currentStatus: RoomType["currentStatus"];
+  }>;
 }) {
   const form = useForm({
     resolver: zodResolver(roomSchema),

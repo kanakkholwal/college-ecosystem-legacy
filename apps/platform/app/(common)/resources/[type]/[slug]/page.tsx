@@ -97,7 +97,7 @@ export default async function ResourcePage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
         id="structured-data-resource"
       />
-      <div className="grid grid-cols-1 md:grid-cols-12 gap-4 mb-10 lg:mb-20 w-full mx-auto max-w-(--max-app-width)">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 mb-10 lg:mb-20 w-full mx-auto max-w-(--max-app-width)">
         <main
           className="col-span-1 lg:col-span-9"
           itemType="https://schema.org/BlogPosting"
