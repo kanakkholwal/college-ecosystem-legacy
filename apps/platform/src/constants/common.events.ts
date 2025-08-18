@@ -28,7 +28,7 @@ export const rawEventsSchema = z
         "Name must be at most 100 characters long (enter description instead)"
       ), // Name of the event
     description: z.string(),
-    links: z.array(z.url()).default([]).optional(), // Array of links related to the event
+    links: z.array(z.string().url()).default([]).optional(), // Array of links related to the event
     time: z.date().refine((date) => new Date(date) > new Date(), {
       message: "Event time must be in the future",
     }),
