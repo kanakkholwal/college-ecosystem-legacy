@@ -41,7 +41,7 @@ export const formSchema = z.object({
     .min(2, "At least two options are required."),
   multipleChoice: z.boolean().default(false),
   votes: z.array(z.string()).default([]),
-  closesAt: z.iso
+  closesAt: z.string()
     .datetime({
       message: "Invalid date and time format.",
     })
