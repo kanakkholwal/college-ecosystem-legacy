@@ -11,6 +11,7 @@ import Polling from "./polling";
 import EmptyArea from "@/components/common/empty-area";
 import { AuthButtonLink } from "@/components/utils/link";
 import type { Metadata } from "next";
+import { appConfig } from "~/project.config";
 import { ClosingBadge } from "../components/poll-timer";
 
 export async function generateMetadata({
@@ -24,14 +25,14 @@ export async function generateMetadata({
   if (!poll) return notFound();
 
   return {
-    title: `${poll.question}`,
-    description: `${poll?.description?.substring(0, 160)}...`,
+    title: poll.question,
+    description: poll?.description?.substring(0, 160) + "...",
     openGraph: {
       type: "website",
-      title: `${poll.question}`,
-      description: `${poll?.description?.substring(0, 160)}...`,
-      siteName: process.env.NEXTAUTH_URL,
-      url: `${process.env.NEXTAUTH_URL}/polls/${pollId}`,
+      title: poll.question,
+      description: poll?.description?.substring(0, 160) + "...",
+      siteName: appConfig.name,
+      url: `${appConfig.url}/polls/${pollId}`,
     },
   };
 }
