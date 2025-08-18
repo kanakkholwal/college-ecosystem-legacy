@@ -200,14 +200,18 @@ export default function CommunityPostList({
                 className="flex grow items-center justify-center gap-3 rounded-md px-4 py-2 transition hover:bg-accent h-full"
               >
                 <Icon name="send" />
-                Share
+                <span className="max-sm:hidden">
+                  Share
+                </span>
               </ShareButton>
             </div>
 
             <div className="ml-auto">
               <Button variant="dark" size="sm" effect="shineHover" asChild>
                 <Link href={`/community/posts/${post._id}`}>
-                  View Post
+                  <span className="max-xs:hidden">
+                    View Post
+                  </span>
                   <ArrowRight />
                 </Link>
               </Button>

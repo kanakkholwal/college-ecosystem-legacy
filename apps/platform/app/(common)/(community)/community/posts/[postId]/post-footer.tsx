@@ -3,7 +3,7 @@
 import ShareButton from "@/components/common/share-button";
 import { Icon } from "@/components/icons";
 import { cn } from "@/lib/utils";
-import { Bookmark, BookmarkCheck, Eye, Share, ThumbsUp } from "lucide-react";
+import { Eye } from "lucide-react";
 import { useOptimistic, useTransition } from "react";
 import toast from "react-hot-toast";
 import type { CommunityPostTypeWithId } from "src/models/community";
@@ -85,60 +85,52 @@ export default function PostFooterOptimistic({
         </div>
 
         {/* Like */}
-        <div
-          title="Like Post"
-          aria-label="Like Post"
-          className="rounded-2xl bg-background flex items-center gap-1.5 h-full hover:ring-1 hover:ring-primary transition-all"
+        <button
+          onClick={handleLike}
+          className="flex grow items-center justify-center gap-3 rounded-md px-4 py-2 transition hover:bg-accent"
         >
-          <button
-            onClick={handleLike}
+          <Icon
+            name={
+              user && optimisticPost.likes.includes(user.id)
+                ? "heart"
+                : "heart-empty"
+            }
             className={cn(
-              user?.id &&
-                optimisticPost.likes.includes(user.id) &&
-                "text-primary bg-primary/10"
+              "size-4",
+              user && optimisticPost.likes.includes(user.id) && "text-red-500"
             )}
-            disabled={isPending}
-          >
-            {isPending && optimisticPost.likes.includes(user?.id ?? "") ? (
-              <Icon name="loader-circle" className="animate-spin" />
-            ) : (
-              <ThumbsUp />
-            )}
-          </button>
-          <span className="text-xs pr-2 font-medium text-muted-foreground">
-            {formatNumber(optimisticPost.likes.length)}{" "}
-            {optimisticPost.likes.length < 1 ? " Like" : " Likes"}
+          />
+          <span className="inline font-medium opacity-90 text-[14px] transition hover:opacity-100">
+            {formatNumber(optimisticPost.likes.length)}
+            <span className="max-sm:hidden">
+              {optimisticPost.likes.length < 1 ? " Like" : " Likes"}
+            </span>
           </span>
-        </div>
+        </button>
 
         {/* Save */}
-        <div
-          title="Bookmark Post"
-          aria-label="Bookmark Post"
-          className="rounded-2xl bg-background flex items-center gap-1.5 h-full hover:ring-1 hover:ring-primary transition-all"
+        <button
+          onClick={handleSave}
+          className="flex grow items-center justify-center gap-3 rounded-md px-4 py-2 transition hover:bg-accent"
         >
-          <button
-            onClick={handleSave}
+          <Icon
+            name={
+              user && optimisticPost.savedBy.includes(user.id)
+                ? "bookmark-check"
+                : "bookmark"
+            }
             className={cn(
-              "flex items-center gap-1 aspect-square h-full p-2 rounded-full text-xs [&>svg]:size-4 transition-all",
-              "hover:text-primary hover:bg-primary/10 active:scale-95",
-              user?.id &&
-                optimisticPost.savedBy.includes(user.id) &&
-                "text-primary bg-primary/10"
+              "size-4",
+              user && optimisticPost.savedBy.includes(user.id) && "text-emerald-500"
             )}
-            disabled={isPending}
-          >
-            {optimisticPost.savedBy.includes(user?.id ?? "") ? (
-              <BookmarkCheck />
-            ) : (
-              <Bookmark />
-            )}
-          </button>
-          <span className="text-xs pr-2 font-medium text-muted-foreground">
-            {formatNumber(optimisticPost.savedBy.length)}{" "}
-            {optimisticPost.savedBy.length < 1 ? " Save" : " Saves"}
+          />
+          <span className="inline font-medium opacity-90 text-[14px] transition hover:opacity-100">
+            {formatNumber(optimisticPost.savedBy.length)}
+            <span className="max-sm:hidden">
+              {optimisticPost.savedBy.length < 1 ? " Saved" : " Saves"}
+            </span>
           </span>
-        </div>
+        </button>
 
         {/* Share */}
         <ShareButton
@@ -151,8 +143,10 @@ export default function PostFooterOptimistic({
           size="xs"
           className="rounded-2xl bg-background flex items-center gap-1.5 h-full hover:ring-1 hover:ring-primary transition-all"
         >
-          <Share />
-          Share
+          <Icon name="send" />
+          <span className="max-sm:hidden">
+            Share
+          </span>
         </ShareButton>
       </div>
     </div>

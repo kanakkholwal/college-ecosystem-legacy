@@ -50,9 +50,4 @@ const nextConfig = {
 
 export default withSerWist(nextConfig);
 
-// Only enable Cloudflare context in dev mode
-if (process.env.NODE_ENV === "development") {
-  const { initOpenNextCloudflareForDev } = await import('@opennextjs/cloudflare');
-  initOpenNextCloudflareForDev();
-}
-// This is a workaround for the issue with wrangler not being able to read the config file
+

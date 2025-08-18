@@ -127,9 +127,7 @@
   "devDependencies": {
     "@types/node": "^22",
     "serwist": "^9.0.11",
-    "typescript": "^5.7.3",
-    "wrangler": "^4.30.0",
-    "@opennextjs/cloudflare": "^1.6.5"
+    "typescript": "^5.7.3"
   },
   "packageManager": "npm@11.4.1"
 }
