@@ -24,22 +24,14 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import type { z } from "zod";
 import { roomSchema, roomTypes } from "~/constants/common.room";
+import { RoomSelect } from "~/db/schema/room";
 
 type RoomType = z.infer<typeof roomSchema>;
 
 export default function CreateRoomForm({
   onSubmit,
 }: {
-  onSubmit: (room: RoomType) => Promise<{
-    roomNumber: string;
-    roomType: string;
-    capacity: number | null;
-    currentStatus: string;
-    lastUpdatedTime: Date | null;
-    id: string;
-    createdAt: Date | null;
-    updatedAt: Date | null;
-  }>;
+  onSubmit: (room: RoomType) => Promise<RoomSelect>;
 }) {
   const form = useForm({
     resolver: zodResolver(roomSchema),

@@ -161,7 +161,7 @@ export async function listAllRoomsWithHistory(filters?: {
 // Function to create a new room
 export async function createRoom(
   roomData: z.infer<typeof roomSchema>,
-  initialUsageHistory?: UsageHistoryInsert
+  // initialUsageHistory?: UsageHistoryInsert
 ): Promise<RoomSelect> {
   "use server";
   // Validate room data
@@ -179,12 +179,12 @@ export async function createRoom(
     throw new Error("Failed to create room");
   }
 
-  if (initialUsageHistory) {
-    await db.insert(roomUsageHistory).values({
-      ...initialUsageHistory,
-      roomId: newRoom.id,
-    });
-  }
+  // if (initialUsageHistory) {
+  //   await db.insert(roomUsageHistory).values({
+  //     ...initialUsageHistory,
+  //     roomId: newRoom.id,
+  //   });
+  // }
 
   return newRoom;
 }

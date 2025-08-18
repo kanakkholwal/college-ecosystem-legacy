@@ -15,7 +15,7 @@ import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { type Control, useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { CgPoll } from "react-icons/cg";
 import z from "zod";
@@ -27,7 +27,7 @@ import { nanoid } from "nanoid";
 
 export const formSchema = z.object({
   question: z.string().min(3, "A question is required."),
-  description: z.string().optional(),
+  description: z.string().default(""),
   options: z
     .array(
       z.object({
@@ -85,10 +85,11 @@ function PollForm({ className }: { className?: string }) {
       ],
       multipleChoice: false,
       closesAt: new Date(Date.now() + 6 * 60 * 60 * 1000).toISOString(),
+      votes: [],
     },
   });
-  const { fields, append, remove } = useFieldArray<PollFormData>({
-    control: form.control as Control<PollFormData>,
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
     name: "options",
   });
 

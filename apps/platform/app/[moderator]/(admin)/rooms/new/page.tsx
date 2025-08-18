@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description: "Add a new room to the database",
 };
 
-export default async function CoursesPage() {
+export default function CoursesPage() {
   return (
     <>
       <Card className="m-4 mt-10">

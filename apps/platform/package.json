@@ -8,7 +8,8 @@
     "start": "next start",
     "dev": "next dev",
     "build": "next build",
-    "build:no-warn":"next build --experimental-build-mode compile",
+    "build:no-warn": "next build --experimental-build-mode compile",
+    "build:isolated": "docker build -t platform .",
     "format": "npx prettier --write \"**/*.{ts,tsx,js,jsx,md}\""
   },
   "dependencies": {
@@ -64,7 +65,7 @@
     "cmdk": "^1.1.1",
     "cobe": "^0.6.4",
     "date-fns": "^4.1.0",
-    "drizzle-kit": "^0.30.2",
+    "drizzle-kit": "^0.31.4",
     "drizzle-orm": "^0.44.2",
     "eslint": "^9.28.0",
     "eslint-config-next": "^15.4.6",
@@ -124,5 +125,5 @@
     "serwist": "^9.0.11",
     "typescript": "^5.7.3"
   },
-  "packageManager": "npm@11.4.1"
+  "packageManager": "npm@11.5.2"
 }
