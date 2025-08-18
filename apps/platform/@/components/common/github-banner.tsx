@@ -4,6 +4,7 @@ import { GitBranch, StarIcon, Users } from "lucide-react";
 import Link from "next/link";
 import { getRepoStats, StatsData } from "~/lib/third-party/github";
 import { appConfig } from "~/project.config";
+import { StaggerChildrenContainer, StaggerChildrenItem } from "../animation/motion";
 import { Icon, IconType } from "../icons";
 import { Badge } from "../ui/badge";
 
@@ -26,7 +27,7 @@ export default async function GithubBanner({ className }: GithubBannerProps) {
   }
 
   return (
-    <div
+    <StaggerChildrenContainer
       className={cn(
         "flex flex-col items-center pt-5 px-3 pb-10 md:pb-14 xl:pb-[60px]",
         className
@@ -51,7 +52,7 @@ export default async function GithubBanner({ className }: GithubBannerProps) {
         free and aims to make academic and campus resources accessible in one
         place.
       </p>
-      <div className="mx-auto mt-10 flex w-full max-w-2xl flex-col items-center">
+      <StaggerChildrenItem className="mx-auto mt-10 flex w-full max-w-2xl flex-col items-center">
         <div
           data-slot="card"
           className="bg-card text-card-foreground relative flex w-full flex-col items-start gap-6 overflow-hidden rounded-2xl border border-border p-8 shadow-lg md:flex-row lg:items-center"
@@ -138,27 +139,37 @@ export default async function GithubBanner({ className }: GithubBannerProps) {
             </div>
           </div>
         </div>
-      </div>
-      <div className="mt-8 flex justify-center gap-4 flex-wrap px-3">
+      </StaggerChildrenItem>
+      <StaggerChildrenItem className="mt-8">
+        <h6 className="text-base font-semibold text-center text-foreground/90 tracking-tight">
+          Connect with Project Creator
+        </h6>
+        <p className="mt-1 text-sm text-center text-muted-foreground">
+          Follow on social media to stay updated
+        </p>
+      </StaggerChildrenItem>
+
+      <StaggerChildrenItem className="mt-6 flex justify-center gap-5 flex-wrap px-3">
         {(Object.entries(appConfig.socials) as [IconType, string][]).map(
-          ([key, value]) => {
-            return (
-              <a
-                key={key}
-                href={value}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex w-24 flex-col items-center gap-2 rounded-xl border border-border bg-muted p-4 transition-all hover:shadow-md hover:bg-muted/80 hover:border-muted/80 active:scale-95 active:bg-muted/90 active:border-muted/90"
-              >
-                <Icon name={key} className="size-6 icon" />
-                <span className="text-xs font-medium capitalize text-muted-foreground">
-                  {key}
-                </span>
-              </a>
-            );
-          }
+          ([key, value]) => (
+            <a
+              key={key}
+              href={value}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex w-28 flex-col items-center gap-2 rounded-2xl border border-border bg-card p-4 shadow-sm transition-all hover:shadow-md hover:border-primary/30 hover:bg-muted/60 active:scale-95"
+            >
+              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-primary/10 text-primary">
+                <Icon name={key} className="w-6 h-6" />
+              </div>
+              <span className="text-xs font-medium capitalize text-foreground/80">
+                {key}
+              </span>
+            </a>
+          )
         )}
-      </div>
-    </div>
+      </StaggerChildrenItem>
+
+    </StaggerChildrenContainer>
   );
 }

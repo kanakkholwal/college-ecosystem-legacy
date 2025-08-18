@@ -7,7 +7,6 @@ import { Icon } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { formatDistanceToNow } from "date-fns";
 import { ArrowRight, Dot } from "lucide-react";
 import Link from "next/link";
@@ -20,6 +19,7 @@ import type { Session } from "~/auth";
 import { CATEGORY_IMAGES } from "~/constants/common.community";
 import { appConfig } from "~/project.config";
 import { formatNumber } from "~/utils/number";
+import { OptimisticFooterActionBar } from "./posts/[postId]/post-footer";
 
 export default function CommunityPostList({
   posts,
@@ -143,52 +143,10 @@ export default function CommunityPostList({
 
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-between gap-2">
-              <button
-                onClick={() => handleToggle(post._id, "toggleLike")}
-                className="flex grow items-center justify-center gap-3 rounded-md px-4 py-2 transition hover:bg-accent"
-              >
-                <Icon
-                  name={
-                    user && post.likes.includes(user.id)
-                      ? "heart"
-                      : "heart-empty"
-                  }
-                  className={cn(
-                    "size-4",
-                    user && post.likes.includes(user.id) && "text-red-500"
-                  )}
+                <OptimisticFooterActionBar
+                  post={post}
+                  user={user}
                 />
-                <span className="inline font-medium opacity-90 text-[14px] transition hover:opacity-100">
-                  {formatNumber(post.likes.length)}
-                  <span className="max-sm:hidden">
-                    {post.likes.length < 1 ? " Like" : " Likes"}
-                  </span>
-                </span>
-              </button>
-
-              <button
-                onClick={() => handleToggle(post._id, "toggleSave")}
-                className="flex grow items-center justify-center gap-3 rounded-md px-4 py-2 transition hover:bg-accent"
-              >
-                <Icon
-                  name={
-                    user && post.savedBy.includes(user.id)
-                      ? "bookmark-check"
-                      : "bookmark"
-                  }
-                  className={cn(
-                    "size-4",
-                    user && post.savedBy.includes(user.id) && "text-emerald-500"
-                  )}
-                />
-                <span className="inline font-medium opacity-90 text-[14px] transition hover:opacity-100">
-                  {formatNumber(post.savedBy.length)}
-                  <span className="max-sm:hidden">
-                    {post.savedBy.length < 1 ? " Saved" : " Saves"}
-                  </span>
-                </span>
-              </button>
-
               <ShareButton
                 data={{
                   title: post.title,
@@ -197,7 +155,7 @@ export default function CommunityPostList({
                 }}
                 variant="ghost"
                 size="xs"
-                className="flex grow items-center justify-center gap-3 rounded-md px-4 py-2 transition hover:bg-accent h-full"
+                className="h-7 flex grow items-center justify-center gap-3 rounded-md px-4 py-2 transition hover:bg-accent"
               >
                 <Icon name="send" />
                 <span className="max-sm:hidden">

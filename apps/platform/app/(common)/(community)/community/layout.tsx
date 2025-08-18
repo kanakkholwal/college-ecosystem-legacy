@@ -23,72 +23,75 @@ export default async function Layout({
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 min-h-screen">
       {/* Sidebar */}
-      <aside className="hidden md:block md:col-span-1 space-y-4 sticky top-4 h-fit">
-        <div className="bg-card rounded-2xl shadow p-4">
-          <h2 className="text-base font-medium mb-2">Communities</h2>
-          <div className="space-y-1 text-sm grid-cols-1 gap-1 ">
+      <aside className="hidden md:block md:col-span-1 space-y-6 sticky top-4 h-fit">
+        {/* Communities Section */}
+        <div className="bg-card rounded-2xl shadow-sm border p-5">
+          <h2 className="text-sm font-semibold text-foreground/80 mb-3 tracking-tight">
+            Communities
+          </h2>
+          <div className="flex flex-col gap-1.5">
             <Button
               variant="ghost"
               size="sm"
-              width="full"
-              className="justify-start"
+              className="justify-start gap-2 rounded-lg px-2 py-2 hover:bg-muted/60 transition-colors"
               asChild
             >
               <Link href="/community" shallow>
-                <RiCommunityLine />
-                All Posts
+                <RiCommunityLine className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">All Posts</span>
               </Link>
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              width="full"
-              className="justify-start"
+              className="justify-start gap-2 rounded-lg px-2 py-2 hover:bg-muted/60 transition-colors"
               asChild
             >
               <Link href="/community?sort=popular" shallow>
-                <TrendingUpIcon />
-                Popular Posts
+                <TrendingUpIcon className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">Popular Posts</span>
               </Link>
             </Button>
             <Button
               variant="ghost"
               size="sm"
-              width="full"
-              className="justify-start"
+              className="justify-start gap-2 rounded-lg px-2 py-2 hover:bg-muted/60 transition-colors"
               asChild
             >
               <Link href="/community?sort=recent" shallow>
-                <SortAsc />
-                Recent Posts
+                <SortAsc className="w-4 h-4 text-primary" />
+                <span className="text-sm font-medium">Recent Posts</span>
               </Link>
             </Button>
           </div>
         </div>
-        <div className="bg-card rounded-2xl shadow p-4">
-          <h2 className="text-base font-medium mb-2">Popular Communities</h2>
-          <div className="text-sm grid grid-cols-1 gap-1">
-            {CATEGORIES.map((category) => {
-              return (
-                <Link
-                  key={category.value}
-                  href={`/community?c=${category.value}`}
-                  className="hover:bg-muted hover:text-foreground cursor-pointer py-1 px-2 rounded-lg inline-flex items-center gap-1.5 text-muted-foreground text-sm"
-                >
-                  <Image
-                    src={category.image}
-                    alt={category.description}
-                    width={24}
-                    height={24}
-                    className="inline-block rounded-full size-5 object-contain"
-                  />
-                  c/{category.name}
-                </Link>
-              );
-            })}
+
+        {/* Popular Communities Section */}
+        <div className="bg-card rounded-2xl shadow-sm border p-5">
+          <h2 className="text-sm font-semibold text-foreground/80 mb-3 tracking-tight">
+            Popular Communities
+          </h2>
+          <div className="grid grid-cols-1 gap-2">
+            {CATEGORIES.map((category) => (
+              <Link
+                key={category.value}
+                href={`/community?c=${category.value}`}
+                className="group flex items-center gap-3 px-2 py-2 rounded-xl hover:bg-muted/60 transition-colors text-sm font-medium text-muted-foreground"
+              >
+                <Image
+                  src={category.image}
+                  alt={category.description}
+                  width={40}
+                  height={40}
+                  className="rounded-full object-cover size-7 border border-border group-hover:scale-105 transition-transform"
+                />
+                <span className="truncate">c/{category.name}</span>
+              </Link>
+            ))}
           </div>
         </div>
       </aside>
+
 
       {children}
     </div>

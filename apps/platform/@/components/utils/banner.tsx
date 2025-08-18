@@ -61,7 +61,7 @@ export function BannerPanel({
           exit={{ opacity: 0, y: -50, height: 0 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
           className={cn(
-            "bg-muted px-4 py-3 md:py-2 relative shadow",
+            "bg-card/30 backdrop-blur-2xl px-4 py-3 md:py-2 relative shadow",
             className
           )}
         >

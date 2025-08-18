@@ -171,12 +171,13 @@ export const appConfig = {
     "https://github.com/kanakkholwal/college-ecosystem?utm_source=app.nith.eu.org&utm_medium=referral&utm_campaign=repo_link",
   githubUri: "kanakkholwal/college-ecosystem",
   socials: {
-    twitter: "https://twitter.com/kanakkholwal",
-    linkedin: "https://linkedin.com/in/kanak-kholwal",
-    instagram: "https://instagram.com/kanakkholwal",
-    github: "https://github.com/kanakkholwal",
-    website: "https://kanak.eu.org",
+    twitter: "https://twitter.com/kanakkholwal?utm_source=app.nith.eu.org&utm_medium=direct&utm_campaign=personal_brand",
+    linkedin: "https://linkedin.com/in/kanak-kholwal?utm_source=app.nith.eu.org&utm_medium=direct&utm_campaign=personal_brand",
+    instagram: "https://instagram.com/kanakkholwal?utm_source=app.nith.eu.org&utm_medium=direct&utm_campaign=personal_brand",
+    github: "https://github.com/kanakkholwal?utm_source=app.nith.eu.org&utm_medium=direct&utm_campaign=personal_brand",
+    website: "https://kanak.eu.org/?utm_source=app.nith.eu.org&utm_medium=direct&utm_campaign=personal_brand",
   },
+
   verifications: {
     google_adsense: "ca-pub-6988693445063744",
     google_analytics: "G-SC4TQQ5PCW",

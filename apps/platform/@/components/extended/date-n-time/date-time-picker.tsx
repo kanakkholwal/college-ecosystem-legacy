@@ -61,14 +61,13 @@ export function DateTimePicker(field: DateTimePickerProps) {
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant={"outline"}
+          variant="outline"
           disabled={field.disabled}
           className={cn(
             "w-full pl-3 text-left font-normal",
             !field.value && "text-muted-foreground",
             field.className
           )}
-          {...field.btnProps}
         >
           {field.value ? (
             format(field.value, "dd/MM/yyyy hh:mm aa")

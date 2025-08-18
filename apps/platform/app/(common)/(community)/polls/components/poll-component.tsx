@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { ArrowRight, Check, Clock } from "lucide-react";
 import Link from "next/link";
 import { BiUpvote } from "react-icons/bi";
@@ -17,23 +18,27 @@ export default function PollComponent({
   const closesAlready = new Date(poll.closesAt) < new Date();
 
   return (
-    <div className="bg-card p-4 rounded-lg mt-2 flex flex-col justify-between items-stretch gap-3 border hover:shadow-sm relative">
-      <div>
-        <h3 className="text-xl font-medium text-card-foreground">
+    <div className="bg-card p-6 rounded-2xl mt-3 flex flex-col gap-4 border shadow-sm hover:shadow-md transition-shadow">
+      {/* Header */}
+      <div className="space-y-2">
+        <h3 className="text-lg font-semibold text-foreground leading-snug">
           {poll.question}
         </h3>
-        <p className="text-sm text-muted-foreground">{poll.description}</p>
-        <div className="flex items-center gap-2">
-          <h1 className="text-sm text-muted-foreground">
+        {poll.description && (
+          <p className="text-sm text-muted-foreground">{poll.description}</p>
+        )}
+        <div className="flex items-center gap-2 text-xs text-muted-foreground">
+          <span>
             by{" "}
             <Link
-              className="text-foreground hover:underline"
+              className="text-foreground hover:underline font-medium"
               href={`/u/${poll?.createdBy}`}
             >
               @{poll?.createdBy}
             </Link>
-          </h1>
-          <p className="text-sm text-muted-foreground">
+          </span>
+          <span>•</span>
+          <span>
             {poll?.createdAt
               ? new Date(poll.createdAt).toLocaleString("default", {
                   year: "numeric",
@@ -43,27 +48,38 @@ export default function PollComponent({
                   minute: "2-digit",
                 })
               : ""}
-          </p>
+          </span>
         </div>
       </div>
+
+      {/* Poll Options */}
       <PollRender poll={poll} user={user} />
-      <div className="w-full flex items-center gap-2 flex-wrap">
-        <span className="rounded-md bg-muted text-muted-foreground px-2 py-1 text-xs inline-flex items-center whitespace-nowrap">
-          <BiUpvote className="mr-1 inline-block size-4" />
+
+      {/* Stats */}
+      <div className="flex flex-wrap items-center gap-3 mt-2 text-xs">
+        <span className="rounded-full bg-muted/70 text-muted-foreground px-3 py-1 inline-flex items-center gap-1.5">
+          <BiUpvote className="w-4 h-4" />
           {poll.votes.length} votes
         </span>
-        <span className="rounded-md bg-muted text-muted-foreground px-2 py-1 text-xs inline-flex items-center">
-          <Clock className="mr-1 inline-block size-3" />
+        <span className="rounded-full bg-muted/70 text-muted-foreground px-3 py-1 inline-flex items-center gap-1.5">
+          <Clock className="w-3 h-3" />
           <ClosingBadge poll={poll} />
         </span>
       </div>
-      <div className="w-full flex items-center justify-end gap-2">
+
+      {/* Actions */}
+      <div className="flex items-center justify-end gap-2">
         {user?.id === poll.createdBy && <DeletePoll pollId={poll._id} />}
         {!closesAlready && (
-          <Button variant="dark" size="sm" effect="shineHover" asChild>
+          <Button
+            variant="default"
+            size="sm"
+            className="rounded-lg shadow-sm hover:shadow-md transition-all gap-1"
+            asChild
+          >
             <Link href={`/polls/${poll._id}`}>
               Vote
-              <ArrowRight />
+              <ArrowRight className="w-4 h-4" />
             </Link>
           </Button>
         )}
@@ -71,6 +87,7 @@ export default function PollComponent({
     </div>
   );
 }
+
 export function PollRender({
   poll,
   user,
@@ -79,41 +96,59 @@ export function PollRender({
   user?: Session["user"];
 }) {
   return (
-    <div className="grid gap-2 mt-5 w-full">
+    <div className="grid gap-3 mt-4">
       {poll.options.map((option, index) => {
         const { percent, count } = parseVotes(poll.votes, option);
-        const { disabled, message, btnText, voted } = notAllowed(
+        const { disabled, voted } = notAllowed(
           poll.votes,
           poll.multipleChoice,
           option,
           user
         );
-        return (
-          <Button
-            aria-label={`Vote for ${option}`}
-            disabled={disabled}
-            variant="outline"
-            key={index}
-            transition="none"
-            className="cursor-default disabled:opacity-80 flex gap-2 items-center justify-between relative z-10 bg-none after:rounded-md after:h-full after:absolute after:bottom-0 after:left-0 after:-z-10 after:bg-secondary after:text-secondary-foreground after:w-[var(--vote-width)]"
-            style={
-              {
-                "--vote-width": `${count > 0 ? Math.max(1, percent) : 0}%`,
-              } as React.CSSProperties
-            }
-          >
-            <div className="flex items-center gap-2">
-              {voted && <Check className="h-4 w-4" />}
-              <p className="text-sm">{option}</p>
-            </div>
 
-            <p className="text-sm opacity-80">{percent.toFixed(2)}%</p>
-          </Button>
+        return (
+          <div
+            key={index}
+            className="relative w-full rounded-lg border overflow-hidden group"
+          >
+            {/* Progress background */}
+            <div
+              className={`absolute left-0 top-0 h-full transition-all duration-500 ${
+                voted ? "bg-primary/30" : "bg-primary/15"
+              }`}
+              style={{ width: `${count > 0 ? Math.max(1, percent) : 0}%` }}
+            />
+
+            {/* Option Row */}
+            <button
+              aria-label={`Vote for ${option}`}
+              disabled={disabled}
+              className={cn(`relative z-10 flex w-full items-center justify-between px-4 py-2 text-sm font-medium transition-colors`, {
+                "text-primary font-semibold": voted,
+                "text-foreground hover:bg-muted/60": !voted,
+                "disabled:cursor-not-allowed disabled:opacity-80": disabled,
+              })}
+            >
+              <div className="flex items-center gap-2">
+                {voted && (
+                  <Check className="h-4 w-4 text-primary shrink-0" />
+                )}
+                <span>{option}</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                <span>{percent.toFixed(1)}%</span>
+                <span className="hidden sm:inline">({count})</span>
+              </div>
+            </button>
+          </div>
         );
       })}
     </div>
   );
 }
+
+
+/* Helpers */
 function notAllowed(
   voteData: PollType["votes"],
   multipleChoice: boolean,
@@ -121,57 +156,24 @@ function notAllowed(
   user?: Session["user"]
 ) {
   if (!user) {
-    return {
-      disabled: true,
-      message: "You need to be logged in to vote",
-      btnText: "Login to Vote",
-      voted: false,
-    };
+    return { disabled: true, voted: false };
   }
   switch (true) {
     case !multipleChoice:
       return {
         disabled: voteData?.some((vote) => vote.userId === user.id),
-        message: "You can only vote once",
-        btnText: voteData?.some((vote) => vote.userId === user.id)
-          ? "Voted"
-          : "Vote",
-        voted: voteData?.some((vote) => vote.userId === user.id),
-      };
-    case !multipleChoice && voteData?.some((vote) => vote.userId === user.id):
-      return {
-        disabled: true,
-        message: "You can only vote once",
-        btnText: voteData?.some((vote) => vote.userId === user.id)
-          ? "Voted"
-          : "Vote",
         voted: voteData?.some((vote) => vote.userId === user.id),
       };
     case multipleChoice &&
       voteData?.some(
         (vote) => vote.userId === user.id && vote.option === option
       ):
-      return {
-        disabled: true,
-        message: "You have already voted",
-        btnText: voteData?.some(
-          (vote) => vote.userId === user.id && vote.option === option
-        )
-          ? "Voted"
-          : "Vote",
-        voted: voteData?.some(
-          (vote) => vote.userId === user.id && vote.option === option
-        ),
-      };
+      return { disabled: true, voted: true };
     default:
-      return {
-        disabled: false,
-        message: "",
-        btnText: "Vote",
-        voted: false,
-      };
+      return { disabled: false, voted: false };
   }
 }
+
 function parseVotes(votes: PollType["votes"], option: string) {
   const count = votes?.filter((vote) => vote.option === option).length || 0;
   const percent = votes && votes.length > 0 ? (count / votes.length) * 100 : 0;

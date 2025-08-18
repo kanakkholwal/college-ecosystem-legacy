@@ -9,6 +9,19 @@ npm install --save-dev wrangler @opennextjs/cloudflare
 ```
 
 ```json
+  "scripts": {
+    "lint": "next lint",
+    "start": "next start",
+    "dev": "next dev",
+    "build": "next build",
+    "build:no-warn":"next build --experimental-build-mode compile",
+    "build:prod": "npx opennext:build && wrangler deploy --dry-run --outdir=dist",
+    "opennext:build": "opennextjs-cloudflare build",
+    "opennext:deploy": "opennextjs-cloudflare deploy",
+    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "upload": "opennextjs-cloudflare build && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv ./cloudflare-env.d.ts"
+  },
 "devDependencies": {
     "wrangler": "^4.30.0",
     "@opennextjs/cloudflare": "^1.6.5"

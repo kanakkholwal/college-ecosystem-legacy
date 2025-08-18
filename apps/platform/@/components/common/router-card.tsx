@@ -31,8 +31,8 @@ function RouterCard({
     <Link
       href={href}
       className={cn(
-        "@max-lg:col-span-full bg-card block border p-4 rounded-lg shadow-md text-fd-card-foreground transition-colors",
-        "group flex flex-col justify-between gap-2 animate-in popup backdrop-blur-2xl shadow-sm",
+        "@max-lg:col-span-full bg-card block border p-4 rounded-lg shadow-md text-card-foreground transition-all",
+        "group flex flex-col justify-between gap-2 animate-in popup backdrop-blur-2xl shadow-sm relative",
         "hover:-translate-1",
         disabled ? "pointer-events-none cursor-not-allowed" : ""
       )}
@@ -63,6 +63,9 @@ function RouterCard({
         Go to {title}
         {external ? <ArrowUpRight /> : <ArrowRight />}
       </p>
+          {/* Decorative elements */}
+        <span className="from-primary/0 via-primary to-primary/0 absolute -bottom-px left-1/2 h-px w-1/2 -translate-x-1/2 bg-gradient-to-r opacity-60"/>
+        <span className="absolute inset-0 bg-[radial-gradient(30%_5%_at_50%_100%,hsl(var(--primary)/0.15)_0%,transparent_100%)] opacity-60"/>
     </Link>
   );
 }

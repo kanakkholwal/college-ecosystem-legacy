@@ -32,6 +32,7 @@ export type ResponsiveDialogProps = {
   onOpenChange?(open: boolean): void;
   className?: string;
   showCloseButton?: boolean;
+  hideHeader?: boolean;
 };
 
 const ResponsiveDialog = React.memo(
@@ -44,27 +45,26 @@ const ResponsiveDialog = React.memo(
     defaultOpen,
     onOpenChange,
     showCloseButton = true,
+    hideHeader = false,
   }: ResponsiveDialogProps) => {
     const [open, setOpen] = useState(defaultOpen || false);
     const isDesktop = useMediaQuery("(min-width: 768px)");
+    const handleOpenChange = (value: boolean) => {
+      setOpen(value);
+      onOpenChange?.(value);
+    }
 
     const dialog = useMemo(() => {
       if (isDesktop) {
         return (
-          <Dialog
-            open={open}
-            onOpenChange={(value) => {
-              setOpen(value);
-              onOpenChange?.(value);
-            }}
-          >
+          <Dialog open={open} onOpenChange={handleOpenChange}>
             <DialogTrigger asChild>
               <Button {...btnProps} />
             </DialogTrigger>
             <DialogContent
               className={cn("sm:max-w-[425px] @container/dialog", className)}
             >
-              <DialogHeader>
+              <DialogHeader className={cn(hideHeader ? "hidden" : "text-left")}>
                 <DialogTitle className="text-pretty">{title}</DialogTitle>
                 <DialogDescription className="text-pretty">
                   {description}
@@ -77,18 +77,12 @@ const ResponsiveDialog = React.memo(
       }
 
       return (
-        <Drawer
-          open={open}
-          onOpenChange={(value) => {
-            setOpen(value);
-            onOpenChange?.(value);
-          }}
-        >
+        <Drawer open={open} onOpenChange={handleOpenChange}>
           <DrawerTrigger asChild>
             <Button {...btnProps} />
           </DrawerTrigger>
           <DrawerContent>
-            <DrawerHeader className="text-left">
+            <DrawerHeader className={cn(hideHeader ? "hidden" : "text-left")}>
               <DrawerTitle className="text-pretty">{title}</DrawerTitle>
               <DrawerDescription className="text-pretty">
                 {description}

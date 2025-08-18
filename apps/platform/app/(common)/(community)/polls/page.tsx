@@ -79,7 +79,7 @@ export default async function PollsPage(props: {
                         size="sm"
                         href="/polls?tab=opened-polls"
                       >
-                        Login
+                        Sign in to Continue
                         <LogIn />
                       </AuthButtonLink>
                     ),

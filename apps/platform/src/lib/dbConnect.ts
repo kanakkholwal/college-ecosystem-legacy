@@ -12,7 +12,8 @@ declare const global: {
 };
 
 if (!MONGODB_URI) {
-  throw new Error("Please define the MONGODB_URI environment variable");
+  // throw new Error("Please define the MONGODB_URI environment variable");
+  console.warn("Please define the MONGODB_URI environment variable : Vercel issue");
 }
 
 const defaultDb =

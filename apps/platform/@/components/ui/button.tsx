@@ -43,6 +43,10 @@ const buttonVariants = cva(
         rainbow_outline:
           "border border-input border-b-transparent bg-[linear-gradient(#ffffff,#ffffff),linear-gradient(#ffffff_50%,rgba(18,18,19,0.6)_80%,rgba(18,18,19,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] bg-[length:200%] text-accent-foreground dark:text-primary-foreground [background-clip:padding-box,border-box,border-box] [background-origin:border-box] before:absolute before:bottom-[-20%] before:left-1/2 before:z-0 before:h-1/5 before:w-3/5 before:-translate-x-1/2 before:animate-rainbow before:bg-[linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))] before:[filter:blur(0.75rem)] dark:bg-[linear-gradient(#0a0a0a,#0a0a0a),linear-gradient(#0a0a0a_50%,rgba(255,255,255,0.6)_80%,rgba(0,0,0,0)),linear-gradient(90deg,var(--color-1),var(--color-5),var(--color-3),var(--color-4),var(--color-2))]",
 
+        vote: "w-full rounded-lg border border-primary text-primary bg-primary/5 hover:bg-primary/10 hover:shadow-md dark:border-primary/70 dark:text-primary",
+        voted: "w-full rounded-lg bg-gradient-to-r from-primary/90 to-primary text-white shadow-lg hover:shadow-xl",
+
+
         gradient_blue:
           "text-white bg-gradient-to-r from-blue-600 via-blue-700 to-blue-700 hover:bg-gradient-to-br",
         gradient_green:
@@ -121,7 +125,7 @@ const buttonVariants = cva(
         scale: "hover:scale-105 active:scale-95",
       },
       shadow: {
-        none: "",
+        none: "shadow-none",
         default: "shadow-lg shadow-primary/50",
         default_light: "shadow-md shadow-primary/20",
         destructive: "shadow-lg shadow-destructive/50",
@@ -158,7 +162,7 @@ interface IconRefProps {
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+  VariantProps<typeof buttonVariants> {
   isLoading?: boolean;
   asChild?: boolean;
 }

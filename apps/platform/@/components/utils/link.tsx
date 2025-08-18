@@ -4,6 +4,8 @@ import { getWindowOrigin } from "@/lib/env";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Icon } from "../icons";
+import { ResponsiveDialog } from "../ui/responsive-dialog";
 
 interface RedirectButtonProps extends ButtonProps {
   href: string;
@@ -72,6 +74,7 @@ export function AuthButtonLink({
   React.ComponentProps<typeof Link> & {
     authorized?: boolean;
   }) {
+
   return (
     <Button asChild {...props}>
       <Link href={authorized ? href : `/auth/sign-in?next=${href}`}>
@@ -80,6 +83,65 @@ export function AuthButtonLink({
     </Button>
   );
 }
+function AuthActionButton({
+  authorized,
+  dialog,
+  ...props
+}: React.ComponentProps<typeof Button> & {
+  authorized?: boolean;
+  dialog?: {
+    title: string;
+    description: string;
+    content?: React.ReactNode;
+    showHeader?: boolean;
+  }
+}) {
+  const pathname = usePathname();
+
+  if (!authorized) {
+    // If not authorized, show a dialog with sign-in option
+    const { onClick, ...restProps } = props;
+    return (
+      <ResponsiveDialog
+        hideHeader={true}
+        title={dialog?.title ?? "Sign In Required"}
+        description={dialog?.description ?? "You need to sign in to access this content."}
+        btnProps={{
+          ...restProps
+        }}
+      >
+        {dialog?.content ? (
+          <div className="mt-4">{dialog.content}</div>
+        ) : (
+          <div className="flex flex-col items-center justify-center mt-6 text-center">
+            <div className="flex items-center justify-center w-16 h-16 rounded-2xl bg-muted shadow-sm mb-4">
+              <Icon name="lock" className="w-8 h-8 text-primary" />
+            </div>
+            <h3 className="text-lg font-semibold mb-2">Authentication Needed</h3>
+            <p className="text-sm text-muted-foreground max-w-sm">
+              You need to sign in to access this feature. Please continue with your account to unlock it.
+            </p>
+          </div>
+        )}
+
+        <AuthButtonLink
+          href={pathname}
+          authorized={false}
+          className="w-full mt-6 flex items-center justify-center gap-2 rounded-xl bg-primary text-white py-2.5 font-medium shadow-md hover:shadow-lg transition-all"
+        >
+          Sign In to Continue
+          <Icon name="arrow-right" className="w-4 h-4" />
+        </AuthButtonLink>
+      </ResponsiveDialog>
+    );
+  }
+
+  return <Button {...props} />;
+}
+
+AuthActionButton.displayName = "AuthActionButton";
+export { AuthActionButton };
+
 
 export type ParamsPreserverLinkProps = React.ComponentProps<typeof Link> & {
   preserveParams?: boolean;

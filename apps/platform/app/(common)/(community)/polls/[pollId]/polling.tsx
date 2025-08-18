@@ -2,6 +2,8 @@
 
 import { Button } from "@/components/ui/button";
 import { createClient } from "@supabase/supabase-js";
+import { motion } from "framer-motion";
+import { CircleCheckBig, MousePointerClick } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
@@ -19,6 +21,7 @@ interface PollingProps {
   updateVotes: (voteData: PollType["votes"]) => Promise<PollType>;
 }
 
+
 export default function Polling({ poll, user, updateVotes }: PollingProps) {
   const [voteData, setVoteData] = useState<PollType["votes"]>(poll.votes);
 
@@ -31,6 +34,7 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
     );
 
     if (existingVoteIndex > -1) {
+      // User already voted on this option
       if (!poll.multipleChoice) {
         updatedVotes.splice(existingVoteIndex, 1);
       }
@@ -41,7 +45,6 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
       updatedVotes.push({ option, userId: user.id });
     }
 
-    // Update in Supabase
     const { error } = await supabase
       .from("polls")
       .update({ votes: updatedVotes })
@@ -49,7 +52,6 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
 
     if (error) {
       toast.error("Failed to submit vote");
-      console.error(error);
       return;
     }
 
@@ -59,14 +61,12 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
   const handleSync = useCallback(async () => {
     try {
       await updateVotes(voteData);
-      console.log("Poll updated:", voteData);
     } catch (error) {
       console.error("Error updating poll:", error);
     }
   }, [updateVotes, voteData]);
 
   useEffect(() => {
-    // Realtime subscription
     const channel = supabase
       .channel(`polls-${poll._id}`)
       .on(
@@ -97,58 +97,69 @@ export default function Polling({ poll, user, updateVotes }: PollingProps) {
   }, [handleSync, poll.votes.length, voteData.length]);
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="space-y-4">
       {poll.options.map((option, index) => {
-        const { disabled, message, btnText } = notAllowed(
-          voteData,
-          poll.multipleChoice,
-          user,
-          option
+        const totalVotes = voteData.length || 1;
+        const count = voteData.filter((v) => v.option === option).length;
+        const percent = (count / totalVotes) * 100;
+
+        const hasVoted = voteData.some(
+          (v) => v.userId === user.id && v.option === option
         );
-        const { count, percent } = parseVotes(voteData, option);
 
         return (
-          <div
+          <motion.div
             key={`${option}-${index}`}
-            className="relative bg-muted rounded-lg"
+            className="relative overflow-hidden rounded-xl border border-border bg-card shadow-sm"
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
           >
-            <div
-              className="flex items-center rounded transition-all h-full bg-primary/5 dark:bg-primary/10 absolute inset-0"
-              style={{ width: `${percent}%` }}
+            {/* Progress Bar */}
+            <motion.div
+              className={`absolute inset-y-0 left-0 bg-primary/20`}
+              initial={{ width: 0 }}
+              animate={{ width: `${percent}%` }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
             />
-            <div className="grid gap-2 p-4 w-full h-full">
-              <h3 className="text-lg font-semibold">{option}</h3>
-              <div className="flex justify-between items-center">
-                <p className="text-sm font-medium text-muted-foreground">
-                  {percent.toFixed(2)}%
-                </p>
-                <p className="text-sm font-medium text-primary">
-                  {count} votes
-                </p>
+
+            <div className="relative z-10 p-4 flex flex-col gap-3">
+              {/* Option Text */}
+              <h3 className="text-base font-semibold tracking-tight">
+                {option}
+              </h3>
+
+              {/* Stats */}
+              <div className="flex items-center justify-between">
+                <div className="flex gap-3 text-sm">
+                  <span className="text-muted-foreground font-medium">
+                    {percent.toFixed(1)}%
+                  </span>
+                  <span className="font-semibold text-primary">{count} votes</span>
+                </div>
+
+
+                {/* Vote Button */}
+                <Button 
+                  size="sm"
+                  variant={hasVoted ? "default" : "outline"}
+                  shadow="none"
+                  onClick={() => handleVote(option)}
+                >
+                  {hasVoted ? (
+                    <CircleCheckBig  className="shrink-0" />
+                  ) : (
+                    <MousePointerClick className="shrink-0" />
+                  )}
+                  <span>{hasVoted ? "You Backed This" : "Back This"}</span>
+                </Button>
               </div>
-              <Button
-                width="full"
-                variant="dark"
-                size="sm"
-                className="z-10"
-                disabled={disabled}
-                onClick={() => {
-                  if (disabled) {
-                    message?.trim().length > 0 && toast.error(message);
-                    return;
-                  }
-                  handleVote(option);
-                }}
-              >
-                {btnText}
-              </Button>
             </div>
-          </div>
+          </motion.div>
         );
       })}
     </div>
   );
 }
+
 
 // utils
 function notAllowed(
