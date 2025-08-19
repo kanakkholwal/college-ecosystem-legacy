@@ -152,6 +152,7 @@ function OptimisticFooterActionBar({
       <AuthActionButton
         variant="raw"
         authorized={!!user}
+        nextUrl={`/community#post-${post._id}`}
         dialog={{
           title: "Sign In Required",
           description: "You need to sign in to like or save this post.",

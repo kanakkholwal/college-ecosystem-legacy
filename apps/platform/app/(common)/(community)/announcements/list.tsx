@@ -30,6 +30,7 @@ export default function AnnouncementsList({
         return (
           <div
             key={announcement._id}
+            id={"announcement-" +announcement._id}
             className="relative w-full mx-auto rounded-lg bg-card backdrop-blur-md p-3 lg:p-5 space-y-4"
           >
             <div>

@@ -8,6 +8,7 @@ import type { Metadata } from "next";
 import { getPostsByCategory } from "~/actions/common.community";
 import { getSession } from "~/auth/server";
 import CommunityPostList from "./list";
+import { Icon } from "@/components/icons";
 
 export const metadata: Metadata = {
   title: "Communities",
@@ -47,7 +48,10 @@ export default async function CommunitiesPage(props: {
       {/* Feed */}
       <main className="md:col-span-3 lg:col-span-2 space-y-4 pr-2 min-h-screen">
         <div className="md:sticky md:top-4 z-50 w-full mx-1.5 lg:mx-auto flex justify-between items-center gap-2 bg-card px-2 lg:px-4 py-1 lg:py-2 rounded-lg border">
-          <h3 className="text-base font-medium">
+          
+          <Icon name="globe" className="inline-block size-6 text-primary" />
+          <div>
+            <h3 className="text-sm font-semibold">
             Community Posts
             {activePopularCategory && (
               <span className="text-sm text-muted-foreground ml-1">
@@ -64,7 +68,12 @@ export default async function CommunitiesPage(props: {
             <Badge size="sm" className="ml-2">
               {posts.length}
             </Badge>
-          </h3>
+            </h3>
+            <p className="text-muted-foreground text-xs">
+              Sub-reddits like public communities
+            </p>
+          </div>
+          <div className="inline-flex items-center gap-2 sm:ml-auto">
           <AuthButtonLink
             authorized={!!session?.user}
             variant="ghost"
@@ -72,8 +81,9 @@ export default async function CommunitiesPage(props: {
             href="/community/create"
           >
             Create Post
-            <ArrowRight />
+            <Icon name="arrow-right" />
           </AuthButtonLink>
+          </div>
         </div>
         <CommunityPostList posts={posts} user={session?.user} />
       </main>

@@ -155,7 +155,7 @@ const popular_features = [
   {
     name: "Communities",
     icon: Users,
-    href: "/communities",
+    href: "/community",
     color: "text-green-500",
   },
   {
@@ -503,7 +503,7 @@ export function FeatureSection() {
 
           {/* Center column */}
           <StaggerChildrenItem className="order-[1] mb-6 self-center sm:order-[0] md:mb-0">
-            <div className="bg-bard text-foreground ring-border relative mx-auto mb-4.5 w-fit rounded-full rounded-bl-[2px] px-4 py-2 text-sm ring">
+            <div className="bg-card text-foreground ring-border relative mx-auto mb-4.5 w-fit rounded-full rounded-bl-[2px] px-4 py-2 text-sm ring">
               <AnimatedGradientText className="relative z-1 flex items-center gap-2 font-semibold">
                 <Sparkles className="size-3 text-yellow-500 animate-spin animation-duration-3000" />{" "}
                 Features

@@ -86,9 +86,11 @@ export function AuthButtonLink({
 function AuthActionButton({
   authorized,
   dialog,
+  nextUrl,
   ...props
 }: React.ComponentProps<typeof Button> & {
   authorized?: boolean;
+  nextUrl?: string;
   dialog?: {
     title: string;
     description: string;
@@ -125,7 +127,7 @@ function AuthActionButton({
         )}
 
         <AuthButtonLink
-          href={pathname}
+          href={nextUrl ? nextUrl :pathname}
           authorized={false}
           className="w-full mt-6 flex items-center justify-center gap-2 rounded-xl bg-primary text-white py-2.5 font-medium shadow-md hover:shadow-lg transition-all"
         >

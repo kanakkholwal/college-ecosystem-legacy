@@ -28,41 +28,9 @@ export default function CommunityPostList({
   posts: CommunityPostTypeWithId[];
   user?: Session["user"];
 }) {
-  const [optimisticPosts, setOptimisticPosts] = useOptimistic(
-    posts,
-    (
-      state,
-      action: { type: "toggleLike" | "toggleSave"; id: string; userId: string }
-    ) => {
-      return state.map((p) => {
-        if (p._id !== action.id) return p;
 
-        if (action.type === "toggleLike") {
-          const liked = p.likes.includes(action.userId);
-          return {
-            ...p,
-            likes: liked
-              ? p.likes.filter((uid) => uid !== action.userId)
-              : [...p.likes, action.userId],
-          };
-        }
 
-        if (action.type === "toggleSave") {
-          const saved = p.savedBy.includes(action.userId);
-          return {
-            ...p,
-            savedBy: saved
-              ? p.savedBy.filter((uid) => uid !== action.userId)
-              : [...p.savedBy, action.userId],
-          };
-        }
-
-        return p;
-      });
-    }
-  );
-
-  if (optimisticPosts.length === 0) {
+  if (posts.length === 0) {
     return (
       <EmptyArea
         icons={[GrAnnounce]}
@@ -72,17 +40,11 @@ export default function CommunityPostList({
     );
   }
 
-  const handleToggle = (postId: string, type: "toggleLike" | "toggleSave") => {
-    if (!user?.id) return;
-    startTransition(() => {
-      setOptimisticPosts({ type, id: postId, userId: user.id });
-      updatePost(postId, { type });
-    });
-  };
+
 
   return (
     <div className="grid grid-cols-1 gap-4 w-full">
-      {optimisticPosts.map((post) => (
+      {posts.map((post) => (
         <div
           key={post._id}
           className="w-full mx-auto rounded-lg backdrop-blur-md lg:p-5 bg-card border border-border p-4 flex flex-col gap-4"
@@ -154,7 +116,6 @@ export default function CommunityPostList({
                   url: appConfig.url + `/community/posts/${post._id}`,
                 }}
                 variant="ghost"
-                size="xs"
                 className="h-7 flex grow items-center justify-center gap-3 rounded-md px-4 py-2 transition hover:bg-accent"
               >
                 <Icon name="send" />

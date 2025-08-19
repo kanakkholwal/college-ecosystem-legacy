@@ -17,6 +17,8 @@ import { getAllResources } from "~/lib/markdown/mdx";
 import { appConfig } from "~/project.config";
 import { FeatureSection, IntroSection } from "./client";
 import { ResourcesList } from "./resources/client";
+import { ButtonLink } from "@/components/utils/link";
+import { Icon } from "@/components/icons";
 
 const RESOURCES_LIMIT = 6; // Limit the number of resources fetched
 
@@ -91,9 +93,17 @@ export default async function HomePage() {
         <Suspense fallback={<SkeletonCardArea count={RESOURCES_LIMIT} />}>
           <ResourcesList resources={resources} showImage={false} />
         </Suspense>
+        <StaggerChildrenItem className="w-full py-2 flex justify-center">
+          <ButtonLink href="/resources" size="lg" variant="rainbow_outline">
+            Checkout All Updates
+            <Icon name="arrow-right"/>
+          </ButtonLink>
+        </StaggerChildrenItem>
       </StaggerChildrenContainer>
 
       <FeatureSection />
+
+      
       <StaggerChildrenContainer className="space-y-4" id="testimonials">
         <h2 className="text-xl font-semibold text-center">
           What Students Are Saying
