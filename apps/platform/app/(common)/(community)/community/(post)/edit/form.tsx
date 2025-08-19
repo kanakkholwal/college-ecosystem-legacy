@@ -1,4 +1,5 @@
 "use client";
+import { HeaderBar } from "@/components/common/header-bar";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -18,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, SendHorizontal, Trash2 } from "lucide-react";
+import { Edit2Icon, Loader2, SendHorizontal, Trash2 } from "lucide-react";
 import NexoMdxEditor from "nexo-mdx";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
@@ -85,10 +86,33 @@ export default function EditCommunityPost({
 
   return (
     <Form {...form}>
-      <form
+       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 p-2 lg:p-4 bg-card rounded-lg"
+        
       >
+      <HeaderBar
+        Icon={Edit2Icon}
+        titleNode="Editing Post"
+        descriptionNode="Edit the post and publish it"
+        actionNode={
+          <Button
+            type="submit"
+            variant="dark"
+            size="sm"
+            width="content"
+            className="hidden sm:inline-flex"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? (
+              <Loader2 className="animate-spin" />
+            ) : null}
+            {form.formState.isSubmitting ? "Updating..." : "Update Post"}
+            {form.formState.isSubmitting ? null : <SendHorizontal />}
+          </Button>
+        }
+      />
+            <div className="space-y-6 p-2 lg:p-4 bg-card rounded-lg pb-6">
+
         <FormField
           control={form.control}
           name="title"
@@ -227,6 +251,7 @@ export default function EditCommunityPost({
               <Trash2 />
             )}
           </Button>
+        </div>
         </div>
       </form>
     </Form>

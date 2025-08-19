@@ -1,6 +1,7 @@
 import {
   Activity,
   AlignLeft,
+  ArrowLeft,
   ArrowRight,
   ArrowUp,
   ArrowUpRight,
@@ -117,6 +118,7 @@ export const IconComponent = {
   users: Users,
   "arrow-up-right": ArrowUpRight,
   "arrow-right": ArrowRight,
+  "arrow-left": ArrowLeft,
   "arrow-up": ArrowUp,
   "loader-circle": LoaderCircleIcon,
   layout: LayoutTemplate,

@@ -27,7 +27,7 @@ export function HeaderBar({
         <h3 className="text-sm font-semibold">{titleNode}</h3>
         <p className="text-muted-foreground text-xs">{descriptionNode}</p>
       </div>
-      <div className="inline-flex items-center gap-2 sm:ml-auto">
+      <div className="inline-flex items-center gap-2 ml-auto">
         {actionNode}
       </div>
     </div>

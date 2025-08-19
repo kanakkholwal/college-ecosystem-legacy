@@ -1,4 +1,6 @@
 "use client";
+import { HeaderBar } from "@/components/common/header-bar";
+import { Icon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,14 +19,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { ButtonLink } from "@/components/utils/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Content, JSONContent } from "@tiptap/react";
-import { Loader2, SendHorizontal } from "lucide-react";
+import { Globe, Loader2, SendHorizontal } from "lucide-react";
 import { defaultExtensions, NexoEditor, renderToMarkdown } from "nexo-editor";
 import "nexo-editor/index.css";
 import { useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { IoMdAddCircleOutline } from "react-icons/io";
 import type { z } from "zod";
 import { createPost } from "~/actions/common.community";
 import {
@@ -90,12 +94,33 @@ export default function CreateCommunityPost() {
     });
   }
 
-  return (
-    <Form {...form}>
+  return ( <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-6 p-2 lg:p-4 bg-card rounded-lg"
+        
       >
+      <HeaderBar
+        Icon={IoMdAddCircleOutline}
+        titleNode="Create a New Post"
+        descriptionNode="Create a new post in the community"
+        actionNode={
+          <Button
+            type="submit"
+            variant="dark"
+            size="sm"
+            width="content"
+            className="hidden sm:inline-flex"
+            disabled={form.formState.isSubmitting}
+          >
+            {form.formState.isSubmitting ? (
+              <Loader2 className="animate-spin" />
+            ) : null}
+            {form.formState.isSubmitting ? "Publishing..." : "Publish Post"}
+            {form.formState.isSubmitting ? null : <SendHorizontal />}
+          </Button>
+        }
+      />
+      <div className="space-y-6 p-2 lg:p-4 bg-card rounded-lg pb-6">
         <FormField
           control={form.control}
           name="title"
@@ -212,18 +237,21 @@ export default function CreateCommunityPost() {
           />
         )}
         <Button
-          type="submit"
-          variant="dark"
-          width="content"
-          disabled={form.formState.isSubmitting}
-        >
-          {form.formState.isSubmitting ? (
-            <Loader2 className="animate-spin" />
-          ) : null}
-          {form.formState.isSubmitting ? "Publishing..." : "Publish Post"}
-          {form.formState.isSubmitting ? null : <SendHorizontal />}
-        </Button>
+            type="submit"
+            variant="dark"
+            size="sm"
+            width="content"
+            disabled={form.formState.isSubmitting}
+            className="sm:hidden"
+          >
+            {form.formState.isSubmitting ? (
+              <Loader2 className="animate-spin" />
+            ) : null}
+            {form.formState.isSubmitting ? "Publishing..." : "Publish Post"}
+            {form.formState.isSubmitting ? null : <SendHorizontal />}
+          </Button>
+        </div>
       </form>
     </Form>
-  );
+ );
 }
