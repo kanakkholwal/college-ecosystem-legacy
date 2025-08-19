@@ -23,10 +23,6 @@
   "engines": {
     "node": ">=20"
   },
-  "packageManager": "npm@11.5.2",
-  "workspaces": [
-    "apps/*"
-  ],
   "dependencies": {
     "dotenv": "^16.4.7",
     "tsup": "^8.3.5"

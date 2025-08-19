@@ -35,17 +35,18 @@ export default function CreateRoomForm({
     currentStatus: RoomType["currentStatus"];
   }>;
 }) {
-  const form = useForm({
+  const form = useForm<RoomType>({
     resolver: zodResolver(roomSchema),
     defaultValues: {
       roomNumber: "",
-      roomType: roomTypes[0],
-      capacity: 0,
+      roomType: "classroom",
+      capacity: 1,
       currentStatus: "occupied",
       lastUpdatedTime: new Date(),
     },
   });
-  const handleSubmit = async (data: RoomType) => {
+  
+  async function handleSubmit(data: RoomType) {
     toast.promise(onSubmit(data), {
       loading: "Saving...",
       success: (data: { roomNumber: string | number }) =>

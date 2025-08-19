@@ -47,7 +47,7 @@ const userSchema = z.object({
 });
 
 export default function CreateNewUser() {
-  const form = useForm({
+  const form = useForm<z.infer<typeof userSchema>>({
     resolver: zodResolver(userSchema),
     defaultValues: {
       name: "",
@@ -59,7 +59,7 @@ export default function CreateNewUser() {
     },
   });
 
-  const handleSubmit = async (data: z.infer<typeof userSchema>) => {
+  async function handleSubmit(data: z.infer<typeof userSchema>) {
     toast.promise(
       authClient.admin.createUser({
         name: data.name,

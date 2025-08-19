@@ -1,8 +1,8 @@
 # College Ecosystem
 
-[![🧹 Lint project](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/lint.yml/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/lint.yml)
-[![🚀 Deployments](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy.yml/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy.yml)
-[![CodeQL](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/github-code-scanning/codeql)
+[![🚀 Platform Deployments](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy-platform.yml/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy-platform.yml)
+[![🚀 Server Deployments](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy-servers.yml/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy-servers.yml)
+[![🚀 Landing Site Deployments](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy-statics.yml/badge.svg)](https://github.com/kanakkholwal/college-ecosystem/actions/workflows/deploy-statics.yml)
 
 **College Ecosystem** is a monorepo for various projects aimed at creating a comprehensive platform for managing and interacting with different aspects of a college environment. It includes frontend applications built with Next.js and a backend server using Express and TypeScript.
 
