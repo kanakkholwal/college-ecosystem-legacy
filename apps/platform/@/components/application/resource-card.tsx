@@ -57,17 +57,18 @@ export default function ResourceCard({
                 </span>
               </span>
             )}
-            <span>
-              {new Date(date).toLocaleDateString("en-IN", {
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-              })}
-            </span>
+
             {readingTime && <span>{readingTime}</span>}
           </div>
 
           <h2 className="text-lg font-semibold line-clamp-2">{title}</h2>
+          <p  className="text-muted-foreground text-xs">
+              On {new Date(date).toLocaleDateString("en-IN", {
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+              })}
+          </p>
           {summary && (
             <p className="text-muted-foreground text-sm line-clamp-3">
               {summary}
@@ -76,7 +77,7 @@ export default function ResourceCard({
 
           <div className="flex flex-wrap gap-1 pt-2">
             {category && (
-              <Badge variant="default_light" className="text-xs capitalize">
+              <Badge variant="info" appearance="light" className="text-xs capitalize">
                 {category}
               </Badge>
             )}

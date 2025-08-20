@@ -1,4 +1,5 @@
 import * as z from "zod";
+import { Content } from "@tiptap/react";
 
 export const RELATED_FOR_TYPES = [
   "academics",
@@ -13,10 +14,14 @@ export const RELATED_FOR_TYPES = [
 export const rawAnnouncementSchema = z.object({
   title: z.string().min(5, "Title must be atleast 5 characters long."),
   content: z.string().min(10, "Content must be atleast 10 characters long."),
+  content_json: z.custom<Content>(),
   expiresAt: z
     .date()
     .refine((date) => date !== null, {
       message: "An expiry Date is required.",
+    })
+    .refine((date) => date.getTime() > new Date().getTime(), {
+      message: "Expiry Date must be in the future.",
     })
     .default(
       new Date(Date.now() + 2 * 24 * 60 * 60 * 1000) // Default to 2 days from now

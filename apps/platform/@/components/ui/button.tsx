@@ -146,7 +146,7 @@ const buttonVariants = cva(
       hoverEffect: "none",
       effect: "none",
       rounded: "default",
-      shadow: "none",
+      // shadow: "none",
     },
   }
 );

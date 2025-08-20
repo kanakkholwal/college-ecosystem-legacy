@@ -20,6 +20,9 @@ import { Dot, Edit } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { appConfig } from "~/project.config";
+import { Badge } from "@/components/ui/badge";
+import { Icon } from "@/components/icons";
+import { formatNumber } from "~/utils/number";
 
 export async function generateMetadata(
   { params }: Props,
@@ -75,7 +78,7 @@ export default async function CommunityPost(props: Props) {
         }}
         id="json-ld-blog-post"
       />
-      <div className="w-full mx-auto rounded-lg bg-card backdrop-blur-md p-3 lg:p-5 grid grid-cols-1 space-y-4">
+      <div className="w-full mx-auto rounded-lg bg-card backdrop-blur-md p-3 lg:p-5 grid grid-cols-1 gap-y-4">
         <div className="inline-flex items-center gap-2">
           <Avatar className="size-10 rounded-full">
             <AvatarImage
@@ -92,7 +95,7 @@ export default async function CommunityPost(props: Props) {
               {post.category.charAt(0).toUpperCase()}
             </AvatarFallback>
           </Avatar>
-          <p className="text-xs text-muted-foreground">
+          <p className="text-xs text-muted-foreground align-middle">
             <Link
               href={`/community?c=${post.category}`}
               className="hover:underline hover:text-primary font-medium"
@@ -122,6 +125,12 @@ export default async function CommunityPost(props: Props) {
           )}
         </div>
         <h3 className="text-lg font-medium">{post.title}</h3>
+        <p className="-mb-2 -mt-4">
+          <Badge size="sm">
+            <Icon name="trend-up" className="text-primary" />
+            {formatNumber(post.views)} impressions
+          </Badge>
+        </p>
         <article className="border-l py-4  max-w-full prose prose-sm dark:prose-invert pl-2 bg-muted/10">
           <Markdown remarkPlugins={[remarkGfm]}>{post.content}</Markdown>
         </article>

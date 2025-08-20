@@ -33,7 +33,7 @@ function EventCard({
       <p className="text-xs text-muted-foreground mt-1">{event.description}</p>
       <p>
         {isGoingEvent && (
-          <Badge variant="success_light" size="sm">
+          <Badge variant="success" appearance="ghost" size="sm">
             Going
           </Badge>
         )}

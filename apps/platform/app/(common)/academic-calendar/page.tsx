@@ -56,6 +56,9 @@ export default async function AcademicCalenderPage(props: Props) {
   if (session?.user?.role === "admin") {
     console.log("Events fetched for admin:", groupedEvents);
   }
+  const futureEvents = groupedEvents.filter((group) => {
+    return new Date(group.day).getTime() > new Date().getTime();
+  });
 
   return (
     <div className="max-w-6xl mx-auto px-4 pt-10 space-y-6 pb-5">
@@ -108,14 +111,14 @@ export default async function AcademicCalenderPage(props: Props) {
           />
         </TabsContent>
         <TabsContent value="list">
-          <ConditionalRender condition={groupedEvents.length === 0}>
+          <ConditionalRender condition={futureEvents.length === 0}>
             <EmptyArea
-              title="No Events Found"
-              description="There are no events available in the academic calendar at the moment. Please check back later or contact the administration for more information."
+              title="No Upcoming events Found"
+              description="There are no upcoming events available in the academic calendar at the moment. Please check back later or contact the administration for more information."
               icons={[CalendarDays]}
             />
           </ConditionalRender>
-          {groupedEvents.map((group, idx) => {
+          {futureEvents.map((group, idx) => {
             return (
               <StaticStep
                 key={group.day.toString()}

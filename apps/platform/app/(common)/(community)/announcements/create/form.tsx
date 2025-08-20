@@ -1,22 +1,16 @@
 "use client";
-import NexoMdxEditor from "nexo-mdx";
-
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+
 import {
   Select,
   SelectContent,
@@ -26,8 +20,6 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { format } from "date-fns";
-import { CalendarIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { GrAnnounce } from "react-icons/gr";
@@ -38,13 +30,41 @@ import {
   RELATED_FOR_TYPES,
   rawAnnouncementSchema,
 } from "~/constants/common.announcement";
+import { defaultExtensions, NexoEditor, renderToMarkdown } from "nexo-editor";
+import "nexo-editor/index.css";
+import type { Content, JSONContent } from "@tiptap/react";
+import { DateTimePicker } from "@/components/extended/date-n-time";
+
+const defaultContent = {
+  type: "doc",
+  content: [
+    {
+      type: "paragraph",
+      content: [
+        {
+          type: "text",
+          text: "Hello, this is a simple editor built with Nexo Editor!",
+        },
+      ],
+    },
+  ],
+}
+function convertToMd(data: Content) {
+  const md = renderToMarkdown({
+    content: data as JSONContent,
+    extensions: defaultExtensions,
+  });
+  console.log(md);
+  return md
+}
 
 export default function CreateAnnouncement() {
   const form = useForm<z.infer<typeof rawAnnouncementSchema>>({
-    resolver: zodResolver(rawAnnouncementSchema as any),
+    resolver: zodResolver(rawAnnouncementSchema),
     defaultValues: {
       title: "",
-      content: "",
+      content: convertToMd(defaultContent),
+      content_json: defaultContent as Content,
       relatedFor: RELATED_FOR_TYPES[0],
       // after 2 days from now
       // This is just a default value, it will be overridden by the user.
@@ -92,28 +112,37 @@ export default function CreateAnnouncement() {
               </FormItem>
             )}
           />
+
           <FormField
             control={form.control}
-            name="content"
+            name="content_json"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>The content of the announcement.</FormLabel>
+                <FormLabel>Content</FormLabel>
                 <FormControl>
-                  <NexoMdxEditor
-                    rows={10}
-                    placeholder="Write the announcement content here..."
-                    {...field}
-                    disabled={form.formState.isSubmitting}
-                    // renderHtml={(md) => <article className='prose prose-sm dark:prose-invert max-w-full'>
-                    //   <MDXRemote source={md} parseFrontmatter />
-                    // </article>}
+                  <NexoEditor
+                    content={field.value as Content}
+                    onChange={(content) => {
+                      field.onChange(content);
+                      form.setValue("content", convertToMd(defaultContent));
+                    }}
                   />
                 </FormControl>
+                <FormDescription>The content of the post.</FormDescription>
+                  <FormField
+                    control={form.control}
+                    name="content"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2">
+          <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 items-center">
             <FormField
               control={form.control}
               name="relatedFor"
@@ -152,40 +181,13 @@ export default function CreateAnnouncement() {
                   <FormLabel>
                     The date at which the announcement will expire.
                   </FormLabel>
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <FormControl>
-                        <Button
-                          variant={"outline"}
-                          className={cn(
-                            "w-[240px] pl-3 text-left font-normal",
-                            !field.value && "text-muted-foreground"
-                          )}
-                          disabled={form.formState.isSubmitting}
-                        >
-                          {field.value ? (
-                            format(field.value, "PPP")
-                          ) : (
-                            <span>Pick a date</span>
-                          )}
-                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                        </Button>
-                      </FormControl>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
-                      <Calendar
-                        mode="single"
-                        selected={field.value}
-                        onSelect={field.onChange}
-                        disabled={(date) =>
-                          date < new Date() ||
-                          date < new Date("1900-01-01") ||
-                          form.formState.isSubmitting
-                        }
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
+                  <DateTimePicker
+                    value={field.value.toISOString() ?? ""}
+                    onChange={(date) => field.onChange(new Date(date))}
+                  // disabled={field.value < new Date() ||
+                  //   field.value < new Date("1900-01-01") || form.formState.isSubmitting}
+                  />
+
                   <FormMessage />
                 </FormItem>
               )}

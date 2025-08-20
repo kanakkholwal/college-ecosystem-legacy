@@ -167,6 +167,7 @@ export default async function AdminDashboard() {
             title="Users by Gender"
             Icon={<Transgender className="inline-block mr-2 size-4" />}
           >
+          
             <ChartRadialStacked
               data={Object.entries(usersByGender).map(([key, value]) => {
                 return { key, count: value };

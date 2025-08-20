@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
-import { PreviousPageLink } from "@/components/utils/link";
+import { AuthActionButton, PreviousPageLink } from "@/components/utils/link";
 import Image from "next/image";
 import Link from "next/link";
 import { getCourseByCode } from "~/actions/common.course";
@@ -23,6 +23,7 @@ import { IconMap } from "./render-link";
 import type { Metadata, ResolvingMetadata } from "next";
 import { getSession } from "~/auth/server";
 import { orgConfig } from "~/project.config";
+import { Icon } from "@/components/icons";
 
 type Props = {
   params: Promise<{ code: string }>;
@@ -157,20 +158,20 @@ export default async function CoursePage(props: Props) {
               {booksAndReferences.map((ref) => {
                 const iconsSrc = IconMap.has(
                   ref.type as
+                  | "book"
+                  | "reference"
+                  | "drive"
+                  | "youtube"
+                  | "others"
+                )
+                  ? IconMap.get(
+                    ref.type as
                     | "book"
                     | "reference"
                     | "drive"
                     | "youtube"
                     | "others"
-                )
-                  ? IconMap.get(
-                      ref.type as
-                        | "book"
-                        | "reference"
-                        | "drive"
-                        | "youtube"
-                        | "others"
-                    )
+                  )
                   : OthersPng;
                 return (
                   <div className="bg-card p-3 rounded-lg" key={ref.link}>
@@ -219,19 +220,19 @@ export default async function CoursePage(props: Props) {
               Any Books and References will be shown here.
             </p>
           )}
-          <div className="flex w-full items-center justify-center p-4">
+          <div className="flex w-full items-center justify-center p-4" id="add-resources">
+
             {session?.user ? (
               <AddRefsModal code={course.code} courseId={course.id} />
             ) : (
-              <p className="text-center text-muted-foreground text-sm font-medium pt-3">
-                <Link
-                  href="/auth/sign-in"
-                  className="text-primary font-semibold hover:underline"
-                >
-                  Login
-                </Link>{" "}
-                to add Books and References
-              </p>
+              <AuthActionButton
+                authorized={!!session?.user}
+                variant="dark"
+                nextUrl={`/syllabus/${course.code}#add-resources`}
+              >
+                <Icon name="plus"/>
+                Submit Books and References
+              </AuthActionButton>
             )}
           </div>
         </TabsContent>
@@ -266,19 +267,18 @@ export default async function CoursePage(props: Props) {
             </p>
           )}
 
-          <div className="flex w-full items-center justify-center p-4">
+          <div className="flex w-full items-center justify-center p-4" id="add-prev_papers">
             {session?.user ? (
               <AddPrevModal code={course.code} courseId={course.id} />
             ) : (
-              <p className="text-center text-muted-foreground text-sm font-semibold pt-3">
-                <Link
-                  href="/auth/sign-in"
-                  className="text-primary font-semibold hover:underline"
-                >
-                  Login
-                </Link>{" "}
-                to add Previous Year Papers
-              </p>
+              <AuthActionButton
+              authorized={!!session?.user}
+              variant="dark"
+              nextUrl={`/syllabus/${course.code}#add-resources`}
+            >
+               <Icon name="plus"/>
+              Submit Previous Year Papers
+            </AuthActionButton>
             )}
           </div>
         </TabsContent>

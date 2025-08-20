@@ -19,10 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ButtonLink } from "@/components/utils/link";
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { Content, JSONContent } from "@tiptap/react";
-import { Globe, Loader2, SendHorizontal } from "lucide-react";
+import {  Loader2, SendHorizontal } from "lucide-react";
 import { defaultExtensions, NexoEditor, renderToMarkdown } from "nexo-editor";
 import "nexo-editor/index.css";
 import { useSearchParams } from "next/navigation";
@@ -34,8 +33,8 @@ import { createPost } from "~/actions/common.community";
 import {
   CATEGORY_TYPES,
   SUB_CATEGORY_TYPES,
+  rawCommunityPostSchema
 } from "~/constants/common.community";
-import { rawCommunityPostSchema } from "~/models/community";
 
 export default function CreateCommunityPost() {
   const searchParams = useSearchParams();

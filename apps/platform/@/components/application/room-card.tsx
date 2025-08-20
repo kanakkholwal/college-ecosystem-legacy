@@ -133,13 +133,13 @@ export default function RoomCard({
           <span className="text-xs font-medium  text-muted-foreground">
             Capacity
           </span>
-          <Badge size="sm">{room.capacity}</Badge>
+          <Badge size="sm" appearance="outline">{room.capacity}</Badge>
         </div>
         <div className="flex flex-col items-center gap-1">
           <span className="text-xs font-medium  text-muted-foreground">
             Room Type
           </span>
-          <Badge size="sm">{room.roomType}</Badge>
+          <Badge size="sm" appearance="outline">{room.roomType}</Badge>
         </div>
         <div className="flex flex-col items-center gap-1">
           <span className="text-xs font-medium  text-muted-foreground">
@@ -147,6 +147,7 @@ export default function RoomCard({
           </span>
           <Badge
             size="sm"
+            appearance="outline"
             variant={
               room.currentStatus === "available" ? "success" : "destructive"
             }

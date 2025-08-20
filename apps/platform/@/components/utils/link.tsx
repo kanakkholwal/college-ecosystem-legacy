@@ -107,7 +107,7 @@ function AuthActionButton({
       <ResponsiveDialog
         hideHeader={true}
         title={dialog?.title ?? "Sign In Required"}
-        description={dialog?.description ?? "You need to sign in to access this content."}
+        description={dialog?.description ?? "You need to sign in to perform this action"}
         btnProps={{
           ...restProps
         }}

@@ -29,10 +29,10 @@ import { deletePost, updatePost } from "~/actions/common.community";
 import {
   CATEGORY_TYPES,
   SUB_CATEGORY_TYPES,
+  rawCommunityPostSchema,
 } from "~/constants/common.community";
 import {
   CommunityPostTypeWithId,
-  rawCommunityPostSchema,
 } from "~/models/community";
 
 export default function EditCommunityPost({

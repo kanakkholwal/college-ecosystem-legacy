@@ -89,9 +89,9 @@ export default async function ResultsPage(props: Props) {
               </Link>
             </h5>
             <div className="w-full flex flex-wrap items-center gap-4 text-sm mx-auto md:ml-0">
-              <Badge variant="default_light">{getYear(result)}</Badge>
-              <Badge variant="default_light">{result.branch}</Badge>
-              <Badge variant="default_light">{result.programme}</Badge>
+              <Badge variant="info" appearance="light">{getYear(result)}</Badge>
+              <Badge variant="info" appearance="light">{result.branch}</Badge>
+              <Badge variant="info" appearance="light">{result.programme}</Badge>
             </div>
           </div>
           <div className="flex flex-col gap-4">

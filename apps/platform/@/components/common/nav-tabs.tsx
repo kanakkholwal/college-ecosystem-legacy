@@ -18,7 +18,7 @@ interface NavLink extends LinkProps {
   id: string;
   children: React.ReactNode;
   href: string;
-  notificationCount?: number;
+  notification?: string | React.ReactNode | number;
   items?: NavLinkItems[];
 }
 
@@ -141,9 +141,9 @@ const NavTabs = React.forwardRef<HTMLDivElement, NavTabsProps>(
             >
               <div className="text-xs font-medium leading-5 whitespace-nowrap flex items-center gap-2 justify-center h-full [&>svg]:size-4">
                 {navLink?.children}
-                {navLink.notificationCount && navLink.notificationCount > 0 ? (
+                {navLink.notification? (
                   <span className="inline-flex items-center justify-center size-4 text-xs font-medium text-primary bg-primary/10 rounded-full">
-                    {navLink.notificationCount}
+                    {navLink.notification}
                   </span>
                 ) : null}
               </div>

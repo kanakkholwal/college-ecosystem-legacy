@@ -21,12 +21,6 @@ export default function PostFooterOptimistic({
   return (
     <div className="inline-flex items-center gap-3 w-full justify-between">
       <div className="flex gap-2 items-center h-7">
-        {/* Views */}
-
-        <Badge size="sm" className="px-3 py-1.5 [&>svg]:size-4 h-full">
-          <Icon name="trend-up" />
-          {formatNumber(post.views)} impressions
-        </Badge>
         <OptimisticFooterActionBar
           post={post}
           user={user}
@@ -40,7 +34,7 @@ export default function PostFooterOptimistic({
           }}
           variant="ghost"
           size="xs"
-          className="rounded-2xl bg-background flex items-center gap-1.5 h-full hover:ring-1 hover:ring-primary transition-all"
+          className="rounded-2xl bg-background flex items-center gap-1.5 px-4 py-2 h-full hover:ring-1 hover:ring-primary transition-all"
         >
           <Icon name="send" />
           <span className="max-sm:hidden">
