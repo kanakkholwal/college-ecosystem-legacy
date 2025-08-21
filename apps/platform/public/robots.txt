@@ -1,4 +1,11 @@
 User-agent: *
+Disallow: /admin/
+Disallow: /api/
+Disallow: /student/
+Disallow: /faculty/
+Disallow: /staff/
+
+
 Allow: /
 
 # Host

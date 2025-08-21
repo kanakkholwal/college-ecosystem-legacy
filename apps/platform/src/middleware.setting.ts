@@ -78,6 +78,7 @@ export const RAW_PRIVATE_ROUTES: RoutePattern[] = [
   "/announcements/create",
   "/community/create",
   "/community/edit",
+  "/whispers/*",
 ];
 
 export const PRIVATE_ROUTES = RAW_PRIVATE_ROUTES.map((route) => ({
