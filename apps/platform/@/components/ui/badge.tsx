@@ -1,7 +1,7 @@
-import * as React from 'react';
 import { cn } from '@/lib/utils';
+import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from 'class-variance-authority';
-import { Slot, Slottable } from "@radix-ui/react-slot";
+import * as React from 'react';
 
 export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, VariantProps<typeof badgeVariants> {
   asChild?: boolean;
@@ -11,7 +11,7 @@ export interface BadgeProps extends React.HTMLAttributes<HTMLDivElement>, Varian
 
 export interface BadgeButtonProps
   extends React.ButtonHTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeButtonVariants> {
+  VariantProps<typeof badgeButtonVariants> {
   asChild?: boolean;
 }
 
@@ -33,6 +33,39 @@ const badgeVariants = cva(
         info: 'bg-[var(--color-info-accent,var(--color-violet-500))] text-[var(--color-info-foreground,var(--color-white))]',
         outline: 'bg-transparent border border-border text-foreground',
         destructive: 'bg-destructive text-destructive-foreground',
+
+        success_light: "bg-green-500/5 text-green-500 hover:bg-green-500/20",
+        warning_light: "bg-yellow-500/5 text-yellow-500 hover:bg-yellow-500/20",
+        info_light: "bg-sky-500/5 text-sky-500 hover:bg-sky-500/20",
+        destructive_light:
+          "bg-red-500/5 text-red-500 hover:bg-red-500/20 dark:bg-red-500/20 dark:text-red-500 hover:dark:bg-red-500/5 hover:dark:text-red-500",
+
+          // legacy
+          dark: "bg-neutral-900 text-white hover:bg-neutral-800 dark:bg-neutral-100 dark:hover:bg-neutral-200 dark:text-neutral-800",
+        link: "text-primary underline-offset-4 hover:underline",
+         ghost:
+          "bg-white hover:bg-white hover:text-accent-foreground  dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700 dark:hover:text-white",
+        slate:
+          "bg-slate-200 hover:bg-slate-300 text-slate-700 dark:bg-slate-900 dark:text-slate-200 dark:hover:bg-slate-950 dark:hover:text-slate-100",
+           gradient_blue:
+          "text-white bg-gradient-to-r from-blue-500 via-blue-600 to-blue-700 hover:bg-gradient-to-br",
+        gradient_green:
+          "text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br",
+        gradient_cyan:
+          "text-white bg-gradient-to-r from-cyan-400 via-cyan-500 to-cyan-600 hover:bg-gradient-to-br",
+        gradient_teal:
+          "text-white bg-gradient-to-r from-teal-400 via-teal-500 to-teal-600 hover:bg-gradient-to-br",
+        gradient_lime:
+          "text-white bg-gradient-to-r from-lime-400 via-lime-500 to-lime-600 hover:bg-gradient-to-br",
+        gradient_red:
+          "text-white bg-gradient-to-r from-red-400 via-red-500 to-red-600 hover:bg-gradient-to-br",
+        gradient_pink:
+          "text-white bg-gradient-to-r from-pink-400 via-pink-500 to-pink-600 hover:bg-gradient-to-br",
+        gradient_purple:
+          "text-white bg-gradient-to-r from-purple-400 via-purple-500 to-purple-600 hover:bg-gradient-to-br",
+        glass:
+          "backdrop-blur-lg bg-white/30 dark:bg-slate-800/15 backdrop-blur-xl border-white/5 dark:border-white/5 dark:text-white shadow",
+
       },
       appearance: {
         default: '',

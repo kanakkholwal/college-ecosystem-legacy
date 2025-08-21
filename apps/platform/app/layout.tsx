@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import type { Metadata } from "next";
 import { Inter as FontSans, Space_Mono } from "next/font/google";
+import Script from "next/script";
 import { appConfig, orgConfig } from "~/project.config";
 import { Provider } from "./client-provider";
 import "./global.css";
@@ -119,6 +120,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
           }}
           id="json-ld-educational-organization"
           suppressHydrationWarning
+        />
+                {/* ✅ Load AdSense script once globally */}
+        <Script
+          id="adsense-script"
+          strategy="afterInteractive"
+          async
+          src={"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + appConfig.verifications.google_adsense}
+          crossOrigin="anonymous"
         />
         <Provider>{children} </Provider>
         {process.env.NODE_ENV === "production" && (

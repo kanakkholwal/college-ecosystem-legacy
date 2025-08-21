@@ -3,12 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import { getSession } from "~/auth/server";
+import {
+  RawCommunityPostType,
+} from "~/constants/common.community";
 import dbConnect from "~/lib/dbConnect";
 import CommunityPost, {
   CommunityComment,
   CommunityPostTypeWithId,
   rawCommunityCommentSchema,
-  RawCommunityPostType,
 } from "~/models/community";
 
 // Create a new post

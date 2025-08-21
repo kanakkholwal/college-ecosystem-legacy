@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
 
 interface AdComponentProps {
@@ -9,22 +10,26 @@ interface AdComponentProps {
 }
 
 const AdComponent: React.FC<AdComponentProps> = ({ adSlot, adFormat = 'auto', adLayout = '' }) => {
+    const pathname = usePathname();
     useEffect(() => {
         try {
             (window as any).adsbygoogle = (window as any).adsbygoogle || [];
             (window as any).adsbygoogle.push({});
         } catch (e) {
-            console.error('Error loading ads:', e);
+            console.error('Adsense error:', e);
         }
-    }, []);
+    }, [pathname]); // re-run when route changes
 
     return (
-        <ins className="adsbygoogle"
-            style={{ display: 'block' }}
-            data-ad-client="ca-pub-XXXX"
+        <ins
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client={process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}
             data-ad-slot={adSlot}
             data-ad-format={adFormat}
-            data-ad-layout={adLayout}></ins>
+            data-full-width-responsive="true"
+            data-ad-layout={adLayout}
+        />
     );
 };
 
