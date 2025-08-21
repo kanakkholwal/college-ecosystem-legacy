@@ -157,6 +157,7 @@ export default async function Page() {
         </ButtonLink>
       </BaseHeroSection>
       <div className="max-w-(--max-app-width) mx-auto px-4 lg:px-6 mb-8">
+      
         <CategoryFilter categories={allCategories} />
       </div>
       <ResourcesList resources={resources} />

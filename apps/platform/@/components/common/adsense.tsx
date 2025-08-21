@@ -3,14 +3,36 @@
 import { usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
 import { appConfig } from '~/project.config';
+import "./adsense.css";
+
+
+const adsTypes = {
+    "display-horizontal":{
+        adSlot:"4288761968",
+        adFormat:"auto"
+    },
+    "display-square":{
+        adSlot:"6395200498",
+        adFormat:"auto"
+    },
+    "display-vertical":{
+        adSlot:"6395200498",
+        adFormat:"auto"
+    },
+    "multiplex":{
+        adSlot:"8619691544",
+        adFormat:"autorelaxed"
+    },
+} as const;
+
 
 interface AdComponentProps {
-    adSlot: string;
-    adFormat?: string;
-    adLayout?: string;
+    adSlot: keyof typeof adsTypes;
 }
 
-const AdComponent: React.FC<AdComponentProps> = ({ adSlot, adFormat = 'auto', adLayout = '' }) => {
+
+const AdsenseAds: React.FC<AdComponentProps> = ({ adSlot}) => {
+    const adsProps = adsTypes[adSlot as keyof typeof adsTypes];
     const pathname = usePathname();
     useEffect(() => {
         try {
@@ -18,20 +40,23 @@ const AdComponent: React.FC<AdComponentProps> = ({ adSlot, adFormat = 'auto', ad
             (window as any).adsbygoogle.push({});
         } catch (e) {
             console.error('Adsense error:', e);
+            document.querySelectorAll('.adsbygoogle').forEach((el) => {
+                el.classList.add("error")
+            })
         }
     }, [pathname]); // re-run when route changes
 
     return (
+        <div className="adsense-container">
         <ins
             className="adsbygoogle"
-            style={{ display: "block" }}
             data-ad-client={appConfig.verifications.google_adsense}
-            data-ad-slot={adSlot}
-            data-ad-format={adFormat}
+            data-ad-slot={adsProps?.adSlot}
+            data-ad-format={adsProps?.adFormat}
             data-full-width-responsive="true"
-            data-ad-layout={adLayout}
         />
+        </div>
     );
 };
 
-export default AdComponent;
+export default AdsenseAds;

@@ -1,3 +1,4 @@
+import AdsenseAds from "@/components/common/adsense";
 import { Icon } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -62,13 +63,13 @@ export default async function ResourcePage({ params }: PageProps) {
     dateModified: modifiedDate,
     author: frontmatter.author
       ? {
-          "@type": "Person",
-          name: frontmatter.author,
-        }
+        "@type": "Person",
+        name: frontmatter.author,
+      }
       : {
-          "@type": "Organization",
-          name: appConfig.name,
-        },
+        "@type": "Organization",
+        name: appConfig.name,
+      },
     publisher: {
       "@type": "Organization",
       name: appConfig.name,
@@ -81,11 +82,11 @@ export default async function ResourcePage({ params }: PageProps) {
     keywords: frontmatter.tags?.join(", ") || "",
     image: appConfig.flags.enableOgImage
       ? {
-          "@type": "ImageObject",
-          url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
-          width: 1200,
-          height: 630,
-        }
+        "@type": "ImageObject",
+        url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
+        width: 1200,
+        height: 630,
+      }
       : undefined,
   };
 
@@ -342,6 +343,8 @@ export default async function ResourcePage({ params }: PageProps) {
             items={response.data.toc}
             className="lg:sticky lg:top-2"
           />
+          <AdsenseAds adSlot="display-vertical" />
+
         </aside>
         {otherResources.length > 0 && (
           <section
@@ -398,13 +401,13 @@ export async function generateMetadata(
 
       images: appConfig.flags.enableOgImage
         ? [
-            {
-              url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
-              alt: frontmatter.title,
-              width: 1200,
-              height: 630,
-            },
-          ]
+          {
+            url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
+            alt: frontmatter.title,
+            width: 1200,
+            height: 630,
+          },
+        ]
         : [],
     },
     twitter: {
@@ -414,13 +417,13 @@ export async function generateMetadata(
       creator: appConfig.socials.twitter,
       images: appConfig.flags.enableOgImage
         ? [
-            {
-              url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
-              alt: frontmatter.title,
-              width: 1200,
-              height: 630,
-            },
-          ]
+          {
+            url: `${appConfig.url}/og/resources/${resolvedParams.type}/${resolvedParams.slug}`,
+            alt: frontmatter.title,
+            width: 1200,
+            height: 630,
+          },
+        ]
         : [],
     },
     robots: {

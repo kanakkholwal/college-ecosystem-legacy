@@ -15,13 +15,14 @@ interface Props {
 }
 
 // import { CommentsWithAuth } from "@/components/application/comments";
+import AdsenseAds from "@/components/common/adsense";
+import { Icon } from "@/components/icons";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dot, Edit } from "lucide-react";
 import type { Metadata, ResolvingMetadata } from "next";
 import Link from "next/link";
 import { appConfig } from "~/project.config";
-import { Badge } from "@/components/ui/badge";
-import { Icon } from "@/components/icons";
 import { formatNumber } from "~/utils/number";
 
 export async function generateMetadata(
@@ -135,6 +136,9 @@ export default async function CommunityPost(props: Props) {
           <Markdown remarkPlugins={[remarkGfm]}>{post.content}</Markdown>
         </article>
         <PostFooter post={post} user={session?.user!} />
+        <div id="ads-section" className="mt-4">
+          <AdsenseAds adSlot="display-horizontal"/>
+        </div>
         <div id="comments-section" className="mt-4">
           {/* <CommentsWithAuth
             page={`community/posts/${post._id}`}

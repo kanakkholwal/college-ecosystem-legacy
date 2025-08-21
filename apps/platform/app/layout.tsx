@@ -122,6 +122,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           suppressHydrationWarning
         />
                 {/* ✅ Load AdSense script once globally */}
+        <Provider>{children} </Provider>
         <Script
           id="adsense-script"
           strategy="afterInteractive"
@@ -129,7 +130,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           src={"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=" + appConfig.verifications.google_adsense}
           crossOrigin="anonymous"
         />
-        <Provider>{children} </Provider>
         {process.env.NODE_ENV === "production" && (
           <GoogleAnalytics gaId={appConfig.verifications.google_analytics} />
         )}

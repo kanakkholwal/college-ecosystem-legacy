@@ -1,12 +1,13 @@
 import CourseCard from "@/components/application/course-card";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { Metadata } from "next";
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 import { getCourses } from "~/actions/common.course";
 
 import { BaseHeroSection } from "@/components/application/base-hero";
 import Pagination from "@/components/application/course-pagination";
 import SearchBox from "@/components/application/course-search";
+import AdsenseAds from "@/components/common/adsense";
 import { ResponsiveContainer } from "@/components/common/container";
 import { NoteSeparator } from "@/components/common/note-separator";
 import { orgConfig } from "~/project.config";
@@ -75,7 +76,7 @@ export default async function CoursesPage(props: {
           }
         >
           {courses.map((course, i) => {
-            return (
+            return (<Fragment key={course.id}>
               <CourseCard
                 key={course.id}
                 course={course}
@@ -84,6 +85,13 @@ export default async function CoursesPage(props: {
                   animationDelay: `${i * 100}ms`,
                 }}
               />
+              {(i + 1) % 5 === 0 && (
+          
+                  <AdsenseAds
+                    adSlot="display-square"
+                  />
+)}
+            </Fragment>
             );
           })}
         </Suspense>
@@ -92,6 +100,9 @@ export default async function CoursesPage(props: {
       <div className="max-w-7xl mx-auto p-4">
         {courses.length > 0 ? <Pagination totalPages={totalPages} /> : null}
       </div>
+      <AdsenseAds
+        adSlot="multiplex"
+      />
     </div>
   );
 }

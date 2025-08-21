@@ -1,3 +1,4 @@
+import AdsenseAds from "@/components/common/adsense";
 import {
   Accordion,
   AccordionContent,
@@ -71,7 +72,7 @@ export default async function ResultsPage(props: Props) {
         <div className="mr-auto">
           <PreviousPageLink size="sm" variant="light" />
         </div>
-        <div className="mt-5 grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <div className="mt-5 mb-4 grid grid-cols-1 lg:grid-cols-2 gap-5">
           <div className="flex flex-col gap-4">
             <h1 className="font-bold text-3xl lg:text-5xl">
               <span className="relative bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent md:px-2">
@@ -142,6 +143,10 @@ export default async function ResultsPage(props: Props) {
             </div>
           </div>
         </div>
+        <AdsenseAds
+          adSlot="display-horizontal"
+
+        />
       </section>
       <div>
         <h2 className="text-3xl font-bold text-center mx-auto my-10">
@@ -159,9 +164,10 @@ export default async function ResultsPage(props: Props) {
             <Accordion
               type="single"
               collapsible
+              defaultValue={result.semesters?.[0]?.semester.toString()}
               className="w-full relative grid gap-4"
             >
-              {result.semesters?.map((semester: Semester) => {
+              {result.semesters?.map((semester: Semester,index) => {
                 return (
                   <AccordionItem
                     value={semester.semester.toString()}
@@ -221,6 +227,10 @@ export default async function ResultsPage(props: Props) {
           </TabsContent>
         </Tabs>
       </div>
+       <AdsenseAds
+          adSlot="display-horizontal"
+ 
+        />
     </div>
   );
 }

@@ -8,6 +8,7 @@ import { getSession } from "~/auth/server";
 import { PollRender } from "../components/poll-component";
 import Polling from "./polling";
 
+import AdsenseAds from "@/components/common/adsense";
 import EmptyArea from "@/components/common/empty-area";
 import { AuthButtonLink } from "@/components/utils/link";
 import type { Metadata } from "next";
@@ -111,6 +112,9 @@ export default async function Dashboard({ params }: Props) {
           />
         )}
       </div>
+      <AdsenseAds
+        adSlot="display-horizontal"
+      />
     </div>
   );
 }

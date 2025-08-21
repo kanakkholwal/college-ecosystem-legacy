@@ -9,10 +9,12 @@ import type { PollType } from "~/models/poll";
 import CreatePoll from "./components/create-poll";
 import PollComponent from "./components/poll-component";
 
+import AdsenseAds from "@/components/common/adsense";
 import { Badge } from "@/components/ui/badge";
 import { AuthButtonLink } from "@/components/utils/link";
 import { LogIn } from "lucide-react";
 import type { Metadata } from "next";
+import { Fragment } from "react";
 import { CgPoll } from "react-icons/cg";
 import { getSession } from "~/auth/server";
 
@@ -108,12 +110,18 @@ export default async function PollsPage(props: {
                 />
               ) : (
                 <div className="grid grid-cols-1 @2xl/polls:grid-cols-2 gap-3">
-                  {polls[idx].map((poll: PollType) => (
-                    <PollComponent
-                      poll={poll}
-                      key={poll._id}
-                      user={session?.user}
-                    />
+                  {polls[idx].map((poll: PollType, i) => (
+                    <Fragment key={poll._id}>
+                      {/* Poll Component */}
+                      <PollComponent
+                        poll={poll}
+                        key={poll._id}
+                        user={session?.user}
+                      />
+                      {(i + 1) % 2 === 0 && (
+                        <AdsenseAds adSlot="display-square" />
+                      )}
+                    </Fragment>
                   ))}
                 </div>
               )}

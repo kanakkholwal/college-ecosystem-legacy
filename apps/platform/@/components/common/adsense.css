@@ -1,0 +1,48 @@
+.adsense-container{
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.adsense-container:empty{
+    display: none;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+}
+/*
+.adsbygoogle:empty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    padding: 10px;
+    background-color: var(--color-muted);
+    color: var(--color-muted-foreground);
+    text-decoration: none !important;
+ }
+.adsbygoogle:empty::after {
+    content: "Loading Ad...";
+    font-size: 14px;
+    line-height: 50px;
+    font: inherit
+}
+
+.adsbygoogle.error:empty{
+    display: none;
+    cursor: not-allowed;
+}
+.adsbygoogle.error:empty::before {
+    content: "Ad Blocker Detected";
+    font-size: 14px;
+    line-height: 50px;
+    font-weight: bold;
+    color: var(--color-destructive);
+    text-transform: uppercase;
+} */

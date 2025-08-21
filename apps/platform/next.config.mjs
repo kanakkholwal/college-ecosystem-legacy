@@ -26,9 +26,10 @@ const nextConfig = {
       { hostname: 'visitor-badge.laobi.icu' },
     ],
   },
-  experimental: {
-    forceSwcTransforms: true,
-  },
+
+  // experimental: {
+  //   forceSwcTransforms: true,
+  // },
   // async rewrites() {
   //   return [
   //     {

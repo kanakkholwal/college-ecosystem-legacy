@@ -1,4 +1,5 @@
 // app/contact/page.tsx
+import AdsenseAds from "@/components/common/adsense";
 import type { Metadata } from "next";
 import { appConfig } from "~/project.config";
 
@@ -41,7 +42,9 @@ export default function AboutPage() {
             experience.
           </li>
         </ul>
-
+        <AdsenseAds
+          adSlot="multiplex"
+        />
         <h2>Transparency & Community</h2>
         <p>
           We believe in open development and transparency. Features evolve based
@@ -73,7 +76,9 @@ export default function AboutPage() {
             </a>
           </li>
         </ul>
-
+        <AdsenseAds
+          adSlot="multiplex"
+        />
         <h2>Disclaimer</h2>
         <p>
           While we strive to provide accurate and helpful information, the

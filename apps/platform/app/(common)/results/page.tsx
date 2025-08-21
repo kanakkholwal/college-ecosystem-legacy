@@ -2,11 +2,12 @@ import { ResultCard, SkeletonCard } from "@/components/application/result-card";
 import Pagination from "@/components/application/result-pagination";
 import SearchBox from "@/components/application/result-search";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Suspense } from "react";
+import { Fragment, Suspense } from "react";
 import { BiSpreadsheet } from "react-icons/bi";
 import { getCachedLabels, getResults } from "~/actions/common.result";
 
 import { BaseHeroSection } from "@/components/application/base-hero";
+import AdsenseAds from "@/components/common/adsense";
 import EmptyArea from "@/components/common/empty-area";
 import { NoteSeparator } from "@/components/common/note-separator";
 import ConditionalRender from "@/components/utils/conditional-render";
@@ -173,13 +174,21 @@ and track academic performance"
           <div className="mx-auto max-w-7xl w-full xl:px-6 grid gap-3 grid-cols-1 @md:grid-cols-2 @xl:grid-cols-3 @5xl:grid-cols-4">
             {results.map((result, i) => {
               return (
-                <ResultCard
-                  key={result._id.toString()}
-                  result={result}
-                  style={{
-                    animationDelay: `${i * 100}ms`,
-                  }}
-                />
+                <Fragment key={result._id.toString()}>
+                  <ResultCard
+                    key={result._id.toString()}
+                    result={result}
+                    style={{
+                      animationDelay: `${i * 100}ms`,
+                    }}
+                  />
+                  {(i + 1) % 4 === 0 && (
+
+                    <AdsenseAds
+                      adSlot="display-square"
+                    />
+                  )}
+                </Fragment>
               );
             })}
           </div>
@@ -200,6 +209,10 @@ and track academic performance"
           />
         </ConditionalRender>
       </ErrorBoundaryWithSuspense>
+
+      <AdsenseAds
+        adSlot="multiplex"
+      />
     </div>
   );
 }

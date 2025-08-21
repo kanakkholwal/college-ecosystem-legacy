@@ -1,4 +1,5 @@
 // app/privacy-policy/page.tsx
+import AdsenseAds from "@/components/common/adsense";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -133,7 +134,9 @@ export default function PrivacyPolicyPage() {
             for broader industry opt-out choices (where available).
           </li>
         </ul>
-
+    <AdsenseAds
+        adSlot="multiplex"
+      />
         <h3>Analytics</h3>
         <p>
           We may use privacy-respecting analytics and/or mainstream tools to
@@ -266,6 +269,9 @@ export default function PrivacyPolicyPage() {
             the property of their respective owners.
           </em>
         </p>
+            <AdsenseAds
+        adSlot="multiplex"
+      />
       </article>
     </main>
   );

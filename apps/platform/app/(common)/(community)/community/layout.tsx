@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { CATEGORIES } from "~/constants/common.community";
 
+import AdsenseAds from "@/components/common/adsense";
 import { Button } from "@/components/ui/button";
 import { SortAsc, TrendingUpIcon } from "lucide-react";
 import type { Metadata } from "next";
@@ -90,6 +91,8 @@ export default async function Layout({
             ))}
           </div>
         </div>
+        <AdsenseAds adSlot="display-square" />
+
       </aside>
 
 

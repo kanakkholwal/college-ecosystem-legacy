@@ -10,6 +10,7 @@ import CRDashboard from "./cr.dashboard";
 import GuardDashboard from "./guard.dashboard";
 import StudentDashboard from "./student.dashboard";
 import WardenDashboard from "./warden.dashboard";
+import AdsenseAds from "@/components/common/adsense";
 // import type { JSX } from "react";
 
 // type DashboardTemplateType = Promise<JSX.Element> | JSX.Element;
@@ -44,6 +45,7 @@ export function DashboardTemplate({ user_role }: { user_role: string }) {
               }}
             />
           </ConditionalRender>
+          <AdsenseAds adSlot="display-horizontal" />
           <ErrorBoundaryWithSuspense
             loadingFallback={
               <SkeletonCardArea

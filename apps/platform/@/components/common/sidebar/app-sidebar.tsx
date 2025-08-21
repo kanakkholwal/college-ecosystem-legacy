@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import type { Session } from "~/auth/client";
 
+import AdsenseAds from "@/components/common/adsense";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { sidebar_links } from "@/constants/links";
 import Link from "next/link";
@@ -94,6 +95,8 @@ export function AppSidebar({
       <SidebarContent>
         <NavMain items={links} />
       </SidebarContent>
+                <AdsenseAds adSlot="display-square" />
+
       <SidebarFooter>
         <NavUser user={user} />
       </SidebarFooter>

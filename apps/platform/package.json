@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "next lint",
     "start": "next start",
-    "dev": "next dev",
+    "dev": "next dev --turbo",
     "build": "next build",
     "build:no-warn": "next build --experimental-build-mode compile",
     "build:isolated": "docker build -t platform .",
