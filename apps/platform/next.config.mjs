@@ -7,20 +7,7 @@ const withSerWist = withSerWistInit({
   swSrc: "app/sw.ts",
   swDest: "public/sw.js",
   disable: process.env.NODE_ENV !== "production",
-  runtimeCaching: [
-    {
-      urlPattern: /^https:\/\/pagead2\.googlesyndication\.com\//,
-      handler: "NetworkOnly",
-    },
-    {
-      urlPattern: /^https:\/\/googleads\.g\.doubleclick\.net\//,
-      handler: "NetworkOnly",
-    },
-    {
-      urlPattern: /^https:\/\/www\.googletagservices\.com\//,
-      handler: "NetworkOnly",
-    },
-  ],
+ 
 });
 
 const nextConfig = {

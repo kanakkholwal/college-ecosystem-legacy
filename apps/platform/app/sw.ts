@@ -1,7 +1,7 @@
 // sw.ts
 import { defaultCache } from "@serwist/next/worker";
 import type { PrecacheEntry, SerwistGlobalConfig } from "serwist";
-import { Serwist } from "serwist";
+import { NetworkOnly, Serwist } from "serwist";
 
 // This declares the value of `injectionPoint` to TypeScript.
 // `injectionPoint` is the string that will be replaced by the
@@ -19,7 +19,24 @@ const serwist = new Serwist({
   skipWaiting: true,
   clientsClaim: true,
   navigationPreload: true,
-  runtimeCaching: defaultCache,
+  runtimeCaching: [
+    ...defaultCache,
+    {
+      matcher: ({ url }) =>
+        url.hostname === "pagead2.googlesyndication.com",
+      handler: new NetworkOnly(),
+    },
+    {
+      matcher: ({ url }) =>
+        url.hostname === "googleads.g.doubleclick.net",
+      handler: new NetworkOnly(),
+    },
+    {
+      matcher: ({ url }) =>
+        url.hostname === "www.googletagservices.com",
+      handler: new NetworkOnly(),
+    },
+  ],
   // importScripts: ['notifications-worker.js'], // Import the custom service worker script
 });
 serwist.addEventListeners();
