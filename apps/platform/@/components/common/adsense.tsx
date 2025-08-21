@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useId, useRef } from "react";
 import { appConfig } from "~/project.config";
 import "./adsense.css";
 
@@ -30,14 +30,15 @@ interface AdUnitProps {
 
 const AdUnit: React.FC<AdUnitProps> = ({ adSlot }) => {
   const adsProps = adsTypes[adSlot];
+  const id = useId();
   const pathname = usePathname();
   const adRef = useRef<HTMLModElement>(null);
 
   useEffect(() => {
     try {
-    //   if (typeof window !== "undefined") {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-    //   }
+      //   if (typeof window !== "undefined") {
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
+      //   }
     } catch (e) {
       console.error("Adsense error:", e);
       adRef.current?.classList.add("error");
@@ -45,8 +46,10 @@ const AdUnit: React.FC<AdUnitProps> = ({ adSlot }) => {
   }, [pathname, adSlot]); // refresh ad when route or slot changes
 
   return (
-    <div className="adsense-container">
+    <div className="adsense-container" id={`adsense-${id}`}>
       <ins
+        key={id}
+        id={`adsbygoogle-${id}`}
         ref={adRef}
         className="adsbygoogle"
         style={{ display: "block" }}

@@ -139,11 +139,7 @@ export default function CommunityPostList({
             </div>
           </div>
           {(index + 1) % 2 === 0 && (
-            <div
-              className="w-full mx-auto lg:p-5 p-4"
-            >
-              <AdUnit adSlot="display-square"/>
-            </div>
+              <AdUnit adSlot="display-square" key={`ad-${post._id}`} />
           )}
         </React.Fragment>
       ))}

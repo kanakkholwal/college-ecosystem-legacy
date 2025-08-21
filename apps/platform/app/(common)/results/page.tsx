@@ -186,6 +186,7 @@ and track academic performance"
 
                     <AdUnit
                       adSlot="display-square"
+                      key={`ad-${result._id.toString()}`}
                     />
                   )}
                 </Fragment>
