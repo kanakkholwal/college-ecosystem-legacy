@@ -1,4 +1,4 @@
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import { Icon } from "@/components/icons";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -8,10 +8,10 @@ import { Metadata, ResolvingMetadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import {
-  getAllResourcesGroupedByType,
-  getResourceBySlug,
-  getResourceRelated,
-  ResourceType,
+    getAllResourcesGroupedByType,
+    getResourceBySlug,
+    getResourceRelated,
+    ResourceType,
 } from "~/lib/markdown/mdx";
 import { appConfig } from "~/project.config";
 import { changeCase, marketwiseLink } from "~/utils/string";
@@ -343,7 +343,7 @@ export default async function ResourcePage({ params }: PageProps) {
             items={response.data.toc}
             className="lg:sticky lg:top-2"
           />
-          <AdsenseAds adSlot="display-vertical" />
+          <AdUnit adSlot="display-vertical" />
 
         </aside>
         {otherResources.length > 0 && (

@@ -7,7 +7,7 @@ import { BiSpreadsheet } from "react-icons/bi";
 import { getCachedLabels, getResults } from "~/actions/common.result";
 
 import { BaseHeroSection } from "@/components/application/base-hero";
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import EmptyArea from "@/components/common/empty-area";
 import { NoteSeparator } from "@/components/common/note-separator";
 import ConditionalRender from "@/components/utils/conditional-render";
@@ -184,7 +184,7 @@ and track academic performance"
                   />
                   {(i + 1) % 4 === 0 && (
 
-                    <AdsenseAds
+                    <AdUnit
                       adSlot="display-square"
                     />
                   )}
@@ -210,7 +210,7 @@ and track academic performance"
         </ConditionalRender>
       </ErrorBoundaryWithSuspense>
 
-      <AdsenseAds
+      <AdUnit
         adSlot="multiplex"
       />
     </div>

@@ -15,7 +15,7 @@ interface Props {
 }
 
 // import { CommentsWithAuth } from "@/components/application/comments";
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import { Icon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -137,7 +137,7 @@ export default async function CommunityPost(props: Props) {
         </article>
         <PostFooter post={post} user={session?.user!} />
         <div id="ads-section" className="mt-4">
-          <AdsenseAds adSlot="display-horizontal"/>
+          <AdUnit adSlot="display-horizontal"/>
         </div>
         <div id="comments-section" className="mt-4">
           {/* <CommentsWithAuth

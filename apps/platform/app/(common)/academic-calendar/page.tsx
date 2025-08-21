@@ -1,5 +1,5 @@
 import { EventCard } from "@/components/application/event-card";
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import { ResponsiveContainer } from "@/components/common/container";
 import EmptyArea from "@/components/common/empty-area";
 import { StaticStep } from "@/components/common/step";
@@ -88,7 +88,7 @@ export default async function AcademicCalenderPage(props: Props) {
           <ArrowUpRight />
         </ButtonLink>
       </div>
-      <AdsenseAds
+      <AdUnit
           adSlot="multiplex"
         />
       <Tabs defaultValue="calendar" className="bg-card p-4 lg:p-5 rounded-lg">

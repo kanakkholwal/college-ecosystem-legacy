@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { CATEGORIES } from "~/constants/common.community";
 
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import { Icon } from "@/components/icons";
 import { Badge } from "@/components/ui/badge";
 import { AuthButtonLink } from "@/components/utils/link";
@@ -100,7 +100,7 @@ export default async function CommunitiesPage(props: {
             </p>
           </div>
         ) : null}
-        <AdsenseAds adSlot="display-vertical" />
+        <AdUnit adSlot="display-vertical" />
 
 
       </aside>

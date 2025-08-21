@@ -1,5 +1,5 @@
 // app/terms/page.tsx
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -152,7 +152,7 @@ export default function TermsPage() {
             institute.
           </em>
         </p>
-            <AdsenseAds
+            <AdUnit
         adSlot="multiplex"
       />
       </article>

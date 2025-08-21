@@ -1,5 +1,5 @@
 // app/contact/page.tsx
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import type { Metadata } from "next";
 import { appConfig } from "~/project.config";
 
@@ -42,7 +42,7 @@ export default function AboutPage() {
             experience.
           </li>
         </ul>
-        <AdsenseAds
+        <AdUnit
           adSlot="multiplex"
         />
         <h2>Transparency & Community</h2>
@@ -76,7 +76,7 @@ export default function AboutPage() {
             </a>
           </li>
         </ul>
-        <AdsenseAds
+        <AdUnit
           adSlot="multiplex"
         />
         <h2>Disclaimer</h2>

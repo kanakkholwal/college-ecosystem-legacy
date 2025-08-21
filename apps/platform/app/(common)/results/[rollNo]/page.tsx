@@ -1,9 +1,9 @@
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+    Accordion,
+    AccordionContent,
+    AccordionItem,
+    AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -143,7 +143,7 @@ export default async function ResultsPage(props: Props) {
             </div>
           </div>
         </div>
-        <AdsenseAds
+        <AdUnit
           adSlot="display-horizontal"
 
         />
@@ -227,7 +227,7 @@ export default async function ResultsPage(props: Props) {
           </TabsContent>
         </Tabs>
       </div>
-       <AdsenseAds
+       <AdUnit
           adSlot="display-horizontal"
  
         />

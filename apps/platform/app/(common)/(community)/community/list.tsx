@@ -1,7 +1,7 @@
 "use client";
 
 import { UserPreview } from "@/components/application/user-preview";
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import EmptyArea from "@/components/common/empty-area";
 import ShareButton from "@/components/common/share-button";
 import { Icon } from "@/components/icons";
@@ -142,7 +142,7 @@ export default function CommunityPostList({
             <div
               className="w-full mx-auto lg:p-5 p-4"
             >
-              <AdsenseAds adSlot="display-square"/>
+              <AdUnit adSlot="display-square"/>
             </div>
           )}
         </React.Fragment>

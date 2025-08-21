@@ -5,18 +5,18 @@ import type * as React from "react";
 import { NavMain } from "@/components/common/sidebar/nav-main";
 import { NavUser } from "@/components/common/sidebar/nav-user";
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarRail,
 } from "@/components/ui/sidebar";
 import type { Session } from "~/auth/client";
 
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { sidebar_links } from "@/constants/links";
 import Link from "next/link";
@@ -95,7 +95,7 @@ export function AppSidebar({
       <SidebarContent>
         <NavMain items={links} />
       </SidebarContent>
-                <AdsenseAds adSlot="display-square" />
+                <AdUnit adSlot="display-square" />
 
       <SidebarFooter>
         <NavUser user={user} />

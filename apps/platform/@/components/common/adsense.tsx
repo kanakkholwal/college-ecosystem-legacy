@@ -1,73 +1,62 @@
 "use client";
 
-import { usePathname } from 'next/navigation';
-import React, { useEffect } from 'react';
-import { appConfig } from '~/project.config';
+import { usePathname } from "next/navigation";
+import React, { useEffect, useRef } from "react";
+import { appConfig } from "~/project.config";
 import "./adsense.css";
 
-
 const adsTypes = {
-    "display-horizontal": {
-        adSlot: "4288761968",
-        adFormat: "auto"
-    },
-    "display-square": {
-        adSlot: "6395200498",
-        adFormat: "auto"
-    },
-    "display-vertical": {
-        adSlot: "6395200498",
-        adFormat: "auto"
-    },
-    "multiplex": {
-        adSlot: "8619691544",
-        adFormat: "autorelaxed"
-    },
+  "display-horizontal": {
+    adSlot: "4288761968",
+    adFormat: "auto",
+  },
+  "display-square": {
+    adSlot: "6395200498",
+    adFormat: "auto",
+  },
+  "display-vertical": {
+    adSlot: "6395200498",
+    adFormat: "auto",
+  },
+  multiplex: {
+    adSlot: "8619691544",
+    adFormat: "autorelaxed",
+  },
 } as const;
 
-
-interface AdComponentProps {
-    adSlot: keyof typeof adsTypes;
+interface AdUnitProps {
+  adSlot: keyof typeof adsTypes;
 }
 
+const AdUnit: React.FC<AdUnitProps> = ({ adSlot }) => {
+  const adsProps = adsTypes[adSlot];
+  const pathname = usePathname();
+  const adRef = useRef<HTMLModElement>(null);
 
-function loadAdSlot() {
+  useEffect(() => {
     try {
-        // Load the Google Adsense script if not already loaded
-        (window as any).adsbygoogle = (window as any).adsbygoogle || [];
-        (window as any).adsbygoogle.push({});
+    //   if (typeof window !== "undefined") {
+        (window.adsbygoogle = window.adsbygoogle || []).push({});
+    //   }
     } catch (e) {
-        console.error('Adsense error:', e);
-        document.querySelectorAll('.adsbygoogle').forEach((el) => {
-            el.classList.add("error")
-        })
+      console.error("Adsense error:", e);
+      adRef.current?.classList.add("error");
     }
-}
+  }, [pathname, adSlot]); // refresh ad when route or slot changes
 
-const AdsenseAds: React.FC<AdComponentProps> = ({ adSlot }) => {
-    const adsProps = adsTypes[adSlot as keyof typeof adsTypes];
-    const pathname = usePathname();
-    useEffect(() => {
-        document.addEventListener("DOMContentLoaded", loadAdSlot);
-        // Load the Adsense script if not already loaded
-        return () => {
-            // Cleanup if necessary
-            document.removeEventListener("DOMContentLoaded", loadAdSlot);
-        };
-    }, [pathname]); // re-run when route changes
-
-    return (
-        <div className="adsense-container">
-            <ins
-                className="adsbygoogle"
-                style={{ display: 'block' }}
-                data-ad-client={appConfig.verifications.google_adsense}
-                data-ad-slot={adsProps?.adSlot}
-                data-ad-format={adsProps?.adFormat}
-                data-full-width-responsive="true"
-            />
-        </div>
-    );
+  return (
+    <div className="adsense-container">
+      <ins
+        ref={adRef}
+        className="adsbygoogle"
+        style={{ display: "block" }}
+        data-ad-client={appConfig.verifications.google_adsense}
+        data-ad-slot={adsProps.adSlot}
+        data-ad-format={adsProps.adFormat}
+        data-full-width-responsive="true"
+      />
+    </div>
+  );
 };
 
-export default AdsenseAds;
+export default AdUnit;

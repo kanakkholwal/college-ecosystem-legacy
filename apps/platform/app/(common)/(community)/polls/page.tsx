@@ -1,15 +1,15 @@
 import EmptyArea from "@/components/common/empty-area";
 import { Tabs, TabsContent, VercelTabsList } from "@/components/ui/tabs";
 import {
-  getClosedPolls,
-  getOpenPolls,
-  getPollsCreatedByLoggedInUser,
+    getClosedPolls,
+    getOpenPolls,
+    getPollsCreatedByLoggedInUser,
 } from "~//actions/common.poll";
 import type { PollType } from "~/models/poll";
 import CreatePoll from "./components/create-poll";
 import PollComponent from "./components/poll-component";
 
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import { Badge } from "@/components/ui/badge";
 import { AuthButtonLink } from "@/components/utils/link";
 import { LogIn } from "lucide-react";
@@ -119,7 +119,7 @@ export default async function PollsPage(props: {
                         user={session?.user}
                       />
                       {(i + 1) % 2 === 0 && (
-                        <AdsenseAds adSlot="display-square" />
+                        <AdUnit adSlot="display-square" />
                       )}
                     </Fragment>
                   ))}

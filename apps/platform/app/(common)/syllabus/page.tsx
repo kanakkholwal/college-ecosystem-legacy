@@ -7,7 +7,7 @@ import { getCourses } from "~/actions/common.course";
 import { BaseHeroSection } from "@/components/application/base-hero";
 import Pagination from "@/components/application/course-pagination";
 import SearchBox from "@/components/application/course-search";
-import AdsenseAds from "@/components/common/adsense";
+import AdUnit from "@/components/common/adsense";
 import { ResponsiveContainer } from "@/components/common/container";
 import { NoteSeparator } from "@/components/common/note-separator";
 import { orgConfig } from "~/project.config";
@@ -87,7 +87,7 @@ export default async function CoursesPage(props: {
               />
               {(i + 1) % 5 === 0 && (
           
-                  <AdsenseAds
+                  <AdUnit
                     adSlot="display-square"
                   />
 )}
@@ -100,7 +100,7 @@ export default async function CoursesPage(props: {
       <div className="max-w-7xl mx-auto p-4">
         {courses.length > 0 ? <Pagination totalPages={totalPages} /> : null}
       </div>
-      <AdsenseAds
+      <AdUnit
         adSlot="multiplex"
       />
     </div>
