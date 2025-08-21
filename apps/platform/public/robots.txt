@@ -5,11 +5,6 @@ Disallow: /student/
 Disallow: /faculty/
 Disallow: /staff/
 
-
 Allow: /
 
-# Host
-Host: https://app.nith.eu.org
-
-# Sitemaps
-Sitemap: https://app.nith.eu.org/sitemap.xml
+Sitemap: https://nith.eu.org/sitemap.xml

@@ -2,6 +2,7 @@
 
 import { usePathname } from 'next/navigation';
 import React, { useEffect } from 'react';
+import { appConfig } from '~/project.config';
 
 interface AdComponentProps {
     adSlot: string;
@@ -24,7 +25,7 @@ const AdComponent: React.FC<AdComponentProps> = ({ adSlot, adFormat = 'auto', ad
         <ins
             className="adsbygoogle"
             style={{ display: "block" }}
-            data-ad-client={process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID}
+            data-ad-client={appConfig.verifications.google_adsense}
             data-ad-slot={adSlot}
             data-ad-format={adFormat}
             data-full-width-responsive="true"
