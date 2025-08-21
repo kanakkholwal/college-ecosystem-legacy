@@ -7,21 +7,21 @@ import "./adsense.css";
 
 
 const adsTypes = {
-    "display-horizontal":{
-        adSlot:"4288761968",
-        adFormat:"auto"
+    "display-horizontal": {
+        adSlot: "4288761968",
+        adFormat: "auto"
     },
-    "display-square":{
-        adSlot:"6395200498",
-        adFormat:"auto"
+    "display-square": {
+        adSlot: "6395200498",
+        adFormat: "auto"
     },
-    "display-vertical":{
-        adSlot:"6395200498",
-        adFormat:"auto"
+    "display-vertical": {
+        adSlot: "6395200498",
+        adFormat: "auto"
     },
-    "multiplex":{
-        adSlot:"8619691544",
-        adFormat:"autorelaxed"
+    "multiplex": {
+        adSlot: "8619691544",
+        adFormat: "autorelaxed"
     },
 } as const;
 
@@ -31,31 +31,41 @@ interface AdComponentProps {
 }
 
 
-const AdsenseAds: React.FC<AdComponentProps> = ({ adSlot}) => {
+function loadAdSlot() {
+    try {
+        // Load the Google Adsense script if not already loaded
+        (window as any).adsbygoogle = (window as any).adsbygoogle || [];
+        (window as any).adsbygoogle.push({});
+    } catch (e) {
+        console.error('Adsense error:', e);
+        document.querySelectorAll('.adsbygoogle').forEach((el) => {
+            el.classList.add("error")
+        })
+    }
+}
+
+const AdsenseAds: React.FC<AdComponentProps> = ({ adSlot }) => {
     const adsProps = adsTypes[adSlot as keyof typeof adsTypes];
     const pathname = usePathname();
     useEffect(() => {
-        try {
-            (window as any).adsbygoogle = (window as any).adsbygoogle || [];
-            (window as any).adsbygoogle.push({});
-        } catch (e) {
-            console.error('Adsense error:', e);
-            document.querySelectorAll('.adsbygoogle').forEach((el) => {
-                el.classList.add("error")
-            })
-        }
+        document.addEventListener("DOMContentLoaded", loadAdSlot);
+        // Load the Adsense script if not already loaded
+        return () => {
+            // Cleanup if necessary
+            document.removeEventListener("DOMContentLoaded", loadAdSlot);
+        };
     }, [pathname]); // re-run when route changes
 
     return (
         <div className="adsense-container">
-        <ins
-            className="adsbygoogle"
-            style={{ display: 'block' }}
-            data-ad-client={appConfig.verifications.google_adsense}
-            data-ad-slot={adsProps?.adSlot}
-            data-ad-format={adsProps?.adFormat}
-            data-full-width-responsive="true"
-        />
+            <ins
+                className="adsbygoogle"
+                style={{ display: 'block' }}
+                data-ad-client={appConfig.verifications.google_adsense}
+                data-ad-slot={adsProps?.adSlot}
+                data-ad-format={adsProps?.adFormat}
+                data-full-width-responsive="true"
+            />
         </div>
     );
 };
