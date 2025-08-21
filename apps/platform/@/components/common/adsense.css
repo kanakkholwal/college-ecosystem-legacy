@@ -12,6 +12,12 @@
     height: 0;
     overflow: hidden;
 }
+.adsbygoogle{
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
 /*
 .adsbygoogle:empty {
     display: flex;

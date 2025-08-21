@@ -50,6 +50,7 @@ const AdsenseAds: React.FC<AdComponentProps> = ({ adSlot}) => {
         <div className="adsense-container">
         <ins
             className="adsbygoogle"
+            style={{ display: 'block' }}
             data-ad-client={appConfig.verifications.google_adsense}
             data-ad-slot={adsProps?.adSlot}
             data-ad-format={adsProps?.adFormat}
