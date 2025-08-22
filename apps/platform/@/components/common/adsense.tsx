@@ -36,9 +36,9 @@ const AdUnit: React.FC<AdUnitProps> = ({ adSlot }) => {
 
   useEffect(() => {
     try {
-      //   if (typeof window !== "undefined") {
+    if (typeof window !== "undefined") {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-      //   }
+        }
     } catch (e) {
       console.error("Adsense error:", e);
       adRef.current?.classList.add("error");

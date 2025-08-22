@@ -27,6 +27,9 @@ const nextConfig = {
       { hostname: 'visitor-badge.laobi.icu' },
     ],
   },
+  turbopack: {
+    // TODO: enable when fixed
+  },
 
   // experimental: {
   //   forceSwcTransforms: true,

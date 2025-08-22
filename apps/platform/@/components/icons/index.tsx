@@ -33,6 +33,7 @@ import {
   Palette,
   Phone,
   Plus,
+  RocketIcon,
   Share,
   ShieldCheck,
   SparklesIcon,
@@ -101,6 +102,7 @@ export const IconComponent = {
   website: Globe,
   copy: CopyIcon,
   plus: Plus,
+  rocket: RocketIcon,
   plus_circle: CirclePlus,
   "copy-check": CopyCheckIcon,
   send: Share, // Share icon for sending

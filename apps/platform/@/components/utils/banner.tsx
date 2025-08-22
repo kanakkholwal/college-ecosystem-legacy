@@ -3,10 +3,9 @@ import { BorderBeam } from "@/components/animation/border-beam";
 import { Button } from "@/components/ui/button";
 import useStorage from "@/hooks/useLocalStorage";
 import { cn } from "@/lib/utils";
-import { cva, type VariantProps } from "class-variance-authority";
 import { AnimatePresence, motion } from "framer-motion";
 import { X } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { ButtonLink } from "./link";
 
 interface BannerActionPropsBase {
@@ -22,8 +21,8 @@ interface BannerActionPropsBase {
 
 interface BannerActionWithBtnProps extends BannerActionPropsBase {
   btnProps:
-    | React.ComponentProps<typeof Button>
-    | React.ComponentProps<typeof ButtonLink>;
+  | React.ComponentProps<typeof Button>
+  | React.ComponentProps<typeof ButtonLink>;
   actionComponent?: never;
 }
 
@@ -53,17 +52,18 @@ export function BannerPanel({
   );
 
   return (
-    <AnimatePresence>
+    <AnimatePresence >
       {!isBannerPanelClosed && (
         <motion.div
-          initial={{ opacity: 0, y: -50, height: "auto" }}
-          animate={{ opacity: 1, y: 0, height: "auto" }}
-          exit={{ opacity: 0, y: -50, height: 0 }}
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: 100 }}
           transition={{ type: "spring", damping: 20, stiffness: 300 }}
           className={cn(
-            "bg-card/30 backdrop-blur-2xl px-4 py-3 md:py-2 relative shadow",
+            "fixed bottom-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-6xl rounded-2xl bg-card/80 backdrop-blur-2xl shadow-xl px-4 py-3 md:py-2",
             className
           )}
+          suppressHydrationWarning
         >
           <div className="mx-auto max-w-(--max-app-width) w-full flex grow gap-3 flex-wrap md:items-center justify-between px-3 lg:px-6 z-50 relative">
             <div className="flex grow gap-3 md:items-center">
@@ -72,7 +72,7 @@ export function BannerPanel({
                   initial={{ scale: 0.8, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.2 }}
-                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/15 max-md:mt-0.5"
+                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/10 max-md:mt-0.5 [&>svg]:size-4 text-primary"
                   aria-hidden="true"
                 >
                   {icon}
@@ -89,10 +89,10 @@ export function BannerPanel({
                 </div>
                 {typeof description === "string"
                   ? description.length > 0 && (
-                      <p className="text-xs text-muted-foreground text-pretty truncate line-clamp-2">
-                        {description}
-                      </p>
-                    )
+                    <p className="text-xs text-muted-foreground text-pretty truncate line-clamp-2">
+                      {description}
+                    </p>
+                  )
                   : description}
               </motion.div>
             </div>
@@ -135,6 +135,7 @@ export function BannerPanel({
                     variant="ghost"
                     size="icon_xs"
                     rounded="full"
+                    transition="damped"
                     className="group shrink-0 p-0 -mr-2 absolute right-2 left-auto top-1/2 -translate-y-1/2 hover:bg-transparent"
                     onClick={() => {
                       setIsBannerPanelClosed(true);
@@ -160,126 +161,36 @@ export function BannerPanel({
   );
 }
 
-const bannerVariants = cva("relative w-full", {
-  variants: {
-    variant: {
-      default: "bg-background border border-border",
-      muted: "dark bg-muted",
-      border: "border-b border-border",
-    },
-    size: {
-      sm: "px-4 py-2",
-      default: "px-4 py-3",
-      lg: "px-4 py-3 md:py-2",
-    },
-    rounded: {
-      none: "",
-      default: "rounded-lg",
-    },
-  },
-  defaultVariants: {
-    variant: "default",
-    size: "default",
-    rounded: "none",
-  },
-});
 
-interface BannerProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof bannerVariants> {
-  icon?: React.ReactNode;
-  action?: React.ReactNode;
-  onClose?: () => void;
-  isClosable?: boolean;
-  layout?: "row" | "center" | "complex";
+interface RotatingBannerProps {
+  banners: BannerPanelProps[]; // array of props
+  interval?: number; // ms
 }
 
-const Banner = React.forwardRef<HTMLDivElement, BannerProps>(
-  (
-    {
-      className,
-      variant,
-      size,
-      rounded,
-      icon,
-      action,
-      onClose,
-      isClosable,
-      layout = "row",
-      children,
-      ...props
-    },
-    ref
-  ) => {
-    const innerContent = (
-      <div
-        className={cn(
-          "flex gap-2",
-          layout === "center" && "justify-center",
-          layout === "complex" && "md:items-center"
-        )}
-      >
-        {layout === "complex" ? (
-          <div className="flex grow gap-3 md:items-center">
-            {icon && (
-              <div className="flex shrink-0 items-center gap-3 max-md:mt-0.5">
-                {icon}
-              </div>
-            )}
-            <div
-              className={cn(
-                "flex grow",
-                layout === "complex" &&
-                  "flex-col justify-between gap-3 md:flex-row md:items-center"
-              )}
-            >
-              {children}
-            </div>
-          </div>
-        ) : (
-          <>
-            {icon && (
-              <div className="flex shrink-0 items-center gap-3">{icon}</div>
-            )}
-            <div className="flex grow items-center justify-between gap-3">
-              {children}
-            </div>
-          </>
-        )}
-        {(action || isClosable) && (
-          <div className="flex items-center gap-3">
-            {action}
-            {isClosable && (
-              <Button
-                variant="ghost"
-                className="group -my-1.5 -me-2 size-8 shrink-0 p-0 hover:bg-transparent"
-                onClick={onClose}
-                aria-label="Close banner"
-              >
-                <X
-                  size={16}
-                  strokeWidth={2}
-                  className="opacity-60 transition-opacity group-hover:opacity-100"
-                  aria-hidden="true"
-                />
-              </Button>
-            )}
-          </div>
-        )}
-      </div>
-    );
+export function RotatingBanner({ banners, interval = 5000 }: RotatingBannerProps) {
+  const [index, setIndex] = useState(0);
 
-    return (
-      <div
-        ref={ref}
-        className={cn(bannerVariants({ variant, size, rounded }), className)}
-        {...props}
-      >
-        {innerContent}
-      </div>
-    );
-  }
-);
-Banner.displayName = "Banner";
+  useEffect(() => {
+    if (banners.length <= 1) return;
+    const id = setInterval(() => {
+      setIndex((prev) => (prev + 1) % banners.length);
+    }, interval);
+    return () => clearInterval(id);
+  }, [banners, interval]);
 
-export { Banner, type BannerProps };
+  return (
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50" suppressHydrationWarning>
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={index} // important for re-mount animation
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -50 }}
+          transition={{ duration: 0.5 }}
+        >
+          <BannerPanel {...banners[index]} />
+        </motion.div>
+      </AnimatePresence>
+    </div>
+  );
+}
