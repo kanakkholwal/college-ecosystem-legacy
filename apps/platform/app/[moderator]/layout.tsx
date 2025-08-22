@@ -21,12 +21,13 @@ const ALLOWED_ROLES = [
   ROLES_ENUMS.GUARD,
   ROLES_ENUMS.LIBRARIAN,
   ROLES_ENUMS.STUDENT,
+  "dashboard"
 ];
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
   params: Promise<{
-    moderator: string;
+    moderator: (typeof ALLOWED_ROLES)[number];
   }>;
 }
 
@@ -49,8 +50,8 @@ export default async function DashboardLayout({
 }: DashboardLayoutProps) {
   const { moderator } = await params;
   if (
-    !ALLOWED_ROLES.includes(moderator as (typeof ALLOWED_ROLES)[number]) &&
-    moderator !== "dashboard"
+    !ALLOWED_ROLES.includes(moderator as (typeof ALLOWED_ROLES)[number]) 
+    // && moderator !== "dashboard"
   ) {
     return notFound();
   }
