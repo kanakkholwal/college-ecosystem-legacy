@@ -118,9 +118,9 @@ export default async function PollsPage(props: {
                         key={poll._id}
                         user={session?.user}
                       />
-                      {(i + 1) % 2 === 0 && (
+                      {/* {(i + 1) % 2 === 0 && (
                         <AdUnit adSlot="display-square" key={`ad-${poll._id.toString()}`} />
-                      )}
+                      )} */}
                     </Fragment>
                   ))}
                 </div>
@@ -128,6 +128,7 @@ export default async function PollsPage(props: {
             </TabsContent>
           );
         })}
+        <AdUnit adSlot="display-horizontal" />
       </div>
     </Tabs>
   );

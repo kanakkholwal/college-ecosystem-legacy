@@ -182,13 +182,13 @@ and track academic performance"
                       animationDelay: `${i * 100}ms`,
                     }}
                   />
-                  {(i + 1) % 4 === 0 && (
+                  {/* {(i + 1) % 4 === 0 && (
 
                     <AdUnit
                       adSlot="display-square"
                       key={`ad-${result._id.toString()}`}
                     />
-                  )}
+                  )} */}
                 </Fragment>
               );
             })}

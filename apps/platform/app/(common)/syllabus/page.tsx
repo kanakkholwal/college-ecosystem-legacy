@@ -85,12 +85,12 @@ export default async function CoursesPage(props: {
                   animationDelay: `${i * 100}ms`,
                 }}
               />
-              {(i + 1) % 4 === 0 && (
+              {/* {(i + 1) % 4 === 0 && (
                 <AdUnit
                   adSlot="display-square"
                   key={`ad-${course.id}`}
                 />
-              )}
+              )} */}
             </Fragment>
             );
           })}
