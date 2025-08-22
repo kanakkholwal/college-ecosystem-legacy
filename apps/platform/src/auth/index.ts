@@ -159,12 +159,20 @@ export const auth = betterAuth({
     },
     cookiePrefix: "nith",
   },
-  // trustedOrigins: [appConfig.url, `https://${appConfig.appDomain}`,`https://*.nith.eu.org`],
   trustedOrigins: [
+    "nith.eu.org", // Trust all subdomains of nith.eu.org
+    "auth.nith.eu.org", // Trust all subdomains of nith.eu.org
+    "app.nith.eu.org", // Trust all subdomains of nith.eu.org
+    "platform.nith.eu.org", // Trust all subdomains of nith.eu.org
+    "https://nith.eu.org", // Trust only HTTPS subdomains
+    "https://auth.nith.eu.org", // Trust only HTTPS subdomains
+    "https://app.nith.eu.org", // Trust only HTTPS subdomains
+    "https://platform.nith.eu.org", // Trust only HTTPS subdomains
     "*.nith.eu.org", // Trust all subdomains of nith.eu.org
     "https://*.nith.eu.org", // Trust only HTTPS subdomains
     "https://*.dev.nith.eu.org", // Trust HTTPS subdomains of dev.nith.eu.org
   ],
+  // trustedOrigins: [appConfig.url, `https://${appConfig.appDomain}`,`https://*.nith.eu.org`],
   user: {
     additionalFields: {
       role: {
