@@ -15,7 +15,7 @@ export default async function DashboardLayout({
   params,
 }: DashboardLayoutProps) {
   const { moderator } = await params;
-  if (moderator === "admin") {
+  if (moderator !== "admin") {
     return notFound();
   }
   const session = await getSession();
