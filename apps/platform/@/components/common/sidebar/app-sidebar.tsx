@@ -5,14 +5,14 @@ import type * as React from "react";
 import { NavMain } from "@/components/common/sidebar/nav-main";
 import { NavUser } from "@/components/common/sidebar/nav-user";
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarFooter,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    SidebarRail,
+  Sidebar,
+  SidebarContent,
+  SidebarFooter,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
 } from "@/components/ui/sidebar";
 import type { Session } from "~/auth/client";
 
@@ -95,7 +95,7 @@ export function AppSidebar({
       <SidebarContent>
         <NavMain items={links} />
       </SidebarContent>
-                <AdUnit adSlot="display-square" />
+      <AdUnit adSlot="display-square" key="adsense-app-sidebar" />
 
       <SidebarFooter>
         <NavUser user={user} />

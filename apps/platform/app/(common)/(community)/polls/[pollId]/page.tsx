@@ -114,6 +114,7 @@ export default async function Dashboard({ params }: Props) {
       </div>
       <AdUnit
         adSlot="display-horizontal"
+        key={`polls-page-ad-${poll._id}`}
       />
     </div>
   );

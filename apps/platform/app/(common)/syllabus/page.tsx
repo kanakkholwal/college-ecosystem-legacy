@@ -102,6 +102,7 @@ export default async function CoursesPage(props: {
       </div>
       <AdUnit
         adSlot="multiplex"
+        key={`syllabus-page-ad-footer`}
       />
     </div>
   );

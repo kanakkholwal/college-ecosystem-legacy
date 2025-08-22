@@ -137,7 +137,7 @@ export default async function CommunityPost(props: Props) {
         </article>
         <PostFooter post={post} user={session?.user!} />
         <div id="ads-section" className="mt-4">
-          <AdUnit adSlot="display-horizontal"/>
+          <AdUnit adSlot="display-horizontal" key="community-post-ad" />
         </div>
         <div id="comments-section" className="mt-4">
           {/* <CommentsWithAuth

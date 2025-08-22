@@ -20,22 +20,24 @@ const serwist = new Serwist({
   clientsClaim: true,
   navigationPreload: true,
   runtimeCaching: [
+
+    {
+      matcher: ({ url }) =>
+        [
+          "pagead2.googlesyndication.com",
+          "tpc.googlesyndication.com",
+          "googleads.g.doubleclick.net",
+          "securepubads.g.doubleclick.net",
+          "www.googletagservices.com",
+          "adservice.google.com",
+          "adservice.google.co.in",
+          "fundingchoicesmessages.google.com",
+          "partner.googleadservices.com",
+        ].includes(url.hostname),
+      handler: new NetworkOnly(),
+    }
+    ,
     ...defaultCache,
-    {
-      matcher: ({ url }) =>
-        url.hostname === "pagead2.googlesyndication.com",
-      handler: new NetworkOnly(),
-    },
-    {
-      matcher: ({ url }) =>
-        url.hostname === "googleads.g.doubleclick.net",
-      handler: new NetworkOnly(),
-    },
-    {
-      matcher: ({ url }) =>
-        url.hostname === "www.googletagservices.com",
-      handler: new NetworkOnly(),
-    },
   ],
   // importScripts: ['notifications-worker.js'], // Import the custom service worker script
 });

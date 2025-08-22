@@ -45,7 +45,7 @@ export function DashboardTemplate({ user_role }: { user_role: string }) {
               }}
             />
           </ConditionalRender>
-          <AdUnit adSlot="display-horizontal" />
+          <AdUnit adSlot="display-horizontal" key={"dashboard-page-ad-" + user_role} />
           <ErrorBoundaryWithSuspense
             loadingFallback={
               <SkeletonCardArea

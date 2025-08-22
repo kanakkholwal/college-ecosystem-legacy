@@ -100,7 +100,7 @@ export default async function CommunitiesPage(props: {
             </p>
           </div>
         ) : null}
-        <AdUnit adSlot="display-vertical" />
+        <AdUnit adSlot="display-vertical" key="communities-page-sidebar" />
 
 
       </aside>

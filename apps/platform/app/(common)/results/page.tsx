@@ -213,6 +213,7 @@ and track academic performance"
 
       <AdUnit
         adSlot="multiplex"
+        key={"results-page-ad"}
       />
     </div>
   );

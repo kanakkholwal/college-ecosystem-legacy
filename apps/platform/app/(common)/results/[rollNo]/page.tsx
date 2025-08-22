@@ -1,9 +1,9 @@
 import AdUnit from "@/components/common/adsense";
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
@@ -145,7 +145,7 @@ export default async function ResultsPage(props: Props) {
         </div>
         <AdUnit
           adSlot="display-horizontal"
-
+          key={"results-page-ad-header-" + result.rollNo}
         />
       </section>
       <div>
@@ -229,6 +229,7 @@ export default async function ResultsPage(props: Props) {
       </div>
        <AdUnit
           adSlot="display-horizontal"
+          key={"results-page-ad-footer-" + result.rollNo}
  
         />
     </div>

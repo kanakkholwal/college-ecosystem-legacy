@@ -91,7 +91,7 @@ export default async function Layout({
             ))}
           </div>
         </div>
-        <AdUnit adSlot="display-square" />
+        <AdUnit adSlot="display-square" key="communities-layout.tsx" />
 
       </aside>
 

@@ -136,6 +136,7 @@ export default function PrivacyPolicyPage() {
         </ul>
     <AdUnit
         adSlot="multiplex"
+        key={"privacy-policy-page-ad"}
       />
         <h3>Analytics</h3>
         <p>
@@ -271,6 +272,7 @@ export default function PrivacyPolicyPage() {
         </p>
             <AdUnit
         adSlot="multiplex"
+        key={"privacy-policy-page-ad-footer"}
       />
       </article>
     </main>

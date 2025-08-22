@@ -89,7 +89,8 @@ export default async function AcademicCalenderPage(props: Props) {
         </ButtonLink>
       </div>
       <AdUnit
-          adSlot="multiplex"
+          adSlot="display-horizontal"
+          key={"academic-calendar-page-ad"}
         />
       <Tabs defaultValue="calendar" className="bg-card p-4 lg:p-5 rounded-lg">
         <VercelTabsList
@@ -139,6 +140,10 @@ export default async function AcademicCalenderPage(props: Props) {
           })}
         </TabsContent>
       </Tabs>
+      <AdUnit
+          adSlot="multiplex"
+          key={"academic-calendar-page-ad-footer"}
+        />
     </div>
   );
 }

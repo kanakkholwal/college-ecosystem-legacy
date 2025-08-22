@@ -128,7 +128,7 @@ export default async function PollsPage(props: {
             </TabsContent>
           );
         })}
-        <AdUnit adSlot="display-horizontal" />
+        <AdUnit adSlot="display-horizontal" key="polls-page-ad" />
       </div>
     </Tabs>
   );

@@ -44,6 +44,7 @@ export default function AboutPage() {
         </ul>
         <AdUnit
           adSlot="multiplex"
+          key="about-page-ad"
         />
         <h2>Transparency & Community</h2>
         <p>
@@ -78,6 +79,7 @@ export default function AboutPage() {
         </ul>
         <AdUnit
           adSlot="multiplex"
+          key={"contact-page-ad"}
         />
         <h2>Disclaimer</h2>
         <p>
