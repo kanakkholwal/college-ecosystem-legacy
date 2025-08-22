@@ -18,6 +18,9 @@ import {
 import { appConfig } from "~/project.config";
 
 // Middleware to handle authentication and authorization for the platform
+const allowedOrigins = process.env.NODE_ENV === 'production'
+  ? [/^https?:\/\/(.+\.)?nith\.eu.org$/] // Regex for subdomains of nith.eu.org
+  : ['http://localhost:3000', 'http://localhost:3001']; // Adjust for local development
 
 export async function middleware(request: NextRequest) {
   const url = new URL(request.url);

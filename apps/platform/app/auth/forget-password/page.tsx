@@ -51,6 +51,10 @@ export default function ForgotPassword() {
       const res = await authClient.forgetPassword({
         email: data.email,
         redirectTo: "/auth/sign-in?tab=reset-password",
+      }, {
+        headers: {
+          credentials: 'include'
+        },
       });
       if (res.error) {
         toast.error(

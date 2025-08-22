@@ -82,6 +82,9 @@ export default function SignUpForm() {
         other_roles: ["student"],
       },
       {
+         headers:{
+          credentials: 'include'
+        },
         onRequest: () => {
           setIsLoading(true);
         },

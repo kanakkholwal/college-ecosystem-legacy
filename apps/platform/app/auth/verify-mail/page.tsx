@@ -30,17 +30,21 @@ export default function VerifyEmail() {
           query: {
             token: token,
           },
+        }, {
+          headers: {
+            credentials: 'include'
+          },
         })
         .then((res) => {
           if (res.error) {
             console.log("Error verifying email:", res);
             toast.error(
               res.error?.message ??
-                "An error occurred while verifying your email."
+              "An error occurred while verifying your email."
             );
             setError(
               res?.error?.message ??
-                "An error occurred while verifying your email."
+              "An error occurred while verifying your email."
             );
           } else {
             setVerified(true);

@@ -78,6 +78,9 @@ export default function SignInForm() {
         rememberMe: data.rememberMe,
       },
       {
+        headers:{
+          credentials: 'include'
+        },
         onRequest: () => {
           setIsLoading(true);
         },
@@ -95,7 +98,8 @@ export default function SignInForm() {
           }
           toast.error(ctx.error.message);
         },
-      }
+      },
+      
     );
   }
 

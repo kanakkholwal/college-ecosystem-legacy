@@ -84,6 +84,10 @@ export default function ResetPassword() {
       const res = await authClient.resetPassword({
         newPassword: data.newPassword,
         token: token,
+      },{
+         headers:{
+          credentials: 'include'
+        },
       });
       if (res.error) {
         toast.error(
