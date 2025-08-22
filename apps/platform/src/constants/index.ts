@@ -24,6 +24,25 @@ export const ROLES_MAP = Object.fromEntries(
   Object.entries(ROLES).map(([key, value]) => [value, key])
 );
 
+export const ALLOWED_ROLES = [
+  ROLES_ENUMS.ADMIN,
+  ROLES_ENUMS.FACULTY,
+  ROLES_ENUMS.CR,
+  ROLES_ENUMS.FACULTY,
+  ROLES_ENUMS.CHIEF_WARDEN,
+  ROLES_ENUMS.WARDEN,
+  ROLES_ENUMS.ASSISTANT_WARDEN,
+  ROLES_ENUMS.MMCA,
+  ROLES_ENUMS.HOD,
+  ROLES_ENUMS.GUARD,
+  ROLES_ENUMS.LIBRARIAN,
+  ROLES_ENUMS.STUDENT,
+  "dashboard"
+];
+
+// export const DASHBOARD_ROLES = [
+
+// ]
 export const GENDER = {
   MALE: "male",
   FEMALE: "female",

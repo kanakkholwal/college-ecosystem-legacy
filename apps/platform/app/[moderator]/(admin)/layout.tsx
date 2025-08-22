@@ -1,10 +1,12 @@
 import Page403 from "@/components/utils/403";
+import { notFound } from "next/navigation";
 import { getSession } from "~/auth/server";
+import { ALLOWED_ROLES } from "~/constants";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
   params: Promise<{
-    moderator: "admin" | "moderator";
+    moderator: typeof ALLOWED_ROLES[number];
   }>;
 }
 
@@ -12,9 +14,11 @@ export default async function DashboardLayout({
   children,
   params,
 }: DashboardLayoutProps) {
-  const session = await getSession();
   const { moderator } = await params;
-
+  if (moderator === "admin") {
+    return notFound();
+  }
+  const session = await getSession();
   if (
     session &&
     moderator === "admin" &&

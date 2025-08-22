@@ -5,24 +5,10 @@ import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 import type { Session } from "~/auth";
 import { getSession } from "~/auth/server";
-import { ROLES_ENUMS } from "~/constants";
+import { ALLOWED_ROLES } from "~/constants";
 import { changeCase } from "~/utils/string";
 
-const ALLOWED_ROLES = [
-  ROLES_ENUMS.ADMIN,
-  ROLES_ENUMS.FACULTY,
-  ROLES_ENUMS.CR,
-  ROLES_ENUMS.FACULTY,
-  ROLES_ENUMS.CHIEF_WARDEN,
-  ROLES_ENUMS.WARDEN,
-  ROLES_ENUMS.ASSISTANT_WARDEN,
-  ROLES_ENUMS.MMCA,
-  ROLES_ENUMS.HOD,
-  ROLES_ENUMS.GUARD,
-  ROLES_ENUMS.LIBRARIAN,
-  ROLES_ENUMS.STUDENT,
-  "dashboard"
-];
+
 
 interface DashboardLayoutProps {
   children: React.ReactNode;

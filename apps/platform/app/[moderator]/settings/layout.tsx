@@ -1,5 +1,6 @@
 import { HeaderBar } from "@/components/common/header-bar";
 import { Settings2 } from "lucide-react";
+import { ALLOWED_ROLES } from "~/constants";
 import { SidebarNav } from "./sidenav";
 
 const sidebarNavItems = [
@@ -20,7 +21,7 @@ const sidebarNavItems = [
 interface SettingsLayoutProps {
   children: React.ReactNode;
   params: Promise<{
-    moderator: string;
+    moderator: typeof ALLOWED_ROLES[number];
   }>;
 }
 export default async function SettingsLayout({
