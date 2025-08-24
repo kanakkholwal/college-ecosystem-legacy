@@ -94,8 +94,8 @@ export function AppSidebar({
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={links} />
+        <AdUnit adSlot="display-square" key="adsense-app-sidebar" />
       </SidebarContent>
-      <AdUnit adSlot="display-square" key="adsense-app-sidebar" />
 
       <SidebarFooter>
         <NavUser user={user} />

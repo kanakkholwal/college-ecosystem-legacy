@@ -115,10 +115,10 @@ export default async function AdminDashboard() {
               Currently active sessions
             </p>
           </StatsCard>
-          {/* Total count Card */}
+          {/* Total Visitors Card */}
           <StatsCard
             className="col-span-1 sm:col-span-2 md:col-span-4"
-            title="Total count"
+            title="Total Visitors"
             Icon={<Eye className="inline-block mr-2 size-4" />}
           >
             <NumberTicker
@@ -126,7 +126,7 @@ export default async function AdminDashboard() {
               className="text-3xl font-bold text-primary"
             />
             <p className="text-xs text-muted-foreground">
-              Total count to the portal
+              Total Visitors to the portal
             </p>
           </StatsCard>
           {/* platformDBStats */}
