@@ -1,8 +1,8 @@
 
-import { emailTemplates } from "./templates";
-import EmailWrapper from "./wrapper";
 import type { EmailPayload } from "@/types/schema";
 import { emailPayloadSchema } from "@/types/schema";
+import { emailTemplates } from "./templates";
+import EmailWrapper from "./wrapper";
 
 // map emailTemplates to their keys a Map for easier access
 // and to avoid using a plain object which would require type assertions
@@ -32,12 +32,14 @@ export function getEmailTemplate({
   // Check if the template key exists in the email_templates map
 
   if (!EmailComponent) {
-    throw new Error(`Template key "${template_key}" does not exist.`);
+    console.error(`Template key "${template_key}" does not exist.`);
+    return null;
   }
 
   const res = emailPayloadSchema.safeParse(payload);
   if (!res.success) {
-    throw new Error(res.error.message);
+    console.error(res.error.message);
+    return null;
   }
   // Validate the payload
   const validatedPayload = res.data;

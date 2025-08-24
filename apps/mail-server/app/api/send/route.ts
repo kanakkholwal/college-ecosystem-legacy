@@ -36,6 +36,12 @@ export async function POST(request: NextRequest) {
     console.log("Template", template_key);
     console.log("Payload", payload);
     const EmailTemplate = getEmailTemplate({ template_key, payload });
+    if(!EmailTemplate){
+      return NextResponse.json(
+        { error: `Template key "${template_key}" does not exist.`, data: null },
+        { status: 400, headers: corsHeaders }
+      );
+    }
 
     const emailHtml = await render(EmailTemplate);
     const response = await handleEmailFire(
